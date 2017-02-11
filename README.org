@@ -1,6 +1,8 @@
 *!! Package not yet meant for general public consumption !!*
 
-What this package is planned to do:
+This package will be an org exporter backend that exports =org-mode= to =markdown= with [[https://gohugo.io/][=hugo=]] -required TOML front-matter. =hugo= also supports YAML front-matter but planning to stick with TOML for now.
+
+What this package is planned to do --
 
 - Write blog posts in =org-mode=.
 - For *current subtree*
@@ -8,6 +10,7 @@ What this package is planned to do:
   - Do that with each save.
 
 * TODO [0/5]
+- [ ] Have =ox-hugo= be a backend derived from =ox-gfm= (=ox-gfm= needed at least for table support).
 - [ ] Parse org tags to set the hugo post tags/categories in fm.
 - [ ] Parse org heading to set the hugo post title in fm.
 - [ ] Use title to auto-generate file name string.
@@ -17,6 +20,6 @@ What this package is planned to do:
 - [ ] Call =hugo= after each save.
 
 * References
-Currently the =org-hugo.el= just contains slightly re-factored code snippets from the below 2 sources:
+Currently the =ox-hugo.el= just contains slightly re-factored code snippets from the below 2 sources:
 - http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
 - http://whyarethingsthewaytheyare.com/setting-up-the-blog/

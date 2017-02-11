@@ -1,10 +1,10 @@
-;;; org-hugo.el --- Write hugo blog posts in org-mode -*- lexical-binding: t -*-
+;;; ox-hugo.el --- Write hugo blog posts in org-mode -*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;
 
 ;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
-(defvar hugo-content-dir (concat (getenv "HOME") "/sandbox/org/org-hugo/content/")
+(defvar hugo-content-dir (concat (getenv "HOME") "/sandbox/org/ox-hugo/content/")
   "Path to Hugo's content directory")
 
 (defun hugo-ensure-property (property)
@@ -148,6 +148,6 @@ Returns list of properties that still must be filled in"
           (while (re-search-forward (car reps) nil t)
             (replace-match (cdr reps))))))))
 
-(provide 'org-hugo)
+(provide 'ox-hugo)
 
-;;; org-hugo.el ends here
+;;; ox-hugo.el ends here

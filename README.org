@@ -9,7 +9,17 @@ What this package is planned to do --
   - Export the org-mode meta-data and content into a separate markdown file.
   - Do that with each save.
 
-* TODO [0/5]
+This package might evolve into a multi-.el project.
+
+1. An =ox-hugo.el= that just deals with exporting org to md.
+2. A =hugo.el= with helper elisp snippets to do stuff like:
+   - New post creation using =org-capture=.
+   - Single interactive function to export only the current subtree.
+   - Interactive function to toggle /draft/ state, add/remove/increment/decrement /publishdate/ property.
+   - Set separate faces for titles based on /draft/ state and /futureness/.
+   - Option to use template =config.toml= and some default hugo theme. So all a new user would need to do is to (i) have the =hugo= binary in =PATH= (ii) define their =hugo= blog dir in the =defcustom= (iii) =M-x hugo=.
+
+* TODO [0/9]
 - [ ] Have =ox-hugo= be a backend derived from =ox-gfm= (=ox-gfm= needed at least for table support).
 - [ ] Parse org tags to set the hugo post tags/categories in fm.
 - [ ] Parse org heading to set the hugo post title in fm.
@@ -17,9 +27,13 @@ What this package is planned to do --
 - [ ] Set post date to be the same as the export date *unless* =:PUBLISHDATE:= property exists.
 - [ ] Ability to set/toggle =:DRAFT: true= in property drawer. Of course that should translate to hugo post fm.
 - [ ] Function to re-export the whole org file to subtree-specific markdown files
+- [ ] Use =org-capture= to generate new posts in a pre-defined "blog posts org file". That step should also auto-insert the meta-data needed for hugo frontmatter as needed -- like the post's initial /draft/ state.
+- [ ] Different faces for the post heading based on its /draft/ state and /futureness/ (if /publishdate/ is newer than today).
 - [ ] Call =hugo= after each save.
 
 * References
 Currently the =ox-hugo.el= just contains slightly re-factored code snippets from the below 2 sources:
 - http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
 - http://whyarethingsthewaytheyare.com/setting-up-the-blog/
+
+Recently discovered https://github.com/helloyi/ox-hugo.

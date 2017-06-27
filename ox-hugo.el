@@ -86,68 +86,6 @@ channel."
     (concat shortcode code close-shortcode)))
 
 
-;;;;; Table Stuff (stolen from ox-gfm.el
-
-
-;;;; Table constants
-
-(defconst hugo-table-left-border "")
-(defconst hugo-table-right-border "")
-(defconst hugo-table-separator " |")
-
-;;;; Table-Row
-
-(defun org-gfm-table-row (table-row contents info)
-  "Transcode TABLE-ROW element from Org into GFM. CONTENTS is cell
-contents of TABLE-ROW. INFO is a plist used as a communication
-channel."
-  (let ((table (org-export-get-parent-table table-row)))
-    (when (and (eq 'rule (org-element-property :type table-row))
-               ;; In GFM, rule is valid only at second row.
-               (eq 1 (cl-position
-                      table-row
-                      (org-element-map table 'table-row 'identity info))))
-      (let* ((table (org-export-get-parent-table table-row))
-             (header-p (org-export-table-row-starts-header-p table-row info))
-             (build-rule (org-gfm-make-hline-builder table info ?-))
-             (cols (cdr (org-export-table-dimensions table info))))
-        (setq contents
-              (concat hugo-table-left-border
-                      (mapconcat (lambda (col) (funcall build-rule col))
-                                 (number-sequence 0 (- cols 1))
-                                 hugo-table-separator)
-                      hugo-table-right-border))))
-    contents))
-
-
-
-;;;; Table
-
-(defun org-hugo-table (table contents info)
-  "Transcode TABLE element into Blackfriday Flavored Markdown table.
-CONTENTS is the contents of the table. INFO is a plist holding
-contextual information."
-  (let* ((rows (org-element-map table 'table-row 'identity info))
-         (no-header (or (<= (length rows) 1)))
-         (cols (cdr (org-export-table-dimensions table info)))
-         (build-dummy-header
-          (function
-           (lambda ()
-             (let ((build-empty-cell (org-gfm-make-hline-builder table info ?\s))
-                   (build-rule (org-gfm-make-hline-builder table info ?-))
-                   (columns (number-sequence 0 (- cols 1))))
-               (concat hugo-table-left-border
-                       (mapconcat (lambda (col) (funcall build-empty-cell col))
-                                  columns
-                                  gfm-table-separator)
-                       hugo-table-right-border "\n" hugo-table-left-border
-                       (mapconcat (lambda (col) (funcall build-rule col))
-                                  columns
-                                  gfm-table-separator)
-                       gfm-table-right-border "\n"))))))
-    (concat (when no-header (funcall build-dummy-header))
-            (replace-regexp-in-string "\n\n" "\n" contents))))
-
 
 
 ;;;; Hugo metadata

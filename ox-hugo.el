@@ -60,8 +60,9 @@ This variable can be set to either `toml' or `yaml'."
               (if a (org-hugo-export-to-md t s v)
                 (org-open-file (org-hugo-export-to-md nil s v)))))))
   :translate-alist '((src-block . org-hugo-src-block)
-                     (inner-template . org-hugo-inner-template)
+                     ;;(inner-template . org-hugo-inner-template)
                      (table . org-hugo-table))
+  :filters-alist '((:filter-body . org-hugo-body-filter))
 
   :options-alist '((:hugo-metadata-format "HUGO_METADATA_FORMAT" nil org-hugo-metadata-format)
                    (:hugo-tags        "HUGO_TAGS" nil nil)
@@ -184,12 +185,11 @@ KEY is a key of hugo metadata."
 
 ;;;; Template
 
-(defun org-hugo-inner-template (contents info)
-  "Return body of document after converting it to Markdown syntax.
-CONTENTS is the transcoded contents string.  INFO is a plist
+(defun org-hugo-body-filter (body backend info)
+  "Add frontmatter to  body of document. 
+BODY is the result of the export. BACKEND is always going to be hugo.  INFO is a plist
 holding export options."
-  (concat (org-hugo-metadata info) "\n"
-          (org-trim (org-html-inner-template (concat "\n" contents "\n") info))))
+  (format "%s\n%s" (org-hugo-metadata info) body))
 
 
 ;;; Interactive function

@@ -4,10 +4,16 @@ This package will be an org exporter backend that exports =org-mode= to =markdow
 
 What this package is planned to do --
 
-- Write blog posts in =org-mode=.
+- Write blog posts and other content in =org-mode=.
 - For *current subtree*
   - Export the org-mode meta-data and content into a separate markdown file.
   - Do that with each save.
+
+
+At present this project consists of the following files:
+
+- =ox-blackfriday.el=: a derived backend that exports to the blackfriday markdown syntax, which Hugo uses as a basis
+- =ox-hugo-helper.el=: collection of legacy functions gleaned from the web
 
 This package might evolve into a multi-.el project.
 
@@ -19,8 +25,9 @@ This package might evolve into a multi-.el project.
    - Set separate faces for titles based on /draft/ state and /futureness/.
    - Option to use template =config.toml= and some default hugo theme. So all a new user would need to do is to (i) have the =hugo= binary in =PATH= (ii) define their =hugo= blog dir in the =defcustom= (iii) =M-x hugo=.
 
-* TODO [0/9]
-- [ ] Have =ox-hugo= be a backend derived from =ox-gfm= (=ox-gfm= needed at least for table support).
+* TODO [0/12]
+- [ ] Have =ox-hugo= be a backend derived from =ox-blackfriday= (=ox-blackfriday= needed at least for table support).
+- [ ] fix table horizontal rule generator, which currently adds an additional syntax-breaking space in each cell
 - [ ] Parse org tags to set the hugo post tags/categories in fm.
 - [ ] Parse org heading to set the hugo post title in fm.
 - [ ] Use title to auto-generate file name string.

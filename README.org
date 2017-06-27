@@ -1,14 +1,32 @@
 *!! Package not yet meant for general public consumption !!*
 
-This package will be an org exporter backend that exports =org-mode= to =markdown= with [[https://gohugo.io/][=hugo=]] -required TOML front-matter. =hugo= also supports YAML front-matter but planning to stick with TOML for now.
+---
+
+NOTE TO FUTURE CONTRIBUTORS: I plan to merge this package into Org
+source.
+
+So please assign your copyright to FSF in order to get your patches
+accepted.
+
+- https://www.gnu.org/licenses/why-assign.html
+- https://www.gnu.org/prep/maintain/html_node/Copyright-Papers.html#Copyright-Papers
+
+As a bonus, once you have assigned your copyright to FSF, doors open up
+for your contributions to Emacs too!
+
+---
+
+This package will be an org exporter backend that exports =org-mode=
+to =markdown= with [[https://gohugo.io/][=hugo=]] -required TOML front-matter. =hugo= also
+supports YAML front-matter but planning to stick with TOML for now.
 
 What this package is planned to do --
 
 - Write blog posts and other content in =org-mode=.
 - For *current subtree*
-  - Export the org-mode meta-data and content into a separate markdown file.
+  - Export the org-mode meta-data and content into a separate markdown
+    file.
   - Do that with each save.
-
 
 At present this project consists of the following files:
 
@@ -19,29 +37,49 @@ This package might evolve into a multi-.el project.
 2. A =hugo.el= with helper elisp snippets to do stuff like:
    - New post creation using =org-capture=.
    - Single interactive function to export only the current subtree.
-   - Interactive function to toggle /draft/ state, add/remove/increment/decrement /publishdate/ property.
-   - Set separate faces for titles based on /draft/ state and /futureness/.
-   - Option to use template =config.toml= and some default hugo theme. So all a new user would need to do is to (i) have the =hugo= binary in =PATH= (ii) define their =hugo= blog dir in the =defcustom= (iii) =M-x hugo=.
+   - Interactive function to toggle /draft/ state,
+     add/remove/increment/decrement /publishdate/ property.
+   - Set separate faces for titles based on /draft/ state and
+     /futureness/.
+   - Option to use template =config.toml= and some default hugo
+     theme. So all a new user would need to do is to (i) have the
+     =hugo= binary in =PATH= (ii) define their =hugo= blog dir in the
+     =defcustom= (iii) =M-x hugo=.
 
 * TODO [1/8]
-- [X] Have =ox-hugo= be a backend derived from =ox-blackfriday= (=ox-blackfriday= needed at least for table support).
-- [ ] fix table horizontal rule generator, which currently adds an additional syntax-breaking space in each cell
-- [ ] Parse org heading to set the hugo post title in fm 
+- [X] Have =ox-hugo= be a backend derived from =ox-blackfriday=
+  (=ox-blackfriday= needed at least for table support).
+- [ ] fix table horizontal rule generator, which currently adds an
+  additional syntax-breaking space in each cell
+- [ ] Parse org heading to set the hugo post title in fm
 - [-] Clean up and formalize metadata fields
   - [ ] Parse org tags to set the hugo post tags/categories in fm.
   - [X] Use title to auto-generate file name string.
-  - [ ] Set post date to be the same as the export date *unless* =:PUBLISHDATE:= property exists.
-  - [ ] Ability to set/toggle =:DRAFT: true= in property drawer. Of course that should translate to hugo post fm.
-- [ ] Function to re-export the whole org file to subtree-specific markdown files
-- [ ] Use =org-capture= to generate new posts in a pre-defined "blog posts org file". That step should also auto-insert the meta-data needed for hugo frontmatter as needed -- like the post's initial /draft/ state.
-- [ ] Different faces for the post heading based on its /draft/ state and /futureness/ (if /publishdate/ is newer than today). (this seems like a `hugo-minor-mode`. Seems cool to do, but maybe a separate project? 
+  - [ ] Set post date to be the same as the export date *unless*
+    =:PUBLISHDATE:= property exists.
+  - [ ] Ability to set/toggle =:DRAFT: true= in property drawer. Of
+    course that should translate to hugo post fm.
+- [ ] Function to re-export the whole org file to subtree-specific
+  markdown files
+- [ ] Use =org-capture= to generate new posts in a pre-defined "blog
+  posts org file". That step should also auto-insert the meta-data
+  needed for hugo frontmatter as needed -- like the post's initial
+  /draft/ state.
+- [ ] Different faces for the post heading based on its /draft/ state
+  and /futureness/ (if /publishdate/ is newer than today). (this seems
+  like a `hugo-minor-mode`. Seems cool to do, but maybe a separate
+  project?
 - [ ] Call =hugo= after each save.
 
 * References
-Currently the =ox-hugo-helper.el= just contains slightly re-factored code snippets from the below 2 sources:
+Currently the =ox-hugo-helper.el= just contains slightly re-factored
+code snippets from the below 2 sources:
 - http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
 - http://whyarethingsthewaytheyare.com/setting-up-the-blog/
 
-=ox-blackfriday.el= is a derived backend that exports to the blackfriday markdown syntax, which Hugo uses as a basis. Stolen from `ox-gfm.el`
+=ox-blackfriday.el= is a derived backend that exports to the
+blackfriday markdown syntax, which Hugo uses as a basis. Stolen from
+`ox-gfm.el`
 
-=ox-hugo-helper.el= is a lightly-rewritten version of @helloyi's exporter: https://github.com/helloyi/ox-hugo.
+=ox-hugo-helper.el= is a lightly-rewritten version of @helloyi's
+exporter: https://github.com/helloyi/ox-hugo.

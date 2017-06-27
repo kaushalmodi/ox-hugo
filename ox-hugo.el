@@ -1,152 +1,272 @@
-;;; ox-hugo.el --- Write hugo blog posts in org-mode -*- lexical-binding: t -*-
+;;; ox-hugo.el --- Hugo Markdown Back-End for Org Export Engine
+
+;; Copyright (C) 2016 Helloyi He
+
+;; Author: Helloyi He
+;; Keywords: org, hugo, markdown, gitpage
+
+;; This file is not part of GNU Emacs.
+
+;; GNU Emacs is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; GNU Emacs is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;;
 
-;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
-(defvar hugo-content-dir (concat (getenv "HOME") "/sandbox/org/ox-hugo/content/")
-  "Path to Hugo's content directory")
+;; This library implements a Markdown back-end (hugo flavor) for Org
+;; exporter, based on the `md' back-end.
 
-(defun hugo-ensure-property (property)
-  "Make sure that a property exists. If not, it will be created.
+;;; Code:
 
-Returns the property name if the property has been created, otherwise nil."
-  (unless (org-entry-get nil property)
-    (org-entry-put nil property "")
-    property))
+(require 'ox-blackfriday)
 
-(defun hugo-ensure-properties ()
-  "This ensures that several properties exists.
+
+;;; User-Configurable Variables
 
-If not, these properties will be created in an empty form. In this case, the
-drawer will also be opened and the cursor will be positioned at the first
-element that needs to be filled.
+(defgroup org-export-hugo nil
+  "Options specific to Markdown export back-end."
+  :tag "Org Hugo Flavored Markdown"
+  :group 'org-export
+  :version "24.4"
+  :package-version '(Org . "8.0"))
 
-Returns list of properties that still must be filled in"
-  (require 'dash)
-  (let ((current-time (format-time-string
-                       (org-time-stamp-format :long :inactive)
-                       (org-current-time)))
-        first)
-    (save-excursion
-      (unless (org-entry-get nil "TITLE")
-        (org-entry-put nil "TITLE" (nth 4 (org-heading-components))))
-      (setq first (--first it (mapcar #'hugo-ensure-property
-                                      '("HUGO_TAGS" "HUGO_TOPICS" "HUGO_FILE"))))
-      (unless (org-entry-get nil "HUGO_DATE")
-        (org-entry-put nil "HUGO_DATE" current-time)))
-    (when first
-      (goto-char (org-entry-beginning-position))
-      ;; The following opens the drawer
-      (forward-line 1)
-      (beginning-of-line 1)
-      (when (looking-at org-drawer-regexp)
-        (org-flag-drawer nil))
-      ;; And now move to the drawer property
-      (search-forward (concat ":" first ":"))
-      (end-of-line))
-    first))
+(defcustom org-hugo-metadata-format "toml"
+  "Format used to metadata.
+This variable can be set to either `toml' or `yaml'."
+  :group 'org-export-hugo
+  :type 'string)
 
-(defun hugo ()
+
+;;; Define Back-End
+
+(org-export-define-derived-backend 'hugo 'blackfriday
+  ;;:export-block '("HMD" "HUGO FLAVORED MARKDOWN")
+  :menu-entry
+  '(?H "Export to Hugo Flavored Markdown"
+       ((?M "To temporary buffer"
+            (lambda (a s v b) (org-hugo-export-as-md a s v)))
+        (?m "To file" (lambda (a s v b) (org-hugo-export-to-md a s v)))
+        (?o "To file and open"
+            (lambda (a s v b)
+              (if a (org-hugo-export-to-md t s v)
+                (org-open-file (org-hugo-export-to-md nil s v)))))))
+  :translate-alist '((src-block . org-hugo-src-block)
+                     ;;(inner-template . org-hugo-inner-template)
+                     (table . org-hugo-table))
+  :filters-alist '((:filter-body . org-hugo-body-filter))
+
+  :options-alist '((:hugo-metadata-format "HUGO_METADATA_FORMAT" nil org-hugo-metadata-format)
+                   (:hugo-tags        "HUGO_TAGS" nil nil)
+                   (:hugo-categories  "HUGO_CATEGORIES" nil nil)
+                   (:hugo-description "HUGO_DESCRIPTION" nil nil)
+                   (:hugo-slug        "HUGO_SLUG" nil nil)
+                   (:hugo-url         "HUGO_URL" nil nil)))
+
+
+;;; Transcode Functions
+
+;;;; Src Block
+
+(defun org-hugo-src-block (src-block contents info)
+  "Transcode SRC-BLOCK element into Hugo Flavored Markdown
+format. CONTENTS is nil.  INFO is a plist used as a communication
+channel."
+  (let* ((lang (org-element-property :language src-block))
+         (code (org-element-property :value src-block))
+         (shortcode (concat "{{< highlight " lang " >}}\n"))
+         (close-shortcode "{{< /highlight >}}\n"))
+    (concat shortcode code close-shortcode)))
+
+
+
+
+;;;; Hugo metadata
+
+(defun org-hugo-metadata (info)
+  "..."
+  (let* ((mt-format (org-export-data (plist-get info :hugo-metadata-format) info))
+         (title       (org-hugo--get-metadata-title info))
+         (date        (org-hugo--get-metadata-date  info))
+
+         (description (org-hugo--get-string-metadata info :hugo-description))
+         (tags        (org-hugo--get-list-metadata   info :hugo-tags))
+         (categories  (org-hugo--get-list-metadata   info :hugo-categories))
+         (slug        (org-hugo--get-string-metadata info :hugo-slug))
+         (url         (org-hugo--get-string-metadata info :hugo-url))
+
+         (data (list "title" title "date" date))
+         (data (if description (plist-put data "description" description) data))
+         (data (if tags        (plist-put data "tags" tags) data))
+         (data (if categories  (plist-put data "categories" categories) data))
+         (data (if slug        (plist-put data "slug" slug) data))
+         (data (if url         (plist-put data "url" url) data)))
+
+    (message "%s" data)
+    (cond ((string= mt-format "toml") (org-hugo--encode-metadata-to-toml data))
+          ((string= mt-format "yaml") (org-hugo--encode-metadata-to-yaml data))
+          "")))
+
+(defun org-hugo--get-metadata-title (info)
+  "Get title of hugo.
+If title is nil, set it with current buffer name"
+  (let ((title (org-hugo--get-string-metadata info :title)))
+    (if title title
+      (org-hugo-string--wrap-quotes
+       (file-name-sans-extension
+        (file-name-nondirectory (buffer-file-name)))))))
+
+(defun org-hugo--get-metadata-date (info)
+  "Get date of hugo.
+If date is nil, set it with current time"
+  (let ((date (org-export-get-date info "%Y-%m-%d %T %z")))
+    (if date (org-hugo-string--wrap-quotes date)
+      (org-hugo-string--wrap-quotes (format-time-string "%Y-%m-%d %T %z" (current-time))))))
+
+(defun org-hugo--get-list-metadata (info key)
+  "Get hugo metadata of list type.
+INFO is a plist holding export options.
+KEY is a key of hugo metadata."
+  (let ((value (org-export-data (plist-get info key) info))
+        (key (substring (symbol-name key) 1)))
+    (cond ((string-empty-p value) nil)
+          (t (mapcar 'org-hugo-string--wrap-quotes (split-string value))))))
+
+(defun org-hugo--get-string-metadata (info key)
+  "Get hugo metadata of string type.
+INFO is a plist holding export options.
+KEY is a key of hugo metadata."
+  (let ((value (org-export-data (plist-get info key) info))
+        (key (substring (symbol-name key) 1)))
+    (cond ((string-empty-p value) nil)
+          (t (org-hugo-string--wrap-quotes value)))))
+
+(defun org-hugo-string--wrap-quotes (str)
+  "Wrap double quotes to string."
+  (cond ((string-empty-p str) "")
+        ((and (string= (substring str 0 1) "\"")
+              (string= (substring str -1) "\"")) str)
+        (t (concat "\"" str "\""))))
+
+(defun org-hugo--encode-metadata-to-toml (data)
+  "Encode hugo metadata to toml format."
+  (setq metadata "+++\n")
+  (cl-loop for (key value) on data by 'cddr do
+           (setq metadata
+                 (concat metadata
+                         key " = "
+                         (cond ((or (string= key "tags") (string= key "categories"))
+                                (concat "[" (mapconcat 'identity value ", ") "]"))
+                               (value))
+                         "\n")))
+  (concat metadata "+++\n"))
+
+(defun org-hugo--encode-metadata-to-yaml (data)
+  "Encode hugo metadata to yaml format."
+  (setq metadata "---\n")
+  (cl-loop for (key value) on data by 'cddr do
+           (setq metadata
+                 (concat metadata key ": "
+                         (cond ((string= key "tags")
+                                (concat "[" (mapconcat 'identity value ", ") "]"))
+                               ((string= key "categories")
+                                (concat "\n  - " (mapconcat 'identity value "\n  - ")))
+                               (value))
+                         "\n")))
+  (concat metadata "---\n"))
+
+;;;; Template
+
+(defun org-hugo-body-filter (body backend info)
+  "Add frontmatter to  body of document. 
+BODY is the result of the export. BACKEND is always going to be hugo.  INFO is a plist
+holding export options."
+  (format "%s\n%s" (org-hugo-metadata info) body))
+
+
+;;; Interactive function
+
+;;;###autoload
+(defun org-hugo-export-as-md (&optional async subtreep visible-only)
+  "Export current buffer to a Hugo Flavored Markdown buffer.
+
+If narrowing is active in the current buffer, only export its
+narrowed part.
+
+If a region is active, export that region.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously.  The resulting buffer should be accessible
+through the `org-export-stack' interface.
+
+When optional argument SUBTREEP is non-nil, export the sub-tree
+at point, extracting information from the headline properties
+first.
+
+When optional argument VISIBLE-ONLY is non-nil, don't export
+contents of hidden elements.
+
+Export is done in a buffer named \"*Org Hugo Export*\", which will
+be displayed when `org-export-show-temporary-export-buffer' is
+non-nil."
   (interactive)
-  (unless (hugo-ensure-properties)
-    (let* ((title (concat "title = \""
-                          (org-entry-get nil "TITLE")
-                          "\"\n"))
-           (date (concat "date = \""
-                         (format-time-string
-                          "%Y-%m-%d"
-                          (apply #'encode-time
-                                 (org-parse-time-string
-                                  (org-entry-get nil "HUGO_DATE"))))
-                         "\"\n"))
-           (topics (concat "topics = [ \""
-                           (mapconcat #'identity
-                                      (split-string (org-entry-get nil "HUGO_TOPICS")
-                                                    "\\( *, *\\)" :omit-nulls)
-                                      "\", \"")
-                           "\" ]\n"))
-           (tags (concat "tags = [ \""
-                         (mapconcat #'identity
-                                    (split-string (org-entry-get nil "HUGO_TAGS")
-                                                  "\\( *, *\\)" :omit-nulls)
-                                    "\", \"")
-                         "\" ]\n"))
-           (fm (concat "+++\n"
-                       title
-                       date
-                       tags
-                       topics
-                       "+++\n\n"))
-           (file (org-entry-get nil "HUGO_FILE"))
-           (coding-system-for-write buffer-file-coding-system)
-           backend
-           blog)
-      ;; Load ox-gfm.el if available and use it as backend
-      (if (require 'ox-gfm nil :noerror)
-          (setq backend 'gfm)
-        (progn
-          (require 'ox-md)
-          (setq backend 'md)))
-      (setq blog (org-export-as backend :subtreep))
-      ;; Normalize save file path
-      (unless (string-match "^[/~]" file)
-        (setq file (concat hugo-content-dir file))
-        (unless (string-match "\\.md$" file)
-          (setq file (concat file ".md")))
-        ;; Save markdown
-        (with-temp-buffer
-          (insert fm)
-          (insert blog)
-          (write-file file)
-          (message "Exported to %s" file))))))
+  (org-export-to-buffer 'hugo "*Org Hugo Export*"
+    async subtreep visible-only nil nil (lambda () (text-mode))))
 
-;; http://whyarethingsthewaytheyare.com/setting-up-the-blog/
-(defun diego/org-hugo-export ()
-  "Export current subheading to markdown using pandoc."
+
+;;;###autoload
+(defun org-hugo-convert-region-to-md ()
+  "Assume the current region has org-mode syntax, and convert it
+to Hugo Flavored Markdown.  This can be used in any buffer.
+For example, you can write an itemized list in org-mode syntax in
+a Markdown buffer and use this command to convert it."
   (interactive)
-  (save-excursion
-    (unless (eq (org-current-level) 1)
-      (outline-up-heading 10))
-    (let* ((org-pandoc-format 'markdown)
-           (org-pandoc-options-for-markdown '((standalone . t)
-                                              (atx-headers . t)
-                                              (columns . 79)))
-           (properties (org-entry-properties))
-           (filename (cdr (assoc "EXPORT_FILE_NAME" properties)))
-           (title (concat "\"" (cdr (assoc "ITEM" properties)) "\""))
-           (slug (concat "\"" (cdr (assoc "SLUG" properties)) "\""))
-           (date (concat "\"" (cdr (assoc "DATE" properties)) "\""))
-           (categories
-            (concat "[\"" (mapconcat
-                           'identity
-                           (remove ""
-                                   (split-string
-                                    (cdr (assoc "TAGS" properties)) ":"))
-                           "\",\"") "\"]")))
-      (org-export-to-file
-          'pandoc
-          (org-export-output-file-name
-           (concat (make-temp-name ".tmp") ".org") t)
-        nil t nil nil nil
-        (lambda (f)
-          (org-pandoc-run-to-buffer-or-file f 'markdown t nil)))
-      (sleep-for 0.5)
-      (with-temp-file filename
-        (insert-file-contents filename)
-        (goto-char (point-min))
-        (re-search-forward "---\\(.\\|\n\\)+?---\n\n")
-        (replace-match "")
-        (goto-char (point-min))
-        (insert
-         (format
-          "---\ntitle: %s\nslug: %s\ndate: %s\ncategories: %s\n---\n\n"
-          title slug date categories))
-        (dolist (reps '(("^#" . "##")
-                        ("\n``` {\\.\\(.+?\\)}" . "```\\1")))
-          (goto-char (point-min))
-          (while (re-search-forward (car reps) nil t)
-            (replace-match (cdr reps))))))))
+  (org-export-replace-region-by 'hugo))
+
+
+;;;###autoload
+(defun org-hugo-export-to-md (&optional async subtreep visible-only)
+  "Export current buffer to a Hugo Flavored Markdown file.
+
+If narrowing is active in the current buffer, only export its
+narrowed part.
+
+If a region is active, export that region.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously.  The resulting file should be accessible through
+the `org-export-stack' interface.
+
+When optional argument SUBTREEP is non-nil, export the sub-tree
+at point, extracting information from the headline properties
+first.
+
+When optional argument VISIBLE-ONLY is non-nil, don't export
+contents of hidden elements.
+
+Return output file's name."
+  (interactive)
+  (let ((outfile (org-export-output-file-name ".md" subtreep)))
+    (org-export-to-file 'hugo outfile async subtreep visible-only)))
+
+;;;###autoload
+(defun org-hugo-publish-to-md (plist filename pub-dir)
+  "Publish an org file to Markdown.
+
+FILENAME is the filename of the Org file to be published.  PLIST
+is the property list for the given project.  PUB-DIR is the
+publishing directory.
+
+Return output file name."
+  (org-publish-org-to 'hugo filename ".md" plist pub-dir))
 
 (provide 'ox-hugo)
 

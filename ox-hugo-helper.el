@@ -1,7 +1,9 @@
-;;; ox-hugo.el --- Write hugo blog posts in org-mode -*- lexical-binding: t -*-
+;;; ox-hugo-helper.el --- Helper functions to write hugo blog posts in org-mode -*- lexical-binding: t -*-
 
 ;;; Commentary:
-;;
+;; This file is a colletion of legacy files pilfered from the web.
+;; preserved here as resources for a more systematic approach.
+
 
 ;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
 (defvar hugo-content-dir (concat (getenv "HOME") "/sandbox/org/ox-hugo/content/")
@@ -148,6 +150,6 @@ Returns list of properties that still must be filled in"
           (while (re-search-forward (car reps) nil t)
             (replace-match (cdr reps))))))))
 
-(provide 'ox-hugo)
+(provide 'ox-hugo-helper)
 
 ;;; ox-hugo.el ends here

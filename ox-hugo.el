@@ -29,7 +29,6 @@
 
 (require 'ox-blackfriday)
 
-
 ;;; User-Configurable Variables
 
 (defgroup org-export-hugo nil
@@ -45,7 +44,6 @@ This variable can be set to either `toml' or `yaml'."
   :group 'org-export-hugo
   :type 'string)
 
-
 ;;; Define Back-End
 
 (org-export-define-derived-backend 'hugo 'blackfriday
@@ -70,7 +68,7 @@ This variable can be set to either `toml' or `yaml'."
                    (:hugo-description "HUGO_DESCRIPTION" nil nil)
                    (:hugo-slug        "HUGO_SLUG" nil nil)
                    (:hugo-url         "HUGO_URL" nil nil)
-                   (:hugo-content-dir  "HUGO_CONTENT_DIR" nil nil)
+                   (:hugo-export-dir  "HUGO_EXPORT_DIR" nil nil)
                    (:hugo-section     "HUGO_SECTION" "posts" nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" "image" nil)))
 
@@ -257,11 +255,18 @@ contents of hidden elements.
 
 Return output file's name."
   (interactive)
+
+  ;; steals some plist reading code
+  ;; from =org-export-as=
+  ;; allows us to extract destination file info from
+  ;; export-options-alist
   (let* ((info (org-combine-plists
 		(org-export--get-export-attributes
-		 backend subtreep visible-only body-only)
-		(org-export--get-buffer-attributes)))
-         (pub-dir (concat (file-name-as-directory (plist-get info :hugo-content-dir) )
+		 'hugo subtreep visible-only)
+		(org-export--get-buffer-attributes)
+                (org-export-get-environment 'hugo subtreep)))
+         (pub-dir (concat (file-name-as-directory (plist-get info :hugo-export-dir) )
+                          (file-name-as-directory "content")
                           (file-name-as-directory (plist-get info :hugo-section))))
          (outfile (org-export-output-file-name ".md" subtreep pub-dir)))
     (org-export-to-file 'hugo outfile async subtreep visible-only)))

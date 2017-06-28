@@ -69,7 +69,10 @@ This variable can be set to either `toml' or `yaml'."
                    (:hugo-categories  "HUGO_CATEGORIES" nil nil)
                    (:hugo-description "HUGO_DESCRIPTION" nil nil)
                    (:hugo-slug        "HUGO_SLUG" nil nil)
-                   (:hugo-url         "HUGO_URL" nil nil)))
+                   (:hugo-url         "HUGO_URL" nil nil)
+                   (:hugo-content-dir  "HUGO_CONTENT_DIR" nil nil)
+                   (:hugo-section     "HUGO_SECTION" "posts" nil)
+                   (:hugo-static-images "HUGO_STATIC_IMAGES" "image" nil)))
 
 
 ;;; Transcode Functions
@@ -254,7 +257,13 @@ contents of hidden elements.
 
 Return output file's name."
   (interactive)
-  (let ((outfile (org-export-output-file-name ".md" subtreep)))
+  (let* ((info (org-combine-plists
+		(org-export--get-export-attributes
+		 backend subtreep visible-only body-only)
+		(org-export--get-buffer-attributes)))
+         (pub-dir (concat (file-name-as-directory (plist-get info :hugo-content-dir) )
+                          (file-name-as-directory (plist-get info :hugo-section))))
+         (outfile (org-export-output-file-name ".md" subtreep pub-dir)))
     (org-export-to-file 'hugo outfile async subtreep visible-only)))
 
 ;;;###autoload

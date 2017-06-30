@@ -1,9 +1,9 @@
-;;; ox-hugo.el --- Hugo Markdown Back-End for Org Export Engine
+;;; ox-hugo.el --- Hugo Markdown Back-End for Org Export Engine  -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2016 Helloyi He
 
 ;; Author: Helloyi He
-;; Keywords: org, hugo, markdown, gitpage
+;; Keywords: org, hugo, markdown
 
 ;; This file is not part of GNU Emacs.
 
@@ -14,42 +14,42 @@
 
 ;; GNU Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
+;; along with GNU Emacs. If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
-;; This library implements a Markdown back-end (hugo flavor) for Org
-;; exporter, based on the `md' back-end.
+;; This library implements a Markdown back-end compatible with the
+;; Hugo static site generator (https://gohugo.io/).
 
 ;;; Code:
 
 (require 'ox-blackfriday)
 
+
 ;;; User-Configurable Variables
 
 (defgroup org-export-hugo nil
-  "Options specific to Markdown export back-end."
-  :tag "Org Hugo Flavored Markdown"
+  "Options for exporting Org mode files to Hugo-compatible Markdown."
+  :tag "Org Export Hugo"
   :group 'org-export
-  :version "24.4"
-  :package-version '(Org . "8.0"))
+  :version "25.2")
 
-(defcustom org-hugo-metadata-format "toml"
-  "Format used to metadata.
+(defcustom org-hugo-front-matter-format "toml"
+  "Format used to front matter.
 This variable can be set to either `toml' or `yaml'."
   :group 'org-export-hugo
   :type 'string)
 
+
 ;;; Define Back-End
 
 (org-export-define-derived-backend 'hugo 'blackfriday
-  ;;:export-block '("HMD" "HUGO FLAVORED MARKDOWN")
   :menu-entry
-  '(?H "Export to Hugo Flavored Markdown"
+  '(?H "Export to Hugo-compatible Markdown"
        ((?M "To temporary buffer"
             (lambda (a s v b) (org-hugo-export-as-md a s v)))
         (?m "To file" (lambda (a s v b) (org-hugo-export-to-md a s v)))
@@ -65,25 +65,23 @@ This variable can be set to either `toml' or `yaml'."
                    ;; (:filter-link . org-hugo-image-filter)
                    )
 
-  :options-alist '((:hugo-metadata-format "HUGO_METADATA_FORMAT" nil org-hugo-metadata-format)
-                   (:hugo-tags        "HUGO_TAGS" nil nil)
-                   (:hugo-categories  "HUGO_CATEGORIES" nil nil)
+  :options-alist '((:hugo-front-matter-format "HUGO_METADATA_FORMAT" nil org-hugo-front-matter-format)
+                   (:hugo-tags "HUGO_TAGS" nil nil)
+                   (:hugo-categories "HUGO_CATEGORIES" nil nil)
                    (:hugo-description "HUGO_DESCRIPTION" nil nil)
-                   (:hugo-slug        "HUGO_SLUG" nil nil)
-                   (:hugo-url         "HUGO_URL" nil nil)
-                   (:hugo-export-dir  "HUGO_EXPORT_DIR" nil nil)
-                   (:hugo-section     "HUGO_SECTION" "posts" nil)
+                   (:hugo-slug "HUGO_SLUG" nil nil)
+                   (:hugo-url "HUGO_URL" nil nil)
+                   (:hugo-export-dir "HUGO_EXPORT_DIR" nil nil)
+                   (:hugo-section "HUGO_SECTION" "posts" nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" "images" nil)))
 
-
+
 ;;; Transcode Functions
 
-;;;; Src Block
+;;;; Source Blocks
 
-(defun org-hugo-src-block (src-block contents info)
-  "Transcode SRC-BLOCK element into Hugo Flavored Markdown
-format. CONTENTS is nil.  INFO is a plist used as a communication
-channel."
+(defun org-hugo-src-block (src-block _contents _info)
+  "Convert SRC-BLOCK element to the Hugo `highlight' shortcode."
   (let* ((lang (org-element-property :language src-block))
          (code (org-element-property :value src-block))
          (shortcode (concat "{{< highlight " lang " >}}\n"))
@@ -93,16 +91,19 @@ channel."
 ;;;; Links
 
 (defun org-hugo-link (link contents info)
-  "Transcode LINE-BREAK object into Markdown format.
-CONTENTS is the link's description. INFO is a plist used as a
-communication channel. Unlike org-md-link, this function will
-copy local images and rewrite link paths to make blogging more seamless."
+  "Convert LINK to Markdown format.
+
+CONTENTS is the link's description.
+INFO is a plist used as a communication channel.
+
+Unlike `org-md-link', this function will copy local images and
+rewrite link paths to make blogging more seamless."
   (let ((link-org-files-as-md
 	 (lambda (raw-path)
-	   ;; Treat links to `file.org' as links to `file.md'.
-	   (if (string= ".org" (downcase (file-name-extension raw-path ".")))
-	       (concat (file-name-sans-extension raw-path) ".md")
-	     raw-path)))
+           ;; Treat links to `file.org' as links to `file.md'.
+           (if (string= ".org" (downcase (file-name-extension raw-path ".")))
+               (concat (file-name-sans-extension raw-path) ".md")
+             raw-path)))
 	(type (org-element-property :type link)))
     (message "link filename is : %s" (expand-file-name (plist-get (car (cdr link)) :path)))
     (message "link type is %s" type)
@@ -112,78 +113,81 @@ copy local images and rewrite link paths to make blogging more seamless."
      ((org-export-custom-protocol-maybe link contents 'md))
      ((member type '("custom-id" "id" "fuzzy"))
       (let ((destination (if (string= type "fuzzy")
-			     (org-export-resolve-fuzzy-link link info)
-			   (org-export-resolve-id-link link info))))
+                             (org-export-resolve-fuzzy-link link info)
+                           (org-export-resolve-id-link link info))))
 	(pcase (org-element-type destination)
-	  (`plain-text			; External file.
-	   (let ((path (funcall link-org-files-as-md destination)))
-	     (if (not contents) (format "<%s>" path)
-	       (format "[%s](%s)" contents path))))
-	  (`headline
-	   (format
-	    "[%s](#%s)"
-	    ;; Description.
-	    (cond ((org-string-nw-p contents))
-		  ((org-export-numbered-headline-p destination info)
-		   (mapconcat #'number-to-string
-			      (org-export-get-headline-number destination info)
-			      "."))
-		  (t (org-export-data (org-element-property :title destination)
-				      info)))
-	    ;; Reference.
-	    (or (org-element-property :CUSTOM_ID destination)
+          (`plain-text			; External file.
+           (let ((path (funcall link-org-files-as-md destination)))
+             (if (not contents) (format "<%s>" path)
+               (format "[%s](%s)" contents path))))
+          (`headline
+           (format
+            "[%s](#%s)"
+            ;; Description.
+            (cond ((org-string-nw-p contents))
+                  ((org-export-numbered-headline-p destination info)
+                   (mapconcat #'number-to-string
+                              (org-export-get-headline-number destination info)
+                              "."))
+                  (t (org-export-data (org-element-property :title destination)
+                                      info)))
+            ;; Reference.
+            (or (org-element-property :CUSTOM_ID destination)
 		(org-export-get-reference destination info))))
-	  (_
-	   (let ((description
-		  (or (org-string-nw-p contents)
-		      (let ((number (org-export-get-ordinal destination info)))
+          (_
+           (let ((description
+                  (or (org-string-nw-p contents)
+                      (let ((number (org-export-get-ordinal destination info)))
 			(cond
 			 ((not number) nil)
 			 ((atom number) (number-to-string number))
 			 (t (mapconcat #'number-to-string number ".")))))))
-	     (when description
-	       (format "[%s](#%s)"
-		       description
-		       (org-export-get-reference destination info))))))))
+             (when description
+               (format "[%s](#%s)"
+                       description
+                       (org-export-get-reference destination info))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
       (message "org-hugo-link proccessing an image %s" contents)
-      
+
       (let ((path (org-hugo--attachment-rewrite
                    (let ((raw-path (org-element-property :path link)))
-		     (if (not (file-name-absolute-p raw-path)) raw-path
-		       (expand-file-name raw-path))) info))
-	    (caption (org-export-data
-		      (org-export-get-caption
-		       (org-export-get-parent-element link)) info)))
+                     (if (not (file-name-absolute-p raw-path)) raw-path
+                       (expand-file-name raw-path))) info))
+            (caption (org-export-data
+                      (org-export-get-caption
+                       (org-export-get-parent-element link)) info)))
 	(format "![img](%s)"
 		(if (not (org-string-nw-p caption)) path
-		  (format "%s \"%s\"" path caption)))))
+                  (format "%s \"%s\"" path caption)))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
 	(format (org-export-get-coderef-format ref contents)
 		(org-export-resolve-coderef ref info))))
      ((equal type "radio") contents)
      (t (let* ((raw-path (org-element-property :path link))
-	       (path
+               (path
 		(cond
 		 ((member type '("http" "https" "ftp"))
-		  (concat type ":" raw-path))
+                  (concat type ":" raw-path))
 		 ((string= type "file")
-		  (org-hugo--attachment-rewrite
+                  (org-hugo--attachment-rewrite
                    (org-export-file-uri
                     (funcall link-org-files-as-md raw-path))info))
 		 (t raw-path))))
-	  (if (not contents) (format "<%s>" path)
-	    (format "[%s](%s)" contents path)))))))
+          (if (not contents) (format "<%s>" path)
+            (format "[%s](%s)" contents path)))))))
 
 ;;;;; Helpers
 
-;; make attachments work on export
-(defun org-hugo--attachment-rewrite (path  info)
-  "copy local images (and pdfs) to static dir and rewrite image links"
-  (message "the hugo sectioimage dir is: %s" (plist-get info :hugo-static-images) )
-  (message "the hugo section is: %s" (plist-get info :hugo-section) )
-  (message "the hugo export dir is: %s" (plist-get info :hugo-export-dir) )
+(defun org-hugo--attachment-rewrite (path info)
+  "Copy local images and pdfs to the \"static/\" directory.
+Also rewrite image links.
+
+PATH is the path to the image or pdf attachment.
+INFO is a plist used as a communication channel."
+  (message "the Hugo sectioimage dir is: %s" (plist-get info :hugo-static-images) )
+  (message "the Hugo section is: %s" (plist-get info :hugo-section) )
+  (message "the Hugo export dir is: %s" (plist-get info :hugo-export-dir) )
 
   (let* ((full-path (file-truename path))
          (exportables '("jpg" "jpeg" "tiff" "png" "pdf" "odt" ))
@@ -195,9 +199,9 @@ copy local images and rewrite link paths to make blogging more seamless."
                             ))
          (exported-image (concat image-export-dir file-name)))
     (message "image export dir is: %s" image-export-dir)
-    (if (and  (file-exists-p full-path)
-              (member (file-name-extension path) exportables)
-              (file-directory-p image-export-dir))
+    (if (and (file-exists-p full-path)
+             (member (file-name-extension path) exportables)
+             (file-directory-p image-export-dir))
         (progn
           (unless (file-exists-p exported-image)
             (copy-file full-path exported-image))
@@ -206,114 +210,140 @@ copy local images and rewrite link paths to make blogging more seamless."
       )))
 
 
-;;;; Hugo metadata
+;;;; Hugo Front Matter
 
-(defun org-hugo-metadata (info)
-  "..."
-  (let* ((mt-format (org-export-data (plist-get info :hugo-metadata-format) info))
-         (title       (org-hugo--get-metadata-title info))
-         (date        (org-hugo--get-metadata-date  info))
+(defun org-hugo--get-front-matter (info)
+  "Return the Hugo front matter string.
 
-         (description (org-hugo--get-string-metadata info :hugo-description))
-         (tags        (org-hugo--get-list-metadata   info :hugo-tags))
-         (categories  (org-hugo--get-list-metadata   info :hugo-categories))
-         (slug        (org-hugo--get-string-metadata info :hugo-slug))
-         (url         (org-hugo--get-string-metadata info :hugo-url))
+INFO is a plist used as a communication channel."
+  (let* ((fm-format (org-export-data (plist-get info :hugo-front-matter-format) info))
+         (title (org-hugo--get-front-matter-title info))
+         (date (org-hugo--get-front-matter-date info))
+         (description (org-hugo--get-string-front-matter info :hugo-description))
+         (tags (org-hugo--get-list-front-matter info :hugo-tags))
+         (categories (org-hugo--get-list-front-matter info :hugo-categories))
+         (slug (org-hugo--get-string-front-matter info :hugo-slug))
+         (url (org-hugo--get-string-front-matter info :hugo-url))
 
          (data (list "title" title "date" date))
          (data (if description (plist-put data "description" description) data))
-         (data (if tags        (plist-put data "tags" tags) data))
-         (data (if categories  (plist-put data "categories" categories) data))
-         (data (if slug        (plist-put data "slug" slug) data))
-         (data (if url         (plist-put data "url" url) data)))
+         (data (if tags (plist-put data "tags" tags) data))
+         (data (if categories (plist-put data "categories" categories) data))
+         (data (if slug (plist-put data "slug" slug) data))
+         (data (if url (plist-put data "url" url) data)))
 
-    (message "%s" data)
-    (cond ((string= mt-format "toml") (org-hugo--encode-metadata-to-toml data))
-          ((string= mt-format "yaml") (org-hugo--encode-metadata-to-yaml data))
-          "")))
+    ;; (message "%s" data)
+    (cond ((string= fm-format "toml")
+           (org-hugo--encode-front-matter-to-toml data))
+          ((string= fm-format "yaml")
+           (org-hugo--encode-front-matter-to-yaml data))
+          (t
+           ""))))
 
-(defun org-hugo--get-metadata-title (info)
-  "Get title of hugo.
-If title is nil, set it with current buffer name"
-  (let ((title (org-hugo--get-string-metadata info :title)))
+(defun org-hugo--get-front-matter-title (info)
+  "Get the Title from the front matter.
+If it is nil, set it with current buffer file name.
+
+INFO is a plist used as a communication channel."
+  (let ((title (org-hugo--get-string-front-matter info :title)))
     (if title title
-      (org-hugo-string--wrap-quotes
+      (org-hugo--wrap-string-in-quotes
        (file-name-sans-extension
         (file-name-nondirectory (buffer-file-name)))))))
 
-(defun org-hugo--get-metadata-date (info)
-  "Get date of hugo.
-If date is nil, set it with current time"
+(defun org-hugo--get-front-matter-date (info)
+  "Get the Date from the front matter.
+If it is nil, set it to the current time.
+
+INFO is a plist used as a communication channel."
   (let ((date (org-export-get-date info "%Y-%m-%d %T %z")))
-    (if date (org-hugo-string--wrap-quotes date)
-      (org-hugo-string--wrap-quotes (format-time-string "%Y-%m-%d %T %z" (current-time))))))
+    (if date (org-hugo--wrap-string-in-quotes date)
+      (org-hugo--wrap-string-in-quotes (format-time-string "%Y-%m-%d %T %z" (current-time))))))
 
-(defun org-hugo--get-list-metadata (info key)
-  "Get hugo metadata of list type.
+(defun org-hugo--get-list-front-matter (info key)
+  "Get Hugo front matter of list type.
 INFO is a plist holding export options.
-KEY is a key of hugo metadata."
+KEY is a key of Hugo front matter."
   (let ((value (org-export-data (plist-get info key) info))
-        (key (substring (symbol-name key) 1)))
+        ;; (key (substring (symbol-name key) 1))
+        )
     (cond ((string-empty-p value) nil)
-          (t (mapcar 'org-hugo-string--wrap-quotes (split-string value))))))
+          (t (mapcar 'org-hugo--wrap-string-in-quotes (split-string value))))))
 
-(defun org-hugo--get-string-metadata (info key)
-  "Get hugo metadata of string type.
+(defun org-hugo--get-string-front-matter (info key)
+  "Get Hugo front matter of string type.
 INFO is a plist holding export options.
-KEY is a key of hugo metadata."
+KEY is a key of Hugo front matter."
   (let ((value (org-export-data (plist-get info key) info))
-        (key (substring (symbol-name key) 1)))
+        ;; (key (substring (symbol-name key) 1))
+        )
     (cond ((string-empty-p value) nil)
-          (t (org-hugo-string--wrap-quotes value)))))
+          (t (org-hugo--wrap-string-in-quotes value)))))
 
-(defun org-hugo-string--wrap-quotes (str)
-  "Wrap double quotes to string."
-  (cond ((string-empty-p str) "")
+(defun org-hugo--wrap-string-in-quotes (str)
+  "Wrap STR with double quotes and return the string."
+  (cond ((string-empty-p str)
+         "")
         ((and (string= (substring str 0 1) "\"")
-              (string= (substring str -1) "\"")) str)
-        (t (concat "\"" str "\""))))
+              (string= (substring str -1) "\""))
+         str)
+        (t
+         (concat "\"" str "\""))))
 
-(defun org-hugo--encode-metadata-to-toml (data)
-  "Encode hugo metadata to toml format."
-  (setq metadata "+++\n")
-  (cl-loop for (key value) on data by 'cddr do
-           (setq metadata
-                 (concat metadata
-                         key " = "
-                         (cond ((or (string= key "tags") (string= key "categories"))
-                                (concat "[" (mapconcat 'identity value ", ") "]"))
-                               (value))
-                         "\n")))
-  (concat metadata "+++\n"))
+(defun org-hugo--encode-front-matter-to-toml (data)
+  "Encode Hugo front matter to a string in TOML format.
+Return that string.
 
-(defun org-hugo--encode-metadata-to-yaml (data)
-  "Encode hugo metadata to yaml format."
-  (setq metadata "---\n")
-  (cl-loop for (key value) on data by 'cddr do
-           (setq metadata
-                 (concat metadata key ": "
-                         (cond ((string= key "tags")
-                                (concat "[" (mapconcat 'identity value ", ") "]"))
-                               ((string= key "categories")
-                                (concat "\n  - " (mapconcat 'identity value "\n  - ")))
-                               (value))
-                         "\n")))
-  (concat metadata "---\n"))
+DATA is a property list, which is a list of the form \(PROP1
+VALUE1 PROP2 VALUE2 ...\).  PROP is a string and VAL is any
+object."
+  (let ((front-matter "+++\n"))
+    (cl-loop for (key value) on data by 'cddr do
+             (setq front-matter
+                   (concat front-matter
+                           key " = "
+                           (cond ((or (string= key "tags") (string= key "categories"))
+                                  (concat "[" (mapconcat 'identity value ", ") "]"))
+                                 (value))
+                           "\n")))
+    (setq front-matter (concat front-matter "+++\n"))
+    front-matter))
+
+(defun org-hugo--encode-front-matter-to-yaml (data)
+  "Encode Hugo front matter to a string in YAML format.
+Return that string.
+
+DATA is a property list, which is a list of the form \(PROP1
+VALUE1 PROP2 VALUE2 ...\).  PROP is a string and VAL is any
+object."
+  (let ((front-matter "---\n"))
+    (cl-loop for (key value) on data by 'cddr do
+             (setq front-matter
+                   (concat front-matter key ": "
+                           (cond ((string= key "tags")
+                                  (concat "[" (mapconcat 'identity value ", ") "]"))
+                                 ((string= key "categories")
+                                  (concat "\n - " (mapconcat 'identity value "\n - ")))
+                                 (value))
+                           "\n")))
+    (setq front-matter (concat front-matter "---\n"))
+    front-matter))
 
 ;;;; Template
 
-(defun org-hugo-body-filter (body backend info)
-  "Add frontmatter to  body of document. 
-BODY is the result of the export. BACKEND is always going to be hugo.  INFO is a plist
-holding export options."
-  (format "%s\n%s" (org-hugo-metadata info) body))
+(defun org-hugo-body-filter (body _backend info)
+  "Add front matter to the BODY of the document.
 
+BODY is the result of the export.
+INFO is a plist holding export options."
+  (format "%s\n%s" (org-hugo--get-front-matter info) body))
 
-;;; Interactive function
+
+;;; Interactive functions
 
 ;;;###autoload
 (defun org-hugo-export-as-md (&optional async subtreep visible-only)
-  "Export current buffer to a Hugo Flavored Markdown buffer.
+  "Export current buffer to a Hugo-compatible Markdown buffer.
 
 If narrowing is active in the current buffer, only export its
 narrowed part.
@@ -338,20 +368,20 @@ non-nil."
   (org-export-to-buffer 'hugo "*Org Hugo Export*"
     async subtreep visible-only nil nil (lambda () (text-mode))))
 
-
 ;;;###autoload
 (defun org-hugo-convert-region-to-md ()
-  "Assume the current region has org-mode syntax, and convert it
-to Hugo Flavored Markdown.  This can be used in any buffer.
-For example, you can write an itemized list in org-mode syntax in
-a Markdown buffer and use this command to convert it."
+  "Convert text in the current region to Hugo-compatible Markdown.
+The text is assumed to be in Org mode format.
+
+This can be used in any buffer.  For example, you can write an
+itemized list in Org mode syntax in a Markdown buffer and use
+this command to convert it."
   (interactive)
   (org-export-replace-region-by 'hugo))
 
-
 ;;;###autoload
 (defun org-hugo-export-to-md (&optional async subtreep visible-only)
-  "Export current buffer to a Hugo Flavored Markdown file.
+  "Export current buffer to a Hugo-compatible Markdown file.
 
 If narrowing is active in the current buffer, only export its
 narrowed part.
@@ -389,7 +419,7 @@ Return output file's name."
 
 ;;;###autoload
 (defun org-hugo-walk-headlines ()
-  "Publish each 1st-level headline to hugo-mode"
+  "Publish each 1st level Org headline to a Hugo post."
   (interactive)
   (org-map-entries
    '(lambda ()
@@ -397,33 +427,34 @@ Return output file's name."
              (level (org-element-property :level entry))
              (commentedp (org-element-property :commentedp entry))
              (tags (org-element-property :tags entry)))
-        (message "on headline %s\n level is %s \n tags are %s \n commentedp is %s\n test value is %s" 
+        (message "on headline %s\n level is %s \n tags are %s \n commentedp is %s\n test value is %s"
                  (org-element-property :raw-value entry)
                  level tags commentedp
-                 (and  (eq 1 level)
-                       (not (member "noexport" tags))
-                       (not commentedp))
+                 (and (eq 1 level)
+                      (not (member "noexport" tags))
+                      (not commentedp))
                  )
-        (if (and  (eq 1 level)
-                  (not (member "noexport" tags))
-                  (not commentedp))
+        (if (and (eq 1 level)
+                 (not (member "noexport" tags))
+                 (not commentedp))
             (org-hugo-export-to-md nil t)))))
   ;; (org-publish-subtrees-to
-  ;;  (quote hugo) (buffer-file-name)
-  ;;  md nil
-  ;;  (concat (file-name-as-directory hugo-content-dir) hugo-section))
+  ;; (quote hugo) (buffer-file-name)
+  ;; md nil
+  ;; (concat (file-name-as-directory hugo-content-dir) hugo-section))
   )
 
 ;;;###autoload
 (defun org-hugo-publish-to-md (plist filename pub-dir)
-  "Publish an org file to Markdown.
+  "Publish an Org file to Hugo-compatible Markdown file.
 
-FILENAME is the filename of the Org file to be published.  PLIST
-is the property list for the given project.  PUB-DIR is the
+PLIST is the property list for the given project.  FILENAME is
+the filename of the Org file to be published.  PUB-DIR is the
 publishing directory.
 
 Return output file name."
   (org-publish-org-to 'hugo filename ".md" plist pub-dir))
+
 
 (provide 'ox-hugo)
 

@@ -1,12 +1,12 @@
-;;; ox-blackfriday.el --- Blackfriday Flavored Markdown Back-End for Org Export Engine
+;;; ox-blackfriday.el --- Blackfriday Flavored Markdown Back-End for Org Export Engine  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2014 Lars Tveito
+;; Copyright (C) 2017 Free Software Foundation, Inc.
 
-;; Author: Lars Tveito, Matt Price
-;; Keywords: org, wp, markdown, blackfriday
-;; Package-Version: 20170304.1504
+;; Authors: Matt Price <moptop99@gmail.com>
+;;          Lars Tveito <larstvei@ifi.uio.no>
+;; Keywords: org, markdown, blackfriday
 
-;; This file is not part of GNU Emacs.
+;; This file is part of GNU Emacs.
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,8 +23,11 @@
 
 ;;; Commentary:
 
-;; This library implements a Markdown back-end (blackfriday flavor) for Org
-;; exporter, based on the `md' back-end. It is mostly copied from Lats Tveito's gfm
+;; This library implements a Markdown back-end (Blackfriday flavor
+;; (https://github.com/russross/blackfriday)) for Org exporter, based
+;; on the `md' back-end.
+
+;; It is mostly copied from Lats Tveito's GitHub Flavored Markdown
 ;; exporter (https://github.com/larstvei/ox-gfm).
 
 ;;; Code:
@@ -35,11 +38,10 @@
 ;;; User-Configurable Variables
 
 (defgroup org-export-blackfriday nil
-  "Options specific to Markdown export back-end."
-  :tag "Org Github Flavored Markdown"
+  "Options for exporting Org mode files to Blackfriday Markdown."
+  :tag "Org Export Blackfriday"
   :group 'org-export
-  :version "24.4"
-  :package-version '(Org . "8.0"))
+  :version "25.2")
 
 
 ;;; Define Back-End
@@ -70,7 +72,7 @@
 ;;;; Paragraph
 
 (defun org-blackfriday-paragraph (paragraph contents info)
-  "Transcode PARAGRAPH element into Github Flavoured Markdown format.
+  "Transcode PARAGRAPH element into Blackfriday Markdown format.
 CONTENTS is the paragraph contents.  INFO is a plist used as a
 communication channel."
   (unless (plist-get info :preserve-breaks)
@@ -84,10 +86,10 @@ communication channel."
 
 ;;;; Src Block
 
-(defun org-blackfriday-src-block (src-block contents info)
-  "Transcode SRC-BLOCK element into Github Flavored Markdown
-format. CONTENTS is nil.  INFO is a plist used as a communication
-channel."
+(defun org-blackfriday-src-block (src-block _contents info)
+  "Transcode SRC-BLOCK element into Blackfriday Markdown format.
+
+INFO is a plist used as a communication channel."
   (let* ((lang (org-element-property :language src-block))
          (code (org-export-format-code-default src-block info))
          (prefix (concat "```" lang "\n"))
@@ -97,10 +99,9 @@ channel."
 
 ;;;; Strike-Through
 
-(defun org-blackfriday-strike-through (strike-through contents info)
-  "Transcode STRIKE-THROUGH from Org to Markdown (BLACKFRIDAY).
-CONTENTS is the text with strike-through markup.  INFO is a plist
-holding contextual information."
+(defun org-blackfriday-strike-through (_strike-through contents _info)
+  "Transcode strike-through text from Org to Blackfriday Markdown.
+CONTENTS contains the text with strike-through markup."
   (format "~~%s~~" contents))
 
 
@@ -114,10 +115,11 @@ holding contextual information."
 (defconst blackfriday-table-separator "| ")
 
 (defun org-blackfriday-table-col-width (table column info)
-  "Return width of TABLE at given COLUMN. INFO is a plist used as
-communication channel. Width of a column is determined either by
-inquerying `width-cookies' in the column, or by the maximum cell with in
-the column."
+  "Return width of TABLE at given COLUMN using INFO.
+
+INFO is a plist used as communication channel.
+Width of a column is determined either by inquerying `width-cookies'
+in the column, or by the maximum cell with in the column."
   (let ((cookie (when (hash-table-p width-cookies)
                   (gethash column width-cookies))))
     (if (and (eq table width-cookies-table)
@@ -148,10 +150,12 @@ the column."
 
 
 (defun org-blackfriday-make-hline-builder (table info char)
-  "Return a function to build horizontal line in TABLE with given
-CHAR. INFO is a plist used as a communication channel."
+  "Return a function to horizontal lines in TABLE.
+Draw the lines using INFO with given CHAR.
+
+INFO is a plist used as a communication channel."
   `(lambda (col)
-     (let ((max-width (max 3 (+ 1  (org-blackfriday-table-col-width table col info)))))
+     (let ((max-width (max 3 (+ 1 (org-blackfriday-table-col-width ,table col ,info)))))
        (when (< max-width 1)
          (setq max-width 1))
        (make-string max-width ,char))))
@@ -160,8 +164,10 @@ CHAR. INFO is a plist used as a communication channel."
 ;;;; Table-Cell
 
 (defun org-blackfriday-table-cell (table-cell contents info)
-  "Transcode TABLE-CELL element from Org into BLACKFRIDAY. CONTENTS is content
-of the cell. INFO is a plist used as a communication channel."
+  "Transcode TABLE-CELL element from Org into Blackfriday.
+
+CONTENTS is content of the cell.  INFO is a plist used as a
+communication channel."
   (let* ((table (org-export-get-parent-table table-cell))
          (column (cdr (org-export-table-cell-address table-cell info)))
          (width (org-blackfriday-table-col-width table column info))
@@ -178,17 +184,18 @@ of the cell. INFO is a plist used as a communication channel."
 ;;;; Table-Row
 
 (defun org-blackfriday-table-row (table-row contents info)
-  "Transcode TABLE-ROW element from Org into BLACKFRIDAY. CONTENTS is cell
-contents of TABLE-ROW. INFO is a plist used as a communication
-channel."
+  "Transcode TABLE-ROW element from Org into Blackfriday.
+
+CONTENTS is cell contents of TABLE-ROW.  INFO is a plist used as a
+communication channel."
   (let ((table (org-export-get-parent-table table-row)))
     (when (and (eq 'rule (org-element-property :type table-row))
-               ;; In BLACKFRIDAY, rule is valid only at second row.
+               ;; In Blackfriday, rule is valid only at second row.
                (eq 1 (cl-position
                       table-row
                       (org-element-map table 'table-row 'identity info))))
       (let* ((table (org-export-get-parent-table table-row))
-             (header-p (org-export-table-row-starts-header-p table-row info))
+             ;; (headerp (org-export-table-row-starts-header-p table-row info))
              (build-rule (org-blackfriday-make-hline-builder table info ?-))
              (cols (cdr (org-export-table-dimensions table info))))
         (setq contents
@@ -204,8 +211,9 @@ channel."
 ;;;; Table
 
 (defun org-blackfriday-table (table contents info)
-  "Transcode TABLE element into Github Flavored Markdown table.
-CONTENTS is the contents of the table. INFO is a plist holding
+  "Transcode TABLE element from Org into Blackfriday.
+
+CONTENTS is contents of the table.  INFO is a plist holding
 contextual information."
   (let* ((rows (org-element-map table 'table-row 'identity info))
          (no-header (or (<= (length rows) 1)))
@@ -228,20 +236,18 @@ contextual information."
     (concat (when no-header (funcall build-dummy-header))
             (replace-regexp-in-string "\n\n" "\n" contents))))
 
-
 ;;;; Table of contents
 
-(defun org-blackfriday-format-toc (headline)
-  "Return an appropriate table of contents entry for HEADLINE. INFO is a
-plist used as a communication channel."
-  (let* ((title (org-export-data
-                 (org-export-get-alt-title headline info) info))
+(defun org-blackfriday-format-toc (headline info)
+  "Return an appropriate table of contents entry for HEADLINE.
+
+INFO is a plist used as a communication channel."
+  (let* ((title (org-export-data (org-export-get-alt-title headline info) info))
          (level (1- (org-element-property :level headline)))
          (indent (concat (make-string (* level 2) ? )))
          (anchor (or (org-element-property :CUSTOM_ID headline)
                      (org-export-get-reference headline info))))
     (concat indent "- [" title "]" "(#" anchor ")")))
-
 
 ;;;; Footnote section
 
@@ -250,7 +256,7 @@ plist used as a communication channel."
 INFO is a plist used as a communication channel."
   (let* ((fn-alist (org-export-collect-footnote-definitions info))
          (fn-alist
-          (cl-loop for (n type raw) in fn-alist collect
+          (cl-loop for (n raw) in fn-alist collect
                    (cons n (org-trim (org-export-data raw info))))))
     (when fn-alist
       (format
@@ -283,15 +289,18 @@ CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
   (let* ((depth (plist-get info :with-toc))
          (headlines (and depth (org-export-collect-headlines info depth)))
-         (toc-string (or (mapconcat 'org-blackfriday-format-toc headlines "\n") ""))
-         (toc-tail (if headlines "\n\n" "")))
+         (toc-tail (if headlines "\n\n" ""))
+         (toc-string ""))
+
+    (when headlines
+      (dolist (headline headlines)
+        (setq toc-string (concat toc-string
+                                 (org-blackfriday-format-toc headline info)
+                                 "\n"))))
     (org-trim (concat toc-string toc-tail contents "\n" (org-blackfriday-footnote-section info)))))
-        
-
-
 
 
-;;; Interactive function
+;;; Interactive functions
 
 ;;;###autoload
 (defun org-blackfriday-export-as-markdown (&optional async subtreep visible-only)
@@ -320,16 +329,16 @@ non-nil."
   (org-export-to-buffer 'blackfriday "*Org BLACKFRIDAY Export*"
     async subtreep visible-only nil nil (lambda () (text-mode))))
 
-
 ;;;###autoload
 (defun org-blackfriday-convert-region-to-md ()
-  "Assume the current region has org-mode syntax, and convert it
-to Github Flavored Markdown.  This can be used in any buffer.
-For example, you can write an itemized list in org-mode syntax in
-a Markdown buffer and use this command to convert it."
+  "Convert text in the current region to Blackfriday Markdown.
+The text is assumed to be in Org mode format.
+
+This can be used in any buffer.  For example, you can write an
+itemized list in Org mode syntax in a Markdown buffer and use
+this command to convert it."
   (interactive)
   (org-export-replace-region-by 'blackfriday))
-
 
 ;;;###autoload
 (defun org-blackfriday-export-to-markdown (&optional async subtreep visible-only)
@@ -358,12 +367,15 @@ Return output file's name."
 
 ;;;###autoload
 (defun org-blackfriday-publish-to-blackfriday (plist filename pub-dir)
-  "Publish an org file to Markdown.
-FILENAME is the filename of the Org file to be published.  PLIST
-is the property list for the given project.  PUB-DIR is the
+  "Publish an Org file to Blackfriday Markdown file.
+
+PLIST is the property list for the given project.  FILENAME is
+the filename of the Org file to be published.  PUB-DIR is the
 publishing directory.
+
 Return output file name."
   (org-publish-org-to 'blackfriday filename ".md" plist pub-dir))
+
 
 (provide 'ox-blackfriday)
 

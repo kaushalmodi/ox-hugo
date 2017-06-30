@@ -46,7 +46,7 @@ This package might evolve into a multi-.el project.
      =hugo= binary in =PATH= (ii) define their =hugo= blog dir in the
      =defcustom= (iii) =M-x hugo=.
 
-* TODO [1/8]
+* TODO [2/9]
 - [X] Have =ox-hugo= be a backend derived from =ox-blackfriday=
   (=ox-blackfriday= needed at least for table support).
 - [ ] fix table horizontal rule generator, which currently adds an
@@ -61,6 +61,7 @@ This package might evolve into a multi-.el project.
     course that should translate to hugo post fm.
 - [ ] Function to re-export the whole org file to subtree-specific
   markdown files
+- [X] in image links, copy images to static dir and rewrite link target
 - [ ] Use =org-capture= to generate new posts in a pre-defined "blog
   posts org file". That step should also auto-insert the meta-data
   needed for hugo frontmatter as needed -- like the post's initial

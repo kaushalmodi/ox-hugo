@@ -58,9 +58,12 @@ This variable can be set to either `toml' or `yaml'."
               (if a (org-hugo-export-to-md t s v)
                 (org-open-file (org-hugo-export-to-md nil s v)))))))
   :translate-alist '((src-block . org-hugo-src-block)
+                     (link . org-hugo-link)
                      ;;(inner-template . org-hugo-inner-template)
                      (table . org-hugo-table))
-  :filters-alist '((:filter-body . org-hugo-body-filter))
+  :filters-alist '((:filter-body . org-hugo-body-filter)
+                   ;; (:filter-link . org-hugo-image-filter)
+                   )
 
   :options-alist '((:hugo-metadata-format "HUGO_METADATA_FORMAT" nil org-hugo-metadata-format)
                    (:hugo-tags        "HUGO_TAGS" nil nil)
@@ -70,9 +73,9 @@ This variable can be set to either `toml' or `yaml'."
                    (:hugo-url         "HUGO_URL" nil nil)
                    (:hugo-export-dir  "HUGO_EXPORT_DIR" nil nil)
                    (:hugo-section     "HUGO_SECTION" "posts" nil)
-                   (:hugo-static-images "HUGO_STATIC_IMAGES" "image" nil)))
+                   (:hugo-static-images "HUGO_STATIC_IMAGES" "images" nil)))
 
-
+
 ;;; Transcode Functions
 
 ;;;; Src Block
@@ -87,7 +90,120 @@ channel."
          (close-shortcode "{{< /highlight >}}\n"))
     (concat shortcode code close-shortcode)))
 
+;;;; Links
 
+(defun org-hugo-link (link contents info)
+  "Transcode LINE-BREAK object into Markdown format.
+CONTENTS is the link's description. INFO is a plist used as a
+communication channel. Unlike org-md-link, this function will
+copy local images and rewrite link paths to make blogging more seamless."
+  (let ((link-org-files-as-md
+	 (lambda (raw-path)
+	   ;; Treat links to `file.org' as links to `file.md'.
+	   (if (string= ".org" (downcase (file-name-extension raw-path ".")))
+	       (concat (file-name-sans-extension raw-path) ".md")
+	     raw-path)))
+	(type (org-element-property :type link)))
+    (message "link filename is : %s" (expand-file-name (plist-get (car (cdr link)) :path)))
+    (message "link type is %s" type)
+    (message "link ")
+    (cond
+     ;; Link type is handled by a special function.
+     ((org-export-custom-protocol-maybe link contents 'md))
+     ((member type '("custom-id" "id" "fuzzy"))
+      (let ((destination (if (string= type "fuzzy")
+			     (org-export-resolve-fuzzy-link link info)
+			   (org-export-resolve-id-link link info))))
+	(pcase (org-element-type destination)
+	  (`plain-text			; External file.
+	   (let ((path (funcall link-org-files-as-md destination)))
+	     (if (not contents) (format "<%s>" path)
+	       (format "[%s](%s)" contents path))))
+	  (`headline
+	   (format
+	    "[%s](#%s)"
+	    ;; Description.
+	    (cond ((org-string-nw-p contents))
+		  ((org-export-numbered-headline-p destination info)
+		   (mapconcat #'number-to-string
+			      (org-export-get-headline-number destination info)
+			      "."))
+		  (t (org-export-data (org-element-property :title destination)
+				      info)))
+	    ;; Reference.
+	    (or (org-element-property :CUSTOM_ID destination)
+		(org-export-get-reference destination info))))
+	  (_
+	   (let ((description
+		  (or (org-string-nw-p contents)
+		      (let ((number (org-export-get-ordinal destination info)))
+			(cond
+			 ((not number) nil)
+			 ((atom number) (number-to-string number))
+			 (t (mapconcat #'number-to-string number ".")))))))
+	     (when description
+	       (format "[%s](#%s)"
+		       description
+		       (org-export-get-reference destination info))))))))
+     ((org-export-inline-image-p link org-html-inline-image-rules)
+      (message "org-hugo-link proccessing an image %s" contents)
+      
+      (let ((path (org-hugo--attachment-rewrite
+                   (let ((raw-path (org-element-property :path link)))
+		     (if (not (file-name-absolute-p raw-path)) raw-path
+		       (expand-file-name raw-path))) info))
+	    (caption (org-export-data
+		      (org-export-get-caption
+		       (org-export-get-parent-element link)) info)))
+	(format "![img](%s)"
+		(if (not (org-string-nw-p caption)) path
+		  (format "%s \"%s\"" path caption)))))
+     ((string= type "coderef")
+      (let ((ref (org-element-property :path link)))
+	(format (org-export-get-coderef-format ref contents)
+		(org-export-resolve-coderef ref info))))
+     ((equal type "radio") contents)
+     (t (let* ((raw-path (org-element-property :path link))
+	       (path
+		(cond
+		 ((member type '("http" "https" "ftp"))
+		  (concat type ":" raw-path))
+		 ((string= type "file")
+		  (org-hugo--attachment-rewrite
+                   (org-export-file-uri
+                    (funcall link-org-files-as-md raw-path))info))
+		 (t raw-path))))
+	  (if (not contents) (format "<%s>" path)
+	    (format "[%s](%s)" contents path)))))))
+
+;;;;; Helpers
+
+;; make attachments work on export
+(defun org-hugo--attachment-rewrite (path  info)
+  "copy local images (and pdfs) to static dir and rewrite image links"
+  (message "the hugo sectioimage dir is: %s" (plist-get info :hugo-static-images) )
+  (message "the hugo section is: %s" (plist-get info :hugo-section) )
+  (message "the hugo export dir is: %s" (plist-get info :hugo-export-dir) )
+
+  (let* ((full-path (file-truename path))
+         (exportables '("jpg" "jpeg" "tiff" "png" "pdf" "odt" ))
+         (file-name (file-name-nondirectory path))
+         (image-export-dir (concat
+                            (file-name-as-directory (plist-get info :hugo-export-dir))
+                            "static/"
+                            (file-name-as-directory (plist-get info :hugo-static-images))
+                            ))
+         (exported-image (concat image-export-dir file-name)))
+    (message "image export dir is: %s" image-export-dir)
+    (if (and  (file-exists-p full-path)
+              (member (file-name-extension path) exportables)
+              (file-directory-p image-export-dir))
+        (progn
+          (unless (file-exists-p exported-image)
+            (copy-file full-path exported-image))
+          (concat "/static/" (file-name-as-directory (plist-get info :hugo-static-images)) file-name))
+      path
+      )))
 
 
 ;;;; Hugo metadata
@@ -192,7 +308,7 @@ BODY is the result of the export. BACKEND is always going to be hugo.  INFO is a
 holding export options."
   (format "%s\n%s" (org-hugo-metadata info) body))
 
-
+
 ;;; Interactive function
 
 ;;;###autoload

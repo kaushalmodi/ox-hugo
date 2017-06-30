@@ -1,0 +1,9 @@
+#+TITLE: My Blog
+#+HUGO_EXPORT_DIR: ~/temp/small1/
+#+HUGO_SECTION: posts
+
+# 1. Load `ox-hugo'
+# 2. M-x org-hugo-walk-headlines
+
+* Post 1
+Something

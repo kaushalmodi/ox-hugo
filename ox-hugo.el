@@ -401,7 +401,6 @@ contents of hidden elements.
 
 Return output file's name."
   (interactive)
-
   ;; steals some plist reading code
   ;; from =org-export-as=
   ;; allows us to extract destination file info from
@@ -411,9 +410,16 @@ Return output file's name."
 		 'hugo subtreep visible-only)
 		(org-export--get-buffer-attributes)
                 (org-export-get-environment 'hugo subtreep)))
-         (pub-dir (concat (file-name-as-directory (plist-get info :hugo-export-dir) )
-                          (file-name-as-directory "content")
-                          (file-name-as-directory (plist-get info :hugo-section))))
+         (export-dir-path (if (null (plist-get info :hugo-export-dir))
+                              (user-error "It is mandatory to set the HUGO_EXPORT_DIR property")
+                            (file-name-as-directory (plist-get info :hugo-export-dir))))
+         (content-dir "content/")
+         (section-dir (if (null (plist-get info :hugo-section))
+                          (user-error "It is mandatory to set the HUGO_SECTION property")
+                        (file-name-as-directory (plist-get info :hugo-section))))
+         (pub-dir (let ((dir (concat export-dir-path content-dir section-dir)))
+                    (make-directory dir :parents) ;Create the directory if it does not exist
+                    dir))
          (outfile (org-export-output-file-name ".md" subtreep pub-dir)))
     (org-export-to-file 'hugo outfile async subtreep visible-only)))
 

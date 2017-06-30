@@ -65,7 +65,7 @@ This variable can be set to either `toml' or `yaml'."
                    ;; (:filter-link . org-hugo-image-filter)
                    )
 
-  :options-alist '((:hugo-front-matter-format "HUGO_METADATA_FORMAT" nil org-hugo-front-matter-format)
+  :options-alist '((:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil org-hugo-front-matter-format)
                    (:hugo-tags "HUGO_TAGS" nil nil)
                    (:hugo-categories "HUGO_CATEGORIES" nil nil)
                    (:hugo-description "HUGO_DESCRIPTION" nil nil)

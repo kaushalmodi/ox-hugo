@@ -59,7 +59,7 @@ This package might evolve into a multi-.el project.
     =:PUBLISHDATE:= property exists.
   - [ ] Ability to set/toggle =:DRAFT: true= in property drawer. Of
     course that should translate to hugo post fm.
-- [ ] Function to re-export the whole org file to subtree-specific
+- [X] Function to re-export the whole org file to subtree-specific
   markdown files
 - [X] in image links, copy images to static dir and rewrite link target
 - [ ] Use =org-capture= to generate new posts in a pre-defined "blog

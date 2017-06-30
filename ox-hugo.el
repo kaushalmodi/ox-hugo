@@ -272,6 +272,26 @@ Return output file's name."
     (org-export-to-file 'hugo outfile async subtreep visible-only)))
 
 ;;;###autoload
+(defun org-hugo-walk-headlines ()
+  "Publish each 1st-level headline to hugo-mode"
+  (interactive)
+  (org-map-entries
+   '(lambda ()
+      (let* ((entry (org-element-at-point))
+             (level (org-element-property :level (org-element-at-point)))
+             (commentedp (org-element-property :commentedp headline))
+             (tags (org-element-property :tags headline))))
+      (if (and  (eq 1 level)
+                (member "noexport" tags)
+                (not commentedp))
+          (org-hugo-export-to-md nil t))))
+  ;; (org-publish-subtrees-to
+  ;;  (quote hugo) (buffer-file-name)
+  ;;  md nil
+  ;;  (concat (file-name-as-directory hugo-content-dir) hugo-section))
+  )
+
+;;;###autoload
 (defun org-hugo-publish-to-md (plist filename pub-dir)
   "Publish an org file to Markdown.
 

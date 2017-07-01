@@ -1,9 +1,18 @@
 #+TITLE: My Blog
-#+HUGO_EXPORT_DIR: ~/temp/small1/
+#+HUGO_EXPORT_DIR: ../../md/
 #+HUGO_SECTION: posts
 
 # 1. Load `ox-hugo'
 # 2. M-x org-hugo-walk-headlines
 
 * Post 1
+:PROPERTIES:
+:DATE:     June 11, 2000
+:END:
 Something
+* Post 2
+:PROPERTIES:
+:CUSTOM_ID: testxyz
+:FOO: There
+:END:
+Something Else

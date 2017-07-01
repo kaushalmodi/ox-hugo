@@ -1,0 +1,17 @@
+#+TITLE: Ox-Hugo Manual
+
+=ox-hugo= is an Emacs package to export Org files to Hugo-compatible
+Markdown files.  At the moment it supports only the [[https://github.com/russross/blackfriday][Blackfriday
+Markdown]] flavor.
+* Hugo specific export settings
+** Mandatory settings
+- HUGO_SECTION :: The default Hugo section name for all the posts.  See
+                  [[http://gohugo.io/content/sections/][here]] for more information on Hugo sections.  It is
+                  common for this property to be set to =posts= or
+                  =blog=.
+- HUGO_EXPORT_DIR :: Root directory of the source for the Hugo site.
+     If this is set to =~/hugo/=, the exported Markdown files will be
+     saved to =~/hugo/content/<HUGO_SECTION>/= directory.  By [[http://gohugo.io/content/organization/][default]],
+     the Markdown files reside in a hierarchy under the =content/=
+     directory in the site root directory.
+** Optional settings

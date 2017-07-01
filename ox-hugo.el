@@ -50,9 +50,16 @@ This variable can be set to either `toml' or `yaml'."
 (org-export-define-derived-backend 'hugo 'blackfriday
   :menu-entry
   '(?H "Export to Hugo-compatible Markdown"
-       ((?M "To temporary buffer"
+       ((?H "Subtree to file             " (lambda (a _s v b) (org-hugo-export-to-md a :subtreep v)))
+        (?h "To file" (lambda (a s v b) (org-hugo-export-to-md a s v)))
+        (?T "Subtree to temporary buffer "
+            (lambda (a _s v b) (org-hugo-export-as-md a :subtreep v)))
+        (?t "To temporary buffer"
             (lambda (a s v b) (org-hugo-export-as-md a s v)))
-        (?m "To file" (lambda (a s v b) (org-hugo-export-to-md a s v)))
+        (?O "Subtree to file and open    "
+            (lambda (a _s v b)
+              (if a (org-hugo-export-to-md t :subtreep v)
+                (org-open-file (org-hugo-export-to-md nil :subtreep v)))))
         (?o "To file and open"
             (lambda (a s v b)
               (if a (org-hugo-export-to-md t s v)

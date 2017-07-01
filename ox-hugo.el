@@ -220,74 +220,6 @@ INFO is a plist used as a communication channel."
 
 ;;;; Hugo Front Matter
 
-(defun org-hugo--get-front-matter (info)
-  "Return the Hugo front matter string.
-
-INFO is a plist used as a communication channel."
-  (let* ((fm-format (org-export-data (plist-get info :hugo-front-matter-format) info))
-         (title (org-hugo--get-front-matter-title info))
-         (date (org-hugo--get-front-matter-date info))
-         (description (org-hugo--get-string-front-matter info :hugo-description))
-         (tags (org-hugo--get-list-front-matter info :hugo-tags))
-         (categories (org-hugo--get-list-front-matter info :hugo-categories))
-         (slug (org-hugo--get-string-front-matter info :hugo-slug))
-         (url (org-hugo--get-string-front-matter info :hugo-url))
-
-         (data (list "title" title "date" date))
-         (data (if description (plist-put data "description" description) data))
-         (data (if tags (plist-put data "tags" tags) data))
-         (data (if categories (plist-put data "categories" categories) data))
-         (data (if slug (plist-put data "slug" slug) data))
-         (data (if url (plist-put data "url" url) data)))
-
-    ;; (message "%s" data)
-    (cond ((string= fm-format "toml")
-           (org-hugo--encode-front-matter-to-toml data))
-          ((string= fm-format "yaml")
-           (org-hugo--encode-front-matter-to-yaml data))
-          (t
-           ""))))
-
-(defun org-hugo--get-front-matter-title (info)
-  "Get the Title from the front matter.
-If it is nil, set it with current buffer file name.
-
-INFO is a plist used as a communication channel."
-  (let ((title (org-hugo--get-string-front-matter info :title)))
-    (if title title
-      (org-hugo--wrap-string-in-quotes
-       (file-name-sans-extension
-        (file-name-nondirectory (buffer-file-name)))))))
-
-(defun org-hugo--get-front-matter-date (info)
-  "Get the Date from the front matter.
-If it is nil, set it to the current time.
-
-INFO is a plist used as a communication channel."
-  (let ((date (org-export-get-date info "%Y-%m-%d %T %z")))
-    (if date (org-hugo--wrap-string-in-quotes date)
-      (org-hugo--wrap-string-in-quotes (format-time-string "%Y-%m-%d %T %z" (current-time))))))
-
-(defun org-hugo--get-list-front-matter (info key)
-  "Get Hugo front matter of list type.
-INFO is a plist holding export options.
-KEY is a key of Hugo front matter."
-  (let ((value (org-export-data (plist-get info key) info))
-        ;; (key (substring (symbol-name key) 1))
-        )
-    (cond ((string-empty-p value) nil)
-          (t (mapcar 'org-hugo--wrap-string-in-quotes (split-string value))))))
-
-(defun org-hugo--get-string-front-matter (info key)
-  "Get Hugo front matter of string type.
-INFO is a plist holding export options.
-KEY is a key of Hugo front matter."
-  (let ((value (org-export-data (plist-get info key) info))
-        ;; (key (substring (symbol-name key) 1))
-        )
-    (cond ((string-empty-p value) nil)
-          (t (org-hugo--wrap-string-in-quotes value)))))
-
 (defun org-hugo--wrap-string-in-quotes (str)
   "Wrap STR with double quotes and return the string."
   (cond ((string-empty-p str)
@@ -298,44 +230,65 @@ KEY is a key of Hugo front matter."
         (t
          (concat "\"" str "\""))))
 
-(defun org-hugo--encode-front-matter-to-toml (data)
-  "Encode Hugo front matter to a string in TOML format.
-Return that string.
+(defun org-hugo--get-front-matter (info)
+  "Return the Hugo front matter string.
 
-DATA is a property list, which is a list of the form \(PROP1
-VALUE1 PROP2 VALUE2 ...\).  PROP is a string and VAL is any
-object."
-  (let ((front-matter "+++\n"))
-    (cl-loop for (key value) on data by 'cddr do
-             (setq front-matter
-                   (concat front-matter
-                           key " = "
-                           (cond ((or (string= key "tags") (string= key "categories"))
-                                  (concat "[" (mapconcat 'identity value ", ") "]"))
-                                 (value))
-                           "\n")))
-    (setq front-matter (concat front-matter "+++\n"))
-    front-matter))
+INFO is a plist used as a communication channel."
+  (let* ((fm-format (org-export-data (plist-get info :hugo-front-matter-format) info))
+         (hugo-date-fmt "%Y-%m-%dT%T%z")
+         (date (or (org-string-nw-p (org-export-get-date info hugo-date-fmt))
+                   (format-time-string hugo-date-fmt (current-time))))
+         (data `((title . ,(org-export-data (plist-get info :title) info))
+                 (date . ,date)
+                 (description . ,(org-export-data (plist-get info :hugo-description) info))
+                 (slug . ,(org-export-data (plist-get info :hugo-slug) info))
+                 (url . ,(org-export-data (plist-get info :hugo-url) info))
+                 (aliases . ,(org-export-data (plist-get info :hugo-aliases) info))
+                 (tags . ,(org-export-data (plist-get info :hugo-tags) info))
+                 (categories . ,(org-export-data (plist-get info :hugo-categories) info)))))
+    (org-hugo--gen-front-matter data fm-format)))
 
-(defun org-hugo--encode-front-matter-to-yaml (data)
-  "Encode Hugo front matter to a string in YAML format.
-Return that string.
+(defun org-hugo--gen-front-matter (data format)
+  "Generate the Hugo post front matter, and return that string.
 
-DATA is a property list, which is a list of the form \(PROP1
-VALUE1 PROP2 VALUE2 ...\).  PROP is a string and VAL is any
-object."
-  (let ((front-matter "---\n"))
-    (cl-loop for (key value) on data by 'cddr do
-             (setq front-matter
-                   (concat front-matter key ": "
-                           (cond ((string= key "tags")
-                                  (concat "[" (mapconcat 'identity value ", ") "]"))
-                                 ((string= key "categories")
-                                  (concat "\n - " (mapconcat 'identity value "\n - ")))
-                                 (value))
-                           "\n")))
-    (setq front-matter (concat front-matter "---\n"))
-    front-matter))
+DATA is an alist of the form \((KEY1 . VAL1) (KEY2 . VAL2) .. \),
+where KEY is a symbol and VAL is a string.
+
+Generate the front matter in the specified FORMAT.  Valid values
+are \"toml\" and \"yaml\"."
+  (let ((sep (cond ((string= format "toml") "+++\n")
+                   ((string= format "yaml") "---\n")
+                   (t "")))
+        (sign (cond ((string= format "toml") "=")
+                    ((string= format "yaml") ":")
+                    (t "")))
+        (front-matter ""))
+    (dolist (pair data)
+      (let ((key (symbol-name (car pair)))
+            (value (cdr pair)))
+        (unless (or (null value)
+                    (string= "" value))
+          ;; In TOML/YAML, the value portion needs to be wrapped in double quotes
+          ;; TOML example:
+          ;;     title = "My Post"
+          ;; YAML example:
+          ;;     title : "My Post"
+          (setq front-matter
+                (concat front-matter
+                        (format "%s %s %s\n"
+                                key
+                                sign
+                                (cond ((or (string= key "tags")
+                                           (string= key "categories"))
+                                       ;; "abc def" -> "[\"abc\", \"def\"]"
+                                       (concat "["
+                                               (mapconcat #'identity
+                                                          (mapcar #'org-hugo--wrap-string-in-quotes
+                                                                  (split-string value)) ", ")
+                                               "]"))
+                                      (t
+                                       (org-hugo--wrap-string-in-quotes value)))))))))
+    (concat sep front-matter sep)))
 
 ;;;; Template
 

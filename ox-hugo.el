@@ -78,6 +78,7 @@ This variable can be set to either `toml' or `yaml'."
                    (:hugo-description "HUGO_DESCRIPTION" nil nil)
                    (:hugo-slug "HUGO_SLUG" nil nil)
                    (:hugo-url "HUGO_URL" nil nil)
+                   (:hugo-aliases "HUGO_ALIASES" nil nil)
                    (:hugo-export-dir "HUGO_EXPORT_DIR" nil nil)
                    (:hugo-section "HUGO_SECTION" "posts" nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" "images" nil)))

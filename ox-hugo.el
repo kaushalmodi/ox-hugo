@@ -112,9 +112,9 @@ rewrite link paths to make blogging more seamless."
                (concat (file-name-sans-extension raw-path) ".md")
              raw-path)))
 	(type (org-element-property :type link)))
-    (message "link filename is : %s" (expand-file-name (plist-get (car (cdr link)) :path)))
-    (message "link type is %s" type)
-    (message "link ")
+    (message "[ox-hugo DBG] link filename is : %s" (expand-file-name (plist-get (car (cdr link)) :path)))
+    (message "[ox-hugo DBG] link type is %s" type)
+    (message "[ox-hugo DBG] link ")
     (cond
      ;; Link type is handled by a special function.
      ((org-export-custom-protocol-maybe link contents 'md))
@@ -192,9 +192,9 @@ Also rewrite image links.
 
 PATH is the path to the image or pdf attachment.
 INFO is a plist used as a communication channel."
-  (message "the Hugo sectioimage dir is: %s" (plist-get info :hugo-static-images) )
-  (message "the Hugo section is: %s" (plist-get info :hugo-section) )
-  (message "the Hugo export dir is: %s" (plist-get info :hugo-export-dir) )
+  (message "[ox-hugo DBG] The Hugo sectioimage dir is: %s" (plist-get info :hugo-static-images) )
+  (message "[ox-hugo DBG] The Hugo section is: %s" (plist-get info :hugo-section) )
+  (message "[ox-hugo DBG] The Hugo export dir is: %s" (plist-get info :hugo-export-dir) )
 
   (let* ((full-path (file-truename path))
          (exportables '("jpg" "jpeg" "tiff" "png" "pdf" "odt" ))
@@ -205,7 +205,7 @@ INFO is a plist used as a communication channel."
                             (file-name-as-directory (plist-get info :hugo-static-images))
                             ))
          (exported-image (concat image-export-dir file-name)))
-    (message "image export dir is: %s" image-export-dir)
+    (message "[ox-hugo DBG] Image export dir is: %s" image-export-dir)
     (if (and (file-exists-p full-path)
              (member (file-name-extension path) exportables)
              (file-directory-p image-export-dir))
@@ -345,7 +345,7 @@ BODY is the result of the export.
 INFO is a plist holding export options."
   (format "%s\n%s" (org-hugo--get-front-matter info) body))
 
-
+
 ;;; Interactive functions
 
 ;;;###autoload
@@ -440,7 +440,7 @@ Return output file's name."
              (level (org-element-property :level entry))
              (commentedp (org-element-property :commentedp entry))
              (tags (org-element-property :tags entry)))
-        (message "on headline %s\n level is %s \n tags are %s \n commentedp is %s\n test value is %s"
+        (message "[ox-hugo DBG] On headline %s\n level is %s \n tags are %s \n commentedp is %s\n test value is %s"
                  (org-element-property :raw-value entry)
                  level tags commentedp
                  (and (eq 1 level)

@@ -107,7 +107,7 @@ directory where all Hugo posts should go by default."
                    (:hugo-url "HUGO_URL" nil nil)
                    ;; Non-front-matter options
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
-                   (:hugo-export-dir "HUGO_EXPORT_DIR" nil nil)
+                   (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")))
 
 
@@ -222,13 +222,13 @@ PATH is the path to the image or pdf attachment.
 INFO is a plist used as a communication channel."
   (message "[ox-hugo DBG] The Hugo sectioimage dir is: %s" (plist-get info :hugo-static-images) )
   (message "[ox-hugo DBG] The Hugo section is: %s" (plist-get info :hugo-section) )
-  (message "[ox-hugo DBG] The Hugo export dir is: %s" (plist-get info :hugo-export-dir) )
+  (message "[ox-hugo DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir) )
 
   (let* ((full-path (file-truename path))
          (exportables '("jpg" "jpeg" "tiff" "png" "pdf" "odt" ))
          (file-name (file-name-nondirectory path))
          (image-export-dir (concat
-                            (file-name-as-directory (plist-get info :hugo-export-dir))
+                            (file-name-as-directory (plist-get info :hugo-base-dir))
                             "static/"
                             (file-name-as-directory (plist-get info :hugo-static-images))
                             ))
@@ -413,14 +413,14 @@ Return output file's name."
 		 'hugo subtreep visible-only)
 		(org-export--get-buffer-attributes)
                 (org-export-get-environment 'hugo subtreep)))
-         (export-dir-path (if (null (plist-get info :hugo-export-dir))
-                              (user-error "It is mandatory to set the HUGO_EXPORT_DIR property")
-                            (file-name-as-directory (plist-get info :hugo-export-dir))))
+         (base-dir (if (null (plist-get info :hugo-base-dir))
+                       (user-error "It is mandatory to set the HUGO_BASE_DIR property")
+                     (file-name-as-directory (plist-get info :hugo-base-dir))))
          (content-dir "content/")
          (section-dir (if (null (plist-get info :hugo-section))
                           (user-error "It is mandatory to set the HUGO_SECTION property")
                         (file-name-as-directory (plist-get info :hugo-section))))
-         (pub-dir (let ((dir (concat export-dir-path content-dir section-dir)))
+         (pub-dir (let ((dir (concat base-dir content-dir section-dir)))
                     (make-directory dir :parents) ;Create the directory if it does not exist
                     dir))
          (outfile (org-export-output-file-name ".md" subtreep pub-dir)))

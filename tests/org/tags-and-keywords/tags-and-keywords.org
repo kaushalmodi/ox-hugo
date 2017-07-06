@@ -1,5 +1,5 @@
 #+TITLE: My Blog
-#+HUGO_EXPORT_DIR: ../../md/
+#+HUGO_BASE_DIR: ../../md/
 #+KEYWORDS: alpha beta
 
 # 1. Load `ox-hugo'

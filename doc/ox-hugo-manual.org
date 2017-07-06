@@ -9,7 +9,7 @@ Markdown]] flavor.
                   [[http://gohugo.io/content/sections/][here]] for more information on Hugo sections.  It is
                   common for this property to be set to =posts= or
                   =blog=.
-- HUGO_EXPORT_DIR :: Root directory of the source for the Hugo site.
+- HUGO_BASE_DIR :: Root directory of the source for the Hugo site.
      If this is set to =~/hugo/=, the exported Markdown files will be
      saved to =~/hugo/content/<HUGO_SECTION>/= directory.  By [[http://gohugo.io/content/organization/][default]],
      the Markdown files reside in a hierarchy under the =content/=

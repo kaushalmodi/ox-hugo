@@ -110,7 +110,7 @@ directory where all Hugo posts should go by default."
                    ;; Non-front-matter options
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-export-dir "HUGO_EXPORT_DIR" nil nil)
-                   (:hugo-static-images "HUGO_STATIC_IMAGES" "images" nil)))
+                   (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")))
 
 
 ;;; Transcode Functions

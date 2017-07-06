@@ -91,13 +91,12 @@ directory where all Hugo posts should go by default."
                    ;; "date" is parsed from the Org #+DATE or subtree property EXPORT_HUGO_DATE
                    (:hugo-description "HUGO_DESCRIPTION" nil nil)
                    (:hugo-date "HUGO_DATE" nil nil)
-                   (:hugo-categories "HUGO_CATEGORIES" nil nil)
-                   (:hugo-tags "HUGO_TAGS" nil nil) ;TODO: Also parse the Org tags as post tags
                    (:date "DATE" nil nil)
                    (:keywords "KEYWORDS" nil nil 'space)
                    (:hugo-tags "HUGO_TAGS" nil nil 'space) ;TODO: Also parse the Org tags as post tags
+                   (:hugo-categories "HUGO_CATEGORIES" nil nil 'space)
                    ;; Optional front matter variables
-                   (:hugo-aliases "HUGO_ALIASES" nil nil)
+                   (:hugo-aliases "HUGO_ALIASES" nil nil 'space)
                    (:hugo-draft "HUGO_DRAFT" nil nil)
                    (:hugo-publishdate "HUGO_PUBLISHDATE" nil nil)
                    (:hugo-expirydate "HUGO_EXPIRYDATE" nil nil)

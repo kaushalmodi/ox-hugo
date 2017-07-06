@@ -1,0 +1,10 @@
+{{ define "main" }}
+
+<div class="posts">
+    <!-- http://justindunham.net/blog-bells-and-whistles-in-hugo/ -->
+    {{ range (.Paginator 10).Pages }}
+    {{ .Render "single"}}      <!-- Use layouts/post/summary.html -->
+    {{ end }}
+</div>
+
+{{ end }}

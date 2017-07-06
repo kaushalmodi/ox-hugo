@@ -1,0 +1,15 @@
+#+DATE: July 6, 2017
+
+* How to compile the site
+1. Be the root directory for this Hugo site (the directory containing =config.toml=).
+2. Run "hugo server --port 1111"
+3. See the site served on "http://localhost:1111/"
+* Source blog posts in Org
+Location: =<HUGO_BASE_DIR>/content-org/=
+
+The directory does not have to be =content-org=, but it has to be
+outside the =hugo= Contents dir =content/=.
+* Tested to work on
+- hugo v0.25-DEV updated today
+- org master updated today
+- emacs master updated today

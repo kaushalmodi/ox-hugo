@@ -1,0 +1,25 @@
+#+HUGO_BASE_DIR: ../
+
+* Preparation
+:PROPERTIES:
+:EXPORT_FILE_NAME: prep
+:END:
+1. Be the root directory for this Hugo site (the directory containing
+   =config.toml=).
+2. Run
+  #+BEGIN_EXAMPLE
+  hugo server --port 1111
+  #+END_EXAMPLE
+3. See the site served on "http://localhost:1111/"
+* Post 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-1
+:END:
+Export this *first* post only by moving point here and doing =C-c C-e
+H H=.
+* Post 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-2
+:END:
+Export this *second* post only by moving point here and doing =C-c C-e
+H H=.

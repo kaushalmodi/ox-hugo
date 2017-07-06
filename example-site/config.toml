@@ -2,3 +2,5 @@ baseURL = "http://example.org/"
 languageCode = "en-us"
 title = "My Org-exported Hugo Site"
 theme = "bare_min"
+
+canonifyURLs = true

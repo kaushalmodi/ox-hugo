@@ -23,3 +23,40 @@ H H=.
 :END:
 Export this *second* post only by moving point here and doing =C-c C-e
 H H=.
+* Image
+:PROPERTIES:
+:EXPORT_FILE_NAME: image
+:END:
+*To be fixed*: At the moment, you need to place the point here and do
+ =C-c C-e H H=. If the point is under any of the nested sub-trees in
+ here where you do that, only that subtree gets exported.
+
+/Need to add smarts that determines which subtree contains the whole
+post.. like look for =EXPORT_FILE_NAME=?/
+** Unclickable image
+[[./images/org-mode-unicorn-logo.png]]
+
+*To be fixed*: The sub-headings in a post get exported as /Heading 1/
+ instead of /Heading 2/.
+
+For example, this sub-section's heading is exported as:
+#+BEGIN_SRC markdown
+# Unclickable image
+#+END_SRC
+instead of
+#+BEGIN_SRC markdown
+## Unclickable image
+#+END_SRC
+
+So the sub-heading title and the post title both get the /Heading 1/
+tag and look the same size.
+** Clickable link that opens the image
+[[./images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
+** Clickable image that opens the image
+Click below image to jump to the unicorn image.
+
+[[file:images/org-mode-unicorn-logo.png][file:./images/org-mode-unicorn-logo.png]]
+- NOTE 1 :: =file:= has to be used in both Link and Description components
+          of the Org link.
+- NOTE 2 :: As the path is relative, we need to use =./images/..=
+            instead of =/images/..=.

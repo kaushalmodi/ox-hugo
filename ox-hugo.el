@@ -250,7 +250,11 @@ INFO is a plist used as a communication channel."
 INFO is a plist used as a communication channel."
   (let* ((fm-format (org-export-data (plist-get info :hugo-front-matter-format) info))
          (hugo-date-fmt "%Y-%m-%dT%T%z")
-         (date (or (org-string-nw-p (org-export-get-date info hugo-date-fmt))
+         (date (or ;; Get the date from the subtree property `EXPORT_DATE' if available
+                   (org-export-data (plist-get info :date) info)
+                   ;; Else try to get it from the #+DATE keyword in the Org file
+                   (org-string-nw-p (org-export-get-date info hugo-date-fmt))
+                   ;; Else finally set the date to the current date
                    (format-time-string hugo-date-fmt (current-time))))
          (data `((title . ,(org-export-data (plist-get info :title) info))
                  (date . ,date)
@@ -262,7 +266,7 @@ INFO is a plist used as a communication channel."
                  (publishdate . ,(org-export-data (plist-get info :hugo-publishdate) info))
                  (expirydate . ,(org-export-data (plist-get info :hugo-expirydate) info))
                  (type . ,(org-export-data (plist-get info :hugo-type) info))
-                 (iscjklanguage . ,(org-export-data (plist-get info :hugo-iscjklanguage) info))
+                 (isCJKLanguage . ,(org-export-data (plist-get info :hugo-iscjklanguage) info))
                  (weight . ,(org-export-data (plist-get info :hugo-weight) info))
                  (markup . ,(org-export-data (plist-get info :hugo-markup) info))
                  (slug . ,(org-export-data (plist-get info :hugo-slug) info))

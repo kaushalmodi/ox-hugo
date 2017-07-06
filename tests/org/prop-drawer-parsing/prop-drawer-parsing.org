@@ -1,0 +1,17 @@
+#+TITLE: My Blog
+#+HUGO_EXPORT_DIR: ../../md/
+#+HUGO_SECTION: posts
+
+# 1. Load `ox-hugo'
+# 2. M-x org-hugo-walk-headlines
+
+* Test setting the =draft= variable in front matter
+:PROPERTIES:
+:EXPORT_HUGO_DRAFT: true
+:END:
+Something. /Run =C-c C-e H O= with point in this subtree./
+* Test setting the =date= variable in front matter
+:PROPERTIES:
+:EXPORT_DATE: Feb 2, 2002
+:END:
+Something Else. /Run =C-c C-e H O= with point in this subtree./

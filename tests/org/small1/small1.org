@@ -7,12 +7,11 @@
 
 * Post 1
 :PROPERTIES:
-:DATE:     June 11, 2000
+:EXPORT_DATE:     June 11, 2000
 :END:
 Something
 * Post 2
 :PROPERTIES:
 :CUSTOM_ID: testxyz
-:FOO: There
 :END:
 Something Else

@@ -73,14 +73,28 @@ This variable can be set to either `toml' or `yaml'."
                    )
 
   :options-alist '((:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil org-hugo-front-matter-format)
-                   (:hugo-tags "HUGO_TAGS" nil nil)
-                   (:hugo-categories "HUGO_CATEGORIES" nil nil)
+                   ;; Front matter variables - https://gohugo.io/content/front-matter/
+                   ;; Required front matter variables
+                   ;; "title" is parsed from the Org #+TITLE or the subtree heading.
+                   ;; "date" is parsed from the Org #+DATE or subtree property EXPORT_HUGO_DATE
                    (:hugo-description "HUGO_DESCRIPTION" nil nil)
+                   (:hugo-date "HUGO_DATE" nil nil)
+                   (:hugo-categories "HUGO_CATEGORIES" nil nil)
+                   (:hugo-tags "HUGO_TAGS" nil nil) ;TODO: Also parse the Org tags as post tags
+                   ;; Optional front matter variables
+                   (:hugo-aliases "HUGO_ALIASES" nil nil)
+                   (:hugo-draft "HUGO_DRAFT" nil nil)
+                   (:hugo-publishdate "HUGO_PUBLISHDATE" nil nil)
+                   (:hugo-expirydate "HUGO_EXPIRYDATE" nil nil)
+                   (:hugo-type "HUGO_TYPE" nil nil)
+                   (:hugo-iscjklanguage "HUGO_ISCJKLANGUAGE" nil nil)
+                   (:hugo-weight "HUGO_WEIGHT" nil nil)
+                   (:hugo-markup "HUGO_MARKUP" nil nil)
                    (:hugo-slug "HUGO_SLUG" nil nil)
                    (:hugo-url "HUGO_URL" nil nil)
-                   (:hugo-aliases "HUGO_ALIASES" nil nil)
-                   (:hugo-export-dir "HUGO_EXPORT_DIR" nil nil)
+                   ;; Non-front-matter options
                    (:hugo-section "HUGO_SECTION" "posts" nil)
+                   (:hugo-export-dir "HUGO_EXPORT_DIR" nil nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" "images" nil)))
 
 
@@ -241,11 +255,18 @@ INFO is a plist used as a communication channel."
          (data `((title . ,(org-export-data (plist-get info :title) info))
                  (date . ,date)
                  (description . ,(org-export-data (plist-get info :hugo-description) info))
-                 (slug . ,(org-export-data (plist-get info :hugo-slug) info))
-                 (url . ,(org-export-data (plist-get info :hugo-url) info))
-                 (aliases . ,(org-export-data (plist-get info :hugo-aliases) info))
+                 (categories . ,(org-export-data (plist-get info :hugo-categories) info))
                  (tags . ,(org-export-data (plist-get info :hugo-tags) info))
-                 (categories . ,(org-export-data (plist-get info :hugo-categories) info)))))
+                 (aliases . ,(org-export-data (plist-get info :hugo-aliases) info))
+                 (draft . ,(org-export-data (plist-get info :hugo-draft) info))
+                 (publishdate . ,(org-export-data (plist-get info :hugo-publishdate) info))
+                 (expirydate . ,(org-export-data (plist-get info :hugo-expirydate) info))
+                 (type . ,(org-export-data (plist-get info :hugo-type) info))
+                 (iscjklanguage . ,(org-export-data (plist-get info :hugo-iscjklanguage) info))
+                 (weight . ,(org-export-data (plist-get info :hugo-weight) info))
+                 (markup . ,(org-export-data (plist-get info :hugo-markup) info))
+                 (slug . ,(org-export-data (plist-get info :hugo-slug) info))
+                 (url . ,(org-export-data (plist-get info :hugo-url) info)))))
     (org-hugo--gen-front-matter data fm-format)))
 
 (defun org-hugo--gen-front-matter (data format)

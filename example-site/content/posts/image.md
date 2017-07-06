@@ -1,6 +1,6 @@
 +++
 title = "Image"
-date = 2017-07-06T16:21:36-04:00
+date = 2017-07-06T16:27:48-04:00
 tags = []
 +++
 
@@ -17,15 +17,11 @@ tags = []
 
 For example, this sub-section&rsquo;s heading is exported as:
 
-{{< highlight markdown >}}
-# Unclickable image
-{{< /highlight >}}
+    # Unclickable image
 
 instead of
 
-{{< highlight markdown >}}
-## Unclickable image
-{{< /highlight >}}
+    ## Unclickable image
 
 So the sub-heading title and the post title both get the *Heading 1* tag and look the same size.
 

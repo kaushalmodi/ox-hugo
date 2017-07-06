@@ -40,13 +40,13 @@ post.. like look for =EXPORT_FILE_NAME=?/
  instead of /Heading 2/.
 
 For example, this sub-section's heading is exported as:
-#+BEGIN_SRC markdown
+#+BEGIN_EXAMPLE
 # Unclickable image
-#+END_SRC
+#+END_EXAMPLE
 instead of
-#+BEGIN_SRC markdown
+#+BEGIN_EXAMPLE
 ## Unclickable image
-#+END_SRC
+#+END_EXAMPLE
 
 So the sub-heading title and the post title both get the /Heading 1/
 tag and look the same size.

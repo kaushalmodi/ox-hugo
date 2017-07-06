@@ -263,12 +263,18 @@ INFO is a plist used as a communication channel."
 INFO is a plist used as a communication channel."
   (let* ((fm-format (org-export-data (plist-get info :hugo-front-matter-format) info))
          (hugo-date-fmt "%Y-%m-%dT%T%z")
-         (date (or ;; Get the date from the subtree property `EXPORT_DATE' if available
-                (org-string-nw-p (org-export-data (plist-get info :date) info))
-                ;; Else try to get it from the #+DATE keyword in the Org file
-                (org-string-nw-p (org-export-get-date info hugo-date-fmt))
-                ;; Else finally set the date to the current date
-                (format-time-string hugo-date-fmt (current-time))))
+         (date-nocolon (or ;; Get the date from the subtree property `EXPORT_DATE' if available
+                        (org-string-nw-p (org-export-data (plist-get info :date) info))
+                        ;; Else try to get it from the #+DATE keyword in the Org file
+                        (org-string-nw-p (org-export-get-date info hugo-date-fmt))
+                        ;; Else finally set the date to the current date
+                        (format-time-string hugo-date-fmt (current-time))))
+         ;; Hugo expects the date stamp in this format:
+         ;;   2017-07-06T14:59:45-04:00
+         ;; But the "%Y-%m-%dT%T%z" format produces the date in this format:
+         ;;   2017-07-06T14:59:45-0400 (Note the missing colon)
+         ;; Below simply adds that colon.
+         (date (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2" date-nocolon))
          (tags (concat
                 (org-export-data (plist-get info :hugo-tags) info) " "
                 (org-export-data (plist-get info :keywords) info)))
@@ -328,6 +334,13 @@ are \"toml\" and \"yaml\"."
                                                           (mapcar #'org-hugo--wrap-string-in-quotes
                                                                   (split-string value)) ", ")
                                                "]"))
+                                      ;; There is no need to wrap strings not expected to contain spaces in
+                                      ;; double quotes, like date strings, draft state, etc.
+                                      ((or (string= key "date")
+                                           (string= key "publishdate")
+                                           (string= key "expirydate")
+                                           (string= key "draft"))
+                                       value)
                                       (t
                                        (org-hugo--wrap-string-in-quotes value)))))))))
     (concat sep front-matter sep)))

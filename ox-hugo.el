@@ -89,8 +89,7 @@ directory where all Hugo posts should go by default."
                    ;; Required front matter variables
                    ;; "title" is parsed from the Org #+TITLE or the subtree heading.
                    ;; "date" is parsed from the Org #+DATE or subtree property EXPORT_HUGO_DATE
-                   (:hugo-description "HUGO_DESCRIPTION" nil nil)
-                   (:hugo-date "HUGO_DATE" nil nil)
+                   (:description "DESCRIPTION" nil nil)
                    (:date "DATE" nil nil)
                    (:keywords "KEYWORDS" nil nil 'space)
                    (:hugo-tags "HUGO_TAGS" nil nil 'space) ;TODO: Also parse the Org tags as post tags

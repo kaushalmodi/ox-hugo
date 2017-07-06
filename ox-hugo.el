@@ -40,9 +40,11 @@
 
 (defcustom org-hugo-front-matter-format "toml"
   "Format used to front matter.
-This variable can be set to either `toml' or `yaml'."
+This variable can be set to either \"toml\" or \"yaml\"."
   :group 'org-export-hugo
-  :type 'string)
+  :type '(choice
+          (const :tag "TOML" "toml")
+          (const :tag "YAML" "yaml")))
 
 
 ;;; Define Back-End
@@ -72,7 +74,8 @@ This variable can be set to either `toml' or `yaml'."
                    ;; (:filter-link . org-hugo-image-filter)
                    )
 
-  :options-alist '((:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil org-hugo-front-matter-format)
+  ;;                KEY                       KEYWORD                    OPTION  DEFAULT                     BEHAVIOR
+  :options-alist '((:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
                    ;; Front matter variables - https://gohugo.io/content/front-matter/
                    ;; Required front matter variables
                    ;; "title" is parsed from the Org #+TITLE or the subtree heading.
@@ -294,6 +297,7 @@ are \"toml\" and \"yaml\"."
                     ((string= format "yaml") ":")
                     (t "")))
         (front-matter ""))
+    ;; (message "hugo fm format: %s" format)
     (dolist (pair data)
       (let ((key (symbol-name (car pair)))
             (value (cdr pair)))

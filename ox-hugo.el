@@ -106,6 +106,7 @@ directory where all Hugo posts should go by default."
                    (:hugo-slug "HUGO_SLUG" nil nil)
                    (:hugo-url "HUGO_URL" nil nil)
                    ;; Non-front-matter options
+                   (:with-toc nil "toc" nil) ;No TOC by default
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")))

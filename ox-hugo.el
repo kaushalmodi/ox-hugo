@@ -46,6 +46,15 @@ This variable can be set to either \"toml\" or \"yaml\"."
           (const :tag "TOML" "toml")
           (const :tag "YAML" "yaml")))
 
+(defcustom org-hugo-default-section-directory "posts"
+  "Default section for Hugo posts.
+
+This variable is the name of the directory under the \"content/\"
+directory where all Hugo posts should go by default."
+  :group 'org-export-hugo
+  :type 'directory
+  :safe 'stringp)
+
 
 ;;; Define Back-End
 
@@ -99,7 +108,7 @@ This variable can be set to either \"toml\" or \"yaml\"."
                    (:hugo-slug "HUGO_SLUG" nil nil)
                    (:hugo-url "HUGO_URL" nil nil)
                    ;; Non-front-matter options
-                   (:hugo-section "HUGO_SECTION" "posts" nil)
+                   (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-export-dir "HUGO_EXPORT_DIR" nil nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" "images" nil)))
 

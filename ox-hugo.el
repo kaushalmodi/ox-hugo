@@ -82,6 +82,8 @@ This variable can be set to either `toml' or `yaml'."
                    (:hugo-categories "HUGO_CATEGORIES" nil nil)
                    (:hugo-tags "HUGO_TAGS" nil nil) ;TODO: Also parse the Org tags as post tags
                    (:date "DATE" nil nil)
+                   (:keywords "KEYWORDS" nil nil 'space)
+                   (:hugo-tags "HUGO_TAGS" nil nil 'space) ;TODO: Also parse the Org tags as post tags
                    ;; Optional front matter variables
                    (:hugo-aliases "HUGO_ALIASES" nil nil)
                    (:hugo-draft "HUGO_DRAFT" nil nil)
@@ -257,11 +259,14 @@ INFO is a plist used as a communication channel."
                 (org-string-nw-p (org-export-get-date info hugo-date-fmt))
                 ;; Else finally set the date to the current date
                 (format-time-string hugo-date-fmt (current-time))))
+         (tags (concat
+                (org-export-data (plist-get info :hugo-tags) info) " "
+                (org-export-data (plist-get info :keywords) info)))
          (data `((title . ,(org-export-data (plist-get info :title) info))
                  (date . ,date)
                  (description . ,(org-export-data (plist-get info :hugo-description) info))
+                 (tags . ,tags)
                  (categories . ,(org-export-data (plist-get info :hugo-categories) info))
-                 (tags . ,(org-export-data (plist-get info :hugo-tags) info))
                  (aliases . ,(org-export-data (plist-get info :hugo-aliases) info))
                  (draft . ,(org-export-data (plist-get info :hugo-draft) info))
                  (publishdate . ,(org-export-data (plist-get info :hugo-publishdate) info))

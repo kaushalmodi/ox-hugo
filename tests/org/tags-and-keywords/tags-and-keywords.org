@@ -1,0 +1,21 @@
+#+TITLE: My Blog
+#+HUGO_EXPORT_DIR: ../../md/
+#+KEYWORDS: alpha beta
+
+# 1. Load `ox-hugo'
+# 2. M-x org-hugo-walk-headlines
+
+* Overriding default tags
+:PROPERTIES:
+:EXPORT_KEYWORDS: foo
+:END:
+By using =EXPORT_KEYWORDS= in the property drawer, the default set of
+tags set in =#+KEYWORDS= is overridden.
+* Specifying additional tags
+:PROPERTIES:
+:EXPORT_HUGO_TAGS: gamma delta
+:END:
+If user specifies =EXPORT_HUGO_TAGS= in the property drawer, those
+tags get added to the set of default tags set in =#+KEYWORDS= (if
+any).  These tags are collected together and assigned to the Hugo
+=tags= front matter variable.

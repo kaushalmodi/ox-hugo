@@ -140,10 +140,11 @@ and rewrite link paths to make blogging more seamless."
            (if (string= ".org" (downcase (file-name-extension raw-path ".")))
                (concat (file-name-sans-extension raw-path) ".md")
              raw-path)))
+        (raw-path (org-element-property :path link))
+        (images-dir (org-string-nw-p (plist-get info :hugo-static-images)))
 	(type (org-element-property :type link)))
-    (message "[ox-hugo DBG] link filename is : %s" (expand-file-name (plist-get (car (cdr link)) :path)))
-    (message "[ox-hugo DBG] link type is %s" type)
-    (message "[ox-hugo DBG] link ")
+    (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
+    (message "[ox-hugo-link DBG] link type: %s" type)
     (cond
      ;; Link type is handled by a special function.
      ((org-export-custom-protocol-maybe link contents 'md))
@@ -154,8 +155,9 @@ and rewrite link paths to make blogging more seamless."
 	(pcase (org-element-type destination)
           (`plain-text			;External file
            (let ((path (funcall link-org-files-as-md destination)))
-             (if (not contents) (format "<%s>" path)
-               (format "[%s](%s)" contents path))))
+             (if contents
+                 (format "[%s](%s)" contents path)
+               (format "<%s>" path))))
           (`headline
            (format
             "[%s](#%s)"
@@ -183,38 +185,44 @@ and rewrite link paths to make blogging more seamless."
                        description
                        (org-export-get-reference destination info))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
-      (message "org-hugo-link processing an image %s" contents)
-
+      (message "[org-hugo-link DBG] processing an image: %s" contents)
       (let ((path (org-hugo--attachment-rewrite
-                   (let ((raw-path (org-element-property :path link)))
-                     (if (not (file-name-absolute-p raw-path)) raw-path
-                       (expand-file-name raw-path)))
+                   (if (file-name-absolute-p raw-path)
+                       (expand-file-name raw-path)
+                     raw-path)
                    info))
             (caption (org-export-data
                       (org-export-get-caption
                        (org-export-get-parent-element link))
                       info)))
-	(format "![img](%s)"
-		(if (not (org-string-nw-p caption)) path
-                  (format "%s \"%s\"" path caption)))))
+	(format "![img](%s)" (if (org-string-nw-p caption)
+                                 (format "%s \"%s\"" path caption)
+                               path))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
 	(format (org-export-get-coderef-format ref contents)
 		(org-export-resolve-coderef ref info))))
-     ((equal type "radio") contents)
-     (t (let* ((raw-path (org-element-property :path link))
-               (path
-		(cond
-		 ((member type '("http" "https" "ftp"))
-                  (concat type ":" raw-path))
-		 ((string= type "file")
-                  (org-hugo--attachment-rewrite
-                   (org-export-file-uri
-                    (funcall link-org-files-as-md raw-path))
-                   info))
-		 (t raw-path))))
-          (if (not contents) (format "<%s>" path)
-            (format "[%s](%s)" contents path)))))))
+     ((equal type "radio")
+      contents)
+     (t
+      (let ((path (cond
+	           ((member type '("http" "https" "ftp"))
+                    (concat type ":" raw-path))
+	           ((and (string= type "file")
+                         (or (null images-dir)
+                             ;; Do not add the "file://" prefix if the
+                             ;; raw-path begins with the HUGO_STATIC_IMAGES
+                             ;; dir name.
+                             (not (string-match-p (concat "\\`/" images-dir "/") raw-path))))
+                    (org-hugo--attachment-rewrite
+                     (org-export-file-uri
+                      (funcall link-org-files-as-md raw-path))
+                     info))
+	           (t
+                    raw-path))))
+        (if contents
+            (format "[%s](%s)" contents path)
+          (format "<%s>" path)))))))
 
 ;;;;; Helpers
 
@@ -224,9 +232,9 @@ Also rewrite image links.
 
 PATH is the path to the image or pdf attachment.
 INFO is a plist used as a communication channel."
-  (message "[ox-hugo DBG] The Hugo sectioimage dir is: %s" (plist-get info :hugo-static-images) )
-  (message "[ox-hugo DBG] The Hugo section is: %s" (plist-get info :hugo-section) )
-  (message "[ox-hugo DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir) )
+  (message "[ox-hugo attachment DBG] The Hugo images dir is: %s" (plist-get info :hugo-static-images))
+  (message "[ox-hugo attachment DBG] The Hugo section is: %s" (plist-get info :hugo-section))
+  (message "[ox-hugo attachment DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir))
 
   (let* ((full-path (file-truename path))
          (exportables '("jpg" "jpeg" "tiff" "png" "pdf" "odt" ))
@@ -458,8 +466,7 @@ Return output file's name."
                  level tags commentedp
                  (and (eq 1 level)
                       (not (member "noexport" tags))
-                      (not commentedp))
-                 )
+                      (not commentedp)))
         (if (and (eq 1 level)
                  (not (member "noexport" tags))
                  (not commentedp))

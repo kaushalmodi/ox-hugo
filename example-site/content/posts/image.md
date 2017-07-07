@@ -1,6 +1,6 @@
 +++
 title = "Image"
-date = 2017-07-07T15:33:35-04:00
+date = 2017-07-07T18:44:51-04:00
 tags = []
 +++
 
@@ -9,9 +9,7 @@ tags = []
 *Need to add smarts that determines which subtree contains the whole post.. like look for `EXPORT_FILE_NAME`?*
 
 
-# Unclickable image
-
-**This works!**
+# Unclickable image (works!)
 
 ![img](/images/org-mode-unicorn-logo.png)
 
@@ -28,46 +26,14 @@ instead of
 So the sub-heading title and the post title both get the *Heading 1* tag and look the same size.
 
 
-# Clickable link that opens the image
+# Clickable link that opens the image (works!)
 
-[Click here to see the unicorn](file:///images/org-mode-unicorn-logo.png)
-
-
-## FIXME
-
-Above:
-
-    [[/images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
-
-exports to:
-
-    [Click here to see the unicorn](file:///images/org-mode-unicorn-logo.png)
-
-instead of:
-
-    [Click here to see the unicorn](/images/org-mode-unicorn-logo.png)
+[Click here to see the unicorn](/images/org-mode-unicorn-logo.png)
 
 
-# Clickable image that opens the image
+# Clickable image that opens the image (works!)
 
-Click below image to jump to the unicorn image.
-
-[![img](/images/org-mode-unicorn-logo.png)](file:///images/org-mode-unicorn-logo.png)
-
-
-## FIXME
-
-Above:
-
-    [[file:/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
-
-exports to:
-
-    [![img](/images/org-mode-unicorn-logo.png)](file:///images/org-mode-unicorn-logo.png)
-
-instead of:
-
-    [![img](/images/org-mode-unicorn-logo.png)](/images/org-mode-unicorn-logo.png)
+Click below image to jump to the unicorn image. [![img](/images/org-mode-unicorn-logo.png)](/images/org-mode-unicorn-logo.png)
 
 -   **NOTE:** `file:` has to be used in both Link and Description components of the Org link.
 

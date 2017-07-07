@@ -33,10 +33,7 @@ H H=.
 
 /Need to add smarts that determines which subtree contains the whole
 post.. like look for =EXPORT_FILE_NAME=?/
-** Unclickable image
-
-*This works!*
-
+** Unclickable image (works!)
 [[/images/org-mode-unicorn-logo.png]]
 
 *To be fixed*: The sub-headings in a post get exported as /Heading 1/
@@ -53,38 +50,11 @@ instead of
 
 So the sub-heading title and the post title both get the /Heading 1/
 tag and look the same size.
-** TODO Clickable link that opens the image
+** Clickable link that opens the image (works!)
 [[/images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
-*** FIXME
-Above:
-#+BEGIN_EXAMPLE
-[[/images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
-#+END_EXAMPLE
-exports to:
-#+BEGIN_EXAMPLE
-[Click here to see the unicorn](file:///images/org-mode-unicorn-logo.png)
-#+END_EXAMPLE
-instead of:
-#+BEGIN_EXAMPLE
-[Click here to see the unicorn](/images/org-mode-unicorn-logo.png)
-#+END_EXAMPLE
-** TODO Clickable image that opens the image
+** Clickable image that opens the image (works!)
 Click below image to jump to the unicorn image.
-
 [[file:/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
-*** FIXME
-Above:
-#+BEGIN_EXAMPLE
-[[file:/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
-#+END_EXAMPLE
-exports to:
-#+BEGIN_EXAMPLE
-[![img](/images/org-mode-unicorn-logo.png)](file:///images/org-mode-unicorn-logo.png)
-#+END_EXAMPLE
-instead of:
-#+BEGIN_EXAMPLE
-[![img](/images/org-mode-unicorn-logo.png)](/images/org-mode-unicorn-logo.png)
-#+END_EXAMPLE
 
 - NOTE :: =file:= has to be used in both Link and Description components
           of the Org link.

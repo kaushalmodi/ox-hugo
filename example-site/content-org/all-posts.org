@@ -34,7 +34,10 @@ H H=.
 /Need to add smarts that determines which subtree contains the whole
 post.. like look for =EXPORT_FILE_NAME=?/
 ** Unclickable image
-[[./images/org-mode-unicorn-logo.png]]
+
+*This works!*
+
+[[/images/org-mode-unicorn-logo.png]]
 
 *To be fixed*: The sub-headings in a post get exported as /Heading 1/
  instead of /Heading 2/.
@@ -50,13 +53,61 @@ instead of
 
 So the sub-heading title and the post title both get the /Heading 1/
 tag and look the same size.
-** Clickable link that opens the image
-[[./images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
-** Clickable image that opens the image
+** TODO Clickable link that opens the image
+[[/images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
+*** FIXME
+Above:
+#+BEGIN_EXAMPLE
+[[/images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
+#+END_EXAMPLE
+exports to:
+#+BEGIN_EXAMPLE
+[Click here to see the unicorn](file:///images/org-mode-unicorn-logo.png)
+#+END_EXAMPLE
+instead of:
+#+BEGIN_EXAMPLE
+[Click here to see the unicorn](/images/org-mode-unicorn-logo.png)
+#+END_EXAMPLE
+** TODO Clickable image that opens the image
 Click below image to jump to the unicorn image.
 
-[[file:images/org-mode-unicorn-logo.png][file:./images/org-mode-unicorn-logo.png]]
-- NOTE 1 :: =file:= has to be used in both Link and Description components
+[[file:/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+*** FIXME
+Above:
+#+BEGIN_EXAMPLE
+[[file:/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+#+END_EXAMPLE
+exports to:
+#+BEGIN_EXAMPLE
+[![img](/images/org-mode-unicorn-logo.png)](file:///images/org-mode-unicorn-logo.png)
+#+END_EXAMPLE
+instead of:
+#+BEGIN_EXAMPLE
+[![img](/images/org-mode-unicorn-logo.png)](/images/org-mode-unicorn-logo.png)
+#+END_EXAMPLE
+
+- NOTE :: =file:= has to be used in both Link and Description components
           of the Org link.
-- NOTE 2 :: As the path is relative, we need to use =./images/..=
-            instead of =/images/..=.
+** TODO Image with =ATTR_HTML= [[https://github.com/kaushalmodi/ox-hugo/issues/17][Issue # 17]]
+#+ATTR_HTML: :class inset
+[[/images/org-mode-unicorn-logo.png]]
+
+[[https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728][Discussion]]
+*** Below will not work!
+You cannot wrap markdown code inside HTML.
+
+As /rdwatters/ says [[https://discourse.gohugo.io/t/is-it-possible-to-insert-html-code-in-markdown-content/4867/4?u=kaushalmodi][here]],
+#+BEGIN_QUOTE
+HTML can be part of markdown because HTML-inside-markdown is part of
+the spec. That said, remember that the spec disallows markdown nested
+inside of HTML. So if you create a div, just make sure everything
+inside that div is valid HTML.
+#+END_QUOTE
+
+#+BEGIN_EXPORT md
+<div class="inset">
+#+END_EXPORT
+[[/images/org-mode-unicorn-logo.png]]
+#+BEGIN_EXPORT md
+</div>
+#+END_EXPORT

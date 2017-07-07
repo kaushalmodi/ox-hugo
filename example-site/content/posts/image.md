@@ -1,6 +1,6 @@
 +++
 title = "Image"
-date = 2017-07-06T16:27:48-04:00
+date = 2017-07-07T15:33:35-04:00
 tags = []
 +++
 
@@ -11,7 +11,9 @@ tags = []
 
 # Unclickable image
 
-![img](./images/org-mode-unicorn-logo.png)
+**This works!**
+
+![img](/images/org-mode-unicorn-logo.png)
 
 **To be fixed**: The sub-headings in a post get exported as *Heading 1* instead of *Heading 2*.
 
@@ -28,14 +30,65 @@ So the sub-heading title and the post title both get the *Heading 1* tag and loo
 
 # Clickable link that opens the image
 
-[Click here to see the unicorn](./images/org-mode-unicorn-logo.png)
+[Click here to see the unicorn](file:///images/org-mode-unicorn-logo.png)
+
+
+## FIXME
+
+Above:
+
+    [[/images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
+
+exports to:
+
+    [Click here to see the unicorn](file:///images/org-mode-unicorn-logo.png)
+
+instead of:
+
+    [Click here to see the unicorn](/images/org-mode-unicorn-logo.png)
 
 
 # Clickable image that opens the image
 
 Click below image to jump to the unicorn image.
 
-[![img](./images/org-mode-unicorn-logo.png)](images/org-mode-unicorn-logo.png)
+[![img](/images/org-mode-unicorn-logo.png)](file:///images/org-mode-unicorn-logo.png)
 
--   **NOTE 1:** `file:` has to be used in both Link and Description components of the Org link.
--   **NOTE 2:** As the path is relative, we need to use `./images/..` instead of `/images/..`.
+
+## FIXME
+
+Above:
+
+    [[file:/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+
+exports to:
+
+    [![img](/images/org-mode-unicorn-logo.png)](file:///images/org-mode-unicorn-logo.png)
+
+instead of:
+
+    [![img](/images/org-mode-unicorn-logo.png)](/images/org-mode-unicorn-logo.png)
+
+-   **NOTE:** `file:` has to be used in both Link and Description components of the Org link.
+
+
+# Image with `ATTR_HTML` [Issue # 17](https://github.com/kaushalmodi/ox-hugo/issues/17)
+
+![img](/images/org-mode-unicorn-logo.png)
+
+[Discussion](https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728)
+
+
+## Below will not work!
+
+You cannot wrap markdown code inside HTML.
+
+As *rdwatters* says [here](https://discourse.gohugo.io/t/is-it-possible-to-insert-html-code-in-markdown-content/4867/4?u=kaushalmodi),
+
+> HTML can be part of markdown because HTML-inside-markdown is part of the spec. That said, remember that the spec disallows markdown nested inside of HTML. So if you create a div, just make sure everything inside that div is valid HTML.
+
+<div class="inset">
+
+![img](/images/org-mode-unicorn-logo.png)
+
+</div>

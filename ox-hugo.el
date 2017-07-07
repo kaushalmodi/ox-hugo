@@ -132,8 +132,8 @@ directory where all Hugo posts should go by default."
 CONTENTS is the link's description.
 INFO is a plist used as a communication channel.
 
-Unlike `org-md-link', this function will copy local images and
-rewrite link paths to make blogging more seamless."
+Unlike `org-md-link', this function will also copy local images
+and rewrite link paths to make blogging more seamless."
   (let ((link-org-files-as-md
 	 (lambda (raw-path)
            ;; Treat links to `file.org' as links to `file.md'.
@@ -152,14 +152,14 @@ rewrite link paths to make blogging more seamless."
                              (org-export-resolve-fuzzy-link link info)
                            (org-export-resolve-id-link link info))))
 	(pcase (org-element-type destination)
-          (`plain-text			; External file.
+          (`plain-text			;External file
            (let ((path (funcall link-org-files-as-md destination)))
              (if (not contents) (format "<%s>" path)
                (format "[%s](%s)" contents path))))
           (`headline
            (format
             "[%s](#%s)"
-            ;; Description.
+            ;; Description
             (cond ((org-string-nw-p contents))
                   ((org-export-numbered-headline-p destination info)
                    (mapconcat #'number-to-string
@@ -167,7 +167,7 @@ rewrite link paths to make blogging more seamless."
                               "."))
                   (t (org-export-data (org-element-property :title destination)
                                       info)))
-            ;; Reference.
+            ;; Reference
             (or (org-element-property :CUSTOM_ID destination)
 		(org-export-get-reference destination info))))
           (_
@@ -183,15 +183,17 @@ rewrite link paths to make blogging more seamless."
                        description
                        (org-export-get-reference destination info))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
-      (message "org-hugo-link proccessing an image %s" contents)
+      (message "org-hugo-link processing an image %s" contents)
 
       (let ((path (org-hugo--attachment-rewrite
                    (let ((raw-path (org-element-property :path link)))
                      (if (not (file-name-absolute-p raw-path)) raw-path
-                       (expand-file-name raw-path))) info))
+                       (expand-file-name raw-path)))
+                   info))
             (caption (org-export-data
                       (org-export-get-caption
-                       (org-export-get-parent-element link)) info)))
+                       (org-export-get-parent-element link))
+                      info)))
 	(format "![img](%s)"
 		(if (not (org-string-nw-p caption)) path
                   (format "%s \"%s\"" path caption)))))
@@ -208,7 +210,8 @@ rewrite link paths to make blogging more seamless."
 		 ((string= type "file")
                   (org-hugo--attachment-rewrite
                    (org-export-file-uri
-                    (funcall link-org-files-as-md raw-path))info))
+                    (funcall link-org-files-as-md raw-path))
+                   info))
 		 (t raw-path))))
           (if (not contents) (format "<%s>" path)
             (format "[%s](%s)" contents path)))))))

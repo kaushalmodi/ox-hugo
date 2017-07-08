@@ -1,6 +1,6 @@
 +++
 title = "Image"
-date = 2017-07-07T23:15:39-04:00
+date = 2017-07-07T23:32:14-04:00
 tags = []
 +++
 
@@ -11,7 +11,7 @@ tags = []
 
 # Unclickable image (works!)
 
-{{<figure src="/images/org-mode-unicorn-logo.png" caption="" class="nil">}}
+{{<figure src="/images/org-mode-unicorn-logo.png">}}
 
 **To be fixed**: The sub-headings in a post get exported as *Heading 1* instead of *Heading 2*.
 
@@ -33,13 +33,13 @@ So the sub-heading title and the post title both get the *Heading 1* tag and loo
 
 # Clickable image that opens the image (works!)
 
-Click below image to jump to the unicorn image. [{{<figure src="/images/org-mode-unicorn-logo.png" caption="" class="nil">}}](/images/org-mode-unicorn-logo.png)
+Click below image to jump to the unicorn image. [{{<figure src="/images/org-mode-unicorn-logo.png">}}](/images/org-mode-unicorn-logo.png)
 
 -   **NOTE:** `file:` has to be used in both Link and Description components of the Org link.
 
 
 # Image with `ATTR_HTML` [Issue # 17](https://github.com/kaushalmodi/ox-hugo/issues/17)
 
-{{<figure src="/images/org-mode-unicorn-logo.png" caption="" class="inset">}}
+{{<figure src="/images/org-mode-unicorn-logo.png" class="inset">}}
 
 [Discussion](https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728)

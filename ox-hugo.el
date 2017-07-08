@@ -198,8 +198,14 @@ and rewrite link paths to make blogging more seamless."
              (parent (org-export-get-parent link))
              (attr (org-export-read-attribute :attr_html parent))
              (class (plist-get attr :class)))
-	(format "{{<figure src=\"%s\" caption=\"%s\" class=\"%s\">}}"
-                path caption class)))
+	(format "{{<figure src=\"%s\"%s%s>}}"
+                path
+                (if (org-string-nw-p caption)
+                    (format " caption=\"%s\"" caption)
+                  "")
+                (if (org-string-nw-p class)
+                    (format " class=\"%s\"" class)
+                  ""))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
 	(format (org-export-get-coderef-format ref contents)

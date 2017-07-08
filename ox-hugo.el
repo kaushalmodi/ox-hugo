@@ -186,18 +186,20 @@ and rewrite link paths to make blogging more seamless."
                        (org-export-get-reference destination info))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
       (message "[org-hugo-link DBG] processing an image: %s" contents)
-      (let ((path (org-hugo--attachment-rewrite
-                   (if (file-name-absolute-p raw-path)
-                       (expand-file-name raw-path)
-                     raw-path)
-                   info))
-            (caption (org-export-data
-                      (org-export-get-caption
-                       (org-export-get-parent-element link))
-                      info)))
-	(format "![img](%s)" (if (org-string-nw-p caption)
-                                 (format "%s \"%s\"" path caption)
-                               path))))
+      (let* ((path (org-hugo--attachment-rewrite
+                    (if (file-name-absolute-p raw-path)
+                        (expand-file-name raw-path)
+                      raw-path)
+                    info))
+             (caption (org-export-data
+                       (org-export-get-caption
+                        (org-export-get-parent-element link))
+                       info))
+             (parent (org-export-get-parent link))
+             (attr (org-export-read-attribute :attr_html parent))
+             (class (plist-get attr :class)))
+	(format "{{<figure src=\"%s\" caption=\"%s\" class=\"%s\">}}"
+                path caption class)))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
 	(format (org-export-get-coderef-format ref contents)

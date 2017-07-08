@@ -58,12 +58,12 @@ Click below image to jump to the unicorn image.
 
 - NOTE :: =file:= has to be used in both Link and Description components
           of the Org link.
-** TODO Image with =ATTR_HTML= [[https://github.com/kaushalmodi/ox-hugo/issues/17][Issue # 17]]
+** Image with =ATTR_HTML= [[https://github.com/kaushalmodi/ox-hugo/issues/17][Issue # 17]]
 #+ATTR_HTML: :class inset
 [[/images/org-mode-unicorn-logo.png]]
 
 [[https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728][Discussion]]
-*** Below will not work!
+*** COMMENT Below will not work!
 You cannot wrap markdown code inside HTML.
 
 As /rdwatters/ says [[https://discourse.gohugo.io/t/is-it-possible-to-insert-html-code-in-markdown-content/4867/4?u=kaushalmodi][here]],

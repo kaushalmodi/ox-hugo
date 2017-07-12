@@ -584,83 +584,79 @@ Return output file's name."
     (org-export-to-file 'hugo outfile async subtreep visible-only)))
 
 ;;;###autoload
-(defun org-hugo-walk-headlines ()
-  "Publish each 1st level Org headline to a Hugo post."
-  (interactive)
-  (org-map-entries
-   '(lambda ()
-      (let* ((entry (org-element-at-point))
-             (level (org-element-property :level entry))
-             (is-commented (org-element-property :commentedp entry))
-             (tags (org-element-property :tags entry)))
-        (message "[ox-hugo DBG] On headline %s\n  level is %s\n  tags are %s\n  is-commented is %s\n  test value is %s"
-                 (org-element-property :raw-value entry)
-                 level tags is-commented
-                 (and (eq 1 level)
-                      (not (member "noexport" tags))
-                      (not is-commented)))
-        (if (and (eq 1 level)
-                 (not (member "noexport" tags))
-                 (not is-commented))
-            (org-hugo-export-to-md nil :subtreep)))))
-  ;; (org-publish-subtrees-to
-  ;; (quote hugo) (buffer-file-name)
-  ;; md nil
-  ;; (concat (file-name-as-directory hugo-content-dir) hugo-section))
-  )
-
-;;;###autoload
-(defun org-hugo-export-current-subtree ()
+(defun org-hugo-publish-subtree (&optional all-subtrees)
   "Publish the current subtree to a Hugo post.
 The next parent subtree having the \"EXPORT_FILE_NAME\" property
-is exported if the current subtree doesn't have that property."
-  (interactive)
-  ;; Reset the state variables first
-  (setq org-hugo--draft-state nil)
-  (setq org-hugo--tags-list nil)
+is exported if the current subtree doesn't have that property.
 
-  (save-excursion
-    (org-back-to-heading)
-    (let ((entry (catch 'break
-                   (while :infinite
-                     (let* ((entry (org-element-at-point))
-                            (fname (org-element-property :EXPORT_FILE_NAME entry))
-                            level)
-                       (when fname
-                         (throw 'break entry))
-                       ;; Keep on jumping to the parent heading if the current
-                       ;; entry does not have an EXPORT_FILE_NAME property.
-                       (setq level (org-up-heading-safe))
-                       ;; If no more parent heading exists, break out of the loop
-                       ;; and return nil
-                       (unless level
-                         (throw 'break nil))))))
-          fname is-commented tags is-excluded)
-      (if entry
-          (progn
-            (setq fname (org-element-property :EXPORT_FILE_NAME entry))
-            (setq is-commented (org-element-property :commentedp entry))
-            (setq tags (org-get-tags))
-            (dolist (exclude-tag org-export-exclude-tags)
-              (when (member exclude-tag tags)
-                (setq is-excluded t)))
-            ;; (message "[current subtree DBG] entry: %S" entry)
-            (message "[current subtree DBG] fname:%S, is-commented:%S, tags:%S, is-excluded:%S"
-                     fname is-commented tags is-excluded)
-            (unless (or is-commented
-                        is-excluded)
-              (let ((draft (if (string-match-p "\\`TODO\\|DRAFT\\'"
-                                               (format "%s" (org-get-todo-state)))
-                               "true"
-                             "false")))
-                (message "[current subtree DBG] draft:%S" draft)
-                ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
-                ;; FIXME: Is there a better way than passing these
-                ;; values via global variables.
-                (setq org-hugo--draft-state draft)
-                (setq org-hugo--tags-list tags)
-                (org-hugo-export-to-md nil :subtreep))))
-        (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property")))))
+If ALL-SUBTREES is non-nil, publish all subtrees in the current
+file."
+  (interactive "P")
+  (if all-subtrees
+      (org-map-entries (lambda ()
+                         (let* ((entry (org-element-at-point))
+                                (fname (org-element-property :EXPORT_FILE_NAME entry)))
+                           (when fname
+                             (org-hugo-publish-subtree)))))
+    ;; Publish only the current subtree
+    ;; Reset the state variables first
+    (setq org-hugo--draft-state nil)
+    (setq org-hugo--tags-list nil)
+
+    (save-restriction
+      (widen)
+      (save-excursion
+        (org-back-to-heading)
+        (let ((entry (catch 'break
+                       (while :infinite
+                         (let* ((entry (org-element-at-point))
+                                (fname (org-element-property :EXPORT_FILE_NAME entry))
+                                level)
+                           (when fname
+                             (throw 'break entry))
+                           ;; Keep on jumping to the parent heading if the current
+                           ;; entry does not have an EXPORT_FILE_NAME property.
+                           (setq level (org-up-heading-safe))
+                           ;; If no more parent heading exists, break out of the loop
+                           ;; and return nil
+                           (unless level
+                             (throw 'break nil))))))
+              is-commented tags is-excluded)
+          (if entry
+              (progn
+                (setq is-commented (org-element-property :commentedp entry))
+                (setq tags (org-get-tags))
+                (dolist (exclude-tag org-export-exclude-tags)
+                  (when (member exclude-tag tags)
+                    (setq is-excluded t)))
+                ;; (message "[current subtree DBG] entry: %S" entry)
+                ;; (message "[current subtree DBG] is-commented:%S, tags:%S, is-excluded:%S"
+                ;;          is-commented tags is-excluded)
+                (let ((title (org-element-property :title entry)))
+                  (cond
+                   (is-commented
+                    (message "[ox-hugo] `%s' was not exported as that subtree is commented" title))
+                   (is-excluded
+                    (message "[ox-hugo] `%s' was not exported as it is tagged with one of `org-export-exclude-tags'" title))
+                   (t
+                    (message "[ox-hugo] Exporting `%s' .." title)
+                    (let* ((todo-keyword (format "%s" (org-get-todo-state)))
+                           (draft (cond
+                                   ((string= "TODO" todo-keyword)
+                                    "true")
+                                   ((string= "DRAFT" todo-keyword)
+                                    (message "[ox-hugo] `%s' post is marked as a draft" title)
+                                    "true")
+                                   (t
+                                    "false"))))
+                      ;; (message "[current subtree DBG] draft:%S" draft)
+                      ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
+                      ;; FIXME: Is there a better way than passing these
+                      ;; values via global variables.
+                      (setq org-hugo--draft-state draft)
+                      (setq org-hugo--tags-list tags)
+                      (org-hugo-export-to-md nil :subtreep))))))
+            (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property")))))))
 
 ;;;###autoload
 (defun org-hugo-publish-to-md (plist filename pub-dir)

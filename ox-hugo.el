@@ -126,47 +126,47 @@ CONTENTS is the headline contents.  INFO is a plist used as
 a communication channel."
   (unless (org-element-property :footnote-section-p headline)
     (let* ((level (org-export-get-relative-level headline info))
-	   (title (org-export-data (org-element-property :title headline) info))
-	   (todo (and (plist-get info :with-todo-keywords)
-		      (let ((todo (org-element-property :todo-keyword
-				    headline)))
-			(and todo (concat (org-export-data todo info) " ")))))
-	   (tags (and (plist-get info :with-tags)
-		      (let ((tag-list (org-export-get-tags headline info)))
-			(and tag-list
-			     (format "     :%s:"
-				     (mapconcat 'identity tag-list ":"))))))
-	   (priority
-	    (and (plist-get info :with-priority)
-		 (let ((char (org-element-property :priority headline)))
-		   (and char (format "[#%c] " char)))))
-	   ;; Headline text without tags.
-	   (heading (concat todo priority title))
-	   (style (plist-get info :md-headline-style)))
+           (title (org-export-data (org-element-property :title headline) info))
+           (todo (and (plist-get info :with-todo-keywords)
+                      (let ((todo (org-element-property :todo-keyword
+                                    headline)))
+                        (and todo (concat (org-export-data todo info) " ")))))
+           (tags (and (plist-get info :with-tags)
+                      (let ((tag-list (org-export-get-tags headline info)))
+                        (and tag-list
+                             (format "     :%s:"
+                                     (mapconcat 'identity tag-list ":"))))))
+           (priority
+            (and (plist-get info :with-priority)
+                 (let ((char (org-element-property :priority headline)))
+                   (and char (format "[#%c] " char)))))
+           ;; Headline text without tags.
+           (heading (concat todo priority title))
+           (style (plist-get info :md-headline-style)))
       (cond
        ;; Cannot create a headline.  Fall-back to a list.
        ((or (org-export-low-level-p headline info)
-	    (not (memq style '(atx setext)))
-	    (and (eq style 'atx) (> level 6))
-	    (and (eq style 'setext) (> level 2)))
-	(let ((bullet
-	       (if (not (org-export-numbered-headline-p headline info)) "-"
-		 (concat (number-to-string
-			  (car (last (org-export-get-headline-number
-				      headline info))))
-			 "."))))
-	  (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags "\n\n"
-		  (and contents (replace-regexp-in-string "^" "    " contents)))))
+            (not (memq style '(atx setext)))
+            (and (eq style 'atx) (> level 6))
+            (and (eq style 'setext) (> level 2)))
+        (let ((bullet
+               (if (not (org-export-numbered-headline-p headline info)) "-"
+                 (concat (number-to-string
+                          (car (last (org-export-get-headline-number
+                                      headline info))))
+                         "."))))
+          (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags "\n\n"
+                  (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
-	(let ((anchor
-	       (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
-		       (or (org-element-property :CUSTOM_ID headline)
+        (let ((anchor
+               (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
+                       (or (org-element-property :CUSTOM_ID headline)
                            (org-hugo--slug title)
-			   ;; (org-export-get-reference headline info)
+                           ;; (org-export-get-reference headline info)
                            )))
               (loffset (plist-get info :hugo-level-offset)))
-	  (concat (org-hugo--headline-title style level loffset title anchor)
-		  contents)))))))
+          (concat (org-hugo--headline-title style level loffset title anchor)
+                  contents)))))))
 
 ;;;;; Headline Helpers
 (defun org-hugo--slug (str)
@@ -211,7 +211,7 @@ section as a string."
   (if (and (eq style 'setext) (< level 3))
       (let* ((underline-char (if (= level 1) ?= ?-))
              (underline (concat (make-string (length title) underline-char)
-				"\n")))
+                                "\n")))
         (concat "\n" title " " anchor "\n" underline "\n"))
     ;; Use "Atx" style
     ;; Always translate level N Org headline to level N+1 Markdown
@@ -240,14 +240,14 @@ INFO is a plist used as a communication channel.
 Unlike `org-md-link', this function will also copy local images
 and rewrite link paths to make blogging more seamless."
   (let ((link-org-files-as-md
-	 (lambda (raw-path)
+         (lambda (raw-path)
            ;; Treat links to `file.org' as links to `file.md'.
            (if (string= ".org" (downcase (file-name-extension raw-path ".")))
                (concat (file-name-sans-extension raw-path) ".md")
              raw-path)))
         (raw-path (org-element-property :path link))
         (images-dir (org-string-nw-p (plist-get info :hugo-static-images)))
-	(type (org-element-property :type link)))
+        (type (org-element-property :type link)))
     (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
     (message "[ox-hugo-link DBG] link type: %s" type)
     (cond
@@ -257,8 +257,8 @@ and rewrite link paths to make blogging more seamless."
       (let ((destination (if (string= type "fuzzy")
                              (org-export-resolve-fuzzy-link link info)
                            (org-export-resolve-id-link link info))))
-	(pcase (org-element-type destination)
-          (`plain-text			;External file
+        (pcase (org-element-type destination)
+          (`plain-text                  ;External file
            (let ((path (funcall link-org-files-as-md destination)))
              (if contents
                  (format "[%s](%s)" contents path)
@@ -276,15 +276,15 @@ and rewrite link paths to make blogging more seamless."
                                       info)))
             ;; Reference
             (or (org-element-property :CUSTOM_ID destination)
-		(org-export-get-reference destination info))))
+                (org-export-get-reference destination info))))
           (_
            (let ((description
                   (or (org-string-nw-p contents)
                       (let ((number (org-export-get-ordinal destination info)))
-			(cond
-			 ((not number) nil)
-			 ((atom number) (number-to-string number))
-			 (t (mapconcat #'number-to-string number ".")))))))
+                        (cond
+                         ((not number) nil)
+                         ((atom number) (number-to-string number))
+                         (t (mapconcat #'number-to-string number ".")))))))
              (when description
                (format "[%s](#%s)"
                        description
@@ -303,7 +303,7 @@ and rewrite link paths to make blogging more seamless."
              (parent (org-export-get-parent link))
              (attr (org-export-read-attribute :attr_html parent))
              (class (plist-get attr :class)))
-	(format "{{<figure src=\"%s\"%s%s>}}"
+        (format "{{<figure src=\"%s\"%s%s>}}"
                 path
                 (if (org-string-nw-p caption)
                     (format " caption=\"%s\"" caption)
@@ -313,15 +313,15 @@ and rewrite link paths to make blogging more seamless."
                   ""))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
-	(format (org-export-get-coderef-format ref contents)
-		(org-export-resolve-coderef ref info))))
+        (format (org-export-get-coderef-format ref contents)
+                (org-export-resolve-coderef ref info))))
      ((equal type "radio")
       contents)
      (t
       (let ((path (cond
-	           ((member type '("http" "https" "ftp"))
+                   ((member type '("http" "https" "ftp"))
                     (concat type ":" raw-path))
-	           ((and (string= type "file")
+                   ((and (string= type "file")
                          (or (null images-dir)
                              ;; Do not add the "file://" prefix if the
                              ;; raw-path begins with the HUGO_STATIC_IMAGES
@@ -331,7 +331,7 @@ and rewrite link paths to make blogging more seamless."
                      (org-export-file-uri
                       (funcall link-org-files-as-md raw-path))
                      info))
-	           (t
+                   (t
                     raw-path))))
         (if contents
             (format "[%s](%s)" contents path)
@@ -545,9 +545,9 @@ Return output file's name."
   ;; allows us to extract destination file info from
   ;; export-options-alist
   (let* ((info (org-combine-plists
-		(org-export--get-export-attributes
-		 'hugo subtreep visible-only)
-		(org-export--get-buffer-attributes)
+                (org-export--get-export-attributes
+                 'hugo subtreep visible-only)
+                (org-export--get-buffer-attributes)
                 (org-export-get-environment 'hugo subtreep)))
          (base-dir (if (null (plist-get info :hugo-base-dir))
                        (user-error "It is mandatory to set the HUGO_BASE_DIR property")

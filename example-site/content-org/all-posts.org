@@ -130,6 +130,17 @@ This post must not be exported as it is commented.
 :PROPERTIES:
 :EXPORT_FILE_NAME: test-tags
 :END:
+* Section                                                             :emacs:
+** Emacs Post 1                                                         :foo:
+:PROPERTIES:
+:EXPORT_FILE_NAME: emacs-post-1
+:END:
+Here is the first post on Emacs.
+** Emacs Post 2                                                         :bar:
+:PROPERTIES:
+:EXPORT_FILE_NAME: emacs-post-2
+:END:
+Here is the second post on Emacs.
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

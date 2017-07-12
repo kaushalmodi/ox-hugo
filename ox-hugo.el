@@ -625,7 +625,9 @@ file."
           (if entry
               (progn
                 (setq is-commented (org-element-property :commentedp entry))
-                (setq tags (org-get-tags))
+                ;; (setq tags (org-get-tags)) ;Return a list of tags *only* at the current heading
+                (setq tags (org-get-tags-at)) ;Return a list of tags at current heading
+                                        ;+ inherited ones! Needs `org-use-tag-inheritance' to be t.
                 (dolist (exclude-tag org-export-exclude-tags)
                   (when (member exclude-tag tags)
                     (setq is-excluded t)))

@@ -75,7 +75,8 @@ directory where all Hugo posts should go by default."
             (lambda (a s v b)
               (if a (org-hugo-export-to-md t s v)
                 (org-open-file (org-hugo-export-to-md nil s v)))))))
-  :translate-alist '((src-block . org-hugo-src-block)
+  :translate-alist '((headline . org-hugo-headline)
+                     (src-block . org-hugo-src-block)
                      (link . org-hugo-link)
                      ;;(inner-template . org-hugo-inner-template)
                      (table . org-hugo-table))
@@ -92,6 +93,7 @@ directory where all Hugo posts should go by default."
                    (:description "DESCRIPTION" nil nil)
                    (:date "DATE" nil nil)
                    (:tags "TAGS" nil nil 'space)
+                   (:hugo-level-offset "HUGO_LEVEL_OFFSET" loffset 0)
                    (:hugo-tags "HUGO_TAGS" nil nil 'space) ;TODO: Also parse the Org tags as post tags
                    (:hugo-categories "HUGO_CATEGORIES" nil nil 'space)
                    ;; Optional front matter variables
@@ -114,8 +116,76 @@ directory where all Hugo posts should go by default."
 
 ;;; Transcode Functions
 
-;;;; Source Blocks
+;;;; Headline
+(defun org-hugo-headline (headline contents info)
+  "Transcode HEADLINE element into Markdown format.
+CONTENTS is the headline contents.  INFO is a plist used as
+a communication channel."
+  (unless (org-element-property :footnote-section-p headline)
+    (let* ((level (org-export-get-relative-level headline info))
+	   (title (org-export-data (org-element-property :title headline) info))
+	   (todo (and (plist-get info :with-todo-keywords)
+		      (let ((todo (org-element-property :todo-keyword
+				    headline)))
+			(and todo (concat (org-export-data todo info) " ")))))
+	   (tags (and (plist-get info :with-tags)
+		      (let ((tag-list (org-export-get-tags headline info)))
+			(and tag-list
+			     (format "     :%s:"
+				     (mapconcat 'identity tag-list ":"))))))
+	   (priority
+	    (and (plist-get info :with-priority)
+		 (let ((char (org-element-property :priority headline)))
+		   (and char (format "[#%c] " char)))))
+	   ;; Headline text without tags.
+	   (heading (concat todo priority title))
+	   (style (plist-get info :md-headline-style)))
+      (cond
+       ;; Cannot create a headline.  Fall-back to a list.
+       ((or (org-export-low-level-p headline info)
+	    (not (memq style '(atx setext)))
+	    (and (eq style 'atx) (> level 6))
+	    (and (eq style 'setext) (> level 2)))
+	(let ((bullet
+	       (if (not (org-export-numbered-headline-p headline info)) "-"
+		 (concat (number-to-string
+			  (car (last (org-export-get-headline-number
+				      headline info))))
+			 "."))))
+	  (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags "\n\n"
+		  (and contents (replace-regexp-in-string "^" "    " contents)))))
+       (t
+	(let ((anchor
+	       (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
+		       (or (org-element-property :CUSTOM_ID headline)
+			   (org-export-get-reference headline info))))
+              (loffset (plist-get info :hugo-level-offset)))
+	  (concat (org-hugo--headline-title style level loffset title anchor)
+		  contents)))))))
 
+;;;;; Headline Helper
+(defun org-hugo--headline-title (style level loffset title &optional anchor)
+  "Generate a headline title in the preferred Markdown headline style.
+STYLE is the preferred style (`atx' or `setext').  LEVEL is the
+header level.  LOFFSET is the offset (a non-negative number) that
+is added to the Markdown heading level for `atx' style.  TITLE is
+the headline title.  ANCHOR is the Hugo anchor tag for the
+section as a string."
+  ;; Use "Setext" style
+  (if (and (eq style 'setext) (< level 3))
+      (let* ((underline-char (if (= level 1) ?= ?-))
+             (underline (concat (make-string (length title) underline-char)
+				"\n")))
+        (concat "\n" title " " anchor "\n" underline "\n"))
+    ;; Use "Atx" style
+    ;; Always translate level N Org headline to level N+1 Markdown
+    ;; headline because Markdown level 1 headline and HTML title both
+    ;; get the HTML <h1> tag, and we do not want the top-most heading
+    ;; of a post to look the exact same as the post's title.
+    (let ((level-mark (make-string (+ loffset level) ?#)))
+      (concat "\n" level-mark " " title " " anchor "\n\n"))))
+
+;;;; Source Blocks
 (defun org-hugo-src-block (src-block _contents _info)
   "Convert SRC-BLOCK element to the Hugo `highlight' shortcode."
   (let* ((lang (org-element-property :language src-block))
@@ -125,7 +195,6 @@ directory where all Hugo posts should go by default."
     (concat shortcode code close-shortcode)))
 
 ;;;; Links
-
 (defun org-hugo-link (link contents info)
   "Convert LINK to Markdown format.
 
@@ -233,7 +302,6 @@ and rewrite link paths to make blogging more seamless."
           (format "<%s>" path)))))))
 
 ;;;;; Helpers
-
 (defun org-hugo--attachment-rewrite (path info)
   "Copy local images and pdfs to the \"static/\" directory.
 Also rewrite image links.
@@ -266,7 +334,6 @@ INFO is a plist used as a communication channel."
 
 
 ;;;; Hugo Front Matter
-
 (defun org-hugo--wrap-string-in-quotes (str)
   "Wrap STR with double quotes and return the string."
   (cond ((string-empty-p str)

@@ -1,4 +1,5 @@
 #+HUGO_BASE_DIR: ../
+#+OPTIONS: loffset:1
 
 * Preparation
 :PROPERTIES:
@@ -82,3 +83,34 @@ inside that div is valid HTML.
 #+BEGIN_EXPORT md
 </div>
 #+END_EXPORT
+* Setting heading anchors
+:PROPERTIES:
+:EXPORT_FILE_NAME: setting-heading-anchors
+:END:
+** Heading 1 of the post
+:PROPERTIES:
+:CUSTOM_ID: cool-ref-1
+:END:
+Something
+*** Heading 1.1 of the post
+:PROPERTIES:
+:CUSTOM_ID: cool-ref-1.1
+:END:
+Something else
+** Heading 2 of the post
+:PROPERTIES:
+:CUSTOM_ID: cool-ref-2
+:END:
+Something 2
+*** Heading 2.1 of the post
+:PROPERTIES:
+:CUSTOM_ID: cool-ref-2.1
+:END:
+Something 2.1
+* COMMENT To be implemented
+** TODO Draft state
+:PROPERTIES:
+:EXPORT_FILE_NAME: draft-state
+:END:
+If a post has the =TODO= keyword, the =draft= front matter variable
+should be set to =true=.

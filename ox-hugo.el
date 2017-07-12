@@ -171,9 +171,20 @@ a communication channel."
 ;;;;; Headline Helpers
 (defun org-hugo--slug (str)
   "Return a slug string for STR.
-The slug can contain only alphabets, numbers and hyphens, and
-should be all lower-case."
-  (message "dbg:%s" str)
+STR is in Markdown format, most likely a Markdown heading.  The
+returned slug string has the following specification:
+
+- Should contain only lower case alphabet, number and hyphen
+  characters.
+- URLs if present in STR should be removed.
+- Replace \".\" in STR with \"and\", and \"&\" with \"and\".
+- Parentheses should be replaced with double-hyphens ( \"foo (bar)
+  baz\" becomes \"foo--bar--baz\").
+- One or more consecutive spaces should be replaced with a single
+  hyphen.
+- Maximum number of consecutive hyphens allowed is two.
+- No hyphens should be present at the leading or trailing end of the
+  returned string ."
   (let* (;; All lower-case
          (str (downcase str))
          ;; Remove URLs if present in the string
@@ -191,7 +202,7 @@ should be all lower-case."
          ;; Replace 2 or more spaces with a single space
          (str (replace-regexp-in-string "[[:space:]]\\{2,\\}" " " str))
          ;; Replace parentheses with double-hyphens
-         (str (replace-regexp-in-string "\\s-*(\\([^)]+\\))\\s-*" " -\\1- " str))
+         (str (replace-regexp-in-string "\\s-*([[:space:]]*\\([^)]+?\\)[[:space:]]*)\\s-*" " -\\1- " str))
          ;; Remove any remaining parentheses character
          (str (replace-regexp-in-string "[()]" "" str))
          ;; Replace spaces with hyphens

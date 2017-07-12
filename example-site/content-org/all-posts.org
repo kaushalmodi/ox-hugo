@@ -126,14 +126,26 @@ This post must not be exported as it is tagged =noexport=.
 :EXPORT_FILE_NAME: commented-post
 :END:
 This post must not be exported as it is commented.
-* COMMENT To be implemented
-** TODO Draft state
-:PROPERTIES:
-:EXPORT_FILE_NAME: draft-state
-:END:
-If a post has the =TODO= keyword, the =draft= front matter variable
-should be set to =true=.
-** Test tags                                                        :abc:def:
+* Test tags                                                         :abc:def:
 :PROPERTIES:
 :EXPORT_FILE_NAME: test-tags
 :END:
+* TODO Draft state
+:PROPERTIES:
+:EXPORT_FILE_NAME: draft-state-todo
+:END:
+If a post has the =TODO= keyword, the =draft= front matter variable
+should be set to =true=.
+
+Idea to to mark a post or blog idea as =TODO= that you yet have to
+start writing.
+* DRAFT Draft state
+:PROPERTIES:
+:EXPORT_FILE_NAME: draft-state-draft
+:END:
+If a post has the =DRAFT= keyword too, the =draft= front matter variable
+should be set to =true=.
+
+Idea is to mark a post as =DRAFT= that you have already started
+writing, or are in the process at the moment, but it is not yet ready
+to be published

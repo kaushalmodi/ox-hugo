@@ -46,19 +46,21 @@ This package might evolve into a multi-.el project.
      =hugo= binary in =PATH= (ii) define their =hugo= blog dir in the
      =defcustom= (iii) =M-x hugo=.
 
-* TODO [2/9]
+* TODO [4/9]
 - [X] Have =ox-hugo= be a backend derived from =ox-blackfriday=
   (=ox-blackfriday= needed at least for table support).
 - [ ] fix table horizontal rule generator, which currently adds an
   additional syntax-breaking space in each cell
-- [ ] Parse org heading to set the hugo post title in fm
+- [X] Parse org heading to set the hugo post title in fm
 - [-] Clean up and formalize the front matter fields
-  - [ ] Parse org tags to set the hugo post tags/categories in fm.
+  - [X] Parse org tags to set the hugo post tags/categories in fm.
   - [X] Use title to auto-generate file name string.
   - [ ] Set post date to be the same as the export date *unless*
     =:PUBLISHDATE:= property exists.
-  - [ ] Ability to set/toggle =:DRAFT: true= in property drawer. Of
-    course that should translate to hugo post fm.
+  - [X] Ability to set/toggle =:DRAFT: true= in property drawer. Of
+    course that should translate to hugo post fm. <2017-07-12 Wed>
+    Implemented an even better way.. by setting =TODO=, =DRAFT= and
+    =DONE= todo states.
 - [X] Function to re-export the whole org file to subtree-specific
   markdown files
 - [X] in image links, copy images to static dir and rewrite link target

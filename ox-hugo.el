@@ -32,6 +32,12 @@
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
 
+(defvar org-hugo--draft-state nil
+  "State variable to store the \"draft\" state of the subtree to be exported.")
+
+(defvar org-hugo--tags-list nil
+  "State variable to store the tags of the subtree to be exported.")
+
 
 ;;; User-Configurable Variables
 
@@ -410,16 +416,19 @@ INFO is a plist used as a communication channel."
          ;;   2017-07-06T14:59:45-0400 (Note the missing colon)
          ;; Below simply adds that colon.
          (date (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2" date-nocolon))
-         (tags (concat
-                (org-export-data (plist-get info :hugo-tags) info) " "
-                (org-export-data (plist-get info :tags) info)))
+         (tags (or (org-string-nw-p (mapconcat #'identity org-hugo--tags-list " "))
+                   (concat
+                    (org-export-data (plist-get info :hugo-tags) info) " "
+                    (org-export-data (plist-get info :tags) info))))
+         (draft (or org-hugo--draft-state
+                    (org-export-data (plist-get info :hugo-draft) info)))
          (data `((title . ,(org-export-data (plist-get info :title) info))
                  (date . ,date)
                  (description . ,(org-export-data (plist-get info :hugo-description) info))
                  (tags . ,tags)
                  (categories . ,(org-export-data (plist-get info :hugo-categories) info))
                  (aliases . ,(org-export-data (plist-get info :hugo-aliases) info))
-                 (draft . ,(org-export-data (plist-get info :hugo-draft) info))
+                 (draft . ,draft)
                  (publishdate . ,(org-export-data (plist-get info :hugo-publishdate) info))
                  (expirydate . ,(org-export-data (plist-get info :hugo-expirydate) info))
                  (type . ,(org-export-data (plist-get info :hugo-type) info))
@@ -606,6 +615,10 @@ Return output file's name."
 The next parent subtree having the \"EXPORT_FILE_NAME\" property
 is exported if the current subtree doesn't have that property."
   (interactive)
+  ;; Reset the state variables first
+  (setq org-hugo--draft-state nil)
+  (setq org-hugo--tags-list nil)
+
   (save-excursion
     (org-back-to-heading)
     (let ((entry (catch 'break
@@ -642,8 +655,10 @@ is exported if the current subtree doesn't have that property."
                              "false")))
                 (message "[current subtree DBG] draft:%S" draft)
                 ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
-                ;; FIXME: Need to now somehow pass the values of `draft' and
-                ;; `tags' to the INFO of the subtree.
+                ;; FIXME: Is there a better way than passing these
+                ;; values via global variables.
+                (setq org-hugo--draft-state draft)
+                (setq org-hugo--tags-list tags)
                 (org-hugo-export-to-md nil :subtreep))))
         (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property")))))
 

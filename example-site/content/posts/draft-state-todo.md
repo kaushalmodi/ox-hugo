@@ -1,7 +1,10 @@
 +++
 title = "Draft state"
-date = 2017-07-12T13:16:55-04:00
+date = 2017-07-12T13:45:57-04:00
 tags = []
+draft = true
 +++
 
 If a post has the `TODO` keyword, the `draft` front matter variable should be set to `true`.
+
+Idea to to mark a post or blog idea as `TODO` that you yet have to start writing.

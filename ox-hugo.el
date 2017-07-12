@@ -589,20 +589,20 @@ is exported if the current subtree doesn't have that property.
 If ALL-SUBTREES is non-nil, publish all subtrees in the current
 file."
   (interactive "P")
-  (if all-subtrees
-      (org-map-entries (lambda ()
-                         (let* ((entry (org-element-at-point))
-                                (fname (org-element-property :EXPORT_FILE_NAME entry)))
-                           (when fname
-                             (org-hugo-publish-subtree)))))
-    ;; Publish only the current subtree
-    ;; Reset the state variables first
-    (setq org-hugo--draft-state nil)
-    (setq org-hugo--tags-list nil)
+  (save-restriction
+    (widen)
+    (save-excursion
+      (if all-subtrees
+          (org-map-entries (lambda ()
+                             (let* ((entry (org-element-at-point))
+                                    (fname (org-element-property :EXPORT_FILE_NAME entry)))
+                               (when fname
+                                 (org-hugo-publish-subtree)))))
+        ;; Publish only the current subtree
+        ;; Reset the state variables first
+        (setq org-hugo--draft-state nil)
+        (setq org-hugo--tags-list nil)
 
-    (save-restriction
-      (widen)
-      (save-excursion
         (org-back-to-heading)
         (let ((entry (catch 'break
                        (while :infinite

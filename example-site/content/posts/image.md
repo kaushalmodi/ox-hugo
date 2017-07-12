@@ -1,7 +1,7 @@
 +++
 title = "Image"
-date = 2017-07-07T23:32:14-04:00
-tags = []
+date = 2017-07-11T23:52:07-04:00
+tags = ["image"]
 +++
 
 **To be fixed**: At the moment, you need to place the point here and do `C-c C-e H H`. If the point is under any of the nested sub-trees in here where you do that, only that subtree gets exported.

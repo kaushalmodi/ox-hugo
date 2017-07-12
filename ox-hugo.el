@@ -91,7 +91,7 @@ directory where all Hugo posts should go by default."
                    ;; "date" is parsed from the Org #+DATE or subtree property EXPORT_HUGO_DATE
                    (:description "DESCRIPTION" nil nil)
                    (:date "DATE" nil nil)
-                   (:keywords "KEYWORDS" nil nil 'space)
+                   (:tags "TAGS" nil nil 'space)
                    (:hugo-tags "HUGO_TAGS" nil nil 'space) ;TODO: Also parse the Org tags as post tags
                    (:hugo-categories "HUGO_CATEGORIES" nil nil 'space)
                    ;; Optional front matter variables
@@ -297,7 +297,7 @@ INFO is a plist used as a communication channel."
          (date (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2" date-nocolon))
          (tags (concat
                 (org-export-data (plist-get info :hugo-tags) info) " "
-                (org-export-data (plist-get info :keywords) info)))
+                (org-export-data (plist-get info :tags) info)))
          (data `((title . ,(org-export-data (plist-get info :title) info))
                  (date . ,date)
                  (description . ,(org-export-data (plist-get info :hugo-description) info))

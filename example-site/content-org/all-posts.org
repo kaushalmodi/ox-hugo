@@ -26,6 +26,7 @@ H H=.
 * Image
 :PROPERTIES:
 :EXPORT_FILE_NAME: image
+:EXPORT_TAGS: image
 :END:
 *To be fixed*: At the moment, you need to place the point here and do
  =C-c C-e H H=. If the point is under any of the nested sub-trees in

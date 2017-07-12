@@ -601,6 +601,53 @@ Return output file's name."
   )
 
 ;;;###autoload
+(defun org-hugo-export-current-subtree ()
+  "Publish the current subtree to a Hugo post.
+The next parent subtree having the \"EXPORT_FILE_NAME\" property
+is exported if the current subtree doesn't have that property."
+  (interactive)
+  (save-excursion
+    (org-back-to-heading)
+    (let ((entry (catch 'break
+                   (while :infinite
+                     (let* ((entry (org-element-at-point))
+                            (fname (org-element-property :EXPORT_FILE_NAME entry))
+                            level)
+                       (when fname
+                         (throw 'break entry))
+                       ;; Keep on jumping to the parent heading if the current
+                       ;; entry does not have an EXPORT_FILE_NAME property.
+                       (setq level (org-up-heading-safe))
+                       ;; If no more parent heading exists, break out of the loop
+                       ;; and return nil
+                       (unless level
+                         (throw 'break nil))))))
+          fname is-commented tags is-excluded)
+      (if entry
+          (progn
+            (setq fname (org-element-property :EXPORT_FILE_NAME entry))
+            (setq is-commented (org-element-property :commentedp entry))
+            (setq tags (org-get-tags))
+            (dolist (exclude-tag org-export-exclude-tags)
+              (when (member exclude-tag tags)
+                (setq is-excluded t)))
+            ;; (message "[current subtree DBG] entry: %S" entry)
+            (message "[current subtree DBG] fname:%S, is-commented:%S, tags:%S, is-excluded:%S"
+                     fname is-commented tags is-excluded)
+            (unless (or is-commented
+                        is-excluded)
+              (let ((draft (if (string-match-p "\\`TODO\\|DRAFT\\'"
+                                               (format "%s" (org-get-todo-state)))
+                               "true"
+                             "false")))
+                (message "[current subtree DBG] draft:%S" draft)
+                ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
+                ;; FIXME: Need to now somehow pass the values of `draft' and
+                ;; `tags' to the INFO of the subtree.
+                (org-hugo-export-to-md nil :subtreep))))
+        (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property")))))
+
+;;;###autoload
 (defun org-hugo-publish-to-md (plist filename pub-dir)
   "Publish an Org file to Hugo-compatible Markdown file.
 

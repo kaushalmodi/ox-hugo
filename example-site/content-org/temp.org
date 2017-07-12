@@ -1,0 +1,10 @@
+#+HUGO_BASE_DIR: ../
+#+OPTIONS: loffset:1
+#+SEQ_TODO: TODO DRAFT DONE
+
+* abc
+Running =org-hugo-export-current-subtree= here will throw this user
+error:
+#+BEGIN_EXAMPLE
+user-error: It is mandatory to have a subtree with EXPORT_FILE_NAME property
+#+END_EXAMPLE

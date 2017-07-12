@@ -1,5 +1,6 @@
 #+HUGO_BASE_DIR: ../
 #+OPTIONS: loffset:1
+#+SEQ_TODO: TODO DRAFT DONE
 
 * Preparation
 :PROPERTIES:
@@ -115,6 +116,16 @@ Something 2.1
 ** Foo ( Bar ) Baz
 ** (Foo)Bar.Baz&Zoo
 ** Hey! I have a link [[https://example.org][here]] (Awesome!)
+* Excluded post                                                    :noexport:
+:PROPERTIES:
+:EXPORT_FILE_NAME: excluded-post
+:END:
+This post must not be exported as it is tagged =noexport=.
+* COMMENT Commented post
+:PROPERTIES:
+:EXPORT_FILE_NAME: commented-post
+:END:
+This post must not be exported as it is commented.
 * COMMENT To be implemented
 ** TODO Draft state
 :PROPERTIES:
@@ -122,3 +133,7 @@ Something 2.1
 :END:
 If a post has the =TODO= keyword, the =draft= front matter variable
 should be set to =true=.
+** Test tags                                                        :abc:def:
+:PROPERTIES:
+:EXPORT_FILE_NAME: test-tags
+:END:

@@ -130,7 +130,7 @@ This post must not be exported as it is commented.
 :PROPERTIES:
 :EXPORT_FILE_NAME: test-tags
 :END:
-* TODO Draft state
+* TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo
 :END:

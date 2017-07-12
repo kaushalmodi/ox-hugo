@@ -1,7 +1,8 @@
 +++
 title = "Preparation"
-date = 2017-07-06T15:38:08-04:00
+date = 2017-07-12T17:05:38-04:00
 tags = []
+draft = false
 +++
 
 1.  Be the root directory for this Hugo site (the directory containing `config.toml`).

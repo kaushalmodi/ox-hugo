@@ -1,6 +1,6 @@
 +++
-title = "Draft state"
-date = 2017-07-12T13:45:57-04:00
+title = "Pre-Draft State"
+date = 2017-07-12T17:05:41-04:00
 tags = []
 draft = true
 +++

@@ -86,9 +86,7 @@ directory where all Hugo posts should go by default."
                 (org-open-file (org-hugo-export-to-md nil s v)))))))
   :translate-alist '((headline . org-hugo-headline)
                      (src-block . org-hugo-src-block)
-                     (link . org-hugo-link)
-                     ;;(inner-template . org-hugo-inner-template)
-                     (table . org-hugo-table))
+                     (link . org-hugo-link))
   :filters-alist '((:filter-body . org-hugo-body-filter)
                    ;; (:filter-link . org-hugo-image-filter)
                    )
@@ -364,7 +362,6 @@ INFO is a plist used as a communication channel."
   ;; (message "[ox-hugo attachment DBG] The Hugo images dir is: %s" (plist-get info :hugo-static-images))
   ;; (message "[ox-hugo attachment DBG] The Hugo section is: %s" (plist-get info :hugo-section))
   ;; (message "[ox-hugo attachment DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir))
-
   (let* ((full-path (file-truename path))
          (exportables '("jpg" "jpeg" "tiff" "png" "pdf" "odt" ))
          (file-name (file-name-nondirectory path))
@@ -382,11 +379,20 @@ INFO is a plist used as a communication channel."
           (unless (file-exists-p exported-image)
             (copy-file full-path exported-image))
           (concat "/static/" (file-name-as-directory (plist-get info :hugo-static-images)) file-name))
-      path
-      )))
+      path)))
 
+
+;;; Filter Functions
 
-;;;; Hugo Front Matter
+;;;; Body Filter
+(defun org-hugo-body-filter (body _backend info)
+  "Add front matter to the BODY of the document.
+
+BODY is the result of the export.
+INFO is a plist holding export options."
+  (format "%s\n%s" (org-hugo--get-front-matter info) body))
+
+;;;;; Hugo Front Matter
 (defun org-hugo--wrap-string-in-quotes (str)
   "Wrap STR with double quotes and return the string."
   (cond ((string-empty-p str)
@@ -489,16 +495,7 @@ are \"toml\" and \"yaml\"."
                                        (org-hugo--wrap-string-in-quotes value)))))))))
     (concat sep front-matter sep)))
 
-;;;; Template
-
-(defun org-hugo-body-filter (body _backend info)
-  "Add front matter to the BODY of the document.
-
-BODY is the result of the export.
-INFO is a plist holding export options."
-  (format "%s\n%s" (org-hugo--get-front-matter info) body))
-
-
+
 ;;; Interactive functions
 
 ;;;###autoload

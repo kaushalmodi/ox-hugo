@@ -265,8 +265,8 @@ and rewrite link paths to make blogging more seamless."
         (raw-path (org-element-property :path link))
         (images-dir (org-string-nw-p (plist-get info :hugo-static-images)))
         (type (org-element-property :type link)))
-    (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
-    (message "[ox-hugo-link DBG] link type: %s" type)
+    ;; (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
+    ;; (message "[ox-hugo-link DBG] link type: %s" type)
     (cond
      ;; Link type is handled by a special function.
      ((org-export-custom-protocol-maybe link contents 'md))
@@ -307,7 +307,7 @@ and rewrite link paths to make blogging more seamless."
                        description
                        (org-export-get-reference destination info))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
-      (message "[org-hugo-link DBG] processing an image: %s" contents)
+      ;; (message "[org-hugo-link DBG] processing an image: %s" contents)
       (let* ((path (org-hugo--attachment-rewrite
                     (if (file-name-absolute-p raw-path)
                         (expand-file-name raw-path)
@@ -361,9 +361,9 @@ Also rewrite image links.
 
 PATH is the path to the image or pdf attachment.
 INFO is a plist used as a communication channel."
-  (message "[ox-hugo attachment DBG] The Hugo images dir is: %s" (plist-get info :hugo-static-images))
-  (message "[ox-hugo attachment DBG] The Hugo section is: %s" (plist-get info :hugo-section))
-  (message "[ox-hugo attachment DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir))
+  ;; (message "[ox-hugo attachment DBG] The Hugo images dir is: %s" (plist-get info :hugo-static-images))
+  ;; (message "[ox-hugo attachment DBG] The Hugo section is: %s" (plist-get info :hugo-section))
+  ;; (message "[ox-hugo attachment DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir))
 
   (let* ((full-path (file-truename path))
          (exportables '("jpg" "jpeg" "tiff" "png" "pdf" "odt" ))
@@ -374,7 +374,7 @@ INFO is a plist used as a communication channel."
                             (file-name-as-directory (plist-get info :hugo-static-images))
                             ))
          (exported-image (concat image-export-dir file-name)))
-    (message "[ox-hugo DBG] Image export dir is: %s" image-export-dir)
+    ;; (message "[ox-hugo DBG] Image export dir is: %s" image-export-dir)
     (if (and (file-exists-p full-path)
              (member (file-name-extension path) exportables)
              (file-directory-p image-export-dir))

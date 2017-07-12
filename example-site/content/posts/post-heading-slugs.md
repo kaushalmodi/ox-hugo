@@ -1,6 +1,6 @@
 +++
 title = "Post heading with crazy characters"
-date = 2017-07-12T03:24:41-04:00
+date = 2017-07-12T11:10:00-04:00
 tags = []
 +++
 
@@ -13,4 +13,4 @@ tags = []
 ## (Foo)Bar.Baz&Zoo {#foo--bar-dot-baz-and-zoo}
 
 
-## Hey! I have a link [here](https://example.org) (Awesome!) {#hey-i-have-a-link-here---awesome}
+## Hey! I have a link [here](https://example.org) (Awesome!) {#hey-i-have-a-link-here--awesome}

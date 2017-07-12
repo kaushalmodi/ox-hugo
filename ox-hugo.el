@@ -179,7 +179,7 @@ should be all lower-case."
          ;; Remove URLs if present in the string
          ;; The ")" in the below regexp is the closing parenthesis of a
          ;; Markdown link: [Desc](Link)
-         (str (replace-regexp-in-string (concat ffap-url-regexp "[^)]+)") "" str))
+         (str (replace-regexp-in-string (concat "\\](" ffap-url-regexp "[^)]+)") "]" str))
          ;; Replace "&" with " and "
          (str (replace-regexp-in-string "&" " and " str))
          ;; Replace "." with " dot "
@@ -191,7 +191,7 @@ should be all lower-case."
          ;; Replace 2 or more spaces with a single space
          (str (replace-regexp-in-string "[[:space:]]\\{2,\\}" " " str))
          ;; Replace parentheses with double-hyphens
-         (str (replace-regexp-in-string "\\s-*(\\([^)]+\\))\\s-*" "--\\1--" str))
+         (str (replace-regexp-in-string "\\s-*(\\([^)]+\\))\\s-*" " -\\1- " str))
          ;; Remove any remaining parentheses character
          (str (replace-regexp-in-string "[()]" "" str))
          ;; Replace spaces with hyphens

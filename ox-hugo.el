@@ -395,6 +395,7 @@ INFO is a plist used as a communication channel."
   "Return the Hugo front matter string.
 
 INFO is a plist used as a communication channel."
+  ;; (message "[hugo front matter DBG] info: %S" (pp info))
   (let* ((fm-format (org-export-data (plist-get info :hugo-front-matter-format) info))
          (hugo-date-fmt "%Y-%m-%dT%T%z")
          (date-nocolon (or ;; Get the date from the subtree property `EXPORT_DATE' if available
@@ -581,18 +582,18 @@ Return output file's name."
    '(lambda ()
       (let* ((entry (org-element-at-point))
              (level (org-element-property :level entry))
-             (commentedp (org-element-property :commentedp entry))
+             (is-commented (org-element-property :commentedp entry))
              (tags (org-element-property :tags entry)))
-        (message "[ox-hugo DBG] On headline %s\n level is %s \n tags are %s \n commentedp is %s\n test value is %s"
+        (message "[ox-hugo DBG] On headline %s\n  level is %s\n  tags are %s\n  is-commented is %s\n  test value is %s"
                  (org-element-property :raw-value entry)
-                 level tags commentedp
+                 level tags is-commented
                  (and (eq 1 level)
                       (not (member "noexport" tags))
-                      (not commentedp)))
+                      (not is-commented)))
         (if (and (eq 1 level)
                  (not (member "noexport" tags))
-                 (not commentedp))
-            (org-hugo-export-to-md nil t)))))
+                 (not is-commented))
+            (org-hugo-export-to-md nil :subtreep)))))
   ;; (org-publish-subtrees-to
   ;; (quote hugo) (buffer-file-name)
   ;; md nil

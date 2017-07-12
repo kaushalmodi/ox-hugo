@@ -107,6 +107,14 @@ Something 2
 :CUSTOM_ID: cool-ref-2.1
 :END:
 Something 2.1
+* Post heading with crazy characters
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-heading-slugs
+:END:
+** Releasing version 1.1
+** Foo(Bar)Baz
+** (Foo)Bar.Baz&Zoo
+** Hey! I have a link [[https://example.org][here]] (Awesome!)
 * COMMENT To be implemented
 ** TODO Draft state
 :PROPERTIES:

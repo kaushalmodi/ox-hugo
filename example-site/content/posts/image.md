@@ -1,6 +1,6 @@
 +++
 title = "Image"
-date = 2017-07-11T23:52:07-04:00
+date = 2017-07-12T03:27:44-04:00
 tags = ["image"]
 +++
 
@@ -9,7 +9,7 @@ tags = ["image"]
 *Need to add smarts that determines which subtree contains the whole post.. like look for `EXPORT_FILE_NAME`?*
 
 
-# Unclickable image (works!)
+## Unclickable image (works!) {#unclickable-image--works}
 
 {{<figure src="/images/org-mode-unicorn-logo.png">}}
 
@@ -26,19 +26,19 @@ instead of
 So the sub-heading title and the post title both get the *Heading 1* tag and look the same size.
 
 
-# Clickable link that opens the image (works!)
+## Clickable link that opens the image (works!) {#clickable-link-that-opens-the-image--works}
 
 [Click here to see the unicorn](/images/org-mode-unicorn-logo.png)
 
 
-# Clickable image that opens the image (works!)
+## Clickable image that opens the image (works!) {#clickable-image-that-opens-the-image--works}
 
 Click below image to jump to the unicorn image. [{{<figure src="/images/org-mode-unicorn-logo.png">}}](/images/org-mode-unicorn-logo.png)
 
 -   **NOTE:** `file:` has to be used in both Link and Description components of the Org link.
 
 
-# Image with `ATTR_HTML` [Issue # 17](https://github.com/kaushalmodi/ox-hugo/issues/17)
+## Image with `ATTR_HTML` [Issue # 17](https://github.com/kaushalmodi/ox-hugo/issues/17) {#image-with-attr-html-issue-17}
 
 {{<figure src="/images/org-mode-unicorn-logo.png" class="inset">}}
 

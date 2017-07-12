@@ -28,6 +28,9 @@
 ;;; Code:
 
 (require 'ox-blackfriday)
+(require 'ffap)                         ;For `ffap-url-regexp'
+
+(defvar ffap-url-regexp)                ;Silence byte-compiler
 
 
 ;;; User-Configurable Variables
@@ -158,12 +161,45 @@ a communication channel."
 	(let ((anchor
 	       (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
 		       (or (org-element-property :CUSTOM_ID headline)
-			   (org-export-get-reference headline info))))
+                           (org-hugo--slug title)
+			   ;; (org-export-get-reference headline info)
+                           )))
               (loffset (plist-get info :hugo-level-offset)))
 	  (concat (org-hugo--headline-title style level loffset title anchor)
 		  contents)))))))
 
-;;;;; Headline Helper
+;;;;; Headline Helpers
+(defun org-hugo--slug (str)
+  "Return a slug string for STR.
+The slug can contain only alphabets, numbers and hyphens, and
+should be all lower-case."
+  (message "dbg:%s" str)
+  (let* (;; All lower-case
+         (str (downcase str))
+         ;; Remove URLs if present in the string
+         ;; The ")" in the below regexp is the closing parenthesis of a
+         ;; Markdown link: [Desc](Link)
+         (str (replace-regexp-in-string (concat ffap-url-regexp "[^)]+)") "" str))
+         ;; Replace "&" with " and "
+         (str (replace-regexp-in-string "&" " and " str))
+         ;; Replace "." with " dot "
+         (str (replace-regexp-in-string "\\." " dot " str))
+         ;; Replace non-alphabets and non-numbers with spaces
+         (str (replace-regexp-in-string "[^a-z0-9()]" " " str))
+         ;; Remove leading and trailing whitespace
+         (str (replace-regexp-in-string "\\(^[[:space:]]*\\|[[:space:]]*$\\)" "" str))
+         ;; Replace 2 or more spaces with a single space
+         (str (replace-regexp-in-string "[[:space:]]\\{2,\\}" " " str))
+         ;; Replace parentheses with double-hyphens
+         (str (replace-regexp-in-string "\\s-*(\\([^)]+\\))\\s-*" "--\\1--" str))
+         ;; Remove any remaining parentheses character
+         (str (replace-regexp-in-string "[()]" "" str))
+         ;; Replace spaces with hyphens
+         (str (replace-regexp-in-string " " "-" str))
+         ;; Remove leading and trailing hyphens
+         (str (replace-regexp-in-string "\\(^[-]*\\|[-]*$\\)" "" str)))
+    str))
+
 (defun org-hugo--headline-title (style level loffset title &optional anchor)
   "Generate a headline title in the preferred Markdown headline style.
 STYLE is the preferred style (`atx' or `setext').  LEVEL is the

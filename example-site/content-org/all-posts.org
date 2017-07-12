@@ -141,6 +141,64 @@ Here is the first post on Emacs.
 :EXPORT_FILE_NAME: emacs-post-2
 :END:
 Here is the second post on Emacs.
+* Tables                                                              :table:
+** Simple Table
+:PROPERTIES:
+:EXPORT_FILE_NAME: simple-table
+:END:
+| h1 | h2 |
+| a  | b  |
+| c  | d  |
+** Table with narrowest cols
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-with-narrowest-columns
+:END:
+| 1 | 2 | 3 |
+| a | b | e |
+| c | d | f |
+** Table with top border
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-top-border
+:END:
+|---+---+---+---|
+| 1 | 2 | 3 | 4 |
+| a | b | e | g |
+| c | d | f | h |
+** Table with bottom border
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-bottom-border
+:END:
+| 1 | 2 | 3 | 4 |
+| a | b | e | g |
+| c | d | f | h |
+|---+---+---+---|
+** Table with top and bottom border
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-top-and-bottom-border
+:END:
+|---+---+---+---|
+| 1 | 2 | 3 | 4 |
+| a | b | e | g |
+| c | d | f | h |
+|---+---+---+---|
+** Table with rule after first row
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-only-rule-after-first-row
+:END:
+| 1 | 2 | 3 | 4 |
+|---+---+---+---|
+| a | b | e | g |
+| c | d | f | h |
+** Table with borders and rule after first
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-with-borders-and-rule-after-first
+:END:
+|---+---+---+---|
+| 1 | 2 | 3 | 4 |
+|---+---+---+---|
+| a | b | e | g |
+| c | d | f | h |
+|---+---+---+---|
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

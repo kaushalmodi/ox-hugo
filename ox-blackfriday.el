@@ -34,6 +34,14 @@
 
 (require 'ox-md)
 (require 'ox-publish)
+
+(defvar width-cookies nil)
+(defvar width-cookies-table nil)
+
+(defconst blackfriday-table-left-border "")
+(defconst blackfriday-table-right-border " ")
+(defconst blackfriday-table-separator "| ")
+
 
 ;;; User-Configurable Variables
 
@@ -70,7 +78,6 @@
 ;;; Transcode Functions
 
 ;;;; Paragraph
-
 (defun org-blackfriday-paragraph (paragraph contents info)
   "Transcode PARAGRAPH element into Blackfriday Markdown format.
 CONTENTS is the paragraph contents.  INFO is a plist used as a
@@ -83,9 +90,7 @@ communication channel."
         (replace-regexp-in-string "\\`#" "\\#" contents nil t)
       contents)))
 
-
 ;;;; Src Block
-
 (defun org-blackfriday-src-block (src-block _contents info)
   "Transcode SRC-BLOCK element into Blackfriday Markdown format.
 
@@ -96,24 +101,13 @@ INFO is a plist used as a communication channel."
          (suffix "```"))
     (concat prefix code suffix)))
 
-
 ;;;; Strike-Through
-
 (defun org-blackfriday-strike-through (_strike-through contents _info)
   "Transcode strike-through text from Org to Blackfriday Markdown.
 CONTENTS contains the text with strike-through markup."
   (format "~~%s~~" contents))
 
-
 ;;;; Table-Common
-
-(defvar width-cookies nil)
-(defvar width-cookies-table nil)
-
-(defconst blackfriday-table-left-border "")
-(defconst blackfriday-table-right-border " ")
-(defconst blackfriday-table-separator "| ")
-
 (defun org-blackfriday-table-col-width (table column info)
   "Return width of TABLE at given COLUMN using INFO.
 
@@ -140,14 +134,14 @@ in the column, or by the maximum cell with in the column."
                     (max (length
                           (org-export-data
                            (org-element-contents
-                            (elt (if specialp (car (org-element-contents row))
+                            (elt (if specialp
+                                     (car (org-element-contents row))
                                    (org-element-contents row))
                                  column))
                            info))
                          max-width)))
             info)
           (puthash column max-width width-cookies))))))
-
 
 (defun org-blackfriday-make-hline-builder (table info char)
   "Return a function to horizontal lines in TABLE.
@@ -160,61 +154,86 @@ INFO is a plist used as a communication channel."
          (setq max-width 1))
        (make-string max-width ,char))))
 
-
 ;;;; Table-Cell
-
 (defun org-blackfriday-table-cell (table-cell contents info)
   "Transcode TABLE-CELL element from Org into Blackfriday.
 
 CONTENTS is content of the cell.  INFO is a plist used as a
 communication channel."
+  (message "[ox-bf-table-cell DBG] In contents: %s" contents)
   (let* ((table (org-export-get-parent-table table-cell))
          (column (cdr (org-export-table-cell-address table-cell info)))
          (width (org-blackfriday-table-col-width table column info))
          (left-border (if (org-export-table-cell-starts-colgroup-p table-cell info) "" " "))
          (right-border (if (org-export-table-cell-ends-colgroup-p table-cell info) "" " |"))
-         (data (or contents "")))
-    (setq contents
-          (concat data
-                  (make-string (max 0 (- width (string-width data)))
-                               ?\s)))
-    (concat left-border contents right-border)))
-
+         (data (or contents ""))
+         (cell (concat left-border
+                       data
+                       (make-string (max 0 (- width (string-width data))) ?\s)
+                       right-border))
+         (cell-width (length cell)))
+    ;; Each cell needs to be at least 3 characters wide (4 chars,
+    ;; including the table border char "|"); otherwise the export
+    ;; is not rendered as a table
+    (when (< cell-width 4)
+      (setq cell (concat (make-string (- 4 cell-width) ? ) cell)))
+    (message "[ox-bf-table-cell DBG] Cell:\n%s" cell)
+    cell))
 
 ;;;; Table-Row
+(defvar org-blackfriday--hrule-inserted nil
+  "State variable to keep track if the horizontal rule after
+first row is already inserted.")
 
 (defun org-blackfriday-table-row (table-row contents info)
   "Transcode TABLE-ROW element from Org into Blackfriday.
 
 CONTENTS is cell contents of TABLE-ROW.  INFO is a plist used as a
 communication channel."
-  (let ((table (org-export-get-parent-table table-row)))
-    (when (and (eq 'rule (org-element-property :type table-row))
-               ;; In Blackfriday, rule is valid only at second row.
-               (eq 1 (cl-position
-                      table-row
-                      (org-element-map table 'table-row 'identity info))))
-      (let* ((table (org-export-get-parent-table table-row))
-             ;; (headerp (org-export-table-row-starts-header-p table-row info))
-             (build-rule (org-blackfriday-make-hline-builder table info ?-))
-             (cols (cdr (org-export-table-dimensions table info))))
-        (setq contents
-              (concat blackfriday-table-left-border
-                      (mapconcat (lambda (col) (funcall build-rule col))
-                                 (number-sequence 0 (- cols 1))
-                                 blackfriday-table-separator)
-                      blackfriday-table-right-border))))
-    contents))
+  (let* ((table (org-export-get-parent-table table-row))
+         (row-num (cl-position          ;Begins with 0
+                   table-row
+                   (org-element-map table 'table-row #'identity info)))
+         (row contents)) ;If CONTENTS is `nil', row has to be returned as `nil' too
+    ;; Reset the state variable when the first row of the table is
+    ;; received.
+    (when (eq 0 row-num)
+      (setq org-blackfriday--hrule-inserted nil))
 
+    (message "[ox-bf-table-row DBG] Row # %0d In contents: %s,\ntable-row: %S" row-num contents table-row)
+    (when row
+      (progn
+        (when (and (eq 'rule (org-element-property :type table-row))
+                   ;; In Blackfriday, rule is valid only at second row.
+                   (eq 1 row-num))
+          (let* ((table (org-export-get-parent-table table-row))
+                 ;; (headerp (org-export-table-row-starts-header-p table-row info))
+                 (build-rule (org-blackfriday-make-hline-builder table info ?-))
+                 (cols (cdr (org-export-table-dimensions table info))))
+            (setq row (concat blackfriday-table-left-border
+                              (mapconcat (lambda (col)
+                                           (funcall build-rule col))
+                                         (number-sequence 0 (- cols 1))
+                                         blackfriday-table-separator)
+                              blackfriday-table-right-border))))
 
+        ;; If the first table row is "abc | def", it needs to have a rule
+        ;; under it for Blackfriday to detect the whole object as a table.
+        (when (and (stringp row)
+                   (null org-blackfriday--hrule-inserted))
+          (let ((rule (replace-regexp-in-string "[^|]" "-" row)))
+            (setq row (concat row "\n" rule))
+            (setq org-blackfriday--hrule-inserted t)))))
+    (message "[ox-bf-table-row DBG] Row:\n%s" row)
+    row))
 
 ;;;; Table
-
 (defun org-blackfriday-table (table contents info)
   "Transcode TABLE element from Org into Blackfriday.
 
 CONTENTS is contents of the table.  INFO is a plist holding
 contextual information."
+  (message "[ox-bf-table DBG] In contents: %s" contents)
   (let* ((rows (org-element-map table 'table-row 'identity info))
          (no-header (or (<= (length rows) 1)))
          (cols (cdr (org-export-table-dimensions table info)))
@@ -225,19 +244,23 @@ contextual information."
                    (build-rule (org-blackfriday-make-hline-builder table info ?-))
                    (columns (number-sequence 0 (- cols 1))))
                (concat blackfriday-table-left-border
-                       (mapconcat (lambda (col) (funcall build-empty-cell col))
+                       (mapconcat (lambda (col)
+                                    (funcall build-empty-cell col))
                                   columns
                                   blackfriday-table-separator)
                        blackfriday-table-right-border "\n" blackfriday-table-left-border
-                       (mapconcat (lambda (col) (funcall build-rule col))
+                       (mapconcat (lambda (col)
+                                    (funcall build-rule col))
                                   columns
                                   blackfriday-table-separator)
-                       blackfriday-table-right-border "\n"))))))
-    (concat (when no-header (funcall build-dummy-header))
-            (replace-regexp-in-string "\n\n" "\n" contents))))
+                       blackfriday-table-right-border "\n")))))
+         (tbl (concat (when no-header
+                        (funcall build-dummy-header))
+                      (replace-regexp-in-string "\n\n" "\n" contents))))
+    (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
+    tbl))
 
 ;;;; Table of contents
-
 (defun org-blackfriday-format-toc (headline info)
   "Return an appropriate table of contents entry for HEADLINE.
 
@@ -250,7 +273,6 @@ INFO is a plist used as a communication channel."
     (concat indent "- [" title "]" "(#" anchor ")")))
 
 ;;;; Footnote section
-
 (defun org-blackfriday-footnote-section (info)
   "Format the footnote section.
 INFO is a plist used as a communication channel."
@@ -280,9 +302,7 @@ INFO is a plist used as a communication channel."
          fn-alist
          "\n"))))))
 
-
 ;;;; Template
-
 (defun org-blackfriday-inner-template (contents info)
   "Return body of document after converting it to Markdown syntax.
 CONTENTS is the transcoded contents string.  INFO is a plist
@@ -299,7 +319,7 @@ holding export options."
                                  "\n"))))
     (org-trim (concat toc-string toc-tail contents "\n" (org-blackfriday-footnote-section info)))))
 
-
+
 ;;; Interactive functions
 
 ;;;###autoload

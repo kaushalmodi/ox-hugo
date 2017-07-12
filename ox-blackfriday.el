@@ -160,7 +160,7 @@ INFO is a plist used as a communication channel."
 
 CONTENTS is content of the cell.  INFO is a plist used as a
 communication channel."
-  (message "[ox-bf-table-cell DBG] In contents: %s" contents)
+  ;; (message "[ox-bf-table-cell DBG] In contents: %s" contents)
   (let* ((table (org-export-get-parent-table table-cell))
          (column (cdr (org-export-table-cell-address table-cell info)))
          (width (org-blackfriday-table-col-width table column info))
@@ -177,7 +177,7 @@ communication channel."
     ;; is not rendered as a table
     (when (< cell-width 4)
       (setq cell (concat (make-string (- 4 cell-width) ? ) cell)))
-    (message "[ox-bf-table-cell DBG] Cell:\n%s" cell)
+    ;; (message "[ox-bf-table-cell DBG] Cell:\n%s" cell)
     cell))
 
 ;;;; Table-Row
@@ -200,7 +200,7 @@ communication channel."
     (when (eq 0 row-num)
       (setq org-blackfriday--hrule-inserted nil))
 
-    (message "[ox-bf-table-row DBG] Row # %0d In contents: %s,\ntable-row: %S" row-num contents table-row)
+    ;; (message "[ox-bf-table-row DBG] Row # %0d In contents: %s,\ntable-row: %S" row-num contents table-row)
     (when row
       (progn
         (when (and (eq 'rule (org-element-property :type table-row))
@@ -224,7 +224,7 @@ communication channel."
           (let ((rule (replace-regexp-in-string "[^|]" "-" row)))
             (setq row (concat row "\n" rule))
             (setq org-blackfriday--hrule-inserted t)))))
-    (message "[ox-bf-table-row DBG] Row:\n%s" row)
+    ;; (message "[ox-bf-table-row DBG] Row:\n%s" row)
     row))
 
 ;;;; Table
@@ -233,7 +233,7 @@ communication channel."
 
 CONTENTS is contents of the table.  INFO is a plist holding
 contextual information."
-  (message "[ox-bf-table DBG] In contents: %s" contents)
+  ;; (message "[ox-bf-table DBG] In contents: %s" contents)
   (let* ((rows (org-element-map table 'table-row 'identity info))
          (no-header (or (<= (length rows) 1)))
          (cols (cdr (org-export-table-dimensions table info)))
@@ -257,7 +257,7 @@ contextual information."
          (tbl (concat (when no-header
                         (funcall build-dummy-header))
                       (replace-regexp-in-string "\n\n" "\n" contents))))
-    (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
+    ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
     tbl))
 
 ;;;; Table of contents

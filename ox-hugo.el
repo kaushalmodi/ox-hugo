@@ -108,7 +108,7 @@ directory where all Hugo posts should go by default."
                    (:date "DATE" nil nil)
                    (:tags "TAGS" nil nil 'space)
                    (:hugo-level-offset "HUGO_LEVEL_OFFSET" loffset 0)
-                   (:hugo-tags "HUGO_TAGS" nil nil 'space) ;TODO: Also parse the Org tags as post tags
+                   (:hugo-tags "HUGO_TAGS" nil nil 'space)
                    (:hugo-categories "HUGO_CATEGORIES" nil nil 'space)
                    ;; Optional front matter variables
                    (:hugo-aliases "HUGO_ALIASES" nil nil 'space)
@@ -125,7 +125,8 @@ directory where all Hugo posts should go by default."
                    (:with-toc nil "toc" nil) ;No TOC by default
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
-                   (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")))
+                   (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")
+                   (:hugo-code-fence "HUGO_CODE_FENCE" nil "t")))
 
 
 ;;; Transcode Functions
@@ -244,13 +245,18 @@ section as a string."
       (concat "\n" level-mark " " title " " anchor "\n\n"))))
 
 ;;;; Source Blocks
-(defun org-hugo-src-block (src-block _contents _info)
-  "Convert SRC-BLOCK element to the Hugo `highlight' shortcode."
-  (let* ((lang (org-element-property :language src-block))
-         (code (org-element-property :value src-block))
-         (shortcode (concat "{{< highlight " lang " >}}\n"))
-         (close-shortcode "{{< /highlight >}}\n"))
-    (concat shortcode code close-shortcode)))
+(defun org-hugo-src-block (src-block _contents info)
+  "Convert SRC-BLOCK element to Hugo-compatible element.
+
+ If the HUGO_CODE_FENCE property is set to t (default), the
+ Markdown style triple-backquoted code blocks are created.
+ Otherwise, the code block is wrapped in Hugo `highlight'
+ shortcode."
+  (if (string= "t" (org-export-data (plist-get info :hugo-code-fence) info))
+      (org-blackfriday-src-block src-block nil info)
+    (let* ((lang (org-element-property :language src-block))
+           (code (org-export-format-code-default src-block info)))
+      (format "{{< highlight %s>}}\n%s{{< /highlight >}}\n" lang code))))
 
 ;;;; Links
 (defun org-hugo-link (link contents info)

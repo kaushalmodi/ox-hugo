@@ -1,11 +1,14 @@
 ;;; ox-hugo.el --- Hugo Markdown Back-End for Org Export Engine  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2016 Helloyi He
+;; Copyright (C) 2017 Free Software Foundation, Inc.
 
-;; Author: Helloyi He
+;; Authors: Kaushal Modi <kaushal.mod@gmail.com>
+;;          Matt Price <moptop99@gmail.com>
+;; URL: https://github.com/kaushalmodi/ox-hugo
+;; Package-Requires: ((emacs "24.5"))
 ;; Keywords: org, hugo, markdown
 
-;; This file is not part of GNU Emacs.
+;; This file is part of GNU Emacs.
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -14,16 +17,20 @@
 
 ;; GNU Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs. If not, see <http://www.gnu.org/licenses/>.
+;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
 ;; This library implements a Markdown back-end compatible with the
 ;; Hugo static site generator (https://gohugo.io/).
+
+;; Very early version of this package started off as a fork of the
+;; ox-hugo package by helloyi (https://github.com/helloyi/ox-hugo).
+;; But it has since been re-written and modified heavily.
 
 ;;; Code:
 

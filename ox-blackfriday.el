@@ -3,7 +3,10 @@
 ;; Copyright (C) 2017 Free Software Foundation, Inc.
 
 ;; Authors: Matt Price <moptop99@gmail.com>
+;;          Kaushal Modi <kaushal.modi@gmail.com>
 ;;          Lars Tveito <larstvei@ifi.uio.no>
+;; URL: https://github.com/kaushalmodi/ox-hugo
+;; Package-Requires: ((emacs "24.5"))
 ;; Keywords: org, markdown, blackfriday
 
 ;; This file is part of GNU Emacs.

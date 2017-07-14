@@ -391,7 +391,7 @@ INFO is a plist used as a communication channel."
         (progn
           (unless (file-exists-p exported-image)
             (copy-file full-path exported-image))
-          (concat "/static/" (file-name-as-directory (plist-get info :hugo-static-images)) file-name))
+          (concat "/" (file-name-as-directory (plist-get info :hugo-static-images)) file-name))
       path)))
 
 

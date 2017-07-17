@@ -1,9 +1,9 @@
-+++
-title = "Image"
-date = 2017-07-12T13:46:57-04:00
-tags = ["image"]
-draft = false
-+++
+---
+title : "Image"
+date : 2017-07-15T07:49:44-04:00
+tags : ["image"]
+draft : false
+---
 
 **To be fixed**: At the moment, you need to place the point here and do `C-c C-e H H`. If the point is under any of the nested sub-trees in here where you do that, only that subtree gets exported.
 
@@ -44,3 +44,8 @@ Click below image to jump to the unicorn image. [{{<figure src="/images/org-mode
 {{<figure src="/images/org-mode-unicorn-logo.png" class="inset">}}
 
 [Discussion](https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728)
+
+
+## Link to image outside of standard Hugo locations {#link-to-image-outside-of-standard-hugo-locations}
+
+{{<figure src="/images/copy-of-unicorn-logo.png">}}

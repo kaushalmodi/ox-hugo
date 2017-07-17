@@ -84,6 +84,8 @@ inside that div is valid HTML.
 #+BEGIN_EXPORT md
 </div>
 #+END_EXPORT
+** Link to image outside of standard Hugo locations
+[[../src-images/copy-of-unicorn-logo.png]]
 * Setting heading anchors
 :PROPERTIES:
 :EXPORT_FILE_NAME: setting-heading-anchors

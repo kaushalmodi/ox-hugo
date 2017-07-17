@@ -126,7 +126,11 @@ directory where all Hugo posts should go by default."
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")
-                   (:hugo-code-fence "HUGO_CODE_FENCE" nil "t")))
+                   (:hugo-code-fence "HUGO_CODE_FENCE" nil "t")
+                   (:hugo-static-images "HUGO_STATIC_IMAGES" "images" nil)
+                   (:hugo-menu-name "HUGO_MENU_NAME" "main" nil)
+                   (:hugo-menu-weight "HUGO_MENU_WEIGHT" 20 nil)
+                   (:hugo-menu-parent "HUGO_MENU_PARENT" nil nil)))
 
 
 ;;; Transcode Functions
@@ -455,10 +459,16 @@ INFO is a plist used as a communication channel."
                  (weight . ,(org-export-data (plist-get info :hugo-weight) info))
                  (markup . ,(org-export-data (plist-get info :hugo-markup) info))
                  (slug . ,(org-export-data (plist-get info :hugo-slug) info))
-                 (url . ,(org-export-data (plist-get info :hugo-url) info)))))
-    (org-hugo--gen-front-matter data fm-format)))
+                 (url . ,(org-export-data (plist-get info :hugo-url) info))
+                 (menu  .      ,(org-export-data (plist-get info :hugo-menu-name) info))
+                 )))
+    (message "collect-menu output is: %s" (org-hugo--collect-menu-metadata info fm-format))
+    ;;(message "output of collect-menu is: %s" (car (org-hugo--collect-menu-metadata info)))
+    ;; (message "car of collect-menu: %s"  (car (org-hugo--collect-menu-metadata info)))
+    ;; (message "cdr of collect-menu: %s"  (cdr (org-hugo--collect-menu-metadata info)))
+    (org-hugo--gen-front-matter data fm-format info)))
 
-(defun org-hugo--gen-front-matter (data format)
+(defun org-hugo--gen-front-matter (data format info)
   "Generate the Hugo post front matter, and return that string.
 
 DATA is an alist of the form \((KEY1 . VAL1) (KEY2 . VAL2) .. \),
@@ -466,6 +476,7 @@ where KEY is a symbol and VAL is a string.
 
 Generate the front matter in the specified FORMAT.  Valid values
 are \"toml\" and \"yaml\"."
+  
   (let ((sep (cond ((string= format "toml") "+++\n")
                    ((string= format "yaml") "---\n")
                    (t "")))
@@ -478,7 +489,8 @@ are \"toml\" and \"yaml\"."
       (let ((key (symbol-name (car pair)))
             (value (cdr pair)))
         (unless (or (null value)
-                    (string= "" value))
+                    (string= "" value)
+                    (string= "menu" key))
           ;; In TOML/YAML, the value portion needs to be wrapped in double quotes
           ;; TOML example:
           ;;     title = "My Post"
@@ -506,7 +518,37 @@ are \"toml\" and \"yaml\"."
                                        value)
                                       (t
                                        (org-hugo--wrap-string-in-quotes value)))))))))
-    (concat sep front-matter sep)))
+    (concat sep front-matter (if (alist-get "menu" data) (org-hugo--collect-menu-metadata info format) (org-hugo--collect-menu-metadata info format) ) sep)))
+
+(defun org-hugo--collect-menu-metadata (info format)
+  "collect all the menu-related metadata and return a nested plist of the values
+to be used by toml and yaml frontmatter creators."
+  ;;(message "info: %s" info)
+  (let* ((menu-atts '(:hugo-menu-parent "parent" :hugo-menu-weight "weight"))
+         (menu-name (plist-get info :hugo-menu-name))
+         (menu-identifier (plist-get info :title))
+         (menu-weight (plist-get info :hugo-menu-weight))
+         (menu-parent (plist-get info :hugo-menu-parent))
+         ;; (atts-plist (cl-loop for att in (plist-get-keys menu-atts)
+         ;;                      collect (plist-get menu-atts att) 
+         ;;                      collect  (plist-get info att)))
+         ;;(menu-plist (plist-put '() menu-name `("parent" ,menu-parent "weight" ,menu-weight)))
+         )
+    
+    
+    (if (string= format "yaml")
+        (let ((indent "    "))
+          (format "\nmenu:\n  %s:\n    %s: %s\n    %s: %s\n    %s: %s\n"
+                  menu-name
+                  "identifier"  (plist-get info :title)
+                  "parent" (plist-get info :hugo-menu-parent )
+                  "weight" (plist-get  info :hugo-menu-weight)))
+      (format "[[menu.%s]]\n  %s = %s\n  %s = %s\n%  s = %s\n"
+              menu-name
+              "parent" (plist-get info :hugo-menu-parent )
+              "identifier" (plist-get info :title)
+              "weight" (plist-get  info :hugo-menu-weight))
+      )))
 
 
 ;;; Interactive functions

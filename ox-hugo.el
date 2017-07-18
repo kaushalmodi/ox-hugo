@@ -450,7 +450,9 @@ INFO is a plist used as a communication channel."
          (menu-parent (plist-get info :hugo-menu-parent))
          (menu-weight (plist-get info :hugo-menu-weight))
          (menu (when menu-name
-                 (cons menu-name `(,menu-identifier ,menu-parent ,menu-weight))))
+                 (cons menu-name `((identifier . ,menu-identifier)
+                                   (parent . ,menu-parent)
+                                   (weight . ,menu-weight)))))
          (data `((title . ,title)
                  (date . ,date)
                  (description . ,(org-export-data (plist-get info :hugo-description) info))
@@ -501,33 +503,58 @@ are \"toml\" and \"yaml\"."
           ;;     title : "My Post"
           (setq front-matter
                 (concat front-matter
-                        (format "%s %s %s\n"
-                                key
-                                sign
-                                (cond ((or (string= key "tags")
-                                           (string= key "categories"))
-                                       ;; "abc def" -> "[\"abc\", \"def\"]"
-                                       (concat "["
-                                               (mapconcat #'identity
-                                                          (mapcar #'org-hugo--wrap-string-in-quotes
-                                                                  (split-string value)) ", ")
-                                               "]"))
-                                      ;; There is no need to wrap strings not expected to contain spaces in
-                                      ;; double quotes, like date strings, draft state, etc.
-                                      ((or (string= key "date")
-                                           (string= key "publishdate")
-                                           (string= key "expirydate")
-                                           (string= key "draft"))
-                                       value)
-                                      ((string= key "menu")
-                                       (message "dbg: %S" value)
-                                       (message "Need to translate value to menu fm in yaml/toml here")
-                                       "")
-                                      (t
-                                       (org-hugo--wrap-string-in-quotes value)))))))))
+                        (cond ((string= key "menu")
+                               (message "dbg: %S" (car value))
+                               (message "Need to translate value to menu fm in yaml/toml here")
+                               (if (string= format "yaml")
+                                   (concat "menu:\n  " (car value) ":\n"
+                                           (let ((menu-string ""))
+                                             (dolist (menu-pair (cdr value))
+                                               (let ((menu-key (symbol-name (car menu-pair)))
+                                                     (menu-value (cdr menu-pair)))
+                                                 (setq menu-string
+                                                       (concat menu-string
+                                                               (when menu-value
+                                                                 (concat "    "
+                                                                         menu-key ": "
+                                                                         menu-value "\n"))))))
+                                             menu-string))
+                                 (concat "[[menu." (car value) "]]\n"
+                                         (let ((menu-string ""))
+                                           (dolist (menu-pair (cdr value))
+                                             (let ((menu-key (symbol-name (car menu-pair)))
+                                                   (menu-value (cdr menu-pair)))
+                                               (setq menu-string
+                                                     (concat menu-string
+                                                             (when menu-value
+                                                               (concat "  "
+                                                                       menu-key " = "
+                                                                       (org-hugo--wrap-string-in-quotes menu-value) "\n")))) ))
+                                           menu-string))))
+                              (t
+                               (format "%s %s %s\n"
+                                       key
+                                       sign
+                                       (cond ((or (string= key "tags")
+                                                  (string= key "categories"))
+                                              ;; "abc def" -> "[\"abc\", \"def\"]"
+                                              (concat "["
+                                                      (mapconcat #'identity
+                                                                 (mapcar #'org-hugo--wrap-string-in-quotes
+                                                                         (split-string value)) ", ")
+                                                      "]"))
+                                             ;; There is no need to wrap strings not expected to contain spaces in
+                                             ;; double quotes, like date strings, draft state, etc.
+                                             ((or (string= key "date")
+                                                  (string= key "publishdate")
+                                                  (string= key "expirydate")
+                                                  (string= key "draft"))
+                                              value)
+                                             (t
+                                              (org-hugo--wrap-string-in-quotes value)))))))))))
     (concat sep front-matter sep)))
 
-
+
 ;;; Interactive functions
 
 ;;;###autoload

@@ -5,5 +5,8 @@
 :PROPERTIES:
 :EXPORT_FILE_NAME: menu-meta-data-yaml
 :EXPORT_DATE: 2017/07/17
+:HUGO_MENU_NAME: main
+:HUGO_MENU_WEIGHT: 100
+:HUGO_MENU_PARENT: posts
 :END:
 Testing the addition of /menu/ meta data to the front matter.

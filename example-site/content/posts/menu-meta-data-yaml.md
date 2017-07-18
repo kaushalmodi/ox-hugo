@@ -1,7 +1,7 @@
 ---
 title : "Menu Meta Data in YAML Front Matter"
 date : 2017-07-17
-tags : []
+tags : ["menu", "yaml"]
 draft : false
 menu :
   main:
@@ -10,4 +10,4 @@ menu :
     weight : 100
 ---
 
-Testing the addition of *menu* meta data to the front matter.
+Testing the addition of *menu* meta data to the YAML front matter. Here the front matter format is set to YAML using the `#+HUGO_FRONT_MATTER_FORMAT` keyword.

@@ -246,7 +246,19 @@ ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
 :EXPORT_HUGO_MENU_WEIGHT: 80
 :EXPORT_HUGO_MENU_PARENT: posts
 :END:
-Testing the addition of /menu/ meta data to the front matter.
+Testing the addition of /menu/ meta data to the TOML front matter.
+** Menu Meta Data in YAML Front Matter                                 :yaml:
+:PROPERTIES:
+:EXPORT_FILE_NAME: menu-meta-data-yaml2
+:EXPORT_DATE: 2017-07-18
+:EXPORT_HUGO_MENU_NAME: main
+:EXPORT_HUGO_MENU_WEIGHT: 25
+:EXPORT_HUGO_MENU_PARENT: posts
+:EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
+:END:
+Testing the addition of /menu/ meta data to the YAML front matter.
+Here the front matter format is set to YAML using the
+=HUGO_FRONT_MATTER_FORMAT= key in property drawer.
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo
@@ -266,3 +278,8 @@ should be set to =true=.
 Idea is to mark a post as =DRAFT= that you have already started
 writing, or are in the process at the moment, but it is not yet ready
 to be published
+* COMMENT Local Variables                                           :ARCHIVE:
+# Local Variables:
+# fill-column: 70
+# eval: (auto-fill-mode 1)
+# End:

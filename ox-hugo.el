@@ -487,7 +487,9 @@ are \"toml\" and \"yaml\"."
         (sign (cond ((string= format "toml") "=")
                     ((string= format "yaml") ":")
                     (t "")))
-        (front-matter ""))
+        (front-matter "")
+        (indent "  ")
+        (menu-string ""))
     ;; (message "hugo fm format: %s" format)
     (dolist (pair data)
       (let ((key (symbol-name (car pair)))
@@ -496,65 +498,66 @@ are \"toml\" and \"yaml\"."
         (unless (or (null value)
                     (and (stringp value)
                          (string= "" value)))
-          ;; In TOML/YAML, the value portion needs to be wrapped in double quotes
+          ;; In TOML/YAML, the value portion needs to be wrapped in
+          ;; double quotes.
           ;; TOML example:
           ;;     title = "My Post"
           ;; YAML example:
           ;;     title : "My Post"
-          (setq front-matter
-                (concat front-matter
-                        (cond ((string= key "menu")
-                               (message "dbg: %S" (car value))
-                               (message "Need to translate value to menu fm in yaml/toml here")
-                               (if (string= format "yaml")
-                                   (concat "menu:\n  " (car value) ":\n"
-                                           (let ((menu-string ""))
-                                             (dolist (menu-pair (cdr value))
-                                               (let ((menu-key (symbol-name (car menu-pair)))
-                                                     (menu-value (cdr menu-pair)))
-                                                 (setq menu-string
-                                                       (concat menu-string
-                                                               (when menu-value
-                                                                 (concat "    "
-                                                                         menu-key ": "
-                                                                         menu-value "\n"))))))
-                                             menu-string))
-                                 (concat "[[menu." (car value) "]]\n"
-                                         (let ((menu-string ""))
-                                           (dolist (menu-pair (cdr value))
-                                             (let ((menu-key (symbol-name (car menu-pair)))
-                                                   (menu-value (cdr menu-pair)))
-                                               (setq menu-string
-                                                     (concat menu-string
-                                                             (when menu-value
-                                                               (concat "  "
-                                                                       menu-key " = "
-                                                                       (org-hugo--wrap-string-in-quotes menu-value) "\n")))) ))
-                                           menu-string))))
-                              (t
-                               (format "%s %s %s\n"
-                                       key
-                                       sign
-                                       (cond ((or (string= key "tags")
-                                                  (string= key "categories"))
-                                              ;; "abc def" -> "[\"abc\", \"def\"]"
-                                              (concat "["
-                                                      (mapconcat #'identity
-                                                                 (mapcar #'org-hugo--wrap-string-in-quotes
-                                                                         (split-string value)) ", ")
-                                                      "]"))
-                                             ;; There is no need to wrap strings not expected to contain spaces in
-                                             ;; double quotes, like date strings, draft state, etc.
-                                             ((or (string= key "date")
-                                                  (string= key "publishdate")
-                                                  (string= key "expirydate")
-                                                  (string= key "draft"))
-                                              value)
-                                             (t
-                                              (org-hugo--wrap-string-in-quotes value)))))))))))
-    (concat sep front-matter sep)))
 
-
+          ;; In TOML, the menu information in the front matter is as a
+          ;; table. So it needs to be always added to the end of the
+          ;; front matter. So generate the `menu-string' separately
+          ;; and then append it to `front-matter' at the end.
+          (if (string= key "menu")
+              (let ((menu-name (car value))
+                    (menu-name-str "")
+                    (menu-value-str ""))
+                (setq menu-name-str (cond ((string= format "toml")
+                                           (format "[menu.%s]\n" menu-name))
+                                          ((string= format "yaml")
+                                           (prog1
+                                               (format "menu %s\n%s%s%s\n" sign indent menu-name sign)
+                                             (setq indent (concat indent indent)))) ;Double the indent for next use
+                                          (t
+                                           "")))
+                (dolist (menu-pair (cdr value))
+                  (let ((menu-key (symbol-name (car menu-pair)))
+                        (menu-value (cdr menu-pair)))
+                    (when menu-value
+                      (unless (string= menu-key "weight")
+                        (setq menu-value (org-hugo--wrap-string-in-quotes menu-value)))
+                      ;; (message "menu DBG: %S %S %S" menu-name menu-key menu-value)
+                      (setq menu-value-str
+                            (concat menu-value-str
+                                    (format "%s%s %s %s\n"
+                                            indent menu-key sign menu-value))))))
+                (setq menu-string (concat menu-name-str menu-value-str)))
+            (setq front-matter
+                  (concat front-matter
+                          (format "%s %s %s\n"
+                                  key
+                                  sign
+                                  (cond ((or (string= key "tags")
+                                             (string= key "categories"))
+                                         ;; "abc def" -> "[\"abc\", \"def\"]"
+                                         (concat "["
+                                                 (mapconcat #'identity
+                                                            (mapcar #'org-hugo--wrap-string-in-quotes
+                                                                    (split-string value)) ", ")
+                                                 "]"))
+                                        ;; There is no need to wrap strings not expected to contain spaces in
+                                        ;; double quotes, like date strings, draft state, etc.
+                                        ((or (string= key "date")
+                                             (string= key "publishdate")
+                                             (string= key "expirydate")
+                                             (string= key "draft"))
+                                         value)
+                                        (t
+                                         (org-hugo--wrap-string-in-quotes value))))))))))
+    (concat sep front-matter menu-string sep)))
+
+
 ;;; Interactive functions
 
 ;;;###autoload

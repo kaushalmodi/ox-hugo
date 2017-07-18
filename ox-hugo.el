@@ -126,7 +126,10 @@ directory where all Hugo posts should go by default."
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")
-                   (:hugo-code-fence "HUGO_CODE_FENCE" nil "t")))
+                   (:hugo-code-fence "HUGO_CODE_FENCE" nil "t")
+                   (:hugo-menu-name "HUGO_MENU_NAME" nil "main")
+                   (:hugo-menu-weight "HUGO_MENU_WEIGHT" nil 20)
+                   (:hugo-menu-parent "HUGO_MENU_PARENT" nil nil)))
 
 
 ;;; Transcode Functions
@@ -421,7 +424,7 @@ INFO is a plist holding export options."
 
 INFO is a plist used as a communication channel."
   ;; (message "[hugo front matter DBG] info: %S" (pp info))
-  (let* ((fm-format (org-export-data (plist-get info :hugo-front-matter-format) info))
+  (let* ((fm-format (plist-get info :hugo-front-matter-format))
          (hugo-date-fmt "%Y-%m-%dT%T%z")
          (date-nocolon (or ;; Get the date from the subtree property `EXPORT_DATE' if available
                         (org-string-nw-p (org-export-data (plist-get info :date) info))
@@ -441,7 +444,14 @@ INFO is a plist used as a communication channel."
                     (org-export-data (plist-get info :tags) info))))
          (draft (or org-hugo--draft-state
                     (org-export-data (plist-get info :hugo-draft) info)))
-         (data `((title . ,(org-export-data (plist-get info :title) info))
+         (title (org-export-data (plist-get info :title) info))
+         (menu-name (org-string-nw-p (plist-get info :hugo-menu-name)))
+         (menu-identifier (org-hugo--slug title))
+         (menu-parent (plist-get info :hugo-menu-parent))
+         (menu-weight (plist-get info :hugo-menu-weight))
+         (menu (when menu-name
+                 (cons menu-name `((identifier . ,menu-identifier) (parent . ,menu-parent) (weight . ,menu-weight)))))
+         (data `((title . ,title)
                  (date . ,date)
                  (description . ,(org-export-data (plist-get info :hugo-description) info))
                  (tags . ,tags)
@@ -455,7 +465,9 @@ INFO is a plist used as a communication channel."
                  (weight . ,(org-export-data (plist-get info :hugo-weight) info))
                  (markup . ,(org-export-data (plist-get info :hugo-markup) info))
                  (slug . ,(org-export-data (plist-get info :hugo-slug) info))
-                 (url . ,(org-export-data (plist-get info :hugo-url) info)))))
+                 (url . ,(org-export-data (plist-get info :hugo-url) info))
+                 (menu . ,menu))))
+    ;; (message "[get fm menu DBG] %S" menu)
     (org-hugo--gen-front-matter data fm-format)))
 
 (defun org-hugo--gen-front-matter (data format)
@@ -466,6 +478,7 @@ where KEY is a symbol and VAL is a string.
 
 Generate the front matter in the specified FORMAT.  Valid values
 are \"toml\" and \"yaml\"."
+
   (let ((sep (cond ((string= format "toml") "+++\n")
                    ((string= format "yaml") "---\n")
                    (t "")))
@@ -477,8 +490,10 @@ are \"toml\" and \"yaml\"."
     (dolist (pair data)
       (let ((key (symbol-name (car pair)))
             (value (cdr pair)))
+        ;; (message "[hugo fm key value DBG] %S %S" key value)
         (unless (or (null value)
-                    (string= "" value))
+                    (and (stringp value)
+                         (string= "" value)))
           ;; In TOML/YAML, the value portion needs to be wrapped in double quotes
           ;; TOML example:
           ;;     title = "My Post"
@@ -486,29 +501,54 @@ are \"toml\" and \"yaml\"."
           ;;     title : "My Post"
           (setq front-matter
                 (concat front-matter
-                        (format "%s %s %s\n"
-                                key
-                                sign
-                                (cond ((or (string= key "tags")
-                                           (string= key "categories"))
-                                       ;; "abc def" -> "[\"abc\", \"def\"]"
-                                       (concat "["
-                                               (mapconcat #'identity
-                                                          (mapcar #'org-hugo--wrap-string-in-quotes
-                                                                  (split-string value)) ", ")
-                                               "]"))
-                                      ;; There is no need to wrap strings not expected to contain spaces in
-                                      ;; double quotes, like date strings, draft state, etc.
-                                      ((or (string= key "date")
-                                           (string= key "publishdate")
-                                           (string= key "expirydate")
-                                           (string= key "draft"))
-                                       value)
-                                      (t
-                                       (org-hugo--wrap-string-in-quotes value)))))))))
+                        (cond ((string= key "menu")
+                               (message "dbg: %S" (car value))
+                               (message "Need to translate value to menu fm in yaml/toml here")
+                               (if (string= format "yaml")
+                                   (concat "menu:\n  " (car value) ":\n"
+                                           (let ((menu-string ""))
+                                             (dolist (menu-pair (cdr value))
+                                               (let ((menu-key (symbol-name (car menu-pair)))
+                                                     (menu-value (cdr menu-pair)))
+                                                 (setq menu-string
+                                                       (concat menu-string
+                                                               (if menu-value
+                                                                   (concat "    " menu-key ": " menu-value "\n")))) ))
+                                             menu-string))
+                                 (concat "[[menu." (car value) "]]\n"
+                                         (let ((menu-string ""))
+                                           (dolist (menu-pair (cdr value))
+                                             (let ((menu-key (symbol-name (car menu-pair)))
+                                                   (menu-value (cdr menu-pair)))
+                                               (setq menu-string
+                                                     (concat menu-string
+                                                             (if menu-value
+                                                                 (concat "  " menu-key " = " (org-hugo--wrap-string-in-quotes menu-value) "\n")))) ))
+                                           menu-string))))
+                              (t
+                               (format "%s %s %s\n"
+                                       key
+                                       sign
+                                       (cond ((or (string= key "tags")
+                                                  (string= key "categories"))
+                                              ;; "abc def" -> "[\"abc\", \"def\"]"
+                                              (concat "["
+                                                      (mapconcat #'identity
+                                                                 (mapcar #'org-hugo--wrap-string-in-quotes
+                                                                         (split-string value)) ", ")
+                                                      "]"))
+                                             ;; There is no need to wrap strings not expected to contain spaces in
+                                             ;; double quotes, like date strings, draft state, etc.
+                                             ((or (string= key "date")
+                                                  (string= key "publishdate")
+                                                  (string= key "expirydate")
+                                                  (string= key "draft"))
+                                              value)
+                                             (t
+                                              (org-hugo--wrap-string-in-quotes value)))))))))))
     (concat sep front-matter sep)))
 
-
+
 ;;; Interactive functions
 
 ;;;###autoload

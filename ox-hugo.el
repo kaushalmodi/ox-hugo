@@ -127,7 +127,7 @@ directory where all Hugo posts should go by default."
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil "t")
-                   (:hugo-menu-name "HUGO_MENU_NAME" nil "main")
+                   (:hugo-menu-name "HUGO_MENU_NAME" nil nil)
                    (:hugo-menu-weight "HUGO_MENU_WEIGHT" nil 20)
                    (:hugo-menu-parent "HUGO_MENU_PARENT" nil nil)))
 

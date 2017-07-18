@@ -2,5 +2,9 @@ baseURL = "http://example.org/"
 languageCode = "en-us"
 title = "My Org-exported Hugo Site"
 theme = "bare_min"
-
 canonifyURLs = true
+[[menu.main]]
+name = "labs"
+weight = -110
+identifier = "labs"
+url = "/labs/"

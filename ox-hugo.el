@@ -584,6 +584,29 @@ are \"toml\" and \"yaml\"."
                                          (org-hugo--wrap-string-in-quotes value))))))))))
     (concat sep front-matter menu-string sep)))
 
+(defun org-hugo--selective-property-inheritance ()
+  "Returns a list of properties that should be inherited.
+It does so only if `org-use-property-inheritance' is a list (or
+nil).  Otherwise it just returns the value of
+``org-use-property-inheritance'."
+  (if (listp org-use-property-inheritance)
+      (let ((prop-list '("HUGO_TAGS"
+                         "HUGO_CATEGORIES"
+                         "HUGO_DRAFT"
+                         "HUGO_TYPE"
+                         "HUGO_WEIGHT"
+                         "HUGO_MARKUP"
+                         "HUGO_SECTION"
+                         "HUGO_BASE_DIR"
+                         "HUGO_STATIC_IMAGES"
+                         "HUGO_CODE_FENCE"
+                         "HUGO_MENU"))
+            ret)
+        (dolist (prop prop-list)
+          (let ((prop (concat "EXPORT_" prop)))
+            (push prop ret)))
+        ret)
+    org-use-property-inheritance))
 
 ;;; Interactive functions
 
@@ -611,8 +634,10 @@ Export is done in a buffer named \"*Org Hugo Export*\", which will
 be displayed when `org-export-show-temporary-export-buffer' is
 non-nil."
   (interactive)
-  (org-export-to-buffer 'hugo "*Org Hugo Export*"
-    async subtreep visible-only nil nil (lambda () (text-mode))))
+  ;; Allow certain `ox-hugo' properties to be inherited.
+  (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
+    (org-export-to-buffer 'hugo "*Org Hugo Export*"
+      async subtreep visible-only nil nil (lambda () (text-mode)))))
 
 ;;;###autoload
 (defun org-hugo-convert-region-to-md ()
@@ -623,7 +648,9 @@ This can be used in any buffer.  For example, you can write an
 itemized list in Org mode syntax in a Markdown buffer and use
 this command to convert it."
   (interactive)
-  (org-export-replace-region-by 'hugo))
+  ;; Allow certain `ox-hugo' properties to be inherited.
+  (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
+    (org-export-replace-region-by 'hugo)))
 
 ;;;###autoload
 (defun org-hugo-export-to-md (&optional async subtreep visible-only)
@@ -647,10 +674,6 @@ contents of hidden elements.
 
 Return output file's name."
   (interactive)
-  ;; steals some plist reading code
-  ;; from =org-export-as=
-  ;; allows us to extract destination file info from
-  ;; export-options-alist
   (let* ((info (org-combine-plists
                 (org-export--get-export-attributes
                  'hugo subtreep visible-only)
@@ -666,7 +689,9 @@ Return output file's name."
          (pub-dir (let ((dir (concat base-dir content-dir section-dir)))
                     (make-directory dir :parents) ;Create the directory if it does not exist
                     dir))
-         (outfile (org-export-output-file-name ".md" subtreep pub-dir)))
+         (outfile (org-export-output-file-name ".md" subtreep pub-dir))
+         ;; Allow certain `ox-hugo' properties to be inherited.
+         (org-use-property-inheritance (org-hugo--selective-property-inheritance)))
     (org-export-to-file 'hugo outfile async subtreep visible-only)))
 
 ;;;###autoload

@@ -1,13 +1,15 @@
 ---
 title : "Menu Meta Data in YAML Front Matter"
-date : 2017-07-17
+date : 2017-07-18
 tags : ["menu", "yaml"]
 draft : false
 menu :
   main:
-    identifier : "menu-meta-data-in-yaml-front-matter"
+    identifier : "yaml-menu-override"
+    weight : 25
     parent : "posts"
-    weight : 100
 ---
 
 Testing the addition of *menu* meta data to the YAML front matter. Here the front matter format is set to YAML using the `#+HUGO_FRONT_MATTER_FORMAT` keyword.
+
+Later only the *weight* and *identifier* menu properties are overridden using `EXPORT_HUGO_MENU_OVERRIDE` key in the property drawer.

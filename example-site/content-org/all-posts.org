@@ -240,21 +240,41 @@ ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
 * Menu in front matter                                                 :menu:
 ** Menu Meta Data in TOML Front Matter
 :PROPERTIES:
-:EXPORT_FILE_NAME: menu-meta-data-toml
+:EXPORT_FILE_NAME: menu-alist-meta-data-toml
 :EXPORT_DATE: 2017-07-18
-:EXPORT_HUGO_MENU_NAME: main
-:EXPORT_HUGO_MENU_WEIGHT: 80
-:EXPORT_HUGO_MENU_PARENT: posts
+:EXPORT_HUGO_MENU: :name main :weight 80 :parent posts :identifier foo1
 :END:
-Testing the addition of /menu/ meta data to the TOML front matter.
+Testing the addition of /menu/ alist meta data to the TOML front
+matter.
+*** Overriding few menu properties
+:PROPERTIES:
+:EXPORT_FILE_NAME: menu-alist-meta-data-toml-override-partial
+:EXPORT_DATE: 2017-07-18
+:EXPORT_HUGO_MENU_OVERRIDE: :weight 10 :identifier ov-partial
+:END:
+For this post, we should see just the menu /weight/ and /identifier/
+properties get overridden.
+
+You need to set unique menu identifiers, else you get a Hugo error
+like this:
+#+BEGIN_EXAMPLE
+ERROR 2017/07/18 12:32:14 Two or more menu items have the same name/identifier in Menu "main": "menu-meta-data-in-yaml-front-matter".
+Rename or set an unique identifier.
+#+END_EXAMPLE
+*** Overriding menu properties completely
+:PROPERTIES:
+:EXPORT_FILE_NAME: menu-alist-meta-data-toml-override-full
+:EXPORT_DATE: 2017-07-18
+:EXPORT_HUGO_MENU: :name test :weight 50
+:END:
+For this post, we see that no menu properties are inherited from the
+parent; only the menu properties set in his subtree are effective.
 ** Menu Meta Data in YAML Front Matter                                 :yaml:
 :PROPERTIES:
+:EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
 :EXPORT_FILE_NAME: menu-meta-data-yaml2
 :EXPORT_DATE: 2017-07-18
-:EXPORT_HUGO_MENU_NAME: main
-:EXPORT_HUGO_MENU_WEIGHT: 25
-:EXPORT_HUGO_MENU_PARENT: posts
-:EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
+:EXPORT_HUGO_MENU: :name main :weight 25 :parent posts :identifier menu-yaml
 :END:
 Testing the addition of /menu/ meta data to the YAML front matter.
 Here the front matter format is set to YAML using the

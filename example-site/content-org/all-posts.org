@@ -237,6 +237,16 @@ ORG_MAKE_DOC = info pdf card # html
 #   org-mime - Convert org buffer to htmlized format for email
 ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
 #+END_SRC
+* Menu in front matter                                                 :menu:
+** Menu Meta Data in TOML Front Matter
+:PROPERTIES:
+:EXPORT_FILE_NAME: menu-meta-data-toml
+:EXPORT_DATE: 2017-07-18
+:EXPORT_HUGO_MENU_NAME: main
+:EXPORT_HUGO_MENU_WEIGHT: 80
+:EXPORT_HUGO_MENU_PARENT: posts
+:END:
+Testing the addition of /menu/ meta data to the front matter.
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

@@ -36,6 +36,7 @@
 
 (require 'ox-blackfriday)
 (require 'ffap)                         ;For `ffap-url-regexp'
+(require 'ob-core)                      ;For `org-babel-parse-header-arguments'
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
 
@@ -127,9 +128,8 @@ directory where all Hugo posts should go by default."
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil "t")
-                   (:hugo-menu-name "HUGO_MENU_NAME" nil nil)
-                   (:hugo-menu-weight "HUGO_MENU_WEIGHT" nil 20)
-                   (:hugo-menu-parent "HUGO_MENU_PARENT" nil nil)))
+                   (:hugo-menu "HUGO_MENU" nil nil)
+                   (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)))
 
 
 ;;; Transcode Functions
@@ -419,6 +419,21 @@ INFO is a plist holding export options."
         (t
          (concat "\"" str "\""))))
 
+(defun org-hugo--parse-menu-prop-to-alist (menu-prop-str)
+  "Return an alist converted from a string of Hugo menu
+properties.
+
+Example: Input MENU-PROP-STR \":name foo :weight 80\" would
+convert to an alist ((:name . \"foo\") (:weight . 80))."
+  (let ((menu-alist (org-babel-parse-header-arguments menu-prop-str))
+        ret)
+    ;; Hugo menu properties: https://gohugo.io/content-management/menus/
+    (dolist (prop '(name url menu identifier pre post weight parent children))
+      (when-let* ((key (intern (concat ":" (symbol-name prop)))) ;name -> :name
+                  (cell (assoc key menu-alist)))
+        (push `(,prop . ,(cdr cell)) ret)))
+    ret))
+
 (defun org-hugo--get-front-matter (info)
   "Return the Hugo front matter string.
 
@@ -445,14 +460,17 @@ INFO is a plist used as a communication channel."
          (draft (or org-hugo--draft-state
                     (org-export-data (plist-get info :hugo-draft) info)))
          (title (org-export-data (plist-get info :title) info))
-         (menu-name (org-string-nw-p (plist-get info :hugo-menu-name)))
-         (menu-identifier (org-hugo--slug title))
-         (menu-parent (plist-get info :hugo-menu-parent))
-         (menu-weight (plist-get info :hugo-menu-weight))
-         (menu (when menu-name
-                 (cons menu-name `((identifier . ,menu-identifier)
-                                   (parent . ,menu-parent)
-                                   (weight . ,menu-weight)))))
+         (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
+         (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
+         ;; If menu-alist-override is non-nil, update menu-alist with values from that.
+         (menu-alist (let ((updated-menu-alist menu-alist))
+                       (dolist (override-prop menu-alist-override)
+                         (let ((override-key (car override-prop))
+                               (override-val (cdr override-prop)))
+                           (if-let ((matching-prop (assoc override-key updated-menu-alist)))
+                               (setcdr matching-prop override-val)
+                             (push override-prop updated-menu-alist))))
+                       updated-menu-alist))
          (data `((title . ,title)
                  (date . ,date)
                  (description . ,(org-export-data (plist-get info :hugo-description) info))
@@ -468,8 +486,10 @@ INFO is a plist used as a communication channel."
                  (markup . ,(org-export-data (plist-get info :hugo-markup) info))
                  (slug . ,(org-export-data (plist-get info :hugo-slug) info))
                  (url . ,(org-export-data (plist-get info :hugo-url) info))
-                 (menu . ,menu))))
-    ;; (message "[get fm menu DBG] %S" menu)
+                 (menu . ,menu-alist))))
+    ;; (message "[get fm info DBG] %S" info)
+    (message "[get fm menu DBG] %S" menu-alist)
+    (message "[get fm menu override DBG] %S" menu-alist-override)
     (org-hugo--gen-front-matter data fm-format)))
 
 (defun org-hugo--gen-front-matter (data format)
@@ -510,29 +530,36 @@ are \"toml\" and \"yaml\"."
           ;; front matter. So generate the `menu-string' separately
           ;; and then append it to `front-matter' at the end.
           (if (string= key "menu")
-              (let ((menu-name (car value))
-                    (menu-name-str "")
-                    (menu-value-str ""))
-                (setq menu-name-str (cond ((string= format "toml")
-                                           (format "[menu.%s]\n" menu-name))
-                                          ((string= format "yaml")
-                                           (prog1
-                                               (format "menu %s\n%s%s%s\n" sign indent menu-name sign)
-                                             (setq indent (concat indent indent)))) ;Double the indent for next use
-                                          (t
-                                           "")))
-                (dolist (menu-pair (cdr value))
-                  (let ((menu-key (symbol-name (car menu-pair)))
-                        (menu-value (cdr menu-pair)))
-                    (when menu-value
-                      (unless (string= menu-key "weight")
-                        (setq menu-value (org-hugo--wrap-string-in-quotes menu-value)))
+              (let* (;; Menu properties: https://gohugo.io/content-management/menus/
+                     (menu-alist value)
+                     ;; Menu name needs to be non-nil to insert menu
+                     ;; info in front matter.
+                     (menu-name (cdr (assoc 'name menu-alist)))
+                     (menu-name-str "")
+                     (menu-value-str ""))
+                (message "[menu alist DBG] = %S" menu-alist)
+                (when menu-name
+                  (setq menu-name-str (cond ((string= format "toml")
+                                             (format "[menu.%s]\n" menu-name))
+                                            ((string= format "yaml")
+                                             (prog1
+                                                 (format "menu %s\n%s%s%s\n" sign indent menu-name sign)
+                                               (setq indent (concat indent indent)))) ;Double the indent for next use
+                                            (t
+                                             "")))
+                  (dolist (menu-pair menu-alist)
+                    (let ((menu-key (symbol-name (car menu-pair)))
+                          (menu-value (cdr menu-pair)))
                       ;; (message "menu DBG: %S %S %S" menu-name menu-key menu-value)
-                      (setq menu-value-str
-                            (concat menu-value-str
-                                    (format "%s%s %s %s\n"
-                                            indent menu-key sign menu-value))))))
-                (setq menu-string (concat menu-name-str menu-value-str)))
+                      (unless (string= "name" menu-key)
+                        (when menu-value
+                          (unless (string= menu-key "weight")
+                            (setq menu-value (org-hugo--wrap-string-in-quotes menu-value)))
+                          (setq menu-value-str
+                                (concat menu-value-str
+                                        (format "%s%s %s %s\n"
+                                                indent menu-key sign menu-value)))))))
+                  (setq menu-string (concat menu-name-str menu-value-str))))
             (setq front-matter
                   (concat front-matter
                           (format "%s %s %s\n"

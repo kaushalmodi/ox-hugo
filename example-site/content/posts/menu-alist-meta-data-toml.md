@@ -1,9 +1,9 @@
 +++
-title = "Menu Alist Meta Data in TOML Front Matter"
+title = "Menu Meta Data in TOML Front Matter"
 date = 2017-07-18
 tags = ["menu"]
 draft = false
-[menu.main]
+[menu."something here"]
   parent = "posts"
   weight = 80
   identifier = "foo1"

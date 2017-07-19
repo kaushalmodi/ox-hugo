@@ -3,7 +3,7 @@ title = "Overriding few menu properties"
 date = 2017-07-18
 tags = ["menu"]
 draft = false
-[menu.main]
+[menu."something here"]
   parent = "posts"
   weight = 10
   identifier = "ov-partial"

@@ -1,6 +1,6 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_FRONT_MATTER_FORMAT: yaml
-#+HUGO_MENU: :name main :parent posts
+#+HUGO_MENU: :menu main :parent posts
 
 * Menu Meta Data in YAML Front Matter                             :menu:yaml:
 :PROPERTIES:

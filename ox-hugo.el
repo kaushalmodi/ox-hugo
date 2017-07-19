@@ -428,7 +428,7 @@ convert to an alist ((:name . \"foo\") (:weight . 80))."
   (let ((menu-alist (org-babel-parse-header-arguments menu-prop-str))
         ret)
     ;; Hugo menu properties: https://gohugo.io/content-management/menus/
-    (dolist (prop '(name url menu identifier pre post weight parent children))
+    (dolist (prop '(menu name url identifier pre post weight parent)) ;children prop is probably read-only
       (when-let* ((key (intern (concat ":" (symbol-name prop)))) ;name -> :name
                   (cell (assoc key menu-alist)))
         (push `(,prop . ,(cdr cell)) ret)))
@@ -534,24 +534,29 @@ are \"toml\" and \"yaml\"."
                      (menu-alist value)
                      ;; Menu name needs to be non-nil to insert menu
                      ;; info in front matter.
-                     (menu-name (cdr (assoc 'name menu-alist)))
-                     (menu-name-str "")
+                     (menu-entry (cdr (assoc 'menu menu-alist)))
+                     ;; Wrap the menu-entry with double quotes if it
+                     ;; contains non-alphabetical characters.
+                     (menu-entry (if (string-match-p "\\`[a-zA-Z]+\\'" menu-entry)
+                                     menu-entry
+                                   (org-hugo--wrap-string-in-quotes menu-entry)))
+                     (menu-entry-str "")
                      (menu-value-str ""))
                 (message "[menu alist DBG] = %S" menu-alist)
-                (when menu-name
-                  (setq menu-name-str (cond ((string= format "toml")
-                                             (format "[menu.%s]\n" menu-name))
-                                            ((string= format "yaml")
-                                             (prog1
-                                                 (format "menu %s\n%s%s%s\n" sign indent menu-name sign)
-                                               (setq indent (concat indent indent)))) ;Double the indent for next use
-                                            (t
-                                             "")))
+                (when menu-entry
+                  (setq menu-entry-str (cond ((string= format "toml")
+                                              (format "[menu.%s]\n" menu-entry))
+                                             ((string= format "yaml")
+                                              (prog1
+                                                  (format "menu %s\n%s%s%s\n" sign indent menu-entry sign)
+                                                (setq indent (concat indent indent)))) ;Double the indent for next use
+                                             (t
+                                              "")))
                   (dolist (menu-pair menu-alist)
                     (let ((menu-key (symbol-name (car menu-pair)))
                           (menu-value (cdr menu-pair)))
-                      ;; (message "menu DBG: %S %S %S" menu-name menu-key menu-value)
-                      (unless (string= "name" menu-key)
+                      ;; (message "menu DBG: %S %S %S" menu-entry menu-key menu-value)
+                      (unless (string= "menu" menu-key)
                         (when menu-value
                           (unless (string= menu-key "weight")
                             (setq menu-value (org-hugo--wrap-string-in-quotes menu-value)))
@@ -559,7 +564,7 @@ are \"toml\" and \"yaml\"."
                                 (concat menu-value-str
                                         (format "%s%s %s %s\n"
                                                 indent menu-key sign menu-value)))))))
-                  (setq menu-string (concat menu-name-str menu-value-str))))
+                  (setq menu-string (concat menu-entry-str menu-value-str))))
             (setq front-matter
                   (concat front-matter
                           (format "%s %s %s\n"
@@ -590,7 +595,8 @@ It does so only if `org-use-property-inheritance' is a list (or
 nil).  Otherwise it just returns the value of
 ``org-use-property-inheritance'."
   (if (listp org-use-property-inheritance)
-      (let ((prop-list '("HUGO_TAGS"
+      (let ((prop-list '("HUGO_FRONT_MATTER_FORMAT"
+                         "HUGO_TAGS"
                          "HUGO_CATEGORIES"
                          "HUGO_DRAFT"
                          "HUGO_TYPE"

@@ -242,7 +242,7 @@ ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
 :PROPERTIES:
 :EXPORT_FILE_NAME: menu-alist-meta-data-toml
 :EXPORT_DATE: 2017-07-18
-:EXPORT_HUGO_MENU: :name main :weight 80 :parent posts :identifier foo1
+:EXPORT_HUGO_MENU: :menu "something here" :weight 80 :parent posts :identifier foo1
 :END:
 Testing the addition of /menu/ alist meta data to the TOML front
 matter.
@@ -265,20 +265,36 @@ Rename or set an unique identifier.
 :PROPERTIES:
 :EXPORT_FILE_NAME: menu-alist-meta-data-toml-override-full
 :EXPORT_DATE: 2017-07-18
-:EXPORT_HUGO_MENU: :name test :weight 50
+:EXPORT_HUGO_MENU: :menu test :weight 50
 :END:
 For this post, we see that no menu properties are inherited from the
 parent; only the menu properties set in his subtree are effective.
 ** Menu Meta Data in YAML Front Matter                                 :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
+:END:
+*** White space in menu entry
+:PROPERTIES:
 :EXPORT_FILE_NAME: menu-meta-data-yaml2
-:EXPORT_DATE: 2017-07-18
-:EXPORT_HUGO_MENU: :name main :weight 25 :parent posts :identifier menu-yaml
+:EXPORT_DATE: 2017-07-19
+:EXPORT_HUGO_MENU: :menu "something here" :weight 25
 :END:
 Testing the addition of /menu/ meta data to the YAML front matter.
 Here the front matter format is set to YAML using the
 =HUGO_FRONT_MATTER_FORMAT= key in property drawer.
+
+Here there is white space in menu entry keyword.
+*** White space in menu name
+:PROPERTIES:
+:EXPORT_FILE_NAME: menu-meta-data-yaml3
+:EXPORT_DATE: 2017-07-19
+:EXPORT_HUGO_MENU: :menu main :weight 25 :parent posts :name "Menu in YAML"
+:END:
+Testing the addition of /menu/ meta data to the YAML front matter.
+Here the front matter format is set to YAML using the
+=HUGO_FRONT_MATTER_FORMAT= key in property drawer.
+
+Here there is white space in menu name property.
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

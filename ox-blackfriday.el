@@ -72,6 +72,7 @@
                      (paragraph . org-blackfriday-paragraph)
                      (strike-through . org-blackfriday-strike-through)
                      (src-block . org-blackfriday-src-block)
+                     (example-block . org-blackfriday-example-block)
                      (table-cell . org-blackfriday-table-cell)
                      (table-row . org-blackfriday-table-row)
                      (table . org-blackfriday-table)))
@@ -103,6 +104,14 @@ INFO is a plist used as a communication channel."
          (prefix (concat "```" lang "\n"))
          (suffix "```"))
     (concat prefix code suffix)))
+
+;;;; Example Block
+(defun org-blackfriday-example-block (example-block _contents info)
+  "Transcode a EXAMPLE-BLOCK element into Blackfriday Markdown format.
+CONTENTS is nil.  INFO is a plist holding contextual
+information."
+  (format "```text\n%s```"
+          (org-export-format-code-default example-block info)))
 
 ;;;; Strike-Through
 (defun org-blackfriday-strike-through (_strike-through contents _info)

@@ -250,6 +250,15 @@ ORG_MAKE_DOC = info pdf card # html
 #   org-mime - Convert org buffer to htmlized format for email
 ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
 #+END_SRC
+* Example block                                                     :example:
+** Simple
+:PROPERTIES:
+:EXPORT_DATE: 2017-07-19
+:EXPORT_FILE_NAME: example-simple
+:END:
+#+BEGIN_EXAMPLE
+This is an example
+#+END_EXAMPLE
 * Menu in front matter                                                 :menu:
 ** Menu Meta Data in TOML Front Matter
 :PROPERTIES:

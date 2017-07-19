@@ -590,29 +590,25 @@ are \"toml\" and \"yaml\"."
     (concat sep front-matter menu-string sep)))
 
 (defun org-hugo--selective-property-inheritance ()
-  "Returns a list of properties that should be inherited.
-It does so only if `org-use-property-inheritance' is a list (or
-nil).  Otherwise it just returns the value of
-``org-use-property-inheritance'."
-  (if (listp org-use-property-inheritance)
-      (let ((prop-list '("HUGO_FRONT_MATTER_FORMAT"
-                         "HUGO_TAGS"
-                         "HUGO_CATEGORIES"
-                         "HUGO_DRAFT"
-                         "HUGO_TYPE"
-                         "HUGO_WEIGHT"
-                         "HUGO_MARKUP"
-                         "HUGO_SECTION"
-                         "HUGO_BASE_DIR"
-                         "HUGO_STATIC_IMAGES"
-                         "HUGO_CODE_FENCE"
-                         "HUGO_MENU"))
-            ret)
-        (dolist (prop prop-list)
-          (let ((prop (concat "EXPORT_" prop)))
-            (push prop ret)))
-        ret)
-    org-use-property-inheritance))
+  "Returns a list of properties that should be inherited."
+  (let ((prop-list '("HUGO_FRONT_MATTER_FORMAT"
+                     "HUGO_TAGS"
+                     "HUGO_CATEGORIES"
+                     "HUGO_DRAFT"
+                     "HUGO_TYPE"
+                     "HUGO_WEIGHT"
+                     "HUGO_MARKUP"
+                     "HUGO_SECTION"
+                     "HUGO_BASE_DIR"
+                     "HUGO_STATIC_IMAGES"
+                     "HUGO_CODE_FENCE"
+                     "HUGO_MENU"
+                     "TAGS"))
+        prop-list-allow-inheritance)
+    (dolist (prop prop-list)
+      (let ((prop (concat "EXPORT_" prop)))
+        (push prop prop-list-allow-inheritance)))
+    prop-list-allow-inheritance))
 
 ;;; Interactive functions
 

@@ -27,8 +27,12 @@ Export this *second* post only by moving point here and doing =C-c C-e
 H H=.
 * Image
 :PROPERTIES:
-:EXPORT_FILE_NAME: image
 :EXPORT_TAGS: image
+:END:
+** Image links
+:PROPERTIES:
+:EXPORT_FILE_NAME: image-links
+:EXPORT_DATE: 2017-07-15T07:49:44-04:00
 :END:
 *To be fixed*: At the moment, you need to place the point here and do
  =C-c C-e H H=. If the point is under any of the nested sub-trees in
@@ -36,7 +40,7 @@ H H=.
 
 /Need to add smarts that determines which subtree contains the whole
 post.. like look for =EXPORT_FILE_NAME=?/
-** Unclickable image (works!)
+*** Unclickable image (works!)
 [[/images/org-mode-unicorn-logo.png]]
 
 *To be fixed*: The sub-headings in a post get exported as /Heading 1/
@@ -53,20 +57,20 @@ instead of
 
 So the sub-heading title and the post title both get the /Heading 1/
 tag and look the same size.
-** Clickable link that opens the image (works!)
+*** Clickable link that opens the image (works!)
 [[/images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
-** Clickable image that opens the image (works!)
+*** Clickable image that opens the image (works!)
 Click below image to jump to the unicorn image.
 [[file:/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
 
 - NOTE :: =file:= has to be used in both Link and Description components
           of the Org link.
-** Image with =ATTR_HTML= [[https://github.com/kaushalmodi/ox-hugo/issues/17][Issue # 17]]
+*** Image with =ATTR_HTML= [[https://github.com/kaushalmodi/ox-hugo/issues/17][Issue # 17]]
 #+ATTR_HTML: :class inset
 [[/images/org-mode-unicorn-logo.png]]
 
 [[https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728][Discussion]]
-*** COMMENT Below will not work!
+**** COMMENT Below will not work!
 You cannot wrap markdown code inside HTML.
 
 As /rdwatters/ says [[https://discourse.gohugo.io/t/is-it-possible-to-insert-html-code-in-markdown-content/4867/4?u=kaushalmodi][here]],
@@ -84,7 +88,7 @@ inside that div is valid HTML.
 #+BEGIN_EXPORT md
 </div>
 #+END_EXPORT
-** Link to image outside of standard Hugo locations
+*** Link to image outside of standard Hugo locations
 [[../src-images/copy-of-unicorn-logo.png]]
 * Setting heading anchors
 :PROPERTIES:

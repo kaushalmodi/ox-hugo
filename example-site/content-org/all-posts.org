@@ -90,6 +90,15 @@ inside that div is valid HTML.
 #+END_EXPORT
 *** Link to image outside of standard Hugo locations
 [[../src-images/copy-of-unicorn-logo.png]]
+** Image captions
+:PROPERTIES:
+:EXPORT_DATE: 2017-07-19
+:EXPORT_FILE_NAME: image-captions
+:END:
+Some text before image.
+#+CAPTION: A unicorn!
+[[/images/org-mode-unicorn-logo.png]]
+Some more text, after image.
 * Setting heading anchors
 :PROPERTIES:
 :EXPORT_FILE_NAME: setting-heading-anchors

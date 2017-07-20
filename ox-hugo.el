@@ -100,36 +100,63 @@ directory where all Hugo posts should go by default."
                    )
 
   ;;                KEY                       KEYWORD                    OPTION  DEFAULT                     BEHAVIOR
-  :options-alist '((:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
-                   ;; Front matter variables - https://gohugo.io/content/front-matter/
-                   ;; Required front matter variables
-                   ;; "title" is parsed from the Org #+TITLE or the subtree heading.
-                   ;; "date" is parsed from the Org #+DATE or subtree property EXPORT_HUGO_DATE
-                   (:description "DESCRIPTION" nil nil)
-                   (:date "DATE" nil nil)
-                   (:tags "TAGS" nil nil 'space)
+  :options-alist '(;; Non-front-matter options
+                   (:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
                    (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil 1)
-                   (:hugo-tags "HUGO_TAGS" nil nil 'space)
-                   (:hugo-categories "HUGO_CATEGORIES" nil nil 'space)
-                   ;; Optional front matter variables
-                   (:hugo-aliases "HUGO_ALIASES" nil nil 'space)
-                   (:hugo-draft "HUGO_DRAFT" nil nil)
-                   (:hugo-publishdate "HUGO_PUBLISHDATE" nil nil)
-                   (:hugo-expirydate "HUGO_EXPIRYDATE" nil nil)
-                   (:hugo-type "HUGO_TYPE" nil nil)
-                   (:hugo-iscjklanguage "HUGO_ISCJKLANGUAGE" nil nil)
-                   (:hugo-weight "HUGO_WEIGHT" nil nil)
-                   (:hugo-markup "HUGO_MARKUP" nil nil)
-                   (:hugo-slug "HUGO_SLUG" nil nil)
-                   (:hugo-url "HUGO_URL" nil nil)
-                   ;; Non-front-matter options
                    (:with-toc nil "toc" nil) ;No TOC by default
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil "t")
                    (:hugo-menu "HUGO_MENU" nil nil)
-                   (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)))
+                   (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)
+
+                   ;; Front matter variables
+                   ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
+                   ;; aliases
+                   (:hugo-aliases "HUGO_ALIASES" nil nil 'space)
+                   ;; date
+                   ;; "date" is parsed from the Org #+DATE or subtree property EXPORT_HUGO_DATE
+                   (:date "DATE" nil nil)
+                   ;; description
+                   (:description "DESCRIPTION" nil nil)
+                   ;; draft
+                   ;; "draft" value is also interpreted by TODO state of a post as Org subtree.
+                   (:hugo-draft "HUGO_DRAFT" nil nil)
+                   ;; expiryDate
+                   (:hugo-expirydate "HUGO_EXPIRYDATE" nil nil)
+                   ;; isCJKLanguage
+                   (:hugo-iscjklanguage "HUGO_ISCJKLANGUAGE" nil nil)
+                   ;; keywords
+                   ;; "keywords" is parsed from the Org #+KEYWORDS or subtree property EXPORT_KEYWORDS
+                   (:keywords "KEYWORDS" nil nil)
+                   ;; layout
+                   (:hugo-layout "HUGO_LAYOUT" nil nil)
+                   ;; lastmod
+                   (:hugo-lastmod "HUGO_LASTMOD" nil nil)
+                   ;; linkTitle
+                   (:hugo-linktitle "HUGO_LINKTITLE" nil nil)
+                   ;; markup
+                   (:hugo-markup "HUGO_MARKUP" nil nil) ;default is "md"
+                   ;; outputs
+                   (:hugo-outputs "HUGO_OUTPUTS" nil nil)
+                   ;; publishDate
+                   (:hugo-publishdate "HUGO_PUBLISHDATE" nil nil)
+                   ;; slug
+                   (:hugo-slug "HUGO_SLUG" nil nil)
+                   ;; taxomonomies - tags, categories
+                   ;; Org tags parsed from posts as subtrees get the highest precedence.
+                   (:tags "TAGS" nil nil 'space)
+                   (:hugo-tags "HUGO_TAGS" nil nil 'space)
+                   (:hugo-categories "HUGO_CATEGORIES" nil nil 'space)
+                   ;; title
+                   ;; "title" is parsed from the Org #+TITLE or the subtree heading.
+                   ;; type
+                   (:hugo-type "HUGO_TYPE" nil nil)
+                   ;; url
+                   (:hugo-url "HUGO_URL" nil nil)
+                   ;; weight
+                   (:hugo-weight "HUGO_WEIGHT" nil nil)))
 
 
 ;;; Transcode Functions
@@ -453,12 +480,12 @@ INFO is a plist used as a communication channel."
          ;;   2017-07-06T14:59:45-0400 (Note the missing colon)
          ;; Below simply adds that colon.
          (date (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2" date-nocolon))
+         (draft (or org-hugo--draft-state
+                    (org-export-data (plist-get info :hugo-draft) info)))
          (tags (or (org-string-nw-p (mapconcat #'identity org-hugo--tags-list " "))
                    (concat
                     (org-export-data (plist-get info :hugo-tags) info) " "
                     (org-export-data (plist-get info :tags) info))))
-         (draft (or org-hugo--draft-state
-                    (org-export-data (plist-get info :hugo-draft) info)))
          (title (org-export-data (plist-get info :title) info))
          (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
          (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
@@ -471,21 +498,28 @@ INFO is a plist used as a communication channel."
                                (setcdr matching-prop override-val)
                              (push override-prop updated-menu-alist))))
                        updated-menu-alist))
-         (data `((title . ,title)
-                 (date . ,date)
+         (data `(;; The order of the elements below will be the order in which the front matter
+                 ;; variables will be ordered.
+                 (title . ,title)
                  (description . ,(org-export-data (plist-get info :hugo-description) info))
+                 (date . ,date)
+                 (publishdate . ,(org-export-data (plist-get info :hugo-publishdate) info))
+                 (aliases . ,(org-export-data (plist-get info :hugo-aliases) info))
+                 (expirydate . ,(org-export-data (plist-get info :hugo-expirydate) info))
+                 (isCJKLanguage . ,(org-export-data (plist-get info :hugo-iscjklanguage) info))
+                 (keywords . ,(org-export-data (plist-get info :keywords) info))
+                 (layout . ,(org-export-data (plist-get info :hugo-layout) info))
+                 (lastmod . ,(org-export-data (plist-get info :hugo-lastmod) info))
+                 (linkTitle . ,(org-export-data (plist-get info :hugo-linktitle) info))
+                 (markup . ,(org-export-data (plist-get info :hugo-markup) info))
+                 (outputs . ,(org-export-data (plist-get info :hugo-outputs) info))
+                 (slug . ,(org-export-data (plist-get info :hugo-slug) info))
                  (tags . ,tags)
                  (categories . ,(org-export-data (plist-get info :hugo-categories) info))
-                 (aliases . ,(org-export-data (plist-get info :hugo-aliases) info))
-                 (draft . ,draft)
-                 (publishdate . ,(org-export-data (plist-get info :hugo-publishdate) info))
-                 (expirydate . ,(org-export-data (plist-get info :hugo-expirydate) info))
                  (type . ,(org-export-data (plist-get info :hugo-type) info))
-                 (isCJKLanguage . ,(org-export-data (plist-get info :hugo-iscjklanguage) info))
-                 (weight . ,(org-export-data (plist-get info :hugo-weight) info))
-                 (markup . ,(org-export-data (plist-get info :hugo-markup) info))
-                 (slug . ,(org-export-data (plist-get info :hugo-slug) info))
                  (url . ,(org-export-data (plist-get info :hugo-url) info))
+                 (weight . ,(org-export-data (plist-get info :hugo-weight) info))
+                 (draft . ,draft)
                  (menu . ,menu-alist))))
     ;; (message "[get fm info DBG] %S" info)
     (message "[get fm menu DBG] %S" menu-alist)

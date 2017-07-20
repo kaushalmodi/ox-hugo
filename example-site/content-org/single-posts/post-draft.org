@@ -1,0 +1,21 @@
+#+TITLE: Single Post, but draft
+#+DATE: 2017-07-20
+#+HUGO_PUBLISHDATE: 2017-07-22
+#+HUGO_EXPIRYDATE: 2017-07-23
+
+#+HUGO_BASE_DIR: ../../
+
+#+HUGO_SECTION: singles
+#+TAGS: single toml
+#+HUGO_CATEGORIES: cat1 cat2
+#+HUGO_MENU: :menu "foo" :weight 10 :parent main
+
+#+HUGO_DRAFT: true
+
+This is a single post. You do not need to set the =EXPORT_FILE_NAME=
+property in here. But then you also lose the tag and property
+inheritance, TODO state, etc. Org awesomeness.
+* First heading in this post
+This is a under first heading.
+* Second heading in this post
+This is a under second heading.

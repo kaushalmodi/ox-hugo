@@ -23,6 +23,11 @@
             Menu (for debug): {{ .Params.menu }}
         {{ end }}
     </p>
+    <p>
+        {{ if .Params.draft }}
+            <b>--- This is a Draft ---</b>
+        {{ end }}
+    </p>
     {{ .Content }}
 </div>
 

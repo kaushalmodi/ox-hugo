@@ -1,0 +1,20 @@
+#+TITLE: Single Post with YAML front matter
+#+DATE: 2017-07-20
+#+HUGO_PUBLISHDATE: 2017-07-22
+#+HUGO_EXPIRYDATE: 2017-07-23
+
+#+HUGO_BASE_DIR: ../../
+#+HUGO_FRONT_MATTER_FORMAT: yaml
+
+#+HUGO_SECTION: singles
+#+TAGS: single yaml
+#+HUGO_CATEGORIES: cat1 cat2
+#+HUGO_MENU: :menu "foo" :weight 10 :parent main :identifier single-yaml
+
+This is a single post. You do not need to set the =EXPORT_FILE_NAME=
+property in here. But then you also lose the tag and property
+inheritance, TODO state, etc. Org awesomeness.
+* First heading in this post
+This is a under first heading.
+* Second heading in this post
+This is a under second heading.

@@ -16,15 +16,15 @@
 * Post 1
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-1
+:EXPORT_DATE: 2017-07-12T17:31:56-04:00
 :END:
-Export this *first* post only by moving point here and doing =C-c C-e
-H H=.
+Export this *first* post only by bringing point here and doing =M-x org-hugo-publish-subtree=.
 * Post 2
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-2
+:EXPORT_DATE: 2017-07-12T17:05:38-04:00
 :END:
-Export this *second* post only by moving point here and doing =C-c C-e
-H H=.
+Export this *second* post only by bringing point here and doing =M-x org-hugo-publish-subtree=.
 * Image
 :PROPERTIES:
 :EXPORT_TAGS: image
@@ -34,16 +34,12 @@ H H=.
 :EXPORT_FILE_NAME: image-links
 :EXPORT_DATE: 2017-07-15T07:49:44-04:00
 :END:
-*To be fixed*: At the moment, you need to place the point here and do
- =C-c C-e H H=. If the point is under any of the nested sub-trees in
- here where you do that, only that subtree gets exported.
-
-/Need to add smarts that determines which subtree contains the whole
-post.. like look for =EXPORT_FILE_NAME=?/
+This is some text before the first heading of this post.
 *** Unclickable image (works!)
 [[/images/org-mode-unicorn-logo.png]]
 
-*To be fixed*: The sub-headings in a post get exported as /Heading 1/
+-----
++To be fixed+ (*Now fixed*): The sub-headings in a post get exported as /Heading 1/
  instead of /Heading 2/.
 
 For example, this sub-section's heading is exported as:
@@ -54,6 +50,9 @@ instead of
 #+BEGIN_EXAMPLE
 ## Unclickable image
 #+END_EXAMPLE
+
+-----
+*Solution*: Above is fixed by setting =HUGO_OFFSET_LEVEL= to 1.
 
 So the sub-heading title and the post title both get the /Heading 1/
 tag and look the same size.
@@ -249,6 +248,15 @@ ORG_MAKE_DOC = info pdf card # html
 #   ox-extra - Allow ignoring just the heading, but still export the body of those headings
 #   org-mime - Convert org buffer to htmlized format for email
 ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
+#+END_SRC
+** Source block with caption
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-caption
+:EXPORT_DATE: 2017-07-19
+:END:
+#+CAPTION: Prefix value in =local.mk=
+#+BEGIN_SRC makefile
+prefix = /dir/where/you/want/to/install/org # Default: /usr/share
 #+END_SRC
 * Example block                                                     :example:
 ** Simple

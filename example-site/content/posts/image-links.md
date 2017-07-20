@@ -5,24 +5,32 @@ tags = ["image"]
 draft = false
 +++
 
-**To be fixed**: At the moment, you need to place the point here and do `C-c C-e H H`. If the point is under any of the nested sub-trees in here where you do that, only that subtree gets exported.
-
-*Need to add smarts that determines which subtree contains the whole post.. like look for `EXPORT_FILE_NAME`?*
+This is some text before the first heading of this post.
 
 
 ## Unclickable image (works!) {#unclickable-image--works}
 
 {{<figure src="/images/org-mode-unicorn-logo.png">}}
 
-**To be fixed**: The sub-headings in a post get exported as *Heading 1* instead of *Heading 2*.
+---
+
+~~To be fixed~~ (**Now fixed**): The sub-headings in a post get exported as *Heading 1* instead of *Heading 2*.
 
 For example, this sub-section&rsquo;s heading is exported as:
 
-    # Unclickable image
+```text
+# Unclickable image
+```
 
 instead of
 
-    ## Unclickable image
+```text
+## Unclickable image
+```
+
+---
+
+**Solution**: Above is fixed by setting `HUGO_OFFSET_LEVEL` to 1.
 
 So the sub-heading title and the post title both get the *Heading 1* tag and look the same size.
 

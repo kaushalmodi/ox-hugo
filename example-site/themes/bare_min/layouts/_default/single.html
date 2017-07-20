@@ -1,0 +1,29 @@
+{{ define "main" }}
+
+<div class="post">
+    <h1 class="post-title">{{ .Title }}</h1>
+    <p>
+        {{ if .Params.categories }}
+            Categories:
+            {{ range .Params.categories }}
+                <a href="/categories/{{ . | urlize }}">{{ . }}</a>
+            {{ end }}
+        {{ end }}
+    </p>
+    <p>
+        {{ if .Params.tags }}
+            Tags:
+            {{ range .Params.tags }}
+                <a href="/tags/{{ . | urlize }}">{{ . }}</a>
+            {{ end }}
+        {{ end }}
+    </p>
+    <p>
+        {{ if .Params.menu }}
+            Menu (for debug): {{ .Params.menu }}
+        {{ end }}
+    </p>
+    {{ .Content }}
+</div>
+
+{{ end }}

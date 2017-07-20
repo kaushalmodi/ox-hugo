@@ -148,14 +148,42 @@ This post must not be exported as it is commented.
 :EXPORT_DATE: 2017-07-12T13:48:01-04:00
 :END:
 Testing tags set using Org tags in headings.
-* Section                                                             :emacs:
-** Emacs Post 1                                                         :foo:
+* Section
+** Articles
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: articles
+:END:
+*** Article 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: article-1
+:EXPORT_DATE: 2017-07-19T08:34:29-04:00
+:END:
+First article.
+
+This will land in =content/articles/= as the parent of this subtree
+sets =EXPORT_HUGO_SECTION= to =articles=. Note that the theme needs to
+define at least the =single.html=, either in the =layouts/_default/=
+directory, or =layouts/articles/=, either in the Hugo base dir or the
+theme dir.
+*** Article 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: article-2
+:EXPORT_DATE: 2017-07-19T08:34:22-04:00
+:END:
+Second article.
+
+This will also land in =content/articles/= the same way.
+** Emacs posts                                                        :emacs:
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: posts
+:END:
+*** Emacs Post 1                                                        :foo:
 :PROPERTIES:
 :EXPORT_FILE_NAME: emacs-post-1
 :EXPORT_DATE: 2017-07-12T17:31:56-04:00
 :END:
 Here is the first post on Emacs.
-** Emacs Post 2                                                         :bar:
+*** Emacs Post 2                                                        :bar:
 :PROPERTIES:
 :EXPORT_FILE_NAME: emacs-post-2
 :EXPORT_DATE: 2017-07-12T17:31:56-04:00
@@ -335,28 +363,6 @@ Here the front matter format is set to YAML using the
 =HUGO_FRONT_MATTER_FORMAT= key in property drawer.
 
 Here there is white space in menu name property.
-* Articles
-:PROPERTIES:
-:EXPORT_HUGO_SECTION: articles
-:END:
-** Article 1
-:PROPERTIES:
-:EXPORT_FILE_NAME: article-1
-:EXPORT_DATE: 2017-07-19T08:34:29-04:00
-:END:
-First article.
-
-This will land in =content/articles/= as the parent of this subtree
-sets =EXPORT_HUGO_SECTION= to =articles=. Note that the theme needs to
-define at least the =single.html= for =articles/=.
-** Article 2
-:PROPERTIES:
-:EXPORT_FILE_NAME: article-2
-:EXPORT_DATE: 2017-07-19T08:34:22-04:00
-:END:
-Second article.
-
-This will also land in =content/articles/= the same way.
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

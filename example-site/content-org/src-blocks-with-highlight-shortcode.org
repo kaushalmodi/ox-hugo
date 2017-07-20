@@ -1,12 +1,12 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_CODE_FENCE: nil
 
-#+OPTIONS: loffset:1
 #+SEQ_TODO: TODO DRAFT DONE
 
 * Source blocks with Hugo =highlight= shortcode
 :PROPERTIES:
 :EXPORT_FILE_NAME: shortcode-src-blocks
+:EXPORT_DATE: 2017-07-13T17:57:58-04:00
 :END:
 Here are few variables that you might like to change in the =local.mk=:
 - =prefix= :: Org installation directory

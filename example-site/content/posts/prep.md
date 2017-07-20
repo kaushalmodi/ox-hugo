@@ -8,5 +8,7 @@ draft = false
 1.  Be the root directory for this Hugo site (the directory containing `config.toml`).
 2.  Run
 
-        hugo server --port 1111
+    ```text
+    hugo server --port 1111
+    ```
 3.  See the site served on &ldquo;<http://localhost:1111/>&rdquo;

@@ -108,7 +108,7 @@ directory where all Hugo posts should go by default."
                    (:description "DESCRIPTION" nil nil)
                    (:date "DATE" nil nil)
                    (:tags "TAGS" nil nil 'space)
-                   (:hugo-level-offset "HUGO_LEVEL_OFFSET" loffset 0)
+                   (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil 1)
                    (:hugo-tags "HUGO_TAGS" nil nil 'space)
                    (:hugo-categories "HUGO_CATEGORIES" nil nil 'space)
                    ;; Optional front matter variables

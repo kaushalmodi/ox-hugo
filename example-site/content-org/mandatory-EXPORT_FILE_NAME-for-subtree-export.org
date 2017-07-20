@@ -1,5 +1,4 @@
 #+HUGO_BASE_DIR: ../
-#+OPTIONS: loffset:1
 #+SEQ_TODO: TODO DRAFT DONE
 
 * abc

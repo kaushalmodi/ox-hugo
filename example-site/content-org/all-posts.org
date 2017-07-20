@@ -1,10 +1,10 @@
 #+HUGO_BASE_DIR: ../
-#+OPTIONS: loffset:1
 #+SEQ_TODO: TODO DRAFT DONE
 
 * Preparation
 :PROPERTIES:
 :EXPORT_FILE_NAME: prep
+:EXPORT_DATE: 2017-07-12T17:05:38-04:00
 :END:
 1. Be the root directory for this Hugo site (the directory containing
    =config.toml=).
@@ -101,6 +101,7 @@ Some more text, after image.
 * Setting heading anchors
 :PROPERTIES:
 :EXPORT_FILE_NAME: setting-heading-anchors
+:EXPORT_DATE: 2017-07-12T17:05:39-04:00
 :END:
 ** Heading 1 of the post
 :PROPERTIES:
@@ -125,6 +126,7 @@ Something 2.1
 * Post heading with crazy characters
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-heading-slugs
+:EXPORT_DATE: 2017-07-12T13:46:33-04:00
 :END:
 ** Releasing version 1.1
 ** Foo ( Bar ) Baz
@@ -143,22 +145,27 @@ This post must not be exported as it is commented.
 * Test tags                                                         :abc:def:
 :PROPERTIES:
 :EXPORT_FILE_NAME: test-tags
+:EXPORT_DATE: 2017-07-12T13:48:01-04:00
 :END:
+Testing tags set using Org tags in headings.
 * Section                                                             :emacs:
 ** Emacs Post 1                                                         :foo:
 :PROPERTIES:
 :EXPORT_FILE_NAME: emacs-post-1
+:EXPORT_DATE: 2017-07-12T17:31:56-04:00
 :END:
 Here is the first post on Emacs.
 ** Emacs Post 2                                                         :bar:
 :PROPERTIES:
 :EXPORT_FILE_NAME: emacs-post-2
+:EXPORT_DATE: 2017-07-12T17:31:56-04:00
 :END:
 Here is the second post on Emacs.
 * Tables                                                              :table:
 ** Simple Table
 :PROPERTIES:
 :EXPORT_FILE_NAME: simple-table
+:EXPORT_DATE: 2017-07-12T19:25:56-04:00
 :END:
 | h1 | h2 |
 | a  | b  |
@@ -166,6 +173,7 @@ Here is the second post on Emacs.
 ** Table with narrowest cols
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-with-narrowest-columns
+:EXPORT_DATE: 2017-07-12T19:26:00-04:00
 :END:
 | 1 | 2 | 3 |
 | a | b | e |
@@ -173,6 +181,7 @@ Here is the second post on Emacs.
 ** Table with top border
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-top-border
+:EXPORT_DATE: 2017-07-12T19:26:04-04:00
 :END:
 |---+---+---+---|
 | 1 | 2 | 3 | 4 |
@@ -181,6 +190,7 @@ Here is the second post on Emacs.
 ** Table with bottom border
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-bottom-border
+:EXPORT_DATE: 2017-07-12T19:26:06-04:00
 :END:
 | 1 | 2 | 3 | 4 |
 | a | b | e | g |
@@ -189,6 +199,7 @@ Here is the second post on Emacs.
 ** Table with top and bottom border
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-top-and-bottom-border
+:EXPORT_DATE: 2017-07-12T19:26:10-04:00
 :END:
 |---+---+---+---|
 | 1 | 2 | 3 | 4 |
@@ -198,6 +209,7 @@ Here is the second post on Emacs.
 ** Table with rule after first row
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-only-rule-after-first-row
+:EXPORT_DATE: 2017-07-12T19:26:13-04:00
 :END:
 | 1 | 2 | 3 | 4 |
 |---+---+---+---|
@@ -206,6 +218,7 @@ Here is the second post on Emacs.
 ** Table with borders and rule after first
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-with-borders-and-rule-after-first
+:EXPORT_DATE: 2017-07-12T19:26:16-04:00
 :END:
 |---+---+---+---|
 | 1 | 2 | 3 | 4 |
@@ -217,6 +230,7 @@ Here is the second post on Emacs.
 ** Code-fenced source blocks
 :PROPERTIES:
 :EXPORT_FILE_NAME: code-fenced-src-blocks
+:EXPORT_DATE: 2017-07-13T17:49:22-04:00
 :END:
 Here are few variables that you might like to change in the =local.mk=:
 - =prefix= :: Org installation directory
@@ -249,7 +263,7 @@ ORG_MAKE_DOC = info pdf card # html
 #   org-mime - Convert org buffer to htmlized format for email
 ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
 #+END_SRC
-** Source block with caption
+** Source block with caption                                       :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-caption
 :EXPORT_DATE: 2017-07-19
@@ -270,12 +284,8 @@ This is an example
 * Menu in front matter                                                 :menu:
 ** Menu Meta Data in TOML Front Matter
 :PROPERTIES:
-:EXPORT_FILE_NAME: menu-alist-meta-data-toml
-:EXPORT_DATE: 2017-07-18
 :EXPORT_HUGO_MENU: :menu "something here" :weight 80 :parent posts :identifier foo1
 :END:
-Testing the addition of /menu/ alist meta data to the TOML front
-matter.
 *** Overriding few menu properties
 :PROPERTIES:
 :EXPORT_FILE_NAME: menu-alist-meta-data-toml-override-partial
@@ -332,6 +342,7 @@ Here there is white space in menu name property.
 ** Article 1
 :PROPERTIES:
 :EXPORT_FILE_NAME: article-1
+:EXPORT_DATE: 2017-07-19T08:34:29-04:00
 :END:
 First article.
 
@@ -341,6 +352,7 @@ define at least the =single.html= for =articles/=.
 ** Article 2
 :PROPERTIES:
 :EXPORT_FILE_NAME: article-2
+:EXPORT_DATE: 2017-07-19T08:34:22-04:00
 :END:
 Second article.
 
@@ -348,6 +360,7 @@ This will also land in =content/articles/= the same way.
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo
+:EXPORT_DATE: 2017-07-12T17:05:41-04:00
 :END:
 If a post has the =TODO= keyword, the =draft= front matter variable
 should be set to =true=.
@@ -357,6 +370,7 @@ start writing.
 * DRAFT Draft state
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-draft
+:EXPORT_DATE: 2017-07-12T13:46:16-04:00
 :END:
 If a post has the =DRAFT= keyword too, the =draft= front matter variable
 should be set to =true=.

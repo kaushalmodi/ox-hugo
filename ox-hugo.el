@@ -503,9 +503,9 @@ INFO is a plist used as a communication channel."
                  (title . ,title)
                  (description . ,(org-export-data (plist-get info :hugo-description) info))
                  (date . ,date)
-                 (publishdate . ,(org-export-data (plist-get info :hugo-publishdate) info))
+                 (publishDate . ,(org-export-data (plist-get info :hugo-publishdate) info))
+                 (expiryDate . ,(org-export-data (plist-get info :hugo-expirydate) info))
                  (aliases . ,(org-export-data (plist-get info :hugo-aliases) info))
-                 (expirydate . ,(org-export-data (plist-get info :hugo-expirydate) info))
                  (isCJKLanguage . ,(org-export-data (plist-get info :hugo-iscjklanguage) info))
                  (keywords . ,(org-export-data (plist-get info :keywords) info))
                  (layout . ,(org-export-data (plist-get info :hugo-layout) info))
@@ -805,7 +805,11 @@ file."
                       (setq org-hugo--draft-state draft)
                       (setq org-hugo--tags-list tags)
                       (org-hugo-export-to-md nil :subtreep))))))
-            (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property")))))))
+            (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property")))
+
+        ;; Reset the state variables again at the end.
+        (setq org-hugo--draft-state nil)
+        (setq org-hugo--tags-list nil)))))
 
 ;;;###autoload
 (defun org-hugo-publish-to-md (plist filename pub-dir)

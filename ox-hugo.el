@@ -186,16 +186,8 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
    (let ((prev (org-export-get-previous-element footnote-reference info)))
      (when (eq (org-element-type prev) 'footnote-reference)
        (plist-get info :html-footnote-separator)))
-   (let* ((n (org-export-get-footnote-number footnote-reference info))
-	  (id (format "fn:%d%s"
-		      n
-                      ;; Fri Jul 21 13:55:25 EDT 2017 - kmodi
-                      ;; TODO - Need to figure out what below does.
-		      (if (org-export-footnote-first-reference-p
-			   footnote-reference info)
-			  ""
-			".100"))))
-     (format "[^%s]" id))))
+   (let ((n (org-export-get-footnote-number footnote-reference info)))
+     (format "[^fn:%d]" n))))
 
 ;;;; Headline
 (defun org-hugo-headline (headline contents info)

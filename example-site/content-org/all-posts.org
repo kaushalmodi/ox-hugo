@@ -423,6 +423,14 @@ This is some text[fn:2].
 :EXPORT_DATE: 2017-07-21
 :END:
 This is some text[fn:1][fn:2].
+** Multiple references of same footnote
+:PROPERTIES:
+:EXPORT_FILE_NAME: multi-ref-same-footnote
+:EXPORT_DATE: 2017-07-21
+:END:
+This is some text[fn:1].
+This is some text[fn:1].
+This is some text[fn:1].
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

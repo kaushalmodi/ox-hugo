@@ -47,7 +47,11 @@
   "State variable to store the tags of the subtree to be exported.")
 
 (defvar org-hugo--subtree-coord nil
-  "State variable to store the current valid Hugo subtree coordinates.")
+  "Variable to store the current valid Hugo subtree coordinates.")
+
+(defvar org-hugo--subtree-count nil
+  "Variable to store the count of subtrees getting exported when
+exporting all subtrees in a file.")
 
 
 ;;; User-Configurable Variables
@@ -81,26 +85,31 @@ directory where all Hugo posts should go by default."
 (org-export-define-derived-backend 'hugo 'blackfriday
   :menu-entry
   '(?H "Export to Hugo-compatible Markdown"
-       ((?H "Subtree to file             " (lambda (a _s v b) (org-hugo-export-to-md a :subtreep v)))
-        (?h "To file" (lambda (a s v b) (org-hugo-export-to-md a s v)))
-        (?T "Subtree to temporary buffer "
-            (lambda (a _s v b) (org-hugo-export-as-md a :subtreep v)))
-        (?t "To temporary buffer"
-            (lambda (a s v b) (org-hugo-export-as-md a s v)))
-        (?O "Subtree to file and open    "
-            (lambda (a _s v b)
-              (if a (org-hugo-export-to-md t :subtreep v)
-                (org-open-file (org-hugo-export-to-md nil :subtreep v)))))
+       ((?H "Subtree to file"
+            (lambda (a _s v _b)
+              (org-hugo-export-subtree-to-md nil a v)))
+        (?h "To file"
+            (lambda (a s v _b)
+              (org-hugo-export-to-md a s v)))
+        (?O "Subtree to file and open"
+            (lambda (a _s v _b)
+              (if a
+                  (org-hugo-export-subtree-to-md nil :async v)
+                (org-open-file (org-hugo-export-subtree-to-md nil a v)))))
         (?o "To file and open"
-            (lambda (a s v b)
+            (lambda (a s v _b)
               (if a (org-hugo-export-to-md t s v)
-                (org-open-file (org-hugo-export-to-md nil s v)))))))
+                (org-open-file (org-hugo-export-to-md nil s v)))))
+        (?A "All subtrees to files"
+            (lambda (a _s v _b)
+              (org-hugo-export-subtree-to-md :all-subtrees a v)))
+        (?t "To temporary buffer"
+            (lambda (a s v _b)
+              (org-hugo-export-as-md a s v)))))
   :translate-alist '((headline . org-hugo-headline)
                      (src-block . org-hugo-src-block)
                      (link . org-hugo-link))
-  :filters-alist '((:filter-body . org-hugo-body-filter)
-                   ;; (:filter-link . org-hugo-image-filter)
-                   )
+  :filters-alist '((:filter-body . org-hugo-body-filter))
 
   ;;                KEY                       KEYWORD                    OPTION  DEFAULT                     BEHAVIOR
   :options-alist '(;; Non-front-matter options
@@ -773,19 +782,6 @@ non-nil."
       async subtreep visible-only nil nil (lambda () (text-mode)))))
 
 ;;;###autoload
-(defun org-hugo-convert-region-to-md ()
-  "Convert text in the current region to Hugo-compatible Markdown.
-The text is assumed to be in Org mode format.
-
-This can be used in any buffer.  For example, you can write an
-itemized list in Org mode syntax in a Markdown buffer and use
-this command to convert it."
-  (interactive)
-  ;; Allow certain `ox-hugo' properties to be inherited.
-  (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
-    (org-export-replace-region-by 'hugo)))
-
-;;;###autoload
 (defun org-hugo-export-to-md (&optional async subtreep visible-only)
   "Export current buffer to a Hugo-compatible Markdown file.
 
@@ -828,24 +824,50 @@ Return output file's name."
     (org-export-to-file 'hugo outfile async subtreep visible-only)))
 
 ;;;###autoload
-(defun org-hugo-publish-subtree (&optional all-subtrees)
+(defun org-hugo-publish-to-md (plist filename pub-dir)
+  "Publish an Org file to Hugo-compatible Markdown file.
+
+PLIST is the property list for the given project.  FILENAME is
+the filename of the Org file to be published.  PUB-DIR is the
+publishing directory.
+
+Return output file name."
+  ;; Allow certain `ox-hugo' properties to be inherited.
+  (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
+    (org-publish-org-to 'hugo filename ".md" plist pub-dir)))
+
+;;;###autoload
+(defun org-hugo-export-subtree-to-md (&optional all-subtrees async visible-only)
   "Publish the current subtree to a Hugo post.
 The next parent subtree having the \"EXPORT_FILE_NAME\" property
 is exported if the current subtree doesn't have that property.
 
 If ALL-SUBTREES is non-nil, publish all subtrees in the current
-file."
+file.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously.  The resulting file should be accessible through
+the `org-export-stack' interface.
+
+When optional argument VISIBLE-ONLY is non-nil, don't export
+contents of hidden elements.
+
+Returns output file's name.  If ALL-SUBTREES is non-nil, return
+nil."
   (interactive "P")
   (save-restriction
     (widen)
     (save-excursion
       (if all-subtrees
-          (org-map-entries (lambda ()
-                             (let* ((entry (org-element-at-point))
-                                    (fname (org-element-property :EXPORT_FILE_NAME entry)))
-                               (when fname
-                                 (org-hugo-publish-subtree)))))
-
+          (progn
+            (setq org-hugo--subtree-count 0)
+            (org-map-entries (lambda ()
+                               (let* ((entry (org-element-at-point))
+                                      (fname (org-element-property :EXPORT_FILE_NAME entry)))
+                                 (when fname
+                                   (org-hugo-export-subtree-to-md nil async visible-only)))))
+            (message "[ox-hugo] Exported %d subtrees" org-hugo--subtree-count)
+            nil)
         ;; Publish only the current subtree
         (when (ignore-errors ;.. if the point is currently under an Org headline
                 (org-back-to-heading))
@@ -877,6 +899,8 @@ file."
                 (message "[ox-hugo] `%s' was not exported as it is tagged with one of `org-export-exclude-tags'" title))
                (t
                 (message "[ox-hugo] Exporting `%s' .." title)
+                (when (numberp org-hugo--subtree-count)
+                  (setq org-hugo--subtree-count (1+ org-hugo--subtree-count)))
                 (let* ((todo-keyword (format "%s" (org-get-todo-state)))
                        (draft (cond
                                ((string= "TODO" todo-keyword)
@@ -892,18 +916,7 @@ file."
                   ;; values via variables.
                   (let ((org-hugo--draft-state draft)
                         (org-hugo--tags-list tags))
-                    (org-hugo-export-to-md nil :subtreep))))))))))))
-
-;;;###autoload
-(defun org-hugo-publish-to-md (plist filename pub-dir)
-  "Publish an Org file to Hugo-compatible Markdown file.
-
-PLIST is the property list for the given project.  FILENAME is
-the filename of the Org file to be published.  PUB-DIR is the
-publishing directory.
-
-Return output file name."
-  (org-publish-org-to 'hugo filename ".md" plist pub-dir))
+                    (org-hugo-export-to-md async :subtreep visible-only))))))))))))
 
 
 (provide 'ox-hugo)

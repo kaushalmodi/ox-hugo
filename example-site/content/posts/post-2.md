@@ -5,4 +5,4 @@ tags = []
 draft = false
 +++
 
-Export this **second** post only by bringing point here and doing `M-x org-hugo-publish-subtree`.
+Export this **second** post only by bringing point here and doing `M-x org-hugo-export-subtree-to-md`.

@@ -107,8 +107,9 @@ directory where all Hugo posts should go by default."
             (lambda (a s v _b)
               (org-hugo-export-as-md a s v)))))
   :translate-alist '((headline . org-hugo-headline)
-                     (src-block . org-hugo-src-block)
-                     (link . org-hugo-link))
+                     (keyword . org-hugo-keyword)
+                     (link . org-hugo-link)
+                     (src-block . org-hugo-src-block))
   :filters-alist '((:filter-body . org-hugo-body-filter))
 
   ;;                KEY                       KEYWORD                    OPTION  DEFAULT                     BEHAVIOR
@@ -286,19 +287,21 @@ section as a string."
     (let ((level-mark (make-string (+ loffset level) ?#)))
       (concat "\n" level-mark " " title " " anchor "\n\n"))))
 
-;;;; Source Blocks
-(defun org-hugo-src-block (src-block _contents info)
-  "Convert SRC-BLOCK element to Hugo-compatible element.
-
- If the HUGO_CODE_FENCE property is set to t (default), the
- Markdown style triple-backquoted code blocks are created.
- Otherwise, the code block is wrapped in Hugo `highlight'
- shortcode."
-  (if (string= "t" (org-export-data (plist-get info :hugo-code-fence) info))
-      (org-blackfriday-src-block src-block nil info)
-    (let* ((lang (org-element-property :language src-block))
-           (code (org-export-format-code-default src-block info)))
-      (format "{{< highlight %s>}}\n%s{{< /highlight >}}\n" lang code))))
+;;;; Keyword
+(defun org-hugo-keyword (keyword contents info)
+  "Transcode a KEYWORD element into Hugo-compatible Markdown format.
+CONTENTS is nil.  INFO is a plist used as a communication
+channel."
+  (let ((kwd (org-element-property :key keyword))
+        (value (org-element-property :value keyword)))
+    (cond
+     ((and (equal "HUGO" kwd)           ;Hugo summary splitting
+           (stringp value)
+           (string-match-p "\\`\\s-*more\\s-*\\'" value))
+      ;; https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting
+      "<!--more-->")
+     (t
+      (org-md-keyword keyword contents info)))))
 
 ;;;; Links
 (defun org-hugo-link (link contents info)
@@ -435,6 +438,20 @@ INFO is a plist used as a communication channel."
             (copy-file full-path exported-image))
           (concat "/" (file-name-as-directory (plist-get info :hugo-static-images)) file-name))
       path)))
+
+;;;; Source Blocks
+(defun org-hugo-src-block (src-block _contents info)
+  "Convert SRC-BLOCK element to Hugo-compatible element.
+
+ If the HUGO_CODE_FENCE property is set to t (default), the
+ Markdown style triple-backquoted code blocks are created.
+ Otherwise, the code block is wrapped in Hugo `highlight'
+ shortcode."
+  (if (string= "t" (org-export-data (plist-get info :hugo-code-fence) info))
+      (org-blackfriday-src-block src-block nil info)
+    (let* ((lang (org-element-property :language src-block))
+           (code (org-export-format-code-default src-block info)))
+      (format "{{< highlight %s>}}\n%s{{< /highlight >}}\n" lang code))))
 
 
 ;;; Filter Functions

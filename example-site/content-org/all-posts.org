@@ -392,6 +392,15 @@ Here the front matter format is set to YAML using the
 =HUGO_FRONT_MATTER_FORMAT= key in property drawer.
 
 Here there is white space in menu name property.
+* Post body
+** Summary Splitter
+:PROPERTIES:
+:EXPORT_FILE_NAME: summary-splitter
+:EXPORT_DATE: 2017-07-21
+:END:
+Here is the summary.
+#+HUGO: more
+Here is text after the [[https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting][summary splitter]].
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

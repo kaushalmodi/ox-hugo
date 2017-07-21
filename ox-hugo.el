@@ -53,6 +53,19 @@
   "Variable to store the count of subtrees getting exported when
 exporting all subtrees in a file.")
 
+(defvar org-hugo-allow-export-after-save t
+  "When nil, `org-hugo-export-subtree-to-md-after-save' will not
+be able to export the Org file to Hugo-compatible Markdown.
+
+This variable is usually set to nil by the user in
+`org-capture-before-finalize-hook' and set to t again in
+`org-capture-after-finalize-hook', so that the export does not
+happen as soon as a new post is created using Org capture.
+
+Note that the export after save will not work until
+`org-hugo-export-subtree-to-md-after-save' is added to the
+`after-save-hook' by the user.")
+
 
 ;;; User-Configurable Variables
 
@@ -239,6 +252,7 @@ a communication channel."
                   contents)))))))
 
 ;;;;; Headline Helpers
+;;;###autoload
 (defun org-hugo--slug (str)
   "Return a slug string for STR.
 STR is in Markdown format, most likely a Markdown heading.  The
@@ -772,7 +786,9 @@ are \"toml\" and \"yaml\"."
 (defun org-hugo--get-valid-subtree ()
   "Return the org element for a valid Hugo post subtree.
 The condition to check validity is that the EXPORT_FILE_NAME
-property is defined for the subtree element."
+property is defined for the subtree element.
+
+Returns nil if a valid Hugo post subtree is not found."
   (catch 'break
     (while :infinite
       (let* ((entry (org-element-at-point))
@@ -953,54 +969,71 @@ nil."
             (message "[ox-hugo] Exported %d subtrees" org-hugo--subtree-count)
             nil)
         ;; Publish only the current subtree
-        (when (ignore-errors ;.. if the point is currently under an Org headline
-                (org-back-to-heading))
-          (let ((entry (org-hugo--get-valid-subtree))
-                is-commented tags is-excluded)
+        (org-back-to-heading)
+        (let ((entry (org-hugo--get-valid-subtree))
+              is-commented tags is-excluded)
 
-            (unless entry
-              (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property"))
+          (unless entry
+            (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property"))
 
-            ;; If entry is a valid Hugo post subtree, proceed ..
-            (setq org-hugo--subtree-coord (org-hugo--get-post-subtree-coordinates entry))
+          ;; If entry is a valid Hugo post subtree, proceed ..
+          (setq org-hugo--subtree-coord (org-hugo--get-post-subtree-coordinates entry))
 
-            (setq is-commented (org-element-property :commentedp entry))
-            ;; (setq tags (org-get-tags)) ;Return a list of tags *only* at the current heading
-            (let ((org-use-tag-inheritance t))
-              (setq tags (org-get-tags-at))) ;Return a list of tags at current heading
+          (setq is-commented (org-element-property :commentedp entry))
+          ;; (setq tags (org-get-tags)) ;Return a list of tags *only* at the current heading
+          (let ((org-use-tag-inheritance t))
+            (setq tags (org-get-tags-at))) ;Return a list of tags at current heading
                                         ;+ inherited ones!
-            (dolist (exclude-tag org-export-exclude-tags)
-              (when (member exclude-tag tags)
-                (setq is-excluded t)))
-            ;; (message "[current subtree DBG] entry: %S" entry)
-            ;; (message "[current subtree DBG] is-commented:%S, tags:%S, is-excluded:%S"
-            ;;          is-commented tags is-excluded)
-            (let ((title (org-element-property :title entry)))
-              (cond
-               (is-commented
-                (message "[ox-hugo] `%s' was not exported as that subtree is commented" title))
-               (is-excluded
-                (message "[ox-hugo] `%s' was not exported as it is tagged with one of `org-export-exclude-tags'" title))
-               (t
-                (message "[ox-hugo] Exporting `%s' .." title)
-                (when (numberp org-hugo--subtree-count)
-                  (setq org-hugo--subtree-count (1+ org-hugo--subtree-count)))
-                (let* ((todo-keyword (format "%s" (org-get-todo-state)))
-                       (draft (cond
-                               ((string= "TODO" todo-keyword)
-                                "true")
-                               ((string= "DRAFT" todo-keyword)
-                                (message "[ox-hugo] `%s' post is marked as a draft" title)
-                                "true")
-                               (t
-                                "false"))))
-                  ;; (message "[current subtree DBG] draft:%S" draft)
-                  ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
-                  ;; FIXME: Is there a better way than passing these
-                  ;; values via variables.
-                  (let ((org-hugo--draft-state draft)
-                        (org-hugo--tags-list tags))
-                    (org-hugo-export-to-md async :subtreep visible-only))))))))))))
+          (dolist (exclude-tag org-export-exclude-tags)
+            (when (member exclude-tag tags)
+              (setq is-excluded t)))
+          ;; (message "[current subtree DBG] entry: %S" entry)
+          ;; (message "[current subtree DBG] is-commented:%S, tags:%S, is-excluded:%S"
+          ;;          is-commented tags is-excluded)
+          (let ((title (org-element-property :title entry)))
+            (cond
+             (is-commented
+              (message "[ox-hugo] `%s' was not exported as that subtree is commented" title))
+             (is-excluded
+              (message "[ox-hugo] `%s' was not exported as it is tagged with one of `org-export-exclude-tags'" title))
+             (t
+              (message "[ox-hugo] Exporting `%s' .." title)
+              (when (numberp org-hugo--subtree-count)
+                (setq org-hugo--subtree-count (1+ org-hugo--subtree-count)))
+              (let* ((todo-keyword (format "%s" (org-get-todo-state)))
+                     (draft (cond
+                             ((string= "TODO" todo-keyword)
+                              "true")
+                             ((string= "DRAFT" todo-keyword)
+                              (message "[ox-hugo] `%s' post is marked as a draft" title)
+                              "true")
+                             (t
+                              "false"))))
+                ;; (message "[current subtree DBG] draft:%S" draft)
+                ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
+                ;; FIXME: Is there a better way than passing these
+                ;; values via variables.
+                (let ((org-hugo--draft-state draft)
+                      (org-hugo--tags-list tags))
+                  (org-hugo-export-to-md async :subtreep visible-only)))))))))))
+
+;;;###autoload
+(defun org-hugo-export-subtree-to-md-after-save ()
+  "Fn for `after-save-hook' to run `org-hugo-export-subtree-to-md'.
+Executes `org-hugo-export-subtree-to-md', but only when in a
+valid Hugo post subtree.
+
+The export is also skipped if `org-hugo-allow-export-after-save'
+is nil."
+  (save-excursion
+    (when (and
+           org-hugo-allow-export-after-save
+           ;; Condition 1: Point must be under an Org headline
+           (ignore-errors
+             (org-back-to-heading))
+           ;; Condition 2: Point must be in a valid Hugo post subtree
+           (org-hugo--get-valid-subtree))
+      (org-hugo-export-subtree-to-md))))
 
 
 (provide 'ox-hugo)

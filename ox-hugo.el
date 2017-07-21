@@ -46,6 +46,9 @@
 (defvar org-hugo--tags-list nil
   "State variable to store the tags of the subtree to be exported.")
 
+(defvar org-hugo--subtree-coord nil
+  "State variable to store the current valid Hugo subtree coordinates.")
+
 
 ;;; User-Configurable Variables
 
@@ -129,7 +132,7 @@ directory where all Hugo posts should go by default."
                    (:hugo-iscjklanguage "HUGO_ISCJKLANGUAGE" nil nil)
                    ;; keywords
                    ;; "keywords" is parsed from the Org #+KEYWORDS or subtree property EXPORT_KEYWORDS
-                   (:keywords "KEYWORDS" nil nil)
+                   (:keywords "KEYWORDS" nil nil 'space)
                    ;; layout
                    (:hugo-layout "HUGO_LAYOUT" nil nil)
                    ;; lastmod
@@ -436,23 +439,39 @@ INFO is a plist holding export options."
   (format "%s\n%s" (org-hugo--get-front-matter info) body))
 
 ;;;;; Hugo Front Matter
-(defun org-hugo--wrap-string-in-quotes (str)
-  "Wrap STR with double quotes and return the string."
-  (cond ((string-empty-p str)
-         "")
-        ((and (string= (substring str 0 1) "\"")
-              (string= (substring str -1) "\""))
-         str)
-        (t
-         (concat "\"" str "\""))))
+(defun org-hugo--quote-string (val &optional prefer-no-quotes)
+  "Wrap VAL with double quotes if it is a string.
 
-(defun org-hugo--parse-menu-prop-to-alist (menu-prop-str)
-  "Return an alist converted from a string of Hugo menu
-properties.
+VAL is returned as-it-is under the following cases:
+- It is not a string (or nil).
+- It is a string and is already wrapped with double quotes.
+- It is a string and it's value is \"true\" or \"false\".
+- It is a string representing a date.
+
+If PREFER-NO-QUOTES is non-nil, return the VAL as-it-is if it's a
+string with just alphanumeric characters."
+  (cond
+   ((or (null val)                ;nil
+        (not (stringp val))       ;could be a number, like menu weight
+        (and (string= (substring val 0 1) "\"") ;First char is literally a "
+             (string= (substring val -1) "\"")) ;Last char is literally a "
+        (string= "true" val)
+        (string= "false" val)
+        ;; or if it is a date (date, publishDate, expiryDate, lastmod)
+        (string-match-p "\\`[-0-9T:]+\\'" val))
+    val)
+   ((and prefer-no-quotes
+         (string-match-p "\\`[a-zA-Z0-9]+\\'" val))
+    val)
+   (t
+    (concat "\"" val "\""))))
+
+(defun org-hugo--parse-menu-prop-to-alist (str)
+  "Return an alist converted from a string STR of Hugo menu properties.
 
 Example: Input MENU-PROP-STR \":name foo :weight 80\" would
 convert to an alist ((:name . \"foo\") (:weight . 80))."
-  (let ((menu-alist (org-babel-parse-header-arguments menu-prop-str))
+  (let ((menu-alist (org-babel-parse-header-arguments str))
         ret)
     ;; Hugo menu properties: https://gohugo.io/content-management/menus/
     (dolist (prop '(menu name url identifier pre post weight parent)) ;children prop is probably read-only
@@ -549,8 +568,8 @@ are \"toml\" and \"yaml\"."
       (let ((key (symbol-name (car pair)))
             (value (cdr pair)))
         ;; (message "[hugo fm key value DBG] %S %S" key value)
-        (unless (or (null value)
-                    (and (stringp value)
+        (unless (or (null value) ;Skip writing front matter variables whose value is nil
+                    (and (stringp value) ;or an empty string.
                          (string= "" value)))
           ;; In TOML/YAML, the value portion needs to be wrapped in
           ;; double quotes.
@@ -563,19 +582,29 @@ are \"toml\" and \"yaml\"."
           ;; table. So it needs to be always added to the end of the
           ;; front matter. So generate the `menu-string' separately
           ;; and then append it to `front-matter' at the end.
-          (if (string= key "menu")
-              (let* (;; Menu properties: https://gohugo.io/content-management/menus/
-                     (menu-alist value)
-                     ;; Menu name needs to be non-nil to insert menu
-                     ;; info in front matter.
-                     (menu-entry (cdr (assoc 'menu menu-alist)))
-                     ;; Wrap the menu-entry with double quotes if it
-                     ;; contains non-alphabetical characters.
-                     (menu-entry (if (string-match-p "\\`[a-zA-Z]+\\'" menu-entry)
-                                     menu-entry
-                                   (org-hugo--wrap-string-in-quotes menu-entry)))
+          (cond
+           ((string= key "menu")
+            ;; Menu name needs to be non-nil to insert menu info in front matter.
+            (when (assoc 'menu value)
+              (let* ((menu-alist value)
+                     ;; Menu entry string might need to be quoted if
+                     ;; it contains spaces, for example.
+                     (menu-entry (org-hugo--quote-string (cdr (assoc 'menu menu-alist)) :prefer-no-quotes))
                      (menu-entry-str "")
                      (menu-value-str ""))
+                ;; Auto-set menu identifier if not already set by user.
+                (unless (assoc 'identifier menu-alist)
+                  (let ((title (cdr (assoc 'title data))))
+                    (push `(identifier . ,(org-hugo--slug title)) menu-alist)))
+
+                ;; Auto-set menu weight if not already set by user.
+                (unless (assoc 'weight menu-alist)
+                  (when org-hugo--subtree-coord
+                    (let* ((level (car org-hugo--subtree-coord))
+                           (index (cdr org-hugo--subtree-coord))
+                           (weight (+ (* 1000 level) index)))
+                      (push `(weight . ,weight) menu-alist))))
+
                 (message "[menu alist DBG] = %S" menu-alist)
                 (when menu-entry
                   (setq menu-entry-str (cond ((string= format "toml")
@@ -592,35 +621,38 @@ are \"toml\" and \"yaml\"."
                       ;; (message "menu DBG: %S %S %S" menu-entry menu-key menu-value)
                       (unless (string= "menu" menu-key)
                         (when menu-value
-                          (unless (string= menu-key "weight")
-                            (setq menu-value (org-hugo--wrap-string-in-quotes menu-value)))
+                          ;; Cannot skip quote wrapping for values of keys inside menu.
+                          ;; Attempting to do:
+                          ;;   [menu.foo]
+                          ;;     parent = main
+                          ;;     # parent = "main" # But this works
+                          ;; gives this error:
+                          ;; ERROR 2017/07/21 10:56:07 failed to parse page metadata
+                          ;; for "singles/post-draft.md": Near line 10 (last key parsed
+                          ;; 'menu.foo.parent'): expected value but found "main" instead.
+                          (setq menu-value (org-hugo--quote-string menu-value))
                           (setq menu-value-str
                                 (concat menu-value-str
                                         (format "%s%s %s %s\n"
                                                 indent menu-key sign menu-value)))))))
-                  (setq menu-string (concat menu-entry-str menu-value-str))))
+                  (setq menu-string (concat menu-entry-str menu-value-str))))))
+           (t
             (setq front-matter
                   (concat front-matter
                           (format "%s %s %s\n"
                                   key
                                   sign
                                   (cond ((or (string= key "tags")
-                                             (string= key "categories"))
+                                             (string= key "categories")
+                                             (string= key "keywords"))
                                          ;; "abc def" -> "[\"abc\", \"def\"]"
                                          (concat "["
                                                  (mapconcat #'identity
-                                                            (mapcar #'org-hugo--wrap-string-in-quotes
+                                                            (mapcar #'org-hugo--quote-string
                                                                     (split-string value)) ", ")
                                                  "]"))
-                                        ;; There is no need to wrap strings not expected to contain spaces in
-                                        ;; double quotes, like date strings, draft state, etc.
-                                        ((or (string= key "date")
-                                             (string= key "publishdate")
-                                             (string= key "expirydate")
-                                             (string= key "draft"))
-                                         value)
                                         (t
-                                         (org-hugo--wrap-string-in-quotes value))))))))))
+                                         (org-hugo--quote-string value)))))))))))
     (concat sep front-matter menu-string sep)))
 
 (defun org-hugo--selective-property-inheritance ()
@@ -643,6 +675,71 @@ are \"toml\" and \"yaml\"."
       (let ((prop (concat "EXPORT_" prop)))
         (push prop prop-list-allow-inheritance)))
     prop-list-allow-inheritance))
+
+(defun org-hugo--get-valid-subtree ()
+  "Return the org element for a valid Hugo post subtree.
+The condition to check validity is that the EXPORT_FILE_NAME
+property is defined for the subtree element."
+  (catch 'break
+    (while :infinite
+      (let* ((entry (org-element-at-point))
+             (fname (org-element-property :EXPORT_FILE_NAME entry))
+             level)
+        (when fname
+          (throw 'break entry))
+        ;; Keep on jumping to the parent heading if the current
+        ;; entry does not have an EXPORT_FILE_NAME property.
+        (setq level (org-up-heading-safe))
+        ;; If no more parent heading exists, break out of the loop
+        ;; and return nil
+        (unless level
+          (throw 'break nil))))))
+
+(defun org-hugo--get-post-subtree-coordinates (&optional subtree)
+  "Return the coordinates for a valid Hugo post subtree.
+
+If SUBTREE is non-nil, return the coordinates for that subtree,
+else return the coordinates for the current valid Hugo subtree.
+
+The returned value is of type (LEVEL . INDEX) where LEVEL is the
+level number of the subtree and INDEX is as explained in the
+below example.
+
+If we have
+
+  * Level 1
+  ** Level A
+  ** Level B
+  ** Level C
+
+this function will return 1 for Level 1 and Level A, 2 for Level
+B and 3 for Level C.
+
+So the value returned for Level C would be (2 . 3).
+
+If the point is not in a valid Hugo post subtree, nil is returned."
+  (save-restriction
+    (widen)
+    (save-excursion
+      (org-back-to-heading)
+      (let* ((entry (if subtree
+                        subtree
+                      (org-hugo--get-valid-subtree)))
+             (level (org-element-property :level entry))
+             (index 0))
+        (when level
+          (let ((curr-line (line-number-at-pos))
+                prev-line)
+            (catch 'break
+              (while :infinite
+                (if (and prev-line
+                         (= curr-line prev-line))
+                    (throw 'break nil)
+                  (setq prev-line curr-line)
+                  (org-backward-heading-same-level 1)
+                  (setq curr-line (line-number-at-pos))
+                  (setq index (1+ index))))))
+          (cons level index))))))
 
 ;;; Interactive functions
 
@@ -752,64 +849,57 @@ file."
         ;; Reset the state variables first
         (setq org-hugo--draft-state nil)
         (setq org-hugo--tags-list nil)
+        (setq org-hugo--subtree-coord nil)
 
         (org-back-to-heading)
-        (let ((entry (catch 'break
-                       (while :infinite
-                         (let* ((entry (org-element-at-point))
-                                (fname (org-element-property :EXPORT_FILE_NAME entry))
-                                level)
-                           (when fname
-                             (throw 'break entry))
-                           ;; Keep on jumping to the parent heading if the current
-                           ;; entry does not have an EXPORT_FILE_NAME property.
-                           (setq level (org-up-heading-safe))
-                           ;; If no more parent heading exists, break out of the loop
-                           ;; and return nil
-                           (unless level
-                             (throw 'break nil))))))
+        (let ((entry (org-hugo--get-valid-subtree))
               is-commented tags is-excluded)
-          (if entry
-              (progn
-                (setq is-commented (org-element-property :commentedp entry))
-                ;; (setq tags (org-get-tags)) ;Return a list of tags *only* at the current heading
-                (setq tags (org-get-tags-at)) ;Return a list of tags at current heading
+
+          (unless entry
+            (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property"))
+
+          ;; If entry is a valid Hugo post subtree, proceed ..
+          (setq org-hugo--subtree-coord (org-hugo--get-post-subtree-coordinates entry))
+
+          (setq is-commented (org-element-property :commentedp entry))
+          ;; (setq tags (org-get-tags)) ;Return a list of tags *only* at the current heading
+          (setq tags (org-get-tags-at)) ;Return a list of tags at current heading
                                         ;+ inherited ones! Needs `org-use-tag-inheritance' to be t.
-                (dolist (exclude-tag org-export-exclude-tags)
-                  (when (member exclude-tag tags)
-                    (setq is-excluded t)))
-                ;; (message "[current subtree DBG] entry: %S" entry)
-                ;; (message "[current subtree DBG] is-commented:%S, tags:%S, is-excluded:%S"
-                ;;          is-commented tags is-excluded)
-                (let ((title (org-element-property :title entry)))
-                  (cond
-                   (is-commented
-                    (message "[ox-hugo] `%s' was not exported as that subtree is commented" title))
-                   (is-excluded
-                    (message "[ox-hugo] `%s' was not exported as it is tagged with one of `org-export-exclude-tags'" title))
-                   (t
-                    (message "[ox-hugo] Exporting `%s' .." title)
-                    (let* ((todo-keyword (format "%s" (org-get-todo-state)))
-                           (draft (cond
-                                   ((string= "TODO" todo-keyword)
-                                    "true")
-                                   ((string= "DRAFT" todo-keyword)
-                                    (message "[ox-hugo] `%s' post is marked as a draft" title)
-                                    "true")
-                                   (t
-                                    "false"))))
-                      ;; (message "[current subtree DBG] draft:%S" draft)
-                      ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
-                      ;; FIXME: Is there a better way than passing these
-                      ;; values via global variables.
-                      (setq org-hugo--draft-state draft)
-                      (setq org-hugo--tags-list tags)
-                      (org-hugo-export-to-md nil :subtreep))))))
-            (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property")))
+          (dolist (exclude-tag org-export-exclude-tags)
+            (when (member exclude-tag tags)
+              (setq is-excluded t)))
+          ;; (message "[current subtree DBG] entry: %S" entry)
+          ;; (message "[current subtree DBG] is-commented:%S, tags:%S, is-excluded:%S"
+          ;;          is-commented tags is-excluded)
+          (let ((title (org-element-property :title entry)))
+            (cond
+             (is-commented
+              (message "[ox-hugo] `%s' was not exported as that subtree is commented" title))
+             (is-excluded
+              (message "[ox-hugo] `%s' was not exported as it is tagged with one of `org-export-exclude-tags'" title))
+             (t
+              (message "[ox-hugo] Exporting `%s' .." title)
+              (let* ((todo-keyword (format "%s" (org-get-todo-state)))
+                     (draft (cond
+                             ((string= "TODO" todo-keyword)
+                              "true")
+                             ((string= "DRAFT" todo-keyword)
+                              (message "[ox-hugo] `%s' post is marked as a draft" title)
+                              "true")
+                             (t
+                              "false"))))
+                ;; (message "[current subtree DBG] draft:%S" draft)
+                ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
+                ;; FIXME: Is there a better way than passing these
+                ;; values via global variables.
+                (setq org-hugo--draft-state draft)
+                (setq org-hugo--tags-list tags)
+                (org-hugo-export-to-md nil :subtreep))))))
 
         ;; Reset the state variables again at the end.
         (setq org-hugo--draft-state nil)
-        (setq org-hugo--tags-list nil)))))
+        (setq org-hugo--tags-list nil)
+        (setq org-hugo--subtree-coord nil)))))
 
 ;;;###autoload
 (defun org-hugo-publish-to-md (plist filename pub-dir)

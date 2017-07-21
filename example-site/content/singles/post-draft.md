@@ -1,12 +1,13 @@
 +++
 title = "Single Post, but draft"
 date = 2017-07-20
-publishDate = "2017-07-22"
-expiryDate = "2017-07-23"
+publishDate = 2017-07-22
+expiryDate = 2017-07-23
 tags = ["single", "toml"]
 categories = ["cat1", "cat2"]
 draft = true
 [menu.foo]
+  identifier = "single-post-but-draft"
   parent = "main"
   weight = 10
 +++

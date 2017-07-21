@@ -5,6 +5,7 @@ tags : ["menu", "yaml"]
 draft : false
 menu :
   main:
+    identifier : "white-space-in-menu-name"
     parent : "posts"
     weight : 25
     name : "Menu in YAML"

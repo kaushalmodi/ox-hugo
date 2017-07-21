@@ -4,6 +4,7 @@ date = 2017-07-18
 tags = ["menu"]
 draft = false
 [menu.test]
+  identifier = "overriding-menu-properties-completely"
   weight = 50
 +++
 

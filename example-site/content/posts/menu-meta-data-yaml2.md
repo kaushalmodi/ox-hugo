@@ -5,6 +5,7 @@ tags : ["menu", "yaml"]
 draft : false
 menu :
   "something here":
+    identifier : "white-space-in-menu-entry"
     weight : 25
 ---
 

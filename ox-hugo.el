@@ -845,12 +845,8 @@ file."
                                     (fname (org-element-property :EXPORT_FILE_NAME entry)))
                                (when fname
                                  (org-hugo-publish-subtree)))))
-        ;; Publish only the current subtree
-        ;; Reset the state variables first
-        (setq org-hugo--draft-state nil)
-        (setq org-hugo--tags-list nil)
-        (setq org-hugo--subtree-coord nil)
 
+        ;; Publish only the current subtree
         (org-back-to-heading)
         (let ((entry (org-hugo--get-valid-subtree))
               is-commented tags is-excluded)
@@ -863,8 +859,9 @@ file."
 
           (setq is-commented (org-element-property :commentedp entry))
           ;; (setq tags (org-get-tags)) ;Return a list of tags *only* at the current heading
-          (setq tags (org-get-tags-at)) ;Return a list of tags at current heading
-                                        ;+ inherited ones! Needs `org-use-tag-inheritance' to be t.
+          (let ((org-use-tag-inheritance t))
+            (setq tags (org-get-tags-at))) ;Return a list of tags at current heading
+                                        ;+ inherited ones!
           (dolist (exclude-tag org-export-exclude-tags)
             (when (member exclude-tag tags)
               (setq is-excluded t)))
@@ -891,15 +888,10 @@ file."
                 ;; (message "[current subtree DBG] draft:%S" draft)
                 ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
                 ;; FIXME: Is there a better way than passing these
-                ;; values via global variables.
-                (setq org-hugo--draft-state draft)
-                (setq org-hugo--tags-list tags)
-                (org-hugo-export-to-md nil :subtreep))))))
-
-        ;; Reset the state variables again at the end.
-        (setq org-hugo--draft-state nil)
-        (setq org-hugo--tags-list nil)
-        (setq org-hugo--subtree-coord nil)))))
+                ;; values via variables.
+                (let ((org-hugo--draft-state draft)
+                      (org-hugo--tags-list tags))
+                  (org-hugo-export-to-md nil :subtreep)))))))))))
 
 ;;;###autoload
 (defun org-hugo-publish-to-md (plist filename pub-dir)

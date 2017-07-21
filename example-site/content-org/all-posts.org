@@ -401,6 +401,28 @@ Here there is white space in menu name property.
 Here is the summary.
 #+HUGO: more
 Here is text after the [[https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting][summary splitter]].
+* Footnotes Test                                                   :footnote:
+** Footnotes 1
+:PROPERTIES:
+:EXPORT_DATE: 2017-07-21
+:EXPORT_FILE_NAME: footnotes-1
+:END:
+This is some text[fn:1].
+
+/Note to self: You *cannot* name an Org heading 'Footnotes'; that's
+reserved by Org to store all the footnotes./
+** Footnotes 2
+:PROPERTIES:
+:EXPORT_DATE: 2017-07-21
+:EXPORT_FILE_NAME: footnotes-2
+:END:
+This is some text[fn:2].
+** Footnotes in a row
+:PROPERTIES:
+:EXPORT_FILE_NAME: footnotes-in-a-row
+:EXPORT_DATE: 2017-07-21
+:END:
+This is some text[fn:1][fn:2].
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo
@@ -423,6 +445,11 @@ Idea is to mark a post as =DRAFT= that you have already started
 writing, or are in the process at the moment, but it is not yet ready
 to be published
 * COMMENT Local Variables                                           :ARCHIVE:
+* Footnotes
+
+[fn:2] Second footnote
+
+[fn:1] First footnote
 # Local Variables:
 # fill-column: 70
 # eval: (auto-fill-mode 1)

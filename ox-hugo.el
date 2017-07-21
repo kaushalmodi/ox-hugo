@@ -82,7 +82,7 @@ directory where all Hugo posts should go by default."
 
 ;;; Define Back-End
 
-(org-export-define-derived-backend 'hugo 'blackfriday
+(org-export-define-derived-backend 'hugo 'blackfriday ;hugo < blackfriday < md < html
   :menu-entry
   '(?H "Export to Hugo-compatible Markdown"
        ((?H "Subtree to file"
@@ -106,7 +106,9 @@ directory where all Hugo posts should go by default."
         (?t "To temporary buffer"
             (lambda (a s v _b)
               (org-hugo-export-as-md a s v)))))
-  :translate-alist '((headline . org-hugo-headline)
+  :translate-alist '((footnote-reference . org-hugo-footnote-reference)
+                     (headline . org-hugo-headline)
+                     (inner-template . org-hugo-inner-template)
                      (keyword . org-hugo-keyword)
                      (link . org-hugo-link)
                      (src-block . org-hugo-src-block))
@@ -173,6 +175,27 @@ directory where all Hugo posts should go by default."
 
 
 ;;; Transcode Functions
+
+;;;; Footnote Reference
+(defun org-hugo-footnote-reference (footnote-reference _contents info)
+  "Transcode a FOOTNOTE-REFERENCE element from Org to Hugo-compatible Markdown.
+CONTENTS is nil.  INFO is a plist holding contextual information."
+  ;; (message "footref: %s" footnote-reference)
+  (concat
+   ;; Insert separator between two footnotes in a row.
+   (let ((prev (org-export-get-previous-element footnote-reference info)))
+     (when (eq (org-element-type prev) 'footnote-reference)
+       (plist-get info :html-footnote-separator)))
+   (let* ((n (org-export-get-footnote-number footnote-reference info))
+	  (id (format "fn:%d%s"
+		      n
+                      ;; Fri Jul 21 13:55:25 EDT 2017 - kmodi
+                      ;; TODO - Need to figure out what below does.
+		      (if (org-export-footnote-first-reference-p
+			   footnote-reference info)
+			  ""
+			".100"))))
+     (format "[^%s]" id))))
 
 ;;;; Headline
 (defun org-hugo-headline (headline contents info)
@@ -286,6 +309,58 @@ section as a string."
     ;; of a post to look the exact same as the post's title.
     (let ((level-mark (make-string (+ loffset level) ?#)))
       (concat "\n" level-mark " " title " " anchor "\n\n"))))
+
+;;;; Inner Template
+(defun org-hugo-footnote-section (info)
+  "Format the footnote section.
+INFO is a plist used as a communication channel."
+  (let* ((fn-alist (org-export-collect-footnote-definitions info))
+         ;; Fri Jul 21 14:33:25 EDT 2017 - kmodi
+         ;; TODO: Need to learn using cl-loop
+         ;; Below form from ox-md did not work.
+         ;; (fn-alist-stripped
+         ;;  (cl-loop for (n raw) in fn-alist collect
+         ;;           (cons n (org-trim (org-export-data raw info)))))
+         fn-alist-stripped)
+    (let ((n 1)
+          def)
+      (dolist (fn fn-alist)
+        ;; (message "fn: %S" fn)
+        ;; (message "fn: %s" (org-export-data fn info)) ;This gives error
+        ;; (message "fn nth 2 car: %s" (org-export-data (nth 2 fn) info))
+        (setq def (org-trim (org-export-data (nth 2 fn) info)))
+        (push (cons n def) fn-alist-stripped)
+        (setq n (1+ n))))
+    (when fn-alist-stripped
+      (mapconcat (lambda (fn)
+                   (format "[^fn:%d]: %s"
+                           (car fn)     ;footnote number
+                           (cdr fn)))   ;footnote definition
+                 (nreverse fn-alist-stripped)
+                 "\n"))))
+
+;;;; Template
+(defun org-hugo-inner-template (contents info)
+  "Return body of document after converting it to Hugo-compatible Markdown syntax.
+CONTENTS is the transcoded contents string.  INFO is a plist
+holding export options."
+  (let* (;; (depth (plist-get info :with-toc))
+         ;; (headlines (and depth (org-export-collect-headlines info depth)))
+         ;; (toc-tail (if headlines "\n\n" ""))
+         ;; (toc-string "")
+         )
+
+    ;; (when headlines
+    ;;   (dolist (headline headlines)
+    ;;     (setq toc-string (concat toc-string
+    ;;                              (org-blackfriday-format-toc headline info)
+    ;;                              "\n"))))
+
+    (org-trim (concat ;; toc-string
+               ;; toc-tail
+               contents
+               "\n"
+               (org-hugo-footnote-section info)))))
 
 ;;;; Keyword
 (defun org-hugo-keyword (keyword contents info)

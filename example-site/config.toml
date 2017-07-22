@@ -3,6 +3,8 @@ languageCode = "en-us"
 title = "My Org-exported Hugo Site"
 theme = "bare_min"
 canonifyURLs = true
+enableEmoji = true
+
 [[menu.main]]
 name = "labs"
 weight = -110

@@ -401,6 +401,21 @@ Here there is white space in menu name property.
 Here is the summary.
 #+HUGO: more
 Here is text after the [[https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting][summary splitter]].
+** Dealing with underscores
+:PROPERTIES:
+:EXPORT_FILE_NAME: dealing-with-underscores
+:EXPORT_DATE: 2017-07-21
+:END:
+This underscore should appear escaped in Markdown: _
+
+This underscore is in a verbatim block, so it should not be escaped:
+=_=
+
+This underscore also shouldn't be escaped as it's in an emoji
+code: :raised_hands:
+
+And these ones should be eventually removed and _underline_ the text
+(/Requires CSS to do so./) -- *Org syntax*.
 * Footnotes Test                                                   :footnote:
 ** Footnotes 1
 :PROPERTIES:

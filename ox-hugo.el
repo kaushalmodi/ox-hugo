@@ -345,7 +345,6 @@ INFO is a plist used as a communication channel."
                  (nreverse fn-alist-stripped)
                  "\n"))))
 
-;;;; Template
 (defun org-hugo-inner-template (contents info)
   "Return body of document after converting it to Hugo-compatible Markdown syntax.
 CONTENTS is the transcoded contents string.  INFO is a plist
@@ -543,6 +542,17 @@ INFO is a plist used as a communication channel."
 
 BODY is the result of the export.
 INFO is a plist holding export options."
+  ;; `org-md-plain-text' would have escaped all underscores in plain
+  ;; text i.e. "_" would have been converted to "\_".
+  ;; We need to undo that underscore escaping in Emoji codes for those
+  ;; to work.
+  ;; Example: Convert ":raised\_hands:" back to ":raised_hands:".
+  ;; More Emoji codes: https://www.emoji.codes/
+  ;; (Requires setting "enableEmoji = true" in config.toml.)
+  (setq body (replace-regexp-in-string
+              "\\(:[a-z0-9]+\\)[\\]\\(_[a-z0-9]+:\\)"
+              "\\1\\2"
+              body))
   (format "%s\n%s" (org-hugo--get-front-matter info) body))
 
 ;;;;; Hugo Front Matter

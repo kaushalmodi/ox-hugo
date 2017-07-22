@@ -7,6 +7,7 @@ draft = false
 
 This is some text[^fn:1].
 
-*Note to self: You **cannot** name an Org heading &rsquo;Footnotes&rsquo;; that&rsquo;s reserved by Org to store all the footnotes.*
+_Note to self: You **cannot** name an Org heading &rsquo;Footnotes&rsquo;; that&rsquo;s
+reserved by Org to store all the footnotes._
 
 [^fn:1]: First footnote

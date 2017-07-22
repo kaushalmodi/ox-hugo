@@ -11,7 +11,7 @@ menu :
     name : "Menu in YAML"
 ---
 
-Testing the addition of *menu* meta data to the YAML front matter.
+Testing the addition of _menu_ meta data to the YAML front matter.
 Here the front matter format is set to YAML using the
 `HUGO_FRONT_MATTER_FORMAT` key in property drawer.
 

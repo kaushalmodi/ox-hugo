@@ -32,7 +32,7 @@ Here are few variables that you might like to change in the `local.mk`:
     {{< /highlight >}}
 -   **`ORG_ADD_CONTRIB`:** Packages from the `contrib/` directory that
     you&rsquo;d like to build along with Org. Below are the ones on my
-    *must-have* list.
+    _must-have_ list.
 
     {{< highlight makefile>}}
     # Define if you want to include some (or all) files from contrib/lisp

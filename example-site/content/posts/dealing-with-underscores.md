@@ -14,4 +14,4 @@ This underscore also shouldn&rsquo;t be escaped as it&rsquo;s in an emoji
 code: :raised_hands:
 
 And these ones should be eventually removed and <span class="underline">underline</span> the text
-(*Requires CSS to do so.*) &#x2013; **Org syntax**.
+(_Requires CSS to do so._) &#x2013; **Org syntax**.

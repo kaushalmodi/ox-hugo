@@ -10,9 +10,9 @@ menu :
     parent : "posts"
 ---
 
-Testing the addition of *menu* meta data to the YAML front
+Testing the addition of _menu_ meta data to the YAML front
 matter. Here the front matter format is set to YAML using the
 `#+HUGO_FRONT_MATTER_FORMAT` keyword.
 
-Later only the *weight* and *identifier* menu properties are
+Later only the _weight_ and _identifier_ menu properties are
 overridden using `EXPORT_HUGO_MENU_OVERRIDE` key in the property drawer.

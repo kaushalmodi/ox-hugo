@@ -416,6 +416,14 @@ code: :raised_hands:
 
 And these ones should be eventually removed and _underline_ the text
 (/Requires CSS to do so./) -- *Org syntax*.
+** Nested bold and italics
+:PROPERTIES:
+:EXPORT_DATE: 2017-07-22
+:EXPORT_FILE_NAME: nested-bold-italics
+:END:
+- /This is italics, and *this is bold too*, and back to plain
+  italics./
+- *This is bold, and /this is italics too/, and back to plain bold.*
 * Footnotes Test                                                   :footnote:
 ** Footnotes 1
 :PROPERTIES:

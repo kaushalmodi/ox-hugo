@@ -9,7 +9,7 @@ draft = false
   identifier = "ov-partial"
 +++
 
-For this post, we should see just the menu *weight* and *identifier*
+For this post, we should see just the menu _weight_ and _identifier_
 properties get overridden.
 
 You need to set unique menu identifiers, else you get a Hugo error

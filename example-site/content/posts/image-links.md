@@ -14,8 +14,8 @@ This is some text before the first heading of this post.
 
 ---
 
-~~To be fixed~~ (**Now fixed**): The sub-headings in a post get exported as *Heading 1*
- instead of *Heading 2*.
+~~To be fixed~~ (**Now fixed**): The sub-headings in a post get exported as _Heading 1_
+ instead of _Heading 2_.
 
 For example, this sub-section&rsquo;s heading is exported as:
 
@@ -33,7 +33,7 @@ instead of
 
 **Solution**: Above is fixed by setting `HUGO_OFFSET_LEVEL` to 1.
 
-So the sub-heading title and the post title both get the *Heading 1*
+So the sub-heading title and the post title both get the _Heading 1_
 tag and look the same size.
 
 

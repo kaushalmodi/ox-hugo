@@ -129,9 +129,10 @@ directory where all Hugo posts should go by default."
 
   ;;                KEY                       KEYWORD                    OPTION  DEFAULT                     BEHAVIOR
   :options-alist '(;; Non-front-matter options
+                   (:with-toc nil "toc" nil) ;No TOC by default
+                   (:preserve-breaks nil "\\n" t) ;Preserve breaks so that text filling in Markdown matches that of Org
                    (:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
                    (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil 1)
-                   (:with-toc nil "toc" nil) ;No TOC by default
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")

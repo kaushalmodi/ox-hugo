@@ -13,19 +13,26 @@ Here are few variables that you might like to change in the `local.mk`:
     prefix = /dir/where/you/want/to/install/org # Default: /usr/share
     ```
 
-    The `.el` files will go to `$(prefix)/emacs/site-lisp/org` by default. If you&rsquo;d like to change that, you can tweak the `lispdir` variable.
--   **`infodir`:** Org Info installation directory. I like to keep the Info file for development version of Org in a separate directory.
+    The `.el` files will go to `$(prefix)/emacs/site-lisp/org` by
+                 default. If you&rsquo;d like to change that, you can tweak the
+                 `lispdir` variable.
+-   **`infodir`:** Org Info installation directory. I like to keep the
+    Info file for development version of Org in a separate
+    directory.
 
     ```makefile
     infodir = $(prefix)/org/info # Default: $(prefix)/info
     ```
--   **`ORG_MAKE_DOC`:** Types of Org documentation you&rsquo;d like to build by default.
+-   **`ORG_MAKE_DOC`:** Types of Org documentation you&rsquo;d like to build by
+    default.
 
     ```makefile
     # Define below you only need info documentation, the default includes html and pdf
     ORG_MAKE_DOC = info pdf card # html
     ```
--   **`ORG_ADD_CONTRIB`:** Packages from the `contrib/` directory that you&rsquo;d like to build along with Org. Below are the ones on my *must-have* list.
+-   **`ORG_ADD_CONTRIB`:** Packages from the `contrib/` directory that
+    you&rsquo;d like to build along with Org. Below are the ones on my
+    *must-have* list.
 
     ```makefile
     # Define if you want to include some (or all) files from contrib/lisp

@@ -11,7 +11,9 @@ categories = ["cat1", "cat2"]
   identifier = "single-toml"
 +++
 
-This is a single post. You do not need to set the `EXPORT_FILE_NAME` property in here. But then you also lose the tag and property inheritance Org awesomeness.
+This is a single post. You do not need to set the `EXPORT_FILE_NAME`
+property in here. But then you also lose the tag and property
+inheritance Org awesomeness.
 
 
 ## First heading in this post {#first-heading-in-this-post}

@@ -5,6 +5,8 @@ tags = []
 draft = true
 +++
 
-If a post has the `TODO` keyword, the `draft` front matter variable should be set to `true`.
+If a post has the `TODO` keyword, the `draft` front matter variable
+should be set to `true`.
 
-Idea to to mark a post or blog idea as `TODO` that you yet have to start writing.
+Idea to to mark a post or blog idea as `TODO` that you yet have to
+start writing.

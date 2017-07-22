@@ -5,6 +5,9 @@ tags = []
 draft = true
 +++
 
-If a post has the `DRAFT` keyword too, the `draft` front matter variable should be set to `true`.
+If a post has the `DRAFT` keyword too, the `draft` front matter variable
+should be set to `true`.
 
-Idea is to mark a post as `DRAFT` that you have already started writing, or are in the process at the moment, but it is not yet ready to be published
+Idea is to mark a post as `DRAFT` that you have already started
+writing, or are in the process at the moment, but it is not yet ready
+to be published

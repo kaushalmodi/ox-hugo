@@ -14,7 +14,8 @@ This is some text before the first heading of this post.
 
 ---
 
-~~To be fixed~~ (**Now fixed**): The sub-headings in a post get exported as *Heading 1* instead of *Heading 2*.
+~~To be fixed~~ (**Now fixed**): The sub-headings in a post get exported as *Heading 1*
+ instead of *Heading 2*.
 
 For example, this sub-section&rsquo;s heading is exported as:
 
@@ -32,7 +33,8 @@ instead of
 
 **Solution**: Above is fixed by setting `HUGO_OFFSET_LEVEL` to 1.
 
-So the sub-heading title and the post title both get the *Heading 1* tag and look the same size.
+So the sub-heading title and the post title both get the *Heading 1*
+tag and look the same size.
 
 
 ## Clickable link that opens the image (works!) {#clickable-link-that-opens-the-image--works}
@@ -42,9 +44,11 @@ So the sub-heading title and the post title both get the *Heading 1* tag and loo
 
 ## Clickable image that opens the image (works!) {#clickable-image-that-opens-the-image--works}
 
-Click below image to jump to the unicorn image. [{{<figure src="/images/org-mode-unicorn-logo.png">}}](/images/org-mode-unicorn-logo.png)
+Click below image to jump to the unicorn image.
+[{{<figure src="/images/org-mode-unicorn-logo.png">}}](/images/org-mode-unicorn-logo.png)
 
--   **NOTE:** `file:` has to be used in both Link and Description components of the Org link.
+-   **NOTE:** `file:` has to be used in both Link and Description components
+    of the Org link.
 
 
 ## Image with `ATTR_HTML` [Issue # 17](https://github.com/kaushalmodi/ox-hugo/issues/17) {#image-with-attr-html-issue-17}

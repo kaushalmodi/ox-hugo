@@ -8,4 +8,5 @@ draft = false
   weight = 50
 +++
 
-For this post, we see that no menu properties are inherited from the parent; only the menu properties set in his subtree are effective.
+For this post, we see that no menu properties are inherited from the
+parent; only the menu properties set in his subtree are effective.

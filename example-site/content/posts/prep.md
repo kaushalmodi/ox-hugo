@@ -5,7 +5,8 @@ tags = []
 draft = false
 +++
 
-1.  Be the root directory for this Hugo site (the directory containing `config.toml`).
+1.  Be the root directory for this Hugo site (the directory containing
+    `config.toml`).
 2.  Run
 
     ```text

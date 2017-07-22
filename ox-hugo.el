@@ -132,6 +132,7 @@ directory where all Hugo posts should go by default."
   :options-alist '(;; Non-front-matter options
                    (:with-toc nil "toc" nil) ;No TOC by default
                    (:preserve-breaks nil "\\n" t) ;Preserve breaks so that text filling in Markdown matches that of Org
+                   (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
                    (:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
                    (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil 1)
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)

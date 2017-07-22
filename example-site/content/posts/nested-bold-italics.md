@@ -1,7 +1,7 @@
 +++
 title = "Nested bold and italics"
 date = 2017-07-22
-tags = []
+tags = ["body"]
 draft = false
 +++
 

@@ -12,4 +12,4 @@ draft = false
     ```text
     hugo server --port 1111
     ```
-3.  See the site served on &ldquo;<http://localhost:1111/>&rdquo;
+3.  See the site served on "<http://localhost:1111/>".

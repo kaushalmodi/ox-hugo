@@ -17,7 +17,7 @@ This is some text before the first heading of this post.
 ~~To be fixed~~ (**Now fixed**): The sub-headings in a post get exported as _Heading 1_
  instead of _Heading 2_.
 
-For example, this sub-section&rsquo;s heading is exported as:
+For example, this sub-section's heading is exported as:
 
 ```text
 # Unclickable image

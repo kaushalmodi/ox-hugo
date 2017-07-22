@@ -14,7 +14,7 @@ Here are few variables that you might like to change in the `local.mk`:
     ```
 
     The `.el` files will go to `$(prefix)/emacs/site-lisp/org` by
-                 default. If you&rsquo;d like to change that, you can tweak the
+                 default. If you'd like to change that, you can tweak the
                  `lispdir` variable.
 -   **`infodir`:** Org Info installation directory. I like to keep the
     Info file for development version of Org in a separate
@@ -23,7 +23,7 @@ Here are few variables that you might like to change in the `local.mk`:
     ```makefile
     infodir = $(prefix)/org/info # Default: $(prefix)/info
     ```
--   **`ORG_MAKE_DOC`:** Types of Org documentation you&rsquo;d like to build by
+-   **`ORG_MAKE_DOC`:** Types of Org documentation you'd like to build by
     default.
 
     ```makefile
@@ -31,7 +31,7 @@ Here are few variables that you might like to change in the `local.mk`:
     ORG_MAKE_DOC = info pdf card # html
     ```
 -   **`ORG_ADD_CONTRIB`:** Packages from the `contrib/` directory that
-    you&rsquo;d like to build along with Org. Below are the ones on my
+    you'd like to build along with Org. Below are the ones on my
     _must-have_ list.
 
     ```makefile

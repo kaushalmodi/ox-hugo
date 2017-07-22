@@ -443,6 +443,26 @@ The strings in these two columns should look the exact same.
 *Note:* There is a rendering issue is Row 5 above. That seems to be a
  corner case, because notice that Row 6 looks fine just because there
  was a trailing period. /Will live with this issue for now./
+** /ndash/ `and` *mdash*
+:PROPERTIES:
+:EXPORT_FILE_NAME: ndash-and-mdash
+:EXPORT_DATE: 2017-07-22
+:END:
+The strings in these two columns should look the exact same.
+|   | Character | Rendered Actual | Rendered Expection |
+|---+-----------+-----------------+--------------------|
+| 1 | Hyphen    | a - b           | a - b              |
+| 2 | Ndash     | a -- b           | a – b              |
+| 3 | Mdash     | a --- b           | a — b              |
+| 4 | Ellipsis  | a ... b           | a … b              |
+#+TBLFM: $1=@#-1
+*** Title sanitization
+This post has italics, monospace and bold in the title. This is to
+test that those markup characters *do not* end up in the =title= front
+matter of the post because HTML does not allow markup in the =<title>=
+section.
+
+So the title of this post should read as "ndash and mdash".
 * Footnotes Test                                                   :footnote:
 ** Footnotes 1
 :PROPERTIES:

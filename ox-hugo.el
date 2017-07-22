@@ -133,6 +133,7 @@ directory where all Hugo posts should go by default."
                    (:with-toc nil "toc" nil) ;No TOC by default
                    (:preserve-breaks nil "\\n" t) ;Preserve breaks so that text filling in Markdown matches that of Org
                    (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
+                   (:with-special-strings nil "-" nil) ;Don't use special strings for ndash, mdash; that is done automatically by Blackfriday
                    (:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
                    (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil 1)
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
@@ -639,6 +640,10 @@ INFO is a plist used as a communication channel."
                     (org-export-data (plist-get info :hugo-tags) info) " "
                     (org-export-data (plist-get info :tags) info))))
          (title (org-export-data (plist-get info :title) info))
+         ;; Sanitize title.. cannot do bold, italics, monospace in title
+         (title (replace-regexp-in-string "\\\\?`" "" title))
+         (title (replace-regexp-in-string "\\`__?\\|\\`\\*\\*?\\|__?\\'\\|\\*\\*?\\'" "" title))
+         (title (replace-regexp-in-string " __?\\|__? \\| \\*\\*?\\|\\*\\*? " " " title))
          (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
          (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
          ;; If menu-alist-override is non-nil, update menu-alist with values from that.

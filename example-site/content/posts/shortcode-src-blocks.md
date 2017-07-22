@@ -1,5 +1,5 @@
 +++
-title = "Source blocks with Hugo `highlight` shortcode"
+title = "Source blocks with Hugo highlight shortcode"
 date = 2017-07-13T17:57:58-04:00
 tags = []
 draft = false

@@ -92,6 +92,14 @@ directory where all Hugo posts should go by default."
   :type 'directory
   :safe 'stringp)
 
+(defcustom org-hugo-footer ""
+  "String to be appended at the end of each Hugo post.
+
+The string needs to be in a Hugo-compatible Markdown format or HTML."
+  :group 'org-export-hugo
+  :type 'string
+  :safe 'stringp)
+
 
 ;;; Define Back-End
 
@@ -570,7 +578,10 @@ INFO is a plist holding export options."
               "\\(:[a-z0-9]+\\)[\\]\\(_[a-z0-9]+:\\)"
               "\\1\\2"
               body))
-  (format "%s\n%s" (org-hugo--get-front-matter info) body))
+  (format "%s\n%s%s"
+          (org-hugo--get-front-matter info)
+          body
+          org-hugo-footer))
 
 ;;;;; Hugo Front Matter
 (defun org-hugo--quote-string (val &optional prefer-no-quotes)

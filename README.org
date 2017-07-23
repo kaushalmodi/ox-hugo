@@ -1,6 +1,4 @@
-*!! Package not yet meant for general public consumption !!*
-
----
+-----
 
 NOTE TO FUTURE CONTRIBUTORS: I plan to merge this package into Org
 source.
@@ -8,45 +6,116 @@ source.
 So please assign your copyright to FSF in order to get your patches
 accepted.
 
-- https://www.gnu.org/licenses/why-assign.html
-- https://www.gnu.org/prep/maintain/html_node/Copyright-Papers.html#Copyright-Papers
+- [[https://www.gnu.org/licenses/why-assign.html][Why assign copyright to FSF?]]
+- [[https://www.gnu.org/prep/maintain/html_node/Copyright-Papers.html#Copyright-Papers][How to start this process]]
 
 As a bonus, once you have assigned your copyright to FSF, doors open up
 for your contributions to Emacs too!
 
----
+-----
 
-This package will be an org exporter backend that exports =org-mode=
-to =markdown= with [[https://gohugo.io/][=hugo=]] -required TOML front-matter. =hugo= also
-supports YAML front-matter but planning to stick with TOML for now.
+=ox-hugo= is an Org exporter backend that exports Org to
+[[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]). That also includes the
+generation of front matter (in TOML or YAML format) required for Hugo
+posts.
 
-What this package is planned to do --
+Here is the blogging flow when using this package:
+- Write blog posts in Org
+  - One post per Org subtree (preferred)
+  - One post per Org file (/works but you won't be able to leverage
+    Org-specific benefits like tag and property inheritance, use of
+    TODO states to translate to post =draft= state, etc./)
+- Export only the *current* post Org subtree
+- Export all post subtrees
+- Set up =org-capture= (see below) to quickly start writing new posts.
+- Use =after-save-hook= to export current post subtree to Markdown on
+  each save.
 
-- Write blog posts and other content in =org-mode=.
-- For *current subtree*
-  - Export the org-mode meta-data and content into a separate markdown
-    file.
-  - Do that with each save.
+This project consists of =ox-blackfriday.el= too. It is a derivation
+of [[https://github.com/larstvei/ox-gfm][=ox-gfm=]] with support added for Blackfriday Markdown tables and
+few other tweaks. =ox-hugo= backend extends from this.
 
-At present this project consists of the following files:
+There is a plan to create a =hugo.el= that would do things like:
+- New post creation using =org-capture= (port code from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]]).
+- Interactive functions to toggle /draft/ state,
+  add/remove/increment/decrement /publishdate/ property.
+- Option to use template =config.toml= and some default hugo theme. So
+  all a new user would need to do is to (i) have the =hugo= [[https://github.com/gohugoio/hugo/releases][binary]] in
+  =PATH= (ii) define their =hugo= blog dir in the =defcustom= (iii)
+  =M-x hugo=.
+- Set separate faces for titles based on /draft/ state and
+  /futureness/.
 
+* Example Hugo site to test this package
+A little [[https://github.com/kaushalmodi/ox-hugo/tree/master/example-site][example-site]] with bare-bones "theme" is used to live-test the
+package (you'll know why theme is double-quoted once you try out the
+example-site on =hugo=.. it's not for visuals.. just for testing :)).
 
-This package might evolve into a multi-.el project.
+Check out the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/example-site/content-org/all-posts.org][example single Org file]]. That is created for testing various
+Org->Hugo content and meta-data translation features. [[https://github.com/kaushalmodi/ox-hugo/tree/master/example-site/content/posts][Here]] are the
+exported Markdown files.
 
-1. An =ox-hugo.el= that just deals with exporting org to md.
-2. A =hugo.el= with helper elisp snippets to do stuff like:
-   - New post creation using =org-capture=.
-   - Single interactive function to export only the current subtree.
-   - Interactive function to toggle /draft/ state,
-     add/remove/increment/decrement /publishdate/ property.
-   - Set separate faces for titles based on /draft/ state and
-     /futureness/.
-   - Option to use template =config.toml= and some default hugo
-     theme. So all a new user would need to do is to (i) have the
-     =hugo= binary in =PATH= (ii) define their =hugo= blog dir in the
-     =defcustom= (iii) =M-x hugo=.
+* Why =ox-hugo=?
+Using Org just as a markup like Markdown is a miniscule part of its
+complete feature-set. Org also allows stuff like:
+- Easy ordering/manipulation/commenting of subtrees
+- Creating tables (with even formulas like in Excel)
+- Directly including source code snippets from external files (instead
+  of having to copy/paste them in)
+- Running code snippets within the Org file and embedding the results
+  (Org Babel)
+- ..
 
-* TODO [5/9]
+Using Org for content writing allows using inbuilt Org features to
+translate to Hugo front matter:
+
+- Org uses an outline structure and can inherit meta data (tags and
+  properties) from one subtree to children subtrees.
+- Using that feature, one can tag one tree as /emacs/, and everything
+  under that tree (all posts under that) will get that tag
+  automatically.
+- The same concept applies to inheriting any Org /property/ meta data
+  like menu entry, category, section name, etc.
+- A subtree can be quickly marked to be in TODO state. That
+  information is used to add the /draft/ meta data to the post front
+  matter.
+- The post menu weights can be auto-set so that the menu items order
+  in the final HTML is the same order as that of those post subtrees
+  in Org.
+
+  If the subtrees are reordered in Org, the weights get changed
+  implicitly.
+- One can have a subtree with section property set to "posts" and all
+  post subtrees under that will go to that section. Similarly another
+  parent subtree can have that property set to "articles", and so on.
+- Images can be displayed inline in the Org buffer.
+- After save hooks can be set up in Emacs so that each time I save the
+  file, only the current subtree in Org gets exported to
+  Markdown. With the Hugo server running with the new switch that auto
+  changes the preview to the last changed post (=--navigateToChanged=
+  introduced in Hugo 0.25), the flow is seamless -- Save the Org file
+  and see the exact changed post in browser.
+- *All* posts can simply be subtrees in a single Org file. That way
+  one can take advantage of Org subtree filtering and searching
+  functions.
+- (and much more..)
+
+* Try =ox-hugo=
+1. Clone this repo.
+2. Run =hugo server --buildDrafts --buildFuture --navigateToChanged= in
+   =example-site/= directory.
+   - =--navigateToChanged= requires Hugo 0.25+.
+3. Above command will mention the localhost where the site is
+   served.Open that in your browser.
+4. In emacs, =(require  'ox-hugo)= or evaluate the =ox-hugo.el= from the
+   cloned repo.
+5. Open the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/example-site/content-org/all-posts.org][=all-posts.org=]] file.
+6. =C-c C-e H A= -- Export *all* subtrees in the file to Markdown files.
+7. In few seconds, 40+ test posts will get created, with the hugo server
+   preview in the browser zapping through each new created post (needs
+   that new Hugo 0.25 feature).
+
+* TODO [7/9]
 - [X] Have =ox-hugo= be a backend derived from =ox-blackfriday=
   (=ox-blackfriday= needed at least for table support).
 - [X] fix table horizontal rule generator, which currently adds an
@@ -56,34 +125,32 @@ This package might evolve into a multi-.el project.
 - [-] Clean up and formalize the front matter fields
   - [X] Parse org tags to set the hugo post tags/categories in fm.
   - [X] Use title to auto-generate file name string.
-  - [ ] Set post date to be the same as the export date *unless*
-    =:PUBLISHDATE:= property exists.
   - [X] Ability to set/toggle =:DRAFT: true= in property drawer. Of
     course that should translate to hugo post fm. <2017-07-12 Wed>
     Implemented an even better way.. by setting =TODO=, =DRAFT= and
     =DONE= todo states.
+  - [ ] Set post date to be the same as the export date *unless*
+    =:PUBLISHDATE:= property exists.
 - [X] Function to re-export the whole org file to subtree-specific
   markdown files
 - [X] in image links, copy images to static dir and rewrite link target
-- [ ] Use =org-capture= to generate new posts in a pre-defined "blog
+- [X] Use =org-capture= to generate new posts in a pre-defined "blog
   posts org file". That step should also auto-insert the meta-data
   needed for hugo front matter as needed -- like the post's initial
-  /draft/ state.
+  /draft/ state. This is not a part of this project, but an example
+  =org-capture= template can be found [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]].
+- [X] +Call =hugo= after each save.+ Instead of that, added an
+  =after-save-hook= - friendly function
+  =org-hugo-export-subtree-to-md-after-save=. Hugo server can be run
+  in the background that will update the HTML pages each time the Org
+  file is saved (because that would export Org to =.md= on each save).
 - [ ] Different faces for the post heading based on its /draft/ state
   and /futureness/ (if /publishdate/ is newer than today). (this seems
   like a `hugo-minor-mode`. Seems cool to do, but maybe a separate
   project?
-- [ ] Call =hugo= after each save.
+** [[https://github.com/kaushalmodi/ox-hugo/issues][Issues and feature requests]]
 
-* References
-Currently the =ox-hugo-helper.el= just contains slightly re-factored
-code snippets from the below 2 sources:
-- http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
-- http://whyarethingsthewaytheyare.com/setting-up-the-blog/
-
-=ox-blackfriday.el= is a derived backend that exports to the
-blackfriday markdown syntax, which Hugo uses as a basis. Stolen from
-`ox-gfm.el`
-
-=ox-hugo-helper.el= is a lightly-rewritten version of @helloyi's
-exporter: https://github.com/helloyi/ox-hugo.
+* Thanks
+- Matt Price (@titaniumbones)
+- [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]]
+- [[http://whyarethingsthewaytheyare.com/setting-up-the-blog/][whyarethingsthewaytheyare.com]]

@@ -632,12 +632,25 @@ INFO is a plist used as a communication channel."
   ;; (message "[hugo front matter DBG] info: %S" (pp info))
   (let* ((fm-format (plist-get info :hugo-front-matter-format))
          (hugo-date-fmt "%Y-%m-%dT%T%z")
-         (date-nocolon (or ;; Get the date from the subtree property `EXPORT_DATE' if available
-                        (org-string-nw-p (org-export-data (plist-get info :date) info))
-                        ;; Else try to get it from the #+DATE keyword in the Org file
-                        (org-string-nw-p (org-export-get-date info hugo-date-fmt))
-                        ;; Else finally set the date to the current date
-                        (format-time-string hugo-date-fmt (current-time))))
+         (date-raw (or
+                    ;; Get the date from the subtree property `EXPORT_DATE' if available
+                    (org-string-nw-p (org-export-data (plist-get info :date) info))
+                    ;; Else try to get it from the #+DATE keyword in the Org file
+                    (org-string-nw-p (org-export-get-date info hugo-date-fmt))))
+         (date-nocolon (if (and (stringp date-raw)
+                                (string-match-p "\\`[0-9T:-]+\\'" date-raw))
+                           ;; If the set DATE is already in
+                           ;; Hugo-compatible date format, use it.
+                           date-raw
+                         (format-time-string
+                          hugo-date-fmt
+                          (cond
+                           (;; Else if the DATE property or keyword is
+                            ;; not set, use the current time.
+                            (null date-raw)
+                            (org-current-time))
+                           (t           ;Else try to parse the date.
+                            (apply #'encode-time (org-parse-time-string date-raw)))))))
          ;; Hugo expects the date stamp in this format:
          ;;   2017-07-06T14:59:45-04:00
          ;; But the "%Y-%m-%dT%T%z" format produces the date in this format:

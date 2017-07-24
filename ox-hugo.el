@@ -909,19 +909,12 @@ If the point is not in a valid Hugo post subtree, nil is returned."
                         subtree
                       (org-hugo--get-valid-subtree)))
              (level (org-element-property :level entry))
-             (index 0))
+             (index 0)
+             (current-pos (point)))
         (when level
-          (let ((curr-line (line-number-at-pos))
-                prev-line)
-            (catch 'break
-              (while :infinite
-                (if (and prev-line
-                         (= curr-line prev-line))
-                    (throw 'break nil)
-                  (setq prev-line curr-line)
-                  (org-backward-heading-same-level 1)
-                  (setq curr-line (line-number-at-pos))
-                  (setq index (1+ index))))))
+          (org-map-entries
+           (lambda () (when (< (point) current-pos)
+                        (setq index (1+ index)))) "EXPORT_FILE_NAME<>\"\"")
           (cons level index))))))
 
 ;;; Interactive functions

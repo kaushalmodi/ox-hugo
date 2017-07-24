@@ -609,7 +609,7 @@ string with just alphanumeric characters."
          (string-match-p "\\`[a-zA-Z0-9]+\\'" val))
     val)
    (t
-    (concat "\"" val "\""))))
+    (concat "\"" (replace-regexp-in-string "\"" "\\\\\""  val) "\""))))
 
 (defun org-hugo--parse-menu-prop-to-alist (str)
   "Return an alist converted from a string STR of Hugo menu properties.

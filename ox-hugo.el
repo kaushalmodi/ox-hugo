@@ -878,11 +878,11 @@ Returns nil if a valid Hugo post subtree is not found."
         (unless level
           (throw 'break nil))))))
 
-(defun org-hugo--get-post-subtree-coordinates (&optional subtree)
-  "Return the coordinates for a valid Hugo post subtree.
+(defun org-hugo--get-post-subtree-coordinates (subtree)
+  "Return the coordinates for the current valid Hugo post SUBTREE.
 
-If SUBTREE is non-nil, return the coordinates for that subtree,
-else return the coordinates for the current valid Hugo subtree.
+The Org element returned by `org-hugo--get-valid-subtree' is a
+valid Hugo post subtree.
 
 The returned value is of type (LEVEL . INDEX) where LEVEL is the
 level number of the subtree and INDEX is as explained in the
@@ -894,28 +894,31 @@ If we have
   ** Level A
   ** Level B
   ** Level C
+  * Level 2
 
-this function will return 1 for Level 1 and Level A, 2 for Level
-B and 3 for Level C.
+the INDEX will be 1 for Level 1 and Level A, 2 for Level
+B and Level 2, and 3 for Level C.
 
-So the value returned for Level C would be (2 . 3).
-
-If the point is not in a valid Hugo post subtree, nil is returned."
-  (save-restriction
-    (widen)
-    (save-excursion
-      (org-back-to-heading)
-      (let* ((entry (if subtree
-                        subtree
-                      (org-hugo--get-valid-subtree)))
-             (level (org-element-property :level entry))
-             (index 0)
-             (current-pos (point)))
-        (when level
-          (org-map-entries
-           (lambda () (when (< (point) current-pos)
-                        (setq index (1+ index)))) "EXPORT_FILE_NAME<>\"\"")
-          (cons level index))))))
+So the value returned for Level C will be (2 . 3)."
+  (save-excursion
+    (let* ((level (org-element-property :level subtree))
+           (index 1)
+           (current-pos (point))
+           (scope (if (org-up-heading-safe)
+                      'tree ;Map entries only in parent subtree scope if parent exists
+                    nil))) ;Else map in the whole buffer (provided the MATCH conditions below)
+      (when level
+        (org-map-entries (lambda ()
+                           (when (< (point) current-pos)
+                             (setq index (1+ index))))
+                         ;; Loop through only headings that are at the
+                         ;; same level as SUBTREE, and those which have
+                         ;; the EXPORT_FILE_NAME property defined.
+                         (concat "+LEVEL="
+                                 (number-to-string level)
+                                 "+EXPORT_FILE_NAME<>\"\"")
+                         scope)
+        (cons level index)))))
 
 ;;; Interactive functions
 
@@ -1039,16 +1042,14 @@ nil."
               nil)
           ;; Publish only the current subtree
           (org-back-to-heading)
-          (let ((entry (org-hugo--get-valid-subtree))
+          (let ((subtree (org-hugo--get-valid-subtree))
                 is-commented tags is-excluded)
 
-            (unless entry
+            (unless subtree
               (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property"))
 
-            ;; If entry is a valid Hugo post subtree, proceed ..
-            (setq org-hugo--subtree-coord (org-hugo--get-post-subtree-coordinates entry))
-
-            (setq is-commented (org-element-property :commentedp entry))
+            ;; If subtree is a valid Hugo post subtree, proceed ..
+            (setq is-commented (org-element-property :commentedp subtree))
             ;; (setq tags (org-get-tags)) ;Return a list of tags *only* at the current heading
             (let ((org-use-tag-inheritance t))
               (setq tags (org-get-tags-at))) ;Return a list of tags at current heading
@@ -1056,10 +1057,10 @@ nil."
             (dolist (exclude-tag org-export-exclude-tags)
               (when (member exclude-tag tags)
                 (setq is-excluded t)))
-            ;; (message "[current subtree DBG] entry: %S" entry)
+            ;; (message "[current subtree DBG] subtree: %S" subtree)
             ;; (message "[current subtree DBG] is-commented:%S, tags:%S, is-excluded:%S"
             ;;          is-commented tags is-excluded)
-            (let ((title (org-element-property :title entry)))
+            (let ((title (org-element-property :title subtree)))
               (cond
                (is-commented
                 (message "[ox-hugo] `%s' was not exported as that subtree is commented" title))
@@ -1084,6 +1085,11 @@ nil."
                   ;; values via variables.
                   (let ((org-hugo--draft-state draft)
                         (org-hugo--tags-list tags))
+                    ;; Get the current subtree coordinates if it or
+                    ;; one of its parents has the HUGO_MENU property defined.
+                    (when (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
+                      (setq org-hugo--subtree-coord
+                            (org-hugo--get-post-subtree-coordinates subtree)))
                     (org-hugo-export-to-md async :subtreep visible-only))))))))))))
 
 ;;;###autoload

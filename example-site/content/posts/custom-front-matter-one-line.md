@@ -1,7 +1,7 @@
 +++
-title = "Custom front matter variables"
+title = "Custom front matter in one line"
 date = 2017-07-24
-tags = []
+tags = ["custom_fm"]
 draft = false
 foo = "bar"
 baz = "zoo"

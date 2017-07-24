@@ -405,12 +405,43 @@ Here the front matter format is set to YAML using the
 =HUGO_FRONT_MATTER_FORMAT= key in property drawer.
 
 Here there is white space in menu name property.
-* Custom front matter variables
+* Custom front matter                                             :custom_fm:
+** Custom front matter in one line
 :PROPERTIES:
-:EXPORT_FILE_NAME: custom-front-matter-variables
+:EXPORT_FILE_NAME: custom-front-matter-one-line
 :EXPORT_DATE: 2017-07-24
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :foo bar :baz zoo :alpha 1 :beta "two words" :gamma 10
 :END:
+** Custom front matter in multiple lines
+:PROPERTIES:
+:EXPORT_FILE_NAME: custom-front-matter-multiple-lines
+:EXPORT_DATE: 2017-07-24
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :foo bar
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :baz zoo
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :alpha 1
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :beta "two words"
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :gamma 10
+:END:
+From [[http://orgmode.org/manual/Property-syntax.html][*(org) Property syntax*]]:
+#+BEGIN_QUOTE
+   It is also possible to add to the values of inherited properties.
+The following results in the ‘genres’ property having the value “Classic
+Baroque” under the ‘Goldberg Variations’ subtree.
+     * CD collection
+     ** Classic
+         :PROPERTIES:
+         :GENRES: Classic
+         :END:
+     *** Goldberg Variations
+         :PROPERTIES:
+         :Title:     Goldberg Variations
+         :Composer:  J.S. Bach
+         :Artist:    Glen Gould
+         :Publisher: Deutsche Grammophon
+         :NDisks:    1
+         :GENRES+:   Baroque
+         :END:
+#+END_QUOTE
 * Post body                                                            :body:
 ** Summary Splitter
 :PROPERTIES:

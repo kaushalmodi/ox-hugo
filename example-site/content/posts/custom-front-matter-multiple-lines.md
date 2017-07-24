@@ -1,0 +1,32 @@
++++
+title = "Custom front matter in multiple lines"
+date = 2017-07-24
+tags = ["custom_fm"]
+draft = false
+foo = "bar"
+baz = "zoo"
+alpha = 1
+beta = "two words"
+gamma = 10
++++
+
+From [**(org) Property syntax**](http://orgmode.org/manual/Property-syntax.html):
+
+>    It is also possible to add to the values of inherited properties.
+> The following results in the ‘genres’ property having the value “Classic
+> Baroque” under the ‘Goldberg Variations’ subtree.
+>
+> -   CD collection
+>
+> \*\* Classic
+>
+> :GENRES: Classic
+>
+> **\*** Goldberg Variations
+>
+> :Title:     Goldberg Variations
+> :Composer:  J.S. Bach
+> :Artist:    Glen Gould
+> :Publisher: Deutsche Grammophon
+> :NDisks:    1
+> :GENRES+:   Baroque

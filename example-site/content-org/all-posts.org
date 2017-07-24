@@ -405,6 +405,12 @@ Here the front matter format is set to YAML using the
 =HUGO_FRONT_MATTER_FORMAT= key in property drawer.
 
 Here there is white space in menu name property.
+* Custom front matter variables
+:PROPERTIES:
+:EXPORT_FILE_NAME: custom-front-matter-variables
+:EXPORT_DATE: 2017-07-24
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :foo bar :baz zoo :alpha 1 :beta "two words" :gamma 10
+:END:
 * Post body                                                            :body:
 ** Summary Splitter
 :PROPERTIES:

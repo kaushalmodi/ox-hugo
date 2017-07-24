@@ -150,6 +150,7 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil "t")
                    (:hugo-menu "HUGO_MENU" nil nil)
                    (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)
+                   (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
 
                    ;; Front matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -614,8 +615,8 @@ string with just alphanumeric characters."
 (defun org-hugo--parse-menu-prop-to-alist (str)
   "Return an alist converted from a string STR of Hugo menu properties.
 
-Example: Input MENU-PROP-STR \":name foo :weight 80\" would
-convert to an alist ((:name . \"foo\") (:weight . 80))."
+Example: Input STR \":name foo :weight 80\" would convert to an
+alist ((name . \"foo\") (weight . 80))."
   (let ((menu-alist (org-babel-parse-header-arguments str))
         ret)
     ;; Hugo menu properties: https://gohugo.io/content-management/menus/
@@ -679,6 +680,7 @@ INFO is a plist used as a communication channel."
                                (setcdr matching-prop override-val)
                              (push override-prop updated-menu-alist))))
                        updated-menu-alist))
+         (custom-fm-data (org-babel-parse-header-arguments (plist-get info :hugo-custom-front-matter)))
          (data `(;; The order of the elements below will be the order in which the front matter
                  ;; variables will be ordered.
                  (title . ,title)
@@ -701,10 +703,13 @@ INFO is a plist used as a communication channel."
                  (url . ,(org-export-data (plist-get info :hugo-url) info))
                  (weight . ,(org-export-data (plist-get info :hugo-weight) info))
                  (draft . ,draft)
-                 (menu . ,menu-alist))))
+                 (menu . ,menu-alist)))
+         (data `,(append data custom-fm-data)))
     ;; (message "[get fm info DBG] %S" info)
-    (message "[get fm menu DBG] %S" menu-alist)
-    (message "[get fm menu override DBG] %S" menu-alist-override)
+    ;; (message "[get fm menu DBG] %S" menu-alist)
+    ;; (message "[get fm menu override DBG] %S" menu-alist-override)
+    ;; (message "[custom fm data DBG] %S" custom-fm-data)
+    ;; (message "[fm data DBG] %S" data)
     (org-hugo--gen-front-matter data fm-format)))
 
 (defun org-hugo--gen-front-matter (data format)
@@ -727,8 +732,9 @@ are \"toml\" and \"yaml\"."
         (menu-string ""))
     ;; (message "hugo fm format: %s" format)
     (dolist (pair data)
-      (let ((key (symbol-name (car pair)))
-            (value (cdr pair)))
+      (let* ((key (symbol-name (car pair)))
+             (key (replace-regexp-in-string "\\`:" "" key)) ;":some-key" -> "some-key"
+             (value (cdr pair)))
         ;; (message "[hugo fm key value DBG] %S %S" key value)
         (unless (or (null value) ;Skip writing front matter variables whose value is nil
                     (and (stringp value) ;or an empty string.

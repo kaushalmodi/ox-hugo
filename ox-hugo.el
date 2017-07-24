@@ -612,19 +612,33 @@ string with just alphanumeric characters."
    (t
     (concat "\"" (replace-regexp-in-string "\"" "\\\\\""  val) "\""))))
 
-(defun org-hugo--parse-menu-prop-to-alist (str)
-  "Return an alist converted from a string STR of Hugo menu properties.
+(defun org-hugo--parse-property-arguments (str)
+  "Return an alist converted from a string STR of Hugo property value.
 
-Example: Input STR \":name foo :weight 80\" would convert to an
-alist ((name . \"foo\") (weight . 80))."
-  (let ((menu-alist (org-babel-parse-header-arguments str))
-        ret)
+If STR is of type \":KEY VALUE\", the returned value is ((KEY
+. VALUE)).
+
+Example: Input STR \":foo bar :baz 1 :zoo \\\"two words\\\"\" would
+convert to ((foo . \"bar\") (baz . 1) (zoo . \"two words\"))."
+  (let ((alist (org-babel-parse-header-arguments str)))
+    (dolist (pair alist)
+      ;; :KEY -> KEY
+      (let ((key (intern (replace-regexp-in-string "\\`:" "" (symbol-name (car pair))))))
+        (setcar pair key)))
+    alist))
+
+(defun org-hugo--parse-menu-prop-to-alist (str)
+  "Return an alist of valid Hugo menu properties converted from STR.
+
+Example: Input STR \":name foo :weight 80\" would convert
+to ((name . \"foo\") (weight . 80))."
+  (let ((menu-alist (org-hugo--parse-property-arguments str))
+        valid-menu-alist)
     ;; Hugo menu properties: https://gohugo.io/content-management/menus/
     (dolist (prop '(menu name url identifier pre post weight parent)) ;children prop is probably read-only
-      (when-let* ((key (intern (concat ":" (symbol-name prop)))) ;name -> :name
-                  (cell (assoc key menu-alist)))
-        (push `(,prop . ,(cdr cell)) ret)))
-    ret))
+      (when-let* ((cell (assoc prop menu-alist)))
+        (push cell valid-menu-alist)))
+    valid-menu-alist))
 
 (defun org-hugo--get-front-matter (info)
   "Return the Hugo front matter string.
@@ -680,7 +694,7 @@ INFO is a plist used as a communication channel."
                                (setcdr matching-prop override-val)
                              (push override-prop updated-menu-alist))))
                        updated-menu-alist))
-         (custom-fm-data (org-babel-parse-header-arguments (plist-get info :hugo-custom-front-matter)))
+         (custom-fm-data (org-hugo--parse-property-arguments (plist-get info :hugo-custom-front-matter)))
          (data `(;; The order of the elements below will be the order in which the front matter
                  ;; variables will be ordered.
                  (title . ,title)
@@ -732,9 +746,8 @@ are \"toml\" and \"yaml\"."
         (menu-string ""))
     ;; (message "hugo fm format: %s" format)
     (dolist (pair data)
-      (let* ((key (symbol-name (car pair)))
-             (key (replace-regexp-in-string "\\`:" "" key)) ;":some-key" -> "some-key"
-             (value (cdr pair)))
+      (let ((key (symbol-name (car pair)))
+            (value (cdr pair)))
         ;; (message "[hugo fm key value DBG] %S %S" key value)
         (unless (or (null value) ;Skip writing front matter variables whose value is nil
                     (and (stringp value) ;or an empty string.

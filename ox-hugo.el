@@ -682,7 +682,7 @@ INFO is a plist used as a communication channel."
          (data `(;; The order of the elements below will be the order in which the front matter
                  ;; variables will be ordered.
                  (title . ,title)
-                 (description . ,(org-export-data (plist-get info :hugo-description) info))
+                 (description . ,(org-export-data (plist-get info :description) info))
                  (date . ,date)
                  (publishDate . ,(org-export-data (plist-get info :hugo-publishdate) info))
                  (expiryDate . ,(org-export-data (plist-get info :hugo-expirydate) info))

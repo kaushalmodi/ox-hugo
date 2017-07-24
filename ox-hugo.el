@@ -1037,10 +1037,11 @@ nil."
             (progn
               (setq org-hugo--subtree-count 0)
               (org-map-entries (lambda ()
-                                 (let* ((entry (org-element-at-point))
-                                        (fname (org-element-property :EXPORT_FILE_NAME entry)))
-                                   (when fname
-                                     (org-hugo-export-subtree-to-md nil async visible-only)))))
+                                 (org-hugo-export-subtree-to-md nil async visible-only))
+                               ;; Export only the subtrees where
+                               ;; EXPORT_FILE_NAME property is not
+                               ;; empty.
+                               "EXPORT_FILE_NAME<>\"\"")
               (message "[ox-hugo] Exported %d subtrees" org-hugo--subtree-count)
               nil)
           ;; Publish only the current subtree

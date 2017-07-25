@@ -854,18 +854,22 @@ are \"toml\" and \"yaml\"."
 (defun org-hugo--selective-property-inheritance ()
   "Returns a list of properties that should be inherited."
   (let ((prop-list '("HUGO_FRONT_MATTER_FORMAT"
-                     "HUGO_TAGS"
-                     "HUGO_CATEGORIES"
-                     "HUGO_DRAFT"
-                     "HUGO_TYPE"
-                     "HUGO_WEIGHT"
-                     "HUGO_MARKUP"
                      "HUGO_SECTION"
                      "HUGO_BASE_DIR"
                      "HUGO_STATIC_IMAGES"
                      "HUGO_CODE_FENCE"
                      "HUGO_MENU"
-                     "TAGS"))
+                     "HUGO_CUSTOM_FRONT_MATTER"
+                     "HUGO_DRAFT"
+                     "HUGO_ISCJKLANGUAGE"
+                     "KEYWORDS"
+                     "HUGO_MARKUP"
+                     "HUGO_OUTPUTS"
+                     "TAGS"
+                     "HUGO_TAGS"
+                     "HUGO_CATEGORIES"
+                     "HUGO_TYPE"
+                     "HUGO_WEIGHT"))
         prop-list-allow-inheritance)
     (dolist (prop prop-list)
       (let ((prop (concat "EXPORT_" prop)))

@@ -46,6 +46,9 @@
 (defvar org-hugo--tags-list nil
   "State variable to store the tags of the subtree to be exported.")
 
+(defvar org-hugo--categories-list nil
+  "State variable to store the categories of the subtree to be exported.")
+
 (defvar org-hugo--subtree-coord nil
   "Variable to store the current valid Hugo subtree coordinates.")
 
@@ -162,14 +165,16 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
                    ;; description
                    (:description "DESCRIPTION" nil nil)
                    ;; draft
-                   ;; "draft" value is also interpreted by TODO state of a post as Org subtree.
+                   ;; "draft" value is also interpreted by TODO state
+                   ;; of a post as Org subtree.
                    (:hugo-draft "HUGO_DRAFT" nil nil)
                    ;; expiryDate
                    (:hugo-expirydate "HUGO_EXPIRYDATE" nil nil)
                    ;; isCJKLanguage
                    (:hugo-iscjklanguage "HUGO_ISCJKLANGUAGE" nil nil)
                    ;; keywords
-                   ;; "keywords" is parsed from the Org #+KEYWORDS or subtree property EXPORT_KEYWORDS
+                   ;; "keywords" is parsed from the Org #+KEYWORDS or
+                   ;; subtree property EXPORT_KEYWORDS.
                    (:keywords "KEYWORDS" nil nil 'space)
                    ;; layout
                    (:hugo-layout "HUGO_LAYOUT" nil nil)
@@ -186,9 +191,13 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
                    ;; slug
                    (:hugo-slug "HUGO_SLUG" nil nil)
                    ;; taxomonomies - tags, categories
-                   ;; Org tags parsed from posts as subtrees get the highest precedence.
+                   ;; Org tags parsed from posts as subtrees get the
+                   ;; highest precedence as tag names.
                    (:tags "TAGS" nil nil 'space)
                    (:hugo-tags "HUGO_TAGS" nil nil 'space)
+                   ;; Org tags starting with "@" parsed from posts as
+                   ;; subtrees get the highest precedence as category
+                   ;; names.
                    (:hugo-categories "HUGO_CATEGORIES" nil nil 'space)
                    ;; title
                    ;; "title" is parsed from the Org #+TITLE or the subtree heading.
@@ -231,7 +240,7 @@ a communication channel."
                       (let ((tag-list (org-export-get-tags headline info)))
                         (and tag-list
                              (format "     :%s:"
-                                     (mapconcat 'identity tag-list ":"))))))
+                                     (mapconcat #'identity tag-list ":"))))))
            (priority
             (and (plist-get info :with-priority)
                  (let ((char (org-element-property :priority headline)))
@@ -678,6 +687,12 @@ INFO is a plist used as a communication channel."
                    (concat
                     (org-export-data (plist-get info :hugo-tags) info) " "
                     (org-export-data (plist-get info :tags) info))))
+         (categories (or (org-string-nw-p
+                          (mapconcat (lambda (str)
+                                       ;; Remove "@" from beg of categories.
+                                       (replace-regexp-in-string "\\`@" "" str))
+                                     org-hugo--categories-list " "))
+                         (org-export-data (plist-get info :hugo-categories) info)))
          (title (org-export-data (plist-get info :title) info))
          ;; Sanitize title.. cannot do bold, italics, monospace in title
          (title (replace-regexp-in-string "\\\\?`" "" title))
@@ -712,7 +727,7 @@ INFO is a plist used as a communication channel."
                  (outputs . ,(org-export-data (plist-get info :hugo-outputs) info))
                  (slug . ,(org-export-data (plist-get info :hugo-slug) info))
                  (tags . ,tags)
-                 (categories . ,(org-export-data (plist-get info :hugo-categories) info))
+                 (categories . ,categories)
                  (type . ,(org-export-data (plist-get info :hugo-type) info))
                  (url . ,(org-export-data (plist-get info :hugo-url) info))
                  (weight . ,(org-export-data (plist-get info :hugo-weight) info))
@@ -1043,17 +1058,23 @@ nil."
           ;; Publish only the current subtree
           (org-back-to-heading)
           (let ((subtree (org-hugo--get-valid-subtree))
-                is-commented tags is-excluded)
+                is-commented tags categories is-excluded)
 
             (unless subtree
               (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property"))
 
             ;; If subtree is a valid Hugo post subtree, proceed ..
             (setq is-commented (org-element-property :commentedp subtree))
-            ;; (setq tags (org-get-tags)) ;Return a list of tags *only* at the current heading
-            (let ((org-use-tag-inheritance t))
-              (setq tags (org-get-tags-at))) ;Return a list of tags at current heading
-                                        ;+ inherited ones!
+
+            (cl-labels ((categoryp (tag) ;Returns non-nil if TAG begins with "@"
+                                   (string-match-p "\\`@" tag)))
+              (let ((org-use-tag-inheritance t)
+                    ;; `org-get-tags' returns a list of tags *only*
+                    ;; at the current heading; `org-get-tags-at'
+                    ;; returns inherited tags too.
+                    (all-tags (org-get-tags-at)))
+                (setq tags (cl-remove-if #'categoryp all-tags))
+                (setq categories (cl-remove-if-not #'categoryp all-tags))))
             (dolist (exclude-tag org-export-exclude-tags)
               (when (member exclude-tag tags)
                 (setq is-excluded t)))
@@ -1084,7 +1105,8 @@ nil."
                   ;; FIXME: Is there a better way than passing these
                   ;; values via variables.
                   (let ((org-hugo--draft-state draft)
-                        (org-hugo--tags-list tags))
+                        (org-hugo--tags-list tags)
+                        (org-hugo--categories-list categories))
                     ;; Get the current subtree coordinates if it or
                     ;; one of its parents has the HUGO_MENU property defined.
                     (when (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)

@@ -543,6 +543,20 @@ This is some text[fn:1][fn:2].
 This is some text[fn:1].
 This is some text[fn:1].
 This is some text[fn:1].
+* Tags as Categories
+** Category A                                                         :@catA:
+*** Cat A post 1                                                       :meow:
+:PROPERTIES:
+:EXPORT_DATE: 2017-07-24
+:EXPORT_FILE_NAME: cat-a-post-1
+:END:
+This post is in category =catA= and tagged =meow=.
+*** Cat A and cat B                                                   :@catB:
+:PROPERTIES:
+:EXPORT_FILE_NAME: cat-a-and-cat-b
+:EXPORT_DATE: 2017-07-24
+:END:
+This gets both categories =catA= and =catB=.
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

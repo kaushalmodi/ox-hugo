@@ -104,7 +104,7 @@ translate to Hugo front matter:
 |---------------------------+----------------------------+--------------------------------------|
 | Hugo front matter (TOML)  | Org                        | Org description                      |
 |---------------------------+----------------------------+--------------------------------------|
-| =title = "foo"=           | =* foo=                    | Heading                              |
+| =title = "foo"​=           | =* foo=                    | Heading                              |
 | =date = 2017-07-24=       | =:EXPORT_DATE: 2017-07-24= | Subtree property                     |
 | =tags = ["abc", "def"]=   | =* foo :abc:def:=           | Heading tags                         |
 | =categories = ["x", "y"]= | =* foo :@x:@y:=             | Heading tags with =@= prefix         |

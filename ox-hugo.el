@@ -1060,7 +1060,7 @@ nil."
               (message "[ox-hugo] Exported %d subtrees" org-hugo--subtree-count)
               nil)
           ;; Publish only the current subtree
-          (org-back-to-heading)
+          (org-back-to-heading :invisible-ok)
           (let ((subtree (org-hugo--get-valid-subtree))
                 is-commented tags categories is-excluded)
 
@@ -1131,7 +1131,7 @@ is nil."
            org-hugo-allow-export-after-save
            ;; Condition 1: Point must be under an Org headline
            (ignore-errors
-             (org-back-to-heading))
+             (org-back-to-heading :invisible-ok))
            ;; Condition 2: Point must be in a valid Hugo post subtree
            (org-hugo--get-valid-subtree))
       (org-hugo-export-subtree-to-md))))

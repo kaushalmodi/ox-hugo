@@ -698,6 +698,8 @@ INFO is a plist used as a communication channel."
          (title (replace-regexp-in-string "\\\\?`" "" title))
          (title (replace-regexp-in-string "\\`__?\\|\\`\\*\\*?\\|__?\\'\\|\\*\\*?\\'" "" title))
          (title (replace-regexp-in-string " __?\\|__? \\| \\*\\*?\\|\\*\\*? " " " title))
+         ;; Do not escape underscores in title
+         (title (replace-regexp-in-string "\\\\_" "_" title))
          (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
          (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
          ;; If menu-alist-override is non-nil, update menu-alist with values from that.

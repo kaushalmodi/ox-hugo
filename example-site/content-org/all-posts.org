@@ -132,12 +132,20 @@ Something 2.1
 ** Foo ( Bar ) Baz
 ** (Foo)Bar.Baz&Zoo
 ** Hey! I have a link [[https://example.org][here]] (Awesome!)
-* Awesome title with "quoted text"
+* Title in Front Matter
+** Awesome title with "quoted text"
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-title-quotes
 :EXPORT_DATE: 2017-07-24
 :END:
 Testing a post with double quotes in the title.
+** Under_scores_in_title
+:PROPERTIES:
+:EXPORT_FILE_NAME: under-scores-in-title
+:EXPORT_DATE: 2017-07-28
+:END:
+Ensure that the underscores in =title= string of front matter do not
+get escaped.. =foo_bar= must not become =foo\_bar=.
 * Description meta-data with "quoted text"
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-description-quotes

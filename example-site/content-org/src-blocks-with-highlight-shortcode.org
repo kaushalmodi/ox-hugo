@@ -1,5 +1,9 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_CODE_FENCE: nil
+# Below will work the same as above
+# #+HUGO_CODE_FENCE:
+# Below will use Markdown code fence instead of the highlight shortcode
+#+HUGO_CODE_FENCE: t
 
 #+SEQ_TODO: TODO DRAFT DONE
 

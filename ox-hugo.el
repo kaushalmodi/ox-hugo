@@ -150,7 +150,7 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")
-                   (:hugo-code-fence "HUGO_CODE_FENCE" nil "t")
+                   (:hugo-code-fence "HUGO_CODE_FENCE" nil t)
                    (:hugo-menu "HUGO_MENU" nil nil)
                    (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)
                    (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
@@ -562,11 +562,16 @@ INFO is a plist used as a communication channel."
  Markdown style triple-backquoted code blocks are created.
  Otherwise, the code block is wrapped in Hugo `highlight'
  shortcode."
-  (if (string= "t" (org-export-data (plist-get info :hugo-code-fence) info))
-      (org-blackfriday-src-block src-block nil info)
-    (let* ((lang (org-element-property :language src-block))
-           (code (org-export-format-code-default src-block info)))
-      (format "{{< highlight %s>}}\n%s{{< /highlight >}}\n" lang code))))
+  (let* ((hugo-code-fence (plist-get info :hugo-code-fence))
+         (use-code-fence (and (stringp hugo-code-fence)
+                              (org-string-nw-p hugo-code-fence)
+                              (not (string= "nil" hugo-code-fence)))))
+    (if use-code-fence
+        (org-blackfriday-src-block src-block nil info)
+      (let* ((lang (org-element-property :language src-block))
+             (code (org-export-format-code-default src-block info)))
+        (format "{{< highlight %s>}}\n%s{{< /highlight >}}\n" lang code)))))
+
 
 
 ;;; Filter Functions

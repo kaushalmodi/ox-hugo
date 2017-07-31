@@ -276,10 +276,9 @@ Here is the second post on Emacs.
 | c | d | f | h |
 |---+---+---+---|
 * Source blocks                                                   :src-block:
-** Code-fenced source blocks
+** Example text with code blocks
 :PROPERTIES:
-:EXPORT_FILE_NAME: code-fenced-src-blocks
-:EXPORT_DATE: 2017-07-13T17:49:22-04:00
+:CUSTOM_ID: example-text-with-code-blocks
 :END:
 Here are few variables that you might like to change in the =local.mk=:
 - =prefix= :: Org installation directory
@@ -312,6 +311,20 @@ ORG_MAKE_DOC = info pdf card # html
 #   org-mime - Convert org buffer to htmlized format for email
 ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
 #+END_SRC
+** Code-fenced source blocks
+:PROPERTIES:
+:EXPORT_HUGO_CODE_FENCE: t
+:EXPORT_FILE_NAME: code-fenced-src-blocks
+:EXPORT_DATE: 2017-07-13T17:49:22-04:00
+:END:
+#+INCLUDE: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
+** Source blocks with =highlight= shortcode
+:PROPERTIES:
+:EXPORT_HUGO_CODE_FENCE: nil
+:EXPORT_FILE_NAME: highlight-shortcode-src-blocks
+:EXPORT_DATE: 2017-07-31
+:END:
+#+INCLUDE: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
 ** Source block with caption                                       :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-caption

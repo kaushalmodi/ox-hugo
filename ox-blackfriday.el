@@ -69,6 +69,7 @@
               (if a (org-blackfriday-export-to-markdown t s v)
                 (org-open-file (org-blackfriday-export-to-markdown nil s v)))))))
   :translate-alist '((inner-template . org-blackfriday-inner-template)
+                     (latex-fragment . org-blackfriday-latex-fragment)
                      (paragraph . org-blackfriday-paragraph)
                      (strike-through . org-blackfriday-strike-through)
                      (src-block . org-blackfriday-src-block)
@@ -80,6 +81,43 @@
 
 
 ;;; Transcode Functions
+
+;;;; Inner Template
+(defun org-blackfriday-inner-template (contents info)
+  "Return body of document after converting it to Markdown syntax.
+CONTENTS is the transcoded contents string.  INFO is a plist
+holding export options."
+  (let* ((depth (plist-get info :with-toc))
+         (headlines (and depth (org-export-collect-headlines info depth)))
+         (toc-tail (if headlines "\n\n" ""))
+         (toc-string ""))
+
+    (when headlines
+      (dolist (headline headlines)
+        (setq toc-string (concat toc-string
+                                 (org-blackfriday-format-toc headline info)
+                                 "\n"))))
+    (org-trim (concat toc-string toc-tail contents "\n" (org-blackfriday-footnote-section info)))))
+
+;;;; Latex Fragment
+(defun org-blackfriday-latex-fragment (latex-fragment _contents info)
+  "Transcode a LATEX-FRAGMENT object from Org to Blackfriday Markdown.
+INFO is a plist holding contextual information."
+  (let ((latex-frag (org-element-property :value latex-fragment))
+	(processing-type (plist-get info :with-latex)))
+    (cond
+     ((memq processing-type '(t mathjax))
+      (let* ((frag (org-html-format-latex latex-frag 'mathjax info))
+             ;; https://gohugo.io/content-management/formats#solution
+             (frag (replace-regexp-in-string "\\(\\\\[()]\\)" "\\\\\\1" frag)) ;\( -> \\(, \) -> \\)
+             (frag (replace-regexp-in-string "_" "\\\\_" frag))) ;_ -> \_
+        frag))
+     ((assq processing-type org-preview-latex-process-alist)
+      (let ((formula-link
+	     (org-html-format-latex latex-frag processing-type info)))
+	(when (and formula-link (string-match "file:\\([^]]*\\)" formula-link))
+	  (org-html--format-image (match-string 1 formula-link) nil info))))
+     (t latex-frag))))
 
 ;;;; Paragraph
 (defun org-blackfriday-paragraph (paragraph contents info)
@@ -314,24 +352,7 @@ INFO is a plist used as a communication channel."
          fn-alist
          "\n"))))))
 
-;;;; Template
-(defun org-blackfriday-inner-template (contents info)
-  "Return body of document after converting it to Markdown syntax.
-CONTENTS is the transcoded contents string.  INFO is a plist
-holding export options."
-  (let* ((depth (plist-get info :with-toc))
-         (headlines (and depth (org-export-collect-headlines info depth)))
-         (toc-tail (if headlines "\n\n" ""))
-         (toc-string ""))
-
-    (when headlines
-      (dolist (headline headlines)
-        (setq toc-string (concat toc-string
-                                 (org-blackfriday-format-toc headline info)
-                                 "\n"))))
-    (org-trim (concat toc-string toc-tail contents "\n" (org-blackfriday-footnote-section info)))))
-
-
+
 ;;; Interactive functions
 
 ;;;###autoload

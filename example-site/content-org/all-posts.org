@@ -684,6 +684,28 @@ This gets both categories =catA= and =catB=.
 :CUSTOM_ID: link-heading-2
 :END:
 - Link to [[#link-heading-1][Heading 1]]
+* Equations                                                       :equations:
+** Inline equations
+:PROPERTIES:
+:EXPORT_FILE_NAME: equation-latex-frag
+:EXPORT_DATE: 2017-07-31
+:END:
+Wrap the equations between =\(= and =\)=.
+
+For example, below in Org:
+#+BEGIN_SRC text
+LaTeX formatted equation: \( E = -J \sum_{i=1}^N s_i s_{i+1} \)
+#+END_SRC
+
+will look like this in Hugo rendered HTML (don't see this in Markdown,
+see what it looks after Hugo has processed it).
+
+LaTeX formatted equation: \( E = -J \sum_{i=1}^N s_i s_{i+1 }\)
+
+Here's another example similar to one in [[http://orgmode.org/manual/LaTeX-fragments.html][(org) LaTeX fragments]].
+
+If $a^2=b$ and \( b=2 \), then the solution must be either
+$a=+\sqrt{2}$ or \(a=-\sqrt{2}\).
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

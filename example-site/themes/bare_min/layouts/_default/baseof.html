@@ -11,11 +11,10 @@
             {{ .Title }} ❚ {{ .Site.Title }}
             {{ end }}
         </title>
+        {{ block "head" . }}{{ end }}
     </head>
 
     <body lang="en">
-
         {{ block "main" . }}{{ end }}
-
     </body>
 </html>

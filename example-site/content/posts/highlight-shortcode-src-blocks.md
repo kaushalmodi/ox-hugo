@@ -6,7 +6,7 @@ draft = false
 +++
 
 Note that to disable the code fence option, the value portion of the
-property **needs** to be left empty instead of setting to `nil`!
+property needs to be left **empty** instead of setting to `nil`!
 
 ```text
 :PROPERTIES:

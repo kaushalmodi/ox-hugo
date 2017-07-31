@@ -103,6 +103,12 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
   :type 'string
   :safe 'stringp)
 
+(defcustom org-hugo-use-code-for-kbd t
+  "When non-nil, ~text~ will translate to <kbd>text</kbd>."  :group 'org-export-hugo
+  :group 'org-export-hugo
+  :type 'boolean
+  :safe #'booleanp)
+
 
 ;;; Define Back-End
 
@@ -130,7 +136,8 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
         (?t "To temporary buffer"
             (lambda (a s v _b)
               (org-hugo-export-as-md a s v)))))
-  :translate-alist '((footnote-reference . org-hugo-footnote-reference)
+  :translate-alist '((code . org-hugo-kbd-tags-maybe)
+                     (footnote-reference . org-hugo-footnote-reference)
                      (headline . org-hugo-headline)
                      (inner-template . org-hugo-inner-template)
                      (italic . org-hugo-italic)
@@ -154,6 +161,7 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
                    (:hugo-menu "HUGO_MENU" nil nil)
                    (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)
                    (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
+                   (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
 
                    ;; Front matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -232,6 +240,16 @@ INFO is a plist used as a communication channel."
 
 
 ;;; Transcode Functions
+
+;;;; Code (<kdb> tags)
+(defun org-hugo-kbd-tags-maybe (verbatim _contents info)
+  "Wrap text in VERBATIM object with HTML kbd tags.
+The kdb wrapping is done if `org-hugo-use-code-for-kbd' is non-nil.
+
+INFO is a plist used as a communication channel."
+  (if (org-hugo--plist-value-true-p :hugo-use-code-for-kbd info)
+      (format "<kbd>%s</kbd>" (org-element-property :value verbatim))
+    (org-md-verbatim verbatim nil nil)))
 
 ;;;; Footnote Reference
 (defun org-hugo-footnote-reference (footnote-reference _contents info)

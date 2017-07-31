@@ -654,6 +654,22 @@ to ((name . \"foo\") (weight . 80))."
         (push cell valid-menu-alist)))
     valid-menu-alist))
 
+(defun org-hugo--sanitize-title (info)
+  "Return sanitized version of the title string parsed from INFO.
+
+- Remove bold, italics, monospace Markdown markup characters.
+- Do not escape underscore characters in the title.
+
+INFO is a plist used as a communication channel."
+  (let* ((title (org-export-data (plist-get info :title) info))
+         ;; Sanitize title.. cannot do bold, italics, monospace in title
+         (title (replace-regexp-in-string "\\\\?`" "" title))
+         (title (replace-regexp-in-string "\\`__?\\|\\`\\*\\*?\\|__?\\'\\|\\*\\*?\\'" "" title))
+         (title (replace-regexp-in-string " __?\\|__? \\| \\*\\*?\\|\\*\\*? " " " title))
+         ;; Do not escape underscores in title
+         (title (replace-regexp-in-string "\\\\_" "_" title)))
+    title))
+
 (defun org-hugo--get-front-matter (info)
   "Return the Hugo front matter string.
 
@@ -698,13 +714,6 @@ INFO is a plist used as a communication channel."
                                        (replace-regexp-in-string "\\`@" "" str))
                                      org-hugo--categories-list " "))
                          (org-export-data (plist-get info :hugo-categories) info)))
-         (title (org-export-data (plist-get info :title) info))
-         ;; Sanitize title.. cannot do bold, italics, monospace in title
-         (title (replace-regexp-in-string "\\\\?`" "" title))
-         (title (replace-regexp-in-string "\\`__?\\|\\`\\*\\*?\\|__?\\'\\|\\*\\*?\\'" "" title))
-         (title (replace-regexp-in-string " __?\\|__? \\| \\*\\*?\\|\\*\\*? " " " title))
-         ;; Do not escape underscores in title
-         (title (replace-regexp-in-string "\\\\_" "_" title))
          (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
          (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
          ;; If menu-alist-override is non-nil, update menu-alist with values from that.
@@ -719,7 +728,7 @@ INFO is a plist used as a communication channel."
          (custom-fm-data (org-hugo--parse-property-arguments (plist-get info :hugo-custom-front-matter)))
          (data `(;; The order of the elements below will be the order in which the front matter
                  ;; variables will be ordered.
-                 (title . ,title)
+                 (title . ,(org-hugo--sanitize-title info))
                  (description . ,(org-export-data (plist-get info :description) info))
                  (date . ,date)
                  (publishDate . ,(org-export-data (plist-get info :hugo-publishdate) info))

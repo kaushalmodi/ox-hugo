@@ -1,7 +1,7 @@
 +++
 title = "Don't Use Org Code markup for kbd tag"
 date = 2017-07-31
-tags = []
+tags = ["formatting"]
 draft = false
 +++
 

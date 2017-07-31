@@ -352,6 +352,71 @@ property needs to be left *empty* instead of setting to =nil=!
 #+BEGIN_SRC makefile
 prefix = /dir/where/you/want/to/install/org # Default: /usr/share
 #+END_SRC
+* Formatting                                                     :formatting:
+** General
+:PROPERTIES:
+:EXPORT_DATE: 2017-07-31
+:EXPORT_FILE_NAME: general-formatting
+:END:
+Below table shows the translation of Org markup to Markdown markup in
+the exported =.md= files.
+|--------------------+--------------------------------------------------------------------+-----------------------|
+| Org                | Markdown                                                           | In Hugo rendered HTML |
+|--------------------+--------------------------------------------------------------------+-----------------------|
+| =*bold*=           | =**bold**=                                                         | *bold*                |
+| =/italics/=        | =_italics_=                                                        | /italics/             |
+| ==monospace==      | =`monospace`=                                                      | =monospace=           |
+| =~key-binding~=    | =<kbd>key-binding</kbd>=                                           | ~key-binding~         |
+|                    | - if =org-hugo-use-code-for-kbd= is non-nil [default]              |                       |
+|                    | - Requires *CSS* to render the =<kbd>= tag as something special.   |                       |
+| =~key-binding~=    | =`key-binding`=                                                    |                       |
+|                    | - if =org-hugo-use-code-for-kbd= is nil                            |                       |
+| =+strike-through+= | =~~strike-through~~=                                               | +strike-through+      |
+| =_underline_=      | =<span class = "underline">underline</span>=                       | _underline_           |
+|                    | - Requires *CSS* to render this =underline= class as an underline. |                       |
+|--------------------+--------------------------------------------------------------------+-----------------------|
+** Keyboard tag
+*** Use Org Code markup for =kbd= tag (default behavior)
+:PROPERTIES:
+:EXPORT_FILE_NAME: kbd-tag-default
+:EXPORT_DATE: 2017-07-31
+:END:
+This is the default behavior. So =~C-h f~= will show up as =<kbd>C-h
+f</kbd>=.
+
+Example:
+- Few of Emacs help keybindings: ~C-h f~, ~C-h v~
+*** Use Org Code markup for =kbd= tag
+:PROPERTIES:
+:EXPORT_HUGO_USE_CODE_FOR_KBD: t
+:EXPORT_FILE_NAME: kbd-tag-yes
+:EXPORT_DATE: 2017-07-31
+:END:
+Here the Org code markup is explicitly specified to be used for
+=<kbd>= tag generation by setting =EXPORT_HUGO_USE_CODE_FOR_KBD=
+property to =t=. So =~C-h f~= will show up as =<kbd>C-h f</kbd>=.
+
+Example:
+- Few of Emacs help keybindings: ~C-h f~, ~C-h v~
+*** Don't Use Org Code markup for =kbd= tag
+:PROPERTIES:
+:EXPORT_HUGO_USE_CODE_FOR_KBD:
+:EXPORT_FILE_NAME: kbd-tag-no
+:EXPORT_DATE: 2017-07-31
+:END:
+Note that to disable the "use code for kbd" option, the value portion
+of the property needs to be left *empty* instead of setting to =nil=!
+#+BEGIN_EXAMPLE
+:PROPERTIES:
+:EXPORT_HUGO_USE_CODE_FOR_KBD:
+:END:
+#+END_EXAMPLE
+
+Here =~C-h f~= will show up as =`C-h f`= in Markdown and then
+=<code>C-h f</code>= in the final Hugo generated HTML.
+
+Example:
+- Few of Emacs help keybindings: ~C-h f~, ~C-h v~
 * Example block                                                     :example:
 ** Simple
 :PROPERTIES:
@@ -596,48 +661,6 @@ This post is in category =catA= and tagged =meow=.
 :EXPORT_DATE: 2017-07-24
 :END:
 This gets both categories =catA= and =catB=.
-* Keyboard tag
-** Use Org Code markup for =kbd= tag (default behavior)
-:PROPERTIES:
-:EXPORT_FILE_NAME: kbd-tag-default
-:EXPORT_DATE: 2017-07-31
-:END:
-This is the default behavior. So =~C-h f~= will show up as =<kbd>C-h
-f</kbd>=.
-
-Example:
-- Few of Emacs help keybindings: ~C-h f~, ~C-h v~
-** Use Org Code markup for =kbd= tag
-:PROPERTIES:
-:EXPORT_HUGO_USE_CODE_FOR_KBD: t
-:EXPORT_FILE_NAME: kbd-tag-yes
-:EXPORT_DATE: 2017-07-31
-:END:
-Here the Org code markup is explicitly specified to be used for
-=<kbd>= tag generation by setting =EXPORT_HUGO_USE_CODE_FOR_KBD=
-property to =t=. So =~C-h f~= will show up as =<kbd>C-h f</kbd>=.
-
-Example:
-- Few of Emacs help keybindings: ~C-h f~, ~C-h v~
-** Don't Use Org Code markup for =kbd= tag
-:PROPERTIES:
-:EXPORT_HUGO_USE_CODE_FOR_KBD:
-:EXPORT_FILE_NAME: kbd-tag-no
-:EXPORT_DATE: 2017-07-31
-:END:
-Note that to disable the "use code for kbd" option, the value portion
-of the property needs to be left *empty* instead of setting to =nil=!
-#+BEGIN_EXAMPLE
-:PROPERTIES:
-:EXPORT_HUGO_USE_CODE_FOR_KBD:
-:END:
-#+END_EXAMPLE
-
-Here =~C-h f~= will show up as =`C-h f`= in Markdown and then
-=<code>C-h f</code>= in the final Hugo generated HTML.
-
-Example:
-- Few of Emacs help keybindings: ~C-h f~, ~C-h v~
 * Links                                                               :links:
 ** Within the same post
 *** Link to a heading CUSTOM_ID

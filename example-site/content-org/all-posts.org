@@ -529,23 +529,26 @@ Here there is white space in menu name property.
 From [[http://orgmode.org/manual/Property-syntax.html][*(org) Property syntax*]]:
 #+BEGIN_QUOTE
    It is also possible to add to the values of inherited properties.
-The following results in the ‘genres’ property having the value “Classic
-Baroque” under the ‘Goldberg Variations’ subtree.
-     * CD collection
-     ** Classic
-         :PROPERTIES:
-         :GENRES: Classic
-         :END:
-     *** Goldberg Variations
-         :PROPERTIES:
-         :Title:     Goldberg Variations
-         :Composer:  J.S. Bach
-         :Artist:    Glen Gould
-         :Publisher: Deutsche Grammophon
-         :NDisks:    1
-         :GENRES+:   Baroque
-         :END:
+The following results in the 'genres' property having the value
+"Classic Baroque" under the 'Goldberg Variations' subtree.
 #+END_QUOTE
+
+#+BEGIN_EXAMPLE
+,* CD collection
+,** Classic
+:PROPERTIES:
+:GENRES: Classic
+:END:
+,*** Goldberg Variations
+:PROPERTIES:
+:Title:     Goldberg Variations
+:Composer:  J.S. Bach
+:Artist:    Glen Gould
+:Publisher: Deutsche Grammophon
+:NDisks:    1
+:GENRES+:   Baroque
+:END:
+#+END_EXAMPLE
 * Post body                                                            :body:
 ** Summary Splitter
 :PROPERTIES:
@@ -729,6 +732,66 @@ If $a^2=b$ and \( b=2 \), then the solution must be either
 $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \]
 
 (Note that the last two equations show up on their own lines.)
+* Lists                                                               :lists:
+** List following a list
+:PROPERTIES:
+:EXPORT_FILE_NAME: list-following-a-list
+:EXPORT_DATE: 2017-07-31
+:END:
+You need to force end of list when you have something like an
+unordered list immediately following an ordered list.
+
+/The easiest and cleanest way to do that is adding a comment between
+those lists./ -- [[https://stackoverflow.com/a/8964494/1219634][Reference]]
+
+That would be the implementing in the Org exporter backend. But in
+Org, two consecutive blank lines after a list ends the list.
+
+In the below example, the /foo*/ items would be in a different =<ul>=
+element than the /bar*/ items.
+*** Unordered list following an unordered list
+- foo1
+- foo2
+
+
++ bar1
++ bar2
+*** Unordered list following an ordered list
+1. foo3
+2. foo4
+
+
+- bar3
+- bar4
+*** Ordered list following an unordered list
+- foo5
+- foo6
+
+
+1. bar5
+2. bar6
+*** Description list following an ordered list
+- foo1
+- foo2
+
+
+- bar1 :: description
+- bar2 :: description
+** Nested lists
+:PROPERTIES:
+:EXPORT_FILE_NAME: nested-lists
+:EXPORT_DATE: 2017-07-31
+:END:
++ foo1
++ foo2
+  - bar1
+  - bar2
+    + baz1
+    + baz2
+      - zoo1
+      - zoo2
+        1. numbered1
+        2. numbered2
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

@@ -13,20 +13,22 @@ gamma = 10
 From [**(org) Property syntax**](http://orgmode.org/manual/Property-syntax.html):
 
 >    It is also possible to add to the values of inherited properties.
-> The following results in the ‘genres’ property having the value “Classic
-> Baroque” under the ‘Goldberg Variations’ subtree.
->
-> -   CD collection
->
-> \*\* Classic
->
-> :GENRES: Classic
->
-> **\*** Goldberg Variations
->
-> :Title:     Goldberg Variations
-> :Composer:  J.S. Bach
-> :Artist:    Glen Gould
-> :Publisher: Deutsche Grammophon
-> :NDisks:    1
-> :GENRES+:   Baroque
+> The following results in the 'genres' property having the value
+> "Classic Baroque" under the 'Goldberg Variations' subtree.
+
+```text
+* CD collection
+** Classic
+:PROPERTIES:
+:GENRES: Classic
+:END:
+*** Goldberg Variations
+:PROPERTIES:
+:Title:     Goldberg Variations
+:Composer:  J.S. Bach
+:Artist:    Glen Gould
+:Publisher: Deutsche Grammophon
+:NDisks:    1
+:GENRES+:   Baroque
+:END:
+```

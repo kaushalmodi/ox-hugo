@@ -71,6 +71,7 @@
   :translate-alist '((inner-template . org-blackfriday-inner-template)
                      (latex-fragment . org-blackfriday-latex-fragment)
                      (paragraph . org-blackfriday-paragraph)
+                     (plain-list . org-blackfriday-plain-list)
                      (strike-through . org-blackfriday-strike-through)
                      (src-block . org-blackfriday-src-block)
                      (example-block . org-blackfriday-example-block)
@@ -134,6 +135,17 @@ communication channel."
     (if (and (stringp first-object) (string-match "\\`#" first-object))
         (replace-regexp-in-string "\\`#" "\\#" contents nil t)
       contents)))
+
+;;;; Plain List
+(defun org-blackfriday-plain-list (_plain-list contents _info)
+  "Transcode plain list in CONTENTS into Markdown format."
+  ;; Two consecutive lists in Markdown can be separated by a comment.
+  (let* ((contents (format "%s\n<!--listend-->" contents))
+         ;; Do this only for top level lists.  So the lines with
+         ;; <!--listend--> comments with preceding whitespace will be
+         ;; deleted.
+         (contents (replace-regexp-in-string "\n\\s-+<!--listend-->\n" "" contents)))
+    contents))
 
 ;;;; Src Block
 (defun org-blackfriday-src-block (src-block _contents info)

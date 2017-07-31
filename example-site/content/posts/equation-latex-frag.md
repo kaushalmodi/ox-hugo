@@ -14,9 +14,10 @@ draft = false
         `$a=b$` will work (it will look like: \\(a=b\\)).
 
         On the other hand, both `\(a=b\)` (it will look like: \\(a=b\\)) and
-        `\( a=b \)` (it will look like: \\( a=b \\)) will work.
--   One-per-line equations are wrapped between `\[` and `\]` or `$$`
+        `\( a=b \)` (it will look like: \\( a=b \\)) will work.-   One-per-line equations are wrapped between `\[` and `\]` or `$$`
     delimiters.
+
+<!--listend-->
 
 For example, below in Org:
 

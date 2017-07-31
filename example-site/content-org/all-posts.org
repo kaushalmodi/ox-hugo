@@ -276,7 +276,7 @@ Here is the second post on Emacs.
 | c | d | f | h |
 |---+---+---+---|
 * Source blocks                                                   :src-block:
-** Example text with code blocks
+** Example text with code blocks                                    :ARCHIVE:
 :PROPERTIES:
 :CUSTOM_ID: example-text-with-code-blocks
 :END:
@@ -311,19 +311,37 @@ ORG_MAKE_DOC = info pdf card # html
 #   org-mime - Convert org buffer to htmlized format for email
 ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
 #+END_SRC
+** Code-fenced source blocks (default behavior)
+:PROPERTIES:
+:EXPORT_FILE_NAME: code-fenced-src-blocks-default
+:EXPORT_DATE: 2017-07-31
+:END:
+The source blocks are code-fenced by default.
+
+#+INCLUDE: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
 ** Code-fenced source blocks
 :PROPERTIES:
 :EXPORT_HUGO_CODE_FENCE: t
 :EXPORT_FILE_NAME: code-fenced-src-blocks
 :EXPORT_DATE: 2017-07-13T17:49:22-04:00
 :END:
+Here the source blocks are explicitly set to be code-fenced by setting
+the =EXPORT_HUGO_CODE_FENCE= property to =t=.
+
 #+INCLUDE: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
 ** Source blocks with =highlight= shortcode
 :PROPERTIES:
-:EXPORT_HUGO_CODE_FENCE: nil
+:EXPORT_HUGO_CODE_FENCE:
 :EXPORT_FILE_NAME: highlight-shortcode-src-blocks
 :EXPORT_DATE: 2017-07-31
 :END:
+Note that to disable the code fence option, the value portion of the
+property *needs* to be left empty instead of setting to =nil=!
+#+BEGIN_EXAMPLE
+:PROPERTIES:
+:EXPORT_HUGO_CODE_FENCE:
+:END:
+#+END_EXAMPLE
 #+INCLUDE: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
 ** Source block with caption                                       :noexport:
 :PROPERTIES:

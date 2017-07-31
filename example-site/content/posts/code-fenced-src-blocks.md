@@ -5,6 +5,9 @@ tags = []
 draft = false
 +++
 
+Here the source blocks are explicitly set to be code-fenced by setting
+the `EXPORT_HUGO_CODE_FENCE` property to `t`.
+
 Here are few variables that you might like to change in the `local.mk`:
 
 -   **`prefix`:** Org installation directory

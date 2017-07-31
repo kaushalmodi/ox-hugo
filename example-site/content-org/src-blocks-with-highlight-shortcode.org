@@ -1,9 +1,12 @@
 #+HUGO_BASE_DIR: ../
-#+HUGO_CODE_FENCE: nil
-# Below will work the same as above
-# #+HUGO_CODE_FENCE:
-# Below will use Markdown code fence instead of the highlight shortcode
-#+HUGO_CODE_FENCE: t
+#+HUGO_CODE_FENCE:
+# Below will use Markdown code fence instead of the highlight
+# shortcode.
+# #+HUGO_CODE_FENCE: t
+# Caution! Below will evaluate to the same as "#+HUGO_CODE_FENCE:
+# t"! If you want to disable an option set by keyword or property,
+# just leave it empty.
+# #+HUGO_CODE_FENCE: nil
 
 #+SEQ_TODO: TODO DRAFT DONE
 

@@ -209,6 +209,28 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
                    (:hugo-weight "HUGO_WEIGHT" nil nil)))
 
 
+;;; Miscellaneous Helper Functions
+
+(defun org-hugo--plist-value-true-p (key info)
+  "Return non-nil if KEY in INFO is non-nil.
+If the value of KEY in INFO is nil, \"nil\" or \"\", nil is
+returned.
+
+INFO is a plist used as a communication channel."
+  (let ((value (plist-get info key)))
+    (cond
+     ((or (equal t value)
+          (equal nil value))
+      value)
+     ((stringp value)
+      ;; "" -> nil
+      ;; "t" -> "t"
+      ;; "anything else" -> "anything else"
+      (org-string-nw-p value))
+     (t
+      nil))))
+
+
 ;;; Transcode Functions
 
 ;;;; Footnote Reference
@@ -562,15 +584,11 @@ INFO is a plist used as a communication channel."
  Markdown style triple-backquoted code blocks are created.
  Otherwise, the code block is wrapped in Hugo `highlight'
  shortcode."
-  (let* ((hugo-code-fence (plist-get info :hugo-code-fence))
-         (use-code-fence (and (stringp hugo-code-fence)
-                              (org-string-nw-p hugo-code-fence)
-                              (not (string= "nil" hugo-code-fence)))))
-    (if use-code-fence
-        (org-blackfriday-src-block src-block nil info)
-      (let* ((lang (org-element-property :language src-block))
-             (code (org-export-format-code-default src-block info)))
-        (format "{{< highlight %s>}}\n%s{{< /highlight >}}\n" lang code)))))
+  (if (org-hugo--plist-value-true-p :hugo-code-fence info)
+      (org-blackfriday-src-block src-block nil info)
+    (let* ((lang (org-element-property :language src-block))
+           (code (org-export-format-code-default src-block info)))
+      (format "{{< highlight %s>}}\n%s{{< /highlight >}}\n" lang code))))
 
 
 

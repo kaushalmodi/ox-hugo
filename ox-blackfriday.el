@@ -109,8 +109,11 @@ INFO is a plist holding contextual information."
      ((memq processing-type '(t mathjax))
       (let* ((frag (org-html-format-latex latex-frag 'mathjax info))
              ;; https://gohugo.io/content-management/formats#solution
-             (frag (replace-regexp-in-string "\\(\\\\[()]\\)" "\\\\\\1" frag)) ;\( -> \\(, \) -> \\)
-             (frag (replace-regexp-in-string "_" "\\\\_" frag))) ;_ -> \_
+             (frag (replace-regexp-in-string "_" "\\\\_" frag)) ;_ -> \_
+             ;; Need to escape the backslash in "\(", "\)", .. to
+             ;; make Blackfriday happy. So \( -> \\(, \) -> \\),
+             ;; \[ -> \\[ and \] -> \\].
+             (frag (replace-regexp-in-string "\\(\\\\[]()[]\\)" "\\\\\\1" frag)))
         frag))
      ((assq processing-type org-preview-latex-process-alist)
       (let ((formula-link

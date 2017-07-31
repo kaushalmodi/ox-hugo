@@ -690,22 +690,45 @@ This gets both categories =catA= and =catB=.
 :EXPORT_FILE_NAME: equation-latex-frag
 :EXPORT_DATE: 2017-07-31
 :END:
-Wrap the equations between =\(= and =\)=.
+- Inline equations are wrapped between =\(= and =\)=.
+  - =$= wrapping also works, but it is not preferred as it comes with
+    restrictions like "there should be no whitespace between the
+    equation and the =$= delimiters".
+
+    So =$ a=b $= will not work (it will look like: $ a=b $), but
+    =$a=b$= will work (it will look like: $a=b$).
+
+    On the other hand, both =\(a=b\)= (it will look like: \(a=b\)) and
+    =\( a=b \)= (it will look like: \( a=b \)) will work.
+- One-per-line equations are wrapped between =\[= and =\]= or =$$=
+  delimiters.
 
 For example, below in Org:
 #+BEGIN_SRC text
 LaTeX formatted equation: \( E = -J \sum_{i=1}^N s_i s_{i+1} \)
 #+END_SRC
 
-will look like this in Hugo rendered HTML (don't see this in Markdown,
-see what it looks after Hugo has processed it).
+will look like this in Hugo rendered HTML:
 
 LaTeX formatted equation: \( E = -J \sum_{i=1}^N s_i s_{i+1 }\)
 
-Here's another example similar to one in [[http://orgmode.org/manual/LaTeX-fragments.html][(org) LaTeX fragments]].
+(Don't see this in Markdown, see what it looks after Hugo has
+processed it.)
+
+Here's another example, taken from [[http://orgmode.org/manual/LaTeX-fragments.html][(org) LaTeX fragments]].
+
+Below in Org:
+#+BEGIN_EXAMPLE
+If $a^2=b$ and \( b=2 \), then the solution must be either
+$$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \]
+#+END_EXAMPLE
+
+renders to:
 
 If $a^2=b$ and \( b=2 \), then the solution must be either
-$a=+\sqrt{2}$ or \(a=-\sqrt{2}\).
+$$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \]
+
+(Note that the last two equations show up on their own lines.)
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

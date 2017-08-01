@@ -140,7 +140,6 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
                      (footnote-reference . org-hugo-footnote-reference)
                      (headline . org-hugo-headline)
                      (inner-template . org-hugo-inner-template)
-                     (italic . org-hugo-italic)
                      (keyword . org-hugo-keyword)
                      (link . org-hugo-link)
                      (src-block . org-hugo-src-block))
@@ -428,19 +427,6 @@ holding export options."
                contents
                "\n"
                (org-hugo-footnote-section info)))))
-
-;;;; Italic
-(defun org-hugo-italic (_italic contents _info)
-  "Transcode ITALIC object into Hugo-compatible Markdown format.
-CONTENTS is the text within italic markup.  INFO is a plist used
-as a communication channel."
-  ;; (format "*%s*" contents)
-  ;; While above also works in almost all cases, it fails in cases
-  ;; like "*This is in italic, **and this is in bold-italics**, and
-  ;; back to just italic.*".
-  ;; As `org-md-bold' uses ** to mark bold text, switching to using
-  ;; underscores only for italics.
-  (format "_%s_" contents))
 
 ;;;; Keyword
 (defun org-hugo-keyword (keyword contents info)

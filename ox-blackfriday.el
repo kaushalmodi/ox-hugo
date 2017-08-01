@@ -69,6 +69,7 @@
               (if a (org-blackfriday-export-to-markdown t s v)
                 (org-open-file (org-blackfriday-export-to-markdown nil s v)))))))
   :translate-alist '((inner-template . org-blackfriday-inner-template)
+                     (italic . org-blackfriday-italic)
                      (latex-fragment . org-blackfriday-latex-fragment)
                      (paragraph . org-blackfriday-paragraph)
                      (plain-list . org-blackfriday-plain-list)
@@ -99,6 +100,19 @@ holding export options."
                                  (org-blackfriday-format-toc headline info)
                                  "\n"))))
     (org-trim (concat toc-string toc-tail contents "\n" (org-blackfriday-footnote-section info)))))
+
+;;;; Italic
+(defun org-blackfriday-italic (_italic contents _info)
+  "Transcode ITALIC object into Markdown format.
+CONTENTS is the text within italic markup.  INFO is a plist used
+as a communication channel."
+  ;; (format "*%s*" contents)
+  ;; While above also works in almost all cases, it fails in cases
+  ;; like "*This is in italic, **and this is in bold-italics**, and
+  ;; back to just italic.*".
+  ;; As `org-md-bold' uses ** to mark bold text, switching to using
+  ;; underscores only for italics.
+  (format "_%s_" contents))
 
 ;;;; Latex Fragment
 (defun org-blackfriday-latex-fragment (latex-fragment _contents info)

@@ -12,5 +12,3 @@ property to `t`. So `~C-h f~` will show up as `<kbd>C-h f</kbd>`.
 Example:
 
 -   Few of Emacs help keybindings: <kbd>C-h f</kbd>, <kbd>C-h v</kbd>
-
-<!--listend-->

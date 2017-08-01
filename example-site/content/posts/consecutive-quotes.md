@@ -20,6 +20,4 @@ Some text.
 >
 > This is the second paragraph.
 
-<!--quoteend-->
-
 Some other text.

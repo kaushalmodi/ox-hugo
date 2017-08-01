@@ -11,5 +11,3 @@ f</kbd>`.
 Example:
 
 -   Few of Emacs help keybindings: <kbd>C-h f</kbd>, <kbd>C-h v</kbd>
-
-<!--listend-->

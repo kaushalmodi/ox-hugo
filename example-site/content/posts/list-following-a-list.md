@@ -28,8 +28,6 @@ element than the _bar\*_ items.
 -   bar1
 -   bar2
 
-<!--listend-->
-
 
 ## Unordered list following an ordered list {#unordered-list-following-an-ordered-list}
 
@@ -40,8 +38,6 @@ element than the _bar\*_ items.
 
 -   bar3
 -   bar4
-
-<!--listend-->
 
 
 ## Ordered list following an unordered list {#ordered-list-following-an-unordered-list}
@@ -54,8 +50,6 @@ element than the _bar\*_ items.
 1.  bar5
 2.  bar6
 
-<!--listend-->
-
 
 ## Description list following an ordered list {#description-list-following-an-ordered-list}
 
@@ -66,5 +60,3 @@ element than the _bar\*_ items.
 
 -   **bar1:** description
 -   **bar2:** description
-
-<!--listend-->

@@ -51,5 +51,3 @@ Here are few variables that you might like to change in the `local.mk`:
     #   org-mime - Convert org buffer to htmlized format for email
     ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
     {{< /highlight >}}
-
-<!--listend-->

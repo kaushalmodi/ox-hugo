@@ -20,5 +20,3 @@ Here `~C-h f~` will show up as `` `C-h f` `` in Markdown and then
 Example:
 
 -   Few of Emacs help keybindings: `C-h f`, `C-h v`
-
-<!--listend-->

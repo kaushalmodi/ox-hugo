@@ -13,8 +13,6 @@ draft = false
 
 -   Link to [Heading 2](#link-heading-2)
 
-<!--listend-->
-
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
 mi. Maecenas pharetra sapien nunc, ut mollis enim aliquam quis. Nam at
@@ -227,5 +225,3 @@ blandit in.
 ## Heading 2 {#link-heading-2}
 
 -   Link to [Heading 1](#link-heading-1)
-
-<!--listend-->

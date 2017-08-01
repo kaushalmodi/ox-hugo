@@ -259,28 +259,33 @@ communication channel."
       contents)))
 
 ;;;; Plain List
-(defun org-blackfriday-plain-list (_plain-list contents _info)
-  "Transcode plain list in CONTENTS into Markdown format."
-  ;; Two consecutive lists in Markdown can be separated by a comment.
-  (let* ((contents (format "%s\n<!--listend-->" contents))
-         ;; Do this only for top level lists.  So the lines with
-         ;; <!--listend--> comments with preceding whitespace will be
-         ;; deleted.
-         (contents (replace-regexp-in-string "\n\\s-+<!--listend-->\n" "" contents)))
-    contents))
+(defun org-blackfriday-plain-list (plain-list contents info)
+  "Transcode PLAIN-LIST element into Blackfriday Markdown format.
+CONTENTS is the plain-list contents.  INFO is a plist used as a
+communication channel."
+  (let* ((next (org-export-get-next-element plain-list info))
+         (next-type (org-element-type next))
+         (next-is-list (eq 'plain-list next-type)))
+    (concat contents
+            ;; Two consecutive lists in Markdown can be separated by a
+            ;; comment.
+            (when next-is-list
+              "\n<!--listend-->"))))
 
 ;;;; Quote Block
-(defun org-blackfriday-quote-block (_quote-block contents _info)
+(defun org-blackfriday-quote-block (quote-block contents info)
   "Transcode QUOTE-BLOCK element into Blackfriday Markdown format.
 CONTENTS is the quote-block contents.  INFO is a plist used as a
 communication channel."
-  (let* ((contents (replace-regexp-in-string
-                    "^" "> "
-                    (replace-regexp-in-string "\n\\'" "" contents)))
-         ;; Two consecutive blockquotes in Markdown can be separated
-         ;; by a comment.
-         (contents (format "%s\n\n<!--quoteend-->" contents)))
-    contents))
+  (let* ((next (org-export-get-next-element quote-block info))
+         (next-type (org-element-type next))
+         (next-is-quote (eq 'quote-block next-type))
+         (contents (org-md-quote-block quote-block contents info)))
+    (concat contents
+            ;; Two consecutive blockquotes in Markdown can be
+            ;; separated by a comment.
+            (when next-is-quote
+              "\n\n<!--quoteend-->"))))
 
 ;;;; Src Block
 (defun org-blackfriday-src-block (src-block _contents info)

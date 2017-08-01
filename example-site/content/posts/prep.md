@@ -13,5 +13,3 @@ draft = false
     hugo server --port 1111
     ```
 3.  See the site served on "<http://localhost:1111/>".
-
-<!--listend-->

@@ -792,6 +792,36 @@ element than the /bar*/ items.
       - zoo2
         1. numbered1
         2. numbered2
+** Force ordered list numbering
+:PROPERTIES:
+:EXPORT_DATE: 2017-08-01
+:EXPORT_FILE_NAME: force-ordered-list-numbering
+:END:
+1. This will be 1.
+1. This will be 2.
+
+
+1. [@10] This will be 10!
+1. This will be 11.
+
+
+1. [@17] This will be 17!
+1. This will be 18.
+1. [@123] This will be 123!
+1. This will be 124.
+
+
+1. This will be 1 again.
+1. This will be 2.
+
+Another example:
+
+1. This will be 1.
+1. [@3] This will be 3!
+1. [@7] This will be 7!
+1. [@100] This will be 100!
+
+See [[http://orgmode.org/manual/Plain-lists.html][(org) Plain lists]] to read more about plain lists in Org.
 * Quotes                                                             :quotes:
 ** Consecutive quotes
 :PROPERTIES:

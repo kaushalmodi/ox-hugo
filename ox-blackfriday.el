@@ -78,6 +78,7 @@ first row is already inserted.")
   :translate-alist '((example-block . org-blackfriday-example-block)
                      (inner-template . org-blackfriday-inner-template)
                      (italic . org-blackfriday-italic)
+                     (item . org-blackfriday-item)
                      (latex-fragment . org-blackfriday-latex-fragment)
                      (paragraph . org-blackfriday-paragraph)
                      (plain-list . org-blackfriday-plain-list)
@@ -181,6 +182,24 @@ INFO is a plist used as a communication channel."
          (setq max-width 1))
        (make-string max-width ,char))))
 
+;;;; Plain List Helper
+(defun org-blackfriday--ordered-list-with-custom-counter-p (plain-list)
+  "Returns non-nil is PLAIN-LIST element has an item with custom counter.
+Returns nil immediately if PLAIN-LIST is not an ordered list."
+  (let ((type (org-element-property :type plain-list))
+        has-custom-counter)
+    (when (eq 'ordered type)
+      (let* ((list-contents (org-element-contents plain-list)))
+        (dolist (el list-contents)
+          (when (eq 'item (car el))
+            (let* ((item-plist (car (cdr el)))
+                   (counter (plist-get item-plist :counter)))
+              ;; (message "dbg: %S" counter)
+              (when counter
+                (setq has-custom-counter t)))))))
+    ;; (message "has custom counter: %S" has-custom-counter)
+    has-custom-counter))
+
 
 ;;; Transcode Functions
 
@@ -221,6 +240,20 @@ as a communication channel."
   ;; As `org-md-bold' uses ** to mark bold text, switching to using
   ;; underscores only for italics.
   (format "_%s_" contents))
+
+;;;; Item (list item)
+(defun org-blackfriday-item (item contents info)
+  "Transcode an ITEM element from Org to Blackfriday Markdown format.
+CONTENTS holds the contents of the item.  INFO is a plist holding
+contextual information."
+  (let* ((parent-list (org-export-get-parent item)))
+    ;; If this item is in an ordered list and if this or any other
+    ;; item in this list is using a custom counter, export this list
+    ;; item in HTML.
+    (if (org-blackfriday--ordered-list-with-custom-counter-p parent-list)
+        (org-html-format-list-item contents 'ordered nil info
+                                   (org-element-property :counter item))
+      (org-md-item item contents info))))
 
 ;;;; Latex Fragment
 (defun org-blackfriday-latex-fragment (latex-fragment _contents info)
@@ -263,14 +296,18 @@ communication channel."
   "Transcode PLAIN-LIST element into Blackfriday Markdown format.
 CONTENTS is the plain-list contents.  INFO is a plist used as a
 communication channel."
-  (let* ((next (org-export-get-next-element plain-list info))
-         (next-type (org-element-type next))
-         (next-is-list (eq 'plain-list next-type)))
-    (concat contents
-            ;; Two consecutive lists in Markdown can be separated by a
-            ;; comment.
-            (when next-is-list
-              "\n<!--listend-->"))))
+  (if (org-blackfriday--ordered-list-with-custom-counter-p plain-list)
+      ;; If this is an ordered list and if any item in this list is
+      ;; using a custom counter, export this list in HTML.
+      (org-html-plain-list plain-list contents info)
+    (let* ((next (org-export-get-next-element plain-list info))
+           (next-type (org-element-type next))
+           (next-is-list (eq 'plain-list next-type)))
+      (concat contents
+              ;; Two consecutive lists in Markdown can be separated by
+              ;; a comment.
+              (when next-is-list
+                "\n<!--listend-->")))))
 
 ;;;; Quote Block
 (defun org-blackfriday-quote-block (quote-block contents info)

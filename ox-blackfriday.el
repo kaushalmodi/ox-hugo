@@ -38,12 +38,19 @@
 (require 'ox-md)
 (require 'ox-publish)
 
+
+;;; Variables
+
 (defvar width-cookies nil)
 (defvar width-cookies-table nil)
 
 (defconst blackfriday-table-left-border "")
 (defconst blackfriday-table-right-border " ")
 (defconst blackfriday-table-separator "| ")
+
+(defvar org-blackfriday--hrule-inserted nil
+  "State variable to keep track if the horizontal rule after
+first row is already inserted.")
 
 
 ;;; User-Configurable Variables
@@ -68,21 +75,122 @@
             (lambda (a s v b)
               (if a (org-blackfriday-export-to-markdown t s v)
                 (org-open-file (org-blackfriday-export-to-markdown nil s v)))))))
-  :translate-alist '((inner-template . org-blackfriday-inner-template)
+  :translate-alist '((example-block . org-blackfriday-example-block)
+                     (inner-template . org-blackfriday-inner-template)
                      (italic . org-blackfriday-italic)
                      (latex-fragment . org-blackfriday-latex-fragment)
                      (paragraph . org-blackfriday-paragraph)
                      (plain-list . org-blackfriday-plain-list)
-                     (strike-through . org-blackfriday-strike-through)
+                     (quote-block . org-blackfriday-quote-block)
                      (src-block . org-blackfriday-src-block)
-                     (example-block . org-blackfriday-example-block)
+                     (strike-through . org-blackfriday-strike-through)
                      (table-cell . org-blackfriday-table-cell)
                      (table-row . org-blackfriday-table-row)
                      (table . org-blackfriday-table)
                      (verse-block . org-blackfriday-verse-block)))
 
 
+;;; Miscellaneous Helper Functions
+
+;;;; Table of contents
+(defun org-blackfriday-format-toc (headline info)
+  "Return an appropriate table of contents entry for HEADLINE.
+
+INFO is a plist used as a communication channel."
+  (let* ((title (org-export-data (org-export-get-alt-title headline info) info))
+         (level (1- (org-element-property :level headline)))
+         (indent (concat (make-string (* level 2) ? )))
+         (anchor (or (org-element-property :CUSTOM_ID headline)
+                     (org-export-get-reference headline info))))
+    (concat indent "- [" title "]" "(#" anchor ")")))
+
+;;;; Footnote section
+(defun org-blackfriday-footnote-section (info)
+  "Format the footnote section.
+INFO is a plist used as a communication channel."
+  (let* ((fn-alist (org-export-collect-footnote-definitions info))
+         (fn-alist
+          (cl-loop for (n raw) in fn-alist collect
+                   (cons n (org-trim (org-export-data raw info))))))
+    (when fn-alist
+      (format
+       "## %s\n%s"
+       "Footnotes"
+       (format
+        "\n%s\n"
+        (mapconcat
+         (lambda (fn)
+           (let ((n (car fn)) (def (cdr fn)))
+             (format
+              "%s %s\n"
+              (format
+               (plist-get info :html-footnote-format)
+               (org-html--anchor
+                (format "fn.%d" n)
+                n
+                (format " class=\"footnum\" href=\"#fnr.%d\"" n)
+                info))
+              def)))
+         fn-alist
+         "\n"))))))
+
+;;;; Table-Common
+(defun org-blackfriday-table-col-width (table column info)
+  "Return width of TABLE at given COLUMN using INFO.
+
+INFO is a plist used as communication channel.
+Width of a column is determined either by inquerying `width-cookies'
+in the column, or by the maximum cell with in the column."
+  (let ((cookie (when (hash-table-p width-cookies)
+                  (gethash column width-cookies))))
+    (if (and (eq table width-cookies-table)
+             (not (eq nil cookie)))
+        cookie
+      (progn
+        (unless (and (eq table width-cookies-table)
+                     (hash-table-p width-cookies))
+          (setq width-cookies (make-hash-table))
+          (setq width-cookies-table table))
+        (let ((max-width 0)
+              (specialp (org-export-table-has-special-column-p table)))
+          (org-element-map
+              table
+              'table-row
+            (lambda (row)
+              (setq max-width
+                    (max (length
+                          (org-export-data
+                           (org-element-contents
+                            (elt (if specialp
+                                     (car (org-element-contents row))
+                                   (org-element-contents row))
+                                 column))
+                           info))
+                         max-width)))
+            info)
+          (puthash column max-width width-cookies))))))
+
+(defun org-blackfriday-make-hline-builder (table info char)
+  "Return a function to horizontal lines in TABLE.
+Draw the lines using INFO with given CHAR.
+
+INFO is a plist used as a communication channel."
+  `(lambda (col)
+     (let ((max-width (max 3 (+ 1 (org-blackfriday-table-col-width ,table col ,info)))))
+       (when (< max-width 1)
+         (setq max-width 1))
+       (make-string max-width ,char))))
+
+
 ;;; Transcode Functions
+
+;;;; Example Block
+(defun org-blackfriday-example-block (example-block _contents info)
+  "Transcode a EXAMPLE-BLOCK element into Blackfriday Markdown format.
+CONTENTS is nil.  INFO is a plist holding contextual
+information."
+  (format "```text\n%s```"
+          (org-export-format-code-default example-block info)))
 
 ;;;; Inner Template
 (defun org-blackfriday-inner-template (contents info)
@@ -161,6 +269,19 @@ communication channel."
          (contents (replace-regexp-in-string "\n\\s-+<!--listend-->\n" "" contents)))
     contents))
 
+;;;; Quote Block
+(defun org-blackfriday-quote-block (_quote-block contents _info)
+  "Transcode QUOTE-BLOCK element into Blackfriday Markdown format.
+CONTENTS is the quote-block contents.  INFO is a plist used as a
+communication channel."
+  (let* ((contents (replace-regexp-in-string
+                    "^" "> "
+                    (replace-regexp-in-string "\n\\'" "" contents)))
+         ;; Two consecutive blockquotes in Markdown can be separated
+         ;; by a comment.
+         (contents (format "%s\n\n<!--quoteend-->" contents)))
+    contents))
+
 ;;;; Src Block
 (defun org-blackfriday-src-block (src-block _contents info)
   "Transcode SRC-BLOCK element into Blackfriday Markdown format.
@@ -172,66 +293,11 @@ INFO is a plist used as a communication channel."
          (suffix "```"))
     (concat prefix code suffix)))
 
-;;;; Example Block
-(defun org-blackfriday-example-block (example-block _contents info)
-  "Transcode a EXAMPLE-BLOCK element into Blackfriday Markdown format.
-CONTENTS is nil.  INFO is a plist holding contextual
-information."
-  (format "```text\n%s```"
-          (org-export-format-code-default example-block info)))
-
 ;;;; Strike-Through
 (defun org-blackfriday-strike-through (_strike-through contents _info)
   "Transcode strike-through text from Org to Blackfriday Markdown.
 CONTENTS contains the text with strike-through markup."
   (format "~~%s~~" contents))
-
-;;;; Table-Common
-(defun org-blackfriday-table-col-width (table column info)
-  "Return width of TABLE at given COLUMN using INFO.
-
-INFO is a plist used as communication channel.
-Width of a column is determined either by inquerying `width-cookies'
-in the column, or by the maximum cell with in the column."
-  (let ((cookie (when (hash-table-p width-cookies)
-                  (gethash column width-cookies))))
-    (if (and (eq table width-cookies-table)
-             (not (eq nil cookie)))
-        cookie
-      (progn
-        (unless (and (eq table width-cookies-table)
-                     (hash-table-p width-cookies))
-          (setq width-cookies (make-hash-table))
-          (setq width-cookies-table table))
-        (let ((max-width 0)
-              (specialp (org-export-table-has-special-column-p table)))
-          (org-element-map
-              table
-              'table-row
-            (lambda (row)
-              (setq max-width
-                    (max (length
-                          (org-export-data
-                           (org-element-contents
-                            (elt (if specialp
-                                     (car (org-element-contents row))
-                                   (org-element-contents row))
-                                 column))
-                           info))
-                         max-width)))
-            info)
-          (puthash column max-width width-cookies))))))
-
-(defun org-blackfriday-make-hline-builder (table info char)
-  "Return a function to horizontal lines in TABLE.
-Draw the lines using INFO with given CHAR.
-
-INFO is a plist used as a communication channel."
-  `(lambda (col)
-     (let ((max-width (max 3 (+ 1 (org-blackfriday-table-col-width ,table col ,info)))))
-       (when (< max-width 1)
-         (setq max-width 1))
-       (make-string max-width ,char))))
 
 ;;;; Table-Cell
 (defun org-blackfriday-table-cell (table-cell contents info)
@@ -260,10 +326,6 @@ communication channel."
     cell))
 
 ;;;; Table-Row
-(defvar org-blackfriday--hrule-inserted nil
-  "State variable to keep track if the horizontal rule after
-first row is already inserted.")
-
 (defun org-blackfriday-table-row (table-row contents info)
   "Transcode TABLE-ROW element from Org into Blackfriday.
 
@@ -355,48 +417,6 @@ contextual information."
    (let* ((br (org-html-close-tag "br" nil info))
 	  (re (format "\\(?:%s\\)?[ \t]*\n" (regexp-quote br))))
      (replace-regexp-in-string re (concat br "\n") contents))))
-
-;;;; Table of contents
-(defun org-blackfriday-format-toc (headline info)
-  "Return an appropriate table of contents entry for HEADLINE.
-
-INFO is a plist used as a communication channel."
-  (let* ((title (org-export-data (org-export-get-alt-title headline info) info))
-         (level (1- (org-element-property :level headline)))
-         (indent (concat (make-string (* level 2) ? )))
-         (anchor (or (org-element-property :CUSTOM_ID headline)
-                     (org-export-get-reference headline info))))
-    (concat indent "- [" title "]" "(#" anchor ")")))
-
-;;;; Footnote section
-(defun org-blackfriday-footnote-section (info)
-  "Format the footnote section.
-INFO is a plist used as a communication channel."
-  (let* ((fn-alist (org-export-collect-footnote-definitions info))
-         (fn-alist
-          (cl-loop for (n raw) in fn-alist collect
-                   (cons n (org-trim (org-export-data raw info))))))
-    (when fn-alist
-      (format
-       "## %s\n%s"
-       "Footnotes"
-       (format
-        "\n%s\n"
-        (mapconcat
-         (lambda (fn)
-           (let ((n (car fn)) (def (cdr fn)))
-             (format
-              "%s %s\n"
-              (format
-               (plist-get info :html-footnote-format)
-               (org-html--anchor
-                (format "fn.%d" n)
-                n
-                (format " class=\"footnum\" href=\"#fnr.%d\"" n)
-                info))
-              def)))
-         fn-alist
-         "\n"))))))
 
 
 ;;; Interactive functions

@@ -672,8 +672,9 @@ to ((name . \"foo\") (weight . 80))."
         valid-menu-alist)
     ;; Hugo menu properties: https://gohugo.io/content-management/menus/
     (dolist (prop '(menu name url identifier pre post weight parent)) ;children prop is probably read-only
-      (when-let* ((cell (assoc prop menu-alist)))
-        (push cell valid-menu-alist)))
+      (let ((cell (assoc prop menu-alist)))
+        (when cell
+          (push cell valid-menu-alist))))
     valid-menu-alist))
 
 (defun org-hugo--sanitize-title (info)
@@ -743,9 +744,10 @@ INFO is a plist used as a communication channel."
                        (dolist (override-prop menu-alist-override)
                          (let ((override-key (car override-prop))
                                (override-val (cdr override-prop)))
-                           (if-let ((matching-prop (assoc override-key updated-menu-alist)))
-                               (setcdr matching-prop override-val)
-                             (push override-prop updated-menu-alist))))
+                           (let ((matching-prop (assoc override-key updated-menu-alist)))
+                             (if matching-prop
+                                 (setcdr matching-prop override-val)
+                               (push override-prop updated-menu-alist)))))
                        updated-menu-alist))
          (custom-fm-data (org-hugo--parse-property-arguments (plist-get info :hugo-custom-front-matter)))
          (data `(;; The order of the elements below will be the order in which the front matter

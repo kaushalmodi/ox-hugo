@@ -78,8 +78,8 @@
                      (example-block . org-blackfriday-example-block)
                      (table-cell . org-blackfriday-table-cell)
                      (table-row . org-blackfriday-table-row)
-                     (table . org-blackfriday-table)))
-
+                     (table . org-blackfriday-table)
+                     (verse-block . org-blackfriday-verse-block)))
 
 
 ;;; Transcode Functions
@@ -338,6 +338,23 @@ contextual information."
                       (replace-regexp-in-string "\n\n" "\n" contents))))
     ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
     tbl))
+
+;;;; Verse Block
+(defun org-blackfriday-verse-block (_verse-block contents info)
+  "Transcode a VERSE-BLOCK element from Org to partial HTML.
+CONTENTS is verse block contents.  INFO is a plist holding
+contextual information."
+  ;; Replace leading white spaces with non-breaking spaces.
+  (replace-regexp-in-string
+   "^[ \t]+"
+   (lambda (m)
+     (org-html--make-string (length m) "&#xa0;"))
+   ;; Replace each newline character with line break.  Also
+   ;; remove any trailing "br" close-tag so as to avoid
+   ;; duplicates.
+   (let* ((br (org-html-close-tag "br" nil info))
+	  (re (format "\\(?:%s\\)?[ \t]*\n" (regexp-quote br))))
+     (replace-regexp-in-string re (concat br "\n") contents))))
 
 ;;;; Table of contents
 (defun org-blackfriday-format-toc (headline info)

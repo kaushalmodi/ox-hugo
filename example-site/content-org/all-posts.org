@@ -812,6 +812,57 @@ Quote 3. This is a multi-paragraph quote.
 This is the second paragraph.
 #+END_QUOTE
 Some other text.
+* Verse                                                               :verse:
+** One verse
+:PROPERTIES:
+:EXPORT_DATE: 2017-08-01
+:EXPORT_FILE_NAME: one-verse
+:END:
+To preserve the line breaks, indentation and blank lines in a region,
+but otherwise use normal formatting, you can use the /verse/
+construct, which can also be used to format poetry -- [[http://orgmode.org/manual/Paragraphs.html][Reference]].
+#+BEGIN_VERSE
+Great clouds overhead
+Tiny black birds rise and fall
+Snow covers Emacs
+
+    -- AlexSchroeder
+#+END_VERSE
+** Consecutive verses
+:PROPERTIES:
+:EXPORT_DATE: 2017-08-01
+:EXPORT_FILE_NAME: consecutive-verses
+:END:
+#+BEGIN_VERSE
+Tyger Tyger, burning bright,
+In the forests of the night;
+What immortal hand or eye,
+Could frame thy fearful symmetry?
+
+In what distant deeps or skies.
+Burnt the fire of thine eyes?
+On what wings dare he aspire?
+What the hand, dare seize the fire?
+
+   -- "The Tyger" /by/ William Blake
+#+END_VERSE
+#+BEGIN_VERSE
+Some parts can be *bold*
+  Some can be =monospace=
+    Some can be /italic/ too.
+#+END_VERSE
+#+BEGIN_VERSE
+What is this life if, full of care,
+We have no time to stand and stare.
+
+No time to stand beneath the boughs
+And stare as long as sheep or cows.
+
+No time to see, when woods we pass,
+Where squirrels hide their nuts in grass.
+
+   -- "Leisure" /by/ William Henry Davis
+#+END_VERSE
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

@@ -862,6 +862,33 @@ Another example:
 1. [@100] This will be 100!
 
 See [[http://orgmode.org/manual/Plain-lists.html][(org) Plain lists]] to read more about plain lists in Org.
+** Checklist
+:PROPERTIES:
+:EXPORT_FILE_NAME: checklist
+:EXPORT_DATE: 2017-08-02
+:END:
+This is a check-list:
+*** Checklist [40%]
+Checklist showing progress in percentage.
+
+- [ ] Task 1
+- [ ] Task 2
+- [X] Task 3
+- [ ] Task 4
+- [X] Task 5
+*** Checklist [2/5]                                                  :@fixme:
+Checklist showing progress in ratio.
+
+- [ ] Task 1
+- [ ] Task 2
+- [X] Task 3
+- [ ] Task 4
+- [X] Task 5
+**** TODO Needs Blackfriday front matter
+The "2/5" ratio is rendered as a fraction by Blackfriday. Need to
+implement feature in [[https://github.com/kaushalmodi/ox-hugo/issues/37][Issue # 37]] so that the fraction rendering can be
+disabled in the front matter (setting =[blackfriday] fractions= to
+=false= [[[https://gohugo.io/getting-started/configuration/#configure-blackfriday][Ref]]]).
 * Quotes                                                             :quotes:
 ** Consecutive quotes
 :PROPERTIES:

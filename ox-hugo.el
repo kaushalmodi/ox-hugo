@@ -320,6 +320,7 @@ returned slug string has the following specification:
 
 - Should contain only lower case alphabet, number and hyphen
   characters.
+- Remove \"<code>..</code>\" part from STR if present.
 - URLs if present in STR should be removed.
 - Replace \".\" in STR with \"and\", and \"&\" with \"and\".
 - Parentheses should be replaced with double-hyphens ( \"foo (bar)
@@ -331,6 +332,8 @@ returned slug string has the following specification:
   returned string ."
   (let* (;; All lower-case
          (str (downcase str))
+         ;; Remove "<code>..</code>" stuff if present
+         (str (replace-regexp-in-string "<code>.*</code>" "" str))
          ;; Remove URLs if present in the string
          ;; The ")" in the below regexp is the closing parenthesis of a
          ;; Markdown link: [Desc](Link)

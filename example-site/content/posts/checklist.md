@@ -8,18 +8,18 @@ draft = false
 This is a check-list:
 
 
-## Checklist <code>[40%]</code> {#checklist-code-40-code}
+## Checklist 1 <code>[60%]</code> {#checklist-1}
 
 Checklist showing progress in percentage.
 
 -   [ ] Task 1
--   [ ] Task 2
+-   [X] Task 2
 -   [X] Task 3
 -   [ ] Task 4
 -   [X] Task 5
 
 
-## Checklist <code>[2/5]</code> {#checklist-code-2-5-code}
+## Checklist 2 <code>[2/5]</code> {#checklist-2}
 
 Checklist showing progress in ratio.
 

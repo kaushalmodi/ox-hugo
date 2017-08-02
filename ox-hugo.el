@@ -258,10 +258,9 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
   (concat
    ;; Insert separator between two footnotes in a row.
    (let ((prev (org-export-get-previous-element footnote-reference info)))
-     (when (eq (org-element-type prev) 'footnote-reference)
-       (plist-get info :html-footnote-separator)))
-   (let ((n (org-export-get-footnote-number footnote-reference info)))
-     (format "[^fn:%d]" n))))
+     (and (eq (org-element-type prev) 'footnote-reference)
+          (plist-get info :html-footnote-separator)))
+   (format "[^fn:%d]" (org-export-get-footnote-number footnote-reference info))))
 
 ;;;; Headline
 (defun org-hugo-headline (headline contents info)
@@ -742,12 +741,12 @@ INFO is a plist used as a communication channel."
          ;; If menu-alist-override is non-nil, update menu-alist with values from that.
          (menu-alist (let ((updated-menu-alist menu-alist))
                        (dolist (override-prop menu-alist-override)
-                         (let ((override-key (car override-prop))
-                               (override-val (cdr override-prop)))
-                           (let ((matching-prop (assoc override-key updated-menu-alist)))
-                             (if matching-prop
-                                 (setcdr matching-prop override-val)
-                               (push override-prop updated-menu-alist)))))
+                         (let* ((override-key (car override-prop))
+                                (override-val (cdr override-prop))
+                                (matching-prop (assoc override-key updated-menu-alist)))
+                           (if matching-prop
+                               (setcdr matching-prop override-val)
+                             (push override-prop updated-menu-alist))))
                        updated-menu-alist))
          (custom-fm-data (org-hugo--parse-property-arguments (plist-get info :hugo-custom-front-matter)))
          (data `(;; The order of the elements below will be the order in which the front matter
@@ -1168,11 +1167,13 @@ The export is also skipped if `org-hugo-allow-export-after-save'
 is nil."
   (save-excursion
     (when (and
+           ;; Condition 1: `org-hugo-allow-export-after-save' must be
+           ;; non-nil.
            org-hugo-allow-export-after-save
-           ;; Condition 1: Point must be under an Org headline
+           ;; Condition 2: Point must be under an Org headline
            (ignore-errors
              (org-back-to-heading :invisible-ok))
-           ;; Condition 2: Point must be in a valid Hugo post subtree
+           ;; Condition 3: Point must be in a valid Hugo post subtree
            (org-hugo--get-valid-subtree))
       (org-hugo-export-subtree-to-md))))
 

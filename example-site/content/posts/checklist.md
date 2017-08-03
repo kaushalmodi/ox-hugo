@@ -3,6 +3,8 @@ title = "Checklist"
 date = 2017-08-02
 tags = ["lists"]
 draft = false
+[blackfriday]
+  fractions = false
 +++
 
 This is a check-list:
@@ -28,11 +30,3 @@ Checklist showing progress in ratio.
 -   [X] Task 3
 -   [ ] Task 4
 -   [X] Task 5
-
-
-### Needs Blackfriday front matter {#needs-blackfriday-front-matter}
-
-The "2/5" ratio is rendered as a fraction by Blackfriday. Need to
-implement feature in [Issue # 37](https://github.com/kaushalmodi/ox-hugo/issues/37) so that the fraction rendering can be
-disabled in the front matter (setting `[blackfriday] fractions` to
-`false` [[Ref](https://gohugo.io/getting-started/configuration/#configure-blackfriday)]).

@@ -70,6 +70,252 @@ Note that the export after save will not work until
 `org-hugo-export-subtree-to-md-after-save' is added to the
 `after-save-hook' by the user.")
 
+(defvar org-hugo-blackfriday-options
+  '("taskLists"
+    "smartypants"
+    "smartypantsQuotesNBSP"
+    "angledQuotes"
+    "fractions"
+    "smartDashes"
+    "latexDashes"
+    "hrefTargetBlank"
+    "plainIDAnchors"
+    "extensions"
+    "extensionsmask")
+  "Blackfriday option names as used inside Hugo.
+Note that these names are case-sensitive.
+
+This is a list of strings.
+
+Reference used to get the above list.
+https://gohugo.io/getting-started/configuration/#configure-blackfriday
+
+Development version reference:
+https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
+
+taskLists
+- default: `true'
+- Purpose: `false' turns off GitHub-style automatic task/TODO list
+           generation.
+
+smartypants
+- default: `true'
+- Purpose: `false' disables smart punctuation substitutions, including
+           smart quotes, smart dashes, smart fractions, etc.  If
+           `true', it may be fine-tuned with the `angledQuotes',
+           `fractions', `smartDashes', and `latexDashes' flags.
+
+smartypantsQuotesNBSP
+- default: `false'
+- Purpose: `true' enables French style Guillemets with non-breaking
+           space inside the quotes.
+
+angledQuotes
+- default: `false'
+- Purpose: `true' enables smart, angled double quotes.
+           Example: \"Hugo\" renders to «Hugo» instead of “Hugo”.
+
+fractions
+- default: `true'
+- Purpose: `false' disables smart fractions.
+- Example: 5/12 renders to 5⁄12(<sup>5</sup>&frasl;<sub>12</sub>).
+- Caveat:  Even with \"fractions = false\", Blackfriday still converts
+           1/2, 1/4, and 3/4 respectively to ½ (&frac12;), ¼
+           (&frac14;) and ¾ (&frac34;), but only these three.
+
+smartDashes
+- default: `true'
+- Purpose: `false' disables smart dashes; i.e., the conversion of
+           multiple hyphens into an en-dash or em-dash.  If `true',
+           its behavior can be modified with the `latexDashes' flag.
+
+latexDashes
+- default: `true'
+- Purpose: `false' disables LaTeX-style smart dashes and selects
+           conventional smart dashes.  Assuming `smartDashes': If
+           `true', -- is translated into – (&ndash;), whereas ---
+           is translated into — (&mdash;).  However, spaced single
+           hyphen between two words is translated into an en dash
+           e.g., \"12 June - 3 July\" becomes \"12 June &ndash; 3
+           July\" upon rendering.
+
+hrefTargetBlank
+- default: `false'
+- Purpose: `true' opens external links in a new window or tab.
+
+plainIDAnchors
+- default: `true'
+- Purpose: `true' renders any heading and footnote IDs without the
+           document ID.
+- Example: renders \"#my-heading\" instead of
+           \"#my-heading:bec3ed8ba720b970\".
+
+extensions
+- default: []
+- Purpose: Enable one or more Blackfriday's Markdown extensions (if
+           they aren't Hugo defaults).
+- Example: Include `hardLineBreak' in the list to enable Blackfriday's
+           EXTENSION_HARD_LINK_BREAK.
+
+extensionsmask
+- default: []
+- Purpose: Enable one or more of Blackfriday's Markdown extensions (if
+           they aren't Hugo defaults). Example: Include `autoHeaderIds'
+           as `false' in the list to disable Blackfriday's
+           EXTENSION_AUTO_HEADER_IDS
+
+See `org-hugo-blackfriday-extensions' for valid Blackfriday
+extensions.")
+
+(defvar org-hugo-blackfriday-extensions
+  '("noIntraEmphasis"
+    "tables"
+    "fencedCode"
+    "autolink"
+    "strikethrough"
+    "laxHtmlBlocks"
+    "spaceHeaders"
+    "hardLineBreak"
+    "tabSizeEight"
+    "footnotes"
+    "noEmptyLineBeforeBlock"
+    "headerIds"
+    "titleblock"
+    "autoHeaderIds"
+    "backslashLineBreak"
+    "definitionLists"
+    "joinLines")
+  "Blackfriday extension names as used inside Hugo.
+Note that these names are case-sensitive.
+
+This is a list of strings.
+
+Descriptions of these extensions can be found here:
+https://github.com/russross/blackfriday#extensions
+
+Development version reference:
+https://github.com/russross/blackfriday/blob/master/markdown.go
+
+Hugo code used as reference for these names:
+https://github.com/gohugoio/hugo/blob/master/helpers/content.go
+
+noIntraEmphasis
+- default: enabled
+- Purpose: The \"_\" character is commonly used inside words when
+           discussing code, so having Markdown interpret it as an
+           emphasis command is usually the wrong thing.  When enabled,
+           Blackfriday lets you treat all emphasis markers as normal
+           characters when they occur inside a word.
+
+tables
+- default: enabled
+- Purpose: When enabled, tables can be created by drawing them in the
+           input using the below syntax:
+- Example:
+           Name    | Age
+           --------|------
+           Bob     | 27
+           Alice   | 23
+
+fencedCode
+- default: enabled
+- Purpose: When enabled, in addition to the normal 4-space indentation
+           to mark code blocks, you can explicitly mark them and
+           supply a language (to make syntax highlighting simple).
+
+           You can use 3 or more backticks to mark the beginning of
+           the block, and the same number to mark the end of the
+           block.
+- Example:
+           ```emacs-lisp
+           (message \"Hello\")
+           ```
+
+autolink
+- default: enabled
+- Purpose: When enabled, URLs that have not been explicitly marked as
+           links will be converted into links.
+
+strikethrough
+- default: enabled
+- Purpose: When enabled, text wrapped with two tildes will be crossed
+           out.
+- Example: ~~crossed-out~~
+
+laxHtmlBlocks
+- default: disabled
+- Purpose: When enabled, loosen up HTML block parsing rules.
+           «Needs more information»
+
+spaceHeaders
+- default: enabled
+- Purpose: When enabled, be strict about prefix header rules.
+           «Needs more information»
+
+hardLineBreak
+- default: disabled
+- Purpose: When enabled, newlines in the input translate into line
+           breaks in the output, like in Org verse blocks.
+
+tabSizeEight
+- default: disabled
+- Purpose: When enabled, expand tabs to eight spaces instead of four.
+
+footnotes
+- default: enabled
+- Purpose: When enabled, Pnadoc-style footnotes will be supported.
+           The footnote marker in the text that will become a
+           superscript text; the footnote definition will be placed in
+           a list of footnotes at the end of the document.
+- Example:
+           This is a footnote.[^1]
+
+           [^1]: the footnote text.
+
+noEmptyLineBeforeBlock
+- default: disabled
+- Purpose: When enabled, no need to insert an empty line to start a
+           (code, quote, ordered list, unordered list) block.
+
+headerIds
+- default: enabled
+- Purpose: When enabled, allow specifying header IDs with {#id}.
+
+titleblock
+- default: disabled
+- Purpose: When enabled, support Pandoc-style title blocks.
+           http://pandoc.org/MANUAL.html#extension-pandoc_title_block
+
+autoHeaderIds
+- default: enabled
+- Purpose: When enabled, auto-create the header ID's from the headline
+           text.
+
+backslashLineBreak
+- default: enabled
+- Purpose: When enabled, translate trailing backslashes into line
+           breaks.
+
+definitionLists
+- default: enabled
+- Purpose: When enabled, a simple definition list is made of a
+           single-line term followed by a colon and the definition for
+           that term.
+- Example:
+           Cat
+           : Fluffy animal everyone likes
+
+           Internet
+           : Vector of transmission for pictures of cats
+
+           Terms must be separated from the previous definition by a
+           blank line.
+
+joinLines
+- default: enabled
+- Purpose: When enabled, delete newlines and join the lines.  This
+           behavior is similar to the default behavior in Org.")
+
 
 ;;; User-Configurable Variables
 
@@ -160,8 +406,9 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil t)
                    (:hugo-menu "HUGO_MENU" nil nil)
                    (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)
-                   (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
                    (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
+                   (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
+                   (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil)
 
                    ;; Front matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -413,23 +660,10 @@ INFO is a plist used as a communication channel."
   "Return body of document after converting it to Hugo-compatible Markdown.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
-  (let* (;; (depth (plist-get info :with-toc))
-         ;; (headlines (and depth (org-export-collect-headlines info depth)))
-         ;; (toc-tail (if headlines "\n\n" ""))
-         ;; (toc-string "")
-         )
-
-    ;; (when headlines
-    ;;   (dolist (headline headlines)
-    ;;     (setq toc-string (concat toc-string
-    ;;                              (org-blackfriday-format-toc headline info)
-    ;;                              "\n"))))
-
-    (org-trim (concat ;; toc-string
-               ;; toc-tail
-               contents
-               "\n"
-               (org-hugo-footnote-section info)))))
+  (org-trim (concat
+             contents
+             "\n"
+             (org-hugo-footnote-section info))))
 
 ;;;; Keyword
 (defun org-hugo-keyword (keyword contents info)
@@ -668,6 +902,67 @@ convert to ((foo . \"bar\") (baz . 1) (zoo . \"two words\"))."
         (setcar pair key)))
     alist))
 
+(defun org-hugo--front-matter-value-booleanize (str)
+  "Return a \"true\" or \"false\" string for input STR."
+  (let ((str-lower (and (stringp str)
+                        (downcase str))))
+    (cond
+     ((or (null str)
+          (string= "nil" str-lower)
+          (string= "false" str-lower)
+          (string= "no" str-lower))
+      "false")
+     ((or (string= "t" str)
+          (string= "true" str)
+          (string= "yes" str))
+      "true")
+     (t
+      (user-error "%S needs to represent a boolean value" str)))))
+
+(defun org-hugo--parse-blackfriday-prop-to-alist (str)
+  "Return an alist of valid Hugo blackfriday properties converted from STR.
+
+For example, input STR:
+
+  \":fractions :smartdashes nil :angledquotes t\"
+
+would convert to:
+
+  ((fractions . \"false\") (smartDashes . \"false\") (angledQuotes . \"true\"))
+
+The \"true\" and \"false\" strings in the return value are due to
+`org-hugo--front-matter-value-booleanize'."
+  (let ((blackfriday-alist (org-hugo--parse-property-arguments str))
+        valid-blackfriday-alist)
+    (dolist (ref-prop org-hugo-blackfriday-options)
+      (dolist (user-prop blackfriday-alist)
+        (when (string= (downcase (symbol-name (car user-prop)))
+                       (downcase ref-prop))
+          (let* ((key (intern ref-prop))
+                 (value (cdr user-prop))
+                 (value (if (or (equal key 'extensions)
+                                (equal key 'extensionsmask))
+                            value
+                          (org-hugo--front-matter-value-booleanize value))))
+            (push (cons key value)
+                  valid-blackfriday-alist)))))
+    valid-blackfriday-alist))
+
+(defun org-hugo--return-valid-blackfriday-extension (ext)
+  "Return valid case-sensitive string for Blackfriday extension EXT.
+
+Example: If EXT is \"hardlinebreak\",
+\"\"hardLineBreak\"\" (quoted string) is returned."
+  (let (ret)
+    (dolist (ref-ext org-hugo-blackfriday-extensions)
+      ;; (message "ox-hugo bf valid ext DBG: ext=%s ref-ext=%s" ext ref-ext)
+      (when (string= (downcase ext) (downcase ref-ext))
+        (setq ret ref-ext)))
+    (unless ret
+      (user-error "Invalid Blackfriday extension name %S, see `org-hugo-blackfriday-extensions'"
+                  ext))
+    (org-hugo--quote-string ret)))
+
 (defun org-hugo--parse-menu-prop-to-alist (str)
   "Return an alist of valid Hugo menu properties converted from STR.
 
@@ -755,6 +1050,7 @@ INFO is a plist used as a communication channel."
                              (push override-prop updated-menu-alist))))
                        updated-menu-alist))
          (custom-fm-data (org-hugo--parse-property-arguments (plist-get info :hugo-custom-front-matter)))
+         (blackfriday (org-hugo--parse-blackfriday-prop-to-alist (plist-get info :hugo-blackfriday)))
          (data `(;; The order of the elements below will be the order in which the front matter
                  ;; variables will be ordered.
                  (title . ,(org-hugo--sanitize-title info))
@@ -777,9 +1073,11 @@ INFO is a plist used as a communication channel."
                  (url . ,(org-export-data (plist-get info :hugo-url) info))
                  (weight . ,(org-export-data (plist-get info :hugo-weight) info))
                  (draft . ,draft)
+                 (blackfriday . ,blackfriday)
                  (menu . ,menu-alist)))
          (data `,(append data custom-fm-data)))
     ;; (message "[get fm info DBG] %S" info)
+    ;; (message "[get fm blackfriday DBG] %S" blackfriday)
     ;; (message "[get fm menu DBG] %S" menu-alist)
     ;; (message "[get fm menu override DBG] %S" menu-alist-override)
     ;; (message "[custom fm data DBG] %S" custom-fm-data)
@@ -794,7 +1092,6 @@ where KEY is a symbol and VAL is a string.
 
 Generate the front matter in the specified FORMAT.  Valid values
 are \"toml\" and \"yaml\"."
-
   (let ((sep (cond ((string= format "toml") "+++\n")
                    ((string= format "yaml") "---\n")
                    (t "")))
@@ -803,6 +1100,7 @@ are \"toml\" and \"yaml\"."
                     (t "")))
         (front-matter "")
         (indent "  ")
+        (bf-string "")
         (menu-string ""))
     ;; (message "hugo fm format: %s" format)
     (dolist (pair data)
@@ -822,7 +1120,8 @@ are \"toml\" and \"yaml\"."
           ;; In TOML, the menu information in the front matter is as a
           ;; table. So it needs to be always added to the end of the
           ;; front matter. So generate the `menu-string' separately
-          ;; and then append it to `front-matter' at the end.
+          ;; and then append it to `front-matter' at the end.  Do the
+          ;; same for blackfriday param values.
           (cond
            ((string= key "menu")
             ;; Menu name needs to be non-nil to insert menu info in front matter.
@@ -846,13 +1145,14 @@ are \"toml\" and \"yaml\"."
                            (weight (+ (* 1000 level) index)))
                       (push `(weight . ,weight) menu-alist))))
 
-                (message "[menu alist DBG] = %S" menu-alist)
+                ;; (message "[menu alist DBG] = %S" menu-alist)
                 (when menu-entry
                   (setq menu-entry-str (cond ((string= format "toml")
                                               (format "[menu.%s]\n" menu-entry))
                                              ((string= format "yaml")
                                               (prog1
-                                                  (format "menu %s\n%s%s%s\n" sign indent menu-entry sign)
+                                                  (format "menu %s\n%s%s%s\n"
+                                                          sign indent menu-entry sign)
                                                 (setq indent (concat indent indent)))) ;Double the indent for next use
                                              (t
                                               "")))
@@ -877,6 +1177,35 @@ are \"toml\" and \"yaml\"."
                                         (format "%s%s %s %s\n"
                                                 indent menu-key sign menu-value)))))))
                   (setq menu-string (concat menu-entry-str menu-value-str))))))
+           ((string= key "blackfriday")
+            (when value
+              (let* ((bf-alist value)
+                     (bf-entry-str "")
+                     (bf-value-str ""))
+                (setq bf-entry-str (cond ((string= format "toml")
+                                          "[blackfriday]\n")
+                                         ((string= format "yaml")
+                                          (format "blackfriday %s\n" sign))
+                                         (t
+                                          "")))
+                (dolist (bf-pair bf-alist)
+                  (let* ((bf-key (symbol-name (car bf-pair)))
+                         (bf-value (cdr bf-pair))
+                         (bf-value (cond ((or (string= bf-key "extensions")
+                                              (string= bf-key "extensionsmask"))
+                                          ;; "abc def" -> "[\"abc\", \"def\"]"
+                                          (concat "["
+                                                  (mapconcat #'identity
+                                                             (mapcar #'org-hugo--return-valid-blackfriday-extension
+                                                                     (split-string bf-value)) ", ")
+                                                  "]"))
+                                         (t
+                                          (org-hugo--quote-string bf-value)))))
+                    ;; (message "blackfriday DBG: %S %S" bf-key bf-value)
+                    (setq bf-value-str
+                          (concat bf-value-str
+                                  (format "%s%s %s %s\n" indent bf-key sign bf-value)))))
+                (setq bf-string (concat bf-entry-str bf-value-str)))))
            (t
             (setq front-matter
                   (concat front-matter
@@ -894,11 +1223,12 @@ are \"toml\" and \"yaml\"."
                                                  "]"))
                                         (t
                                          (org-hugo--quote-string value)))))))))))
-    (concat sep front-matter menu-string sep)))
+    (concat sep front-matter bf-string menu-string sep)))
 
 (defun org-hugo--selective-property-inheritance ()
   "Return a list of properties that should be inherited."
   (let ((prop-list '("HUGO_FRONT_MATTER_FORMAT"
+                     "HUGO_BLACKFRIDAY"
                      "HUGO_SECTION"
                      "HUGO_BASE_DIR"
                      "HUGO_STATIC_IMAGES"

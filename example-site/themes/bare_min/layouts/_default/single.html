@@ -48,6 +48,11 @@
         {{ end }}
     </p>
     <p>
+        {{ if .Params.blackfriday }}
+            Blackfriday (for debug): {{ .Params.blackfriday }}
+        {{ end }}
+    </p>
+    <p>
         {{ if .Params.menu }}
             Menu (for debug): {{ .Params.menu }}
         {{ end }}

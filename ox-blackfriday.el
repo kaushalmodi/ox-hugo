@@ -49,8 +49,9 @@
 (defconst blackfriday-table-separator "| ")
 
 (defvar org-blackfriday--hrule-inserted nil
-  "State variable to keep track if the horizontal rule after
-first row is already inserted.")
+  "State variable to track if the horizontal rule was inserted.
+This check is specifically track if that horizontal rule was
+inserted after the first row of the table.")
 
 
 ;;; User-Configurable Variables
@@ -184,7 +185,7 @@ INFO is a plist used as a communication channel."
 
 ;;;; Plain List Helper
 (defun org-blackfriday--ordered-list-with-custom-counter-p (plain-list)
-  "Returns non-nil is PLAIN-LIST element has an item with custom counter.
+  "Return non-nil is PLAIN-LIST element has an item with custom counter.
 Returns nil immediately if PLAIN-LIST is not an ordered list."
   (let ((type (org-element-property :type plain-list))
         has-custom-counter)

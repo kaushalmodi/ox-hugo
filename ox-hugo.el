@@ -53,12 +53,13 @@
   "Variable to store the current valid Hugo subtree coordinates.")
 
 (defvar org-hugo--subtree-count nil
-  "Variable to store the count of subtrees getting exported when
-exporting all subtrees in a file.")
+  "Variable to count of number of subtrees getting exported.
+This variable is used when exporting all subtrees in a file.")
 
 (defvar org-hugo-allow-export-after-save t
-  "When nil, `org-hugo-export-subtree-to-md-after-save' will not
-be able to export the Org file to Hugo-compatible Markdown.
+  "Enable flag for `org-hugo-export-subtree-to-md-after-save'.
+When nil, the above function will not export the Org file to
+Hugo-compatible Markdown.
 
 This variable is usually set to nil by the user in
 `org-capture-before-finalize-hook' and set to t again in
@@ -409,7 +410,7 @@ INFO is a plist used as a communication channel."
                  "\n"))))
 
 (defun org-hugo-inner-template (contents info)
-  "Return body of document after converting it to Hugo-compatible Markdown syntax.
+  "Return body of document after converting it to Hugo-compatible Markdown.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
   (let* (;; (depth (plist-get info :with-toc))
@@ -589,7 +590,9 @@ INFO is a plist used as a communication channel."
  If the HUGO_CODE_FENCE property is set to t (default), the
  Markdown style triple-backquoted code blocks are created.
  Otherwise, the code block is wrapped in Hugo `highlight'
- shortcode."
+ shortcode.
+
+INFO is a plist used as a communication channel."
   (if (org-hugo--plist-value-true-p :hugo-code-fence info)
       (org-blackfriday-src-block src-block nil info)
     (let* ((lang (org-element-property :language src-block))
@@ -894,7 +897,7 @@ are \"toml\" and \"yaml\"."
     (concat sep front-matter menu-string sep)))
 
 (defun org-hugo--selective-property-inheritance ()
-  "Returns a list of properties that should be inherited."
+  "Return a list of properties that should be inherited."
   (let ((prop-list '("HUGO_FRONT_MATTER_FORMAT"
                      "HUGO_SECTION"
                      "HUGO_BASE_DIR"

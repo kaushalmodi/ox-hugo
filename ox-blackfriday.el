@@ -337,12 +337,16 @@ INFO is a plist used as a communication channel."
     ;; (message "dbg parent type: %S" parent-type)
     ;; Hack to avert a bug in Blackfriday
     ;; Details: https://github.com/kaushalmodi/ox-hugo/issues/57
-    ;; Replace the HYPHEN-MINUS (0x2d) characters at BOL in code with
-    ;; HYPHEN (0x2010).
+    ;; Prefix the ASTERISK (0x2a), PLUS SIGN (0x2b) and HYPHEN-MINUS
+    ;; (0x2d) characters with ZERO WIDTH SPACE (0x200b), if they
+    ;; appear at BOL.
     ;; FIXME: Remove this hack in the when form when
     ;; https://github.com/russross/blackfriday/issues/239 is resolved.
     (when (equal 'item parent-type)
-      (setq code (replace-regexp-in-string "^[-+]" "‐" code)))
+      (setq code (replace-regexp-in-string "^[-+*] " "​\\&" code)))
+    ;; There's a ZERO WIDTH SPACE char (0x200b) here ^^,
+    ;;                            (after «"», but before «\\&"» above)
+    ;; It's not visible (because zero width), but it's there.
     (format "```%s\n%s```" lang code)))
 
 ;;;; Strike-Through

@@ -1,7 +1,7 @@
 +++
 title = "Source block with list syntax in a list"
 date = 2017-08-01
-tags = ["upstream"]
+tags = ["src_block", "upstream"]
 categories = ["fixme"]
 draft = false
 +++

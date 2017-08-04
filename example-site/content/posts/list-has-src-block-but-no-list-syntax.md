@@ -1,6 +1,7 @@
 +++
 title = "Source block without list syntax in a list"
 date = 2017-08-01
+tags = ["src_block"]
 draft = false
 +++
 

@@ -276,7 +276,7 @@ Here is the second post on Emacs.
 | a | b | e | g |
 | c | d | f | h |
 |---+---+---+---|
-* Source blocks                                                   :src-block:
+* Source blocks                                                   :src_block:
 ** Example text with code blocks                                    :ARCHIVE:
 :PROPERTIES:
 :CUSTOM_ID: example-text-with-code-blocks

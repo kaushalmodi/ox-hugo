@@ -332,9 +332,18 @@ communication channel."
 INFO is a plist used as a communication channel."
   (let* ((lang (org-element-property :language src-block))
          (code (org-export-format-code-default src-block info))
-         (prefix (concat "```" lang "\n"))
-         (suffix "```"))
-    (concat prefix code suffix)))
+         (parent-element (org-export-get-parent src-block))
+         (parent-type (car parent-element)))
+    ;; (message "dbg parent type: %S" parent-type)
+    ;; Hack to avert a bug in Blackfriday
+    ;; Details: https://github.com/kaushalmodi/ox-hugo/issues/57
+    ;; Replace the HYPHEN-MINUS (0x2d) characters at BOL in code with
+    ;; HYPHEN (0x2010).
+    ;; FIXME: Remove this hack in the when form when
+    ;; https://github.com/russross/blackfriday/issues/239 is resolved.
+    (when (equal 'item parent-type)
+      (setq code (replace-regexp-in-string "^[-+]" "‐" code)))
+    (format "```%s\n%s```" lang code)))
 
 ;;;; Strike-Through
 (defun org-blackfriday-strike-through (_strike-through contents _info)

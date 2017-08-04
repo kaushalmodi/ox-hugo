@@ -365,11 +365,15 @@ correctly if they contain Markdown syntax lists.
 Below is an example of such a case:
 
 - List item 1
-   #+BEGIN_SRC md
-- List item 1 in code block
-- List item 2 in code block
-   #+END_SRC
+  #+BEGIN_SRC md
+- List item 1.1 in code block
+- List item 1.2 in code block
+  #+END_SRC
 - List item 2
+  #+BEGIN_SRC md
++ List item 2.1 in code block
++ List item 2.2 in code block
+  #+END_SRC
 - List item 3
 ** Source block without list syntax in a list
 :PROPERTIES:

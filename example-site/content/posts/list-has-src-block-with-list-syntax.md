@@ -15,8 +15,13 @@ Below is an example of such a case:
 -   List item 1
 
     ```md
-    - List item 1 in code block
-    - List item 2 in code block
+    ‐ List item 1.1 in code block
+    ‐ List item 1.2 in code block
     ```
 -   List item 2
+
+    ```md
+    ‐ List item 2.1 in code block
+    ‐ List item 2.2 in code block
+    ```
 -   List item 3

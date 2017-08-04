@@ -691,6 +691,31 @@ This is some text[fn:1][fn:2].
 This is some text[fn:1].
 This is some text[fn:1].
 This is some text[fn:1].
+* Hyphens in Org tags
+** Prefer
+:PROPERTIES:
+:EXPORT_HUGO_PREFER_HYPHEN_IN_TAGS: t
+:END:
+*** Prefer Hyphen in Tags           :_a:__a:b_:b__:a_b:a__b:a_b__c:_a_b__c__:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hyphen-tags-prefer
+:END:
+*** Prefer Hyphen Categories :@_a:@__a:@b_:@b__:@a_b:@a__b:@a_b__c:@_a_b__c__:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hyphen-categories-prefer
+:END:
+** Don't Prefer
+:PROPERTIES:
+:EXPORT_HUGO_PREFER_HYPHEN_IN_TAGS:
+:END:
+*** Don't Prefer Hyphen in Tags     :_a:__a:b_:b__:a_b:a__b:a_b__c:_a_b__c__:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hyphen-tags-dont-prefer
+:END:
+*** Don't Prefer Hyphen Categories :@_a:@__a:@b_:@b__:@a_b:@a__b:@a_b__c:@_a_b__c__:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hyphen-categories-dont-prefer
+:END:
 * Tags as Categories
 ** Category A                                                         :@catA:
 *** Cat A post 1                                                       :meow:

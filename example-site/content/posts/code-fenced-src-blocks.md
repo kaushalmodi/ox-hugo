@@ -1,7 +1,7 @@
 +++
 title = "Code-fenced source blocks"
 date = 2017-07-13T17:49:22-04:00
-tags = ["src_block"]
+tags = ["src-block"]
 draft = false
 +++
 

@@ -44,10 +44,18 @@
   "State variable to store the \"draft\" state of the subtree to be exported.")
 
 (defvar org-hugo--tags-list nil
-  "State variable to store the tags of the subtree to be exported.")
+  "Cache of tags for the exported post subtree.
+
+These are Org tags linked to a subtree directly or via
+inheritance, that do not begin with the \"@\" character.
+This is a list of strings.")
 
 (defvar org-hugo--categories-list nil
-  "State variable to store the categories of the subtree to be exported.")
+  "Cache of categories for the exported post subtree.
+
+These are Org tags linked to a subtree directly or via
+inheritance, that begin with the \"@\" character.
+This is a list of strings.")
 
 (defvar org-hugo--subtree-coord nil
   "Variable to store the current valid Hugo subtree coordinates.")
@@ -351,7 +359,17 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
   :safe 'stringp)
 
 (defcustom org-hugo-use-code-for-kbd t
-  "When non-nil, ~text~ will translate to <kbd>text</kbd>."  :group 'org-export-hugo
+  "When non-nil, ~text~ will translate to <kbd>text</kbd>."
+  :group 'org-export-hugo
+  :type 'boolean
+  :safe #'booleanp)
+
+(defcustom org-hugo-prefer-hyphen-in-tags t
+  "When non-nil, replace underscores with hyphens in Org tags.
+In that case, use double underscores to represent a single underscore.
+
+This also affects the Hugo categories set via Org tags using the
+\"@\" prefix."
   :group 'org-export-hugo
   :type 'boolean
   :safe #'booleanp)
@@ -407,6 +425,7 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
                    (:hugo-menu "HUGO_MENU" nil nil)
                    (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)
                    (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
+                   (:hugo-prefer-hyphen-in-tags "HUGO_PREFER_HYPHEN_IN_TAGS" nil org-hugo-prefer-hyphen-in-tags)
                    (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
                    (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil)
 
@@ -993,6 +1012,25 @@ INFO is a plist used as a communication channel."
          (title (replace-regexp-in-string "\\\\_" "_" title)))
     title))
 
+(defun org-hugo--transform-org-tags (str)
+  "Transform Org tag STR for use in Hugo tags and categories.
+
+- Single underscores will be replaced with hyphens.
+- Double underscores will be replaced with single underscores.
+
+Below shows the example of how the Org tags would translate to
+the tag strings in Hugo front matter.
+
+Example: :some_tag:  -> \"some-tag\"
+         :some__tag: -> \"some_tag\"."
+  (let* ((str (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" str))         ;"_a"   -> "-a"
+         (str (replace-regexp-in-string "\\`__\\([^_]\\)" "_\\1" str))        ;"__a"  -> "_a"
+         (str (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" str))         ;"a_"   -> "a-"
+         (str (replace-regexp-in-string "\\([^_]\\)__\\'" "\\1_" str))        ;"a__"  -> "a_"
+         (str (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" str))   ;"a_b"  -> "a-b"
+         (str (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1_\\2" str))) ;"a__b" -> "a_b"
+    str))
+
 (defun org-hugo--get-front-matter (info)
   "Return the Hugo front matter string.
 
@@ -1024,16 +1062,25 @@ INFO is a plist used as a communication channel."
                                               date-nocolon)))
          (draft (or org-hugo--draft-state
                     (org-export-data (plist-get info :hugo-draft) info)))
+         (tag-list (if (org-hugo--plist-value-true-p :hugo-prefer-hyphen-in-tags info)
+                       (mapcar #'org-hugo--transform-org-tags
+                               org-hugo--tags-list)
+                     org-hugo--tags-list))
          (tags (org-string-nw-p ;Don't allow tags to be just whitespace
-                (or (org-string-nw-p (mapconcat #'identity org-hugo--tags-list " "))
+                (or (org-string-nw-p (mapconcat #'identity tag-list " "))
                     (concat
                      (org-export-data (plist-get info :hugo-tags) info) " "
                      (org-export-data (plist-get info :tags) info)))))
+         (categories-list (if (org-hugo--plist-value-true-p :hugo-prefer-hyphen-in-tags info)
+                              (mapcar #'org-hugo--transform-org-tags
+                                      org-hugo--categories-list)
+                            org-hugo--categories-list))
          (categories (or (org-string-nw-p
                           (mapconcat (lambda (str)
                                        ;; Remove "@" from beg of categories.
                                        (replace-regexp-in-string "\\`@" "" str))
-                                     org-hugo--categories-list " "))
+                                     categories-list
+                                     " "))
                          (org-export-data (plist-get info :hugo-categories) info)))
          (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
          (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
@@ -1226,6 +1273,7 @@ are \"toml\" and \"yaml\"."
 (defun org-hugo--selective-property-inheritance ()
   "Return a list of properties that should be inherited."
   (let ((prop-list '("HUGO_FRONT_MATTER_FORMAT"
+                     "HUGO_PREFER_HYPHEN_IN_TAGS"
                      "HUGO_BLACKFRIDAY"
                      "HUGO_SECTION"
                      "HUGO_BASE_DIR"
@@ -1242,12 +1290,10 @@ are \"toml\" and \"yaml\"."
                      "HUGO_TAGS"
                      "HUGO_CATEGORIES"
                      "HUGO_TYPE"
-                     "HUGO_WEIGHT"))
-        prop-list-allow-inheritance)
-    (dolist (prop prop-list)
-      (let ((prop (concat "EXPORT_" prop)))
-        (push prop prop-list-allow-inheritance)))
-    prop-list-allow-inheritance))
+                     "HUGO_WEIGHT")))
+    (mapcar (lambda (str)
+              (concat "EXPORT_" str))
+            prop-list)))
 
 (defun org-hugo--get-valid-subtree ()
   "Return the org element for a valid Hugo post subtree.

@@ -1005,26 +1005,23 @@ INFO is a plist used as a communication channel."
                     (org-string-nw-p (org-export-data (plist-get info :date) info))
                     ;; Else try to get it from the #+DATE keyword in the Org file
                     (org-string-nw-p (org-export-get-date info hugo-date-fmt))))
-         (date-nocolon (if (and (stringp date-raw)
-                                (string-match-p "\\`[0-9T:-]+\\'" date-raw))
-                           ;; If the set DATE is already in
-                           ;; Hugo-compatible date format, use it.
-                           date-raw
-                         (format-time-string
-                          hugo-date-fmt
-                          (cond
-                           (;; Else if the DATE property or keyword is
-                            ;; not set, use the current time.
-                            (null date-raw)
-                            (org-current-time))
-                           (t           ;Else try to parse the date.
-                            (apply #'encode-time (org-parse-time-string date-raw)))))))
+         (date-nocolon (and (stringp date-raw)
+                            (if (string-match-p "\\`[0-9T:-]+\\'" date-raw)
+                                ;; If the set DATE is already in
+                                ;; Hugo-compatible date format, use it.
+                                date-raw
+                              (format-time-string
+                               hugo-date-fmt
+                               ;; Else try to parse the date.
+                               (apply #'encode-time (org-parse-time-string date-raw))))))
          ;; Hugo expects the date stamp in this format:
          ;;   2017-07-06T14:59:45-04:00
          ;; But the "%Y-%m-%dT%T%z" format produces the date in this format:
          ;;   2017-07-06T14:59:45-0400 (Note the missing colon)
          ;; Below simply adds that colon.
-         (date (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2" date-nocolon))
+         (date (and (stringp date-nocolon)
+                    (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
+                                              date-nocolon)))
          (draft (or org-hugo--draft-state
                     (org-export-data (plist-get info :hugo-draft) info)))
          (tags (or (org-string-nw-p (mapconcat #'identity org-hugo--tags-list " "))

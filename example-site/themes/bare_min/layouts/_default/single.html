@@ -31,6 +31,9 @@
 
 <div class="post">
     <h1 class="post-title">{{ .Title }}</h1>
+    {{ if .Params.date }}
+        Date: {{ .Params.date }}
+    {{ end }}
     <p>
         {{ if .Params.categories }}
             Categories:

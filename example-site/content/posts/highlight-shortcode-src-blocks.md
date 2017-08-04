@@ -1,7 +1,6 @@
 +++
 title = "Source blocks with highlight shortcode"
 date = 2017-07-31
-tags = []
 draft = false
 +++
 

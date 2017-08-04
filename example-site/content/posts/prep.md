@@ -1,7 +1,6 @@
 +++
 title = "Preparation"
 date = 2017-07-12T17:05:38-04:00
-tags = []
 draft = false
 +++
 

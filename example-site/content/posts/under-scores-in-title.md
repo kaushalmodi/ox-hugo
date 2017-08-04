@@ -1,7 +1,6 @@
 +++
 title = "Under_scores_in_title"
 date = 2017-07-28
-tags = []
 draft = false
 +++
 

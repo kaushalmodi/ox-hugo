@@ -1,7 +1,6 @@
 +++
 title = "Draft state"
 date = 2017-07-12T13:46:16-04:00
-tags = []
 draft = true
 +++
 

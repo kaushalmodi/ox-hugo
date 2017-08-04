@@ -1,7 +1,6 @@
 +++
 title = "Post heading with crazy characters"
 date = 2017-07-12T13:46:33-04:00
-tags = []
 draft = false
 +++
 

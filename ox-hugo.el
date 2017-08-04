@@ -1024,10 +1024,11 @@ INFO is a plist used as a communication channel."
                                               date-nocolon)))
          (draft (or org-hugo--draft-state
                     (org-export-data (plist-get info :hugo-draft) info)))
-         (tags (or (org-string-nw-p (mapconcat #'identity org-hugo--tags-list " "))
-                   (concat
-                    (org-export-data (plist-get info :hugo-tags) info) " "
-                    (org-export-data (plist-get info :tags) info))))
+         (tags (org-string-nw-p ;Don't allow tags to be just whitespace
+                (or (org-string-nw-p (mapconcat #'identity org-hugo--tags-list " "))
+                    (concat
+                     (org-export-data (plist-get info :hugo-tags) info) " "
+                     (org-export-data (plist-get info :tags) info)))))
          (categories (or (org-string-nw-p
                           (mapconcat (lambda (str)
                                        ;; Remove "@" from beg of categories.

@@ -1,6 +1,5 @@
 +++
 title = "Post 2"
-tags = []
 draft = false
 +++
 

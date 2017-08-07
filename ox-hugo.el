@@ -619,29 +619,30 @@ returned slug string has the following specification:
   returned string ."
   (let* (;; All lower-case
          (str (downcase str))
-         ;; Remove "<code>..</code>" stuff if present
+         ;; Remove "<code>..</code>" stuff if present.
          (str (replace-regexp-in-string "<code>.*</code>" "" str))
-         ;; Remove URLs if present in the string
+         ;; Remove URLs if present in the string.
          ;; The ")" in the below regexp is the closing parenthesis of a
-         ;; Markdown link: [Desc](Link)
+         ;; Markdown link: [Desc](Link).
          (str (replace-regexp-in-string (concat "\\](" ffap-url-regexp "[^)]+)") "]" str))
-         ;; Replace "&" with " and "
+         ;; Replace "&" with " and ".
          (str (replace-regexp-in-string "&" " and " str))
-         ;; Replace "." with " dot "
+         ;; Replace "." with " dot ".
          (str (replace-regexp-in-string "\\." " dot " str))
-         ;; Replace non-alphabets and non-numbers with spaces
-         (str (replace-regexp-in-string "[^a-z0-9()]" " " str))
-         ;; Remove leading and trailing whitespace
+         ;; Replace characters excepts alphabets, numbers and
+         ;; parentheses with spaces.
+         (str (replace-regexp-in-string "[^[:alnum:]()]" " " str))
+         ;; Remove leading and trailing whitespace.
          (str (replace-regexp-in-string "\\(^[[:space:]]*\\|[[:space:]]*$\\)" "" str))
-         ;; Replace 2 or more spaces with a single space
+         ;; Replace 2 or more spaces with a single space.
          (str (replace-regexp-in-string "[[:space:]]\\{2,\\}" " " str))
-         ;; Replace parentheses with double-hyphens
+         ;; Replace parentheses with double-hyphens.
          (str (replace-regexp-in-string "\\s-*([[:space:]]*\\([^)]+?\\)[[:space:]]*)\\s-*" " -\\1- " str))
-         ;; Remove any remaining parentheses character
+         ;; Remove any remaining parentheses character.
          (str (replace-regexp-in-string "[()]" "" str))
-         ;; Replace spaces with hyphens
+         ;; Replace spaces with hyphens.
          (str (replace-regexp-in-string " " "-" str))
-         ;; Remove leading and trailing hyphens
+         ;; Remove leading and trailing hyphens.
          (str (replace-regexp-in-string "\\(^[-]*\\|[-]*$\\)" "" str)))
     str))
 

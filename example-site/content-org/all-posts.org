@@ -133,6 +133,14 @@ Something 2.1
 ** Foo ( Bar ) Baz
 ** (Foo)Bar.Baz&Zoo
 ** Hey! I have a link [[https://example.org][here]] (Awesome!)
+** Este título es en español
+** Non-English titles
+*** ÂÊÎÔÛ
+*** ÁÉÍÓÚÝ
+*** ÀÈÌÒÙ
+*** ÄËÏÖÜ
+*** ÃÐÑÕÞ
+*** Ç
 * Title in Front Matter
 ** Awesome title with "quoted text"
 :PROPERTIES:

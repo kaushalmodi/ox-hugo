@@ -14,3 +14,27 @@ draft = false
 
 
 ## Hey! I have a link [here](https://example.org) (Awesome!) {#hey-i-have-a-link-here--awesome}
+
+
+## Este título es en español {#este-título-es-en-español}
+
+
+## Non-English titles {#non-english-titles}
+
+
+### ÂÊÎÔÛ {#âêîôû}
+
+
+### ÁÉÍÓÚÝ {#áéíóúý}
+
+
+### ÀÈÌÒÙ {#àèìòù}
+
+
+### ÄËÏÖÜ {#äëïöü}
+
+
+### ÃÐÑÕÞ {#ãðñõþ}
+
+
+### Ç {#ç}

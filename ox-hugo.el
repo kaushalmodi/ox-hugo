@@ -95,10 +95,10 @@ Note that these names are case-sensitive.
 
 This is a list of strings.
 
-Reference used to get the above list.
-https://gohugo.io/getting-started/configuration/#configure-blackfriday
+Stable Hugo version reference:
+https://github.com/gohugoio/hugoDocs/blob/master/content/readfiles/bfconfig.md
 
-Development version reference:
+Development Hugo version reference:
 https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
 
 taskLists
@@ -201,11 +201,15 @@ This is a list of strings.
 Descriptions of these extensions can be found here:
 https://github.com/russross/blackfriday#extensions
 
-Development version reference:
-https://github.com/russross/blackfriday/blob/master/markdown.go
+Stable Hugo version reference:
+https://github.com/gohugoio/hugoDocs/blob/master/content/readfiles/bfconfig.md
 
-Hugo code used as reference for these names:
-https://github.com/gohugoio/hugo/blob/master/helpers/content.go
+Development Hugo version reference:
+https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
+
+Code references:
+- https://github.com/russross/blackfriday/blob/master/markdown.go
+- https://github.com/gohugoio/hugo/blob/master/helpers/content.go
 
 noIntraEmphasis
 - default: enabled
@@ -271,7 +275,7 @@ tabSizeEight
 
 footnotes
 - default: enabled
-- Purpose: When enabled, Pnadoc-style footnotes will be supported.
+- Purpose: When enabled, Pandoc-style footnotes will be supported.
            The footnote marker in the text that will become a
            superscript text; the footnote definition will be placed in
            a list of footnotes at the end of the document.

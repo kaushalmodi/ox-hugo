@@ -374,16 +374,21 @@ This also affects the Hugo categories set via Org tags using the
   :type 'boolean
   :safe #'booleanp)
 
-(defcustom org-hugo-pygments-code-fences nil
-  "Mirror of Hugo `pygmentsCodeFences' variable.
+(defcustom org-hugo-langs-no-descr-in-code-fences '()
+  "List of languages whose descriptors should not be exported to Markdown.
 
 This variable is effective only if the HUGO_CODE_FENCE option is set.
 
-If `pygmentsCodeFences' is `true', set this variable to a non-nil
-value, else set it to nil."
+If `pygmentsCodeFences' is `true', and if a language is not supported
+by Pygments, the HTML of that fenced code block is not rendered
+correctly by Hugo.  In such cases, it is better to leave out the
+language descriptor and allow the code block to render as an Org
+example block.
+
+Example value: (org)."
   :group 'org-export-hugo
-  :type 'boolean
-  :safe #'booleanp)
+  :type '(repeat symbol)
+  :safe #'listp)
 
 
 ;;; Define Back-End
@@ -851,35 +856,34 @@ INFO is a plist used as a communication channel."
 (defun org-hugo-src-block (src-block _contents info)
   "Convert SRC-BLOCK element to Hugo-compatible element.
 
- If the HUGO_CODE_FENCE property is set to t (default), the
- Markdown style triple-backquoted code blocks are created.
- Otherwise, the code block is wrapped in Hugo `highlight'
- shortcode.
+If the HUGO_CODE_FENCE property is set to t (default), the Markdown
+style triple-backquoted code blocks are created.  Otherwise, the code
+block is wrapped in Hugo `highlight' shortcode.
 
 INFO is a plist used as a communication channel."
-  (if (org-hugo--plist-value-true-p :hugo-code-fence info)
-      (let (ret)
-        (setq ret (org-blackfriday-src-block src-block nil info))
-        (when org-hugo-pygments-code-fences
-          ;; With the pygmentsCodeFences options enabled in Hugo,
-          ;; `org' is not recognized as a "language".  This is
-          ;; probably because Pygments does not have a lexer for Org.
-          ;; Issue on Pygments repo: https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org
-          ;; So attempt to do below:
-          ;;   ```org
-          ;;   # org comment
-          ;;   ```
-          ;; will not result in a <code> tag wrapped block in HTML.
-          ;; So override the language to be an empty string in such cases.
-          ;; FIXME: Remove this lang override once Pygments support is added.
-          (setq ret (replace-regexp-in-string "\\`\\(```\\)org" "\\1" ret)))
-        ret)
-    (let* ((lang (org-element-property :language src-block))
-           (code (org-export-format-code-default src-block info)))
-      (format "{{< highlight %s>}}\n%s{{< /highlight >}}\n" lang code))))
+  (let ((lang (org-element-property :language src-block)))
+    (if (org-hugo--plist-value-true-p :hugo-code-fence info)
+        (let ((ret (org-blackfriday-src-block src-block nil info)))
+          (when (member (intern lang) org-hugo-langs-no-descr-in-code-fences)
+            ;; With the pygmentsCodeFences options enabled in Hugo,
+            ;; `org' is not recognized as a "language".  This is
+            ;; probably because Pygments does not have a lexer for Org.
+            ;; Issue on Pygments repo:
+            ;; https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org
+            ;; So attempt to do below:
+            ;;   ```org
+            ;;   # org comment
+            ;;   ```
+            ;; will not result in a <code> tag wrapped block in HTML.
+            ;; So override the language to be an empty string in such cases.
+            (setq ret (replace-regexp-in-string
+                       (concat "\\`\\(```\\)" lang)
+                       "\\1" ret)))
+          ret)
+      (let ((code (org-export-format-code-default src-block info)))
+        (format "{{< highlight %s>}}\n%s{{< /highlight >}}\n" lang code)))))
 
 
-
 ;;; Filter Functions
 
 ;;;; Body Filter

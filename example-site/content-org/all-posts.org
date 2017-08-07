@@ -402,19 +402,24 @@ code block does not have Markdown syntax lists.
 :EXPORT_FILE_NAME: org-source-block
 :END:
 Test case for the case where user has set
-=org-hugo-pygments-code-fences= to a non-nil value.
+=org-hugo-langs-no-descr-in-code-fences= to a list containing the
+element =org=.
 
-/As this variable is dependent on user's config, it is not set to be
-exported by default./
+/As this variable is dependent on user's config, this post is not set
+to be exported by default./
 
 The [[https://discourse.gohugo.io/t/fenced-code-block-with-language-unsupported-by-pygments/7710][issue]] with Hugo will be seen if:
 - =pygmentsCodeFences = true= is set in the Hugo site =config.toml=,
-- =org-hugo-pygments-code-fences= is set to =nil=, and
 - a source block's language is set to one that's not supported by
   Pygments (like [[https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org][org]], and thus the below example with source code
-  language set to =org=).
+  language set to =org=), and
+- =org-hugo-langs-no-descr-in-code-fences= is set to a value not
+  containing that lanaguage descriptor (=org= in this case).
 #+BEGIN_SRC org
 # Org comment
+Export this post after setting
+=org-hugo-langs-no-descr-in-code-fences= to =(org)= and temporarily
+removing the =noexport= tag.
 #+END_SRC
 * Formatting                                                     :formatting:
 ** General

@@ -1591,6 +1591,57 @@ is nil."
            (org-hugo--get-valid-subtree))
       (org-hugo-export-subtree-to-md))))
 
+;;;###autoload
+(defun org-hugo-debug-info ()
+  "Get Emacs, Org and Hugo version and ox-hugo customization info.
+The information is converted to Markdown format and copied to the
+kill-ring.  The same information is displayed in the Messages
+buffer and returned as a string in Org format."
+  (interactive)
+  (let* ((emacs-version (emacs-version))
+         (org-version (org-version nil :full))
+         (hugo-binary (executable-find "hugo"))
+         (hugo-version (when hugo-binary
+                         (org-trim
+                          (shell-command-to-string
+                           (concat hugo-binary " version")))))
+         (info-org (mapconcat #'identity
+                              `("* Debug information for =ox-hugo="
+                                "** Emacs Version"
+                                ,(format "%s%s"
+                                         emacs-version
+                                         (if emacs-repository-version
+                                             (format " (commit %s)" emacs-repository-version)
+                                           ""))
+                                "** Org Version"
+                                ,(format "%s" org-version)
+                                "*** Org =load-path= shadows"
+                                ,(let ((str (list-load-path-shadows :stringp)))
+                                   (if (string-match "^\\(.*org.+hides.+org.*\\)\n" str)
+                                       (progn
+                                         (concat "*Warning*: Possible mixed installation of Org\n"
+                                                 "> " (match-string-no-properties 1 str) "\n\n"
+                                                 "Study the output of =M-x list-load-path-shadows=."))
+                                     "No Org mode shadows found in =load-path="))
+                                "** Hugo Version"
+                                ,(if hugo-binary
+                                     (format "%s" hugo-version)
+                                   "=hugo= binary not found in PATH")
+                                "** =ox-hugo= defcustoms"
+                                ,(format "|org-hugo-front-matter-format          |%S|" org-hugo-front-matter-format)
+                                ,(format "|org-hugo-default-section-directory    |%S|" org-hugo-default-section-directory)
+                                ,(format "|org-hugo-use-code-for-kbd             |%S|" org-hugo-use-code-for-kbd)
+                                ,(format "|org-hugo-prefer-hyphen-in-tags        |%S|" org-hugo-prefer-hyphen-in-tags)
+                                ,(format "|org-hugo-langs-no-descr-in-code-fences|%S|" org-hugo-langs-no-descr-in-code-fences))
+                              "\n"))
+         (org-export-with-toc nil)
+         (info-md (progn
+                    (require 'ox-md)
+                    (org-export-string-as info-org 'md :body-only))))
+    (kill-new info-md)
+    (message "%s" info-org)
+    info-org))
+
 
 (provide 'ox-hugo)
 

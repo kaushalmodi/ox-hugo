@@ -151,6 +151,17 @@ translate to Hugo front matter:
 7. In few seconds, 40+ test posts will get created, with the hugo server
    preview in the browser zapping through each new created post (needs
    that new Hugo 0.25 feature).
+* Debug
+If the =ox-hugo= exports do not work as expected, or if you get an
+error backtrace,
+1. Open an [[https://github.com/kaushalmodi/ox-hugo/issues][Issue]].
+2. Describe the problem you are seeing.
+3. Provide the debug info using =org-hugo-debug-info=:
+   - =M-x org-hugo-debug-info= (that will copy the debug info in
+     Markdown format to the kill ring)
+   - Paste the Markdown contents in the GitHub issue.
+     - You can still hit the /Preview/ tab of the Issue before
+       submitting it.
 
 * TODO [7/9]
 - [X] Have =ox-hugo= be a backend derived from =ox-blackfriday=

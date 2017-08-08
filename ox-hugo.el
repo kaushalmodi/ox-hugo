@@ -621,15 +621,15 @@ returned slug string has the following specification:
          (str (downcase str))
          ;; Remove "<code>..</code>" stuff if present.
          (str (replace-regexp-in-string "<code>.*</code>" "" str))
-         ;; Remove URLs if present in the string.
-         ;; The ")" in the below regexp is the closing parenthesis of a
-         ;; Markdown link: [Desc](Link).
+         ;; Remove URLs if present in the string.  The ")" in the
+         ;; below regexp is the closing parenthesis of a Markdown
+         ;; link: [Desc](Link).
          (str (replace-regexp-in-string (concat "\\](" ffap-url-regexp "[^)]+)") "]" str))
          ;; Replace "&" with " and ".
          (str (replace-regexp-in-string "&" " and " str))
          ;; Replace "." with " dot ".
          (str (replace-regexp-in-string "\\." " dot " str))
-         ;; Replace characters excepts alphabets, numbers and
+         ;; Replace all characters except alphabets, numbers and
          ;; parentheses with spaces.
          (str (replace-regexp-in-string "[^[:alnum:]()]" " " str))
          ;; Remove leading and trailing whitespace.

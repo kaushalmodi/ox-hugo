@@ -96,10 +96,10 @@ Note that these names are case-sensitive.
 This is a list of strings.
 
 Stable Hugo version reference:
-https://github.com/gohugoio/hugoDocs/blob/master/content/readfiles/bfconfig.md
+- https://gohugo.io/content-management/formats/#blackfriday-options
 
 Development Hugo version reference:
-https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
+- https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
 
 taskLists
 - default: `true'
@@ -198,16 +198,12 @@ Note that these names are case-sensitive.
 
 This is a list of strings.
 
-Descriptions of these extensions can be found here:
-https://github.com/russross/blackfriday#extensions
-
 Stable Hugo version reference:
-https://github.com/gohugoio/hugoDocs/blob/master/content/readfiles/bfconfig.md
+- https://gohugo.io/content-management/formats/#blackfriday-extensions
 
-Development Hugo version reference:
-https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
-
-Code references:
+Development Hugo version references:
+- https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
+- https://github.com/russross/blackfriday#extensions
 - https://github.com/russross/blackfriday/blob/master/markdown.go
 - https://github.com/gohugoio/hugo/blob/master/helpers/content.go
 

@@ -1,3 +1,5 @@
+#+TITLE: Contributing Guide
+#+AUTHOR: Kaushal Modi
 -----
 
 NOTE TO FUTURE CONTRIBUTORS: I plan to merge this package into Org
@@ -13,7 +15,6 @@ As a bonus, once you have assigned your copyright to FSF, doors open up
 for your contributions to Emacs too!
 
 -----
-
 * Debug
 If the =ox-hugo= exports do not work as expected, or if you get an
 error backtrace,

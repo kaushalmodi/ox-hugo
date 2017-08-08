@@ -1,3 +1,5 @@
+#+TITLE: Ox-Hugo: A carefully crafted Org exporter back-end that enables writing Hugo posts in Org
+#+AUTHOR: Kaushal Modi
 -----
 
 NOTE TO FUTURE CONTRIBUTORS: I plan to merge this package into Org
@@ -25,27 +27,15 @@ Here is the blogging flow when using this package:
   - One post per Org file (/works but you won't be able to leverage
     Org-specific benefits like tag and property inheritance, use of
     TODO states to translate to post =draft= state, etc./)
-- Export only the *current* post Org subtree
-- Export all post subtrees
+- Export only the *current* post Org subtree, or export all post
+  subtrees.
 - Set up =org-capture= (see below) to quickly start writing new posts.
 - Use =after-save-hook= to export current post subtree to Markdown on
   each save.
 
 This project consists of =ox-blackfriday.el= too. It is a derivation
 of [[https://github.com/larstvei/ox-gfm][=ox-gfm=]] with support added for Blackfriday Markdown tables and
-few other tweaks. =ox-hugo= backend extends from this.
-
-There is a plan to create a =hugo.el= that would do things like:
-- New post creation using =org-capture= (port code from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]]).
-- Interactive functions to toggle /draft/ state,
-  add/remove/increment/decrement /publishdate/ property.
-- Option to use template =config.toml= and some default hugo theme. So
-  all a new user would need to do is to (i) have the =hugo= [[https://github.com/gohugoio/hugo/releases][binary]] in
-  =PATH= (ii) define their =hugo= blog dir in the =defcustom= (iii)
-  =M-x hugo=.
-- Set separate faces for titles based on /draft/ state and
-  /futureness/.
-
+many other tweaks. =ox-hugo= backend extends from this.
 * Formatting
 Below table shows the translation of Org markup to Markdown markup in
 the exported =.md= files.
@@ -125,32 +115,37 @@ translate to Hugo front matter:
   one can take advantage of Org subtree filtering and searching
   functions.
 - (and much more..)
-
-* Implicit setting of Hugo front matter variables in Org
+* Translation of Org meta-data to Hugo front matter
+Many Hugo front matter variables get set implicitly using the
+meta-data parsed from the posts in Org.
 |---------------------------+----------------------------+--------------------------------------|
 | Hugo front matter (TOML)  | Org                        | Org description                      |
 |---------------------------+----------------------------+--------------------------------------|
 | =title = "foo"​=           | =* foo=                    | Heading                              |
 | =date = 2017-07-24=       | =:EXPORT_DATE: 2017-07-24= | Subtree property                     |
-| =tags = ["abc", "def"]=   | =* foo :abc:def:=           | Heading tags                         |
-| =categories = ["x", "y"]= | =* foo :@x:@y:=             | Heading tags with =@= prefix         |
+| =tags = ["abc", "def"]=   | =* foo :abc:def:=          | Heading tags                         |
+| =categories = ["x", "y"]= | =* foo :@x:@y:=            | Heading tags with =@= prefix         |
 | =draft = true=            | =* TODO foo=               | Heading set to TODO (or DRAFT)       |
 | =draft = false=           | =* foo=                    | Heading *not* set to TODO (or DRAFT) |
 |---------------------------+----------------------------+--------------------------------------|
-* Try =ox-hugo=
+* How to try =ox-hugo=?
 1. Clone this repo.
-2. Run =hugo server --buildDrafts --buildFuture --navigateToChanged= in
-   =example-site/= directory.
+2. =cd= to the =example-site/= directory and do:
+   #+BEGIN_EXAMPLE
+      hugo server -D --navigateToChanged
+   #+END_EXAMPLE
    - =--navigateToChanged= requires Hugo 0.25+.
 3. Above command will mention the localhost where the site is
-   served.Open that in your browser.
+   served. Open that in your browser.
 4. In emacs, =(require  'ox-hugo)= or evaluate the =ox-hugo.el= from the
    cloned repo.
 5. Open the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/example-site/content-org/all-posts.org][=all-posts.org=]] file.
-6. =C-c C-e H A= -- Export *all* subtrees in the file to Markdown files.
-7. In few seconds, 40+ test posts will get created, with the hugo server
-   preview in the browser zapping through each new created post (needs
-   that new Hugo 0.25 feature).
+6. =C-c C-e H A= -- That will export *all* subtrees in the file to
+   Markdown files.
+7. In few seconds, dozens of test posts will get created, with the
+   =hugo server= aided preview in the browser zapping through each new
+   created post (needs that new feature =--navigateToChanged=
+   introduced in Hugo 0.25).
 * Debug
 If the =ox-hugo= exports do not work as expected, or if you get an
 error backtrace,
@@ -162,7 +157,17 @@ error backtrace,
    - Paste the Markdown contents in the GitHub issue.
      - You can still hit the /Preview/ tab of the Issue before
        submitting it.
-
+* Future Plans
+There is a plan to create a =hugo.el= that would do things like:
+- New post creation using =org-capture= (port code from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]]).
+- Interactive functions to toggle /draft/ state,
+  add/remove/increment/decrement /publishdate/ property.
+- Option to use template =config.toml= and some default hugo theme. So
+  all a new user would need to do is to (i) have the =hugo= [[https://github.com/gohugoio/hugo/releases][binary]] in
+  =PATH= (ii) define their =hugo= blog dir in the =defcustom= (iii)
+  =M-x hugo=.
+- Set separate faces for titles based on /draft/ state and
+  /futureness/.
 * Thanks
 - Matt Price (@titaniumbones)
 - [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]]

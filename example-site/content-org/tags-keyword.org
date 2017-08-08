@@ -1,6 +1,9 @@
 #+TITLE: My Blog
-#+HUGO_BASE_DIR: ../../md/
+#+HUGO_BASE_DIR: ../
 #+TAGS: alpha beta
+
+# 1. Load `ox-hugo'
+# 2. C-c C-e H A
 
 * Overriding default tags
 :PROPERTIES:

@@ -77,6 +77,7 @@ inserted after the first row of the table.")
               (if a (org-blackfriday-export-to-markdown t s v)
                 (org-open-file (org-blackfriday-export-to-markdown nil s v)))))))
   :translate-alist '((example-block . org-blackfriday-example-block)
+                     (fixed-width . org-blackfriday-fixed-width) ;Org Babel Results
                      (inner-template . org-blackfriday-inner-template)
                      (italic . org-blackfriday-italic)
                      (item . org-blackfriday-item)
@@ -211,6 +212,17 @@ CONTENTS is nil.  INFO is a plist holding contextual
 information."
   (format "```text\n%s```"
           (org-export-format-code-default example-block info)))
+
+;;;; Fixed Width
+(defun org-blackfriday-fixed-width (fixed-width _contents info)
+  "Transcode a FIXED-WIDTH element into Blackfriday Markdown format.
+CONTENTS is nil.  INFO is a plist holding contextual
+information."
+  (format "```text\n%s```"
+          (let ((org-src-preserve-indentation t))
+            ;; Preserve leading whitespace in the Org Babel Results
+            ;; blocks.
+            (org-export-format-code-default fixed-width info))))
 
 ;;;; Inner Template
 (defun org-blackfriday-inner-template (contents info)

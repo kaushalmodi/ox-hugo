@@ -405,6 +405,19 @@ code block does not have Markdown syntax lists.
 #+BEGIN_SRC md
 - list 1
 #+END_SRC
+** Org Babel Results
+:PROPERTIES:
+:EXPORT_FILE_NAME: org-babel-results-preserve-indent
+:END:
+#+BEGIN_SRC python :exports both :results output
+str = 'a\tbc'
+print(str[1:])
+#+END_SRC
+
+#+RESULTS:
+: 	bc
+
+The whitespace before "bc" in the results block above should be preserved.
 ** Org Source Block                                                :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-source-block

@@ -96,10 +96,10 @@ Note that these names are case-sensitive.
 This is a list of strings.
 
 Stable Hugo version reference:
-- https://gohugo.io/content-management/formats/#blackfriday-options
+https://gohugo.io/content-management/formats/#blackfriday-options
 
 Development Hugo version reference:
-- https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
+https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
 
 taskLists
 - default: `true'
@@ -199,13 +199,13 @@ Note that these names are case-sensitive.
 This is a list of strings.
 
 Stable Hugo version reference:
-- https://gohugo.io/content-management/formats/#blackfriday-extensions
+https://gohugo.io/content-management/formats/#blackfriday-extensions
 
 Development Hugo version references:
-- https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
-- https://github.com/russross/blackfriday#extensions
-- https://github.com/russross/blackfriday/blob/master/markdown.go
-- https://github.com/gohugoio/hugo/blob/master/helpers/content.go
+https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
+https://github.com/russross/blackfriday#extensions
+https://github.com/russross/blackfriday/blob/master/markdown.go
+https://github.com/gohugoio/hugo/blob/master/helpers/content.go
 
 noIntraEmphasis
 - default: enabled
@@ -647,9 +647,9 @@ returned slug string has the following specification:
   "Generate a headline title in the preferred Markdown headline style.
 STYLE is the preferred style (`atx' or `setext').  LEVEL is the
 header level.  LOFFSET is the offset (a non-negative number) that
-is added to the Markdown heading level for `atx' style.  TITLE is
-the headline title.  ANCHOR is the Hugo anchor tag for the
-section as a string."
+is added to the Markdown heading level for `atx' style.  TODO is
+the Org TODO string.  TITLE is the headline title.  ANCHOR is the
+Hugo anchor tag for the section as a string."
   ;; Use "Setext" style
   (if (and (eq style 'setext) (< level 3))
       (let* ((underline-char (if (= level 1) ?= ?-))
@@ -1593,7 +1593,7 @@ is nil."
 (defun org-hugo-debug-info ()
   "Get Emacs, Org and Hugo version and ox-hugo customization info.
 The information is converted to Markdown format and copied to the
-kill-ring.  The same information is displayed in the Messages
+kill ring.  The same information is displayed in the Messages
 buffer and returned as a string in Org format."
   (interactive)
   (let* ((emacs-version (emacs-version))

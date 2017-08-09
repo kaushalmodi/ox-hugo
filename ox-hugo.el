@@ -584,14 +584,15 @@ a communication channel."
           (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
-        (let ((anchor
-               (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
-                       (or (org-element-property :CUSTOM_ID headline)
-                           (org-hugo--slug title)
-                           ;; (org-export-get-reference headline info)
-                           )))
-              (loffset (plist-get info :hugo-level-offset)))
-          (concat (org-hugo--headline-title style level loffset title anchor)
+        (let ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
+                              (or (org-element-property :CUSTOM_ID headline)
+                                  (org-hugo--slug title)
+                                  ;; (org-export-get-reference headline info)
+                                  )))
+              (loffset (plist-get info :hugo-level-offset))
+              (todo (when todo
+                      (concat (org-html--todo todo info) " "))))
+          (concat (org-hugo--headline-title style level loffset todo title anchor)
                   contents)))))))
 
 ;;;;; Headline Helpers
@@ -642,7 +643,7 @@ returned slug string has the following specification:
          (str (replace-regexp-in-string "\\(^[-]*\\|[-]*$\\)" "" str)))
     str))
 
-(defun org-hugo--headline-title (style level loffset title &optional anchor)
+(defun org-hugo--headline-title (style level loffset todo title &optional anchor)
   "Generate a headline title in the preferred Markdown headline style.
 STYLE is the preferred style (`atx' or `setext').  LEVEL is the
 header level.  LOFFSET is the offset (a non-negative number) that
@@ -661,7 +662,7 @@ section as a string."
     ;; get the HTML <h1> tag, and we do not want the top-most heading
     ;; of a post to look the exact same as the post's title.
     (let ((level-mark (make-string (+ loffset level) ?#)))
-      (concat "\n" level-mark " " title " " anchor "\n\n"))))
+      (concat "\n" level-mark " " todo title " " anchor "\n\n"))))
 
 ;;;; Inner Template
 (defun org-hugo-footnote-section (info)

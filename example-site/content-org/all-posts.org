@@ -1031,6 +1031,24 @@ Where squirrels hide their nuts in grass.
 
    -- "Leisure" /by/ William Henry Davis
 #+END_VERSE
+* Org TODO keywords                                                    :todo:
+** Post with a TODO heading
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-todo
+:END:
+*** Heading 1
+Some text.
+*** TODO Heading 2
+Some text.
+** Post with a DONE heading
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-done
+:END:
+*** Heading 1
+Some text.
+*** DONE Heading 2
+CLOSED: [2017-08-09 Wed 16:15]
+Some text.
 * Blackfriday Options                                           :blackfriday:
 ** Fractions
 *** Fraction Table

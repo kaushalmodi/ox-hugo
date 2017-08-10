@@ -364,9 +364,10 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
   :type 'boolean
   :safe #'booleanp)
 
-(defcustom org-hugo-prefer-hyphen-in-tags t
-  "When non-nil, replace underscores with hyphens in Org tags.
-In that case, use double underscores to represent a single underscore.
+(defcustom org-hugo-enable-special-tags t
+  "When non-nil, interpret Org tags in special manner.
+
+See `org-hugo--transform-org-tags' for more information.
 
 This also affects the Hugo categories set via Org tags using the
 \"@\" prefix."
@@ -441,7 +442,7 @@ Example value: (org)."
                    (:hugo-menu "HUGO_MENU" nil nil)
                    (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)
                    (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
-                   (:hugo-prefer-hyphen-in-tags "HUGO_PREFER_HYPHEN_IN_TAGS" nil org-hugo-prefer-hyphen-in-tags)
+                   (:hugo-enable-special-tags "HUGO_ENABLE_SPECIAL_TAGS" nil org-hugo-enable-special-tags)
                    (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
                    (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil)
 
@@ -1094,7 +1095,7 @@ INFO is a plist used as a communication channel."
                                               date-nocolon)))
          (draft (or org-hugo--draft-state
                     (org-export-data (plist-get info :hugo-draft) info)))
-         (tag-list (if (org-hugo--plist-value-true-p :hugo-prefer-hyphen-in-tags info)
+         (tag-list (if (org-hugo--plist-value-true-p :hugo-enable-special-tags info)
                        (mapcar #'org-hugo--transform-org-tags
                                org-hugo--tags-list)
                      org-hugo--tags-list))
@@ -1103,7 +1104,7 @@ INFO is a plist used as a communication channel."
                     (concat
                      (org-export-data (plist-get info :hugo-tags) info) " "
                      (org-export-data (plist-get info :tags) info)))))
-         (categories-list (if (org-hugo--plist-value-true-p :hugo-prefer-hyphen-in-tags info)
+         (categories-list (if (org-hugo--plist-value-true-p :hugo-enable-special-tags info)
                               (mapcar #'org-hugo--transform-org-tags
                                       org-hugo--categories-list)
                             org-hugo--categories-list))
@@ -1305,7 +1306,7 @@ are \"toml\" and \"yaml\"."
 (defun org-hugo--selective-property-inheritance ()
   "Return a list of properties that should be inherited."
   (let ((prop-list '("HUGO_FRONT_MATTER_FORMAT"
-                     "HUGO_PREFER_HYPHEN_IN_TAGS"
+                     "HUGO_ENABLE_SPECIAL_TAGS"
                      "HUGO_BLACKFRIDAY"
                      "HUGO_SECTION"
                      "HUGO_BASE_DIR"
@@ -1637,7 +1638,7 @@ buffer and returned as a string in Org format."
                                 ,(format "|org-hugo-front-matter-format          |%S|" org-hugo-front-matter-format)
                                 ,(format "|org-hugo-default-section-directory    |%S|" org-hugo-default-section-directory)
                                 ,(format "|org-hugo-use-code-for-kbd             |%S|" org-hugo-use-code-for-kbd)
-                                ,(format "|org-hugo-prefer-hyphen-in-tags        |%S|" org-hugo-prefer-hyphen-in-tags)
+                                ,(format "|org-hugo-enable-special-tags          |%S|" org-hugo-enable-special-tags)
                                 ,(format "|org-hugo-langs-no-descr-in-code-fences|%S|" org-hugo-langs-no-descr-in-code-fences))
                               "\n"))
          (org-export-with-toc nil)

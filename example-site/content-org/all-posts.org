@@ -172,12 +172,6 @@ This post must not be exported as it is tagged =noexport=.
 :EXPORT_FILE_NAME: commented-post
 :END:
 This post must not be exported as it is commented.
-* Test tags                                                         :abc:def:
-:PROPERTIES:
-:EXPORT_FILE_NAME: test-tags
-:EXPORT_DATE: 2017-07-12T13:48:01-04:00
-:END:
-Testing tags set using Org tags in headings.
 * Section
 ** Articles
 :PROPERTIES:
@@ -740,40 +734,47 @@ This is some text[fn:1][fn:2].
 This is some text[fn:1].
 This is some text[fn:1].
 This is some text[fn:1].
-* Hyphens in Org tags
-** Prefer
+* Tags
+** Basic tags                                                       :abc:def:
 :PROPERTIES:
-:EXPORT_HUGO_PREFER_HYPHEN_IN_TAGS: t
+:EXPORT_FILE_NAME: test-tags
+:EXPORT_DATE: 2017-07-12T13:48:01-04:00
 :END:
-*** Prefer Hyphen in Tags           :_a:__a:b_:b__:a_b:a__b:a_b__c:_a_b__c__:
+Testing tags set using Org tags in headings.
+** Hyphens in Org tags
+*** Prefer
+:PROPERTIES:
+:EXPORT_HUGO_ENABLE_SPECIAL_TAGS: t
+:END:
+**** Prefer Hyphen in Tags          :_a:__a:b_:b__:a_b:a__b:a_b__c:_a_b__c__:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hyphen-tags-prefer
 :END:
-*** Prefer Hyphen Categories :@_a:@__a:@b_:@b__:@a_b:@a__b:@a_b__c:@_a_b__c__:
+**** Prefer Hyphen Categories :@_a:@__a:@b_:@b__:@a_b:@a__b:@a_b__c:@_a_b__c__:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hyphen-categories-prefer
 :END:
-** Don't Prefer
+*** Don't Prefer
 :PROPERTIES:
-:EXPORT_HUGO_PREFER_HYPHEN_IN_TAGS:
+:EXPORT_HUGO_ENABLE_SPECIAL_TAGS:
 :END:
-*** Don't Prefer Hyphen in Tags     :_a:__a:b_:b__:a_b:a__b:a_b__c:_a_b__c__:
+**** Don't Prefer Hyphen in Tags    :_a:__a:b_:b__:a_b:a__b:a_b__c:_a_b__c__:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hyphen-tags-dont-prefer
 :END:
-*** Don't Prefer Hyphen Categories :@_a:@__a:@b_:@b__:@a_b:@a__b:@a_b__c:@_a_b__c__:
+**** Don't Prefer Hyphen Categories :@_a:@__a:@b_:@b__:@a_b:@a__b:@a_b__c:@_a_b__c__:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hyphen-categories-dont-prefer
 :END:
-* Tags as Categories
-** Category A                                                         :@catA:
-*** Cat A post 1                                                       :meow:
+** Tags as Categories
+*** Category A                                                        :@catA:
+**** Cat A post 1                                                      :meow:
 :PROPERTIES:
 :EXPORT_DATE: 2017-07-24
 :EXPORT_FILE_NAME: cat-a-post-1
 :END:
 This post is in category =catA= and tagged =meow=.
-*** Cat A and cat B                                                   :@catB:
+**** Cat A and cat B                                                  :@catB:
 :PROPERTIES:
 :EXPORT_FILE_NAME: cat-a-and-cat-b
 :EXPORT_DATE: 2017-07-24

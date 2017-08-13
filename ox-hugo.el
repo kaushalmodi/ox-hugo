@@ -1045,8 +1045,8 @@ INFO is a plist used as a communication channel."
          (title (replace-regexp-in-string "\\\\_" "_" title)))
     title))
 
-(defun org-hugo--transform-org-tags (str)
-  "Transform Org tag STR for use in Hugo tags and categories.
+(defun org-hugo--transform-org-tags (tag-list info)
+  "Transform Org TAG-LIST for use in Hugo tags and categories.
 
 - Single underscores will be replaced with hyphens.
 - Double underscores will be replaced with single underscores.
@@ -1056,13 +1056,21 @@ the tag strings in Hugo front matter.
 
 Example: :some_tag:  -> \"some-tag\"
          :some__tag: -> \"some_tag\"."
-  (let* ((str (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" str))         ;"_a"   -> "-a"
-         (str (replace-regexp-in-string "\\`__\\([^_]\\)" "_\\1" str))        ;"__a"  -> "_a"
-         (str (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" str))         ;"a_"   -> "a-"
-         (str (replace-regexp-in-string "\\([^_]\\)__\\'" "\\1_" str))        ;"a__"  -> "a_"
-         (str (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" str))   ;"a_b"  -> "a-b"
-         (str (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1_\\2" str))) ;"a__b" -> "a_b"
-    str))
+  (let* ((prefer-hyphen (org-hugo--plist-value-true-p :hugo-prefer-hyphen-in-tags info))
+         new-tag-list)
+    (cond
+     (prefer-hyphen
+      (dolist (tag tag-list)
+        (let* ((tag (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" tag))         ;"_a"   -> "-a"
+               (tag (replace-regexp-in-string "\\`__\\([^_]\\)" "_\\1" tag))        ;"__a"  -> "_a"
+               (tag (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" tag))         ;"a_"   -> "a-"
+               (tag (replace-regexp-in-string "\\([^_]\\)__\\'" "\\1_" tag))        ;"a__"  -> "a_"
+               (tag (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" tag))   ;"a_b"  -> "a-b"
+               (tag (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1_\\2" tag))) ;"a__b" -> "a_b"
+          (push tag new-tag-list)))
+      (nreverse new-tag-list))
+     (t
+      tag-list))))
 
 (defun org-hugo--get-front-matter (info)
   "Return the Hugo front matter string.
@@ -1095,19 +1103,13 @@ INFO is a plist used as a communication channel."
                                               date-nocolon)))
          (draft (or org-hugo--draft-state
                     (org-export-data (plist-get info :hugo-draft) info)))
-         (tag-list (if (org-hugo--plist-value-true-p :hugo-prefer-hyphen-in-tags info)
-                       (mapcar #'org-hugo--transform-org-tags
-                               org-hugo--tags-list)
-                     org-hugo--tags-list))
+         (tag-list (org-hugo--transform-org-tags org-hugo--tags-list info))
          (tags (org-string-nw-p ;Don't allow tags to be just whitespace
                 (or (org-string-nw-p (mapconcat #'identity tag-list " "))
                     (concat
                      (org-export-data (plist-get info :hugo-tags) info) " "
                      (org-export-data (plist-get info :tags) info)))))
-         (categories-list (if (org-hugo--plist-value-true-p :hugo-prefer-hyphen-in-tags info)
-                              (mapcar #'org-hugo--transform-org-tags
-                                      org-hugo--categories-list)
-                            org-hugo--categories-list))
+         (categories-list (org-hugo--transform-org-tags org-hugo--categories-list info))
          (categories (or (org-string-nw-p
                           (mapconcat (lambda (str)
                                        ;; Remove "@" from beg of categories.

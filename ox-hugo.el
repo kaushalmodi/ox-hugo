@@ -324,6 +324,11 @@ joinLines
 - Purpose: When enabled, delete newlines and join the lines.  This
            behavior is similar to the default behavior in Org.")
 
+(defvar org-hugo--internal-tag-separator "\n"
+  "String used to separate multiple Org tags.
+This variable is for internal use only, and must not be
+modified.")
+
 
 ;;; User-Configurable Variables
 
@@ -365,7 +370,18 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
   :safe #'booleanp)
 
 (defcustom org-hugo-prefer-hyphen-in-tags t
-  "When non-nil, replace underscores with hyphens in Org tags.
+  "When non-nil, replace single underscores in Org tags with hyphens.
+
+See `org-hugo--transform-org-tags' for more information.
+
+This variable affects the Hugo tags and categories set via Org tags
+using the \"@\" prefix."
+  :group 'org-export-hugo
+  :type 'boolean
+  :safe #'booleanp)
+
+(defcustom org-hugo-allow-spaces-in-tags t
+  "When non-nil, replace double underscores in Org tags with spaces.
 
 See `org-hugo--transform-org-tags' for more information.
 
@@ -443,13 +459,14 @@ Example value: (org)."
                    (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)
                    (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
                    (:hugo-prefer-hyphen-in-tags "HUGO_PREFER_HYPHEN_IN_TAGS" nil org-hugo-prefer-hyphen-in-tags)
+                   (:hugo-allow-spaces-in-tags "HUGO_ALLOW_SPACES_IN_TAGS" nil org-hugo-allow-spaces-in-tags)
                    (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
                    (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil)
 
                    ;; Front matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
                    ;; aliases
-                   (:hugo-aliases "HUGO_ALIASES" nil nil 'space)
+                   (:hugo-aliases "HUGO_ALIASES" nil nil space)
                    ;; date
                    ;; "date" is parsed from the Org #+DATE or subtree property EXPORT_HUGO_DATE
                    (:date "DATE" nil nil)
@@ -466,7 +483,7 @@ Example value: (org)."
                    ;; keywords
                    ;; "keywords" is parsed from the Org #+KEYWORDS or
                    ;; subtree property EXPORT_KEYWORDS.
-                   (:keywords "KEYWORDS" nil nil 'space)
+                   (:keywords "KEYWORDS" nil nil newline)
                    ;; layout
                    (:hugo-layout "HUGO_LAYOUT" nil nil)
                    ;; lastmod
@@ -484,12 +501,12 @@ Example value: (org)."
                    ;; taxomonomies - tags, categories
                    ;; Org tags parsed from posts as subtrees get the
                    ;; highest precedence as tag names.
-                   (:tags "TAGS" nil nil 'space)
-                   (:hugo-tags "HUGO_TAGS" nil nil 'space)
+                   (:tags "TAGS" nil nil newline)
+                   (:hugo-tags "HUGO_TAGS" nil nil newline)
                    ;; Org tags starting with "@" parsed from posts as
                    ;; subtrees get the highest precedence as category
                    ;; names.
-                   (:hugo-categories "HUGO_CATEGORIES" nil nil 'space)
+                   (:hugo-categories "HUGO_CATEGORIES" nil nil newline)
                    ;; title
                    ;; "title" is parsed from the Org #+TITLE or the subtree heading.
                    ;; type
@@ -1050,35 +1067,91 @@ INFO is a plist used as a communication channel."
 
 INFO is a plist used as a communication channel.
 
-If NO-PREFER-HYPHEN is nil, and if user prefers using hyphens in
-tags to underscores (set via `org-hugo-prefer-hyphen-in-tags' or
-HUGO_PREFER_HYPHEN_IN_TAGS property),
+1. Prefer hyphens
+
+If NO-PREFER-HYPHEN is nil, and if using hyphens in tags is
+preferred to underscores (set via
+`org-hugo-prefer-hyphen-in-tags' or HUGO_PREFER_HYPHEN_IN_TAGS
+property),
 
 - Single underscores will be replaced with hyphens.
 - Triple underscores will be replaced with single underscores.
 
 Below shows the example of how the Org tags would translate to
-the tag strings in Hugo front matter.
+the tag strings in Hugo front matter if hyphens were preferred:
 
 Example: :some_tag:   -> \"some-tag\"
-         :some___tag: -> \"some_tag\"."
+         :some___tag: -> \"some_tag\"
+
+2. Allow spaces
+
+If using spaces in tags is allowed (set via
+`org-hugo-allow-spaces-in-tags' or HUGO_ALLOW_SPACES_IN_TAGS
+property),
+
+- Double underscores will be replaced with single spaces.
+
+Below shows the example of how the Org tags would translate to
+the tag strings in Hugo front matter if spaces were allowed:
+
+Example: :some__tag:   -> \"some tag\"."
   (let* ((prefer-hyphen (unless no-prefer-hyphen
                           (org-hugo--plist-value-true-p
                            :hugo-prefer-hyphen-in-tags info)))
+         (allow-spaces (org-hugo--plist-value-true-p
+                        :hugo-allow-spaces-in-tags info))
          new-tag-list)
     (cond
-     (prefer-hyphen
+     ((or prefer-hyphen
+          allow-spaces)
       (dolist (tag tag-list)
-        (let* ((tag (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" tag))          ;"_a"    -> "-a"
-               (tag (replace-regexp-in-string "\\`___\\([^_]\\)" "_\\1" tag))        ;"___a"  -> "_a"
-               (tag (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" tag))          ;"a_"    -> "a-"
-               (tag (replace-regexp-in-string "\\([^_]\\)___\\'" "\\1_" tag))        ;"a___"  -> "a_"
-               (tag (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" tag))    ;"a_b"   -> "a-b"
-               (tag (replace-regexp-in-string "\\([^_]\\)___\\([^_]\\)" "\\1_\\2" tag))) ;"a___b" -> "a_b"
-          (push tag new-tag-list)))
+        (when allow-spaces
+          ;; It is safe to assume that no one would want
+          ;; leading/trailing spaces in tags/categories.. so not
+          ;; checking for "__a" or "a__" cases.
+          (setq tag (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1 \\2" tag)))  ;"a__b"  -> "a b"
+        (when prefer-hyphen
+          (setq tag (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" tag))          ;"_a"    -> "-a"
+          (setq tag (replace-regexp-in-string "\\`___\\([^_]\\)" "_\\1" tag))        ;"___a"  -> "_a"
+          (setq tag (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" tag))          ;"a_"    -> "a-"
+          (setq tag (replace-regexp-in-string "\\([^_]\\)___\\'" "\\1_" tag))        ;"a___"  -> "a_"
+          (setq tag (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" tag))    ;"a_b"   -> "a-b"
+          (setq tag (replace-regexp-in-string "\\([^_]\\)___\\([^_]\\)" "\\1_\\2" tag))) ;"a___b" -> "a_b"
+        (push tag new-tag-list))
       (nreverse new-tag-list))
      (t
       tag-list))))
+
+(defun org-hugo--transform-org-tags-str (tag-str info &optional no-prefer-hyphen)
+  "Wrapper function for `org-hugo--transform-org-tags'.
+
+This function,
+1. Converts the input TAG-STR string to a list,
+2. Passes that to `org-hugo--transform-org-tags', and
+3. Converts the returned list back to a string, with elements
+separated by `org-hugo--internal-tag-separator'.
+4. Returns that string.
+
+Example: \"two__words hyphenated_word\" -> \"two words\nhyphenated-word\".
+
+INFO is a plist used as a communication channel.
+NO-PREFER-HYPHEN when non-nil will prevent interpretation of
+underscores in TAG-STR as hyphens.
+
+Returns nil if TAG-STR is not a string."
+  (when (stringp tag-str)
+    (setq tag-str (org-trim tag-str))
+    (setq tag-str (replace-regexp-in-string
+                   " +" org-hugo--internal-tag-separator
+                   tag-str))
+    (let* ((tag-str-list (split-string
+                          tag-str
+                          org-hugo--internal-tag-separator))
+           (tag-str-list (org-hugo--transform-org-tags
+                          tag-str-list
+                          info
+                          no-prefer-hyphen)))
+      (mapconcat #'identity tag-str-list org-hugo--internal-tag-separator))))
 
 (defun org-hugo--get-front-matter (info)
   "Return the Hugo front matter string.
@@ -1113,18 +1186,26 @@ INFO is a plist used as a communication channel."
                     (org-export-data (plist-get info :hugo-draft) info)))
          (tag-list (org-hugo--transform-org-tags org-hugo--tags-list info))
          (tags (org-string-nw-p ;Don't allow tags to be just whitespace
-                (or (org-string-nw-p (mapconcat #'identity tag-list " "))
-                    (concat
-                     (org-export-data (plist-get info :hugo-tags) info) " "
-                     (org-export-data (plist-get info :tags) info)))))
+                (or (org-string-nw-p (mapconcat #'identity
+                                                tag-list
+                                                org-hugo--internal-tag-separator))
+                    (let* ((merged-tags (concat
+                                         (let ((tags1 (plist-get info :hugo-tags)))
+                                           (when tags1
+                                             tags1)) " "
+                                         (let ((tags2 (plist-get info :tags)))
+                                           (when tags2
+                                             tags2)))))
+                      (org-hugo--transform-org-tags-str merged-tags info :no-prefer-hyphen)))))
          (categories-list (org-hugo--transform-org-tags org-hugo--categories-list info))
          (categories (or (org-string-nw-p
                           (mapconcat (lambda (str)
                                        ;; Remove "@" from beg of categories.
                                        (replace-regexp-in-string "\\`@" "" str))
                                      categories-list
-                                     " "))
-                         (org-export-data (plist-get info :hugo-categories) info)))
+                                     org-hugo--internal-tag-separator))
+                         (let* ((cats (plist-get info :hugo-categories)))
+                           (org-hugo--transform-org-tags-str cats info :no-prefer-hyphen))))
          (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
          (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
          ;; If menu-alist-override is non-nil, update menu-alist with values from that.
@@ -1164,6 +1245,8 @@ INFO is a plist used as a communication channel."
                  (blackfriday . ,blackfriday)
                  (menu . ,menu-alist)))
          (data `,(append data custom-fm-data)))
+    ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
+    ;; (message "dbg: tags: %S" (plist-get info :tags))
     ;; (message "[get fm info DBG] %S" info)
     ;; (message "[get fm blackfriday DBG] %S" blackfriday)
     ;; (message "[get fm menu DBG] %S" menu-alist)
@@ -1307,7 +1390,10 @@ are \"toml\" and \"yaml\"."
                                          (concat "["
                                                  (mapconcat #'identity
                                                             (mapcar #'org-hugo--quote-string
-                                                                    (split-string value)) ", ")
+                                                                    (split-string
+                                                                     value
+                                                                     org-hugo--internal-tag-separator))
+                                                            ", ")
                                                  "]"))
                                         (t
                                          (org-hugo--quote-string value)))))))))))
@@ -1317,6 +1403,7 @@ are \"toml\" and \"yaml\"."
   "Return a list of properties that should be inherited."
   (let ((prop-list '("HUGO_FRONT_MATTER_FORMAT"
                      "HUGO_PREFER_HYPHEN_IN_TAGS"
+                     "HUGO_ALLOW_SPACES_IN_TAGS"
                      "HUGO_BLACKFRIDAY"
                      "HUGO_SECTION"
                      "HUGO_BASE_DIR"
@@ -1649,6 +1736,7 @@ buffer and returned as a string in Org format."
                                 ,(format "|org-hugo-default-section-directory    |%S|" org-hugo-default-section-directory)
                                 ,(format "|org-hugo-use-code-for-kbd             |%S|" org-hugo-use-code-for-kbd)
                                 ,(format "|org-hugo-prefer-hyphen-in-tags        |%S|" org-hugo-prefer-hyphen-in-tags)
+                                ,(format "|org-hugo-allow-spaces-in-tags         |%S|" org-hugo-allow-spaces-in-tags)
                                 ,(format "|org-hugo-langs-no-descr-in-code-fences|%S|" org-hugo-langs-no-descr-in-code-fences))
                               "\n"))
          (org-export-with-toc nil)

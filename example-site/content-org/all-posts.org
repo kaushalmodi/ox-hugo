@@ -741,6 +741,23 @@ This is some text[fn:1].
 :EXPORT_DATE: 2017-07-12T13:48:01-04:00
 :END:
 Testing tags set using Org tags in headings.
+** Prefer hyphens and allow spaces
+:PROPERTIES:
+:EXPORT_HUGO_PREFER_HYPHEN_IN_TAGS: t
+:EXPORT_HUGO_ALLOW_SPACES_IN_TAGS: t
+:END:
+*** Hyphens and spaces in tags      :an_apple__a___pear:good__bad__and__ugly:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hyphens-and-spaces-in-tags
+:END:
+*** Hyphens and spaces in categories :@an_apple__a___pear:@good__bad__and__ugly:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hyphens-and-spaces-in-categories
+:END:
+The Org tags do not allow spaces. So the trick we use is replace
+*double* underscores with spaces.
+
+So an Org tag =@abc__def= becomes Hugo category =abc def=.
 ** Hyphens in Org tags
 *** Prefer
 :PROPERTIES:
@@ -765,6 +782,39 @@ Testing tags set using Org tags in headings.
 **** Don't Prefer Hyphen Categories :@_a:@_a:@b_:@b_:@a_b:@a_b:@a_b_c:@_a_b_c_:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hyphen-categories-dont-prefer
+:END:
+** Spaces in Org Tags
+*** Want Spaces
+:PROPERTIES:
+:EXPORT_HUGO_ALLOW_SPACES_IN_TAGS: t
+:END:
+**** Spaces in tags               :abc__def:abc__def__ghi:abc__def__ghi__jkl:
+:PROPERTIES:
+:EXPORT_FILE_NAME: spaces-in-tags
+:END:
+The Org tags do not allow spaces. So the trick we use is replace
+*double* underscores with spaces.
+
+So an Org tag =abc__def= becomes Hugo tag =abc def=.
+**** Spaces in categories      :@abc__def:@abc__def__ghi:@abc__def__ghi__jkl:
+:PROPERTIES:
+:EXPORT_FILE_NAME: spaces-in-categories
+:END:
+The Org tags do not allow spaces. So the trick we use is replace
+*double* underscores with spaces.
+
+So an Org tag =@abc__def= becomes Hugo category =abc def=.
+*** Don't Want Spaces
+:PROPERTIES:
+:EXPORT_HUGO_ALLOW_SPACES_IN_TAGS:
+:END:
+**** No Spaces in tags            :abc__def:abc__def__ghi:abc__def__ghi__jkl:
+:PROPERTIES:
+:EXPORT_FILE_NAME: no-spaces-in-tags
+:END:
+**** No Spaces in categories   :@abc__def:@abc__def__ghi:@abc__def__ghi__jkl:
+:PROPERTIES:
+:EXPORT_FILE_NAME: no-spaces-in-categories
 :END:
 ** Tags as Categories
 *** Category A                                                        :@catA:

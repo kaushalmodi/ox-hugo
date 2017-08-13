@@ -1,6 +1,7 @@
 #+TITLE: My Blog
 #+HUGO_BASE_DIR: ../
 #+TAGS: alpha beta
+#+TAGS: hyphened-tag
 
 # 1. Load `ox-hugo'
 # 2. C-c C-e H A
@@ -15,6 +16,7 @@ tags set in =#+TAGS= is overridden.
 * Specifying additional tags
 :PROPERTIES:
 :EXPORT_HUGO_TAGS: gamma delta
+:EXPORT_HUGO_TAGS+: two__words
 :EXPORT_FILE_NAME: tags-post-2
 :END:
 If user specifies =EXPORT_HUGO_TAGS= in the property drawer, those

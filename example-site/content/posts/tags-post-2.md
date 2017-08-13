@@ -1,6 +1,6 @@
 +++
 title = "Specifying additional tags"
-tags = ["gamma", "delta", "alpha", "beta"]
+tags = ["gamma", "delta", "two words", "alpha", "beta", "hyphened-tag"]
 draft = false
 +++
 

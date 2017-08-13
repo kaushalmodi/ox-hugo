@@ -366,10 +366,11 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
 
 (defcustom org-hugo-prefer-hyphen-in-tags t
   "When non-nil, replace underscores with hyphens in Org tags.
-In that case, use double underscores to represent a single underscore.
 
-This also affects the Hugo categories set via Org tags using the
-\"@\" prefix."
+See `org-hugo--transform-org-tags' for more information.
+
+This variable affects the Hugo tags and categories set via Org tags
+using the \"@\" prefix."
   :group 'org-export-hugo
   :type 'boolean
   :safe #'booleanp)

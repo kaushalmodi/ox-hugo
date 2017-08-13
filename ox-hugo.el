@@ -686,14 +686,14 @@ Hugo anchor tag for the section as a string."
 (defun org-hugo-footnote-section (info)
   "Format the footnote section.
 INFO is a plist used as a communication channel."
-  (let* ((fn-alist (org-export-collect-footnote-definitions info))
-         ;; Fri Jul 21 14:33:25 EDT 2017 - kmodi
-         ;; TODO: Need to learn using cl-loop
-         ;; Below form from ox-md did not work.
-         ;; (fn-alist-stripped
-         ;;  (cl-loop for (n raw) in fn-alist collect
-         ;;           (cons n (org-trim (org-export-data raw info)))))
-         fn-alist-stripped)
+  (let ((fn-alist (org-export-collect-footnote-definitions info))
+        ;; Fri Jul 21 14:33:25 EDT 2017 - kmodi
+        ;; TODO: Need to learn using cl-loop
+        ;; Below form from ox-md did not work.
+        ;; (fn-alist-stripped
+        ;;  (cl-loop for (n raw) in fn-alist collect
+        ;;           (cons n (org-trim (org-export-data raw info)))))
+        fn-alist-stripped)
     (let ((n 1)
           def)
       (dolist (fn fn-alist)
@@ -1189,13 +1189,13 @@ INFO is a plist used as a communication channel."
                 (or (org-string-nw-p (mapconcat #'identity
                                                 tag-list
                                                 org-hugo--internal-tag-separator))
-                    (let* ((merged-tags (concat
-                                         (let ((tags1 (plist-get info :hugo-tags)))
-                                           (when tags1
-                                             tags1)) " "
-                                         (let ((tags2 (plist-get info :tags)))
-                                           (when tags2
-                                             tags2)))))
+                    (let ((merged-tags (concat
+                                        (let ((tags1 (plist-get info :hugo-tags)))
+                                          (when tags1
+                                            tags1)) " "
+                                        (let ((tags2 (plist-get info :tags)))
+                                          (when tags2
+                                            tags2)))))
                       (org-hugo--transform-org-tags-str merged-tags info :no-prefer-hyphen)))))
          (categories-list (org-hugo--transform-org-tags org-hugo--categories-list info))
          (categories (or (org-string-nw-p
@@ -1204,8 +1204,9 @@ INFO is a plist used as a communication channel."
                                        (replace-regexp-in-string "\\`@" "" str))
                                      categories-list
                                      org-hugo--internal-tag-separator))
-                         (let* ((cats (plist-get info :hugo-categories)))
-                           (org-hugo--transform-org-tags-str cats info :no-prefer-hyphen))))
+                         (org-hugo--transform-org-tags-str
+                          (plist-get info :hugo-categories)
+                          info :no-prefer-hyphen)))
          (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
          (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
          ;; If menu-alist-override is non-nil, update menu-alist with values from that.
@@ -1350,9 +1351,9 @@ are \"toml\" and \"yaml\"."
                   (setq menu-string (concat menu-entry-str menu-value-str))))))
            ((string= key "blackfriday")
             (when value
-              (let* ((bf-alist value)
-                     (bf-entry-str "")
-                     (bf-value-str ""))
+              (let ((bf-alist value)
+                    (bf-entry-str "")
+                    (bf-value-str ""))
                 (setq bf-entry-str (cond ((string= format "toml")
                                           "[blackfriday]\n")
                                          ((string= format "yaml")
@@ -1469,12 +1470,12 @@ B and Level 2, and 3 for Level C.
 
 So the value returned for Level C will be (2 . 3)."
   (save-excursion
-    (let* ((level (org-element-property :level subtree))
-           (index 1)
-           (current-pos (point))
-           (scope (if (org-up-heading-safe)
-                      'tree ;Map entries only in parent subtree scope if parent exists
-                    nil))) ;Else map in the whole buffer (provided the MATCH conditions below)
+    (let ((level (org-element-property :level subtree))
+          (index 1)
+          (current-pos (point))
+          (scope (if (org-up-heading-safe)
+                     'tree ;Map entries only in parent subtree scope if parent exists
+                   nil))) ;Else map in the whole buffer (provided the MATCH conditions below)
       (when level
         (org-map-entries (lambda ()
                            (when (< (point) current-pos)

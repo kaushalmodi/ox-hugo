@@ -746,11 +746,11 @@ Testing tags set using Org tags in headings.
 :PROPERTIES:
 :EXPORT_HUGO_PREFER_HYPHEN_IN_TAGS: t
 :END:
-**** Prefer Hyphen in Tags          :_a:__a:b_:b__:a_b:a__b:a_b__c:_a_b__c__:
+**** Prefer Hyphen in Tags    :_a:___a:b_:b___:a_b:a___b:a_b___c:_a_b___c___:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hyphen-tags-prefer
 :END:
-**** Prefer Hyphen Categories :@_a:@__a:@b_:@b__:@a_b:@a__b:@a_b__c:@_a_b__c__:
+**** Prefer Hyphen Categories :@_a:@___a:@b_:@b___:@a_b:@a___b:@a_b___c:@_a_b___c___:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hyphen-categories-prefer
 :END:
@@ -758,11 +758,11 @@ Testing tags set using Org tags in headings.
 :PROPERTIES:
 :EXPORT_HUGO_PREFER_HYPHEN_IN_TAGS:
 :END:
-**** Don't Prefer Hyphen in Tags    :_a:__a:b_:b__:a_b:a__b:a_b__c:_a_b__c__:
+**** Don't Prefer Hyphen in Tags          :_a:_a:b_:b_:a_b:a_b:a_b_c:_a_b_c_:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hyphen-tags-dont-prefer
 :END:
-**** Don't Prefer Hyphen Categories :@_a:@__a:@b_:@b__:@a_b:@a__b:@a_b__c:@_a_b__c__:
+**** Don't Prefer Hyphen Categories :@_a:@_a:@b_:@b_:@a_b:@a_b:@a_b_c:@_a_b_c_:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hyphen-categories-dont-prefer
 :END:

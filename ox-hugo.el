@@ -1045,28 +1045,36 @@ INFO is a plist used as a communication channel."
          (title (replace-regexp-in-string "\\\\_" "_" title)))
     title))
 
-(defun org-hugo--transform-org-tags (tag-list info)
+(defun org-hugo--transform-org-tags (tag-list info &optional no-prefer-hyphen)
   "Transform Org TAG-LIST for use in Hugo tags and categories.
 
+INFO is a plist used as a communication channel.
+
+If NO-PREFER-HYPHEN is nil, and if user prefers using hyphens in
+tags to underscores (set via `org-hugo-prefer-hyphen-in-tags' or
+HUGO_PREFER_HYPHEN_IN_TAGS property),
+
 - Single underscores will be replaced with hyphens.
-- Double underscores will be replaced with single underscores.
+- Triple underscores will be replaced with single underscores.
 
 Below shows the example of how the Org tags would translate to
 the tag strings in Hugo front matter.
 
-Example: :some_tag:  -> \"some-tag\"
-         :some__tag: -> \"some_tag\"."
-  (let* ((prefer-hyphen (org-hugo--plist-value-true-p :hugo-prefer-hyphen-in-tags info))
+Example: :some_tag:   -> \"some-tag\"
+         :some___tag: -> \"some_tag\"."
+  (let* ((prefer-hyphen (unless no-prefer-hyphen
+                          (org-hugo--plist-value-true-p
+                           :hugo-prefer-hyphen-in-tags info)))
          new-tag-list)
     (cond
      (prefer-hyphen
       (dolist (tag tag-list)
-        (let* ((tag (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" tag))         ;"_a"   -> "-a"
-               (tag (replace-regexp-in-string "\\`__\\([^_]\\)" "_\\1" tag))        ;"__a"  -> "_a"
-               (tag (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" tag))         ;"a_"   -> "a-"
-               (tag (replace-regexp-in-string "\\([^_]\\)__\\'" "\\1_" tag))        ;"a__"  -> "a_"
-               (tag (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" tag))   ;"a_b"  -> "a-b"
-               (tag (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1_\\2" tag))) ;"a__b" -> "a_b"
+        (let* ((tag (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" tag))          ;"_a"    -> "-a"
+               (tag (replace-regexp-in-string "\\`___\\([^_]\\)" "_\\1" tag))        ;"___a"  -> "_a"
+               (tag (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" tag))          ;"a_"    -> "a-"
+               (tag (replace-regexp-in-string "\\([^_]\\)___\\'" "\\1_" tag))        ;"a___"  -> "a_"
+               (tag (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" tag))    ;"a_b"   -> "a-b"
+               (tag (replace-regexp-in-string "\\([^_]\\)___\\([^_]\\)" "\\1_\\2" tag))) ;"a___b" -> "a_b"
           (push tag new-tag-list)))
       (nreverse new-tag-list))
      (t

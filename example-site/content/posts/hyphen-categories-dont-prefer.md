@@ -1,5 +1,5 @@
 +++
 title = "Don't Prefer Hyphen Categories"
-categories = ["_a", "__a", "b_", "b__", "a_b", "a__b", "a_b__c", "_a_b__c__"]
+categories = ["_a", "b_", "a_b", "a_b_c", "_a_b_c_"]
 draft = false
 +++

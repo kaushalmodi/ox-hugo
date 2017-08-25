@@ -1606,7 +1606,7 @@ nil."
                                ;; Export only the subtrees where
                                ;; EXPORT_FILE_NAME property is not
                                ;; empty.
-                               "EXPORT_FILE_NAME<>\"\"")
+                                "EXPORT_FILE_NAME<>\"\"" nil "comment")
               (message "[ox-hugo] Exported %d subtrees" org-hugo--subtree-count)
               nil)
           ;; Publish only the current subtree

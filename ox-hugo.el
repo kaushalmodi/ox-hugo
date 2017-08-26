@@ -1711,20 +1711,22 @@ buffer and returned as a string in Org format."
                                              (format " (commit %s)" emacs-repository-version)
                                            ""))
                                 "** Org Version"
+                                "#+BEGIN_EXAMPLE" ;Prevent the forward slashes in paths being interpreted as Org markup
                                 ,(format "%s" org-version)
+                                "#+END_EXAMPLE"
                                 "*** Org =load-path= shadows"
                                 ,(let* ((str (list-load-path-shadows :stringp))
                                         (str-list (split-string str "\n" :omit-nulls))
                                         (org-shadow-str ""))
                                    (dolist (shadow str-list)
                                      (when (string-match-p ".*org.+hides.+org.*" shadow)
-                                       (setq org-shadow-str (concat org-shadow-str shadow "\n\n"))))
+                                       (setq org-shadow-str (concat org-shadow-str shadow "\n"))))
                                    (if (org-string-nw-p org-shadow-str)
                                        (mapconcat #'identity
                                                   `("*Warning*: Possible mixed installation of Org"
-                                                    "#+BEGIN_QUOTE"
+                                                    "#+BEGIN_EXAMPLE" ;Prevent the forward slashes in paths being interpreted as Org markup
                                                     ,(org-trim org-shadow-str)
-                                                    "#+END_QUOTE"
+                                                    "#+END_EXAMPLE"
                                                     "Study the output of =M-x list-load-path-shadows=.")
                                                   "\n")
                                      "No Org mode shadows found in =load-path="))

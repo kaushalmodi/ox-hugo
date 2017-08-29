@@ -701,10 +701,17 @@ INFO is a plist used as a communication channel."
         ;; (message "fn: %s" (org-export-data fn info)) ;This gives error
         ;; (message "fn nth 2 car: %s" (org-export-data (nth 2 fn) info))
         (setq def (org-trim (org-export-data (nth 2 fn) info)))
+        ;; Support multi-line footnote definitions by folding all
+        ;; footnote definition lines into a single line as Blackfriday
+        ;; does not support that.
+        (setq def (replace-regexp-in-string "\n" " " def))
+        ;; Replace multiple consecutive spaces with a single space.
+        (setq def (replace-regexp-in-string "[[:blank:]]+" " " def))
         (push (cons n def) fn-alist-stripped)
         (setq n (1+ n))))
     (when fn-alist-stripped
       (mapconcat (lambda (fn)
+                   ;; (message "dbg: fn: %0d -- %s" (car fn) (cdr fn))
                    (format "[^fn:%d]: %s"
                            (car fn)     ;footnote number
                            (cdr fn)))   ;footnote definition

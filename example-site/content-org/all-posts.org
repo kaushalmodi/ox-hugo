@@ -756,6 +756,11 @@ This is some text[fn:1][fn:2].
 This is some text[fn:1].
 This is some text[fn:1].
 This is some text[fn:1].
+** Multi-line footnote
+:PROPERTIES:
+:EXPORT_FILE_NAME: multi-line-footnote
+:END:
+This is some text[fn:3].
 * Tags
 ** Basic tags                                                       :abc:def:
 :PROPERTIES:
@@ -1354,6 +1359,9 @@ molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 # a comment forces paragraph break in Org
 * Footnotes
+
+[fn:3] This is a long footnote. It is so long that it gets auto-filled
+over multiple lines. But even then it should be handled fine.
 
 [fn:2] Second footnote
 

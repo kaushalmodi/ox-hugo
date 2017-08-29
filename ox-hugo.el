@@ -435,7 +435,6 @@ Example value: (org)."
             (lambda (a s v _b)
               (org-hugo-export-as-md a s v)))))
   :translate-alist '((code . org-hugo-kbd-tags-maybe)
-                     (footnote-reference . org-hugo-footnote-reference)
                      (headline . org-hugo-headline)
                      (inner-template . org-hugo-inner-template)
                      (keyword . org-hugo-keyword)
@@ -550,18 +549,6 @@ INFO is a plist used as a communication channel."
   (if (org-hugo--plist-value-true-p :hugo-use-code-for-kbd info)
       (format "<kbd>%s</kbd>" (org-element-property :value verbatim))
     (org-md-verbatim verbatim nil nil)))
-
-;;;; Footnote Reference
-(defun org-hugo-footnote-reference (footnote-reference _contents info)
-  "Transcode a FOOTNOTE-REFERENCE element from Org to Hugo-compatible Markdown.
-CONTENTS is nil.  INFO is a plist holding contextual information."
-  ;; (message "footref: %s" footnote-reference)
-  (concat
-   ;; Insert separator between two footnotes in a row.
-   (let ((prev (org-export-get-previous-element footnote-reference info)))
-     (and (eq (org-element-type prev) 'footnote-reference)
-          (plist-get info :html-footnote-separator)))
-   (format "[^fn:%d]" (org-export-get-footnote-number footnote-reference info))))
 
 ;;;; Headline
 (defun org-hugo-headline (headline contents info)
@@ -683,41 +670,6 @@ Hugo anchor tag for the section as a string."
       (concat "\n" level-mark " " todo title " " anchor "\n\n"))))
 
 ;;;; Inner Template
-(defun org-hugo-footnote-section (info)
-  "Format the footnote section.
-INFO is a plist used as a communication channel."
-  (let ((fn-alist (org-export-collect-footnote-definitions info))
-        ;; Fri Jul 21 14:33:25 EDT 2017 - kmodi
-        ;; TODO: Need to learn using cl-loop
-        ;; Below form from ox-md did not work.
-        ;; (fn-alist-stripped
-        ;;  (cl-loop for (n raw) in fn-alist collect
-        ;;           (cons n (org-trim (org-export-data raw info)))))
-        fn-alist-stripped)
-    (let ((n 1)
-          def)
-      (dolist (fn fn-alist)
-        ;; (message "fn: %S" fn)
-        ;; (message "fn: %s" (org-export-data fn info)) ;This gives error
-        ;; (message "fn nth 2 car: %s" (org-export-data (nth 2 fn) info))
-        (setq def (org-trim (org-export-data (nth 2 fn) info)))
-        ;; Support multi-line footnote definitions by folding all
-        ;; footnote definition lines into a single line as Blackfriday
-        ;; does not support that.
-        (setq def (replace-regexp-in-string "\n" " " def))
-        ;; Replace multiple consecutive spaces with a single space.
-        (setq def (replace-regexp-in-string "[[:blank:]]+" " " def))
-        (push (cons n def) fn-alist-stripped)
-        (setq n (1+ n))))
-    (when fn-alist-stripped
-      (mapconcat (lambda (fn)
-                   ;; (message "dbg: fn: %0d -- %s" (car fn) (cdr fn))
-                   (format "[^fn:%d]: %s"
-                           (car fn)     ;footnote number
-                           (cdr fn)))   ;footnote definition
-                 (nreverse fn-alist-stripped)
-                 "\n"))))
-
 (defun org-hugo-inner-template (contents info)
   "Return body of document after converting it to Hugo-compatible Markdown.
 CONTENTS is the transcoded contents string.  INFO is a plist
@@ -725,7 +677,7 @@ holding export options."
   (org-trim (concat
              contents
              "\n"
-             (org-hugo-footnote-section info))))
+             (org-blackfriday-footnote-section info))))
 
 ;;;; Keyword
 (defun org-hugo-keyword (keyword contents info)

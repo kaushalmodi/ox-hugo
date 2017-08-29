@@ -79,6 +79,7 @@ inserted after the first row of the table.")
   ;;               (org-open-file (org-blackfriday-export-to-markdown nil s v)))))))
   :translate-alist '((example-block . org-blackfriday-example-block)
                      (fixed-width . org-blackfriday-fixed-width) ;Org Babel Results
+                     (footnote-reference . org-blackfriday-footnote-reference)
                      (inner-template . org-blackfriday-inner-template)
                      (italic . org-blackfriday-italic)
                      (item . org-blackfriday-item)
@@ -112,31 +113,37 @@ INFO is a plist used as a communication channel."
 (defun org-blackfriday-footnote-section (info)
   "Format the footnote section.
 INFO is a plist used as a communication channel."
-  (let* ((fn-alist (org-export-collect-footnote-definitions info))
-         (fn-alist
-          (cl-loop for (n raw) in fn-alist collect
-                   (cons n (org-trim (org-export-data raw info))))))
-    (when fn-alist
-      (format
-       "## %s\n%s"
-       "Footnotes"
-       (format
-        "\n%s\n"
-        (mapconcat
-         (lambda (fn)
-           (let ((n (car fn)) (def (cdr fn)))
-             (format
-              "%s %s\n"
-              (format
-               (plist-get info :html-footnote-format)
-               (org-html--anchor
-                (format "fn.%d" n)
-                n
-                (format " class=\"footnum\" href=\"#fnr.%d\"" n)
-                info))
-              def)))
-         fn-alist
-         "\n"))))))
+  (let ((fn-alist (org-export-collect-footnote-definitions info))
+        ;; Fri Jul 21 14:33:25 EDT 2017 - kmodi
+        ;; TODO: Need to learn using cl-loop
+        ;; Below form from ox-md did not work.
+        ;; (fn-alist-stripped
+        ;;  (cl-loop for (n raw) in fn-alist collect
+        ;;           (cons n (org-trim (org-export-data raw info)))))
+        fn-alist-stripped)
+    (let ((n 1)
+          def)
+      (dolist (fn fn-alist)
+        ;; (message "fn: %S" fn)
+        ;; (message "fn: %s" (org-export-data fn info)) ;This gives error
+        ;; (message "fn nth 2 car: %s" (org-export-data (nth 2 fn) info))
+        (setq def (org-trim (org-export-data (nth 2 fn) info)))
+        ;; Support multi-line footnote definitions by folding all
+        ;; footnote definition lines into a single line as Blackfriday
+        ;; does not support that.
+        (setq def (replace-regexp-in-string "\n" " " def))
+        ;; Replace multiple consecutive spaces with a single space.
+        (setq def (replace-regexp-in-string "[[:blank:]]+" " " def))
+        (push (cons n def) fn-alist-stripped)
+        (setq n (1+ n))))
+    (when fn-alist-stripped
+      (mapconcat (lambda (fn)
+                   ;; (message "dbg: fn: %0d -- %s" (car fn) (cdr fn))
+                   (format "[^fn:%d]: %s"
+                           (car fn)     ;footnote number
+                           (cdr fn)))   ;footnote definition
+                 (nreverse fn-alist-stripped)
+                 "\n"))))
 
 ;;;; Table-Common
 (defun org-blackfriday-table-col-width (table column info)
@@ -225,6 +232,18 @@ information."
             ;; blocks.
             (org-export-format-code-default fixed-width info))))
 
+;;;; Footnote Reference
+(defun org-blackfriday-footnote-reference (footnote-reference _contents info)
+  "Transcode a FOOTNOTE-REFERENCE element into Blackfriday Markdown format.
+CONTENTS is nil.  INFO is a plist holding contextual information."
+  ;; (message "footref: %s" footnote-reference)
+  (concat
+   ;; Insert separator between two footnotes in a row.
+   (let ((prev (org-export-get-previous-element footnote-reference info)))
+     (and (eq (org-element-type prev) 'footnote-reference)
+          (plist-get info :html-footnote-separator)))
+   (format "[^fn:%d]" (org-export-get-footnote-number footnote-reference info))))
+
 ;;;; Inner Template
 (defun org-blackfriday-inner-template (contents info)
   "Return body of document after converting it to Markdown syntax.
@@ -257,7 +276,7 @@ as a communication channel."
 
 ;;;; Item (list item)
 (defun org-blackfriday-item (item contents info)
-  "Transcode an ITEM element from Org to Blackfriday Markdown format.
+  "Transcode an ITEM element into Blackfriday Markdown format.
 CONTENTS holds the contents of the item.  INFO is a plist holding
 contextual information."
   (let* ((parent-list (org-export-get-parent item)))
@@ -271,7 +290,7 @@ contextual information."
 
 ;;;; Latex Fragment
 (defun org-blackfriday-latex-fragment (latex-fragment _contents info)
-  "Transcode a LATEX-FRAGMENT object from Org to Blackfriday Markdown.
+  "Transcode a LATEX-FRAGMENT object into Blackfriday Markdown format.
 INFO is a plist holding contextual information."
   (let ((latex-frag (org-element-property :value latex-fragment))
 	(processing-type (plist-get info :with-latex)))
@@ -364,13 +383,13 @@ INFO is a plist used as a communication channel."
 
 ;;;; Strike-Through
 (defun org-blackfriday-strike-through (_strike-through contents _info)
-  "Transcode strike-through text from Org to Blackfriday Markdown.
+  "Transcode strike-through text into Blackfriday Markdown format.
 CONTENTS contains the text with strike-through markup."
   (format "~~%s~~" contents))
 
 ;;;; Table-Cell
 (defun org-blackfriday-table-cell (table-cell contents info)
-  "Transcode TABLE-CELL element from Org into Blackfriday.
+  "Transcode TABLE-CELL element into Blackfriday Markdown format.
 
 CONTENTS is content of the cell.  INFO is a plist used as a
 communication channel."
@@ -396,7 +415,7 @@ communication channel."
 
 ;;;; Table-Row
 (defun org-blackfriday-table-row (table-row contents info)
-  "Transcode TABLE-ROW element from Org into Blackfriday.
+  "Transcode TABLE-ROW element into Blackfriday Markdown format.
 
 CONTENTS is cell contents of TABLE-ROW.  INFO is a plist used as a
 communication channel."
@@ -439,7 +458,7 @@ communication channel."
 
 ;;;; Table
 (defun org-blackfriday-table (table contents info)
-  "Transcode TABLE element from Org into Blackfriday.
+  "Transcode TABLE element into Blackfriday Markdown format.
 
 CONTENTS is contents of the table.  INFO is a plist holding
 contextual information."

@@ -67,15 +67,16 @@ inserted after the first row of the table.")
 
 (org-export-define-derived-backend 'blackfriday 'md
   :filters-alist '((:filter-parse-tree . org-md-separate-elements))
-  :menu-entry
-  '(?b "Export to Blackfriday Flavored Markdown"
-       ((?B "To temporary buffer"
-            (lambda (a s v b) (org-blackfriday-export-as-markdown a s v)))
-        (?b "To file" (lambda (a s v b) (org-blackfriday-export-to-markdown a s v)))
-        (?o "To file and open"
-            (lambda (a s v b)
-              (if a (org-blackfriday-export-to-markdown t s v)
-                (org-open-file (org-blackfriday-export-to-markdown nil s v)))))))
+  ;; Do not clutter the *Org Exporter Dispatch* menu.
+  ;; :menu-entry
+  ;; '(?b "Export to Blackfriday Flavored Markdown"
+  ;;      ((?B "To temporary buffer"
+  ;;           (lambda (a s v b) (org-blackfriday-export-as-markdown a s v)))
+  ;;       (?b "To file" (lambda (a s v b) (org-blackfriday-export-to-markdown a s v)))
+  ;;       (?o "To file and open"
+  ;;           (lambda (a s v b)
+  ;;             (if a (org-blackfriday-export-to-markdown t s v)
+  ;;               (org-open-file (org-blackfriday-export-to-markdown nil s v)))))))
   :translate-alist '((example-block . org-blackfriday-example-block)
                      (fixed-width . org-blackfriday-fixed-width) ;Org Babel Results
                      (inner-template . org-blackfriday-inner-template)

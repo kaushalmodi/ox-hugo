@@ -1109,6 +1109,47 @@ Where squirrels hide their nuts in grass.
 
    -- "Leisure" /by/ William Henry Davis
 #+END_VERSE
+** Verse for indentation
+:PROPERTIES:
+:EXPORT_FILE_NAME: verse-for-indentation
+:END:
+Some text before indented text.
+#+BEGIN_VERSE
+>    Indented text
+#+END_VERSE
+Org removes indentation from the first line of the text block even in
+a Verse block. To get around that, the trick is to use the =>=
+character as the first character in the first line containing some
+text in a Verse block. That character is removed when translating to
+Markdown.
+
+More examples:
+- Even more indentation than int the above example:
+  #+BEGIN_VERSE
+>        Indented text
+#+END_VERSE
+- Verse block containing a leading blank line and then indented text:
+  #+BEGIN_VERSE
+
+>    Indented text
+#+END_VERSE
+- Verse block containing indented text and then a trailing blank line:
+  #+BEGIN_VERSE
+>    Indented text
+
+#+END_VERSE
+- Verse block using tab characters for indentation:
+  #+BEGIN_VERSE
+>				Indented text
+#+END_VERSE
+- =>= characters when used as first character on any Verse block line
+  will be removed:
+  #+BEGIN_VERSE
+>Line 1
+Line 2
+>Line 3
+>Line 4
+#+END_VERSE
 * Org TODO keywords                                                    :todo:
 ** Post with a TODO heading
 :PROPERTIES:

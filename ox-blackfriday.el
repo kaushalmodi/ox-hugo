@@ -293,7 +293,7 @@ contextual information."
   "Transcode a LATEX-FRAGMENT object into Blackfriday Markdown format.
 INFO is a plist holding contextual information."
   (let ((latex-frag (org-element-property :value latex-fragment))
-	(processing-type (plist-get info :with-latex)))
+        (processing-type (plist-get info :with-latex)))
     (cond
      ((memq processing-type '(t mathjax))
       (let* ((frag (org-html-format-latex latex-frag 'mathjax info))
@@ -306,9 +306,9 @@ INFO is a plist holding contextual information."
         frag))
      ((assq processing-type org-preview-latex-process-alist)
       (let ((formula-link
-	     (org-html-format-latex latex-frag processing-type info)))
-	(when (and formula-link (string-match "file:\\([^]]*\\)" formula-link))
-	  (org-html--format-image (match-string 1 formula-link) nil info))))
+             (org-html-format-latex latex-frag processing-type info)))
+        (when (and formula-link (string-match "file:\\([^]]*\\)" formula-link))
+          (org-html--format-image (match-string 1 formula-link) nil info))))
      (t latex-frag))))
 
 ;;;; Paragraph
@@ -494,17 +494,23 @@ contextual information."
   "Transcode a VERSE-BLOCK element from Org to partial HTML.
 CONTENTS is verse block contents.  INFO is a plist holding
 contextual information."
-  ;; Replace leading white spaces with non-breaking spaces.
-  (replace-regexp-in-string
-   "^[ \t]+"
-   (lambda (m)
-     (org-html--make-string (length m) "&#xa0;"))
-   ;; Replace each newline character with line break.  Also
-   ;; remove any trailing "br" close-tag so as to avoid
-   ;; duplicates.
-   (let* ((br (org-html-close-tag "br" nil info))
-	  (re (format "\\(?:%s\\)?[ \t]*\n" (regexp-quote br))))
-     (replace-regexp-in-string re (concat br "\n") contents))))
+  (let* ((br (org-html-close-tag "br" nil info))
+         (re (format "\\(?:%s\\)?[ \t]*\n" (regexp-quote br)))
+         ;; Replace each newline character with line break.  Also
+         ;; remove any trailing "br" close-tag so as to avoid
+         ;; duplicates.
+         (ret (replace-regexp-in-string re (concat br "\n") contents))
+         ;; Org removes all the leading whitespace from the first
+         ;; line.  Trick is to use the ">" character is used as a
+         ;; placeholder before any desired whitespace.
+         (ret (replace-regexp-in-string "^>" "" ret))
+         ;; Replace leading white spaces with non-breaking spaces.
+         (ret (replace-regexp-in-string
+               "^[[:blank:]]+"
+               (lambda (m)
+                 (org-html--make-string (length m) "&#xa0;"))
+               ret)))
+    ret))
 
 
 ;;; Interactive functions

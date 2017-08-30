@@ -494,21 +494,22 @@ contextual information."
   "Transcode a VERSE-BLOCK element from Org to partial HTML.
 CONTENTS is verse block contents.  INFO is a plist holding
 contextual information."
-  (let* ((br (org-html-close-tag "br" nil info))
+  (let* ((ret contents)
+         ;; Org removes all the leading whitespace only from the first
+         ;; line.  So the trick is to use the ">" character before any
+         ;; intended indentation on the first non-blank line.
+         (ret (replace-regexp-in-string "\\`\\([[:blank:]\n\r]*\\)>" "\\1" ret))
+         (br (org-html-close-tag "br" nil info))
          (re (format "\\(?:%s\\)?[ \t]*\n" (regexp-quote br)))
          ;; Replace each newline character with line break.  Also
          ;; remove any trailing "br" close-tag so as to avoid
          ;; duplicates.
-         (ret (replace-regexp-in-string re (concat br "\n") contents))
-         ;; Org removes all the leading whitespace from the first
-         ;; line.  Trick is to use the ">" character is used as a
-         ;; placeholder before any desired whitespace.
-         (ret (replace-regexp-in-string "^>" "" ret))
+         (ret (replace-regexp-in-string re (concat br "\n") ret))
          ;; Replace leading white spaces with non-breaking spaces.
          (ret (replace-regexp-in-string
                "^[[:blank:]]+"
                (lambda (m)
-                 (org-html--make-string (length m) "&#xa0;"))
+                 (org-html--make-string (length m) "&nbsp;"))
                ret)))
     ret))
 

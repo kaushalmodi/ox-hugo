@@ -13,4 +13,4 @@ Great clouds overhead<br />
 Tiny black birds rise and fall<br />
 Snow covers Emacs<br />
 <br />
-&#xa0;&#xa0;&#xa0;&#xa0;-- AlexSchroeder<br />
+&nbsp;&nbsp;&nbsp;&nbsp;-- AlexSchroeder<br />

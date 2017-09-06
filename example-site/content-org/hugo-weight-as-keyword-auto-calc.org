@@ -1,0 +1,25 @@
+#+HUGO_BASE_DIR: ../
+#+SEQ_TODO: TODO DRAFT DONE
+#+HUGO_WEIGHT: auto
+#+HUGO_TAGS: weight
+
+* Post 1 with auto calculation of weight (HUGO_WEIGHT as keyword)
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-1-with-auto-calc-of-weight--hugo-weight-as-keyword
+:END:
+* Post 2 with auto calculation of weight (HUGO_WEIGHT as keyword)
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-2-with-auto-calc-of-weight--hugo-weight-as-keyword
+:END:
+* Post 3 with auto calculation of weight (HUGO_WEIGHT as keyword)
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-3-with-auto-calc-of-weight--hugo-weight-as-keyword
+:END:
+* Post 4 with auto calculation of weight (HUGO_WEIGHT as keyword)
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-4-with-auto-calc-of-weight--hugo-weight-as-keyword
+:END:
+* Post 5 with auto calculation of weight (HUGO_WEIGHT as keyword)
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-5-with-auto-calc-of-weight--hugo-weight-as-keyword
+:END:

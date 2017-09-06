@@ -1168,6 +1168,13 @@ INFO is a plist used as a communication channel."
                          (org-hugo--transform-org-tags-str
                           (plist-get info :hugo-categories)
                           info :no-prefer-hyphen)))
+         (weight (let* ((wt (plist-get info :hugo-weight))
+                        (auto-calc (and (stringp wt)
+                                        (string= wt "auto")
+                                        org-hugo--subtree-coord)))
+                   (if auto-calc
+                       (org-hugo--calc-weight)
+                     wt)))
          (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
          (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
          ;; If menu-alist-override is non-nil, update menu-alist with values from that.
@@ -1202,7 +1209,7 @@ INFO is a plist used as a communication channel."
                  (categories . ,categories)
                  (type . ,(org-export-data (plist-get info :hugo-type) info))
                  (url . ,(org-export-data (plist-get info :hugo-url) info))
-                 (weight . ,(org-export-data (plist-get info :hugo-weight) info))
+                 (weight . ,weight)
                  (draft . ,draft)
                  (blackfriday . ,blackfriday)
                  (menu . ,menu-alist)))
@@ -1629,12 +1636,24 @@ nil."
                   (let ((org-hugo--draft-state draft)
                         (org-hugo--tags-list tags)
                         (org-hugo--categories-list categories))
-                    ;; Get the current subtree coordinates if it or
-                    ;; one of its parents has the HUGO_MENU property defined.
-                    (when (or (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
-                              (save-excursion
-                                (goto-char (point-min))
-                                (re-search-forward "^#\\+HUGO_MENU:.*:menu" nil :noerror)))
+                    ;; Get the current subtree coordinates for
+                    ;; auto-calculation of menu item weight or post
+                    ;; weight.
+                    (when (or
+                           ;; Check if the menu front-matter is specified.
+                           (or
+                            (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
+                            (save-excursion
+                              (goto-char (point-min))
+                              (re-search-forward "^#\\+HUGO_MENU:.*:menu" nil :noerror)))
+                           ;; Check if the post needs auto-calculation of weight.
+                           (or
+                            (let ((post-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
+                              (and (stringp post-weight)
+                                   (string= post-weight "auto")))
+                            (save-excursion
+                              (goto-char (point-min))
+                              (re-search-forward "^#\\+HUGO_WEIGHT:[[:blank:]]*auto" nil :noerror))))
                       (setq org-hugo--subtree-coord
                             (org-hugo--get-post-subtree-coordinates subtree)))
                     (org-hugo-export-to-md async :subtreep visible-only))))))))))))

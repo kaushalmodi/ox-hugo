@@ -58,7 +58,9 @@ inheritance, that begin with the \"@\" character.
 This is a list of strings.")
 
 (defvar org-hugo--subtree-coord nil
-  "Variable to store the current valid Hugo subtree coordinates.")
+  "Variable to store the current valid Hugo subtree coordinates.
+It holds the value returned by
+`org-hugo--get-post-subtree-coordinates'.")
 
 (defvar org-hugo--subtree-count nil
   "Variable to count of number of subtrees getting exported.
@@ -1215,6 +1217,16 @@ INFO is a plist used as a communication channel."
     ;; (message "[fm data DBG] %S" data)
     (org-hugo--gen-front-matter data fm-format)))
 
+(defun org-hugo--calc-weight ()
+  "Calculate the weight for a Hugo post or menu item.
+
+The returned weight = INDEX + 1000*LEVEL.  See
+`org-hugo--get-post-subtree-coordinates' learn about INDEX and
+LEVEL."
+  (let* ((level (car org-hugo--subtree-coord))
+         (index (cdr org-hugo--subtree-coord)))
+    (+ (* 1000 level) index)))
+
 (defun org-hugo--gen-front-matter (data format)
   "Generate the Hugo post front matter, and return that string.
 
@@ -1271,10 +1283,7 @@ are \"toml\" and \"yaml\"."
                 ;; Auto-set menu weight if not already set by user.
                 (unless (assoc 'weight menu-alist)
                   (when org-hugo--subtree-coord
-                    (let* ((level (car org-hugo--subtree-coord))
-                           (index (cdr org-hugo--subtree-coord))
-                           (weight (+ (* 1000 level) index)))
-                      (push `(weight . ,weight) menu-alist))))
+                    (push `(weight . ,(org-hugo--calc-weight)) menu-alist)))
 
                 ;; (message "[menu alist DBG] = %S" menu-alist)
                 (when menu-entry

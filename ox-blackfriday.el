@@ -1,8 +1,10 @@
-;;; ox-blackfriday.el --- Blackfriday Flavored Markdown Back-End for Org Export Engine  -*- lexical-binding: t -*-
+;;; ox-blackfriday.el --- Blackfriday Markdown Back-End for Org Export Engine  -*- lexical-binding: t -*-
 
 ;; Authors: Matt Price <moptop99@gmail.com>
 ;;          Kaushal Modi <kaushal.modi@gmail.com>
 ;; URL: https://github.com/kaushalmodi/ox-hugo
+;; Package-Requires: ((emacs "24.5"))
+;; Version: 0.1
 
 ;;; Commentary:
 
@@ -21,12 +23,12 @@
 
 ;;; Variables
 
-(defvar width-cookies nil)
-(defvar width-cookies-table nil)
+(defvar org-blackfriday-width-cookies nil)
+(defvar org-blackfriday-width-cookies-table nil)
 
-(defconst blackfriday-table-left-border "")
-(defconst blackfriday-table-right-border " ")
-(defconst blackfriday-table-separator "| ")
+(defconst org-blackfriday-table-left-border "")
+(defconst org-blackfriday-table-right-border " ")
+(defconst org-blackfriday-table-separator "| ")
 
 (defvar org-blackfriday--hrule-inserted nil
   "State variable to track if the horizontal rule was inserted.
@@ -39,8 +41,7 @@ inserted after the first row of the table.")
 (defgroup org-export-blackfriday nil
   "Options for exporting Org mode files to Blackfriday Markdown."
   :tag "Org Export Blackfriday"
-  :group 'org-export
-  :version "25.2")
+  :group 'org-export)
 
 
 ;;; Define Back-End
@@ -129,19 +130,20 @@ INFO is a plist used as a communication channel."
 (defun org-blackfriday-table-col-width (table column info)
   "Return width of TABLE at given COLUMN using INFO.
 
-INFO is a plist used as communication channel.
-Width of a column is determined either by inquerying `width-cookies'
-in the column, or by the maximum cell with in the column."
-  (let ((cookie (when (hash-table-p width-cookies)
-                  (gethash column width-cookies))))
-    (if (and (eq table width-cookies-table)
+INFO is a plist used as communication channel.  Width of a column
+is determined either by inquiring
+`org-blackfriday-width-cookies' in the column, or by the maximum
+cell with in the column."
+  (let ((cookie (when (hash-table-p org-blackfriday-width-cookies)
+                  (gethash column org-blackfriday-width-cookies))))
+    (if (and (eq table org-blackfriday-width-cookies-table)
              (not (eq nil cookie)))
         cookie
       (progn
-        (unless (and (eq table width-cookies-table)
-                     (hash-table-p width-cookies))
-          (setq width-cookies (make-hash-table))
-          (setq width-cookies-table table))
+        (unless (and (eq table org-blackfriday-width-cookies-table)
+                     (hash-table-p org-blackfriday-width-cookies))
+          (setq org-blackfriday-width-cookies (make-hash-table))
+          (setq org-blackfriday-width-cookies-table table))
         (let ((max-width 0)
               (specialp (org-export-table-has-special-column-p table)))
           (org-element-map
@@ -159,7 +161,7 @@ in the column, or by the maximum cell with in the column."
                            info))
                          max-width)))
             info)
-          (puthash column max-width width-cookies))))))
+          (puthash column max-width org-blackfriday-width-cookies))))))
 
 (defun org-blackfriday-make-hline-builder (table info char)
   "Return a function to horizontal lines in TABLE.
@@ -419,12 +421,12 @@ communication channel."
                  ;; (headerp (org-export-table-row-starts-header-p table-row info))
                  (build-rule (org-blackfriday-make-hline-builder table info ?-))
                  (cols (cdr (org-export-table-dimensions table info))))
-            (setq row (concat blackfriday-table-left-border
+            (setq row (concat org-blackfriday-table-left-border
                               (mapconcat (lambda (col)
                                            (funcall build-rule col))
                                          (number-sequence 0 (- cols 1))
-                                         blackfriday-table-separator)
-                              blackfriday-table-right-border))))
+                                         org-blackfriday-table-separator)
+                              org-blackfriday-table-right-border))))
 
         ;; If the first table row is "abc | def", it needs to have a rule
         ;; under it for Blackfriday to detect the whole object as a table.
@@ -452,17 +454,17 @@ contextual information."
              (let ((build-empty-cell (org-blackfriday-make-hline-builder table info ?\s))
                    (build-rule (org-blackfriday-make-hline-builder table info ?-))
                    (columns (number-sequence 0 (- cols 1))))
-               (concat blackfriday-table-left-border
+               (concat org-blackfriday-table-left-border
                        (mapconcat (lambda (col)
                                     (funcall build-empty-cell col))
                                   columns
-                                  blackfriday-table-separator)
-                       blackfriday-table-right-border "\n" blackfriday-table-left-border
+                                  org-blackfriday-table-separator)
+                       org-blackfriday-table-right-border "\n" org-blackfriday-table-left-border
                        (mapconcat (lambda (col)
                                     (funcall build-rule col))
                                   columns
-                                  blackfriday-table-separator)
-                       blackfriday-table-right-border "\n")))))
+                                  org-blackfriday-table-separator)
+                       org-blackfriday-table-right-border "\n")))))
          (tbl (concat (when no-header
                         (funcall build-dummy-header))
                       (replace-regexp-in-string "\n\n" "\n" contents))))

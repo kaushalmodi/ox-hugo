@@ -6,7 +6,8 @@
 ;;          Matt Price <moptop99@gmail.com>
 ;; URL: https://github.com/kaushalmodi/ox-hugo
 ;; Package-Requires: ((emacs "24.5"))
-;; Keywords: org, hugo, markdown
+;; Keywords: Org, markdown, docs
+;; Version: 0.1
 
 ;; This file is part of GNU Emacs.
 
@@ -593,7 +594,7 @@ a communication channel."
        (t
         (let ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
                               (or (org-element-property :CUSTOM_ID headline)
-                                  (org-hugo--slug title)
+                                  (org-hugo-slug title)
                                   ;; (org-export-get-reference headline info)
                                   )))
               (loffset (plist-get info :hugo-level-offset))
@@ -604,7 +605,7 @@ a communication channel."
 
 ;;;;; Headline Helpers
 ;;;###autoload
-(defun org-hugo--slug (str)
+(defun org-hugo-slug (str)
   "Return a slug string for STR.
 STR is in Markdown format, most likely a Markdown heading.  The
 returned slug string has the following specification:
@@ -1285,7 +1286,7 @@ are \"toml\" and \"yaml\"."
                 ;; Auto-set menu identifier if not already set by user.
                 (unless (assoc 'identifier menu-alist)
                   (let ((title (cdr (assoc 'title data))))
-                    (push `(identifier . ,(org-hugo--slug title)) menu-alist)))
+                    (push `(identifier . ,(org-hugo-slug title)) menu-alist)))
 
                 ;; Auto-set menu weight if not already set by user.
                 (unless (assoc 'weight menu-alist)

@@ -1,0 +1,24 @@
+#+HUGO_BASE_DIR: ../
+#+SEQ_TODO: TODO DRAFT DONE
+#+HUGO_MENU: :menu "auto weight"
+
+* Post with menu 1 (HUGO_WEIGHT as keyword)
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-weight-as-keyword-post-with-menu-1
+:END:
+* Post with menu 2 (HUGO_WEIGHT as keyword)
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-weight-as-keyword-post-with-menu-2
+:END:
+* Post with menu 3 (HUGO_WEIGHT as keyword)
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-weight-as-keyword-post-with-menu-3
+:END:
+* Post with menu 4 (HUGO_WEIGHT as keyword)
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-weight-as-keyword-post-with-menu-4
+:END:
+* Post with menu 5 (HUGO_WEIGHT as keyword)
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-weight-as-keyword-post-with-menu-5
+:END:

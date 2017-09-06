@@ -1622,7 +1622,10 @@ nil."
                         (org-hugo--categories-list categories))
                     ;; Get the current subtree coordinates if it or
                     ;; one of its parents has the HUGO_MENU property defined.
-                    (when (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
+                    (when (or (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
+                              (save-excursion
+                                (goto-char (point-min))
+                                (re-search-forward "^#\\+HUGO_MENU:.*:menu" nil :noerror)))
                       (setq org-hugo--subtree-coord
                             (org-hugo--get-post-subtree-coordinates subtree)))
                     (org-hugo-export-to-md async :subtreep visible-only))))))))))))

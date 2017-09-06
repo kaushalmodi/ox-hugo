@@ -10,11 +10,12 @@
 ;;; Commentary:
 
 ;; This library implements a Markdown back-end compatible with the
-;; Hugo static site generator (https://gohugo.io/).
+;; Hugo static site generator (https://gohugo.io/) for Org exporter.
+;; This includes the generation of the Hugo post front-matter in TOML
+;; or YAML.
 
-;; Very early version of this package started off as a fork of the
-;; ox-hugo package by helloyi (https://github.com/helloyi/ox-hugo).
-;; But it has since been re-written and modified heavily.
+;; See the README and Wiki on https://github.com/kaushalmodi/ox-hugo
+;; for examples and instructions.
 
 ;;; Code:
 

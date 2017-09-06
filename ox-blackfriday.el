@@ -8,7 +8,7 @@
 
 ;; This library implements a Markdown back-end (Blackfriday flavor
 ;; (https://github.com/russross/blackfriday)) for Org exporter, based
-;; on the `md' back-end.
+;; on the ox-md exporter.
 
 ;; It is mostly copied from Lats Tveito's GitHub Flavored Markdown
 ;; exporter (https://github.com/larstvei/ox-gfm).

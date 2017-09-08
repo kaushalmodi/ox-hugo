@@ -3,7 +3,7 @@
 ;; Authors: Kaushal Modi <kaushal.mod@gmail.com>
 ;;          Matt Price <moptop99@gmail.com>
 ;; URL: https://github.com/kaushalmodi/ox-hugo
-;; Package-Requires: ((emacs "24.5"))
+;; Package-Requires: ((emacs "24.5") (org "9.0"))
 ;; Keywords: Org, markdown, docs
 ;; Version: 0.1
 
@@ -394,6 +394,12 @@ Example value: (org)."
   :type '(repeat symbol)
   :safe #'listp)
 
+(defcustom org-hugo-auto-set-lastmod nil
+  "When non-nil, set the lastmod field in front-matter to current time."
+  :group 'org-export-hugo
+  :type 'boolean
+  :safe #'booleanp)
+
 
 ;;; Define Back-End
 
@@ -430,7 +436,7 @@ Example value: (org)."
   :filters-alist '((:filter-body . org-hugo-body-filter))
 
   ;;                KEY                       KEYWORD                    OPTION  DEFAULT                     BEHAVIOR
-  :options-alist '(;; Non-front-matter options
+  :options-alist '(;; Variables not setting the front-matter directly
                    (:with-toc nil "toc" nil) ;No TOC by default
                    (:preserve-breaks nil "\\n" t) ;Preserve breaks so that text filling in Markdown matches that of Org
                    (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
@@ -446,6 +452,7 @@ Example value: (org)."
                    (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
                    (:hugo-prefer-hyphen-in-tags "HUGO_PREFER_HYPHEN_IN_TAGS" nil org-hugo-prefer-hyphen-in-tags)
                    (:hugo-allow-spaces-in-tags "HUGO_ALLOW_SPACES_IN_TAGS" nil org-hugo-allow-spaces-in-tags)
+                   (:hugo-auto-set-lastmod "HUGO_AUTO_SET_LASTMOD" nil org-hugo-auto-set-lastmod)
                    (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
                    (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil)
 
@@ -1128,6 +1135,27 @@ INFO is a plist used as a communication channel."
          (date (and (stringp date-nocolon)
                     (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
                                               date-nocolon)))
+         (lastmod-raw (org-string-nw-p (org-export-data (plist-get info :hugo-lastmod) info)))
+         (lastmod-nocolon (cond
+                           ;; If the set HUGO_LASTMOD is already in
+                           ;; Hugo-compatible lastmod format, use it.
+                           ((and (stringp lastmod-raw)
+                                 (string-match-p "\\`[0-9T:-]+\\'" lastmod-raw))
+                            lastmod-raw)
+                           ;; Else if it's a string, try to parse the lastmod.
+                           ((stringp lastmod-raw)
+                            (format-time-string
+                             hugo-date-fmt
+                             (apply #'encode-time (org-parse-time-string lastmod-raw))))
+                           ;; Else (if nil) and user want to auto-set the lastmod field.
+                           ((org-string-nw-p (plist-get info :hugo-auto-set-lastmod))
+                            (format-time-string hugo-date-fmt (org-current-time)))
+                           ;; Else.. do nothing.
+                           (t
+                            nil)))
+         (lastmod (and (stringp lastmod-nocolon)
+                       (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
+                                                 lastmod-nocolon)))
          (draft (or org-hugo--draft-state
                     (org-export-data (plist-get info :hugo-draft) info)))
          (tag-list (org-hugo--transform-org-tags org-hugo--tags-list info))
@@ -1185,7 +1213,7 @@ INFO is a plist used as a communication channel."
                  (isCJKLanguage . ,(org-export-data (plist-get info :hugo-iscjklanguage) info))
                  (keywords . ,(org-export-data (plist-get info :keywords) info))
                  (layout . ,(org-export-data (plist-get info :hugo-layout) info))
-                 (lastmod . ,(org-export-data (plist-get info :hugo-lastmod) info))
+                 (lastmod . ,lastmod)
                  (linkTitle . ,(org-export-data (plist-get info :hugo-linktitle) info))
                  (markup . ,(org-export-data (plist-get info :hugo-markup) info))
                  (outputs . ,(org-export-data (plist-get info :hugo-outputs) info))
@@ -1381,7 +1409,8 @@ are \"toml\" and \"yaml\"."
                      "HUGO_TAGS"
                      "HUGO_CATEGORIES"
                      "HUGO_TYPE"
-                     "HUGO_WEIGHT")))
+                     "HUGO_WEIGHT"
+                     "HUGO_AUTO_SET_LASTMOD")))
     (mapcar (lambda (str)
               (concat "EXPORT_" str))
             prop-list)))

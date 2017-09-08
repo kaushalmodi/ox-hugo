@@ -1,0 +1,11 @@
+#+HUGO_BASE_DIR: ../
+#+SEQ_TODO: TODO DRAFT DONE
+# Auto-set lastmod field in the below posts.
+#+HUGO_AUTO_SET_LASTMOD: t
+
+* Auto-set Lastmod
+:PROPERTIES:
+:EXPORT_FILE_NAME: auto-set-lastmod
+:END:
+This post will have its =lastmod= field in the front-matter
+auto-updated the time it gets exported each time.

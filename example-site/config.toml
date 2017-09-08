@@ -4,6 +4,7 @@ title = "My Org-exported Hugo Site"
 theme = "bare_min"
 canonifyURLs = true
 enableEmoji = true
+enableGitInfo = true
 
 [[menu.main]]
 name = "labs"

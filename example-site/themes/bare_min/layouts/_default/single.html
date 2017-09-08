@@ -31,9 +31,33 @@
 
 <div class="post">
     <h1 class="post-title">{{ .Title }}</h1>
-    {{ if .Params.date }}
-        Date: {{ .Params.date }}
+    <p>
+        {{ with .Params.date }}
+            Date: {{ . }}
+        {{ end }}
+    </p>
+    <p>
+        {{ if ne (.PublishDate.Format "2006-01-02") "0001-01-01" }}
+            <!-- Print the publishdate only if it is not at its initial value of Jan 1, 0001 -->
+            PublishDate: {{ .PublishDate.Format "2006-01-02" }}
+        {{ end }}
+    </p>
+    <p>
+        {{ if ne (dateFormat "2006-01-02" .Params.LastMod) "0001-01-01" }}
+            <!-- Print the lastmod date only if it is not at its initial value of Jan 1, 0001 -->
+            <!-- Need to use dateFormat instead of .Format for lastmod as it is not a declared variable internally -->
+            LastMod Date: {{ dateFormat "2006-01-02" .Params.LastMod }}
+        {{ end }}
+    </p>
+    {{ if $.GitInfo }}      <!-- To enable this, put "enableGitInfo = true" in your site config.toml -->
+        <p>
+            {{ printf "GitInfo debug:: %#v" $.GitInfo }}
+        </p>
+        <p>
+            LastMod Date using GitInfo: {{ .GitInfo.AuthorDate }}
+        </p>
     {{ end }}
+    </p>
     <p>
         {{ if .Params.categories }}
             Categories:

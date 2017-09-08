@@ -1110,7 +1110,8 @@ INFO is a plist used as a communication channel."
                     ;; Get the date from the subtree property `EXPORT_DATE' if available
                     (org-string-nw-p (org-export-data (plist-get info :date) info))
                     ;; Else try to get it from the #+DATE keyword in the Org file
-                    (org-string-nw-p (org-export-get-date info hugo-date-fmt))))
+                    (org-string-nw-p (org-export-get-date info hugo-date-fmt))
+                    (format-time-string hugo-date-fmt)))
          (date-nocolon (and (stringp date-raw)
                             (if (string-match-p "\\`[0-9T:-]+\\'" date-raw)
                                 ;; If the set DATE is already in

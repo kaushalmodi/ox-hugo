@@ -53,11 +53,9 @@ error backtrace,
 :EXPORT_FILE_NAME: README
 :EXPORT_TITLE: Ox-Hugo: A carefully crafted Org exporter back-end that enables writing Hugo posts in Org
 :END:
-#+INCLUDE: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
-
 =ox-hugo= is an Org exporter backend that exports Org to
 [[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]). That also includes the
-generation of front matter (in TOML or YAML format) required for Hugo
+generation of front matter (in TOML or YAML format) for Hugo
 posts.
 
 Here is the blogging flow when using this package:
@@ -130,7 +128,7 @@ complete feature-set. Org also allows stuff like:
   (Org Babel)
 - ..
 
-Using Org for content writing allows using inbuilt Org features to
+Using Org for content writing allows using in-built Org features to
 translate to Hugo front matter:
 
 - Org uses an outline structure and can inherit meta data (tags and
@@ -140,15 +138,13 @@ translate to Hugo front matter:
   automatically.
 - The same concept applies to inheriting any Org /property/ meta data
   like menu entry, category, section name, etc.
-- A subtree can be quickly marked to be in TODO state. That
-  information is used to add the /draft/ meta data to the post front
-  matter.
-- The post menu weights can be auto-set so that the menu items order
-  in the final HTML is the same order as that of those post subtrees
-  in Org.
+- A subtree can be quickly marked to be in TODO state (default binding
+  =C-c C-t=). A *TODO* post is marked as a /draft/ Hugo post.
+- The /menu-item weights/ and/or /post weights/ can be set to be
+  auto-calculated so that the menu items or post order in the final
+  HTML appear in the same order as the respective subtrees in Org.
 
-  If the subtrees are reordered in Org, the weights get changed
-  implicitly.
+  If the subtrees are re-ordered in Org, the weights get changed too.
 - One can have a subtree with section property set to "posts" and all
   post subtrees under that will go to that section. Similarly another
   parent subtree can have that property set to "articles", and so on.
@@ -161,7 +157,7 @@ translate to Hugo front matter:
   and see the exact changed post in browser.
 - *All* posts can simply be subtrees in a single Org file. That way
   one can take advantage of Org subtree filtering and searching
-  functions.
+  functions (=org-sparse-tree= bound to =C-c /= by default).
 - (and much more..)
 ** Translation of Org meta-data to Hugo front matter                   :wiki:
 :PROPERTIES:
@@ -169,16 +165,19 @@ translate to Hugo front matter:
 :END:
 Many Hugo front matter variables get set implicitly using the
 meta-data parsed from the posts in Org.
-|---------------------------+----------------------------+--------------------------------------|
-| Hugo front matter (TOML)  | Org                        | Org description                      |
-|---------------------------+----------------------------+--------------------------------------|
-| =title = "foo"​=           | =* foo=                    | Heading                              |
-| =date = 2017-07-24=       | =:EXPORT_DATE: 2017-07-24= | Subtree property                     |
-| =tags = ["abc", "def"]=   | =* foo :abc:def:=           | Heading tags                         |
-| =categories = ["x", "y"]= | =* foo :@x:@y:=             | Heading tags with =@= prefix         |
-| =draft = true=            | =* TODO foo=               | Heading set to TODO (or DRAFT)       |
-| =draft = false=           | =* foo=                    | Heading *not* set to TODO (or DRAFT) |
-|---------------------------+----------------------------+--------------------------------------|
+|----------------------------------+------------------------------------+-----------------------------------------------------|
+| Hugo front matter (TOML)         | Org                                | Org description                                     |
+|----------------------------------+------------------------------------+-----------------------------------------------------|
+| =title = "foo"​=                  | =* foo=                            | Heading                                             |
+| =date = 2017-07-24=              | =:EXPORT_DATE: 2017-07-24=         | Subtree property (or =#+DATE:=)                      |
+| =tags = ["abc", "def"]=          | =* foo :abc:def:=                   | Heading tags                                        |
+| =categories = ["x", "y"]=        | =* foo :@x:@y:=                     | Heading tags with =@= prefix                        |
+| =draft = true=                   | =* TODO foo=                       | Heading set to TODO (or DRAFT)                      |
+| =draft = false=                  | =* foo=                            | Heading *not* set to TODO (or DRAFT)                |
+| =weight = 123=                   | =:EXPORT_HUGO_WEIGHT: auto=        | When set to =auto=, weight is auto-calculated.      |
+| =weight = 123= (in =[menu.foo]=) | =:EXPORT_HUGO_MENU: :menu foo=     | Menu weight is auto-calculated unless specified.    |
+| =lastmod = <current date>=       | =:EXPORT_HUGO_AUTO_SET_LASTMOD: t= | Subtree property (or =#+HUGO_AUTO_SET_LASTMODE: t=) |
+|----------------------------------+------------------------------------+-----------------------------------------------------|
 ** How to try =ox-hugo=?                                               :wiki:
 :PROPERTIES:
 :EXPORT_FILE_NAME: How to try ox-hugo?
@@ -205,7 +204,7 @@ meta-data parsed from the posts in Org.
 :EXPORT_FILE_NAME: Debug
 :END:
 #+INCLUDE: "./ox-hugo-manual.org::#debug" :only-contents t
-** Future Plans
+** Future Plans                                                    :noexport:
 There is a plan to create a =hugo.el= that would do things like:
 - New post creation using =org-capture= (port code from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]]).
 - Interactive functions to toggle /draft/ state,
@@ -218,8 +217,10 @@ There is a plan to create a =hugo.el= that would do things like:
   /futureness/.
 ** Thanks
 - Matt Price (@titaniumbones)
-- [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]]
-- [[http://whyarethingsthewaytheyare.com/setting-up-the-blog/][whyarethingsthewaytheyare.com]]
+- Puneeth Chaganti (@punchagan)
+- Also thanks to [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]], [[http://whyarethingsthewaytheyare.com/setting-up-the-blog/][whyarethingsthewaytheyare.com]] and
+  the [[https://github.com/chaseadamsio/goorgeous][=goorgoeous=]] project by Chase Adams (@chaseadamsio) for
+  inspiration to start this project.
 * Contributing                                                 :contributing:
 :PROPERTIES:
 :EXPORT_FILE_NAME: CONTRIBUTING
@@ -248,6 +249,114 @@ git clone https://github.com/kaushalmodi/ox-hugo.wiki.git
 
 If changes are only to this Wiki, I believe you can push them directly
 using =git= or manually edit those here.
+** Org Capture Setup                                                   :wiki:
+:PROPERTIES:
+:EXPORT_FILE_NAME: Org Capture Setup
+:END:
+If you do not want to manually type the =EXPORT_FILE_NAME= and
+=EXPORT_DATE= for each new post, here is an example =org-capture=
+setup can help:
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'org-capture
+  (defun org-hugo-new-subtree-post-capture-template ()
+    "Returns `org-capture' template string for new Hugo post.
+See `org-capture-templates' for more information."
+    (let* (;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
+           (date (format-time-string (org-time-stamp-format :long :inactive) (org-current-time)))
+           (title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
+           (fname (org-hugo-slug title)))
+      (mapconcat #'identity
+                 `(
+                   ,(concat "* TODO " title)
+                   ":PROPERTIES:"
+                   ,(concat ":EXPORT_FILE_NAME: " fname)
+                   ,(concat ":EXPORT_DATE: " date) ;Enter current date and time
+                   ":END:"
+                   "%?\n")          ;Place the cursor here finally
+                 "\n")))
+
+  (add-to-list 'org-capture-templates
+               '("h"                ;`org-capture' binding + h
+                 "Hugo post"
+                 entry
+                 ;; It is assumed that below file is present in `org-directory'
+                 ;; and that it has a "Blog Ideas" heading. It can even be a
+                 ;; symlink pointing to the actual location of all-posts.org!
+                 (file+olp "all-posts.org" "Blog Ideas")
+                 (function org-hugo-new-subtree-post-capture-template))))
+#+END_SRC
+** Auto-export on Saving                                               :wiki:
+:PROPERTIES:
+:EXPORT_FILE_NAME: Auto-export on Saving
+:END:
+Wouldn't it be awesome if you can see the live-preview of your
+Hugo-rendered post each time you saved your post in Org?
+
+Well.. you can do that with a minor 1-time setup.
+*** Step 1: Set up the =after-save-hook=
+1. Add below to the very-end of your posts Org file:
+   #+BEGIN_SRC org
+   * Footnotes
+   * COMMENT Local Variables                                           :ARCHIVE:
+   # Local Variables:
+   # eval: (add-hook 'after-save-hook #'org-hugo-export-subtree-to-md-after-save :append :local)
+   # End:
+   #+END_SRC
+
+   Here I recommend adding the =* Footnotes= header too so that in
+   case you add any Org footnotes, they go directly to that section
+   you created. Otherwise, in the absence of an existing /Footnotes/
+   heading, Org would create a new /Footnotes/ heading *at the end of
+   the file* -- so the /Local Variables/ will then no longer be at the
+   end of the file (and so they will stop working).
+2. Then save the file, and do =revert-buffer=.
+3. You will be prompted to add that =eval= line to your /Customize/
+   setup, hit =!= to permanently save that setting and prevent future
+   prompts.
+*** Step 2: Prevent auto-export during Org Capture
+You might find this step useful if you choose to write new posts using
+=org-capture= as explained in the /Org Capture Setup/ Wiki page.
+
+After saving the below to your emacs config and evaluating it,
+auto-exports will be prevented when saving a new post created using
+Org Capture.
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'org-capture
+  ;; Do not cause auto Org->Hugo export to happen when saving captures
+  (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
+    "Function for `org-capture-before-finalize-hook'.
+Disable `org-hugo-export-subtree-to-md-after-save'."
+    (setq org-hugo-allow-export-after-save nil))
+
+  (defun modi/org-capture--add-auto-org-to-hugo-export-maybe ()
+    "Function for `org-capture-after-finalize-hook'.
+Enable `org-hugo-export-subtree-to-md-after-save'."
+    (setq org-hugo-allow-export-after-save t))
+
+  (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
+  (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
+#+END_SRC
+*** Step 3: Start the engines (Hugo Server)
+The earlier two steps will be required only for the first-time setup.
+
+You will need to ensure that you have started =hugo server= if you'd
+like to see the live-preview each time you save the post in Org.
+
+Using Hugo version 0.25 at the minimum is recommended as that added
+support for the awesome =--navigateToChanged= switch.
+
+Run below in your Hugo site root (the directory that contains the site
+=config.toml=) to start the server:
+#+BEGIN_EXAMPLE
+hugo server -D --navigateToChanged
+#+END_EXAMPLE
+/Note the localhost IP where the site is served./
+*** Step 4: Edit your Org posts
+- Now have your emacs and your favorite browser (showing that
+  /localhost/ address) side-by-side.
+- Edit your Org post.
+- Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
+  *exact post you modified*!
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:
 # fill-column: 70

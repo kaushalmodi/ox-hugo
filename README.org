@@ -1,24 +1,8 @@
 #+TITLE: Ox-Hugo: A carefully crafted Org exporter back-end that enables writing Hugo posts in Org
 #+AUTHOR: Kaushal Modi
------
-
-NOTE TO FUTURE CONTRIBUTORS: I plan to merge this package into Org
-source.
-
-So please assign your copyright to FSF in order to get your patches
-accepted.
-
-- [[https://www.gnu.org/licenses/why-assign.html][Why assign copyright to FSF?]]
-- [[https://www.gnu.org/prep/maintain/html_node/Copyright-Papers.html#Copyright-Papers][How to start this process]]
-
-As a bonus, once you have assigned your copyright to FSF, doors open up
-for your contributions to Emacs too!
-
------
-
 =ox-hugo= is an Org exporter backend that exports Org to
 [[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]). That also includes the
-generation of front matter (in TOML or YAML format) required for Hugo
+generation of front matter (in TOML or YAML format) for Hugo
 posts.
 
 Here is the blogging flow when using this package:
@@ -82,7 +66,7 @@ complete feature-set. Org also allows stuff like:
   (Org Babel)
 - ..
 
-Using Org for content writing allows using inbuilt Org features to
+Using Org for content writing allows using in-built Org features to
 translate to Hugo front matter:
 
 - Org uses an outline structure and can inherit meta data (tags and
@@ -92,15 +76,13 @@ translate to Hugo front matter:
   automatically.
 - The same concept applies to inheriting any Org /property/ meta data
   like menu entry, category, section name, etc.
-- A subtree can be quickly marked to be in TODO state. That
-  information is used to add the /draft/ meta data to the post front
-  matter.
-- The post menu weights can be auto-set so that the menu items order
-  in the final HTML is the same order as that of those post subtrees
-  in Org.
+- A subtree can be quickly marked to be in TODO state (default binding
+  =C-c C-t=). A *TODO* post is marked as a /draft/ Hugo post.
+- The /menu-item weights/ and/or /post weights/ can be set to be
+  auto-calculated so that the menu items or post order in the final
+  HTML appear in the same order as the respective subtrees in Org.
 
-  If the subtrees are reordered in Org, the weights get changed
-  implicitly.
+  If the subtrees are re-ordered in Org, the weights get changed too.
 - One can have a subtree with section property set to "posts" and all
   post subtrees under that will go to that section. Similarly another
   parent subtree can have that property set to "articles", and so on.
@@ -113,21 +95,24 @@ translate to Hugo front matter:
   and see the exact changed post in browser.
 - *All* posts can simply be subtrees in a single Org file. That way
   one can take advantage of Org subtree filtering and searching
-  functions.
+  functions (=org-sparse-tree= bound to =C-c /= by default).
 - (and much more..)
 * Translation of Org meta-data to Hugo front matter
 Many Hugo front matter variables get set implicitly using the
 meta-data parsed from the posts in Org.
-|---------------------------+----------------------------+--------------------------------------|
-| Hugo front matter (TOML)  | Org                        | Org description                      |
-|---------------------------+----------------------------+--------------------------------------|
-| =title = "foo"​=           | =* foo=                    | Heading                              |
-| =date = 2017-07-24=       | =:EXPORT_DATE: 2017-07-24= | Subtree property                     |
-| =tags = ["abc", "def"]=   | =* foo :abc:def:=          | Heading tags                         |
-| =categories = ["x", "y"]= | =* foo :@x:@y:=            | Heading tags with =@= prefix         |
-| =draft = true=            | =* TODO foo=               | Heading set to TODO (or DRAFT)       |
-| =draft = false=           | =* foo=                    | Heading *not* set to TODO (or DRAFT) |
-|---------------------------+----------------------------+--------------------------------------|
+|----------------------------------+------------------------------------+-----------------------------------------------------|
+| Hugo front matter (TOML)         | Org                                | Org description                                     |
+|----------------------------------+------------------------------------+-----------------------------------------------------|
+| =title = "foo"​=                  | =* foo=                            | Heading                                             |
+| =date = 2017-07-24=              | =:EXPORT_DATE: 2017-07-24=         | Subtree property (or =#+DATE:=)                     |
+| =tags = ["abc", "def"]=          | =* foo :abc:def:=                  | Heading tags                                        |
+| =categories = ["x", "y"]=        | =* foo :@x:@y:=                    | Heading tags with =@= prefix                        |
+| =draft = true=                   | =* TODO foo=                       | Heading set to TODO (or DRAFT)                      |
+| =draft = false=                  | =* foo=                            | Heading *not* set to TODO (or DRAFT)                |
+| =weight = 123=                   | =:EXPORT_HUGO_WEIGHT: auto=        | When set to =auto=, weight is auto-calculated.      |
+| =weight = 123= (in =[menu.foo]=) | =:EXPORT_HUGO_MENU: :menu foo=     | Menu weight is auto-calculated unless specified.    |
+| =lastmod = <current date>=       | =:EXPORT_HUGO_AUTO_SET_LASTMOD: t= | Subtree property (or =#+HUGO_AUTO_SET_LASTMODE: t=) |
+|----------------------------------+------------------------------------+-----------------------------------------------------|
 * How to try =ox-hugo=?
 1. Clone this repo.
 2. =cd= to the =example-site/= directory and do:
@@ -157,18 +142,9 @@ error backtrace,
    - Paste the Markdown contents in the GitHub issue.
      - You can still hit the /Preview/ tab of the Issue before
        submitting it.
-* Future Plans
-There is a plan to create a =hugo.el= that would do things like:
-- New post creation using =org-capture= (port code from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]]).
-- Interactive functions to toggle /draft/ state,
-  add/remove/increment/decrement /publishdate/ property.
-- Option to use template =config.toml= and some default hugo theme. So
-  all a new user would need to do is to (i) have the =hugo= [[https://github.com/gohugoio/hugo/releases][binary]] in
-  =PATH= (ii) define their =hugo= blog dir in the =defcustom= (iii)
-  =M-x hugo=.
-- Set separate faces for titles based on /draft/ state and
-  /futureness/.
 * Thanks
 - Matt Price (@titaniumbones)
-- [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]]
-- [[http://whyarethingsthewaytheyare.com/setting-up-the-blog/][whyarethingsthewaytheyare.com]]
+- Puneeth Chaganti (@punchagan)
+- Also thanks to [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]], [[http://whyarethingsthewaytheyare.com/setting-up-the-blog/][whyarethingsthewaytheyare.com]] and
+  the [[https://github.com/chaseadamsio/goorgeous][=goorgoeous=]] project by Chase Adams (@chaseadamsio) for
+  inspiration to start this project.

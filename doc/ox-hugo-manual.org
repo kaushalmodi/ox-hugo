@@ -352,6 +352,7 @@ using =git= or manually edit those here.
 :CUSTOM_ID: screenshot
 :END:
 [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/org-md.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/org-md.png]]
+- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/example-site/content-org/screenshot-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/example-site/content/writing-hugo-blog-in-org.md][Markdown]]
 ** Org Capture Setup                                                   :wiki:
 :PROPERTIES:
 :EXPORT_FILE_NAME: Org Capture Setup

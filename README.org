@@ -21,10 +21,12 @@ This project consists of =ox-blackfriday.el= too. It is a derivation
 of [[https://github.com/larstvei/ox-gfm][=ox-gfm=]] with support added for Blackfriday Markdown tables and
 many other tweaks. =ox-hugo= backend extends from this.
 
-Before you read further, see below (Org on the left, and export
-Markdown with Hugo front-matter on the right).
+Before you read further, you can see below the outcome of an =ox-hugo=
+export (Org on the left; exported Markdown with Hugo front-matter on
+the right).
 
 [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/org-md.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/org-md.png]]
+- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/example-site/content-org/screenshot-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/example-site/content/writing-hugo-blog-in-org.md][Markdown]]
 * Why =ox-hugo=?
 Using Org just as a markup like Markdown is a miniscule part of its
 complete feature-set. Org also allows stuff like:

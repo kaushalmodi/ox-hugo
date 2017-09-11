@@ -265,6 +265,12 @@ necessity if you want to start using =ox-hugo=.
 
 .. And if at some point, you want to stop using =ox-hugo=, you still
 have the exported Markdown files.
+* Changelog
+** 0.1.1
+- Use CLOSED log drawer info if available to set the date in
+  front-matter [[[https://github.com/kaushalmodi/ox-hugo/issues/68][68]]].
+- Code optimization: Use of =org-entry-get= at places instead of
+  maintaining global variables.
 * Debug
 If the =ox-hugo= exports do not work as expected, or if you get an
 error backtrace,

@@ -1,6 +1,9 @@
 #+TITLE: Ox-Hugo Manual
 #+AUTHOR: Kaushal Modi
 
+# #+LINK: issue https://github.com/kaushalmodi/ox-hugo/issues/
+#+MACRO: issue [[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]]
+
 =ox-hugo= is an Emacs package to export Org files to Hugo-compatible
 Markdown files.  At the moment it supports only the [[https://github.com/russross/blackfriday][Blackfriday
 Markdown]] flavor.
@@ -15,6 +18,15 @@ Markdown]] flavor.
      saved to =~/hugo/content/<HUGO_SECTION>/= directory.  By [[http://gohugo.io/content/organization/][default]],
      the Markdown files reside in a hierarchy under the =content/=
      directory in the site root directory.
+* Changelog
+:PROPERTIES:
+:CUSTOM_ID: changelog
+:END:
+** 0.1.1
+- Use CLOSED log drawer info if available to set the date in
+  front-matter {{{issue(68)}}}.
+- Code optimization: Use of =org-entry-get= at places instead of
+  maintaining global variables.
 * Note to Future Contributors
 :PROPERTIES:
 :CUSTOM_ID: note-to-future-contributors
@@ -335,6 +347,12 @@ necessity if you want to start using =ox-hugo=.
 
 .. And if at some point, you want to stop using =ox-hugo=, you still
 have the exported Markdown files.
+** Changelog                                                           :wiki:
+:PROPERTIES:
+:EXPORT_TITLE:
+:EXPORT_FILE_NAME: Changelog
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#changelog" :only-contents t
 ** Debug                                                               :wiki:
 :PROPERTIES:
 :EXPORT_TITLE:

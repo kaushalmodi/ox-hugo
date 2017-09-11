@@ -1744,12 +1744,13 @@ buffer and returned as a string in Org format."
                                      (format "%s" hugo-version)
                                    "=hugo= binary not found in PATH")
                                 "** =ox-hugo= defcustoms"
-                                ,(format "|org-hugo-front-matter-format          |%S|" org-hugo-front-matter-format)
                                 ,(format "|org-hugo-default-section-directory    |%S|" org-hugo-default-section-directory)
                                 ,(format "|org-hugo-use-code-for-kbd             |%S|" org-hugo-use-code-for-kbd)
                                 ,(format "|org-hugo-prefer-hyphen-in-tags        |%S|" org-hugo-prefer-hyphen-in-tags)
                                 ,(format "|org-hugo-allow-spaces-in-tags         |%S|" org-hugo-allow-spaces-in-tags)
-                                ,(format "|org-hugo-langs-no-descr-in-code-fences|%S|" org-hugo-langs-no-descr-in-code-fences))
+                                ,(format "|org-hugo-langs-no-descr-in-code-fences|%S|" org-hugo-langs-no-descr-in-code-fences)
+                                ,(format "|org-hugo-auto-set-lastmod             |%S|" org-hugo-auto-set-lastmod)
+                                ,(format "|org-hugo-front-matter-format          |%S|" org-hugo-front-matter-format))
                               "\n"))
          (org-export-with-toc nil)
          (info-md (progn

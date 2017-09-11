@@ -19,21 +19,17 @@ Markdown]] flavor.
 :PROPERTIES:
 :CUSTOM_ID: note-to-future-contributors
 :END:
------
+NOTE TO FUTURE CONTRIBUTORS: I plan to merge this package into GNU
+Elpa or Org source at some point.
 
-NOTE TO FUTURE CONTRIBUTORS: I plan to merge this package into Org
-source.
-
-So please assign your copyright to FSF in order to get your patches
-accepted.
+So you will need to assign your copyright to FSF in order to get your
+patches accepted.
 
 - [[https://www.gnu.org/licenses/why-assign.html][Why assign copyright to FSF?]]
 - [[https://www.gnu.org/prep/maintain/html_node/Copyright-Papers.html#Copyright-Papers][How to start this process]]
 
 As a bonus, once you have assigned your copyright to FSF, doors open up
-for your contributions to Emacs too!
-
------
+for your future contributions to Emacs too!
 * Debug
 :PROPERTIES:
 :CUSTOM_ID: debug
@@ -87,6 +83,7 @@ front-matter on the right).
 #+INCLUDE: "./ox-hugo-manual.org::#org-blogging-flow-editorial" :only-contents t
 ** Why =ox-hugo=?                                                      :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: Why ox-hugo?
 :END:
 Using Org just as a markup like Markdown is a miniscule part of its
@@ -132,11 +129,13 @@ translate to Hugo front-matter:
 - (and much more..)
 ** Installation                                                        :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: Installation
 :END:
 This package requires emacs 24.5+ and Org 9.0+. It is available on Melpa.
 ** Usage                                                               :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: Usage
 :END:
 Once the package is installed, you will need to require it so that the
@@ -187,6 +186,7 @@ The common =ox-hugo= export bindings are:
 |---------------+-------------------------------------------------------------------------------------|
 ** Example Hugo site to test this package                              :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: Example Hugo site
 :END:
 An [[https://github.com/kaushalmodi/ox-hugo/tree/master/example-site][example-site]] with bare-bones "theme" is used to live-test the
@@ -216,6 +216,7 @@ exported Markdown files.
    introduced in Hugo 0.25).
 ** How do I try =ox-hugo= on my site?                                  :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: How do I try ox-hugo on my site?
 :END:
 1. =cd= to your Hugo site base directory -- the one that contains the
@@ -235,6 +236,7 @@ exported Markdown files.
    [[https://github.com/kaushalmodi/ox-hugo#usage][README]] or [[https://github.com/kaushalmodi/ox-hugo/wiki/Usage][Wiki]] to export it.
 ** Translation of Org meta-data to Hugo front-matter                   :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: Org meta-data to Hugo front-matter
 :END:
 *** For subtree exports (=C-c C-e H H= or =C-c C-e H A=)
@@ -283,6 +285,7 @@ set.
   specify the weights manually if needed.
 ** Formatting                                                          :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: Formatting
 :END:
 Below table shows the translation of Org markup to Markdown markup in
@@ -312,6 +315,7 @@ renderer.. just see those as *single* equal signs on each side of
 /monospace/ instead.)
 ** Do I need to re-write my whole blog in Org?                         :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: Do I need to re-write my whole blog in Org?
 :END:
 If you are considering to try out =ox-hugo=, and if you have already
@@ -333,6 +337,7 @@ necessity if you want to start using =ox-hugo=.
 have the exported Markdown files.
 ** Debug                                                               :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: Debug
 :END:
 #+INCLUDE: "./ox-hugo-manual.org::#debug" :only-contents t
@@ -355,8 +360,8 @@ There is a plan to create a =hugo.el= that would do things like:
   inspiration to start this project.
 * Contributing                                                 :contributing:
 :PROPERTIES:
-:EXPORT_FILE_NAME: CONTRIBUTING
 :EXPORT_TITLE: Contributing Guide
+:EXPORT_FILE_NAME: CONTRIBUTING
 :END:
 #+INCLUDE: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
 ** Debug
@@ -383,6 +388,7 @@ If changes are only to this Wiki, I believe you can push them directly
 using =git= or manually edit those here.
 ** Screenshots                                                         :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: Screenshots
 :CUSTOM_ID: screenshots
 :END:
@@ -414,6 +420,7 @@ in Markdown files --- See the Org versions in the above screenshots for
 comparison.
 ** Org Capture Setup                                                   :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: Org Capture Setup
 :END:
 If you do not want to manually type the =EXPORT_FILE_NAME= and
@@ -450,6 +457,7 @@ See `org-capture-templates' for more information."
 #+END_SRC
 ** Auto-export on Saving                                               :wiki:
 :PROPERTIES:
+:EXPORT_TITLE:
 :EXPORT_FILE_NAME: Auto-export on Saving
 :END:
 Wouldn't it be awesome if you can see the live-preview of your
@@ -520,6 +528,12 @@ hugo server -D --navigateToChanged
 - Edit your Org post.
 - Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
   *exact post you modified*!
+** Contributing Guide                                                  :wiki:
+:PROPERTIES:
+:EXPORT_TITLE:
+:EXPORT_FILE_NAME: Contributing Guide
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:
 # fill-column: 70

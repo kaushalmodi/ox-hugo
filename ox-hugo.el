@@ -25,20 +25,6 @@
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
 
-(defvar org-hugo--tags-list nil
-  "Cache of tags for the exported post subtree.
-
-These are Org tags linked to a subtree directly or via
-inheritance, that do not begin with the \"@\" character.
-This is a list of strings.")
-
-(defvar org-hugo--categories-list nil
-  "Cache of categories for the exported post subtree.
-
-These are Org tags linked to a subtree directly or via
-inheritance, that begin with the \"@\" character.
-This is a list of strings.")
-
 (defvar org-hugo--subtree-coord nil
   "Variable to store the current valid Hugo subtree coordinates.
 It holds the value returned by
@@ -1103,6 +1089,14 @@ Returns nil if TAG-STR is not a string."
                           no-prefer-hyphen)))
       (mapconcat #'identity tag-str-list org-hugo--internal-tag-separator))))
 
+(defun org-hugo--category-p (tag)
+  "Returns non-nil if TAG begins with \"@\".
+
+Org tags that begin with \"@\" are set as the categories field in
+the Hugo front-matter."
+  (and (stringp tag)
+       (string-match-p "\\`@" tag)))
+
 (defun org-hugo--get-front-matter (info)
   "Return the Hugo front matter string.
 
@@ -1173,7 +1167,12 @@ INFO is a plist used as a communication channel."
                   (org-hugo--front-matter-value-booleanize (org-string-nw-p (plist-get info :hugo-draft))))
                  (t
                   "false")))
-         (tag-list (org-hugo--transform-org-tags org-hugo--tags-list info))
+         (all-t-and-c-str (org-entry-get (point) "ALLTAGS"))
+         (all-t-and-c (when (stringp all-t-and-c-str)
+                        (org-split-string all-t-and-c-str ":")))
+         (tags-list (cl-remove-if #'org-hugo--category-p all-t-and-c))
+         (categories-list (cl-remove-if-not #'org-hugo--category-p all-t-and-c))
+         (tag-list (org-hugo--transform-org-tags tags-list info))
          (tags (org-string-nw-p ;Don't allow tags to be just whitespace
                 (or (org-string-nw-p (mapconcat #'identity
                                                 tag-list
@@ -1186,7 +1185,7 @@ INFO is a plist used as a communication channel."
                                           (when tags2
                                             tags2)))))
                       (org-hugo--transform-org-tags-str merged-tags info :no-prefer-hyphen)))))
-         (categories-list (org-hugo--transform-org-tags org-hugo--categories-list info))
+         (categories-list (org-hugo--transform-org-tags categories-list info))
          (categories (or (org-string-nw-p
                           (mapconcat (lambda (str)
                                        ;; Remove "@" from beg of categories.
@@ -1242,6 +1241,10 @@ INFO is a plist used as a communication channel."
                  (blackfriday . ,blackfriday)
                  (menu . ,menu-alist)))
          (data `,(append data custom-fm-data)))
+    ;; (when tags-list
+    ;;   (message "dbg: tags: tags-list = %s" tags-list))
+    ;; (when categories-list
+    ;;   (message "dbg: categories: categories-list = %s" categories-list))
     ;; (message "dbg: todo-state: keyword=%S draft=%S" todo-keyword draft)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
     ;; (message "dbg: tags: %S" (plist-get info :tags))
@@ -1617,7 +1620,7 @@ nil."
           ;; Publish only the current subtree
           (org-back-to-heading :invisible-ok)
           (let ((subtree (org-hugo--get-valid-subtree))
-                is-commented tags categories is-excluded)
+                is-commented is-excluded)
 
             (unless subtree
               (user-error "It is mandatory to have a subtree with EXPORT_FILE_NAME property"))
@@ -1625,18 +1628,15 @@ nil."
             ;; If subtree is a valid Hugo post subtree, proceed ..
             (setq is-commented (org-element-property :commentedp subtree))
 
-            (cl-labels ((categoryp (tag) ;Returns non-nil if TAG begins with "@"
-                                   (string-match-p "\\`@" tag)))
-              (let ((org-use-tag-inheritance t)
-                    ;; `org-get-tags' returns a list of tags *only*
-                    ;; at the current heading; `org-get-tags-at'
-                    ;; returns inherited tags too.
-                    (all-tags (org-get-tags-at)))
-                (setq tags (cl-remove-if #'categoryp all-tags))
-                (setq categories (cl-remove-if-not #'categoryp all-tags))))
-            (dolist (exclude-tag org-export-exclude-tags)
-              (when (member exclude-tag tags)
-                (setq is-excluded t)))
+            (let ((org-use-tag-inheritance t)
+                  ;; `org-get-tags' returns a list of tags *only*
+                  ;; at the current heading; `org-get-tags-at'
+                  ;; returns inherited tags too.
+                  (all-tags (org-get-tags-at)))
+              (dolist (exclude-tag org-export-exclude-tags)
+                (when (member exclude-tag all-tags)
+                  (setq is-excluded t))))
+
             ;; (message "[current subtree DBG] subtree: %S" subtree)
             ;; (message "[current subtree DBG] is-commented:%S, tags:%S, is-excluded:%S"
             ;;          is-commented tags is-excluded)
@@ -1650,32 +1650,27 @@ nil."
                 (message "[ox-hugo] Exporting `%s' .." title)
                 (when (numberp org-hugo--subtree-count)
                   (setq org-hugo--subtree-count (1+ org-hugo--subtree-count)))
-                ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
-                ;; FIXME: Is there a better way than passing these
-                ;; values via variables.
-                (let ((org-hugo--tags-list tags)
-                      (org-hugo--categories-list categories))
-                  ;; Get the current subtree coordinates for
-                  ;; auto-calculation of menu item weight or post
-                  ;; weight.
-                  (when (or
-                         ;; Check if the menu front-matter is specified.
-                         (or
-                          (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
-                          (save-excursion
-                            (goto-char (point-min))
-                            (re-search-forward "^#\\+HUGO_MENU:.*:menu" nil :noerror)))
-                         ;; Check if the post needs auto-calculation of weight.
-                         (or
-                          (let ((post-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
-                            (and (stringp post-weight)
-                                 (string= post-weight "auto")))
-                          (save-excursion
-                            (goto-char (point-min))
-                            (re-search-forward "^#\\+HUGO_WEIGHT:[[:blank:]]*auto" nil :noerror))))
-                    (setq org-hugo--subtree-coord
-                          (org-hugo--get-post-subtree-coordinates subtree)))
-                  (org-hugo-export-to-md async :subtreep visible-only)))))))))))
+                ;; Get the current subtree coordinates for
+                ;; auto-calculation of menu item weight or post
+                ;; weight.
+                (when (or
+                       ;; Check if the menu front-matter is specified.
+                       (or
+                        (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
+                        (save-excursion
+                          (goto-char (point-min))
+                          (re-search-forward "^#\\+HUGO_MENU:.*:menu" nil :noerror)))
+                       ;; Check if the post needs auto-calculation of weight.
+                       (or
+                        (let ((post-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
+                          (and (stringp post-weight)
+                               (string= post-weight "auto")))
+                        (save-excursion
+                          (goto-char (point-min))
+                          (re-search-forward "^#\\+HUGO_WEIGHT:[[:blank:]]*auto" nil :noerror))))
+                  (setq org-hugo--subtree-coord
+                        (org-hugo--get-post-subtree-coordinates subtree)))
+                (org-hugo-export-to-md async :subtreep visible-only))))))))))
 
 ;;;###autoload
 (defun org-hugo-export-subtree-to-md-after-save ()

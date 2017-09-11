@@ -1,7 +1,7 @@
 +++
 title = "Writing Hugo blog in Org"
 date = 2017-09-10
-lastmod = 2017-09-11T12:48:42-04:00
+lastmod = 2017-09-11T16:49:39-04:00
 tags = ["hugo", "org"]
 categories = ["emacs"]
 weight = 2001
@@ -12,8 +12,8 @@ alpha = 1
 beta = "two words"
 gamma = 10
 [menu.main]
-  weight = 2001
   identifier = "writing-hugo-blog-in-org"
+  weight = 2001
 +++
 
 ## First heading within the post {#first-heading-within-the-post}
@@ -22,10 +22,11 @@ gamma = 10
     `content/posts/writing-hugo-blog-in-org-file-export.md`.
 -   Its title will be "Writing Hugo blog in Org".
 -   It will have _hugo_ and _org_ tags and _emacs_ as category.
--   The menu item _weight_ and post _weight_ are auto-calculated.
--   The menu item _identifier_ is auto-set.
 -   The _lastmod_ property in the front-matter is set automatically to
     the time of export.
+-   The menu item _identifier_ is auto-set.
+-   The menu item _weight_ and post _weight_ if needed have to be
+    manually specified as shown above.
 
 
 ### A sub-heading under that heading {#a-sub-heading-under-that-heading}

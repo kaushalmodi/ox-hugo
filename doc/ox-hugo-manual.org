@@ -240,19 +240,23 @@ exported Markdown files.
 When organizing the posts as Org *subtrees*, many Hugo front-matter
 variables get set implicitly using the meta-data parsed from the posts
 in Org.
-|----------------------------------+------------------------------------+---------------------------------------------------------------------|
-| Hugo front-matter (TOML)         | Org                                | Org description                                                     |
-|----------------------------------+------------------------------------+---------------------------------------------------------------------|
-| =title = "foo"​=                  | =* foo=                            | Subtree heading (needs to have the =EXPORT_FILE_NAME= property set) |
-| =date = 2017-07-24=              | =:EXPORT_DATE: 2017-07-24=         | Subtree property (or =#+DATE:=)                                      |
-| =tags = ["abc", "def"]=          | =* foo :abc:def:=                   | Heading tags                                                        |
-| =categories = ["x", "y"]=        | =* foo :@x:@y:=                     | Heading tags with =@= prefix                                        |
-| =draft = true=                   | =* TODO foo=                       | Heading set to =TODO= (or =DRAFT=)                                  |
-| =draft = false=                  | =* foo=                            | Heading *not* set to =TODO= (or =DRAFT=)                            |
-| =weight = 123=                   | =:EXPORT_HUGO_WEIGHT: auto=        | When set to =auto=, weight is auto-calculated.                      |
-| =weight = 123= (in =[menu.foo]=) | =:EXPORT_HUGO_MENU: :menu foo=     | Menu weight is auto-calculated unless specified.                    |
-| =lastmod = <current date>=       | =:EXPORT_HUGO_AUTO_SET_LASTMOD: t= | Subtree property (or =#+HUGO_AUTO_SET_LASTMODE: t=)                 |
-|----------------------------------+------------------------------------+---------------------------------------------------------------------|
+|------------------------------------+------------------------------------+-------------------------------------------------------------------------|
+| Hugo front-matter (TOML)           | Org                                | Org description                                                         |
+|------------------------------------+------------------------------------+-------------------------------------------------------------------------|
+| =title = "foo"​=                    | =* foo=                            | Subtree heading (needs to have the =EXPORT_FILE_NAME= property set)     |
+| =date = 2017-09-11T14:32:00-04:00= | =CLOSED: [2017-09-11 Mon 14:32]=   | Auto-inserted =CLOSED= subtree property when switch to Org *DONE* state |
+| =date = 2017-07-24=                | =:EXPORT_DATE: 2017-07-24=         | Subtree property (or =#+DATE:=)                                          |
+| =tags = ["abc", "def"]=            | =* foo :abc:def:=                   | Heading tags                                                            |
+| =categories = ["x", "y"]=          | =* foo :@x:@y:=                     | Heading tags with =@= prefix                                            |
+| =draft = true=                     | =* TODO foo=                       | Heading set to =TODO= (or =DRAFT=)                                      |
+| =draft = false=                    | =* foo=                            | Heading *not* set to =TODO= (or =DRAFT=)                                |
+| =weight = 123=                     | =:EXPORT_HUGO_WEIGHT: auto=        | When set to =auto=, weight is auto-calculated.                          |
+| =weight = 123= (in =[menu.foo]=)   | =:EXPORT_HUGO_MENU: :menu foo=     | Menu weight is auto-calculated unless specified.                        |
+| =lastmod = <current date>=         | =:EXPORT_HUGO_AUTO_SET_LASTMOD: t= | Subtree property (or =#+HUGO_AUTO_SET_LASTMODE: t=)                     |
+|------------------------------------+------------------------------------+-------------------------------------------------------------------------|
+*** Notes
+- Precedence for =date= parsing: =CLOSED= subtree property /more than/
+  =EXPORT_DATE= subtree property /more than/ =#+DATE:= keyword.
 ** Formatting                                                          :wiki:
 :PROPERTIES:
 :EXPORT_FILE_NAME: Formatting

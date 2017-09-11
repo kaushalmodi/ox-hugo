@@ -1372,6 +1372,18 @@ Below, the code block language name will show up before the code.
 :EXPORT_HUGO_WEIGHT: 4567
 :EXPORT_FILE_NAME: hugo-post-weight-4567
 :END:
+* DONE Parsing date from CLOSED property
+CLOSED: [2017-09-11 Mon 14:32]
+:PROPERTIES:
+:EXPORT_FILE_NAME: parsing-date-from-closed-property
+:END:
+When an Org TODO item is switched to the =DONE= state, a =CLOSED=
+property is auto-inserted (default behavior).
+
+If such a property is non-nil, the value (time-stamp) of that is used
+to set the =date= field in the exported front-matter.
+
+- Reference :: [[http://orgmode.org/manual/Special-properties.html][(org) Special properties]] or =C-h i g (org) Special properties=
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

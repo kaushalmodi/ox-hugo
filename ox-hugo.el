@@ -1114,9 +1114,15 @@ INFO is a plist used as a communication channel."
   (let* ((fm-format (plist-get info :hugo-front-matter-format))
          (hugo-date-fmt "%Y-%m-%dT%T%z")
          (date-raw (or
-                    ;; Get the date from the subtree property `EXPORT_DATE' if available
+                    ;; Get the date from the "CLOSED" property;
+                    ;; generated automatically when switching a
+                    ;; headline to "DONE" state,
+                    (org-entry-get (point) "CLOSED")
+                    ;; Else get the date from the subtree property,
+                    ;; `EXPORT_DATE' if available
                     (org-string-nw-p (org-export-data (plist-get info :date) info))
-                    ;; Else try to get it from the #+DATE keyword in the Org file
+                    ;; Else try to get it from the #+DATE keyword in
+                    ;; the Org file.
                     (org-string-nw-p (org-export-get-date info hugo-date-fmt))))
          (date-nocolon (and (stringp date-raw)
                             (if (string-match-p "\\`[0-9T:-]+\\'" date-raw)

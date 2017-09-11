@@ -1,27 +1,21 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_SECTION: ./
-#+SEQ_TODO: TODO DRAFT DONE
 
 #+HUGO_WEIGHT: auto
 #+HUGO_AUTO_SET_LASTMOD: t
 
-* Blog Ideas
-** DRAFT Cool post
-:PROPERTIES:
-:EXPORT_FILE_NAME: cool-post
-:EXPORT_DATE: 2018-08-01
-:END:
 * Emacs                                                              :@emacs:
 All posts in here will have the category set to /emacs/.
-** Writing Hugo blog in Org                                        :hugo:org:
+** TODO Writing Hugo blog in Org                                   :hugo:org:
 :PROPERTIES:
-:EXPORT_FILE_NAME: writing-hugo-blog-in-org
+:EXPORT_FILE_NAME: writing-hugo-blog-in-org-subtree-export
 :EXPORT_DATE: 2017-09-10
 :EXPORT_HUGO_MENU: :menu "main"
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :foo bar :baz zoo :alpha 1 :beta "two words" :gamma 10
 :END:
 *** First heading within the post
-- This post will be exported as =content/posts/writing-hugo-blog-in-org.md=.
+- This post will be exported as
+  =content/posts/writing-hugo-blog-in-org-subtree-export.md=.
 - Its title will be "Writing Hugo blog in Org".
 - It will have /hugo/ and /org/ tags and /emacs/ as category.
 - The menu item /weight/ and post /weight/ are auto-calculated.
@@ -29,8 +23,14 @@ All posts in here will have the category set to /emacs/.
 - The /lastmod/ property in the front-matter is set automatically to
   the time of export.
 **** A sub-heading under that heading
-- It's draft state will be marked as =false= as the subtree doesn't
-  have the todo state set to /TODO/ or /DRAFT/.
+- It's draft state will be marked as =true= as the subtree has the
+  todo state set to /TODO/.
+
+With the point _anywhere_ in this /Writing Hugo blog in Org/ post
+subtree, do =C-c C-e H H= to export just this post.
+
+The exported Markdown has a little comment footer as set in the /Local
+Variables/ section below.
 * Footnotes
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:

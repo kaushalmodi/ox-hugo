@@ -1061,12 +1061,11 @@ Example: :some__tag:   -> \"some tag\"."
 (defun org-hugo--transform-org-tags-str (tag-str info &optional no-prefer-hyphen)
   "Wrapper function for `org-hugo--transform-org-tags'.
 
-This function,
-1. Converts the input TAG-STR string to a list,
-2. Passes that to `org-hugo--transform-org-tags', and
-3. Converts the returned list back to a string, with elements
-separated by `org-hugo--internal-tag-separator'.
-4. Returns that string.
+1. Convert the input TAG-STR string to a list,
+2. Passe that to `org-hugo--transform-org-tags', and
+3. Convert the returned list back to a string, with elements
+   separated by `org-hugo--internal-tag-separator'.
+4. Return that string.
 
 Example: \"two__words hyphenated_word\" -> \"two words\nhyphenated-word\".
 
@@ -1074,7 +1073,7 @@ INFO is a plist used as a communication channel.
 NO-PREFER-HYPHEN when non-nil will prevent interpretation of
 underscores in TAG-STR as hyphens.
 
-Returns nil if TAG-STR is not a string."
+Return nil if TAG-STR is not a string."
   (when (stringp tag-str)
     (setq tag-str (org-trim tag-str))
     (setq tag-str (replace-regexp-in-string
@@ -1090,7 +1089,7 @@ Returns nil if TAG-STR is not a string."
       (mapconcat #'identity tag-str-list org-hugo--internal-tag-separator))))
 
 (defun org-hugo--category-p (tag)
-  "Returns non-nil if TAG begins with \"@\".
+  "Return non-nil if TAG begins with \"@\".
 
 Org tags that begin with \"@\" are set as the categories field in
 the Hugo front-matter."
@@ -1439,7 +1438,7 @@ are \"toml\" and \"yaml\"."
 The condition to check validity is that the EXPORT_FILE_NAME
 property is defined for the subtree element.
 
-Returns nil if a valid Hugo post subtree is not found."
+Return nil if a valid Hugo post subtree is not found."
   (catch 'break
     (while :infinite
       (let* ((entry (org-element-at-point))
@@ -1599,7 +1598,7 @@ the `org-export-stack' interface.
 When optional argument VISIBLE-ONLY is non-nil, don't export
 contents of hidden elements.
 
-Returns output file's name.  If ALL-SUBTREES is non-nil, return
+Return output file's name.  If ALL-SUBTREES is non-nil, return
 nil."
   (interactive "P")
   (save-window-excursion

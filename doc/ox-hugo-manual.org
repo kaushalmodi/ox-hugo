@@ -3,6 +3,7 @@
 
 # #+LINK: issue https://github.com/kaushalmodi/ox-hugo/issues/
 #+MACRO: issue [[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]]
+#+MACRO: melpa [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]]
 
 =ox-hugo= is an Emacs package to export Org files to Hugo-compatible
 Markdown files.  At the moment it supports only the [[https://github.com/russross/blackfriday][Blackfriday
@@ -61,26 +62,33 @@ error backtrace,
 :EXPORT_FILE_NAME: README
 :EXPORT_TITLE: Ox-Hugo: A carefully crafted Org exporter back-end that enables writing Hugo posts in Org
 :END:
-=ox-hugo= is an Org exporter backend that exports Org to
-[[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]). That also includes the
-generation of front-matter (in TOML or YAML format) for Hugo
-posts.
+{{{melpa}}}
 
-Here is the blogging flow when using this package:
-- Write blog posts in Org
-  - One post per Org subtree (preferred)
-  - One post per Org file (/works but you won't be able to leverage
-    Org-specific benefits like tag and property inheritance, use of
-    TODO states to translate to post =draft= state, etc./)
-- Export only the *current* post Org subtree, or export all post
-  subtrees.
-- Set up =org-capture= (see below) to quickly start writing new posts.
-- Use =after-save-hook= to export current post subtree to Markdown on
-  each save.
+=ox-hugo= is an Org exporter backend that exports Org to
+[[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]) and also generates the
+front-matter (in TOML or YAML format).
 
 This project consists of =ox-blackfriday.el= too. It is a derivation
 of [[https://github.com/larstvei/ox-gfm][=ox-gfm=]] with support added for Blackfriday Markdown tables and
 many other tweaks. =ox-hugo= backend extends from this.
+
+There are 2 major blogging flows that can be used with this package:
+1. One post per Org subtree (preferred)
+   - Export only the *current* post Org subtree, or
+   - Export all valid Hugo post subtrees in a loop.
+2. One post per Org file
+   - This works but you won't be able to leverage Org-specific
+     benefits like tag and property inheritance, use of TODO states to
+     translate to post =draft= state, auto weight calculation for
+     posts and menu items, etc.
+
+See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Org-Capture-Setup][Org Capture Setup]] Wiki page to see how to quickly create new
+posts.
+
+See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Auto-export-on-Saving][Auto-export on Saving]] Wiki page to learn how to setup up
+seeing live-preview of the Hugo-rendered HTML each time you do =C-x
+C-s= in the Org file --- For now, this work only with the *Subtree
+export flow*.
 
 Before you read further, you can see below how =ox-hugo= translates
 Org to Markdown (Org on the left; exported Markdown with Hugo
@@ -481,8 +489,10 @@ See `org-capture-templates' for more information."
 Wouldn't it be awesome if you can see the live-preview of your
 Hugo-rendered post each time you saved your post in Org?
 
-Well.. you can do that with a minor 1-time setup.
-*** Step 1: Set up the =after-save-hook=
+Well.. you can do that with these steps, though, this works *only with
+subtree-export flow* at the moment.
+*** First time setup
+**** Step 1: Set up the =after-save-hook=
 1. Add below to the very-end of your posts Org file:
    #+BEGIN_SRC org
    * Footnotes
@@ -502,7 +512,7 @@ Well.. you can do that with a minor 1-time setup.
 3. You will be prompted to add that =eval= line to your /Customize/
    setup, hit =!= to permanently save that setting and prevent future
    prompts.
-*** Step 2: Prevent auto-export during Org Capture
+**** Step 2: Prevent auto-export during Org Capture
 You might find this step useful if you choose to write new posts using
 =org-capture= as explained in the /Org Capture Setup/ Wiki page.
 
@@ -525,27 +535,38 @@ Enable `org-hugo-export-subtree-to-md-after-save'."
   (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
   (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
 #+END_SRC
-*** Step 3: Start the engines (Hugo Server)
-The earlier two steps will be required only for the first-time setup.
+*** Steps that /might/ need to be taken every time
+**** Step 3: Start the engines (Hugo Server)
+We start the =hugo server= so that we can see the live-preview each
+time the Org file is saved.
 
-You will need to ensure that you have started =hugo server= if you'd
-like to see the live-preview each time you save the post in Org.
-
-Using Hugo version 0.25 at the minimum is recommended as that added
-support for the awesome =--navigateToChanged= switch.
+I recommend using Hugo version 0.25 at the minimum as that added
+support for the awesome =--navigateToChanged= switch!
 
 Run below in your Hugo site root (the directory that contains the site
 =config.toml=) to start the server:
 #+BEGIN_EXAMPLE
 hugo server -D --navigateToChanged
 #+END_EXAMPLE
-/Note the localhost IP where the site is served./
-*** Step 4: Edit your Org posts
-- Now have your emacs and your favorite browser (showing that
-  /localhost/ address) side-by-side.
-- Edit your Org post.
-- Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
-  *exact post you modified*!
+**** Step 4: Open your browser
+By default the site is served locally on port /1313/ on
+/localhost/. So the above step would have printed something like below
+at the end:
+#+BEGIN_EXAMPLE
+Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
+#+END_EXAMPLE
+
+So open your favorite browser pointing to that address.
+*** FINAL step that needs to be taken every time
+If you are like me, you might not need to repeat steps 3 and 4 above,
+as you can leave the =hugo= server running in a separate terminal, and
+have a browser tab pinned to that localhost.
+
+So with that, have the emacs and browser frames set up side-by-side,
+and edit your Org post.
+
+Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
+*exact post you modified*!
 ** Contributing Guide                                                  :wiki:
 :PROPERTIES:
 :EXPORT_TITLE:

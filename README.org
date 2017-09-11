@@ -1,25 +1,32 @@
 #+TITLE: Ox-Hugo: A carefully crafted Org exporter back-end that enables writing Hugo posts in Org
 #+AUTHOR: Kaushal Modi
-=ox-hugo= is an Org exporter backend that exports Org to
-[[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]). That also includes the
-generation of front-matter (in TOML or YAML format) for Hugo
-posts.
+[[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]]
 
-Here is the blogging flow when using this package:
-- Write blog posts in Org
-  - One post per Org subtree (preferred)
-  - One post per Org file (/works but you won't be able to leverage
-    Org-specific benefits like tag and property inheritance, use of
-    TODO states to translate to post =draft= state, etc./)
-- Export only the *current* post Org subtree, or export all post
-  subtrees.
-- Set up =org-capture= (see below) to quickly start writing new posts.
-- Use =after-save-hook= to export current post subtree to Markdown on
-  each save.
+=ox-hugo= is an Org exporter backend that exports Org to
+[[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]) and also generates the
+front-matter (in TOML or YAML format).
 
 This project consists of =ox-blackfriday.el= too. It is a derivation
 of [[https://github.com/larstvei/ox-gfm][=ox-gfm=]] with support added for Blackfriday Markdown tables and
 many other tweaks. =ox-hugo= backend extends from this.
+
+There are 2 major blogging flows that can be used with this package:
+1. One post per Org subtree (preferred)
+   - Export only the *current* post Org subtree, or
+   - Export all valid Hugo post subtrees in a loop.
+2. One post per Org file
+   - This works but you won't be able to leverage Org-specific
+     benefits like tag and property inheritance, use of TODO states to
+     translate to post =draft= state, auto weight calculation for
+     posts and menu items, etc.
+
+See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Org-Capture-Setup][Org Capture Setup]] Wiki page to see how to quickly create new
+posts.
+
+See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Auto-export-on-Saving][Auto-export on Saving]] Wiki page to learn how to setup up
+seeing live-preview of the Hugo-rendered HTML each time you do =C-x
+C-s= in the Org file --- For now, this work only with the *Subtree
+export flow*.
 
 Before you read further, you can see below how =ox-hugo= translates
 Org to Markdown (Org on the left; exported Markdown with Hugo

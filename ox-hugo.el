@@ -25,9 +25,6 @@
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
 
-(defvar org-hugo--draft-state nil
-  "State variable to store the \"draft\" state of the subtree to be exported.")
-
 (defvar org-hugo--tags-list nil
   "Cache of tags for the exported post subtree.
 
@@ -1112,6 +1109,7 @@ Returns nil if TAG-STR is not a string."
 INFO is a plist used as a communication channel."
   ;; (message "[hugo front matter DBG] info: %S" (pp info))
   (let* ((fm-format (plist-get info :hugo-front-matter-format))
+         (title (org-entry-get (point) "ITEM")) ;Post title
          (hugo-date-fmt "%Y-%m-%dT%T%z")
          (date-raw (or
                     ;; Get the date from the "CLOSED" property;
@@ -1162,8 +1160,19 @@ INFO is a plist used as a communication channel."
          (lastmod (and (stringp lastmod-nocolon)
                        (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
                                                  lastmod-nocolon)))
-         (draft (or org-hugo--draft-state
-                    (org-export-data (plist-get info :hugo-draft) info)))
+         (todo-keyword (org-entry-get (point) "TODO"))
+         (draft (cond
+                 ((and todo-keyword
+                       (string= "TODO" todo-keyword))
+                  "true")
+                 ((and todo-keyword
+                       (string= "DRAFT" todo-keyword))
+                  (message "[ox-hugo] `%s' post is marked as a draft" title)
+                  "true")
+                 ((org-string-nw-p (plist-get info :hugo-draft))
+                  (org-hugo--front-matter-value-booleanize (org-string-nw-p (plist-get info :hugo-draft))))
+                 (t
+                  "false")))
          (tag-list (org-hugo--transform-org-tags org-hugo--tags-list info))
          (tags (org-string-nw-p ;Don't allow tags to be just whitespace
                 (or (org-string-nw-p (mapconcat #'identity
@@ -1233,6 +1242,7 @@ INFO is a plist used as a communication channel."
                  (blackfriday . ,blackfriday)
                  (menu . ,menu-alist)))
          (data `,(append data custom-fm-data)))
+    ;; (message "dbg: todo-state: keyword=%S draft=%S" todo-keyword draft)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
     ;; (message "dbg: tags: %S" (plist-get info :tags))
     ;; (message "[get fm info DBG] %S" info)
@@ -1640,43 +1650,32 @@ nil."
                 (message "[ox-hugo] Exporting `%s' .." title)
                 (when (numberp org-hugo--subtree-count)
                   (setq org-hugo--subtree-count (1+ org-hugo--subtree-count)))
-                (let* ((todo-keyword (format "%s" (org-get-todo-state)))
-                       (draft (cond
-                               ((string= "TODO" todo-keyword)
-                                "true")
-                               ((string= "DRAFT" todo-keyword)
-                                (message "[ox-hugo] `%s' post is marked as a draft" title)
-                                "true")
-                               (t
-                                "false"))))
-                  ;; (message "[current subtree DBG] draft:%S" draft)
-                  ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
-                  ;; FIXME: Is there a better way than passing these
-                  ;; values via variables.
-                  (let ((org-hugo--draft-state draft)
-                        (org-hugo--tags-list tags)
-                        (org-hugo--categories-list categories))
-                    ;; Get the current subtree coordinates for
-                    ;; auto-calculation of menu item weight or post
-                    ;; weight.
-                    (when (or
-                           ;; Check if the menu front-matter is specified.
-                           (or
-                            (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
-                            (save-excursion
-                              (goto-char (point-min))
-                              (re-search-forward "^#\\+HUGO_MENU:.*:menu" nil :noerror)))
-                           ;; Check if the post needs auto-calculation of weight.
-                           (or
-                            (let ((post-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
-                              (and (stringp post-weight)
-                                   (string= post-weight "auto")))
-                            (save-excursion
-                              (goto-char (point-min))
-                              (re-search-forward "^#\\+HUGO_WEIGHT:[[:blank:]]*auto" nil :noerror))))
-                      (setq org-hugo--subtree-coord
-                            (org-hugo--get-post-subtree-coordinates subtree)))
-                    (org-hugo-export-to-md async :subtreep visible-only))))))))))))
+                ;; Wed Jul 12 13:10:14 EDT 2017 - kmodi
+                ;; FIXME: Is there a better way than passing these
+                ;; values via variables.
+                (let ((org-hugo--tags-list tags)
+                      (org-hugo--categories-list categories))
+                  ;; Get the current subtree coordinates for
+                  ;; auto-calculation of menu item weight or post
+                  ;; weight.
+                  (when (or
+                         ;; Check if the menu front-matter is specified.
+                         (or
+                          (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
+                          (save-excursion
+                            (goto-char (point-min))
+                            (re-search-forward "^#\\+HUGO_MENU:.*:menu" nil :noerror)))
+                         ;; Check if the post needs auto-calculation of weight.
+                         (or
+                          (let ((post-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
+                            (and (stringp post-weight)
+                                 (string= post-weight "auto")))
+                          (save-excursion
+                            (goto-char (point-min))
+                            (re-search-forward "^#\\+HUGO_WEIGHT:[[:blank:]]*auto" nil :noerror))))
+                    (setq org-hugo--subtree-coord
+                          (org-hugo--get-post-subtree-coordinates subtree)))
+                  (org-hugo-export-to-md async :subtreep visible-only)))))))))))
 
 ;;;###autoload
 (defun org-hugo-export-subtree-to-md-after-save ()

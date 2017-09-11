@@ -1170,11 +1170,10 @@ INFO is a plist used as a communication channel."
          (all-t-and-c (when (stringp all-t-and-c-str)
                         (org-split-string all-t-and-c-str ":")))
          (tags-list (cl-remove-if #'org-hugo--category-p all-t-and-c))
-         (categories-list (cl-remove-if-not #'org-hugo--category-p all-t-and-c))
-         (tag-list (org-hugo--transform-org-tags tags-list info))
+         (tags-list (org-hugo--transform-org-tags tags-list info))
          (tags (org-string-nw-p ;Don't allow tags to be just whitespace
                 (or (org-string-nw-p (mapconcat #'identity
-                                                tag-list
+                                                tags-list
                                                 org-hugo--internal-tag-separator))
                     (let ((merged-tags (concat
                                         (let ((tags1 (plist-get info :hugo-tags)))
@@ -1184,6 +1183,7 @@ INFO is a plist used as a communication channel."
                                           (when tags2
                                             tags2)))))
                       (org-hugo--transform-org-tags-str merged-tags info :no-prefer-hyphen)))))
+         (categories-list (cl-remove-if-not #'org-hugo--category-p all-t-and-c))
          (categories-list (org-hugo--transform-org-tags categories-list info))
          (categories (or (org-string-nw-p
                           (mapconcat (lambda (str)
@@ -1522,6 +1522,9 @@ Export is done in a buffer named \"*Org Hugo Export*\", which will
 be displayed when `org-export-show-temporary-export-buffer' is
 non-nil."
   (interactive)
+  (unless subtreep ;Reset the variables that are used only for subtree exports
+    (setq org-hugo--subtree-count 0)
+    (setq org-hugo--subtree-coord nil))
   ;; Allow certain `ox-hugo' properties to be inherited.
   (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
     (org-export-to-buffer 'hugo "*Org Hugo Export*"
@@ -1567,6 +1570,9 @@ Return output file's name."
          (outfile (org-export-output-file-name ".md" subtreep pub-dir))
          ;; Allow certain `ox-hugo' properties to be inherited.
          (org-use-property-inheritance (org-hugo--selective-property-inheritance)))
+    (unless subtreep ;Reset the variables that are used only for subtree exports
+      (setq org-hugo--subtree-count 0)
+      (setq org-hugo--subtree-coord nil))
     (org-export-to-file 'hugo outfile async subtreep visible-only)))
 
 ;;;###autoload

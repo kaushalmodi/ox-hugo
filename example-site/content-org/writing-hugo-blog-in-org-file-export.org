@@ -14,7 +14,7 @@
 
 #+HUGO_DRAFT: true
 
-* First heading within the post                                         :foo:
+* First heading within the post
 - This post will be exported as
   =content/posts/writing-hugo-blog-in-org-file-export.md=.
 - Its title will be "Writing Hugo blog in Org".

@@ -1,6 +1,6 @@
 #+TITLE: Ox-Hugo: A carefully crafted Org exporter back-end that enables writing Hugo posts in Org
 #+AUTHOR: Kaushal Modi
-[[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]]
+[[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPL%20v3-blue.svg]] [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]]
 
 =ox-hugo= is an Org exporter backend that exports Org to
 [[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]) and also generates the
@@ -25,18 +25,18 @@ posts.
 
 See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Auto-export-on-Saving][Auto-export on Saving]] Wiki page to learn how to setup up
 seeing live-preview of the Hugo-rendered HTML each time you do =C-x
-C-s= in the Org file --- For now, this work only with the *Subtree
+C-s= in the Org file --- For now, this works only with the *Subtree
 export flow*.
 
 Before you read further, you can see below how =ox-hugo= translates
 Org to Markdown (Org on the left; exported Markdown with Hugo
 front-matter on the right).
 
-*When writing posts as Org subtrees --*
+*One post per Org subtree --*
 [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-subtree.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-subtree.png]]
 - Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/example-site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/example-site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
 
-*When writing each post as a separate Org file --*
+*One post per Org file --*
 [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-file.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-file.png]]
 - Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/example-site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/example-site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
 

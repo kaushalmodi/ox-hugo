@@ -1,7 +1,7 @@
 +++
 title = "Writing Hugo blog in Org"
 date = 2017-09-10
-lastmod = 2017-09-11T16:49:39-04:00
+lastmod = 2017-09-12T11:02:38-04:00
 tags = ["hugo", "org"]
 categories = ["emacs"]
 weight = 2001

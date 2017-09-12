@@ -5,7 +5,7 @@
 ;; URL: https://github.com/kaushalmodi/ox-hugo
 ;; Package-Requires: ((emacs "24.5") (org "9.0"))
 ;; Keywords: Org, markdown, docs
-;; Version: 0.1.1
+;; Version: 0.1.2
 
 ;;; Commentary:
 
@@ -298,6 +298,20 @@ joinLines
   "String used to separate multiple Org tags.
 This variable is for internal use only, and must not be
 modified.")
+
+(defvar org-hugo--date-time-regexp (concat "\\`[[:digit:]]\\{4\\}-[[:digit:]]\\{2\\}-[[:digit:]]\\{2\\}"
+                                           "\\(?:T[[:digit:]]\\{2\\}:[[:digit:]]\\{2\\}:[[:digit:]]\\{2\\}"
+                                           "\\(?:Z\\|[+-][[:digit:]]\\{2\\}:[[:digit:]]\\{2\\}\\)*\\)*\\'")
+  "Regexp to match the Hugo time stamp strings.
+
+Reference: https://tools.ietf.org/html/rfc3339#section-5.8
+
+Examples:
+  2017-07-31
+  2017-07-31T17:05:38
+  2017-07-31T17:05:38Z
+  2017-07-31T17:05:38+04:00
+  2017-07-31T17:05:38-04:00.")
 
 
 ;;; User-Configurable Variables
@@ -884,7 +898,9 @@ string with just alphanumeric characters."
         (string= "true" val)
         (string= "false" val)
         ;; or if it is a date (date, publishDate, expiryDate, lastmod)
-        (string-match-p "\\`[-0-9T:]+\\'" val))
+        (string-match-p org-hugo--date-time-regexp val)
+        ;; or if it is any number
+        (string-match-p "\\`[[:digit:]]+\\'" val))
     val)
    ((and prefer-no-quotes
          (string-match-p "\\`[a-zA-Z0-9]+\\'" val))
@@ -1116,7 +1132,7 @@ INFO is a plist used as a communication channel."
                     ;; the Org file.
                     (org-string-nw-p (org-export-get-date info hugo-date-fmt))))
          (date-nocolon (and (stringp date-raw)
-                            (if (string-match-p "\\`[0-9T:-]+\\'" date-raw)
+                            (if (string-match-p org-hugo--date-time-regexp date-raw)
                                 ;; If the set DATE is already in
                                 ;; Hugo-compatible date format, use it.
                                 date-raw
@@ -1137,7 +1153,7 @@ INFO is a plist used as a communication channel."
                            ;; If the set HUGO_LASTMOD is already in
                            ;; Hugo-compatible lastmod format, use it.
                            ((and (stringp lastmod-raw)
-                                 (string-match-p "\\`[0-9T:-]+\\'" lastmod-raw))
+                                 (string-match-p org-hugo--date-time-regexp lastmod-raw))
                             lastmod-raw)
                            ;; Else if it's a string, try to parse the lastmod.
                            ((stringp lastmod-raw)

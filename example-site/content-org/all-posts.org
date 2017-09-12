@@ -1384,6 +1384,32 @@ If such a property is non-nil, the value (time-stamp) of that is used
 to set the =date= field in the exported front-matter.
 
 - Reference :: [[http://orgmode.org/manual/Special-properties.html][(org) Special properties]] or =C-h i g (org) Special properties=
+* Date Formats                                                         :date:
+** Just date
+:PROPERTIES:
+:EXPORT_FILE_NAME: date-just-date
+:EXPORT_DATE: 2017-09-12
+:END:
+** Date + Time
+:PROPERTIES:
+:EXPORT_FILE_NAME: date-plus-time
+:EXPORT_DATE: 2017-09-12T16:10:00
+:END:
+** Date + Time (UTC)
+:PROPERTIES:
+:EXPORT_FILE_NAME: date-plus-time-utc
+:EXPORT_DATE: 2017-09-12T16:10:00Z
+:END:
+** Date + Time (behind UTC)
+:PROPERTIES:
+:EXPORT_FILE_NAME: date-plus-time-minus-utc
+:EXPORT_DATE: 2017-09-12T16:10:00-04:00
+:END:
+** Date + Time (after UTC)
+:PROPERTIES:
+:EXPORT_FILE_NAME: date-plus-time-plus-utc
+:EXPORT_DATE: 2017-09-12T16:10:00+05:30
+:END:
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

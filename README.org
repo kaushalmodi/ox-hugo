@@ -278,6 +278,11 @@ have the exported Markdown files.
   front-matter [[[https://github.com/kaushalmodi/ox-hugo/issues/68][68]]].
 - Code optimization: Use of =org-entry-get= at places instead of
   maintaining global variables.
+** 0.1.2
+- Make DateTime matching better; new internal variable
+  =org-hugo--date-time-regexp=. Earlier time zones ahead of UTC (with
+  =+= sign) were not detected as dates in =org-hugo--quote-string= and
+  thus were unnecessarily quoted.
 * Debug
 If the =ox-hugo= exports do not work as expected, or if you get an
 error backtrace,

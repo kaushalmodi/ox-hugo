@@ -29,6 +29,11 @@ Markdown]] flavor.
   front-matter {{{issue(68)}}}.
 - Code optimization: Use of =org-entry-get= at places instead of
   maintaining global variables.
+** 0.1.2
+- Make DateTime matching better; new internal variable
+  =org-hugo--date-time-regexp=. Earlier time zones ahead of UTC (with
+  =+= sign) were not detected as dates in =org-hugo--quote-string= and
+  thus were unnecessarily quoted.
 * Note to Future Contributors
 :PROPERTIES:
 :CUSTOM_ID: note-to-future-contributors

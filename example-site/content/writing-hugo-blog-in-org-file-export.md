@@ -1,7 +1,7 @@
 +++
-title = "Writing Hugo blog in Org"
+title = "Writing Hugo blog in Org (File Export)"
 date = 2017-09-10
-lastmod = 2017-09-12T11:02:38-04:00
+lastmod = 2017-09-12T15:49:57-04:00
 tags = ["hugo", "org"]
 categories = ["emacs"]
 weight = 2001
@@ -12,7 +12,7 @@ alpha = 1
 beta = "two words"
 gamma = 10
 [menu.main]
-  identifier = "writing-hugo-blog-in-org"
+  identifier = "writing-hugo-blog-in-org--file-export"
   weight = 2001
 +++
 

@@ -4,7 +4,7 @@
 #+HUGO_WEIGHT: 2001
 #+HUGO_AUTO_SET_LASTMOD: t
 
-#+TITLE: Writing Hugo blog in Org
+#+TITLE: Writing Hugo blog in Org (File Export)
 
 #+DATE: 2017-09-10
 #+HUGO_TAGS: hugo org

@@ -554,17 +554,17 @@ a communication channel."
   (unless (org-element-property :footnote-section-p headline)
     (let* ((level (org-export-get-relative-level headline info))
            (title (org-export-data (org-element-property :title headline) info))
-           (todo (and (plist-get info :with-todo-keywords)
+           (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
                       (let ((todo (org-element-property :todo-keyword
                                     headline)))
                         (and todo (concat (org-export-data todo info) " ")))))
-           (tags (and (plist-get info :with-tags)
+           (tags (and (org-hugo--plist-get-true-p info :with-tags)
                       (let ((tag-list (org-export-get-tags headline info)))
                         (and tag-list
                              (format "     :%s:"
                                      (mapconcat #'identity tag-list ":"))))))
            (priority
-            (and (plist-get info :with-priority)
+            (and (org-hugo--plist-get-true-p info :with-priority)
                  (let ((char (org-element-property :priority headline)))
                    (and char (format "[#%c] " char)))))
            ;; Headline text without tags.
@@ -1181,8 +1181,8 @@ INFO is a plist used as a communication channel."
                        (string= "DRAFT" todo-keyword))
                   (message "[ox-hugo] `%s' post is marked as a draft" title)
                   "true")
-                 ((org-string-nw-p (plist-get info :hugo-draft))
-                  (org-hugo--front-matter-value-booleanize (org-string-nw-p (plist-get info :hugo-draft))))
+                 ((org-hugo--plist-get-true-p info :hugo-draft)
+                  (org-hugo--front-matter-value-booleanize (org-hugo--plist-get-true-p info :hugo-draft)))
                  (t
                   "false")))
          (all-t-and-c-str (org-entry-get (point) "ALLTAGS"))
@@ -1242,7 +1242,7 @@ INFO is a plist used as a communication channel."
                  (publishDate . ,(org-export-data (plist-get info :hugo-publishdate) info))
                  (expiryDate . ,(org-export-data (plist-get info :hugo-expirydate) info))
                  (aliases . ,(org-export-data (plist-get info :hugo-aliases) info))
-                 (isCJKLanguage . ,(org-export-data (plist-get info :hugo-iscjklanguage) info))
+                 (isCJKLanguage . ,(org-hugo--plist-get-true-p info :hugo-iscjklanguage))
                  (keywords . ,(org-export-data (plist-get info :keywords) info))
                  (layout . ,(org-export-data (plist-get info :hugo-layout) info))
                  (lastmod . ,lastmod)

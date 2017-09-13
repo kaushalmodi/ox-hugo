@@ -1,12 +1,12 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_CODE_FENCE:
+# Below will also do the same thing (because using
+# org-hugo--plist-get-true-p instead of just plist-get).
+# #+HUGO_CODE_FENCE: nil
+#
 # Below will use Markdown code fence instead of the highlight
 # shortcode.
 # #+HUGO_CODE_FENCE: t
-# Caution! Below will evaluate to the same as "#+HUGO_CODE_FENCE:
-# t"! If you want to disable an option set by keyword or property,
-# just leave it empty.
-# #+HUGO_CODE_FENCE: nil
 
 #+SEQ_TODO: TODO DRAFT DONE
 

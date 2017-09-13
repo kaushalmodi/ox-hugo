@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-13 11:37:20 kmodi>
+;; Time-stamp: <2017-09-13 12:15:52 kmodi>
 
 ;; Helper function to export Org documentation to GitHub repo Wiki pages
 
@@ -23,10 +23,11 @@
               ;; subtrees separately that could be under that.
               (org-use-tag-inheritance nil)
               (org-export-time-stamp-file nil) ;Do not print "Created <timestamp>" in exported files
-              (org-export-with-toc nil)        ;Do not export TOC
-              (org-export-with-tags nil)) ;Do not print tag names in exported files
+              (org-export-with-toc nil))       ;Do not export TOC
           (dolist (tag subtree-tags-to-export)
-            (let* ((exported-file-list (org-map-entries '(org-org-export-to-org nil :subtreep) tag)))
+            (let* (;;Retain tags only in the README; needed for `toc-org-insert-toc' to work
+                   (org-export-with-tags (if (string= tag "readme") t nil))
+                   (exported-file-list (org-map-entries '(org-org-export-to-org nil :subtreep) tag)))
               ;; Move files to their correct directories
               (cond
                ((or (string= "readme" tag)
@@ -48,14 +49,11 @@
             ;; Open the README.org file afresh.
             (setq readme-buf (find-file-noselect readme-file))
             (with-current-buffer readme-buf
-              ;; Add the :TOC: tag for `toc-org-insert-toc' to work.
-              (goto-char (point-min))
-              (replace-regexp "^\\(\\* Table of Contents\\)$" "\\1 :TOC:")
               (require 'toc-org)
               (toc-org-insert-toc)
-              ;; Now remove that :TOC: tag.
+              ;; Now remove all Org tags from the README
               (goto-char (point-min))
-              (replace-regexp "^\\(\\* Table of Contents\\) :TOC:$" "\\1")
+              (while (replace-regexp "^\\(\\* .*?\\)[[:blank:]]*:[^[:blank:]]+:$" "\\1"))
               (save-buffer))))
       (user-error (concat "ox-hugo.wiki dir does not exist. "
                           "You need to `cd doc/' and "

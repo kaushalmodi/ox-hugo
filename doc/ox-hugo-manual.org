@@ -587,6 +587,82 @@ Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
 :EXPORT_FILE_NAME: Contributing Guide
 :END:
 #+INCLUDE: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
+** Image Links                                                         :wiki:
+:PROPERTIES:
+:EXPORT_TITLE:
+:EXPORT_FILE_NAME: Image Links
+:END:
+For the sake of the below explanation, let's have the /HUGO_BASE_DIR/
+(the directory containing the Hugo site's =config.toml= file) be
+=~/hugo/=.
+
+In that case, the Hugo /static/ directory will be =~/hugo/static/=.
+*** References to files in the /static/ directory
+Now if you have a file =~/hugo/static/images/foo.png=, =ox-hugo= makes
+it convenient for you to reference that image by simply
+=/images/foo.png=. *This is the default behavior of other Org
+exporters.* But in the case of Hugo, as the referenced file will
+normally be in the Hugo /static/ directory, the =/images/foo.png=
+style of short reference is allowed *if* that is a valid path under
+the /static/ directory.
+
+See the below examples on how to reference images in different ways:
+**** Inline image (Unhyperlinked)
+#+BEGIN_SRC org
+[[/images/foo.png]]
+#+END_SRC
+**** Inline image (Hyperlinked to the image itself)
+#+BEGIN_SRC org
+[[file:/images/foo.png][file:/images/foo.png]]
+#+END_SRC
+- NOTE :: The =file:= prefix *has to be used* in both Link and
+          Description components of the Org link.
+
+- NOTE-2 :: GitHub Wiki screws up the above code block. It actually
+            looks like below but *without* the space in-between =]=
+            and =[=.
+  #+BEGIN_SRC org
+  [[file:/images/foo.png] [file:/images/foo.png]]
+  #+END_SRC
+**** Link to an image (Image not inlined)
+#+BEGIN_SRC org
+[[/images/foo.png][Click here to see foo.png]]
+#+END_SRC
+This applies to references to non-image files in the /static/
+directory too.
+*** Having references to files *outside* the /static/ directory
+This is a unique feature of =ox-hugo=.
+
+If a reference is made to a file outside the Hugo /static/ directory
+and if it has one of these extensions: ="jpg"=, ="jpeg"=, ="tiff"=,
+="png"=, ="pdf"=, ="odt"= , then that file is copied by =ox-hugo= to
+the /static/ directory.
+
+Here is an example link:
+#+BEGIN_SRC org
+[[../files-to-be-copied-to-static/static/images/copy-of-unicorn-logo.png]]
+#+END_SRC
+
+*Note*: If you link to files outside of the Hugo =static= directory,
+just ensure that that path contains =/static/= if you would like to
+preserve the directory structure. /The necessary directories are also
+created inside the /static/ directory to preserve the structure./
+
+Example translations between outside =static= directory paths to the
+copied location inside =static=:
+|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
+| File location outside =static=   | Copied-to location inside =static=        | Explanation                                                                                                          |
+|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
+| =~/temp/static/images/foo.png=   | =<HUGO_BASE_DIR>/static/images/foo.png=   | If the *outside* path has =/static/= in it, the directory structure after that is preserved when copied.             |
+| =~/temp/static/img/foo.png=      | =<HUGO_BASE_DIR>/static/img/foo.png=      | (same as above)                                                                                                      |
+| =~/temp/static/foo.png=          | =<HUGO_BASE_DIR>/static/foo.png=          | (same as above)                                                                                                      |
+| =~/temp/static/articles/zoo.pdf= | =<HUGO_BASE_DIR>/static/articles/zoo.pdf= | (same as above)                                                                                                      |
+|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
+| =~/temp/bar/baz/foo.png=         | =<HUGO_BASE_DIR>/static/foo.png=          | Here, as the *outside* path does not have =/static/=, the file is copied directly into the Hugo =static/= directory. |
+|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
+
+See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Usage#before-you-export][Usage → Before you export Wiki section]] to learn how to
+set the *HUGO_BASE_DIR*.
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:
 # fill-column: 70

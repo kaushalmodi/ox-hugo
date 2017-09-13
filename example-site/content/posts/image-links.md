@@ -58,6 +58,21 @@ Click below image to jump to the unicorn image.
 [Discussion](https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728)
 
 
-## Link to image outside of standard Hugo locations {#link-to-image-outside-of-standard-hugo-locations}
+## Link to image outside of standard Hugo `static` directory {#link-to-image-outside-of-standard-hugo-static-directory}
 
 {{<figure src="/images/copy-of-unicorn-logo.png">}}
+
+If you link to files outside of the Hugo `static` directory, ensure
+that the path contains `/static/` if you would like to preserve the
+directory structure.
+
+Example translations between outside `static` directory paths to the
+copied location inside `static`:
+
+Outside `static`                 | Copied-to location inside `static`        | Explanation
+---------------------------------|-------------------------------------------|-----------------------------------------------------------------------------------------------------------------------
+`~/temp/static/images/foo.png`   | `<HUGO_BASE_DIR>/static/images/foo.png`   | If the **outside** path has `/static/` in it, the directory structure after that is preserved when copied.
+`~/temp/static/img/foo.png`      | `<HUGO_BASE_DIR>/static/img/foo.png`      | (same as above)
+`~/temp/static/foo.png`          | `<HUGO_BASE_DIR>/static/foo.png`          | (same as above)
+`~/temp/static/articles/zoo.pdf` | `<HUGO_BASE_DIR>/static/articles/zoo.pdf` | (same as above)
+`~/temp/bar/baz/foo.png`         | `<HUGO_BASE_DIR>/static/foo.png`          | Here, as the **outside** path does not have `/static/`, the file is copied directly into the Hugo `static/` directory.

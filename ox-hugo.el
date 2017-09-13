@@ -442,7 +442,6 @@ Example value: (org)."
                    (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil 1)
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
-                   (:hugo-static-images "HUGO_STATIC_IMAGES" nil "images")
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil t)
                    (:hugo-menu "HUGO_MENU" nil nil)
                    (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)
@@ -707,7 +706,6 @@ and rewrite link paths to make blogging more seamless."
                (concat (file-name-sans-extension raw-path) ".md")
              raw-path)))
         (raw-path (org-element-property :path link))
-        (images-dir (org-string-nw-p (plist-get info :hugo-static-images)))
         (type (org-element-property :type link)))
     ;; (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
     ;; (message "[ox-hugo-link DBG] link type: %s" type)
@@ -752,14 +750,9 @@ and rewrite link paths to make blogging more seamless."
                        (org-export-get-reference destination info))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
       ;; (message "[org-hugo-link DBG] processing an image: %s" contents)
-      (let* ((path (org-hugo--attachment-rewrite
-                    (if (file-name-absolute-p raw-path)
-                        (expand-file-name raw-path)
-                      raw-path)
-                    info))
+      (let* ((path (org-hugo--attachment-rewrite-maybe raw-path info))
              (caption (org-export-data
-                       (org-export-get-caption
-                        (org-export-get-parent-element link))
+                       (org-export-get-caption (org-export-get-parent-element link))
                        info))
              (parent (org-export-get-parent link))
              (attr (org-export-read-attribute :attr_html parent))
@@ -782,49 +775,73 @@ and rewrite link paths to make blogging more seamless."
       (let ((path (cond
                    ((member type '("http" "https" "ftp"))
                     (concat type ":" raw-path))
-                   ((and (string= type "file")
-                         (or (null images-dir)
-                             ;; Do not add the "file://" prefix if the
-                             ;; raw-path begins with the HUGO_STATIC_IMAGES
-                             ;; dir name.
-                             (not (string-match-p (concat "\\`/" images-dir "/") raw-path))))
-                    (org-hugo--attachment-rewrite
-                     (org-export-file-uri
-                      (funcall link-org-files-as-md raw-path))
-                     info))
+                   (;; Do not add the "file://" prefix if the raw-path
+                    ;; is in the Hugo "static" dir.
+                    (and (string= type "file")
+                         (let ((static-dir (file-truename
+                                            (concat
+                                             (file-name-as-directory (plist-get info :hugo-base-dir))
+                                             "static/")))
+                               (raw-path-true (file-truename raw-path)))
+                           (string-match-p (regexp-quote static-dir) raw-path-true)))
+                    (let* ((path1 (org-export-file-uri (funcall link-org-files-as-md raw-path)))
+                           (path1 (replace-regexp-in-string "\\`file://" "" path1)))
+                      (org-hugo--attachment-rewrite-maybe path1 info)))
                    (t
                     raw-path))))
         (if contents
-            (format "[%s](%s)" contents path)
+            (progn
+              ;; (message "[ox-hugo DBG org-hugo-link: contents=%s path=%s" contents path)
+              (format "[%s](%s)" contents path))
           (format "<%s>" path)))))))
 
 ;;;;; Helpers
-(defun org-hugo--attachment-rewrite (path info)
-  "Copy local images and pdfs to the \"static/\" directory.
+(defun org-hugo--attachment-rewrite-maybe (path info)
+  "Copy local images and pdfs to the \"static/\" directory if needed.
 Also rewrite image links.
 
-PATH is the path to the image or pdf attachment.
+PATH is the path to the image or pdf attachment.  If the PATH
+already exists in the Hugo \"static\" directory, just return the PATH.
+
 INFO is a plist used as a communication channel."
-  ;; (message "[ox-hugo attachment DBG] The Hugo images dir is: %s" (plist-get info :hugo-static-images))
   ;; (message "[ox-hugo attachment DBG] The Hugo section is: %s" (plist-get info :hugo-section))
   ;; (message "[ox-hugo attachment DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir))
-  (let* ((full-path (file-truename path))
-         (exportables '("jpg" "jpeg" "tiff" "png" "pdf" "odt" ))
-         (file-name (file-name-nondirectory path))
-         (image-export-dir (concat
-                            (file-name-as-directory (plist-get info :hugo-base-dir))
-                            "static/"
-                            (file-name-as-directory (plist-get info :hugo-static-images))
-                            ))
-         (exported-image (concat image-export-dir file-name)))
-    ;; (message "[ox-hugo DBG] Image export dir is: %s" image-export-dir)
-    (if (and (file-exists-p full-path)
+  (let* ((path-true (file-truename path))
+         (exportables '("jpg" "jpeg" "tiff" "png" "pdf" "odt"))
+         (static-dir (file-truename
+                      (concat
+                       (file-name-as-directory (plist-get info :hugo-base-dir))
+                       "static/"))))
+    ;; (message "[ox-hugo DBG attch rewrite] Image export dir is: %s" static-dir)
+    ;; (message "[ox-hugo DBG attch rewrite] path: %s" path)
+    ;; (message "[ox-hugo DBG attch rewrite] path-true: %s" path-true)
+    (if (and (file-exists-p path-true)
              (member (file-name-extension path) exportables)
-             (file-directory-p image-export-dir))
+             (file-directory-p static-dir))
         (progn
-          (unless (file-exists-p exported-image)
-            (copy-file full-path exported-image))
-          (concat "/" (file-name-as-directory (plist-get info :hugo-static-images)) file-name))
+          ;; Check if `path-true' is already inside `static-dir'
+          (if (string-match (regexp-quote static-dir) path-true)
+              (progn
+                ;; If so, return *only* the path considering the
+                ;; static directory as root.
+                (concat "/" (substring path-true (match-end 0))))
+            (let* ((file-name-sans-static (if (string-match "/static/" path-true)
+                                              (substring path-true (match-end 0))
+                                            (file-name-nondirectory path)))
+                   (static-path (concat static-dir file-name-sans-static))
+                   (static-path-dir (file-name-directory static-path)))
+              ;; The `static-dir' would already exist.  But if
+              ;; `file-name-sans-static' is "images/image.png" or
+              ;; "foo/bar.txt", it's likely that "`static-dir'/images"
+              ;; or "`static-dir'/foo" might not exist.  So create
+              ;; those if needed below.
+              (unless (file-exists-p static-path-dir)
+                (mkdir static-path-dir :parents))
+              ;; (message "[ox-hugo DBG attch rewrite] file-name: %s" file-name-sans-static)
+              ;; (message "[ox-hugo DBG attch rewrite] static-path: %s" static-path)
+              ;; (message "[ox-hugo DBG attch rewrite] static-path-dir: %s" static-path-dir)
+              (copy-file path-true static-path :ok-if-already-exists)
+              (concat "/" file-name-sans-static))))
       path)))
 
 ;;;; Source Blocks
@@ -1433,7 +1450,6 @@ are \"toml\" and \"yaml\"."
                      "HUGO_BLACKFRIDAY"
                      "HUGO_SECTION"
                      "HUGO_BASE_DIR"
-                     "HUGO_STATIC_IMAGES"
                      "HUGO_CODE_FENCE"
                      "HUGO_MENU"
                      "HUGO_CUSTOM_FRONT_MATTER"

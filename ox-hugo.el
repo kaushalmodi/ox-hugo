@@ -5,7 +5,7 @@
 ;; URL: https://github.com/kaushalmodi/ox-hugo
 ;; Package-Requires: ((emacs "24.5") (org "9.0"))
 ;; Keywords: Org, markdown, docs
-;; Version: 0.1.2
+;; Version: 0.1.3
 
 ;;; Commentary:
 

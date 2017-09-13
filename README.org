@@ -283,6 +283,11 @@ have the exported Markdown files.
   =org-hugo--date-time-regexp=. Earlier time zones ahead of UTC (with
   =+= sign) were not detected as dates in =org-hugo--quote-string= and
   thus were unnecessarily quoted.
+** 0.1.3
+- Now a HUGO key value set to ="nil"=, like =#+HUGO_CODE_FENCE: nil=,
+  will evaluate as /nil/ instead of /t/, as now
+  =org-hugo--plist-get-true-p= is used to parse boolean keys instead
+  of =plist-get=.
 * Debug
 If the =ox-hugo= exports do not work as expected, or if you get an
 error backtrace,

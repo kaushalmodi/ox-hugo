@@ -509,24 +509,29 @@ Example value: (org)."
 
 ;;; Miscellaneous Helper Functions
 
-(defun org-hugo--plist-value-true-p (key info)
+(defun org-hugo--plist-get-true-p (info key)
   "Return non-nil if KEY in INFO is non-nil.
-If the value of KEY in INFO is nil, \"nil\" or \"\", nil is
-returned.
+Return nil if the value of KEY in INFO is nil, \"nil\" or \"\".
+
+This is a special version of `plist-get' used only for keys that
+are expected to hold a boolean value.
 
 INFO is a plist used as a communication channel."
   (let ((value (plist-get info key)))
+    ;; (message "dbg: org-hugo--plist-get-true-p:: key:%S value:%S" key value)
     (cond
      ((or (equal t value)
           (equal nil value))
       value)
-     ((stringp value)
+     ((and (stringp value)
+           (string= value "nil"))
+      nil)
+     (t
       ;; "" -> nil
       ;; "t" -> "t"
       ;; "anything else" -> "anything else"
-      (org-string-nw-p value))
-     (t
-      nil))))
+      ;; 123 -> nil
+      (org-string-nw-p value)))))
 
 
 ;;; Transcode Functions
@@ -537,7 +542,7 @@ INFO is a plist used as a communication channel."
 The kdb wrapping is done if `org-hugo-use-code-for-kbd' is non-nil.
 
 INFO is a plist used as a communication channel."
-  (if (org-hugo--plist-value-true-p :hugo-use-code-for-kbd info)
+  (if (org-hugo--plist-get-true-p info :hugo-use-code-for-kbd)
       (format "<kbd>%s</kbd>" (org-element-property :value verbatim))
     (org-md-verbatim verbatim nil nil)))
 
@@ -832,7 +837,7 @@ block is wrapped in Hugo `highlight' shortcode.
 
 INFO is a plist used as a communication channel."
   (let ((lang (org-element-property :language src-block)))
-    (if (org-hugo--plist-value-true-p :hugo-code-fence info)
+    (if (org-hugo--plist-get-true-p info :hugo-code-fence)
         (let ((ret (org-blackfriday-src-block src-block nil info)))
           (when (member (intern lang) org-hugo-langs-no-descr-in-code-fences)
             ;; With the pygmentsCodeFences options enabled in Hugo,
@@ -1048,10 +1053,8 @@ the tag strings in Hugo front matter if spaces were allowed:
 
 Example: :some__tag:   -> \"some tag\"."
   (let* ((prefer-hyphen (unless no-prefer-hyphen
-                          (org-hugo--plist-value-true-p
-                           :hugo-prefer-hyphen-in-tags info)))
-         (allow-spaces (org-hugo--plist-value-true-p
-                        :hugo-allow-spaces-in-tags info))
+                          (org-hugo--plist-get-true-p info :hugo-prefer-hyphen-in-tags)))
+         (allow-spaces (org-hugo--plist-get-true-p info :hugo-allow-spaces-in-tags))
          new-tag-list)
     (cond
      ((or prefer-hyphen
@@ -1161,7 +1164,7 @@ INFO is a plist used as a communication channel."
                              hugo-date-fmt
                              (apply #'encode-time (org-parse-time-string lastmod-raw))))
                            ;; Else (if nil) and user want to auto-set the lastmod field.
-                           ((org-string-nw-p (plist-get info :hugo-auto-set-lastmod))
+                           ((org-hugo--plist-get-true-p info :hugo-auto-set-lastmod)
                             (format-time-string hugo-date-fmt (org-current-time)))
                            ;; Else.. do nothing.
                            (t

@@ -27,7 +27,29 @@ See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Auto-export-on-Saving][Aut
 seeing live-preview of the Hugo-rendered HTML each time you do =C-x
 C-s= in the Org file --- For now, this works only with the *Subtree
 export flow*.
+* Table of Contents
+- [[#screenshots][Screenshots]]
+- [[#why-ox-hugo][Why =ox-hugo=?]]
+- [[#installation][Installation]]
+- [[#usage][Usage]]
+  - [[#before-you-export][Before you export]]
+  - [[#export-bindings][Export bindings]]
+- [[#example-hugo-site-to-test-this-package][Example Hugo site to test this package]]
+  - [[#how-to-try-ox-hugo-on-that-site][How to try =ox-hugo= on that site?]]
+- [[#how-do-i-try-ox-hugo-on-my-site][How do I try =ox-hugo= on my site?]]
+- [[#translation-of-org-meta-data-to-hugo-front-matter][Translation of Org meta-data to Hugo front-matter]]
+  - [[#for-subtree-exports-c-c-c-e-h-h-or-c-c-c-e-h-a][For subtree exports (=C-c C-e H H= or =C-c C-e H A=)]]
+  - [[#for-complete-file-exports-c-c-c-e-h-h][For complete-file exports (=C-c C-e H h=)]]
+- [[#formatting][Formatting]]
+- [[#do-i-need-to-re-write-my-whole-blog-in-org][Do I need to re-write my whole blog in Org?]]
+- [[#changelog][Changelog]]
+  - [[#013-2017-09-13-wed][0.1.3 <2017-09-13 Wed>]]
+  - [[#012-2017-09-12-tue][0.1.2 <2017-09-12 Tue>]]
+  - [[#011-2017-09-11-mon][0.1.1 <2017-09-11 Mon>]]
+- [[#debug][Debug]]
+- [[#thanks][Thanks]]
 
+* Screenshots
 Before you read further, you can see below how =ox-hugo= translates
 Org to Markdown (Org on the left; exported Markdown with Hugo
 front-matter on the right).
@@ -273,21 +295,21 @@ necessity if you want to start using =ox-hugo=.
 .. And if at some point, you want to stop using =ox-hugo=, you still
 have the exported Markdown files.
 * Changelog
-** 0.1.1
-- Use CLOSED log drawer info if available to set the date in
-  front-matter [[[https://github.com/kaushalmodi/ox-hugo/issues/68][68]]].
-- Code optimization: Use of =org-entry-get= at places instead of
-  maintaining global variables.
-** 0.1.2
-- Make DateTime matching better; new internal variable
-  =org-hugo--date-time-regexp=. Earlier time zones ahead of UTC (with
-  =+= sign) were not detected as dates in =org-hugo--quote-string= and
-  thus were unnecessarily quoted.
-** 0.1.3
+** 0.1.3 <2017-09-13 Wed>
 - Now a HUGO key value set to ="nil"=, like =#+HUGO_CODE_FENCE: nil=,
   will evaluate as /nil/ instead of /t/, as now
   =org-hugo--plist-get-true-p= is used to parse boolean keys instead
   of =plist-get=.
+** 0.1.2 <2017-09-12 Tue>
+- Make DateTime matching better; new internal variable
+  =org-hugo--date-time-regexp=. Earlier time zones ahead of UTC (with
+  =+= sign) were not detected as dates in =org-hugo--quote-string= and
+  thus were unnecessarily quoted.
+** 0.1.1 <2017-09-11 Mon>
+- Use CLOSED log drawer info if available to set the date in
+  front-matter [[[https://github.com/kaushalmodi/ox-hugo/issues/68][68]]].
+- Code optimization: Use of =org-entry-get= at places instead of
+  maintaining global variables.
 * Debug
 If the =ox-hugo= exports do not work as expected, or if you get an
 error backtrace,

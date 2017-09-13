@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-08-08 12:20:38 kmodi>
+;; Time-stamp: <2017-09-13 11:37:20 kmodi>
 
 ;; Helper function to export Org documentation to GitHub repo Wiki pages
 
@@ -39,7 +39,24 @@
                 (dolist (exported-file exported-file-list)
                   (rename-file (expand-file-name exported-file ox-hugo-doc-dir)
                                (expand-file-name exported-file ox-hugo-wiki-dir)
-                               :ok-if-already-exists)))))))
+                               :ok-if-already-exists))))))
+          ;; Generate TOC in README.org using the `toc-org' package.
+          (let ((readme-buf (get-buffer "README.org"))
+                (readme-file (expand-file-name "README.org" ox-hugo-root-dir)))
+            (when readme-buf    ;Close README.org if it's already open
+              (kill-buffer readme-buf))
+            ;; Open the README.org file afresh.
+            (setq readme-buf (find-file-noselect readme-file))
+            (with-current-buffer readme-buf
+              ;; Add the :TOC: tag for `toc-org-insert-toc' to work.
+              (goto-char (point-min))
+              (replace-regexp "^\\(\\* Table of Contents\\)$" "\\1 :TOC:")
+              (require 'toc-org)
+              (toc-org-insert-toc)
+              ;; Now remove that :TOC: tag.
+              (goto-char (point-min))
+              (replace-regexp "^\\(\\* Table of Contents\\) :TOC:$" "\\1")
+              (save-buffer))))
       (user-error (concat "ox-hugo.wiki dir does not exist. "
                           "You need to `cd doc/' and "
                           "`git clone https://github.com/kaushalmodi/ox-hugo.wiki.git'")))))

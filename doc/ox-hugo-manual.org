@@ -24,21 +24,21 @@ Markdown]] flavor.
 :PROPERTIES:
 :CUSTOM_ID: changelog
 :END:
-** 0.1.1
-- Use CLOSED log drawer info if available to set the date in
-  front-matter {{{issue(68)}}}.
-- Code optimization: Use of =org-entry-get= at places instead of
-  maintaining global variables.
-** 0.1.2
-- Make DateTime matching better; new internal variable
-  =org-hugo--date-time-regexp=. Earlier time zones ahead of UTC (with
-  =+= sign) were not detected as dates in =org-hugo--quote-string= and
-  thus were unnecessarily quoted.
-** 0.1.3
+** 0.1.3 <2017-09-13 Wed>
 - Now a HUGO key value set to ="nil"=, like =#+HUGO_CODE_FENCE: nil=,
   will evaluate as /nil/ instead of /t/, as now
   =org-hugo--plist-get-true-p= is used to parse boolean keys instead
   of =plist-get=.
+** 0.1.2 <2017-09-12 Tue>
+- Make DateTime matching better; new internal variable
+  =org-hugo--date-time-regexp=. Earlier time zones ahead of UTC (with
+  =+= sign) were not detected as dates in =org-hugo--quote-string= and
+  thus were unnecessarily quoted.
+** 0.1.1 <2017-09-11 Mon>
+- Use CLOSED log drawer info if available to set the date in
+  front-matter {{{issue(68)}}}.
+- Code optimization: Use of =org-entry-get= at places instead of
+  maintaining global variables.
 * Note to Future Contributors
 :PROPERTIES:
 :CUSTOM_ID: note-to-future-contributors
@@ -100,7 +100,10 @@ See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Auto-export-on-Saving][Aut
 seeing live-preview of the Hugo-rendered HTML each time you do =C-x
 C-s= in the Org file --- For now, this works only with the *Subtree
 export flow*.
-
+** Table of Contents
+# TOC will be inserted here by `toc-org' package when running
+# `ox-hugo-export-gh-doc'.
+** Screenshots
 Before you read further, you can see below how =ox-hugo= translates
 Org to Markdown (Org on the left; exported Markdown with Hugo
 front-matter on the right).

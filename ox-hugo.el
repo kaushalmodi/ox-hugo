@@ -397,6 +397,27 @@ Example value: (org)."
   :type 'boolean
   :safe #'booleanp)
 
+(defcustom org-hugo-default-static-subdirectory-for-externals "ox-hugo"
+  "Default sub-directory in Hugo static directory for external files.
+If the source path for external files does not contain
+\"static\", `ox-hugo` cannot know what directory structure to
+create inside the Hugo static directory.  So all such files are
+copied to this sub-directory inside the Hugo static directory."
+  :group 'org-export-hugo
+  :type 'string
+  :safe 'stringp)
+
+(defcustom org-hugo-external-file-extensions-allowed-for-copying
+  '("jpg" "jpeg" "tiff" "png" "pdf" "odt")
+  "List of external file extensions allowed for copying to Hugo static dir.
+If an Org link references a file with one of these extensions,
+and if that file is not in the Hugo static directory, that file
+is copied over to the static directory.
+
+The auto-copying behavior is disabled if this variable is set to nil."
+  :group 'org-export-hugo
+  :type '(repeat string))
+
 
 ;;; Define Back-End
 
@@ -801,13 +822,14 @@ and rewrite link paths to make blogging more seamless."
 Also rewrite image links.
 
 PATH is the path to the image or pdf attachment.  If the PATH
-already exists in the Hugo \"static\" directory, just return the PATH.
+already exists in the Hugo \"static\" directory, just return the
+PATH.
 
 INFO is a plist used as a communication channel."
   ;; (message "[ox-hugo attachment DBG] The Hugo section is: %s" (plist-get info :hugo-section))
   ;; (message "[ox-hugo attachment DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir))
   (let* ((path-true (file-truename path))
-         (exportables '("jpg" "jpeg" "tiff" "png" "pdf" "odt"))
+         (exportables org-hugo-external-file-extensions-allowed-for-copying)
          (static-dir (file-truename
                       (concat
                        (file-name-as-directory (plist-get info :hugo-base-dir))
@@ -827,7 +849,9 @@ INFO is a plist used as a communication channel."
                 (concat "/" (substring path-true (match-end 0))))
             (let* ((file-name-sans-static (if (string-match "/static/" path-true)
                                               (substring path-true (match-end 0))
-                                            (file-name-nondirectory path)))
+                                            (concat
+                                             (file-name-as-directory org-hugo-default-static-subdirectory-for-externals)
+                                             (file-name-nondirectory path))))
                    (static-path (concat static-dir file-name-sans-static))
                    (static-path-dir (file-name-directory static-path)))
               ;; The `static-dir' would already exist.  But if
@@ -840,7 +864,12 @@ INFO is a plist used as a communication channel."
               ;; (message "[ox-hugo DBG attch rewrite] file-name: %s" file-name-sans-static)
               ;; (message "[ox-hugo DBG attch rewrite] static-path: %s" static-path)
               ;; (message "[ox-hugo DBG attch rewrite] static-path-dir: %s" static-path-dir)
-              (copy-file path-true static-path :ok-if-already-exists)
+
+              ;; Do the copy only if the file to be copied is newer or
+              ;; doesn't exist in the static dir.
+              (when (file-newer-than-file-p path-true static-path)
+                (message "[ox-hugo] Copied %S to %S" path-true static-path)
+                (copy-file path-true static-path :ok-if-already-exists))
               (concat "/" file-name-sans-static))))
       path)))
 

@@ -634,9 +634,9 @@ directory too.
 This is a unique feature of =ox-hugo=.
 
 If a reference is made to a file outside the Hugo /static/ directory
-and if it has one of these extensions: ="jpg"=, ="jpeg"=, ="tiff"=,
-="png"=, ="pdf"=, ="odt"= , then that file is copied by =ox-hugo= to
-the /static/ directory.
+and if it has one of these extensions listed in
+=org-hugo-external-file-extensions-allowed-for-copying=, then that
+file is copied by =ox-hugo= to the /static/ directory.
 
 Here is an example link:
 #+BEGIN_SRC org
@@ -658,11 +658,23 @@ copied location inside =static=:
 | =~/temp/static/foo.png=          | =<HUGO_BASE_DIR>/static/foo.png=          | (same as above)                                                                                                      |
 | =~/temp/static/articles/zoo.pdf= | =<HUGO_BASE_DIR>/static/articles/zoo.pdf= | (same as above)                                                                                                      |
 |----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
-| =~/temp/bar/baz/foo.png=         | =<HUGO_BASE_DIR>/static/foo.png=          | Here, as the *outside* path does not have =/static/=, the file is copied directly into the Hugo =static/= directory. |
-|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
+**** Source path does not contain =/static/=
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
+|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------|
+| Outside =static=         | Copied-to location inside =static=       | Explanation                                                                                                           |
+|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------|
+| =~/temp/bar/baz/foo.png= | =<HUGO_BASE_DIR>/static/ox-hugo/foo.png= | Here, as the *outside* path does not have =/static/=, the file is copied to the =ox-hugo/= dir in Hugo =static/= dir. |
+|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------|
+- Note :: The =ox-hugo= sub-directory name is because of the default
+          value of
+          =org-hugo-default-static-subdirectory-for-externals=.
 
 See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Usage#before-you-export][Usage → Before you export Wiki section]] to learn how to
 set the *HUGO_BASE_DIR*.
+
+- Note :: This auto-copying behavior can be disabled by setting
+          =org-hugo-external-file-extensions-allowed-for-copying= to
+          /nil/.
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:
 # fill-column: 70

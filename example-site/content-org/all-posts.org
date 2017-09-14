@@ -104,8 +104,17 @@ copied location inside =static=:
 | =~/temp/static/img/foo.png=      | =<HUGO_BASE_DIR>/static/img/foo.png=      | (same as above)                                                                                                      |
 | =~/temp/static/foo.png=          | =<HUGO_BASE_DIR>/static/foo.png=          | (same as above)                                                                                                      |
 | =~/temp/static/articles/zoo.pdf= | =<HUGO_BASE_DIR>/static/articles/zoo.pdf= | (same as above)                                                                                                      |
-| =~/temp/bar/baz/foo.png=         | =<HUGO_BASE_DIR>/static/foo.png=          | Here, as the *outside* path does not have =/static/=, the file is copied directly into the Hugo =static/= directory. |
 |----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
+**** Source path does not contain =/static/=
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
+|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------|
+| Outside =static=         | Copied-to location inside =static=       | Explanation                                                                                                           |
+|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------|
+| =~/temp/bar/baz/foo.png= | =<HUGO_BASE_DIR>/static/ox-hugo/foo.png= | Here, as the *outside* path does not have =/static/=, the file is copied to the =ox-hugo/= dir in Hugo =static/= dir. |
+|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------|
+- Note :: The =ox-hugo= sub-directory name is because of the default
+          value of
+          =org-hugo-default-static-subdirectory-for-externals=.
 ** Image captions
 :PROPERTIES:
 :EXPORT_DATE: 2017-07-19

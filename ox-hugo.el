@@ -1502,7 +1502,12 @@ are \"toml\" and \"yaml\"."
 The condition to check validity is that the EXPORT_FILE_NAME
 property is defined for the subtree element.
 
-Return nil if a valid Hugo post subtree is not found."
+As this function is intended to be called inside a valid Hugo
+post subtree, doing so also moves the point to the beginning of
+the heading of that subtree.
+
+Return nil if a valid Hugo post subtree is not found.  The point
+will be moved in this case too."
   (catch 'break
     (while :infinite
       (let* ((entry (org-element-at-point))

@@ -65,7 +65,6 @@ inserted after the first row of the table.")
                      (italic . org-blackfriday-italic)
                      (item . org-blackfriday-item)
                      (latex-fragment . org-blackfriday-latex-fragment)
-                     (paragraph . org-blackfriday-paragraph)
                      (plain-list . org-blackfriday-plain-list)
                      (quote-block . org-blackfriday-quote-block)
                      (src-block . org-blackfriday-src-block)
@@ -292,19 +291,6 @@ INFO is a plist holding contextual information."
         (when (and formula-link (string-match "file:\\([^]]*\\)" formula-link))
           (org-html--format-image (match-string 1 formula-link) nil info))))
      (t latex-frag))))
-
-;;;; Paragraph
-(defun org-blackfriday-paragraph (paragraph contents info)
-  "Transcode PARAGRAPH element into Blackfriday Markdown format.
-CONTENTS is the paragraph contents.  INFO is a plist used as a
-communication channel."
-  (unless (plist-get info :preserve-breaks)
-    (setq contents (concat (mapconcat 'identity (split-string contents) " ") "\n")))
-  (let ((first-object (car (org-element-contents paragraph))))
-    ;; If paragraph starts with a #, protect it.
-    (if (and (stringp first-object) (string-match "\\`#" first-object))
-        (replace-regexp-in-string "\\`#" "\\#" contents nil t)
-      contents)))
 
 ;;;; Plain List
 (defun org-blackfriday-plain-list (plain-list contents info)

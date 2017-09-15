@@ -353,6 +353,26 @@ The string needs to be in a Hugo-compatible Markdown format or HTML."
   :type 'boolean
   :safe #'booleanp)
 
+(defcustom org-hugo-delete-trailing-ws t
+  "When non-nil, delete trailing whitespace in Markdown output.
+Trailing empty lines at the end of the Markdown output are also deleted.
+
+One might want to set this variable to nil if they want to
+preserve the trailing whitespaces in Markdown for the purpose of
+forcing line-breaks.
+
+\(In below Markdown, underscores are used to represent spaces.)
+
+    abc__
+    def__
+
+Those trailing whitespaces render to \"<br />\" tags in the Hugo
+generated HTML.  But the same result can also be achived by using the
+Org Verse block or Blackfriday hardLineBreak extension."
+  :group 'org-export-hugo
+  :type 'boolean
+  :safe #'booleanp)
+
 (defcustom org-hugo-use-code-for-kbd t
   "When non-nil, ~text~ will translate to <kbd>text</kbd>."
   :group 'org-export-hugo
@@ -469,6 +489,7 @@ The auto-copying behavior is disabled if this variable is set to nil."
                    (:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
                    (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil 1)
                    (:hugo-preserve-filling "HUGO_PRESERVE_FILLING" nil org-hugo-preserve-filling) ;Preserve breaks so that text filling in Markdown matches that of Org
+                   (:hugo-delete-trailing-ws "HUGO_DELETE_TRAILING_WS" nil org-hugo-delete-trailing-ws)
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil t)
@@ -941,6 +962,11 @@ INFO is a plist holding export options."
               "\\(:[a-z0-9]+\\)[\\]\\(_[a-z0-9]+:\\)"
               "\\1\\2"
               body))
+  (when (org-hugo--plist-get-true-p info :hugo-delete-trailing-ws)
+    (setq body (with-temp-buffer
+                 (insert body)
+                 (delete-trailing-whitespace (point-min) nil)
+                 (buffer-substring-no-properties (point-min) (point-max)))))
   (format "%s%s%s"
           (org-hugo--get-front-matter info)
           (if (org-string-nw-p body) ;Insert extra newline if body is non-empty
@@ -1495,6 +1521,7 @@ are \"toml\" and \"yaml\"."
   (let ((prop-list '("HUGO_FRONT_MATTER_FORMAT"
                      "HUGO_PREFER_HYPHEN_IN_TAGS"
                      "HUGO_PRESERVE_FILLING"
+                     "HUGO_DELETE_TRAILING_WS"
                      "HUGO_ALLOW_SPACES_IN_TAGS"
                      "HUGO_BLACKFRIDAY"
                      "HUGO_SECTION"
@@ -1838,6 +1865,7 @@ buffer and returned as a string in Org format."
                                 ,(format "|org-hugo-default-section-directory                    |%S|" org-hugo-default-section-directory)
                                 ,(format "|org-hugo-use-code-for-kbd                             |%S|" org-hugo-use-code-for-kbd)
                                 ,(format "|org-hugo-preserve-filling                             |%S|" org-hugo-preserve-filling)
+                                ,(format "|org-hugo-delete-trailing-ws                           |%S|" org-hugo-delete-trailing-ws)
                                 ,(format "|org-hugo-prefer-hyphen-in-tags                        |%S|" org-hugo-prefer-hyphen-in-tags)
                                 ,(format "|org-hugo-allow-spaces-in-tags                         |%S|" org-hugo-allow-spaces-in-tags)
                                 ,(format "|org-hugo-langs-no-descr-in-code-fences                |%S|" org-hugo-langs-no-descr-in-code-fences)

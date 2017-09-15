@@ -361,6 +361,11 @@ One might want to set this variable to nil if they want to
 preserve the trailing whitespaces in Markdown for the purpose of
 forcing line-breaks.
 
+The trailing whitespace deleting is skipped if
+`org-export-preserve-breaks' is set to non-nil; either via that
+variable or via the OPTIONS keyword \"\\n:t\" (See (org) Export
+settings).
+
 \(In below Markdown, underscores are used to represent spaces.)
 
     abc__
@@ -962,7 +967,8 @@ INFO is a plist holding export options."
               "\\(:[a-z0-9]+\\)[\\]\\(_[a-z0-9]+:\\)"
               "\\1\\2"
               body))
-  (when (org-hugo--plist-get-true-p info :hugo-delete-trailing-ws)
+  (when (and (org-hugo--plist-get-true-p info :hugo-delete-trailing-ws)
+             (not (org-hugo--plist-get-true-p info :preserve-breaks)))
     (setq body (with-temp-buffer
                  (insert body)
                  (delete-trailing-whitespace (point-min) nil)

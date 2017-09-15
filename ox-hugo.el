@@ -1784,11 +1784,13 @@ buffer and returned as a string in Org format."
          (info-org (mapconcat #'identity
                               `("* Debug information for =ox-hugo="
                                 "** Emacs Version"
+                                "#+BEGIN_EXAMPLE" ;Prevent underscores from being interpreted as subscript markup
                                 ,(format "%s%s"
                                          emacs-version
                                          (if emacs-repository-version
                                              (format " (commit %s)" emacs-repository-version)
                                            ""))
+                                "#+END_EXAMPLE"
                                 "** Org Version"
                                 "#+BEGIN_EXAMPLE" ;Prevent the forward slashes in paths being interpreted as Org markup
                                 ,(format "%s" org-version)
@@ -1814,13 +1816,16 @@ buffer and returned as a string in Org format."
                                      (format "%s" hugo-version)
                                    "=hugo= binary not found in PATH")
                                 "** =ox-hugo= defcustoms"
-                                ,(format "|org-hugo-default-section-directory    |%S|" org-hugo-default-section-directory)
-                                ,(format "|org-hugo-use-code-for-kbd             |%S|" org-hugo-use-code-for-kbd)
-                                ,(format "|org-hugo-prefer-hyphen-in-tags        |%S|" org-hugo-prefer-hyphen-in-tags)
-                                ,(format "|org-hugo-allow-spaces-in-tags         |%S|" org-hugo-allow-spaces-in-tags)
-                                ,(format "|org-hugo-langs-no-descr-in-code-fences|%S|" org-hugo-langs-no-descr-in-code-fences)
-                                ,(format "|org-hugo-auto-set-lastmod             |%S|" org-hugo-auto-set-lastmod)
-                                ,(format "|org-hugo-front-matter-format          |%S|" org-hugo-front-matter-format))
+                                ,(format "|org-hugo-default-section-directory                    |%S|" org-hugo-default-section-directory)
+                                ,(format "|org-hugo-use-code-for-kbd                             |%S|" org-hugo-use-code-for-kbd)
+                                ,(format "|org-hugo-prefer-hyphen-in-tags                        |%S|" org-hugo-prefer-hyphen-in-tags)
+                                ,(format "|org-hugo-allow-spaces-in-tags                         |%S|" org-hugo-allow-spaces-in-tags)
+                                ,(format "|org-hugo-langs-no-descr-in-code-fences                |%S|" org-hugo-langs-no-descr-in-code-fences)
+                                ,(format "|org-hugo-auto-set-lastmod                             |%S|" org-hugo-auto-set-lastmod)
+                                ,(format "|org-hugo-front-matter-format                          |%S|" org-hugo-front-matter-format)
+                                ,(format "|org-hugo-default-static-subdirectory-for-externals    |%S|" org-hugo-default-static-subdirectory-for-externals)
+                                ,(format "|org-hugo-external-file-extensions-allowed-for-copying |%S|" org-hugo-external-file-extensions-allowed-for-copying)
+                                ,(format "|org-hugo-front-matter-format                          |%S|" org-hugo-front-matter-format))
                               "\n"))
          (org-export-with-toc nil)
          (info-md (progn

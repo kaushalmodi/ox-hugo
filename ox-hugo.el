@@ -408,7 +408,8 @@ copied to this sub-directory inside the Hugo static directory."
   :safe 'stringp)
 
 (defcustom org-hugo-external-file-extensions-allowed-for-copying
-  '("jpg" "jpeg" "tiff" "png" "pdf" "odt")
+  '("jpg" "jpeg" "tiff" "png" "svg"
+    "pdf" "odt")
   "List of external file extensions allowed for copying to Hugo static dir.
 If an Org link references a file with one of these extensions,
 and if that file is not in the Hugo static directory, that file

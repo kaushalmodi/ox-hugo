@@ -68,6 +68,15 @@ error backtrace,
    - Paste the Markdown contents in the GitHub issue.
      - You can still hit the /Preview/ tab of the Issue before
        submitting it.
+* Test
+:PROPERTIES:
+:CUSTOM_ID: test
+:END:
+1. Clone this repo.
+2. =cd= to the =example-site/= directory and do:
+   #+BEGIN_EXAMPLE
+   make test
+   #+END_EXAMPLE
 * Readme                                                             :readme:
 :PROPERTIES:
 :EXPORT_FILE_NAME: README
@@ -234,6 +243,22 @@ exported Markdown files.
 1. Clone this repo.
 2. =cd= to the =example-site/= directory and do:
    #+BEGIN_EXAMPLE
+   make serve
+   #+END_EXAMPLE
+   - *Requires Hugo 0.25+*
+3. Open =http://localhost:1337= in your browser.
+4. In a different terminal, =cd= to the same =example-site/= directory.
+5. Run:
+   #+BEGIN_EXAMPLE
+   make mdtree ORG=content-org/all-posts.org
+   #+END_EXAMPLE
+6. In few seconds, dozens of test posts will get created, with the
+   =hugo server= aided preview in the browser zapping through each new
+   created post.
+*** Alternative way
+1. Clone this repo.
+2. =cd= to the =example-site/= directory and do:
+   #+BEGIN_EXAMPLE
    hugo server -D --navigateToChanged
    #+END_EXAMPLE
    - =--navigateToChanged= requires Hugo 0.25+.
@@ -381,6 +406,12 @@ have the exported Markdown files.
 :EXPORT_FILE_NAME: Debug
 :END:
 #+INCLUDE: "./ox-hugo-manual.org::#debug" :only-contents t
+** Test                                                                :wiki:
+:PROPERTIES:
+:EXPORT_TITLE:
+:EXPORT_FILE_NAME: Test
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#test" :only-contents t
 ** Future Plans                                                    :noexport:
 There is a plan to create a =hugo.el= that would do things like:
 - New post creation using =org-capture= (port code from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]]).
@@ -406,6 +437,8 @@ There is a plan to create a =hugo.el= that would do things like:
 #+INCLUDE: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
 ** Debug
 #+INCLUDE: "./ox-hugo-manual.org::#debug" :only-contents t
+** Test
+#+INCLUDE: "./ox-hugo-manual.org::#test" :only-contents t
 * Other Wikis
 ** Home                                                                :wiki:
 :PROPERTIES:

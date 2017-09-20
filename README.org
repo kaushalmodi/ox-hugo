@@ -36,6 +36,7 @@ export flow*.
   - [[#export-bindings][Export bindings]]
 - [[#example-hugo-site-to-test-this-package][Example Hugo site to test this package]]
   - [[#how-to-try-ox-hugo-on-that-site][How to try =ox-hugo= on that site?]]
+  - [[#alternative-way][Alternative way]]
 - [[#how-do-i-try-ox-hugo-on-my-site][How do I try =ox-hugo= on my site?]]
 - [[#translation-of-org-meta-data-to-hugo-front-matter][Translation of Org meta-data to Hugo front-matter]]
   - [[#for-subtree-exports-c-c-c-e-h-h-or-c-c-c-e-h-a][For subtree exports (=C-c C-e H H= or =C-c C-e H A=)]]
@@ -44,6 +45,7 @@ export flow*.
 - [[#do-i-need-to-re-write-my-whole-blog-in-org][Do I need to re-write my whole blog in Org?]]
 - [[#changelog][Changelog]]
 - [[#debug][Debug]]
+- [[#test][Test]]
 - [[#thanks][Thanks]]
 
 * Screenshots
@@ -169,6 +171,22 @@ Check out the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/exa
 Org->Hugo content and meta-data translation features. [[https://github.com/kaushalmodi/ox-hugo/tree/master/example-site/content/posts][Here]] are the
 exported Markdown files.
 ** How to try =ox-hugo= on that site?
+1. Clone this repo.
+2. =cd= to the =example-site/= directory and do:
+   #+BEGIN_EXAMPLE
+      make serve
+   #+END_EXAMPLE
+   - *Requires Hugo 0.25+*
+3. Open =http://localhost:1337= in your browser.
+4. In a different terminal, =cd= to the same =example-site/= directory.
+5. Run:
+   #+BEGIN_EXAMPLE
+      make mdtree ORG=content-org/all-posts.org
+   #+END_EXAMPLE
+6. In few seconds, dozens of test posts will get created, with the
+   =hugo server= aided preview in the browser zapping through each new
+   created post.
+** Alternative way
 1. Clone this repo.
 2. =cd= to the =example-site/= directory and do:
    #+BEGIN_EXAMPLE
@@ -318,6 +336,12 @@ error backtrace,
    - Paste the Markdown contents in the GitHub issue.
      - You can still hit the /Preview/ tab of the Issue before
        submitting it.
+* Test
+1. Clone this repo.
+2. =cd= to the =example-site/= directory and do:
+   #+BEGIN_EXAMPLE
+      make test
+   #+END_EXAMPLE
 * Thanks
 - Matt Price (@titaniumbones)
 - Puneeth Chaganti (@punchagan)

@@ -22,3 +22,9 @@ error backtrace,
    - Paste the Markdown contents in the GitHub issue.
      - You can still hit the /Preview/ tab of the Issue before
        submitting it.
+* Test
+1. Clone this repo.
+2. =cd= to the =example-site/= directory and do:
+   #+BEGIN_EXAMPLE
+      make test
+   #+END_EXAMPLE

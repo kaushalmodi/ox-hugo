@@ -526,6 +526,13 @@ Here =~C-h f~= will show up as =`C-h f`= in Markdown and then
 
 Example:
 - Few of Emacs help keybindings: ~C-h f~, ~C-h v~
+*** COMMENT Using the new 'kbd' macro from Org =master=
+:PROPERTIES:
+:EXPORT_FILE_NAME: kbd-macro-org-9-2
+:END:
+- {{{kbd(C-h f)}}}
+- {{{kbd(C-x SPC)}}}
+- {{{kbd(M-RET)}}}
 ** Multi-line bold
 :PROPERTIES:
 :EXPORT_FILE_NAME: multi-line-bold

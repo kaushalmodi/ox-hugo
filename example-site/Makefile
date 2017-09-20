@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-20 14:06:08 kmodi>
+# Time-stamp: <2017-09-20 15:32:05 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -12,7 +12,7 @@ PORT=1337
 OX_HUGO_ELISP=$(shell pwd)/elisp/
 
 # Directory where the required elisp packages are auto-installed
-OX_HUGO_ELPA=/tmp/$(USER)/ox-hugo/
+OX_HUGO_ELPA=/tmp/$(USER)/ox-hugo-dev/
 
 .PHONY: help mdtree mdfile vcheck hugo serve server diff \
 	test vcheck testmkgold \
@@ -85,7 +85,7 @@ diff:
 # - Cannot run test12 and test13 because they set the org-hugo-footer using Local Variables.
 test: vcheck testmkgold \
 	test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 \
-	ctemp diffgolden
+	diffgolden
 
 # https://stackoverflow.com/a/16589534/1219634
 testmkgold:
@@ -95,6 +95,7 @@ testmkgold:
 
 test1:
 	@$(MAKE) mdtree ORG=content-org/all-posts.org
+	@$(MAKE) diffgolden
 
 test2:
 	@$(MAKE) mdtree ORG=content-org/construct-hugo-front-matter-from-menu-meta-data.org
@@ -139,7 +140,7 @@ test13:
 ctemp:
 	@find -name "*.*~" -delete
 
-diffgolden:
+diffgolden: ctemp
 	@diff -rq content content-golden
 
 clean: ctemp

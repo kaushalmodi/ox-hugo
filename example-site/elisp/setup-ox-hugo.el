@@ -1,10 +1,17 @@
-;; Time-stamp: <2017-09-20 13:42:45 kmodi>
+;; Time-stamp: <2017-09-20 15:31:54 kmodi>
 
-;; Install ox-hugo if needed
+;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
+
+;; Some sane settings
+(setq-default require-final-newline t)
+(setq-default indent-tabs-mode nil)
+
 (defvar ox-hugo-elpa (let ((dir (getenv "OX_HUGO_ELPA")))
-                       (when dir
-                         (make-directory (file-name-as-directory dir) :parents))
+                       (unless dir
+                         (setq dir (concat (temporary-file-directory) (getenv "USER") "/ox-hugo-dev/")))
+                       (make-directory (file-name-as-directory dir) :parents)
                        dir))
+(message "ox-hugo-elpa: %S" ox-hugo-elpa)
 
 (let* ((bin-dir (when (and invocation-directory
                            (file-exists-p invocation-directory))
@@ -29,9 +36,6 @@
   ;; (message "setup-packages:: share-dir: %s" share-dir)
   ;; (message "setup-packages:: lisp-dir-1: %s" lisp-dir-1)
   ;; (message "setup-packages:: lisp-dir-2: %s" lisp-dir-2)
-  (defvar my/default-share-directory (when (file-exists-p share-dir)
-                                       share-dir)
-    "Share directory for this Emacs installation.")
   (defvar my/default-lisp-directory (cond
                                      ((file-exists-p lisp-dir-1)
                                       lisp-dir-1)
@@ -46,24 +50,33 @@ Emacs installation.  If Emacs is installed using
 --prefix=\"${PREFIX_DIR}\" this value would typically be
 \"${PREFIX_DIR}/share/emacs/<VERSION>/lisp/\"."))
 
-(defvar my/packages '(ox-hugo))
+(defvar my/packages '(org))
 
 (if (and (stringp ox-hugo-elpa)
          (file-exists-p ox-hugo-elpa))
     (progn
+      ;; Load newer version of .el and .elc if both are available
+      (setq load-prefer-newer t)
+
       (setq package-user-dir (format "%selpa_%s/" ox-hugo-elpa emacs-major-version))
 
       ;; Below require will auto-create `package-user-dir' it doesn't exist.
       (require 'package)
 
-      (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                          (not (gnutls-available-p))))
-             (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
-        (add-to-list 'package-archives (cons "melpa" url) :append)) ;For `ox-hugo'
+      ;; Adding Melpa is not needed for now.
+      ;; (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+      ;;                     (not (gnutls-available-p))))
+      ;;        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
+      ;;   (add-to-list 'package-archives (cons "melpa" url) :append))
       (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") :append) ;For latest `org'
 
-      ;; Load emacs packages and activate them
-      ;; This must come before configurations of installed packages.
+      (defvar ox-hugo-git-root (progn
+                                 (require 'vc-git)
+                                 (vc-git-root "../Makefile")))
+      (message "ox-hugo-git-root: %S" ox-hugo-git-root)
+      (add-to-list 'load-path ox-hugo-git-root)
+
+      ;; Load emacs packages and activate them.
       ;; Don't delete this line.
       (package-initialize)
       ;; `package-initialize' call is required before any of the below
@@ -89,9 +102,10 @@ to be installed.")
 
 ;; Remove Org that ships with Emacs from the `load-path'.
 (with-eval-after-load 'package
-  (dolist (path load-path)
-    (when (string-match-p (expand-file-name "org" my/default-lisp-directory) path)
-      (setq load-path (delete path load-path)))))
+  (when (stringp my/default-lisp-directory)
+    (dolist (path load-path)
+      (when (string-match-p (expand-file-name "org" my/default-lisp-directory) path)
+        (setq load-path (delete path load-path))))))
 
 ;; (message "`load-path': %S" load-path)
 ;; (message "`load-path' Shadows:")
@@ -100,9 +114,6 @@ to be installed.")
 (require 'ox-hugo)
 (defun org-hugo-export-all-subtrees-to-md ()
   (org-hugo-export-subtree-to-md :all-subtrees))
-
-(setq-default require-final-newline t)
-(setq-default indent-tabs-mode nil)
 
 (with-eval-after-load 'org
   ;; Allow multiple line Org emphasis markup

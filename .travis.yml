@@ -1,5 +1,27 @@
+# Courtesy: https://github.com/magit/magit/blob/master/.travis.yml
+sudo: false
 language: generic
 env:
-  - EMACS=emacs25
+  global:
+    - CURL="curl -fsSkL --retry 9 --retry-delay 9"
+  matrix:
+  - EMACS_VERSION=24.4
+  - EMACS_VERSION=24.5
+  - EMACS_VERSION=25.1
+  - EMACS_VERSION=25.2
+  - EMACS_VERSION=25 # emacs-25 branch, built daily
+  - EMACS_VERSION=master # master branch, built daily
+#  allow_failures:
+#    - env: EMACS_VERSION=master
+install:
+  - $CURL -O https://github.com/npostavs/emacs-travis/releases/download/bins/emacs-bin-${EMACS_VERSION}.tar.gz
+  - tar -xaf emacs-bin-${EMACS_VERSION}.tar.gz -C /
+  - export EMACS=/tmp/emacs/bin/emacs
+  - $EMACS --version
 script:
   - make test EMACS=${EMACS}
+notifications:
+  email:
+    # Default is change, but that includes a new branch's 1st success.
+    on_success: never
+    on_failure: always # The default.

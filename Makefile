@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-20 15:32:05 kmodi>
+# Time-stamp: <2017-09-20 23:09:23 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.

@@ -13,7 +13,9 @@
 <article class="summary">
     <header>
         <h1 class="post-title"><a href='{{ .Permalink }}'> {{ .Title }}</a> </h1>
-        <div class="post-date">{{ dateFormat "Mon Jan 2, 2006" .Date }} - {{ .FuzzyWordCount }} Words</div>
+        {{ with .Params.date }}
+            <span class="post-date">{{ dateFormat "Mon Jan 2, 2006" . }}</span>
+        {{ end }}
     </header>
 
     <div class="post" >
@@ -23,6 +25,6 @@
     <!-- https://gohugo.io/content/summaries/ -->
     <!-- Show the 'Read more' link only if needed. -->
     {{ if .Truncated }}
-        <a href='{{ .Permalink }}'><nobr>Read more<span> &rarr;</nobr></span></a>
+        <a href='{{ .Permalink }}'>Read more</a>
     {{ end }}
 </article>

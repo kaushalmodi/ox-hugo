@@ -1,6 +1,6 @@
 #+TITLE: Ox-Hugo: A carefully crafted Org exporter back-end that enables writing Hugo posts in Org
 #+AUTHOR: Kaushal Modi
-[[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPL%20v3-blue.svg]] [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]]
+[[https://travis-ci.org/kaushalmodi/ox-hugo][https://travis-ci.org/kaushalmodi/ox-hugo.svg?branch=master]] [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]] [[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPL%20v3-blue.svg]]
 
 =ox-hugo= is an Org exporter backend that exports Org to
 [[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]) and also generates the

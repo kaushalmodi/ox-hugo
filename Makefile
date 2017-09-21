@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-20 23:29:05 kmodi>
+# Time-stamp: <2017-09-21 00:15:01 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -24,10 +24,25 @@ ORG=
 # Directory where the required elisp packages are auto-installed
 OX_HUGO_ELPA=/tmp/$(USER)/ox-hugo-dev/
 
+subtree_test_files = all-posts.org \
+	construct-hugo-front-matter-from-menu-meta-data.org \
+	src-blocks-with-highlight-shortcode.org \
+	mandatory-EXPORT_FILE_NAME-for-subtree-export.org \
+	hugo-menu-as-keyword.org \
+	tags-keyword.org \
+	hugo-weight-as-keyword-auto-calc.org
+
+file_test_files = single-posts/post-toml.org \
+	single-posts/post-yaml.org \
+	single-posts/post-draft.org
+
+# Cannot run tests on the following files, because:
+# - auto-set-lastmod.org - the lastmod field will always get updated.
+# - screenshot-subtree-export-example.org - sets the org-hugo-footer using Local Variables.
+# - writing-hugo-blog-in-org-file-export.org - sets the org-hugo-footer using Local Variables.
+
 .PHONY: help mdtree mdfile vcheck hugo serve server diff \
-	test vcheck testmkgold \
-	test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 \
-	test11 test12 test13 \
+	test vcheck testmkgold test_subtree test_file \
 	ctemp diffgolden clean
 
 help:
@@ -88,12 +103,7 @@ serve server: vcheck
 diff:
 	@git diff
 
-# Wed Sep 20 13:35:54 EDT 2017 - kmodi
-# - Cannot run test11 because the lastmod field will always get updated.
-# - Cannot run test12 and test13 because they set the org-hugo-footer using Local Variables.
-test: vcheck testmkgold \
-	test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 \
-	diffgolden
+test: vcheck testmkgold test_subtree test_file
 
 # https://stackoverflow.com/a/16589534/1219634
 testmkgold:
@@ -101,48 +111,18 @@ testmkgold:
 	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/content-golden
 	@cp -rf $(OX_HUGO_TEST_SITE_DIR)/content{,-golden}
 
-test1:
-	@$(MAKE) mdtree ORG=all-posts.org
+# Run the mdtree + diffgolden rules in loop on all of $(subtree_test_files)
+# https://stackoverflow.com/a/37748952/1219634
+test_subtree: $(subtree_test_files)
+$(subtree_test_files):
+	@$(MAKE) mdtree ORG=$@
 	@$(MAKE) diffgolden
 
-test2:
-	@$(MAKE) mdtree ORG=construct-hugo-front-matter-from-menu-meta-data.org
-
-test3:
-	@$(MAKE) mdtree ORG=src-blocks-with-highlight-shortcode.org
-
-test4:
-	@$(MAKE) mdtree ORG=mandatory-EXPORT_FILE_NAME-for-subtree-export.org
-
-test5:
-	@$(MAKE) mdtree ORG=hugo-menu-as-keyword.org
-
-test6:
-	@$(MAKE) mdtree ORG=tags-keyword.org
-
-test7:
-	@$(MAKE) mdtree ORG=hugo-weight-as-keyword-auto-calc.org
-
-test8:
-	@$(MAKE) mdfile ORG=single-posts/post-toml.org
-
-test9:
-	@$(MAKE) mdfile ORG=single-posts/post-yaml.org
-
-test10:
-	@$(MAKE) mdfile ORG=single-posts/post-draft.org
-
-# Cannot run test11 because the lastmod field will always get updated.
-test11:
-	@$(MAKE) mdtree ORG=auto-set-lastmod.org
-
-# Cannot run test12 it sets the org-hugo-footer using Local Variables.
-test12:
-	@$(MAKE) mdtree ORG=screenshot-subtree-export-example.org
-
-# Cannot run test13 because it sets the org-hugo-footer using Local Variables.
-test13:
-	@$(MAKE) mdfile ORG=writing-hugo-blog-in-org-file-export.org
+# Run the mdfile + diffgolden rules in loop on all of $(file_test_files)
+test_file: $(file_test_files)
+$(file_test_files):
+	@$(MAKE) mdfile ORG=$@
+	@$(MAKE) diffgolden
 
 ctemp:
 	@find $(OX_HUGO_TEST_SITE_DIR)/content -name "*.*~" -delete
@@ -151,5 +131,5 @@ diffgolden: ctemp
 	@diff -rq $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
 clean: ctemp
-	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/public/ $(OX_HUGO_TEST_SITE_DIR)/content-golden
+	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/public $(OX_HUGO_TEST_SITE_DIR)/content-golden
 	@rm -rf $(OX_HUGO_ELPA)

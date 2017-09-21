@@ -1,15 +1,25 @@
-# Time-stamp: <2017-09-20 23:09:23 kmodi>
+# Time-stamp: <2017-09-20 23:29:05 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
 
-# Input Org file
-ORG=
+# Function to be run in emacs --batch
+FUNC=
+
 # Port for hugo server
 PORT=1337
 
-# Directory containing the setup-ox-hugo.el
-OX_HUGO_ELISP=$(shell pwd)/elisp/
+# ox-hugo test directory; also contains the setup-ox-hugo.el
+OX_HUGO_TEST_DIR=$(shell pwd)/test
+
+# Base directory for the Hugo example site
+OX_HUGO_TEST_SITE_DIR=$(OX_HUGO_TEST_DIR)/example-site
+
+# Directory containing test Org files for example-site
+OX_HUGO_TEST_ORG_DIR=$(OX_HUGO_TEST_SITE_DIR)/content-org
+
+# Path to the Org file relative to $(OX_HUGO_TEST_ORG_DIR)
+ORG=
 
 # Directory where the required elisp packages are auto-installed
 OX_HUGO_ELPA=/tmp/$(USER)/ox-hugo-dev/
@@ -39,24 +49,22 @@ help:
 # the $(ORG) file first will load the older Org version that ships
 # with Emacs and then run the stuff in --eval that loads the new Org
 # version.. and thus we'll end up with mixed Org in the load-path.
-mdtree:
-	@echo "[ox-hugo] Exporting Org to Md in 'Subtree' mode .."
+emacs-batch:
 	@emacs --batch --eval "(progn\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
-	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_ELISP)\"))\
-	)" $(ORG) \
-	-f org-hugo-export-all-subtrees-to-md \
+	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
+	)" $(OX_HUGO_TEST_ORG_DIR)/$(ORG) \
+	-f $(FUNC) \
 	--kill
+
+mdtree:
+	@echo "[ox-hugo] Exporting Org to Md in 'Subtree' mode .."
+	@$(MAKE) emacs-batch FUNC=org-hugo-export-all-subtrees-to-md
 	@echo "[ox-hugo] Done"
 
 mdfile:
 	@echo "[ox-hugo] Exporting Org to Md in 'File' mode .."
-	@emacs --batch --eval "(progn\
-	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
-	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_ELISP)\"))\
-	)" $(ORG) \
-	-f org-hugo-export-to-md \
-	--kill
+	@$(MAKE) emacs-batch FUNC=org-hugo-export-to-md
 	@echo "[ox-hugo] Done"
 
 vcheck:
@@ -89,60 +97,59 @@ test: vcheck testmkgold \
 
 # https://stackoverflow.com/a/16589534/1219634
 testmkgold:
-	@git checkout --ignore-skip-worktree-bits -- content
-	@rm -rf content-golden
-	@cp -rf content{,-golden}
+	@git checkout --ignore-skip-worktree-bits -- $(OX_HUGO_TEST_SITE_DIR)/content
+	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/content-golden
+	@cp -rf $(OX_HUGO_TEST_SITE_DIR)/content{,-golden}
 
 test1:
-	@$(MAKE) mdtree ORG=content-org/all-posts.org
+	@$(MAKE) mdtree ORG=all-posts.org
 	@$(MAKE) diffgolden
 
 test2:
-	@$(MAKE) mdtree ORG=content-org/construct-hugo-front-matter-from-menu-meta-data.org
+	@$(MAKE) mdtree ORG=construct-hugo-front-matter-from-menu-meta-data.org
 
 test3:
-	@$(MAKE) mdtree ORG=content-org/src-blocks-with-highlight-shortcode.org
+	@$(MAKE) mdtree ORG=src-blocks-with-highlight-shortcode.org
 
 test4:
-	@$(MAKE) mdtree ORG=content-org/mandatory-EXPORT_FILE_NAME-for-subtree-export.org
-
+	@$(MAKE) mdtree ORG=mandatory-EXPORT_FILE_NAME-for-subtree-export.org
 
 test5:
-	@$(MAKE) mdtree ORG=content-org/hugo-menu-as-keyword.org
+	@$(MAKE) mdtree ORG=hugo-menu-as-keyword.org
 
 test6:
-	@$(MAKE) mdtree ORG=content-org/tags-keyword.org
+	@$(MAKE) mdtree ORG=tags-keyword.org
 
 test7:
-	@$(MAKE) mdtree ORG=content-org/hugo-weight-as-keyword-auto-calc.org
+	@$(MAKE) mdtree ORG=hugo-weight-as-keyword-auto-calc.org
 
 test8:
-	@$(MAKE) mdfile ORG=content-org/single-posts/post-toml.org
+	@$(MAKE) mdfile ORG=single-posts/post-toml.org
 
 test9:
-	@$(MAKE) mdfile ORG=content-org/single-posts/post-yaml.org
+	@$(MAKE) mdfile ORG=single-posts/post-yaml.org
 
 test10:
-	@$(MAKE) mdfile ORG=content-org/single-posts/post-draft.org
+	@$(MAKE) mdfile ORG=single-posts/post-draft.org
 
 # Cannot run test11 because the lastmod field will always get updated.
 test11:
-	@$(MAKE) mdtree ORG=content-org/auto-set-lastmod.org
+	@$(MAKE) mdtree ORG=auto-set-lastmod.org
 
 # Cannot run test12 it sets the org-hugo-footer using Local Variables.
 test12:
-	@$(MAKE) mdtree ORG=content-org/screenshot-subtree-export-example.org
+	@$(MAKE) mdtree ORG=screenshot-subtree-export-example.org
 
 # Cannot run test13 because it sets the org-hugo-footer using Local Variables.
 test13:
-	@$(MAKE) mdfile ORG=content-org/writing-hugo-blog-in-org-file-export.org
+	@$(MAKE) mdfile ORG=writing-hugo-blog-in-org-file-export.org
 
 ctemp:
-	@find -name "*.*~" -delete
+	@find $(OX_HUGO_TEST_SITE_DIR)/content -name "*.*~" -delete
 
 diffgolden: ctemp
-	@diff -rq content content-golden
+	@diff -rq $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
 clean: ctemp
-	@rm -rf ./public/ ./content-golden
+	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/public/ $(OX_HUGO_TEST_SITE_DIR)/content-golden
 	@rm -rf $(OX_HUGO_ELPA)

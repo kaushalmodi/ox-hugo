@@ -38,10 +38,13 @@ The demo site doesn't look pretty, I know .. because:
 
 /See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
 presentation styles./
+** Actual usage examples
+- [[https://scripter.co]] -- My blog
 * Documentation
 See this README and the [[https://github.com/kaushalmodi/ox-hugo/wiki][*Wiki*]] for more!
 * Table of Contents
 - [[#demo][Demo]]
+  - [[#actual-usage-examples][Actual usage examples]]
 - [[#documentation][Documentation]]
 - [[#screenshots][Screenshots]]
 - [[#why-ox-hugo][Why =ox-hugo=?]]

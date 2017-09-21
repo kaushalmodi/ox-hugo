@@ -6,15 +6,18 @@
         <meta charset="utf-8">
         <title>
             {{ if eq .URL "/" }}
-            {{ .Site.Title }}
+                {{ .Site.Title }}
             {{ else }}
-            {{ .Title }} ❚ {{ .Site.Title }}
+                {{ .Title }} ❚ {{ .Site.Title }}
             {{ end }}
         </title>
         {{ block "head" . }}{{ end }}
     </head>
 
     <body lang="en">
+        <h1>{{ .Site.Title }}</h1>
+        <div>{{ .Site.Params.descr | safeHTML }}</div>
+
         {{ block "main" . }}{{ end }}
     </body>
 </html>

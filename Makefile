@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-21 11:46:12 kmodi>
+# Time-stamp: <2017-09-21 17:04:21 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -44,21 +44,22 @@ file_test_files = single-posts/post-toml.org \
 # - writing-hugo-blog-in-org-file-export.org - sets the org-hugo-footer using Local Variables.
 
 .PHONY: help mdtree mdfile vcheck hugo serve server diff \
-	test vcheck testmkgold test_subtree test_file \
+	test vcheck testmkgold \
+	test_subtree $(subtree_test_files) \
+	test_file $(file_test_files) \
 	ctemp diffgolden clean
 
 help:
 	@echo "Help for command-line Org->Markdown for Hugo Exporter"
 	@echo "====================================================="
-	@echo " make mdtree ORG=example.org   <-- Export the Subtrees in the .org file to Markdown file(s)"
-	@echo " make mdfile ORG=example.org   <-- Export the .org File to a single Markdown file"
-	@echo " make vcheck                   <-- Print emacs, Org, hugo versions"
-	@echo " make hugo                     <-- Run hugo"
-	@echo " make serve                    <-- Run the hugo server on http://localhost:$(PORT)"
-	@echo " make diff                     <-- Run git diff"
-	@echo " make test                     <-- Run test"
-	@echo " make clean                    <-- Delete the Hugo public/ directory and auto-installed elisp packages"
-	@echo " make                          <-- Show this help"
+	@echo " make example.org   <-- Export the .org file from content-org/ dir to Markdown file(s)"
+	@echo " make vcheck        <-- Print emacs and Org versions"
+	@echo " make hugo          <-- Run hugo"
+	@echo " make serve         <-- Run the hugo server on http://localhost:$(PORT)"
+	@echo " make diff          <-- Run git diff"
+	@echo " make test          <-- Run test"
+	@echo " make clean         <-- Delete the Hugo public/ directory and auto-installed elisp packages"
+	@echo " make               <-- Show this help"
 
 # Note: The Org file from $(ORG) is loaded *after* the --eval section
 # gets evaluated i.e. --eval '(progn ..)' $(ORG) If the order is

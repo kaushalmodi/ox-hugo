@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-21 00:25:22 kmodi>
+# Time-stamp: <2017-09-21 00:36:24 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -88,7 +88,9 @@ vcheck:
 	@$(EMACS) --batch \
 	--eval "(message \"[Version checks] Emacs: %s, Org: %s\" emacs-version (org-version))" \
 	--kill
-	@hugo version
+# Thu Sep 21 00:36:23 EDT 2017 - kmodi
+# Don't check hugo version for now, as Travis fails
+#	@hugo version
 
 hugo: vcheck
 	@hugo

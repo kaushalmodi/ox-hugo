@@ -1,0 +1,5 @@
+language: generic
+env:
+  - EMACS=emacs25
+script:
+  - make test EMACS=${EMACS}

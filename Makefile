@@ -1,7 +1,9 @@
-# Time-stamp: <2017-09-21 00:15:01 kmodi>
+# Time-stamp: <2017-09-21 00:25:22 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
+
+EMACS ?= emacs
 
 # Function to be run in emacs --batch
 FUNC=
@@ -65,7 +67,7 @@ help:
 # with Emacs and then run the stuff in --eval that loads the new Org
 # version.. and thus we'll end up with mixed Org in the load-path.
 emacs-batch:
-	@emacs --batch --eval "(progn\
+	@$(EMACS) --batch --eval "(progn\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	)" $(OX_HUGO_TEST_ORG_DIR)/$(ORG) \
@@ -83,7 +85,7 @@ mdfile:
 	@echo "[ox-hugo] Done"
 
 vcheck:
-	@emacs --batch \
+	@$(EMACS) --batch \
 	--eval "(message \"[Version checks] Emacs: %s, Org: %s\" emacs-version (org-version))" \
 	--kill
 	@hugo version

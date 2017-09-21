@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-21 00:36:24 kmodi>
+# Time-stamp: <2017-09-21 00:39:17 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -113,7 +113,7 @@ test: vcheck testmkgold test_subtree test_file
 testmkgold:
 	@git checkout --ignore-skip-worktree-bits -- $(OX_HUGO_TEST_SITE_DIR)/content
 	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/content-golden
-	@cp -rf $(OX_HUGO_TEST_SITE_DIR)/content{,-golden}
+	@cp -rf $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
 # Run the mdtree + diffgolden rules in loop on all of $(subtree_test_files)
 # https://stackoverflow.com/a/37748952/1219634

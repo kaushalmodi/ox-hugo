@@ -110,6 +110,10 @@ See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Auto-export-on-Saving][Aut
 seeing live-preview of the Hugo-rendered HTML each time you do =C-x
 C-s= in the Org file --- For now, this works only with the *Subtree
 export flow*.
+** Demo
+#+BEGIN_CENTER
+[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/content][Exported Markdown]] → [[https://ox-hugo.netlify.com][Hugo published site -- https://ox-hugo.netlify.com]]
+#+END_CENTER
 ** Table of Contents                                                    :TOC:
 # TOC will be inserted here by `toc-org' package when running
 # `ox-hugo-export-gh-doc'.

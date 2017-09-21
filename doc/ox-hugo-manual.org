@@ -111,9 +111,18 @@ seeing live-preview of the Hugo-rendered HTML each time you do =C-x
 C-s= in the Org file --- For now, this works only with the *Subtree
 export flow*.
 ** Demo
-#+BEGIN_CENTER
-[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/content][Exported Markdown]] → [[https://ox-hugo.netlify.com][Hugo published site -- https://ox-hugo.netlify.com]]
-#+END_CENTER
+[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/content][Exported Markdown]] → [[https://ox-hugo.netlify.com][*Hugo published site*]]
+
+The demo site doesn't look pretty, I know .. because:
+- It is designed to verify if all the content translates from Org to
+  Markdown as expected.
+- It uses a [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/themes/bare_min/][*bare_min*]] /theme/ written just for the debug purpose (not
+  presentation).
+
+/See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
+presentation styles./
+** Documentation
+See this README and the [[https://github.com/kaushalmodi/ox-hugo/wiki][*Wiki*]] for more!
 ** Table of Contents                                                    :TOC:
 # TOC will be inserted here by `toc-org' package when running
 # `ox-hugo-export-gh-doc'.
@@ -399,6 +408,19 @@ necessity if you want to start using =ox-hugo=.
 
 .. And if at some point, you want to stop using =ox-hugo=, you still
 have the exported Markdown files.
+** Meta Features                                                       :wiki:
+:PROPERTIES:
+:EXPORT_TITLE:
+:EXPORT_FILE_NAME: Meta Features
+:END:
+- =[✓]= Extensive tests! -- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/content-org][test/example-site/content-org]]
+- =[✓]= Travis CI Integration -- Checks with emacs versions starting from
+  24.4->25.2, with the latest stable version of =org-plus-contrib=.
+- =[✓]= Demo site ([[https://ox-hugo.netlify.com/]]) -- Regenerated after
+  each commit to this repo
+- =[✓]= Documentation -- README, Changelog, Wiki *all* generated from a
+  single [[https://github.com/kaushalmodi/ox-hugo/raw/master/doc/ox-hugo-manual.org][ox-hugo-manual.org]]
+- =[✓]= Passes =checkdoc= and =package-lint= ([[https://github.com/purcell/package-lint/issues/89][/almost/]]).
 ** Changelog                                                :wiki:noexport_1:
 :PROPERTIES:
 :EXPORT_TITLE:

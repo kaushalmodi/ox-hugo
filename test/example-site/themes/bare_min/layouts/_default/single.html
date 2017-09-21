@@ -50,12 +50,16 @@
         {{ end }}
     </p>
     {{ if $.GitInfo }}      <!-- To enable this, put "enableGitInfo = true" in your site config.toml -->
-        <p>
-            {{ printf "GitInfo debug:: %#v" $.GitInfo }}
-        </p>
-        <p>
-            LastMod Date using GitInfo: {{ .GitInfo.AuthorDate }}
-        </p>
+<pre>
+{{/* printf "GitInfo debug:: %#v" $.GitInfo */}}
+{{ printf "GitInfo Hash                           :: %#v" $.GitInfo.Hash }}
+{{ printf "GitInfo AbbreviatedHash                :: %#v" $.GitInfo.AbbreviatedHash }}
+{{ printf "GitInfo Subject                        :: %#v" $.GitInfo.Subject }}
+{{ printf "GitInfo AuthorName                     :: %#v" $.GitInfo.AuthorName }}
+{{/* printf "GitInfo AuthorEmail:: %#v" $.GitInfo.AuthorEmail */}}
+{{ printf "GitInfo AuthorDate (lastmod date)      :: %#v" $.GitInfo.AuthorDate }}
+LastMod Date using .GitInfo.AuthorDate :: {{ .GitInfo.AuthorDate }}
+</pre>
     {{ end }}
     </p>
     <p>

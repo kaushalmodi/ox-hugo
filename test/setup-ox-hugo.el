@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-20 23:30:48 kmodi>
+;; Time-stamp: <2017-09-21 12:09:12 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
 
@@ -31,11 +31,11 @@
                      (concat share-dir "emacs/"
                              (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
                              "/lisp/"))))
-  ;; (message "setup-packages:: bin-dir: %s" bin-dir)
-  ;; (message "setup-packages:: prefix-dir: %s" prefix-dir)
-  ;; (message "setup-packages:: share-dir: %s" share-dir)
-  ;; (message "setup-packages:: lisp-dir-1: %s" lisp-dir-1)
-  ;; (message "setup-packages:: lisp-dir-2: %s" lisp-dir-2)
+  (message "emacs bin-dir: %s" bin-dir)
+  (message "emacs prefix-dir: %s" prefix-dir)
+  (message "emacs share-dir: %s" share-dir)
+  (message "emacs lisp-dir-1: %s" lisp-dir-1)
+  (message "emacs lisp-dir-2: %s" lisp-dir-2)
   (defvar my/default-lisp-directory (cond
                                      ((file-exists-p lisp-dir-1)
                                       lisp-dir-1)
@@ -49,8 +49,10 @@ This value must match the path to the lisp/ directory of the
 Emacs installation.  If Emacs is installed using
 --prefix=\"${PREFIX_DIR}\" this value would typically be
 \"${PREFIX_DIR}/share/emacs/<VERSION>/lisp/\"."))
+(message "my/default-lisp-directory: %S" my/default-lisp-directory)
 
-(defvar my/packages '(org))
+;; `org' will always be detected as installed, so use `org-plus-contrib'.
+(defvar my/packages '(org-plus-contrib))
 
 (if (and (stringp ox-hugo-elpa)
          (file-exists-p ox-hugo-elpa))
@@ -87,6 +89,7 @@ Emacs installation.  If Emacs is installed using
 to be installed.")
 
       (dolist (p my/packages)
+        (message "Is %S installed? %s" p (package-installed-p p))
         (unless (package-installed-p p)
           (add-to-list 'my/missing-packages p)))
 
@@ -100,16 +103,16 @@ to be installed.")
         (setq my/missing-packages '())))
   (error "The environment variable OX_HUGO_ELPA needs to be set"))
 
-;; Remove Org that ships with Emacs from the `load-path'.
 (with-eval-after-load 'package
+  ;; Remove Org that ships with Emacs from the `load-path'.
   (when (stringp my/default-lisp-directory)
     (dolist (path load-path)
       (when (string-match-p (expand-file-name "org" my/default-lisp-directory) path)
         (setq load-path (delete path load-path))))))
 
-;; (message "`load-path': %S" load-path)
-;; (message "`load-path' Shadows:")
-;; (message (list-load-path-shadows :stringp))
+(message "`load-path': %S" load-path)
+(message "`load-path' Shadows:")
+(message (list-load-path-shadows :stringp))
 
 (require 'ox-hugo)
 (defun org-hugo-export-all-subtrees-to-md ()

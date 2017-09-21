@@ -1,8 +1,12 @@
 # Courtesy: https://github.com/magit/magit/blob/master/.travis.yml
+dist: trusty
 sudo: false
 language: generic
 env:
   global:
+  # Below is required so that the time-zones in the time stamps match
+  # when generated on Travis CI too.
+    - TZ=America/New_York
     - CURL="curl -fsSkL --retry 9 --retry-delay 9"
   matrix:
   - EMACS_VERSION=24.4
@@ -11,8 +15,6 @@ env:
   - EMACS_VERSION=25.2
   - EMACS_VERSION=25 # emacs-25 branch, built daily
   - EMACS_VERSION=master # master branch, built daily
-#  allow_failures:
-#    - env: EMACS_VERSION=master
 install:
   - $CURL -O https://github.com/npostavs/emacs-travis/releases/download/bins/emacs-bin-${EMACS_VERSION}.tar.gz
   - tar -xaf emacs-bin-${EMACS_VERSION}.tar.gz -C /

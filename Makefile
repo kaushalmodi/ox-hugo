@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-21 00:39:17 kmodi>
+# Time-stamp: <2017-09-21 11:46:12 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -132,7 +132,7 @@ ctemp:
 	@find $(OX_HUGO_TEST_SITE_DIR)/content -name "*.*~" -delete
 
 diffgolden: ctemp
-	@diff -rq $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-golden
+	@diff -r $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
 clean: ctemp
 	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/public $(OX_HUGO_TEST_SITE_DIR)/content-golden

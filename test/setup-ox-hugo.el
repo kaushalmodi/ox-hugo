@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-22 18:01:01 kmodi>
+;; Time-stamp: <2017-09-22 18:25:22 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
 
@@ -52,6 +52,11 @@ Emacs installation.  If Emacs is installed using
 (message "my/default-lisp-directory: %S" my/default-lisp-directory)
 
 ;; `org' will always be detected as installed, so use `org-plus-contrib'.
+;; Fri Sep 22 18:24:19 EDT 2017 - kmodi
+;; Install the packages in the specified order. We do not want
+;; `toc-org' to be installed first. If that happens, `org' will be
+;; required before the newer version of Org gets installed and we will
+;; end up with mixed Org version.
 (defvar my/packages '(org-plus-contrib toc-org))
 
 (if (and (stringp ox-hugo-elpa)
@@ -90,7 +95,7 @@ to be installed.")
       (dolist (p my/packages)
         ;; (message "Is %S installed? %s" p (package-installed-p p))
         (unless (package-installed-p p)
-          (add-to-list 'my/missing-packages p)))
+          (add-to-list 'my/missing-packages p :append)))
 
       (when my/missing-packages
         (message "Emacs is now refreshing its package database...")
@@ -109,9 +114,9 @@ to be installed.")
       (when (string-match-p (expand-file-name "org" my/default-lisp-directory) path)
         (setq load-path (delete path load-path))))))
 
-;; (message "`load-path': %S" load-path)
-;; (message "`load-path' Shadows:")
-;; (message (list-load-path-shadows :stringp))
+(message "`load-path': %S" load-path)
+(message "`load-path' Shadows:")
+(message (list-load-path-shadows :stringp))
 
 (require 'ox-hugo)
 (defun org-hugo-export-all-subtrees-to-md ()

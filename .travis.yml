@@ -22,6 +22,7 @@ install:
   - $EMACS --version
 script:
   - make test EMACS=${EMACS}
+  - make vcheck EMACS=${EMACS}
 notifications:
   email:
     # Default is change, but that includes a new branch's 1st success.

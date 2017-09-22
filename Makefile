@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-21 17:04:21 kmodi>
+# Time-stamp: <2017-09-22 10:47:04 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -15,9 +15,9 @@ PORT=1337
 OX_HUGO_TEST_DIR=$(shell pwd)/test
 
 # Base directory for the Hugo example site
-OX_HUGO_TEST_SITE_DIR=$(OX_HUGO_TEST_DIR)/example-site
+OX_HUGO_TEST_SITE_DIR=$(OX_HUGO_TEST_DIR)/site
 
-# Directory containing test Org files for example-site
+# Directory containing Org files for the test site
 OX_HUGO_TEST_ORG_DIR=$(OX_HUGO_TEST_SITE_DIR)/content-org
 
 # Path to the Org file relative to $(OX_HUGO_TEST_ORG_DIR)

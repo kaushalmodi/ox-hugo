@@ -24,7 +24,7 @@ error backtrace,
        submitting it.
 * Test
 1. Clone this repo.
-2. =cd= to the =test/example-site/= directory and do:
+2. =cd= to the =test/site/= directory and do:
    #+BEGIN_EXAMPLE
       make test
    #+END_EXAMPLE

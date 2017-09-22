@@ -28,12 +28,12 @@ seeing live-preview of the Hugo-rendered HTML each time you do =C-x
 C-s= in the Org file --- For now, this works only with the *Subtree
 export flow*.
 * Demo
-[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/content][Exported Markdown]] → [[https://ox-hugo.netlify.com][*Hugo published site*]]
+[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content][Exported Markdown]] → [[https://ox-hugo.netlify.com][*Hugo published test site*]]
 
-The demo site doesn't look pretty, I know .. because:
+Now, the test site doesn't look pretty, I know :) .. because:
 - It is designed to verify if all the content translates from Org to
   Markdown as expected.
-- It uses a [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/themes/bare_min/][*bare_min*]] /theme/ written just for the debug purpose (not
+- It uses a [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/themes/bare_min/][*bare_min*]] /theme/ written just for the debug purpose (not
   presentation).
 
 /See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
@@ -52,7 +52,7 @@ See this README and the [[https://github.com/kaushalmodi/ox-hugo/wiki][*Wiki*]] 
 - [[#usage][Usage]]
   - [[#before-you-export][Before you export]]
   - [[#export-bindings][Export bindings]]
-- [[#example-hugo-site-to-test-this-package][Example Hugo site to test this package]]
+- [[#hugo-test-site-for-this-package][Hugo test site for this package]]
   - [[#how-to-try-ox-hugo-on-that-site][How to try =ox-hugo= on that site?]]
   - [[#alternative-way][Alternative way]]
 - [[#how-do-i-try-ox-hugo-on-my-site][How do I try =ox-hugo= on my site?]]
@@ -74,11 +74,11 @@ front-matter on the right).
 
 *One post per Org subtree --*
 [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-subtree.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-subtree.png]]
-- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/example-site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/example-site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
+- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
 
 *One post per Org file --*
 [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-file.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-file.png]]
-- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/example-site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/example-site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
+- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
 
 The preferred way to organize the posts is as Org subtrees (also the
 main reason to write this package, as nothing like that was out there)
@@ -181,23 +181,23 @@ The common =ox-hugo= export bindings are:
 |---------------+-------------------------------------------------------------------------------------|
 | =C-c C-e H h= | Export the whole Org file to a single post                                          |
 |---------------+-------------------------------------------------------------------------------------|
-* Example Hugo site to test this package
-An [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site][example-site]] with bare-bones "theme" is used to live-test the
+* Hugo test site for this package
+An [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][site]] with bare-bones "theme" is used to live-test the
 package --- you'll know why theme is double-quoted once you try out the
-example-site on =hugo=.
+site on =hugo=.
 
-Check out the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/example-site/content-org/all-posts.org][example single Org file]]. That is created for testing various
-Org->Hugo content and meta-data translation features. [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/content/posts][Here]] are the
+Check out the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][example single Org file]]. That is created for testing various
+Org->Hugo content and meta-data translation features. [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content/posts][Here]] are the
 exported Markdown files.
 ** How to try =ox-hugo= on that site?
 1. Clone this repo.
-2. =cd= to the =test/example-site/= directory and do:
+2. =cd= to the =test/site/= directory and do:
    #+BEGIN_EXAMPLE
       make serve
    #+END_EXAMPLE
    - *Requires Hugo 0.25+*
 3. Open =http://localhost:1337= in your browser.
-4. In a different terminal, =cd= to the same =test/example-site/= directory.
+4. In a different terminal, =cd= to the same =test/site/= directory.
 5. Run:
    #+BEGIN_EXAMPLE
       make mdtree ORG=content-org/all-posts.org
@@ -207,7 +207,7 @@ exported Markdown files.
    created post.
 ** Alternative way
 1. Clone this repo.
-2. =cd= to the =test/example-site/= directory and do:
+2. =cd= to the =test/site/= directory and do:
    #+BEGIN_EXAMPLE
       hugo server -D --navigateToChanged
    #+END_EXAMPLE
@@ -216,7 +216,7 @@ exported Markdown files.
    served. Open that in your browser.
 4. In emacs, =(require  'ox-hugo)= or evaluate the =ox-hugo.el= from the
    cloned repo.
-5. Open the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/example-site/content-org/all-posts.org][=all-posts.org=]] file.
+5. Open the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]] file.
 6. =C-c C-e H A= -- That will export *all* subtrees in the file to
    Markdown files.
 7. In few seconds, dozens of test posts will get created, with the
@@ -235,7 +235,7 @@ exported Markdown files.
    served. Open that in your browser.
 4. Create a separate directory for Org content in the Hugo site base
    directory. You can name it anything, but I prefer to name it
-   =content-org= ([[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site][Example 1 -- =ox-hugo= example site]], [[https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io][Example 2 -- My
+   =content-org= ([[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][Example 1 -- =ox-hugo= test site]], [[https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io][Example 2 -- My
    blog]]).
 5. Create an Org file in there and follow the *Usage* section in the
    [[https://github.com/kaushalmodi/ox-hugo#usage][README]] or [[https://github.com/kaushalmodi/ox-hugo/wiki/Usage][Wiki]] to export it.
@@ -288,8 +288,8 @@ set.
 Below table shows the translation of Org markup to Markdown markup in
 the exported =.md= files.
 
-See the Org source in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/example-site/content-org/all-posts.org][=all-posts.org=]] under /Formatting/ -> /General/
-heading and how it exports to Markdown in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/example-site/content/posts/general-formatting.md][=general-formatting.md=]].
+See the Org source in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]] under /Formatting/ -> /General/
+heading and how it exports to Markdown in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/general-formatting.md][=general-formatting.md=]].
 |--------------------+--------------------------------------------------------------------|
 | Org                | Markdown                                                           |
 |--------------------+--------------------------------------------------------------------|
@@ -329,7 +329,7 @@ necessity if you want to start using =ox-hugo=.
 .. And if at some point, you want to stop using =ox-hugo=, you still
 have the exported Markdown files.
 * Meta Features
-- =[✓]= Extensive tests! -- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/example-site/content-org][test/example-site/content-org]]
+- =[✓]= Extensive tests! -- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][test/site/content-org]]
 - =[✓]= Travis CI Integration -- Checks with emacs versions starting from
   24.4->25.2, with the latest stable version of =org-plus-contrib=.
 - =[✓]= Demo site ([[https://ox-hugo.netlify.com/]]) -- Regenerated after
@@ -366,7 +366,7 @@ error backtrace,
        submitting it.
 * Test
 1. Clone this repo.
-2. =cd= to the =test/example-site/= directory and do:
+2. =cd= to the =test/site/= directory and do:
    #+BEGIN_EXAMPLE
       make test
    #+END_EXAMPLE

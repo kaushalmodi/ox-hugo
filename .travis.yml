@@ -14,7 +14,7 @@ env:
   - EMACS_VERSION=25.1
   - EMACS_VERSION=25.2
   - EMACS_VERSION=25 # emacs-25 branch, built daily
-  - EMACS_VERSION=master # master branch, built daily
+  # - EMACS_VERSION=master # master branch, built daily
 install:
   - $CURL -O https://github.com/npostavs/emacs-travis/releases/download/bins/emacs-bin-${EMACS_VERSION}.tar.gz
   - tar -xaf emacs-bin-${EMACS_VERSION}.tar.gz -C /
@@ -22,6 +22,7 @@ install:
   - $EMACS --version
 script:
   - make test EMACS=${EMACS}
+  - make vcheck EMACS=${EMACS}
 notifications:
   email:
     # Default is change, but that includes a new branch's 1st success.

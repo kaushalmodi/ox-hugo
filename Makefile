@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-22 17:07:48 kmodi>
+# Time-stamp: <2017-09-22 18:05:18 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -47,7 +47,7 @@ file_test_files = single-posts/post-toml.org \
 	test vcheck testmkgold \
 	test_subtree $(subtree_test_files) \
 	test_file $(file_test_files) \
-	doc \
+	doc_site gh_docs doc \
 	ctemp diffgolden clean
 
 help:
@@ -58,7 +58,9 @@ help:
 	@echo " make hugo          <-- Run hugo"
 	@echo " make serve         <-- Run the hugo server on http://localhost:$(PORT)"
 	@echo " make diff          <-- Run git diff"
-	@echo " make doc           <-- Build the Markdown content for the documentation site"
+	@echo " make doc_site      <-- Build the Markdown content for the documentation site"
+	@echo " make gh_docs       <-- Build README.org and CONTRIBUTING.org for GitHub"
+	@echo " make doc           <-- Build both Doc Site contents and GitHub docs"
 	@echo " make test          <-- Run test"
 	@echo " make clean         <-- Delete the Hugo public/ directory and auto-installed elisp packages"
 	@echo " make               <-- Show this help"
@@ -132,9 +134,19 @@ $(file_test_files):
 	@$(MAKE) mdfile ORG_FILE=$@ ORG_FILE_DIR=$(OX_HUGO_TEST_ORG_DIR)
 	@$(MAKE) diffgolden
 
-doc:
+doc_site:
+	@echo "[Doc Site] Generating ox-hugo Documentation Site content .."
 	@$(MAKE) mdtree ORG_FILE=ox-hugo-manual.org ORG_FILE_DIR=./doc
 	@$(MAKE) ctemp
+	@echo "[Doc Site] Done"
+
+gh_docs:
+	@echo "[GitHub Docs] Generating README.org and CONTRIBUTING.org for GitHub .."
+	@$(MAKE) emacs-batch FUNC=ox-hugo-export-gh-doc ORG_FILE=github-files.org ORG_FILE_DIR=./doc
+	@$(MAKE) ctemp
+	@echo "[GitHub Docs] Done"
+
+doc: doc_site gh_docs
 
 ctemp:
 	@find $(OX_HUGO_TEST_SITE_DIR)/content -name "*.*~" -delete

@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-22 16:35:43 kmodi>
+;; Time-stamp: <2017-09-22 18:01:01 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
 
@@ -52,7 +52,7 @@ Emacs installation.  If Emacs is installed using
 (message "my/default-lisp-directory: %S" my/default-lisp-directory)
 
 ;; `org' will always be detected as installed, so use `org-plus-contrib'.
-(defvar my/packages '(org-plus-contrib))
+(defvar my/packages '(org-plus-contrib toc-org))
 
 (if (and (stringp ox-hugo-elpa)
          (file-exists-p ox-hugo-elpa))
@@ -65,11 +65,10 @@ Emacs installation.  If Emacs is installed using
       ;; Below require will auto-create `package-user-dir' it doesn't exist.
       (require 'package)
 
-      ;; Adding Melpa is not needed for now.
-      ;; (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-      ;;                     (not (gnutls-available-p))))
-      ;;        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
-      ;;   (add-to-list 'package-archives (cons "melpa" url) :append))
+      (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                          (not (gnutls-available-p))))
+             (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
+        (add-to-list 'package-archives (cons "melpa" url) :append))
       (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") :append) ;For latest `org'
 
       (defvar ox-hugo-git-root (progn
@@ -117,6 +116,52 @@ to be installed.")
 (require 'ox-hugo)
 (defun org-hugo-export-all-subtrees-to-md ()
   (org-hugo-export-subtree-to-md :all-subtrees))
+
+(defun ox-hugo-export-gh-doc ()
+  "Export `ox-hugo' Org documentation to documentation on GitHub repo."
+  (interactive)
+  (let* ((ox-hugo-root-dir (cdr (project-current))) ;Requires emacs 25.1
+         (ox-hugo-doc-dir (concat ox-hugo-root-dir "doc/"))
+         (org-src-preserve-indentation t) ;Preserve the leading whitespace in src blocks
+         (org-id-track-globally nil) ;Prevent "Could not read org-id-values .." error
+         (org-export-with-sub-superscripts '{})
+         (org-export-with-smart-quotes t)
+         (org-export-headline-levels 4)
+         (org-src-fontify-natively t)
+         (subtree-tags-to-export '("readme" "contributing"))
+         ;; If a subtree matches a tag, do not try to export further
+         ;; subtrees separately that could be under that.
+         (org-use-tag-inheritance nil)
+         (org-export-time-stamp-file nil) ;Do not print "Created <timestamp>" in exported files
+         (org-export-with-toc nil))       ;Do not export TOC
+    (dolist (tag subtree-tags-to-export)
+      (let* (;;Retain tags only in the README; needed for `toc-org-insert-toc' to work
+             (org-export-with-tags (if (string= tag "readme") t nil))
+             (exported-file-list (org-map-entries '(org-org-export-to-org nil :subtreep) tag)))
+        ;; Move files to their correct directories
+        (cond
+         ((or (string= "readme" tag)
+              (string= "contributing" tag))
+          (dolist (exported-file exported-file-list)
+            (rename-file (expand-file-name exported-file ox-hugo-doc-dir)
+                         (expand-file-name exported-file ox-hugo-root-dir)
+                         :ok-if-already-exists)))
+         (t
+          nil))))
+    ;; Generate TOC in README.org using the `toc-org' package.
+    (let ((readme-buf (get-buffer "README.org"))
+          (readme-file (expand-file-name "README.org" ox-hugo-root-dir)))
+      (when readme-buf    ;Close README.org if it's already open
+        (kill-buffer readme-buf))
+      ;; Open the README.org file afresh.
+      (setq readme-buf (find-file-noselect readme-file))
+      (with-current-buffer readme-buf
+        (require 'toc-org)
+        (toc-org-insert-toc)
+        ;; Now remove all Org tags from the README
+        (goto-char (point-min))
+        (while (replace-regexp "^\\(\\* .*?\\)[[:blank:]]*:[^[:blank:]]+:$" "\\1"))
+        (save-buffer)))))
 
 (with-eval-after-load 'org
   ;; Allow multiple line Org emphasis markup

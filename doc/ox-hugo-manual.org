@@ -498,13 +498,13 @@ using =git= or manually edit those here.
 :PROPERTIES:
 :CUSTOM_ID: screenshot-one-post-per-subtree
 :END:
-[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-subtree.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-subtree.png]]
+[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-subtree.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-subtree.png]]
 - Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
 *** One post per Org file
 :PROPERTIES:
 :CUSTOM_ID: screenshot-one-post-per-file
 :END:
-[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-file.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-file.png]]
+[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-file.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-file.png]]
 - Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
 *** Editorial
 :PROPERTIES:

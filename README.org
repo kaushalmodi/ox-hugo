@@ -73,11 +73,11 @@ Org to Markdown (Org on the left; exported Markdown with Hugo
 front-matter on the right).
 
 *One post per Org subtree --*
-[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-subtree.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-subtree.png]]
+[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-subtree.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-subtree.png]]
 - Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
 
 *One post per Org file --*
-[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-file.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/images/one-post-per-file.png]]
+[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-file.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-file.png]]
 - Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
 
 The preferred way to organize the posts is as Org subtrees (also the

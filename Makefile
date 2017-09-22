@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-22 10:47:04 kmodi>
+# Time-stamp: <2017-09-22 17:07:48 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -21,7 +21,7 @@ OX_HUGO_TEST_SITE_DIR=$(OX_HUGO_TEST_DIR)/site
 OX_HUGO_TEST_ORG_DIR=$(OX_HUGO_TEST_SITE_DIR)/content-org
 
 # Path to the Org file relative to $(OX_HUGO_TEST_ORG_DIR)
-ORG=
+ORG_FILE=
 
 # Directory where the required elisp packages are auto-installed
 OX_HUGO_ELPA=/tmp/$(USER)/ox-hugo-dev/
@@ -47,6 +47,7 @@ file_test_files = single-posts/post-toml.org \
 	test vcheck testmkgold \
 	test_subtree $(subtree_test_files) \
 	test_file $(file_test_files) \
+	doc \
 	ctemp diffgolden clean
 
 help:
@@ -57,21 +58,23 @@ help:
 	@echo " make hugo          <-- Run hugo"
 	@echo " make serve         <-- Run the hugo server on http://localhost:$(PORT)"
 	@echo " make diff          <-- Run git diff"
+	@echo " make doc           <-- Build the Markdown content for the documentation site"
 	@echo " make test          <-- Run test"
 	@echo " make clean         <-- Delete the Hugo public/ directory and auto-installed elisp packages"
 	@echo " make               <-- Show this help"
 
-# Note: The Org file from $(ORG) is loaded *after* the --eval section
-# gets evaluated i.e. --eval '(progn ..)' $(ORG) If the order is
-# reversed i.e. i.e.$(ORG) --eval '(progn ..)', the act of loading
-# the $(ORG) file first will load the older Org version that ships
-# with Emacs and then run the stuff in --eval that loads the new Org
-# version.. and thus we'll end up with mixed Org in the load-path.
+# Note: The Org file from $(ORG_FILE) is loaded *after* the --eval
+# section gets evaluated i.e. --eval '(progn ..)' $(ORG_FILE) If the
+# order is reversed i.e. i.e.$(ORG_FILE) --eval '(progn ..)', the act
+# of loading the $(ORG_FILE) file first will load the older Org
+# version that ships with Emacs and then run the stuff in --eval that
+# loads the new Org version.. and thus we'll end up with mixed Org in
+# the load-path.
 emacs-batch:
 	@$(EMACS) --batch --eval "(progn\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
-	)" $(OX_HUGO_TEST_ORG_DIR)/$(ORG) \
+	)" $(ORG_FILE_DIR)/$(ORG_FILE) \
 	-f $(FUNC) \
 	--kill
 
@@ -120,17 +123,22 @@ testmkgold:
 # https://stackoverflow.com/a/37748952/1219634
 test_subtree: $(subtree_test_files)
 $(subtree_test_files):
-	@$(MAKE) mdtree ORG=$@
+	@$(MAKE) mdtree ORG_FILE=$@ ORG_FILE_DIR=$(OX_HUGO_TEST_ORG_DIR)
 	@$(MAKE) diffgolden
 
 # Run the mdfile + diffgolden rules in loop on all of $(file_test_files)
 test_file: $(file_test_files)
 $(file_test_files):
-	@$(MAKE) mdfile ORG=$@
+	@$(MAKE) mdfile ORG_FILE=$@ ORG_FILE_DIR=$(OX_HUGO_TEST_ORG_DIR)
 	@$(MAKE) diffgolden
+
+doc:
+	@$(MAKE) mdtree ORG_FILE=ox-hugo-manual.org ORG_FILE_DIR=./doc
+	@$(MAKE) ctemp
 
 ctemp:
 	@find $(OX_HUGO_TEST_SITE_DIR)/content -name "*.*~" -delete
+	@find ./doc/content -name "*.*~" -delete
 
 diffgolden: ctemp
 	@diff -r $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-golden

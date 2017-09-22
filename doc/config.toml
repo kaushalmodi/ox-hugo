@@ -1,0 +1,95 @@
+baseURL = "http://example.org/"
+
+Title = "ox-hugo - Org to Hugo exporter"
+theme = "hugo-alabaster-theme"
+
+contentdir = "content"
+layoutdir = "layouts"
+publishdir = "public"
+
+# Remove files from destination not found in static directories
+cleandestinationdir = true
+
+# Needed for relative references like in the below image link
+#   ![Example PNG image](/images/org-mode-unicorn-logo.png)
+canonifyURLs = true
+enableGitInfo = true
+
+# https://gohugo.io/extras/highlighting/
+
+# Syntax highlighting using Pygments
+# $ python
+# >>> from pygments.styles import STYLE_MAP
+# >>> STYLE_MAP.keys()
+# ['manni', 'igor', 'lovelace', 'xcode', 'vim', 'autumn', 'vs', 'rrt', 'native',
+# 'perldoc', 'borland', 'tango', 'emacs', 'friendly', 'monokai', 'paraiso-dark',
+# 'colorful', 'murphy', 'bw', 'pastie', 'algol_nu', 'paraiso-light', 'trac',
+# 'default', 'algol', 'fruity']
+# pygmentsStyle = "native"
+pygmentsStyle = "trac"
+pygmentsCodeFences = true
+# Use pygmentize generated CSS file instead of inlining the code codes in the HTML.
+# See https://gohugo.io/tools/syntax-highlighting/#pygments and
+# https://github.com/richleland/pygments-css
+pygmentsUseClasses = true
+
+# Fri Sep 22 15:50:42 EDT 2017 - kmodi
+# Disabling Emoji otherwise the ":abc:" portion in `* foo :abc:def:`
+# renders to an Emoji!
+enableEmoji = false
+
+LanguageCode = "en-us" # Used in RSS generation
+
+[Permalinks]
+  # post = "/:year/:month/:title/"
+  # Below, we have
+  #   foo = "bar"
+  # where foo = section name without double quotes for which we want to have
+  # the custom permalinks. If foo is 'posts', it will apply to content in
+  # content/posts/ dir. The "bar" portion is how you want the links to look.
+  doc = "/doc/:slug/"
+  test = "/test/:slug/"
+
+[params]
+  name = "ox-hugo"
+  description = "Org mode to Hugo exporter<br />Write your Hugo posts in native Org mode."
+
+  # Go date formats: https://golang.org/pkg/time/#pkg-constants
+  dateform = "Mon Jan 2, 2006"
+
+  github_user = "kaushalmodi"
+  github_repo = "ox-hugo"
+  github_banner = true
+
+  custom_css = [ "css/style.css"
+                 # Pygments Trac theme
+                 , "css/trac_pygments.css"
+               ]
+  custom_css_absolute = [ # Iosevka fonts
+                          "https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/v1.13.2/iosevka.css"
+                        ]
+  custom_js  = []
+
+  # highlightjs = "css/highlight.css"
+  # favicon = "favicon.ico"
+
+[params.sidebar]
+  logo = "favicon.ico"
+
+  github_button  = true
+  travis_button  = true
+  codecov_button = false
+  gratipay = ""
+
+  # Mon Sep 04 23:55:36 EDT 2017 - kmodi
+  # Disable this option for now.. but seems to be useful in future
+  show_relations = false
+
+[params.footer]
+  copyright = ""
+  show_powered_by = true
+
+# Blackfriday is Hugo's markdown engine.
+# https://gohugo.io/overview/configuration/#configure-blackfriday-rendering
+[blackfriday]
+  hrefTargetBlank = true # open external links in a new window or tab

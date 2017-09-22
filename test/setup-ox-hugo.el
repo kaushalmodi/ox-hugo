@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-21 12:09:12 kmodi>
+;; Time-stamp: <2017-09-22 16:35:43 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
 
@@ -89,7 +89,7 @@ Emacs installation.  If Emacs is installed using
 to be installed.")
 
       (dolist (p my/packages)
-        (message "Is %S installed? %s" p (package-installed-p p))
+        ;; (message "Is %S installed? %s" p (package-installed-p p))
         (unless (package-installed-p p)
           (add-to-list 'my/missing-packages p)))
 
@@ -110,9 +110,9 @@ to be installed.")
       (when (string-match-p (expand-file-name "org" my/default-lisp-directory) path)
         (setq load-path (delete path load-path))))))
 
-(message "`load-path': %S" load-path)
-(message "`load-path' Shadows:")
-(message (list-load-path-shadows :stringp))
+;; (message "`load-path': %S" load-path)
+;; (message "`load-path' Shadows:")
+;; (message (list-load-path-shadows :stringp))
 
 (require 'ox-hugo)
 (defun org-hugo-export-all-subtrees-to-md ()
@@ -132,6 +132,9 @@ to be installed.")
 
 (with-eval-after-load 'ox
   (setq org-export-with-sub-superscripts '{}))
+
+(with-eval-after-load 'ox-hugo
+  (setq org-hugo-langs-no-descr-in-code-fences '(org)))
 
 ;; Wed Sep 20 13:37:06 EDT 2017 - kmodi
 ;; Below does not get applies when running emacs --batch.. need to

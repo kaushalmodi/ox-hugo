@@ -1,8 +1,10 @@
 <div class="footer">
-	{{ if .Site.Params.footer.show_powered_by -}}
-	Powered by <a href="http://gohugo.io/">Hugo {{ .Hugo.Version }}</a>
+    {{ if .Site.Params.footer.show_powered_by -}}
+	Exported from <a href="https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/ox-hugo-manual.org"><code>ox-hugo-manual.org</code></a>
+        using <a href="https://github.com/kaushalmodi/ox-hugo"><code>ox-hugo</code></a>
+        and published using <a href="http://gohugo.io/">Hugo {{ .Hugo.Version }}</a>
 	&amp; <a href="https://github.com/digitalcraftsman/hugo-alabaster-theme">Alabaster</a>
-	{{ end }}
+    {{ end }}
 </div>
 
 {{ if .Site.Params.github_banner -}}

@@ -19,7 +19,6 @@
         <div>
             This is the test site for the <a href="https://github.com/kaushalmodi/ox-hugo">
             <code>ox-hugo</code> package</a> for Emacs/Org-mode generated using Hugo {{ .Hugo.Version }}.
-            [<a href="/">Back to home</a>]
             <p>It is <b>updated automatically after each commit</b> to the repo <i>(thanks Netlify!)</i>.
                 Visit the repo link above for more information.</p>
             <ul>
@@ -30,5 +29,13 @@
         </div>
 
         {{ block "main" . }}{{ end }}
+
+        <hr>
+        <p>
+            [<a href="/">Back to Test Site home</a>]
+        </p>
+        <p>
+            [<a href="https://ox-hugo.netlify.com/">Back to <code>ox-hugo</code> home</a>]
+        </p>
     </body>
 </html>

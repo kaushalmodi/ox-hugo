@@ -33,7 +33,10 @@ pygmentsCodeFences = true
 # https://github.com/richleland/pygments-css
 pygmentsUseClasses = true
 
-enableEmoji = true
+# Fri Sep 22 15:50:42 EDT 2017 - kmodi
+# Disabling Emoji otherwise the ":abc:" portion in `* foo :abc:def:`
+# renders to an Emoji!
+enableEmoji = false
 
 LanguageCode = "en-us" # Used in RSS generation
 
@@ -45,15 +48,18 @@ LanguageCode = "en-us" # Used in RSS generation
   # the custom permalinks. If foo is 'posts', it will apply to content in
   # content/posts/ dir. The "bar" portion is how you want the links to look.
   doc = "/doc/:slug/"
+  test = "/test/:slug/"
 
 [params]
   name = "ox-hugo"
-  description = "Org mode to Hugo exporter"
+  description = "Org mode to Hugo exporter<br />Write your Hugo posts in native Org mode."
 
   # Go date formats: https://golang.org/pkg/time/#pkg-constants
   dateform = "Mon Jan 2, 2006"
 
-  github_banner = false
+  github_user = "kaushalmodi"
+  github_repo = "ox-hugo"
+  github_banner = true
 
   custom_css = [ "css/style.css"
                  # Pygments Trac theme
@@ -68,11 +74,10 @@ LanguageCode = "en-us" # Used in RSS generation
   # favicon = "favicon.ico"
 
 [params.sidebar]
-  # logo = "favicon.ico"
+  logo = "favicon.ico"
 
-
-  github_button  = false
-  travis_button  = false
+  github_button  = true
+  travis_button  = true
   codecov_button = false
   gratipay = ""
 

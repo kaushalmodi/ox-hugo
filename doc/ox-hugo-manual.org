@@ -6,24 +6,7 @@
 
 #+MACRO: imageclick [[file:./static/images/$1][file:/images/$1]]
 #+MACRO: issue [[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]]
-#+MACRO: travis [[https://travis-ci.org/kaushalmodi/ox-hugo][https://travis-ci.org/kaushalmodi/ox-hugo.svg]]
-#+MACRO: melpa [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]]
-#+MACRO: GPLv3 [[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPL%20v3-blue.svg]]
 
-=ox-hugo= is an Emacs package to export Org files to Hugo-compatible
-Markdown files.  At the moment it supports only the [[https://github.com/russross/blackfriday][Blackfriday
-Markdown]] flavor.
-* Hugo specific export settings
-** Mandatory settings
-- HUGO_SECTION :: The default Hugo section name for all the posts.  See
-                  [[http://gohugo.io/content/sections/][here]] for more information on Hugo sections.  It is
-                  common for this property to be set to =posts= or
-                  =blog=.
-- HUGO_BASE_DIR :: Root directory of the source for the Hugo site.
-     If this is set to =~/hugo/=, the exported Markdown files will be
-     saved to =~/hugo/content/<HUGO_SECTION>/= directory.  By [[http://gohugo.io/content/organization/][default]],
-     the Markdown files reside in a hierarchy under the =content/=
-     directory in the site root directory.
 * Changelog
 :PROPERTIES:
 :CUSTOM_ID: changelog
@@ -43,56 +26,15 @@ Markdown]] flavor.
   front-matter {{{issue(68)}}}.
 - Code optimization: Use of =org-entry-get= at places instead of
   maintaining global variables.
-* Note to Future Contributors
-:PROPERTIES:
-:CUSTOM_ID: note-to-future-contributors
-:END:
-NOTE TO FUTURE CONTRIBUTORS: I plan to merge this package into GNU
-Elpa or Org source at some point.
-
-So you will need to assign your copyright to FSF in order to get your
-patches accepted.
-
-- [[https://www.gnu.org/licenses/why-assign.html][Why assign copyright to FSF?]]
-- [[https://www.gnu.org/prep/maintain/html_node/Copyright-Papers.html#Copyright-Papers][How to start this process]]
-
-As a bonus, once you have assigned your copyright to FSF, doors open up
-for your future contributions to Emacs too!
-* Debug
-:PROPERTIES:
-:CUSTOM_ID: debug
-:END:
-If the =ox-hugo= exports do not work as expected, or if you get an
-error backtrace,
-1. Open an [[https://github.com/kaushalmodi/ox-hugo/issues][Issue]].
-2. Describe the problem you are seeing.
-3. Provide the debug info using =org-hugo-debug-info=:
-   - =M-x org-hugo-debug-info= (that will copy the debug info in
-     Markdown format to the kill ring)
-   - Paste the Markdown contents in the GitHub issue.
-     - You can still hit the /Preview/ tab of the Issue before
-       submitting it.
-* Test
-:PROPERTIES:
-:CUSTOM_ID: test
-:END:
-1. Clone this repo.
-2. =cd= to the =test/site/= directory and do:
-   #+BEGIN_EXAMPLE
-   make test
-   #+END_EXAMPLE
 * Homepage
 :PROPERTIES:
+:EXPORT_TITLE: Org to Markdown for Hugo
+:EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_TYPE: homepage
 :EXPORT_HUGO_SECTION: /
-:END:
-** Readme                                                            :readme:
-:PROPERTIES:
-:EXPORT_FILE_NAME: README
 :EXPORT_HUGO_MENU: :menu main
+:CUSTOM_ID: main
 :END:
-{{{travis}}} {{{melpa}}} {{{GPLv3}}}
-
 =ox-hugo= is an Org exporter backend that exports Org to
 [[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]) and also generates the
 front-matter (in TOML or YAML format).
@@ -101,37 +43,7 @@ This project consists of =ox-blackfriday.el= too. It is a derivation
 of [[https://github.com/larstvei/ox-gfm][=ox-gfm=]] with support added for Blackfriday Markdown tables and
 many other tweaks. =ox-hugo= backend extends from this.
 
-There are 2 major blogging flows that can be used with this package:
-1. One post per Org subtree (preferred)
-   - Export only the *current* post Org subtree, or
-   - Export all valid Hugo post subtrees in a loop.
-2. One post per Org file
-   - This works but you won't be able to leverage Org-specific
-     benefits like tag and property inheritance, use of TODO states to
-     translate to post =draft= state, auto weight calculation for
-     posts and menu items, etc.
-
-See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Org-Capture-Setup][Org Capture Setup]] Wiki page to see how to quickly create new
-posts.
-
-See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Auto-export-on-Saving][Auto-export on Saving]] Wiki page to learn how to setup up
-seeing live-preview of the Hugo-rendered HTML each time you do =C-x
-C-s= in the Org file --- For now, this works only with the *Subtree
-export flow*.
-*** Demo
-[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content][Exported Markdown]] → [[../test][*Hugo published test site*]]
-
-Now, the test site doesn't look pretty, I know :) .. because:
-- It is designed to verify if all the content translates from Org to
-  Markdown as expected.
-- It uses a [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/themes/bare_min/][*bare_min*]] /theme/ written just for the debug purpose (not
-  presentation).
-
-/See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
-presentation styles./
-**** Actual usage examples
-- [[https://scripter.co]] -- My blog
-*** Screenshots
+** Screenshots
 Before you read further, you can see below how =ox-hugo= translates
 Org to Markdown (Org on the left; exported Markdown with Hugo
 front-matter on the right).
@@ -143,16 +55,47 @@ front-matter on the right).
 #+INCLUDE: "./ox-hugo-manual.org::#screenshot-one-post-per-file" :only-contents t
 
 #+INCLUDE: "./ox-hugo-manual.org::#org-blogging-flow-editorial" :only-contents t
-*** Installation                                                       :wiki:
+
+#+INCLUDE: "./ox-hugo-manual.org::#demo" :minlevel 2
+
+** Installation
+#+INCLUDE: "./ox-hugo-manual.org::#installation" :only-contents t
+** Usage
+#+INCLUDE: "./ox-hugo-manual.org::#usage" :only-contents t
+** Thanks
+- Matt Price ([[https://github.com/titaniumbones][@titaniumbones]])
+- Puneeth Chaganti ([[https://github.com/punchagan][@punchagan]])
+- Also thanks to [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]], [[http://whyarethingsthewaytheyare.com/setting-up-the-blog/][whyarethingsthewaytheyare.com]] and
+  the [[https://github.com/chaseadamsio/goorgeous][=goorgoeous=]] project by Chase Adams ([[https://github.com/chaseadamsio][@chaseadamsio]]) for
+  inspiration to start this project.
+** Future Plans                                                    :noexport:
+There is a plan to create a =hugo.el= that would do things like:
+- New post creation using =org-capture= (port code from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]]).
+- Interactive functions to toggle /draft/ state,
+  add/remove/increment/decrement /publishdate/ property.
+- Option to use template =config.toml= and some default hugo theme. So
+  all a new user would need to do is to (i) have the =hugo= [[https://github.com/gohugoio/hugo/releases][binary]] in
+  =PATH= (ii) define their =hugo= blog dir in the =defcustom= (iii)
+  =M-x hugo=.
+- Set separate faces for titles based on /draft/ state and
+  /futureness/.
+* Test Site
 :PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Installation
+:EXPORT_HUGO_SECTION: test
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_MENU: :menu main
 :END:
-This package requires emacs 24.5+ and Org 9.0+. It is available on Melpa.
-*** Usage                                                              :wiki:
+# Generate an empty _index.md in test/ for that subdirectory to get generated.
+* Reused Sections
+** Installation
 :PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Usage
+:CUSTOM_ID: installation
+:END:
+This package requires emacs 24.5+ and Org 9.0+. It is available on
+Melpa ([[https://melpa.org/#/ox-hugo]]).
+** Usage
+:PROPERTIES:
+:CUSTOM_ID: usage
 :END:
 Once the package is installed, you will need to require it so that the
 =ox-hugo= export options are available in the /Org Export Dispatcher/
@@ -168,7 +111,10 @@ If you use =use-package=, you can do the below instead:
 (use-package ox-hugo
   :after ox)
 #+END_SRC
-**** Before you export
+*** Before you export
+:PROPERTIES:
+:CUSTOM_ID: before-you-export
+:END:
 Before you export check that these properties are set as you need:
 - HUGO_SECTION :: The default Hugo section name for all the posts.  See
                   [[http://gohugo.io/content/sections/][here]] for more information on Hugo sections.  It is
@@ -190,7 +136,7 @@ Before you export check that these properties are set as you need:
 *Important*: If you choose to export an Org subtree as a post, you
  need to set the =EXPORT_FILE_NAME= subtree property. That property is
  used by this package to figure out where the current post starts.
-**** Export bindings
+*** Export bindings
 The common =ox-hugo= export bindings are:
 |---------------+-------------------------------------------------------------------------------------|
 | Binding       | Description                                                                         |
@@ -200,12 +146,267 @@ The common =ox-hugo= export bindings are:
 |---------------+-------------------------------------------------------------------------------------|
 | =C-c C-e H h= | Export the whole Org file to a single post                                          |
 |---------------+-------------------------------------------------------------------------------------|
-*** Hugo test site for this package                                    :wiki:
+** Screenshots
 :PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Test Hugo site
+:CUSTOM_ID: screenshots
 :END:
-An [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][site]] with bare-bones "theme" is used to live-test the
+*** One post per Org subtree (preferred)
+:PROPERTIES:
+:CUSTOM_ID: screenshot-one-post-per-subtree
+:END:
+{{{imageclick(one-post-per-subtree.png)}}}
+- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
+*** One post per Org file
+:PROPERTIES:
+:CUSTOM_ID: screenshot-one-post-per-file
+:END:
+{{{imageclick(one-post-per-file.png)}}}
+- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
+*** Editorial
+:PROPERTIES:
+:CUSTOM_ID: org-blogging-flow-editorial
+:END:
+The preferred way to organize the posts is as Org subtrees (also the
+main reason to write this package, as nothing like that was out there)
+as it makes the meta-data management for Hugo front-matter pretty
+effortless.
+
+If you are a /one Org-file per post/ type of a person, that flow works
+too! Just note that in this flow many of those =#+HUGO_= properties
+need to be managed manually.. just as one would manage the front-matter
+in Markdown files --- See the Org versions in the above screenshots for
+comparison.
+** Demo
+:PROPERTIES:
+:CUSTOM_ID: demo
+:END:
+[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content][Exported Markdown]] → [[../test][*Hugo published test site*]]
+
+Now, the test site doesn't look pretty, I know :) .. because:
+- It is designed to verify if all the content translates from Org to
+  Markdown as expected.
+- It uses a [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/themes/bare_min/][*bare_min*]] /theme/ written just for the debug purpose (not
+  presentation).
+
+/See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
+presentation styles./
+*** Actual usage examples
+- https://ox-hugo.netlify.com -- =ox-hugo= Documentation Site
+- [[https://scripter.co]] -- My blog
+** Note to Future Contributors
+:PROPERTIES:
+:CUSTOM_ID: note-to-future-contributors
+:EXPORT_FILE_NAME: contributing-guide
+:END:
+NOTE TO FUTURE CONTRIBUTORS: I plan to merge this package into GNU
+Elpa or Org source at some point.
+
+So you will need to assign your copyright to FSF in order to get your
+patches accepted.
+
+- [[https://www.gnu.org/licenses/why-assign.html][Why assign copyright to FSF?]]
+- [[https://www.gnu.org/prep/maintain/html_node/Copyright-Papers.html#Copyright-Papers][How to start this process]]
+
+As a bonus, once you have assigned your copyright to FSF, doors open up
+for your future contributions to Emacs too!
+** Debug
+:PROPERTIES:
+:CUSTOM_ID: debug
+:END:
+If the =ox-hugo= exports do not work as expected, or if you get an
+error backtrace,
+1. Open an [[https://github.com/kaushalmodi/ox-hugo/issues][Issue]].
+2. Describe the problem you are seeing.
+3. Provide the debug info using =org-hugo-debug-info=:
+   - =M-x org-hugo-debug-info= (that will copy the debug info in
+     Markdown format to the kill ring)
+   - Paste the Markdown contents in the GitHub issue.
+     - You can still hit the /Preview/ tab of the Issue before
+       submitting it.
+** Test
+:PROPERTIES:
+:CUSTOM_ID: test
+:END:
+1. Clone this repo.
+2. =cd= to the =test/site/= directory and do:
+   #+BEGIN_EXAMPLE
+   make test
+   #+END_EXAMPLE
+* Menus
+** Early Questions
+:PROPERTIES:
+:EXPORT_HUGO_MENU: :menu early_questions
+:END:
+*** Why =ox-hugo=?
+:PROPERTIES:
+:EXPORT_FILE_NAME: why-ox-hugo
+:END:
+Using Org just as a markup like Markdown is a miniscule part of its
+complete feature-set. Org also allows stuff like:
+- Easy ordering/manipulation/commenting of subtrees
+- Creating tables (with even formulas like in Excel)
+- Directly including source code snippets from external files (instead
+  of having to copy/paste them in)
+- Running code snippets within the Org file and embedding the results
+  (Org Babel)
+- ..
+
+Using Org for content writing allows using in-built Org features to
+translate to Hugo front-matter:
+
+- Org uses an outline structure and can inherit meta data (tags and
+  properties) from one subtree to children subtrees.
+- Using that feature, one can tag one tree as /emacs/, and everything
+  under that tree (all posts under that) will get that tag
+  automatically.
+- The same concept applies to inheriting any Org /property/ meta data
+  like menu entry, category, section name, etc.
+- A subtree can be quickly marked to be in TODO state (default binding
+  =C-c C-t=). A *TODO* post is marked as a /draft/ Hugo post.
+- The /menu-item weights/ and/or /post weights/ can be set to be
+  auto-calculated so that the menu items or post order in the final
+  HTML appear in the same order as the respective subtrees in Org.
+
+  If the subtrees are re-ordered in Org, the weights get changed too.
+- One can have a subtree with section property set to "posts" and all
+  post subtrees under that will go to that section. Similarly another
+  parent subtree can have that property set to "articles", and so on.
+- Images can be displayed inline in the Org buffer.
+- After save hooks can be set up in Emacs so that each time I save the
+  file, only the current subtree in Org gets exported to
+  Markdown. With the Hugo server running with the new switch that auto
+  changes the preview to the last changed post (=--navigateToChanged=
+  introduced in Hugo 0.25), the flow is seamless -- Save the Org file
+  and see the exact changed post in browser.
+- *All* posts can simply be subtrees in a single Org file. That way
+  one can take advantage of Org subtree filtering and searching
+  functions (=org-sparse-tree= bound to =C-c /= by default).
+- (and much more..)
+*** Do I need to re-write my whole blog in Org?
+:PROPERTIES:
+:EXPORT_FILE_NAME: do-I-need-to-re-write-my-whole-blog-in-org
+:END:
+If you are considering to try out =ox-hugo=, and if you have already
+been using Hugo, it is normal for this thought to cross your mind:
+#+BEGIN_QUOTE
+I already have dozens or hundreds of posts written in Markdown. Do I
+need to convert them to Org if I want to start using =ox-hugo=?
+#+END_QUOTE
+
+The answer is *No*.
+
+This package will export your future posts written in Org to
+Markdown. And those files will live along with your already written
+Markdown posts. So converting existing Markdown files to Org would be
+purely the user's choice, your choice -- but that's by no means a
+necessity if you want to start using =ox-hugo=.
+
+.. And if at some point, you want to stop using =ox-hugo=, you still
+have the exported Markdown files.
+** Getting Started
+:PROPERTIES:
+:EXPORT_HUGO_MENU: :menu getting_started
+:END:
+*** Installation
+:PROPERTIES:
+:EXPORT_FILE_NAME: installation
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#installation" :only-contents t
+*** Usage
+:PROPERTIES:
+:EXPORT_FILE_NAME: usage
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#usage" :only-contents t
+*** How do I try =ox-hugo= on my site?
+:PROPERTIES:
+:EXPORT_FILE_NAME: how-do-I-try-it
+:END:
+1. =cd= to your Hugo site base directory -- the one that contains the
+   =config.toml= (or =config.yaml= or =config.json=).
+2. Start the =hugo server= in that directory:
+   #+BEGIN_EXAMPLE
+   hugo server -D --navigateToChanged
+   #+END_EXAMPLE
+   - =--navigateToChanged= requires Hugo 0.25+.
+3. Above command will mention the localhost where the site is
+   served. Open that in your browser.
+4. Create a separate directory for Org content in the Hugo site base
+   directory. You can name it anything, but I prefer to name it
+   =content-org=
+
+   Examples --- [[https://github.com/kaushalmodi/ox-hugo/tree/master/doc][This documentation]], [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][=ox-hugo= test site]], [[https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io][My blog]]
+5. Create an Org file in there and follow the [[/doc/usage][*Usage*]] section to
+   export it.
+*** Blogging Flow
+:PROPERTIES:
+:EXPORT_FILE_NAME: blogging-flow
+:END:
+There are 2 major blogging flows that can be used with this package:
+1. One post per Org subtree (preferred)
+   - Export only the *current* post Org subtree, or
+   - Export all valid Hugo post subtrees in a loop.
+2. One post per Org file
+   - This works but you won't be able to leverage Org-specific
+     benefits like tag and property inheritance, use of TODO states to
+     translate to post =draft= state, auto weight calculation for
+     posts and menu items, etc.
+
+See the [[/doc/org-capture-setup][Org Capture Setup]] page to see how to quickly create new posts.
+
+See the [[/doc/auto-export-on-saving][Auto-export on Saving]] page to learn how to setup up seeing
+live-preview of the Hugo-rendered HTML each time you do =C-x C-s= in
+the Org file --- For now, this works only with the *Subtree export
+flow*.
+
+** Meta
+:PROPERTIES:
+:EXPORT_HUGO_MENU: :menu meta
+:END:
+*** Meta Features
+:PROPERTIES:
+:EXPORT_FILE_NAME: meta-features
+:END:
+- =[✓]= Extensive tests! -- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][test/site/content-org]]
+- =[✓]= Travis CI Integration -- Checks with emacs versions starting from
+  24.4->25.2, with the latest stable version of =org-plus-contrib=.
+- =[✓]= [[https://ox-hugo.netlify.com][Documentation site]] -- Generated using =ox-hugo= itself.
+- =[✓]= [[../test][Test site]] -- Regenerated after each commit to this repo
+- =[✓]= Passes =checkdoc= and =package-lint= ([[https://github.com/purcell/package-lint/issues/89][/almost/]]).
+*** Changelog
+:PROPERTIES:
+:EXPORT_FILE_NAME: changelog
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#changelog" :only-contents t
+*** Contributing Guide
+:PROPERTIES:
+:EXPORT_FILE_NAME: contributing-guide
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
+*** Debug
+:PROPERTIES:
+:EXPORT_FILE_NAME: debug
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#debug" :only-contents t
+*** Test
+:PROPERTIES:
+:EXPORT_FILE_NAME: test
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#test" :only-contents t
+** Example
+:PROPERTIES:
+:EXPORT_HUGO_MENU: :menu example
+:END:
+*** Screenshots
+:PROPERTIES:
+:EXPORT_FILE_NAME: screenshots
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#screenshots" :only-contents t
+*** Hugo test site for this package
+:PROPERTIES:
+:EXPORT_FILE_NAME: tests-site
+:EXPORT_HUGO_SLUG: tests-site
+:END:
+A [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][site]] with bare-bones Hugo "theme" is used to live-test the
 package --- you'll know why theme is double-quoted once you try out the
 site on =hugo=.
 
@@ -246,30 +447,138 @@ exported Markdown files.
    =hugo server= aided preview in the browser zapping through each new
    created post (needs that new feature =--navigateToChanged=
    introduced in Hugo 0.25).
-*** How do I try =ox-hugo= on my site?                                 :wiki:
+** Enhancements
 :PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: How do I try ox-hugo on my site?
+:EXPORT_HUGO_MENU: :menu enhancements
 :END:
-1. =cd= to your Hugo site base directory -- the one that contains the
-   =config.toml= (or =config.yaml= or =config.json=).
-2. Start the =hugo server= in that directory:
-   #+BEGIN_EXAMPLE
-   hugo server -D --navigateToChanged
-   #+END_EXAMPLE
-   - =--navigateToChanged= requires Hugo 0.25+.
-3. Above command will mention the localhost where the site is
-   served. Open that in your browser.
-4. Create a separate directory for Org content in the Hugo site base
-   directory. You can name it anything, but I prefer to name it
-   =content-org= ([[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][Example 1 -- =ox-hugo= test site]], [[https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io][Example 2 -- My
-   blog]]).
-5. Create an Org file in there and follow the *Usage* section in the
-   [[https://github.com/kaushalmodi/ox-hugo#usage][README]] or [[https://github.com/kaushalmodi/ox-hugo/wiki/Usage][Wiki]] to export it.
-*** Translation of Org meta-data to Hugo front-matter                  :wiki:
+*** Auto-export on Saving
 :PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Org meta-data to Hugo front-matter
+:EXPORT_FILE_NAME: auto-export-on-saving
+:END:
+Wouldn't it be awesome if you can see the live-preview of your
+Hugo-rendered post each time you saved your post in Org?
+
+Well.. you can do that with these steps, though, this works *only with
+subtree-export flow* at the moment.
+**** First time setup
+***** Step 1: Set up the =after-save-hook=
+1. Add below to the very-end of your posts Org file:
+   #+BEGIN_SRC org
+   * Footnotes
+   * COMMENT Local Variables                                           :ARCHIVE:
+   # Local Variables:
+   # eval: (add-hook 'after-save-hook #'org-hugo-export-subtree-to-md-after-save :append :local)
+   # End:
+   #+END_SRC
+
+   Here I recommend adding the =* Footnotes= header too so that in
+   case you add any Org footnotes, they go directly to that section
+   you created. Otherwise, in the absence of an existing /Footnotes/
+   heading, Org would create a new /Footnotes/ heading *at the end of
+   the file* -- so the /Local Variables/ heading will then no longer be
+   at the end of the file.
+2. Then save the file, and do =revert-buffer=.
+3. You will be prompted to add that =eval= line to your /Customize/
+   setup, hit =!= to permanently save that setting and prevent future
+   prompts.
+***** Step 2: Prevent auto-export during Org Capture
+You might find this step useful if you choose to write new posts using
+=org-capture= as explained in the [[/doc/org-capture-setup][/Org Capture Setup/]] section.
+
+After saving the below to your emacs config and evaluating it,
+auto-exports will be prevented when saving a new post created using
+Org Capture.
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'org-capture
+  ;; Do not cause auto Org->Hugo export to happen when saving captures
+  (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
+    "Function for `org-capture-before-finalize-hook'.
+Disable `org-hugo-export-subtree-to-md-after-save'."
+    (setq org-hugo-allow-export-after-save nil))
+
+  (defun modi/org-capture--add-auto-org-to-hugo-export-maybe ()
+    "Function for `org-capture-after-finalize-hook'.
+Enable `org-hugo-export-subtree-to-md-after-save'."
+    (setq org-hugo-allow-export-after-save t))
+
+  (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
+  (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
+#+END_SRC
+**** Steps that /might/ need to be taken every time
+***** Step 3: Start the engines (Hugo Server)
+We start the =hugo server= so that we can see the live-preview each
+time the Org file is saved.
+
+I recommend using Hugo version 0.25 at the minimum as that added
+support for the awesome =--navigateToChanged= switch!
+
+Run below in your Hugo site root (the directory that contains the site
+=config.toml=) to start the server:
+#+BEGIN_EXAMPLE
+hugo server -D --navigateToChanged
+#+END_EXAMPLE
+***** Step 4: Open your browser
+By default the site is served locally on port /1313/ on
+/localhost/. So the above step would have printed something like below
+at the end:
+#+BEGIN_EXAMPLE
+Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
+#+END_EXAMPLE
+
+So open your favorite browser pointing to that address.
+**** FINAL step that needs to be taken every time
+If you are like me, you might not need to repeat steps 3 and 4 above,
+as you can leave the =hugo= server running in a separate terminal, and
+have a browser tab pinned to that localhost.
+
+So with that, have the emacs and browser frames set up side-by-side,
+and edit your Org post.
+
+Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
+*exact post you modified*!
+*** Org Capture Setup
+:PROPERTIES:
+:EXPORT_FILE_NAME: org-capture-setup
+:END:
+If you do not want to manually type the =EXPORT_FILE_NAME= and
+=EXPORT_DATE= for each new post, here is an example =org-capture=
+setup can help:
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'org-capture
+  (defun org-hugo-new-subtree-post-capture-template ()
+    "Returns `org-capture' template string for new Hugo post.
+See `org-capture-templates' for more information."
+    (let* (;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
+           (date (format-time-string (org-time-stamp-format :long :inactive) (org-current-time)))
+           (title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
+           (fname (org-hugo-slug title)))
+      (mapconcat #'identity
+                 `(
+                   ,(concat "* TODO " title)
+                   ":PROPERTIES:"
+                   ,(concat ":EXPORT_FILE_NAME: " fname)
+                   ,(concat ":EXPORT_DATE: " date) ;Enter current date and time
+                   ":END:"
+                   "%?\n")          ;Place the cursor here finally
+                 "\n")))
+
+  (add-to-list 'org-capture-templates
+               '("h"                ;`org-capture' binding + h
+                 "Hugo post"
+                 entry
+                 ;; It is assumed that below file is present in `org-directory'
+                 ;; and that it has a "Blog Ideas" heading. It can even be a
+                 ;; symlink pointing to the actual location of all-posts.org!
+                 (file+olp "all-posts.org" "Blog Ideas")
+                 (function org-hugo-new-subtree-post-capture-template))))
+#+END_SRC
+** Org to Hugo
+:PROPERTIES:
+:EXPORT_HUGO_MENU: :menu org_to_hugo
+:END:
+*** Org meta-data to Hugo front-matter
+:PROPERTIES:
+:EXPORT_FILE_NAME: org-meta-data-to-hugo-front-matter
 :END:
 **** For subtree exports (=C-c C-e H H= or =C-c C-e H A=)
 When organizing the posts as Org *subtrees*, many Hugo front-matter
@@ -315,10 +624,9 @@ set.
 - The auto weight calculation for posts and menu items works *only*
   for subtree exports. For the complete-file export flow, one needs to
   specify the weights manually if needed.
-*** Formatting                                                         :wiki:
+*** Formatting
 :PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Formatting
+:EXPORT_FILE_NAME: formatting
 :END:
 Below table shows the translation of Org markup to Markdown markup in
 the exported =.md= files.
@@ -340,337 +648,16 @@ heading and how it exports to Markdown in [[https://raw.githubusercontent.com/ka
 | =_underline_=      | =<span class = "underline">underline</span>=                       |
 |                    | - Requires *CSS* to render this =underline= class as an underline. |
 |--------------------+--------------------------------------------------------------------|
-
-(Note: If you see two equal signs on each side of /monospace/ in the
-/Org/ column in the table above, it is a bug with GitHub's Org
-renderer.. just see those as *single* equal signs on each side of
-/monospace/ instead.)
-*** Do I need to re-write my whole blog in Org?                        :wiki:
+*** Image Links
 :PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Do I need to re-write my whole blog in Org?
-:END:
-If you are considering to try out =ox-hugo=, and if you have already
-been using Hugo, it is normal for this thought to cross your mind:
-#+BEGIN_QUOTE
-I already have dozens or hundreds of posts written in Markdown. Do I
-need to convert them to Org if I want to start using =ox-hugo=?
-#+END_QUOTE
-
-The answer is *No*.
-
-This package will export your future posts written in Org to
-Markdown. And those files will live along with your already written
-Markdown posts. So converting existing Markdown files to Org would be
-purely the user's choice, your choice -- but that's by no means a
-necessity if you want to start using =ox-hugo=.
-
-.. And if at some point, you want to stop using =ox-hugo=, you still
-have the exported Markdown files.
-*** Changelog                                               :wiki:noexport_1:
-:PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Changelog
-:END:
-#+INCLUDE: "./ox-hugo-manual.org::#changelog" :only-contents t
-*** Debug                                                              :wiki:
-:PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Debug
-:END:
-#+INCLUDE: "./ox-hugo-manual.org::#debug" :only-contents t
-*** Test                                                               :wiki:
-:PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Test
-:END:
-#+INCLUDE: "./ox-hugo-manual.org::#test" :only-contents t
-*** Future Plans                                                   :noexport:
-There is a plan to create a =hugo.el= that would do things like:
-- New post creation using =org-capture= (port code from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]]).
-- Interactive functions to toggle /draft/ state,
-  add/remove/increment/decrement /publishdate/ property.
-- Option to use template =config.toml= and some default hugo theme. So
-  all a new user would need to do is to (i) have the =hugo= [[https://github.com/gohugoio/hugo/releases][binary]] in
-  =PATH= (ii) define their =hugo= blog dir in the =defcustom= (iii)
-  =M-x hugo=.
-- Set separate faces for titles based on /draft/ state and
-  /futureness/.
-*** Thanks
-- Matt Price (@titaniumbones)
-- Puneeth Chaganti (@punchagan)
-- Also thanks to [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]], [[http://whyarethingsthewaytheyare.com/setting-up-the-blog/][whyarethingsthewaytheyare.com]] and
-  the [[https://github.com/chaseadamsio/goorgeous][=goorgoeous=]] project by Chase Adams (@chaseadamsio) for
-  inspiration to start this project.
-* Contributing                                                 :contributing:
-:PROPERTIES:
-:EXPORT_TITLE: Contributing Guide
-:EXPORT_FILE_NAME: CONTRIBUTING
-:END:
-#+INCLUDE: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
-** Debug
-#+INCLUDE: "./ox-hugo-manual.org::#debug" :only-contents t
-** Test
-#+INCLUDE: "./ox-hugo-manual.org::#test" :only-contents t
-* Menus
-** Early Questions
-:PROPERTIES:
-:EXPORT_HUGO_MENU: :menu early_questions
-:END:
-*** Why =ox-hugo=?                                                     :wiki:
-:PROPERTIES:
-:EXPORT_FILE_NAME: why-ox-hugo
-:END:
-Using Org just as a markup like Markdown is a miniscule part of its
-complete feature-set. Org also allows stuff like:
-- Easy ordering/manipulation/commenting of subtrees
-- Creating tables (with even formulas like in Excel)
-- Directly including source code snippets from external files (instead
-  of having to copy/paste them in)
-- Running code snippets within the Org file and embedding the results
-  (Org Babel)
-- ..
-
-Using Org for content writing allows using in-built Org features to
-translate to Hugo front-matter:
-
-- Org uses an outline structure and can inherit meta data (tags and
-  properties) from one subtree to children subtrees.
-- Using that feature, one can tag one tree as /emacs/, and everything
-  under that tree (all posts under that) will get that tag
-  automatically.
-- The same concept applies to inheriting any Org /property/ meta data
-  like menu entry, category, section name, etc.
-- A subtree can be quickly marked to be in TODO state (default binding
-  =C-c C-t=). A *TODO* post is marked as a /draft/ Hugo post.
-- The /menu-item weights/ and/or /post weights/ can be set to be
-  auto-calculated so that the menu items or post order in the final
-  HTML appear in the same order as the respective subtrees in Org.
-
-  If the subtrees are re-ordered in Org, the weights get changed too.
-- One can have a subtree with section property set to "posts" and all
-  post subtrees under that will go to that section. Similarly another
-  parent subtree can have that property set to "articles", and so on.
-- Images can be displayed inline in the Org buffer.
-- After save hooks can be set up in Emacs so that each time I save the
-  file, only the current subtree in Org gets exported to
-  Markdown. With the Hugo server running with the new switch that auto
-  changes the preview to the last changed post (=--navigateToChanged=
-  introduced in Hugo 0.25), the flow is seamless -- Save the Org file
-  and see the exact changed post in browser.
-- *All* posts can simply be subtrees in a single Org file. That way
-  one can take advantage of Org subtree filtering and searching
-  functions (=org-sparse-tree= bound to =C-c /= by default).
-- (and much more..)
-** Meta
-:PROPERTIES:
-:EXPORT_HUGO_MENU: :menu meta
-:END:
-*** Meta Features                                                      :wiki:
-:PROPERTIES:
-:EXPORT_FILE_NAME: meta-features
-:END:
-- =[✓]= Extensive tests! -- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][test/site/content-org]]
-- =[✓]= Travis CI Integration -- Checks with emacs versions starting from
-  24.4->25.2, with the latest stable version of =org-plus-contrib=.
-- =[✓]= [[../test][Test site]] -- Regenerated after each commit to this repo
-- =[✓]= Documentation -- README, Changelog, Wiki *all* generated from a
-  single [[https://github.com/kaushalmodi/ox-hugo/raw/master/doc/ox-hugo-manual.org][ox-hugo-manual.org]]
-- =[✓]= Passes =checkdoc= and =package-lint= ([[https://github.com/purcell/package-lint/issues/89][/almost/]]).
-** Home                                                                :wiki:
-:PROPERTIES:
-:EXPORT_TITLE: ox-hugo Wiki
-:EXPORT_FILE_NAME: Home
-:END:
-This project in unique in the sense that *all documentation* you see
-in this repo is built from =doc/ox-hugo-manual.org= file.  That
-includes the =README.org=, =CONTRIBUTING.org=, and these Wiki pages.
-
-These are generated by running =M-x ox-hugo-export-gh-doc= defined in
-=doc/export-gh-doc.el=. Before running that, you would need to:
-
-#+BEGIN_SRC shell
-cd doc/
-git clone https://github.com/kaushalmodi/ox-hugo.wiki.git
-#+END_SRC
-
-If changes are only to this Wiki, I believe you can push them directly
-using =git= or manually edit those here.
-** Example
-:PROPERTIES:
-:EXPORT_HUGO_MENU: :menu example
-:END:
-*** Screenshots                                                        :wiki:
-:PROPERTIES:
-:EXPORT_FILE_NAME: screenshots
-:CUSTOM_ID: screenshots
-:END:
-**** One post per Org subtree (preferred)
-:PROPERTIES:
-:CUSTOM_ID: screenshot-one-post-per-subtree
-:END:
-{{{imageclick(one-post-per-subtree.png)}}}
-- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
-**** One post per Org file
-:PROPERTIES:
-:CUSTOM_ID: screenshot-one-post-per-file
-:END:
-{{{imageclick(one-post-per-file.png)}}}
-- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
-**** Editorial
-:PROPERTIES:
-:CUSTOM_ID: org-blogging-flow-editorial
-:END:
-The preferred way to organize the posts is as Org subtrees (also the
-main reason to write this package, as nothing like that was out there)
-as it makes the meta-data management for Hugo front-matter pretty
-effortless.
-
-If you are a /one Org-file per post/ type of a person, that flow works
-too! Just note that in this flow many of those =#+HUGO_= properties
-need to be managed manually.. just as one would manage the front-matter
-in Markdown files --- See the Org versions in the above screenshots for
-comparison.
-** Org Capture Setup                                                   :wiki:
-:PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Org Capture Setup
-:END:
-If you do not want to manually type the =EXPORT_FILE_NAME= and
-=EXPORT_DATE= for each new post, here is an example =org-capture=
-setup can help:
-#+BEGIN_SRC emacs-lisp
-(with-eval-after-load 'org-capture
-  (defun org-hugo-new-subtree-post-capture-template ()
-    "Returns `org-capture' template string for new Hugo post.
-See `org-capture-templates' for more information."
-    (let* (;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
-           (date (format-time-string (org-time-stamp-format :long :inactive) (org-current-time)))
-           (title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
-           (fname (org-hugo-slug title)))
-      (mapconcat #'identity
-                 `(
-                   ,(concat "* TODO " title)
-                   ":PROPERTIES:"
-                   ,(concat ":EXPORT_FILE_NAME: " fname)
-                   ,(concat ":EXPORT_DATE: " date) ;Enter current date and time
-                   ":END:"
-                   "%?\n")          ;Place the cursor here finally
-                 "\n")))
-
-  (add-to-list 'org-capture-templates
-               '("h"                ;`org-capture' binding + h
-                 "Hugo post"
-                 entry
-                 ;; It is assumed that below file is present in `org-directory'
-                 ;; and that it has a "Blog Ideas" heading. It can even be a
-                 ;; symlink pointing to the actual location of all-posts.org!
-                 (file+olp "all-posts.org" "Blog Ideas")
-                 (function org-hugo-new-subtree-post-capture-template))))
-#+END_SRC
-** Auto-export on Saving                                               :wiki:
-:PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Auto-export on Saving
-:END:
-Wouldn't it be awesome if you can see the live-preview of your
-Hugo-rendered post each time you saved your post in Org?
-
-Well.. you can do that with these steps, though, this works *only with
-subtree-export flow* at the moment.
-*** First time setup
-**** Step 1: Set up the =after-save-hook=
-1. Add below to the very-end of your posts Org file:
-   #+BEGIN_SRC org
-   * Footnotes
-   * COMMENT Local Variables                                           :ARCHIVE:
-   # Local Variables:
-   # eval: (add-hook 'after-save-hook #'org-hugo-export-subtree-to-md-after-save :append :local)
-   # End:
-   #+END_SRC
-
-   Here I recommend adding the =* Footnotes= header too so that in
-   case you add any Org footnotes, they go directly to that section
-   you created. Otherwise, in the absence of an existing /Footnotes/
-   heading, Org would create a new /Footnotes/ heading *at the end of
-   the file* -- so the /Local Variables/ heading will then no longer be
-   at the end of the file.
-2. Then save the file, and do =revert-buffer=.
-3. You will be prompted to add that =eval= line to your /Customize/
-   setup, hit =!= to permanently save that setting and prevent future
-   prompts.
-**** Step 2: Prevent auto-export during Org Capture
-You might find this step useful if you choose to write new posts using
-=org-capture= as explained in the /Org Capture Setup/ Wiki page.
-
-After saving the below to your emacs config and evaluating it,
-auto-exports will be prevented when saving a new post created using
-Org Capture.
-#+BEGIN_SRC emacs-lisp
-(with-eval-after-load 'org-capture
-  ;; Do not cause auto Org->Hugo export to happen when saving captures
-  (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
-    "Function for `org-capture-before-finalize-hook'.
-Disable `org-hugo-export-subtree-to-md-after-save'."
-    (setq org-hugo-allow-export-after-save nil))
-
-  (defun modi/org-capture--add-auto-org-to-hugo-export-maybe ()
-    "Function for `org-capture-after-finalize-hook'.
-Enable `org-hugo-export-subtree-to-md-after-save'."
-    (setq org-hugo-allow-export-after-save t))
-
-  (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
-  (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
-#+END_SRC
-*** Steps that /might/ need to be taken every time
-**** Step 3: Start the engines (Hugo Server)
-We start the =hugo server= so that we can see the live-preview each
-time the Org file is saved.
-
-I recommend using Hugo version 0.25 at the minimum as that added
-support for the awesome =--navigateToChanged= switch!
-
-Run below in your Hugo site root (the directory that contains the site
-=config.toml=) to start the server:
-#+BEGIN_EXAMPLE
-hugo server -D --navigateToChanged
-#+END_EXAMPLE
-**** Step 4: Open your browser
-By default the site is served locally on port /1313/ on
-/localhost/. So the above step would have printed something like below
-at the end:
-#+BEGIN_EXAMPLE
-Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
-#+END_EXAMPLE
-
-So open your favorite browser pointing to that address.
-*** FINAL step that needs to be taken every time
-If you are like me, you might not need to repeat steps 3 and 4 above,
-as you can leave the =hugo= server running in a separate terminal, and
-have a browser tab pinned to that localhost.
-
-So with that, have the emacs and browser frames set up side-by-side,
-and edit your Org post.
-
-Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
-*exact post you modified*!
-** Contributing Guide                                                  :wiki:
-:PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Contributing Guide
-:END:
-#+INCLUDE: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
-** Image Links                                                         :wiki:
-:PROPERTIES:
-:EXPORT_TITLE:
-:EXPORT_FILE_NAME: Image Links
+:EXPORT_FILE_NAME: image-links
 :END:
 For the sake of the below explanation, let's have the /HUGO_BASE_DIR/
 (the directory containing the Hugo site's =config.toml= file) be
 =~/hugo/=.
 
 In that case, the Hugo /static/ directory will be =~/hugo/static/=.
-*** References to files in the /static/ directory
+**** References to files in the /static/ directory
 Now if you have a file =~/hugo/static/images/foo.png=, =ox-hugo= makes
 it convenient for you to reference that image by simply
 =/images/foo.png=. *This is the default behavior of other Org
@@ -680,30 +667,23 @@ style of short reference is allowed *if* that is a valid path under
 the /static/ directory.
 
 See the below examples on how to reference images in different ways:
-**** Inline image (Unhyperlinked)
+***** Inline image (Unhyperlinked)
 #+BEGIN_SRC org
 [[/images/foo.png]]
 #+END_SRC
-**** Inline image (Hyperlinked to the image itself)
+***** Inline image (Hyperlinked to the image itself)
 #+BEGIN_SRC org
 [[file:/images/foo.png][file:/images/foo.png]]
 #+END_SRC
 - NOTE :: The =file:= prefix *has to be used* in both Link and
           Description components of the Org link.
-
-- NOTE-2 :: GitHub Wiki screws up the above code block. It actually
-            looks like below but *without* the space in-between =]=
-            and =[=.
-  #+BEGIN_SRC org
-  [[file:/images/foo.png] [file:/images/foo.png]]
-  #+END_SRC
-**** Link to an image (Image not inlined)
+***** Link to an image (Image not inlined)
 #+BEGIN_SRC org
 [[/images/foo.png][Click here to see foo.png]]
 #+END_SRC
 This applies to references to non-image files in the /static/
 directory too.
-*** Having references to files *outside* the /static/ directory
+**** Having references to files *outside* the /static/ directory
 This is a unique feature of =ox-hugo=.
 
 If a reference is made to a file outside the Hugo /static/ directory
@@ -732,9 +712,9 @@ copied location inside =static=:
 | =~/temp/static/articles/zoo.pdf= | =<HUGO_BASE_DIR>/static/articles/zoo.pdf= | (same as above)                                                                                                      |
 |----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
 
-See the [[https://github.com/kaushalmodi/ox-hugo/wiki/Usage#before-you-export][Usage → Before you export Wiki section]] to learn how to
-set the *HUGO_BASE_DIR*.
-**** Source path does not contain =/static/=
+See the [[/doc/usage#before-you-export][Usage → Before you export]] section to learn how to set the
+*HUGO_BASE_DIR*.
+***** Source path does not contain =/static/=
 Here is an example link where the source path does not contain
 =/static/=:
 #+BEGIN_SRC org

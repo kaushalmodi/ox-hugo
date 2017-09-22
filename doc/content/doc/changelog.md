@@ -1,10 +1,9 @@
 +++
-tags = ["readme", "wiki", "noexport-1"]
-type = "homepage"
+title = "Changelog"
 draft = false
-[menu.main]
-  weight = 3008
-  identifier = ""
+[menu.meta]
+  weight = 3002
+  identifier = "changelog"
 +++
 
 ## 0.1.3 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-13 Wed&gt;</span></span> {#0-dot-1-dot-3-span-class-timestamp-wrapper-span-class-timestamp-and-lt-2017-09-13-wed-and-gt-span-span}

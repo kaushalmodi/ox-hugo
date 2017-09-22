@@ -1,6 +1,5 @@
 +++
 title = "Why ox-hugo?"
-tags = ["wiki"]
 draft = false
 [menu."early_questions"]
   weight = 3001

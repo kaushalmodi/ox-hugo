@@ -1,6 +1,5 @@
 +++
 title = "Screenshots"
-tags = ["wiki"]
 draft = false
 [menu.example]
   weight = 3001

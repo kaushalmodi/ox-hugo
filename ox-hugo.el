@@ -995,7 +995,9 @@ string with just alphanumeric characters."
   (cond
    ((or (null val)                ;nil
         (not (stringp val))       ;could be a number, like menu weight
-        (and (string= (substring val 0 1) "\"") ;First char is literally a "
+        (and (stringp val)
+             (> (safe-length val) 0)
+             (string= (substring val 0 1) "\"") ;First char is literally a "
              (string= (substring val -1) "\"")) ;Last char is literally a "
         (string= "true" val)
         (string= "false" val)

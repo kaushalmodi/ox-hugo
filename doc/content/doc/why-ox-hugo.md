@@ -6,8 +6,18 @@ draft = false
   identifier = "why-ox-hugo"
 +++
 
-Using Org just as a markup like Markdown is a miniscule part of its
-complete feature-set. Org also allows stuff like:
+&nbsp;&nbsp;&nbsp;&nbsp;A picture is worth a thousand words.<br />
+
+So let me show you this screenshot that took on my phone (running
+Emacs in Termux app on Android), showing the single Org file that
+serves as a source of this whole documentation site.
+
+[{{<figure src="/images/ox-hugo-doc-source-viewing-in-Termux-Android.png">}}](/images/ox-hugo-doc-source-viewing-in-Termux-Android.png)
+
+---
+
+Using Org just as a markup like Markdown is a miniscule part of
+its complete feature-set. Org also allows stuff like:
 
 -   Easy ordering/manipulation/commenting of subtrees
 -   Creating tables (with even formulas like in Excel)

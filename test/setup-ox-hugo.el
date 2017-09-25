@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-22 18:29:56 kmodi>
+;; Time-stamp: <2017-09-25 12:06:47 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
 
@@ -59,6 +59,11 @@ Emacs installation.  If Emacs is installed using
 ;; end up with mixed Org version.
 (defvar my/packages '(org-plus-contrib toc-org))
 
+(defvar ox-hugo-git-root (progn
+                           (require 'vc-git)
+                           (vc-git-root ".")))
+(message "ox-hugo-git-root: %S" ox-hugo-git-root)
+
 (if (and (stringp ox-hugo-elpa)
          (file-exists-p ox-hugo-elpa))
     (progn
@@ -75,11 +80,6 @@ Emacs installation.  If Emacs is installed using
              (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
         (add-to-list 'package-archives (cons "melpa" url) :append))
       (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") :append) ;For latest `org'
-
-      (defvar ox-hugo-git-root (progn
-                                 (require 'vc-git)
-                                 (vc-git-root ".")))
-      (message "ox-hugo-git-root: %S" ox-hugo-git-root)
       (add-to-list 'load-path ox-hugo-git-root)
 
       ;; Load emacs packages and activate them.
@@ -125,8 +125,7 @@ to be installed.")
 (defun ox-hugo-export-gh-doc ()
   "Export `ox-hugo' Org documentation to documentation on GitHub repo."
   (interactive)
-  (let* ((ox-hugo-root-dir (cdr (project-current))) ;Requires emacs 25.1
-         (ox-hugo-doc-dir (concat ox-hugo-root-dir "doc/"))
+  (let* ((ox-hugo-doc-dir (concat ox-hugo-git-root "doc/"))
          (org-src-preserve-indentation t) ;Preserve the leading whitespace in src blocks
          (org-id-track-globally nil) ;Prevent "Could not read org-id-values .." error
          (org-export-with-sub-superscripts '{})
@@ -149,13 +148,13 @@ to be installed.")
               (string= "contributing" tag))
           (dolist (exported-file exported-file-list)
             (rename-file (expand-file-name exported-file ox-hugo-doc-dir)
-                         (expand-file-name exported-file ox-hugo-root-dir)
+                         (expand-file-name exported-file ox-hugo-git-root)
                          :ok-if-already-exists)))
          (t
           nil))))
     ;; Generate TOC in README.org using the `toc-org' package.
     (let ((readme-buf (get-buffer "README.org"))
-          (readme-file (expand-file-name "README.org" ox-hugo-root-dir)))
+          (readme-file (expand-file-name "README.org" ox-hugo-git-root)))
       (when readme-buf    ;Close README.org if it's already open
         (kill-buffer readme-buf))
       ;; Open the README.org file afresh.

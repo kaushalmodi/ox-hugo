@@ -32,6 +32,9 @@ pygmentsCodeFences = true
 # See https://gohugo.io/tools/syntax-highlighting/#pygments and
 # https://github.com/richleland/pygments-css
 pygmentsUseClasses = true
+# hugo 0.28+ -- Switched to Go Chroma syntax highlighter by default.
+# Below sets the syntax highlighter back to Python Pygments.
+pygmentsUseClassic=true
 
 # Fri Sep 22 15:50:42 EDT 2017 - kmodi
 # Disabling Emoji otherwise the ":abc:" portion in `* foo :abc:def:`

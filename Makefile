@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-25 11:44:26 kmodi>
+# Time-stamp: <2017-09-25 12:28:57 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -82,6 +82,7 @@ emacs-batch:
 	@$(EMACS) --batch --eval "(progn\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
 	(when (> (length \"$(TIMEZONE)\") 0) (setenv \"TZ\" \"$(TIMEZONE)\"))\
+	(setq-default make-backup-files nil)\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	)" $(ORG_FILE_DIR)/$(ORG_FILE) \
 	-f $(FUNC) \
@@ -98,8 +99,11 @@ mdfile:
 	@echo "[ox-hugo] Done"
 
 vcheck:
-	@$(EMACS) --batch \
-	--eval "(message \"[Version checks] Emacs: %s, Org: %s\" emacs-version (org-version))" \
+	@$(EMACS) --batch --eval "(progn\
+	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
+	(message \"[Version check] Emacs %s\" emacs-version)\
+	(message \"[Version check] %s\" (org-version nil :full))\
+	)" \
 	--kill
 # Thu Sep 21 00:36:23 EDT 2017 - kmodi
 # Don't check hugo version for now, as Travis fails
@@ -148,13 +152,11 @@ $(file_test_files):
 doc_site:
 	@echo "[Doc Site] Generating ox-hugo Documentation Site content .."
 	@$(MAKE) mdtree ORG_FILE=ox-hugo-manual.org ORG_FILE_DIR=./doc
-	@$(MAKE) ctemp
 	@echo "[Doc Site] Done"
 
 gh_docs:
 	@echo "[GitHub Docs] Generating README.org and CONTRIBUTING.org for GitHub .."
 	@$(MAKE) emacs-batch FUNC=ox-hugo-export-gh-doc ORG_FILE=github-files.org ORG_FILE_DIR=./doc
-	@$(MAKE) ctemp
 	@echo "[GitHub Docs] Done"
 
 doc: doc_site gh_docs
@@ -163,7 +165,7 @@ ctemp:
 	@find $(OX_HUGO_TEST_SITE_DIR)/content -name "*.*~" -delete
 	@find ./doc/content -name "*.*~" -delete
 
-diffgolden: ctemp
+diffgolden:
 	@diff -r $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
 clean: ctemp

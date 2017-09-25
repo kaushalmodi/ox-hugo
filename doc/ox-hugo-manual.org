@@ -378,12 +378,12 @@ flow*.
 :PROPERTIES:
 :EXPORT_FILE_NAME: meta-features
 :END:
-- =[✓]= Extensive tests! -- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][test/site/content-org]]
-- =[✓]= Travis CI Integration -- Checks with emacs versions starting from
+- [X] Extensive tests! -- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][test/site/content-org]]
+- [X] Travis CI Integration -- Checks with emacs versions starting from
   24.4->25.2, with the latest stable version of =org-plus-contrib=.
-- =[✓]= [[https://ox-hugo.netlify.com][Documentation site]] -- Generated using =ox-hugo= itself.
-- =[✓]= [[../test][Test site]] -- Regenerated after each commit to this repo
-- =[✓]= Passes =checkdoc= and =package-lint= ([[https://github.com/purcell/package-lint/issues/89][/almost/]]).
+- [X] [[https://ox-hugo.netlify.com][Documentation site]] -- Generated using =ox-hugo= itself.
+- [X] [[../test][Test site]] -- Regenerated after each commit to this repo
+- [X] Passes =checkdoc= and =package-lint= ([[https://github.com/purcell/package-lint/issues/89][/almost/]]).
 *** Changelog
 :PROPERTIES:
 :EXPORT_FILE_NAME: changelog

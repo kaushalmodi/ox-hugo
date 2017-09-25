@@ -25,6 +25,11 @@ li pre, pre {
     padding-right: 5px;
 }
 
+/* Do not should list bullets for checkbox list items */
+ul.task-list {
+    list-style-type: none;
+}
+
 /* * Table of Contents on side */
 .toc {
     font-family: 'Source Sans Pro', sans-serif;

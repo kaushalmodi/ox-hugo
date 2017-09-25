@@ -65,29 +65,6 @@ Click below image to jump to the unicorn image.
 
 - NOTE :: =file:= has to be used in both Link and Description components
           of the Org link.
-*** Image with =ATTR_HTML= [[https://github.com/kaushalmodi/ox-hugo/issues/17][Issue # 17]]
-#+ATTR_HTML: :class inset
-[[/images/org-mode-unicorn-logo.png]]
-
-[[https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728][Discussion]]
-**** COMMENT Below will not work!
-You cannot wrap markdown code inside HTML.
-
-As /rdwatters/ says [[https://discourse.gohugo.io/t/is-it-possible-to-insert-html-code-in-markdown-content/4867/4?u=kaushalmodi][here]],
-#+BEGIN_QUOTE
-HTML can be part of markdown because HTML-inside-markdown is part of
-the spec. That said, remember that the spec disallows markdown nested
-inside of HTML. So if you create a div, just make sure everything
-inside that div is valid HTML.
-#+END_QUOTE
-
-#+BEGIN_EXPORT md
-<div class="inset">
-#+END_EXPORT
-[[/images/org-mode-unicorn-logo.png]]
-#+BEGIN_EXPORT md
-</div>
-#+END_EXPORT
 *** Link to image outside of standard Hugo =static= directory
 [[../files-to-be-copied-to-static/static/images/copy-of-unicorn-logo.png]]
 
@@ -119,11 +96,67 @@ copied location inside =static=:
 :PROPERTIES:
 :EXPORT_DATE: 2017-07-19
 :EXPORT_FILE_NAME: image-captions
+:CUSTOM_ID: image-captions
 :END:
 Some text before image.
 #+CAPTION: A unicorn!
 [[/images/org-mode-unicorn-logo.png]]
 Some more text, after image.
+** Image with Hugo =figure= shortcode parameters set using =ATTR_HTML=
+:PROPERTIES:
+:EXPORT_FILE_NAME: figure-shortcode-and-attr-html
+:END:
+[[https://github.com/kaushalmodi/ox-hugo/issues/17][Issue # 17]]
+*** Setting =class= parameter
+#+ATTR_HTML: :class inset
+[[/images/org-mode-unicorn-logo.png]]
+
+[[https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728][Discussion]]
+**** COMMENT Below will not work!
+You cannot wrap markdown code inside HTML.
+
+As /rdwatters/ says [[https://discourse.gohugo.io/t/is-it-possible-to-insert-html-code-in-markdown-content/4867/4?u=kaushalmodi][here]],
+#+BEGIN_QUOTE
+HTML can be part of markdown because HTML-inside-markdown is part of
+the spec. That said, remember that the spec disallows markdown nested
+inside of HTML. So if you create a div, just make sure everything
+inside that div is valid HTML.
+#+END_QUOTE
+
+#+BEGIN_EXPORT md
+<div class="inset">
+#+END_EXPORT
+[[/images/org-mode-unicorn-logo.png]]
+#+BEGIN_EXPORT md
+</div>
+#+END_EXPORT
+*** Setting =alt= parameter
+[[https://www.reddit.com/r/emacs/comments/71wy6n/orgmode_as_a_markup_language_does_make_sense_even/dnhqudn/][Reference]]
+#+ATTR_HTML: :alt Org-mode Unicorn Logo
+[[/images/org-mode-unicorn-logo.png]]
+*** Setting =title= parameter
+#+ATTR_HTML: :title Logo
+[[/images/org-mode-unicorn-logo.png]]
+*** Setting image caption
+The image caption can be set in two ways.
+1. Using the Org =#+CAPTION= keyword
+2. Using =#+ATTR_HTML: :caption my caption=
+
+The =#+CAPTION= is available will get the higher precedence. In the
+below image, caption is set using that:
+
+#+INCLUDE: "./all-posts.org::#image-captions" :only-contents t
+
+Below, the same caption is set using the =#+ATTR_HTML= method instead:
+
+Some text before image.
+#+ATTR_HTML: :caption A unicorn!
+[[/images/org-mode-unicorn-logo.png]]
+Some more text, after image.
+*** Other
+Similarly, =:link=, =:attr=, =:attrlink= parameters in =#+ATTR_HTML=
+are also supported to set the corresponding parameter in the Hugo
+=figure= shortcode.
 * Setting heading anchors
 :PROPERTIES:
 :EXPORT_FILE_NAME: setting-heading-anchors

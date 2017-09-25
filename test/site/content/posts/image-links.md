@@ -51,13 +51,6 @@ Click below image to jump to the unicorn image.
     of the Org link.
 
 
-## Image with `ATTR_HTML` [Issue # 17](https://github.com/kaushalmodi/ox-hugo/issues/17) {#image-with-attr-html-issue-17}
-
-{{<figure src="/images/org-mode-unicorn-logo.png" class="inset">}}
-
-[Discussion](https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728)
-
-
 ## Link to image outside of standard Hugo `static` directory {#link-to-image-outside-of-standard-hugo-static-directory}
 
 {{<figure src="/images/copy-of-unicorn-logo.png">}}

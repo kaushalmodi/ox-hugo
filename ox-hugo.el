@@ -806,20 +806,33 @@ and rewrite link paths to make blogging more seamless."
      ((org-export-inline-image-p link org-html-inline-image-rules)
       ;; (message "[org-hugo-link DBG] processing an image: %s" contents)
       (let* ((path (org-hugo--attachment-rewrite-maybe raw-path info))
-             (caption (org-export-data
-                       (org-export-get-caption (org-export-get-parent-element link))
-                       info))
              (parent (org-export-get-parent link))
              (attr (org-export-read-attribute :attr_html parent))
-             (class (plist-get attr :class)))
-        (format "{{<figure src=\"%s\"%s%s>}}"
-                path
-                (if (org-string-nw-p caption)
-                    (format " caption=\"%s\"" caption)
-                  "")
-                (if (org-string-nw-p class)
-                    (format " class=\"%s\"" class)
-                  ""))))
+             ;; Hugo `figure' shortcode named parameters
+             ;; https://gohugo.io/content-management/shortcodes/#figure
+             (caption (org-string-nw-p
+                       (org-export-data  ;Look for caption set using #+CAPTION
+                        (org-export-get-caption (org-export-get-parent-element link))
+                        info)))
+             (figure-params `((src . ,path)
+                              (link . ,(plist-get attr :link))
+                              (title . ,(plist-get attr :title))
+                              (caption . ,(if caption
+                                              caption ;Caption set using #+CAPTION takes higher precedence
+                                            (plist-get attr :caption)))
+                              (class . ,(plist-get attr :class))
+                              (attr . ,(plist-get attr :attr))
+                              (attrlink . ,(plist-get attr :attrlink))
+                              (alt . ,(plist-get attr :alt))))
+             (figure-param-str ""))
+        (dolist (param figure-params)
+          (let ((name (car param))
+                (val (cdr param)))
+            (when val
+              (setq figure-param-str (concat figure-param-str
+                                             (format "%s=\"%s\" "
+                                                     name val))))))
+        (format "{{<figure %s>}}" (org-trim figure-param-str))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
         (format (org-export-get-coderef-format ref contents)

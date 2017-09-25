@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-25 12:39:58 kmodi>
+;; Time-stamp: <2017-09-25 17:40:32 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
 
@@ -8,8 +8,14 @@
 
 (defvar ox-hugo-elpa (let ((dir (getenv "OX_HUGO_ELPA")))
                        (unless dir
-                         (setq dir (concat temporary-file-directory (getenv "USER") "/ox-hugo-dev/")))
-                       (make-directory (file-name-as-directory dir) :parents)
+                         (let ((base-dir (file-name-as-directory
+                                          (if (file-writable-p temporary-file-directory)
+                                              (concat temporary-file-directory (getenv "USER"))
+                                            ;; /tmp/ is not writable on Android Termux for example.
+                                            (getenv "HOME")))))
+                           (setq dir (concat base-dir "ox-hugo-dev/"))))
+                       (setq dir (file-name-as-directory dir))
+                       (make-directory dir :parents)
                        dir))
 (message "ox-hugo-elpa: %S" ox-hugo-elpa)
 

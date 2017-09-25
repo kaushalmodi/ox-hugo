@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-25 17:40:32 kmodi>
+;; Time-stamp: <2017-09-25 17:53:26 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
 
@@ -9,7 +9,7 @@
 (defvar ox-hugo-elpa (let ((dir (getenv "OX_HUGO_ELPA")))
                        (unless dir
                          (let ((base-dir (file-name-as-directory
-                                          (if (file-writable-p temporary-file-directory)
+                                          (if (not (string-match-p "/com\\.termux/" temporary-file-directory))
                                               (concat temporary-file-directory (getenv "USER"))
                                             ;; /tmp/ is not writable on Android Termux for example.
                                             (getenv "HOME")))))

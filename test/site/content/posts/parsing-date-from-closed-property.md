@@ -1,6 +1,6 @@
 +++
 title = "Parsing date from CLOSED property"
-date = 2017-09-11T14:32:00-04:00
+date = 2017-09-11T14:32:00+00:00
 draft = false
 +++
 

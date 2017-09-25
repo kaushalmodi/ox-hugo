@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-22 18:05:18 kmodi>
+# Time-stamp: <2017-09-25 11:44:26 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -25,6 +25,12 @@ ORG_FILE=
 
 # Directory where the required elisp packages are auto-installed
 OX_HUGO_ELPA=/tmp/$(USER)/ox-hugo-dev/
+
+# Set TIMEZONE to the TZ environment variable. If TZ is unset, Emacs
+# uses system wall clock time, which is a platform-dependent default
+# time zone --
+# https://www.gnu.org/software/emacs/manual/html_node/elisp/Time-Zone-Rules.html
+TIMEZONE=${TZ}
 
 subtree_test_files = all-posts.org \
 	construct-hugo-front-matter-from-menu-meta-data.org \
@@ -75,6 +81,7 @@ help:
 emacs-batch:
 	@$(EMACS) --batch --eval "(progn\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
+	(when (> (length \"$(TIMEZONE)\") 0) (setenv \"TZ\" \"$(TIMEZONE)\"))\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	)" $(ORG_FILE_DIR)/$(ORG_FILE) \
 	-f $(FUNC) \
@@ -125,13 +132,17 @@ testmkgold:
 # https://stackoverflow.com/a/37748952/1219634
 test_subtree: $(subtree_test_files)
 $(subtree_test_files):
-	@$(MAKE) mdtree ORG_FILE=$@ ORG_FILE_DIR=$(OX_HUGO_TEST_ORG_DIR)
+	@$(MAKE) mdtree ORG_FILE=$@ \
+	                ORG_FILE_DIR=$(OX_HUGO_TEST_ORG_DIR) \
+	                TIMEZONE=UTC # Use UTC/Universal time zone for tests
 	@$(MAKE) diffgolden
 
 # Run the mdfile + diffgolden rules in loop on all of $(file_test_files)
 test_file: $(file_test_files)
 $(file_test_files):
-	@$(MAKE) mdfile ORG_FILE=$@ ORG_FILE_DIR=$(OX_HUGO_TEST_ORG_DIR)
+	@$(MAKE) mdfile ORG_FILE=$@ \
+	                ORG_FILE_DIR=$(OX_HUGO_TEST_ORG_DIR) \
+	                TIMEZONE=UTC # Use UTC/Universal time zone for tests
 	@$(MAKE) diffgolden
 
 doc_site:

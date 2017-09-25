@@ -4,9 +4,6 @@ sudo: false
 language: generic
 env:
   global:
-  # Below is required so that the time-zones in the time stamps match
-  # when generated on Travis CI too.
-    - TZ=America/New_York
     - CURL="curl -fsSkL --retry 9 --retry-delay 9"
   matrix:
   - EMACS_VERSION=24.4
@@ -21,6 +18,7 @@ install:
   - export EMACS=/tmp/emacs/bin/emacs
   - $EMACS --version
 script:
+  - make doc EMACS=${EMACS} # Just ensure that "make doc" doesn't fail for any reason.. this is *not* used to do Org->Markdown doc conversion using Travis.
   - make test EMACS=${EMACS}
   - make vcheck EMACS=${EMACS}
 notifications:

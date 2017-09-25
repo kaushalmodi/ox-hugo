@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-25 12:14:26 kmodi>
+;; Time-stamp: <2017-09-25 12:39:58 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
 
@@ -8,7 +8,7 @@
 
 (defvar ox-hugo-elpa (let ((dir (getenv "OX_HUGO_ELPA")))
                        (unless dir
-                         (setq dir (concat (temporary-file-directory) (getenv "USER") "/ox-hugo-dev/")))
+                         (setq dir (concat temporary-file-directory (getenv "USER") "/ox-hugo-dev/")))
                        (make-directory (file-name-as-directory dir) :parents)
                        dir))
 (message "ox-hugo-elpa: %S" ox-hugo-elpa)

@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-25 12:28:57 kmodi>
+# Time-stamp: <2017-09-25 12:41:18 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -100,6 +100,7 @@ mdfile:
 
 vcheck:
 	@$(EMACS) --batch --eval "(progn\
+	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	(message \"[Version check] Emacs %s\" emacs-version)\
 	(message \"[Version check] %s\" (org-version nil :full))\

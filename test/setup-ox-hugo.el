@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-25 12:06:47 kmodi>
+;; Time-stamp: <2017-09-25 12:14:26 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
 
@@ -61,7 +61,7 @@ Emacs installation.  If Emacs is installed using
 
 (defvar ox-hugo-git-root (progn
                            (require 'vc-git)
-                           (vc-git-root ".")))
+                           (file-truename (vc-git-root "."))))
 (message "ox-hugo-git-root: %S" ox-hugo-git-root)
 
 (if (and (stringp ox-hugo-elpa)

@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-25 21:44:59 kmodi>
+# Time-stamp: <2017-09-26 14:20:42 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -39,7 +39,8 @@ subtree_test_files = all-posts.org \
 	mandatory-EXPORT_FILE_NAME-for-subtree-export.org \
 	hugo-menu-as-keyword.org \
 	tags-keyword.org \
-	hugo-weight-as-keyword-auto-calc.org
+	hugo-weight-as-keyword-auto-calc.org \
+	deep-nesting.org
 
 file_test_files = single-posts/post-toml.org \
 	single-posts/post-yaml.org \

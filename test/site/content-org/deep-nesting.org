@@ -1,0 +1,92 @@
+#+HUGO_BASE_DIR: ../
+
+* Introduction
+See https://github.com/kaushalmodi/ox-hugo/issues/81
+
+#+BEGIN_QUOTE
+I'd like to be able to write a book for the [[http://docdock.netlify.com/content-organisation/][docdock theme]]. It says to
+nest content like this:
+#+BEGIN_EXAMPLE
+content
+├── level-one
+│   ├── level-two
+│   │   ├── level-three
+│   │   │   ├── level-four
+│   │   │   │   ├── _index.md
+│   │   │   │   ├── page-4-a.md
+│   │   │   │   ├── page-4-b.md
+│   │   │   │   └── page-4-c.md
+#+END_EXAMPLE
+#+END_QUOTE
+
+* Books
+** book1
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: book1
+:END:
+*** Index
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+Book 1 index.
+
+This type of organization will generate this in the =content/=
+directory:
+#+BEGIN_EXAMPLE
+> tree book1
+book1
+├── chapter1
+│   ├── _index.md
+│   ├── section1.md
+│   └── section2.md
+├── chapter2
+│   ├── _index.md
+│   ├── section1.md
+│   └── section2.md
+└── _index.md
+#+END_EXAMPLE
+
+- [[/book1/chapter1][Chapter 1]]
+  - [[/book1/chapter1/section1][Chapter 1 Section 1]]
+  - [[/book1/chapter1/section2][Chapter 1 Section 2]]
+- [[/book1/chapter2][Chapter 2]]
+  - [[/book1/chapter2/section1][Chapter 2 Section 1]]
+  - [[/book1/chapter2/section2][Chapter 2 Section 2]]
+*** chapter 1
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: book1/chapter1
+:END:
+**** Chapter 1 Index
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+Introduction for chapter 1
+**** sub section 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: section1
+:END:
+Section 1 of chapter 1
+**** sub section 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: section2
+:END:
+Section 2 of chapter 1
+*** chapter 2
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: book1/chapter2
+:END:
+**** Chapter 2 Index
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+Introduction for chapter 2
+**** sub section 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: section1
+:END:
+Section 1 of chapter 2
+**** sub section 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: section2
+:END:
+Section 2 of chapter 2

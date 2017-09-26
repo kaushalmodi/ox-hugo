@@ -95,7 +95,7 @@ contains the #+TITLE keyword and is present in the
 `my/hugo-org-content-dir'."
     (let ((fname (buffer-file-name)))
       (when (and fname
-                 (string-match-p (concat "\\`" (regexp-quote my/hugo-org-content-dir) ".*\.org\\'")
+                 (string-match-p (concat "\\`" (regexp-quote my/hugo-org-content-dir) ".*\\.org\\'")
                                  fname))
         (save-excursion
           (goto-char (point-min))

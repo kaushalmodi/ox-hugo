@@ -13,25 +13,13 @@
 :END:
 {{{travis}}} {{{melpa}}} {{{GPLv3}}}
 
-=ox-hugo= is an Org exporter backend that exports Org to
-[[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]) and also generates the
-front-matter (in TOML or YAML format).
-
-This project consists of =ox-blackfriday.el= too. It is a derivation
-of [[https://github.com/larstvei/ox-gfm][=ox-gfm=]] with support added for Blackfriday Markdown tables and
-many other tweaks. =ox-hugo= backend extends from this.
-** Screenshots
-Before you read further, you can see below how =ox-hugo= translates
-Org to Markdown (Org on the left; exported Markdown with Hugo
-front-matter on the right).
-
-*One post per Org subtree --*
-#+INCLUDE: "./ox-hugo-manual.org::#screenshot-one-post-per-subtree" :only-contents t
-
-*One post per Org file --*
-#+INCLUDE: "./ox-hugo-manual.org::#screenshot-one-post-per-file" :only-contents t
-
-#+INCLUDE: "./ox-hugo-manual.org::#org-blogging-flow-editorial" :only-contents t
+#+INCLUDE: "./ox-hugo-manual.org::#introduction" :only-contents t
+** Table of Contents                                                    :TOC:
+# TOC will be inserted here by `toc-org' package when running
+# `ox-hugo-export-gh-doc'.
+** Screenshots                                                   :noexport_1:
+#+INCLUDE: "./ox-hugo-manual.org::#screenshots_intro" :only-contents t
+#+INCLUDE: "./ox-hugo-manual.org::#screenshots" :only-contents t
 ** Documentation
 =ox-hugo= is unique in a sense that it *itself* is used to generate
 its documentation!
@@ -49,19 +37,12 @@ https://ox-hugo.netlify.com/
 
 #+INCLUDE: "./ox-hugo-manual.org::#demo" :minlevel 2
 
-** Table of Contents                                                    :TOC:
-# TOC will be inserted here by `toc-org' package when running
-# `ox-hugo-export-gh-doc'.
 ** Installation
 #+INCLUDE: "./ox-hugo-manual.org::#installation" :only-contents t
 ** Usage
 #+INCLUDE: "./ox-hugo-manual.org::#usage" :only-contents t
 ** Thanks
-- Matt Price ([[https://github.com/titaniumbones][@titaniumbones]])
-- Puneeth Chaganti ([[https://github.com/punchagan][@punchagan]])
-- Also thanks to [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]], [[http://whyarethingsthewaytheyare.com/setting-up-the-blog/][whyarethingsthewaytheyare.com]] and
-  the [[https://github.com/chaseadamsio/goorgeous][=goorgoeous=]] project by Chase Adams ([[https://github.com/chaseadamsio][@chaseadamsio]]) for
-  inspiration to start this project.
+#+INCLUDE: "./ox-hugo-manual.org::#thanks" :only-contents t
 * Contributing                                                 :contributing:
 :PROPERTIES:
 :EXPORT_TITLE: Contributing Guide

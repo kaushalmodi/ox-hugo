@@ -35,26 +35,10 @@
 :EXPORT_HUGO_MENU: :menu main
 :CUSTOM_ID: main
 :END:
-=ox-hugo= is an Org exporter backend that exports Org to
-[[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]) and also generates the
-front-matter (in TOML or YAML format).
-
-This project consists of =ox-blackfriday.el= too. It is a derivation
-of [[https://github.com/larstvei/ox-gfm][=ox-gfm=]] with support added for Blackfriday Markdown tables and
-many other tweaks. =ox-hugo= backend extends from this.
-
+#+INCLUDE: "./ox-hugo-manual.org::#introduction" :only-contents t
 ** Screenshots
-Before you read further, you can see below how =ox-hugo= translates
-Org to Markdown (Org on the left; exported Markdown with Hugo
-front-matter on the right).
-
-*One post per Org subtree --*
-#+INCLUDE: "./ox-hugo-manual.org::#screenshot-one-post-per-subtree" :only-contents t
-
-*One post per Org file --*
-#+INCLUDE: "./ox-hugo-manual.org::#screenshot-one-post-per-file" :only-contents t
-
-#+INCLUDE: "./ox-hugo-manual.org::#org-blogging-flow-editorial" :only-contents t
+#+INCLUDE: "./ox-hugo-manual.org::#screenshots_intro" :only-contents t
+#+INCLUDE: "./ox-hugo-manual.org::#screenshots" :only-contents t
 
 #+INCLUDE: "./ox-hugo-manual.org::#demo" :minlevel 2
 
@@ -63,11 +47,7 @@ front-matter on the right).
 ** Usage
 #+INCLUDE: "./ox-hugo-manual.org::#usage" :only-contents t
 ** Thanks
-- Matt Price ([[https://github.com/titaniumbones][@titaniumbones]])
-- Puneeth Chaganti ([[https://github.com/punchagan][@punchagan]])
-- Also thanks to [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]], [[http://whyarethingsthewaytheyare.com/setting-up-the-blog/][whyarethingsthewaytheyare.com]] and
-  the [[https://github.com/chaseadamsio/goorgeous][=goorgoeous=]] project by Chase Adams ([[https://github.com/chaseadamsio][@chaseadamsio]]) for
-  inspiration to start this project.
+#+INCLUDE: "./ox-hugo-manual.org::#thanks" :only-contents t
 ** Future Plans                                                    :noexport:
 There is a plan to create a =hugo.el= that would do things like:
 - New post creation using =org-capture= (port code from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]]).
@@ -87,6 +67,17 @@ There is a plan to create a =hugo.el= that would do things like:
 :END:
 # Generate an empty _index.md in test/ for that subdirectory to get generated.
 * Reused Sections
+** Introduction
+:PROPERTIES:
+:CUSTOM_ID: introduction
+:END:
+=ox-hugo= is an Org exporter backend that exports Org to
+[[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]) and also generates the
+front-matter (in TOML or YAML format).
+
+This project consists of =ox-blackfriday.el= too. It is a derivation
+of [[https://github.com/larstvei/ox-gfm][=ox-gfm=]] with support added for Blackfriday Markdown tables and
+many other tweaks. =ox-hugo= backend extends from this.
 ** Installation
 :PROPERTIES:
 :CUSTOM_ID: installation
@@ -146,6 +137,13 @@ The common =ox-hugo= export bindings are:
 |---------------+-------------------------------------------------------------------------------------|
 | =C-c C-e H h= | Export the whole Org file to a single post                                          |
 |---------------+-------------------------------------------------------------------------------------|
+** Screenshots Intro
+:PROPERTIES:
+:CUSTOM_ID: screenshots_intro
+:END:
+Before you read further, you can see below how =ox-hugo= translates
+Org to Markdown (Org on the left; exported Markdown with Hugo
+front-matter on the right).
 ** Screenshots
 :PROPERTIES:
 :CUSTOM_ID: screenshots
@@ -232,6 +230,15 @@ error backtrace,
    #+BEGIN_EXAMPLE
    make test
    #+END_EXAMPLE
+** Thanks
+:PROPERTIES:
+:CUSTOM_ID: thanks
+:END:
+- Matt Price ([[https://github.com/titaniumbones][@titaniumbones]])
+- Puneeth Chaganti ([[https://github.com/punchagan][@punchagan]])
+- Also thanks to [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]], [[http://whyarethingsthewaytheyare.com/setting-up-the-blog/][whyarethingsthewaytheyare.com]] and
+  the [[https://github.com/chaseadamsio/goorgeous][=goorgoeous=]] project by Chase Adams ([[https://github.com/chaseadamsio][@chaseadamsio]]) for
+  inspiration to start this project.
 * Menus
 ** Early Questions
 :PROPERTIES:
@@ -382,6 +389,8 @@ the above two blogging flows.
   24.4->25.2, with the latest stable version of =org-plus-contrib=.
 - [X] [[https://ox-hugo.netlify.com][Documentation site]] -- Generated using =ox-hugo= itself.
 - [X] [[../test][Test site]] -- Regenerated after each commit to this repo
+- [X] Passes =make test= and generates documentation using =make doc=
+  in [[https://play.google.com/store/apps/details?id=com.termux&hl=en][Termux]] app on Android too.
 - [X] Passes =checkdoc= and =package-lint= ([[https://github.com/purcell/package-lint/issues/89][/almost/]]).
 *** Changelog
 :PROPERTIES:

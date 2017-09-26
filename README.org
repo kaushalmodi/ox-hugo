@@ -9,19 +9,29 @@ front-matter (in TOML or YAML format).
 This project consists of =ox-blackfriday.el= too. It is a derivation
 of [[https://github.com/larstvei/ox-gfm][=ox-gfm=]] with support added for Blackfriday Markdown tables and
 many other tweaks. =ox-hugo= backend extends from this.
+* Table of Contents
+- [[#screenshots][Screenshots]]
+- [[#documentation][Documentation]]
+  - [[#source-of-the-documentation-site][Source of the Documentation site]]
+- [[#demo][Demo]]
+  - [[#actual-usage-examples][Actual usage examples]]
+- [[#installation][Installation]]
+- [[#usage][Usage]]
+  - [[#before-you-export][Before you export]]
+  - [[#export-bindings][Export bindings]]
+- [[#thanks][Thanks]]
+
 * Screenshots
 Before you read further, you can see below how =ox-hugo= translates
 Org to Markdown (Org on the left; exported Markdown with Hugo
 front-matter on the right).
-
-*One post per Org subtree --*
+** One post per Org subtree (preferred)
 [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-subtree.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-subtree.png]]
 - Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
-
-*One post per Org file --*
+** One post per Org file
 [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-file.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-file.png]]
 - Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
-
+** Editorial
 The preferred way to organize the posts is as Org subtrees (also the
 main reason to write this package, as nothing like that was out there)
 as it makes the meta-data management for Hugo front-matter pretty
@@ -61,18 +71,6 @@ presentation styles./
 ** Actual usage examples
 - https://ox-hugo.netlify.com -- =ox-hugo= Documentation Site
 - [[https://scripter.co]] -- My blog
-
-* Table of Contents
-- [[#screenshots][Screenshots]]
-- [[#documentation][Documentation]]
-  - [[#source-of-the-documentation-site][Source of the Documentation site]]
-- [[#demo][Demo]]
-  - [[#actual-usage-examples][Actual usage examples]]
-- [[#installation][Installation]]
-- [[#usage][Usage]]
-  - [[#before-you-export][Before you export]]
-  - [[#export-bindings][Export bindings]]
-- [[#thanks][Thanks]]
 
 * Installation
 This package requires emacs 24.5+ and Org 9.0+. It is available on

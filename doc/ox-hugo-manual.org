@@ -367,9 +367,8 @@ See the [[/doc/org-capture-setup][Org Capture Setup]] page to see how to quickly
 
 See the [[/doc/auto-export-on-saving][Auto-export on Saving]] page to learn how to setup up seeing
 live-preview of the Hugo-rendered HTML each time you do =C-x C-s= in
-the Org file --- For now, this works only with the *Subtree export
-flow*.
-
+the Org file. That section explains how to set that up for either of
+the above two blogging flows.
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu meta
@@ -470,18 +469,19 @@ exported Markdown files.
 Wouldn't it be awesome if you can see the live-preview of your
 Hugo-rendered post each time you saved your post in Org?
 
-Well.. you can do that with these steps, though, it depends on which
-workflow you use:
-**** One post per Org subtree
-***** First time setup
-****** Step 1: Set up the =after-save-hook=
+Well.. you can do that with these steps:
+**** First time setup
+The first time setup varies between the /per-subtree export flow/ and
+/per-file export flow/.
+***** One post per Org subtree
+****** Step 1a: Set up the =after-save-hook=
  1. Add below to the very-end of your posts Org file:
     #+BEGIN_SRC org
-   * Footnotes
-   * COMMENT Local Variables                                           :ARCHIVE:
-   # Local Variables:
-   # eval: (add-hook 'after-save-hook #'org-hugo-export-subtree-to-md-after-save :append :local)
-   # End:
+    * Footnotes
+    * COMMENT Local Variables                                           :ARCHIVE:
+    # Local Variables:
+    # eval: (add-hook 'after-save-hook #'org-hugo-export-subtree-to-md-after-save :append :local)
+    # End:
     #+END_SRC
 
     Here I recommend adding the =* Footnotes= header too so that in
@@ -494,7 +494,7 @@ workflow you use:
  3. You will be prompted to add that =eval= line to your /Customize/
     setup, hit =!= to permanently save that setting and prevent future
     prompts.
-****** Step 2: Prevent auto-export during Org Capture
+****** Step 1b: Prevent auto-export during Org Capture
  You might find this step useful if you choose to write new posts using
  =org-capture= as explained in the [[/doc/org-capture-setup][/Org Capture Setup/]] section.
 
@@ -502,82 +502,90 @@ workflow you use:
  auto-exports will be prevented when saving a new post created using
  Org Capture.
  #+BEGIN_SRC emacs-lisp
-(with-eval-after-load 'org-capture
-  ;; Do not cause auto Org->Hugo export to happen when saving captures
-  (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
-    "Function for `org-capture-before-finalize-hook'.
-Disable `org-hugo-export-subtree-to-md-after-save'."
-    (setq org-hugo-allow-export-after-save nil))
+ (with-eval-after-load 'org-capture
+   ;; Do not cause auto Org->Hugo export to happen when saving captures
+   (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
+     "Function for `org-capture-before-finalize-hook'.
+ Disable `org-hugo-export-subtree-to-md-after-save'."
+     (setq org-hugo-allow-export-after-save nil))
 
-  (defun modi/org-capture--add-auto-org-to-hugo-export-maybe ()
-    "Function for `org-capture-after-finalize-hook'.
-Enable `org-hugo-export-subtree-to-md-after-save'."
-    (setq org-hugo-allow-export-after-save t))
+   (defun modi/org-capture--add-auto-org-to-hugo-export-maybe ()
+     "Function for `org-capture-after-finalize-hook'.
+ Enable `org-hugo-export-subtree-to-md-after-save'."
+     (setq org-hugo-allow-export-after-save t))
 
-  (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
-  (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
+   (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
+   (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
  #+END_SRC
-***** Steps that /might/ need to be taken every time
-****** Step 3: Start the engines (Hugo Server)
- We start the =hugo server= so that we can see the live-preview each
- time the Org file is saved.
+***** One post per Org file
+****** Step 1: Set up the =after-save-hook=
+If you use a seperate Org file for each blog post, you can add the
+below to your config:
 
- I recommend using Hugo version 0.25 at the minimum as that added
- support for the awesome =--navigateToChanged= switch!
+#+BEGIN_SRC emacs-lisp
+(use-package ox-hugo
+  :ensure t
+  :after ox
+  :init
+  (defconst my/hugo-org-content-dir (expand-file-name "~/hugo_base_dir/content-org/")
+    "Directory containing the Org mode posts.")
 
- Run below in your Hugo site root (the directory that contains the site
- =config.toml=) to start the server:
- #+BEGIN_EXAMPLE
+  (defun my/org-hugo-publish-current-buffer-as-post ()
+    "Export the current Org file if a valid Hugo post.
+Current file is exported using `org-hugo-export-to-md' if it
+contains the #+TITLE keyword and is present in the
+`my/hugo-org-content-dir'."
+    (let ((fname (buffer-file-name)))
+      (when (and fname
+                 (string-match-p (concat "\\`" (regexp-quote my/hugo-org-content-dir) ".*\.org\\'")
+                                 fname))
+        (save-excursion
+          (goto-char (point-min))
+          (if (< (how-many "^#\\+TITLE:") 1)
+              (message "Unable to export as the Org file is missing the #+TITLE keyword.")
+            (org-hugo-export-to-md))))))
+
+  (defun my/org-mode-hook-fn ()
+    "My Org mode customization."
+    (add-hook 'after-save-hook #'my/org-hugo-publish-current-buffer-as-post :append :local))
+
+  (add-hook 'org-mode-hook #'my/org-mode-hook-fn))
+#+END_SRC
+**** Steps that /might/ need to be taken every time
+Once the initial setup is done, the following steps apply to both
+blogging flows.
+***** Step 2: Start the engines (Hugo Server)
+We start the =hugo server= so that we can see the live-preview each
+time the Org file is saved.
+
+I recommend using Hugo version 0.25 at the minimum as that added
+support for the awesome =--navigateToChanged= switch!
+
+Run below in your Hugo site root (the directory that contains the site
+=config.toml=) to start the server:
+#+BEGIN_EXAMPLE
 hugo server -D --navigateToChanged
- #+END_EXAMPLE
-****** Step 4: Open your browser
- By default the site is served locally on port /1313/ on
- /localhost/. So the above step would have printed something like below
- at the end:
- #+BEGIN_EXAMPLE
+#+END_EXAMPLE
+***** Step 3: Open your browser
+By default the site is served locally on port /1313/ on
+/localhost/. So the above step would have printed something like below
+at the end:
+#+BEGIN_EXAMPLE
 Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
- #+END_EXAMPLE
+#+END_EXAMPLE
 
- So open your favorite browser pointing to that address.
-***** FINAL step that needs to be taken every time
- If you are like me, you might not need to repeat steps 3 and 4 above,
- as you can leave the =hugo= server running in a separate terminal, and
- have a browser tab pinned to that localhost.
+So open your favorite browser pointing to that address.
+**** FINAL step that needs to be taken every time
+***** Step 4: Save and be in awe
+If you are like me, you might not need to repeat steps 2 and 3 above,
+as you can leave the =hugo= server running in a separate terminal, and
+have a browser tab pinned to that localhost.
 
- So with that, have the emacs and browser frames set up side-by-side,
- and edit your Org post.
+So with that, have the emacs and browser frames set up side-by-side,
+and edit your Org post.
 
- Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
- *exact post you modified*!
-**** One post per Org file
-If you use a seperate Org file for each blog post, you can add this
-hook to your config:
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package ox-hugo
-     :ensure t
-     :after ox
-     :init
-     ; Where I put my Org source files for my blog:
-     (setq my/org-hugo-src-dir (expand-file-name "~/git/blog/src/"))
-     ; Whenever I save the Org source file for one of my blog posts,
-     ; auto-export it to hugo with ox-hugo. (Only applicable to Org
-     ; files saved in the directory defined by my/org-hugo-src-dir)
-     (defun my/org-hugo-publish-current-buffer-as-post ()
-       (if (string-match-p
-            (concat "^" my/org-hugo-src-dir ".*\.org$")
-            (buffer-file-name))
-           (save-excursion 
-             (goto-char (point-min))
-             (if (< (how-many "^#\\+TITLE:") 1)
-                 (message "Refusing to publish blog post without a #+TITLE property.")
-               (org-hugo-export-to-md)))))
-     (add-hook 'org-mode-hook (lambda ()
-       (add-hook 'after-save-hook 
-                 'my/org-hugo-publish-current-buffer-as-post)))
-   )
-   #+END_SRC
-
+Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
+*exact post you modified*!
 *** Org Capture Setup
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-capture-setup

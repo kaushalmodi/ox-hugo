@@ -9,14 +9,19 @@ draft = false
 Wouldn't it be awesome if you can see the live-preview of your
 Hugo-rendered post each time you saved your post in Org?
 
-Well.. you can do that with these steps, though, this works **only with
-subtree-export flow** at the moment.
+Well.. you can do that with these steps:
 
 
 ## First time setup {#first-time-setup}
 
+The first time setup varies between the _per-subtree export flow_ and
+_per-file export flow_.
 
-### Step 1: Set up the `after-save-hook` {#step-1-set-up-the-after-save-hook}
+
+### One post per Org subtree {#one-post-per-org-subtree}
+
+
+#### Step 1a: Set up the `after-save-hook` {#step-1a-set-up-the-after-save-hook}
 
 1.  Add below to the very-end of your posts Org file:
 
@@ -40,7 +45,7 @@ subtree-export flow** at the moment.
     prompts.
 
 
-### Step 2: Prevent auto-export during Org Capture {#step-2-prevent-auto-export-during-org-capture}
+#### Step 1b: Prevent auto-export during Org Capture {#step-1b-prevent-auto-export-during-org-capture}
 
 You might find this step useful if you choose to write new posts using
 `org-capture` as explained in the [_Org Capture Setup_](/doc/org-capture-setup) section.
@@ -67,10 +72,52 @@ Enable `org-hugo-export-subtree-to-md-after-save'."
 ```
 
 
+### One post per Org file {#one-post-per-org-file}
+
+
+#### Step 1: Set up the `after-save-hook` {#step-1-set-up-the-after-save-hook}
+
+If you use a seperate Org file for each blog post, you can add the
+below to your config:
+
+```emacs-lisp
+(use-package ox-hugo
+  :ensure t
+  :after ox
+  :init
+  (defconst my/hugo-org-content-dir (expand-file-name "~/hugo_base_dir/content-org/")
+    "Directory containing the Org mode posts.")
+
+  (defun my/org-hugo-publish-current-buffer-as-post ()
+    "Export the current Org file if a valid Hugo post.
+Current file is exported using `org-hugo-export-to-md' if it
+contains the #+TITLE keyword and is present in the
+`my/hugo-org-content-dir'."
+    (let ((fname (buffer-file-name)))
+      (when (and fname
+                 (string-match-p (concat "\\`" (regexp-quote my/hugo-org-content-dir) ".*\.org\\'")
+                                 fname))
+        (save-excursion
+          (goto-char (point-min))
+          (if (< (how-many "^#\\+TITLE:") 1)
+              (message "Unable to export as the Org file is missing the #+TITLE keyword.")
+            (org-hugo-export-to-md))))))
+
+  (defun my/org-mode-hook-fn ()
+    "My Org mode customization."
+    (add-hook 'after-save-hook #'my/org-hugo-publish-current-buffer-as-post :append :local))
+
+  (add-hook 'org-mode-hook #'my/org-mode-hook-fn))
+```
+
+
 ## Steps that _might_ need to be taken every time {#steps-that-might-need-to-be-taken-every-time}
 
+Once the initial setup is done, the following steps apply to both
+blogging flows.
 
-### Step 3: Start the engines (Hugo Server) {#step-3-start-the-engines--hugo-server}
+
+### Step 2: Start the engines (Hugo Server) {#step-2-start-the-engines--hugo-server}
 
 We start the `hugo server` so that we can see the live-preview each
 time the Org file is saved.
@@ -86,7 +133,7 @@ hugo server -D --navigateToChanged
 ```
 
 
-### Step 4: Open your browser {#step-4-open-your-browser}
+### Step 3: Open your browser {#step-3-open-your-browser}
 
 By default the site is served locally on port _1313_ on
 _localhost_. So the above step would have printed something like below
@@ -101,7 +148,10 @@ So open your favorite browser pointing to that address.
 
 ## FINAL step that needs to be taken every time {#final-step-that-needs-to-be-taken-every-time}
 
-If you are like me, you might not need to repeat steps 3 and 4 above,
+
+### Step 4: Save and be in awe {#step-4-save-and-be-in-awe}
+
+If you are like me, you might not need to repeat steps 2 and 3 above,
 as you can leave the `hugo` server running in a separate terminal, and
 have a browser tab pinned to that localhost.
 

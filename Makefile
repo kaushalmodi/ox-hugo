@@ -1,15 +1,22 @@
-# Time-stamp: <2017-09-25 12:41:18 kmodi>
+# Time-stamp: <2017-09-25 21:44:59 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
 
 EMACS ?= emacs
 
-# Function to be run in emacs --batch
-FUNC=
+# Set TIMEZONE to the TZ environment variable. If TZ is unset, Emacs
+# uses system wall clock time, which is a platform-dependent default
+# time zone --
+# https://www.gnu.org/software/emacs/manual/html_node/elisp/Time-Zone-Rules.html
+TIMEZONE=${TZ}
 
 # Port for hugo server
 PORT=1337
+
+# Directory where the required elisp packages are auto-installed
+TMPDIR ?= /tmp
+OX_HUGO_ELPA=$(TMPDIR)/$(USER)/ox-hugo-dev/
 
 # ox-hugo test directory; also contains the setup-ox-hugo.el
 OX_HUGO_TEST_DIR=$(shell pwd)/test
@@ -23,14 +30,8 @@ OX_HUGO_TEST_ORG_DIR=$(OX_HUGO_TEST_SITE_DIR)/content-org
 # Path to the Org file relative to $(OX_HUGO_TEST_ORG_DIR)
 ORG_FILE=
 
-# Directory where the required elisp packages are auto-installed
-OX_HUGO_ELPA=/tmp/$(USER)/ox-hugo-dev/
-
-# Set TIMEZONE to the TZ environment variable. If TZ is unset, Emacs
-# uses system wall clock time, which is a platform-dependent default
-# time zone --
-# https://www.gnu.org/software/emacs/manual/html_node/elisp/Time-Zone-Rules.html
-TIMEZONE=${TZ}
+# Function to be run in emacs --batch
+FUNC=
 
 subtree_test_files = all-posts.org \
 	construct-hugo-front-matter-from-menu-meta-data.org \

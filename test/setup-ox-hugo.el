@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-25 18:12:29 kmodi>
+;; Time-stamp: <2017-09-25 21:47:44 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
 
@@ -7,15 +7,10 @@
 (setq-default indent-tabs-mode nil)
 
 (defvar ox-hugo-elpa (let ((dir (getenv "OX_HUGO_ELPA")))
-                       (when (or (null dir)
-                                 (string-match-p "/com\\.termux/" temporary-file-directory))
-                         (let ((base-dir (cond
-                                          ((string-match-p "/com\\.termux/" temporary-file-directory)
-                                           ;; /tmp/ is not writable on Android Termux for example.
-                                           (setq base-dir (getenv "HOME")))
-                                          ((null dir)
-                                           (concat temporary-file-directory (getenv "USER"))))))
-                           (setq dir (concat (file-name-as-directory base-dir) "ox-hugo-dev/"))))
+                       (unless dir
+                         (setq dir (concat (file-name-as-directory
+                                            (concat temporary-file-directory (getenv "USER")))
+                                           "ox-hugo-dev/")))
                        (setq dir (file-name-as-directory dir))
                        (make-directory dir :parents)
                        dir))

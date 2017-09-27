@@ -17,11 +17,11 @@ Org                | Markdown
 `*bold*`           | `**bold**`
 `/italics/`        | `_italics_`
 `=monospace=`      | `` `monospace` ``
-`~key-binding~`    | `<kbd>key-binding</kbd>`
-                   | - if `org-hugo-use-code-for-kbd` is non-nil [default]
-                   | - Requires **CSS** to render the `<kbd>` tag as something special.
 `~key-binding~`    | `` `key-binding` ``
-                   | - if `org-hugo-use-code-for-kbd` is nil
+                   | - if `org-hugo-use-code-for-kbd` is nil [default]
+`~key-binding~`    | `<kbd>key-binding</kbd>`
+                   | - if `org-hugo-use-code-for-kbd` is non-nil
+                   | - Requires **CSS** to render the `<kbd>` tag as something special.
 `+strike-through+` | `~~strike-through~~`
 `_underline_`      | `<span class = "underline">underline</span>`
                    | - Requires **CSS** to render this `underline` class as an underline.

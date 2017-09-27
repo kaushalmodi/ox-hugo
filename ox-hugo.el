@@ -378,7 +378,7 @@ Org Verse block or Blackfriday hardLineBreak extension."
   :type 'boolean
   :safe #'booleanp)
 
-(defcustom org-hugo-use-code-for-kbd t
+(defcustom org-hugo-use-code-for-kbd nil
   "When non-nil, ~text~ will translate to <kbd>text</kbd>."
   :group 'org-export-hugo
   :type 'boolean

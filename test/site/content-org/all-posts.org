@@ -508,11 +508,11 @@ the exported =.md= files.
 | =*bold*=           | =**bold**=                                                         | *bold*                |
 | =/italics/=        | =_italics_=                                                        | /italics/             |
 | ==monospace==      | =`monospace`=                                                      | =monospace=           |
-| =~key-binding~=    | =<kbd>key-binding</kbd>=                                           | ~key-binding~         |
-|                    | - if =org-hugo-use-code-for-kbd= is non-nil [default]              |                       |
+| =~key-binding~=    | =`key-binding`=                                                    | ~key-binding~         |
+|                    | - if =org-hugo-use-code-for-kbd= is nil [default]                  |                       |
+| =~key-binding~=    | =<kbd>key-binding</kbd>=                                           |                       |
+|                    | - if =org-hugo-use-code-for-kbd= is non-nil                        |                       |
 |                    | - Requires *CSS* to render the =<kbd>= tag as something special.   |                       |
-| =~key-binding~=    | =`key-binding`=                                                    |                       |
-|                    | - if =org-hugo-use-code-for-kbd= is nil                            |                       |
 | =+strike-through+= | =~~strike-through~~=                                               | +strike-through+      |
 | =_underline_=      | =<span class = "underline">underline</span>=                       | _underline_           |
 |                    | - Requires *CSS* to render this =underline= class as an underline. |                       |
@@ -523,8 +523,8 @@ the exported =.md= files.
 :EXPORT_FILE_NAME: kbd-tag-default
 :EXPORT_DATE: 2017-07-31
 :END:
-This is the default behavior. So =~C-h f~= will show up as =<kbd>C-h
-f</kbd>=.
+This is the default behavior. So =~C-h f~= will show up as =`C-h f`=
+and then =<code>C-h f</code>= in the final Hugo generated HTML.
 
 Example:
 - Few of Emacs help keybindings: ~C-h f~, ~C-h v~

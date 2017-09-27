@@ -30,6 +30,15 @@ ul.task-list {
     list-style-type: none;
 }
 
+/* Org timestamps */
+/* Example: In Changelog */
+.timestamp {
+    color: #BEBEBE;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 0.7em;
+}
+
 /* * Table of Contents on side */
 .toc {
     font-family: 'Source Sans Pro', sans-serif;

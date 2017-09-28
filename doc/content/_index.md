@@ -130,11 +130,11 @@ Before you export check that these properties are set as you need:
 
 The common `ox-hugo` export bindings are:
 
-Binding       | Description
---------------|--------------------------------------------------------------------------------------
-`C-c C-e H H` | Export only the current _valid_ subtree (has the `EXPORT_FILE_NAME` property set)
-`C-c C-e H A` | Export **all** _valid_ subtrees (those that have the `EXPORT_FILE_NAME` property set)
-`C-c C-e H h` | Export the whole Org file to a single post
+| Binding       | Description                                                                           |
+|---------------|---------------------------------------------------------------------------------------|
+| `C-c C-e H H` | Export only the current _valid_ subtree (has the `EXPORT_FILE_NAME` property set)     |
+| `C-c C-e H A` | Export **all** _valid_ subtrees (those that have the `EXPORT_FILE_NAME` property set) |
+| `C-c C-e H h` | Export the whole Org file to a single post                                            |
 
 
 ## Thanks {#thanks}

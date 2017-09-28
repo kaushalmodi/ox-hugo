@@ -6,6 +6,16 @@ draft = false
   identifier = "changelog"
 +++
 
+## 0.2.1 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-28 Thu&gt;</span></span> {#0-dot-2-dot-1-span-class-timestamp-wrapper-span-class-timestamp-and-lt-2017-09-28-thu-and-gt-span-span}
+
+
+### Fixes {#fixes}
+
+-   Single column tables now export correctly [[84](https://github.com/kaushalmodi/ox-hugo/issues/84)].
+-   Ignore `HUGO_WEIGHT` set to `auto` for _per-file_ exports
+    [[83](https://github.com/kaushalmodi/ox-hugo/issues/83)].
+
+
 ## 0.2 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-27 Wed&gt;</span></span> {#0-dot-2-span-class-timestamp-wrapper-span-class-timestamp-and-lt-2017-09-27-wed-and-gt-span-span}
 
 

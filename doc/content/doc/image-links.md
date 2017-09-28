@@ -76,12 +76,12 @@ created inside the /static_ directory to preserve the structure./
 Example translations between outside `static` directory paths to the
 copied location inside `static`:
 
-File location outside `static`   | Copied-to location inside `static`        | Explanation
----------------------------------|-------------------------------------------|-----------------------------------------------------------------------------------------------------------
-`~/temp/static/images/foo.png`   | `<HUGO_BASE_DIR>/static/images/foo.png`   | If the **outside** path has `/static/` in it, the directory structure after that is preserved when copied.
-`~/temp/static/img/foo.png`      | `<HUGO_BASE_DIR>/static/img/foo.png`      | (same as above)
-`~/temp/static/foo.png`          | `<HUGO_BASE_DIR>/static/foo.png`          | (same as above)
-`~/temp/static/articles/zoo.pdf` | `<HUGO_BASE_DIR>/static/articles/zoo.pdf` | (same as above)
+| File location outside `static`   | Copied-to location inside `static`        | Explanation                                                                                                |
+|----------------------------------|-------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| `~/temp/static/images/foo.png`   | `<HUGO_BASE_DIR>/static/images/foo.png`   | If the **outside** path has `/static/` in it, the directory structure after that is preserved when copied. |
+| `~/temp/static/img/foo.png`      | `<HUGO_BASE_DIR>/static/img/foo.png`      | (same as above)                                                                                            |
+| `~/temp/static/foo.png`          | `<HUGO_BASE_DIR>/static/foo.png`          | (same as above)                                                                                            |
+| `~/temp/static/articles/zoo.pdf` | `<HUGO_BASE_DIR>/static/articles/zoo.pdf` | (same as above)                                                                                            |
 
 See the [Usage → Before you export](/doc/usage#before-you-export) section to learn how to set the
 **HUGO\_BASE\_DIR**.
@@ -100,9 +100,9 @@ In that case, that file is copied to the
 `org-hugo-default-static-subdirectory-for-externals` sub-directory
 (`ox-hugo/` by default) within the Hugo static directory.
 
-Outside `static`         | Copied-to location inside `static`       | Explanation
--------------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------------------
-`~/temp/bar/baz/foo.png` | `<HUGO_BASE_DIR>/static/ox-hugo/foo.png` | Here, as the **outside** path does not have `/static/` in it, the file is copied to the `ox-hugo/` dir in Hugo `static/` dir.
+| Outside `static`         | Copied-to location inside `static`       | Explanation                                                                                                                   |
+|--------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| `~/temp/bar/baz/foo.png` | `<HUGO_BASE_DIR>/static/ox-hugo/foo.png` | Here, as the **outside** path does not have `/static/` in it, the file is copied to the `ox-hugo/` dir in Hugo `static/` dir. |
 
 -   **Note:** This auto-copying behavior can be disabled by setting
     `org-hugo-external-file-extensions-allowed-for-copying` to

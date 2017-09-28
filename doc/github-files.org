@@ -1,6 +1,7 @@
 #+TITLE: GitHub Ancillary Files
 #+AUTHOR: Kaushal Modi
 
+#+MACRO: issue [[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]]
 #+MACRO: imageclick [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1]]
 #+MACRO: travis [[https://travis-ci.org/kaushalmodi/ox-hugo][https://travis-ci.org/kaushalmodi/ox-hugo.svg?branch=master]]
 #+MACRO: melpa [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]]
@@ -42,6 +43,8 @@ https://ox-hugo.netlify.com/
 #+INCLUDE: "./ox-hugo-manual.org::#installation" :only-contents t
 ** Usage
 #+INCLUDE: "./ox-hugo-manual.org::#usage" :only-contents t
+** Changelog                                                     :noexport_1:
+#+INCLUDE: "./ox-hugo-manual.org::#changelog" :only-contents t
 ** Thanks
 #+INCLUDE: "./ox-hugo-manual.org::#thanks" :only-contents t
 * Contributing                                                 :contributing:

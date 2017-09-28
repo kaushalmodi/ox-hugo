@@ -56,4 +56,5 @@ Hugo front-matter (TOML)         | Org
 
 -   The auto weight calculation for posts and menu items works **only**
     for subtree exports. For the complete-file export flow, one needs to
-    specify the weights manually if needed.
+    specify the weights manually. The value of _weight_ set to `"auto"`
+    will be equivalent to _nil_ for the complete-file export flow.

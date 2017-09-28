@@ -701,7 +701,8 @@ set.
 ***** Notes
 - The auto weight calculation for posts and menu items works *only*
   for subtree exports. For the complete-file export flow, one needs to
-  specify the weights manually if needed.
+  specify the weights manually. The value of /weight/ set to ="auto"=
+  will be equivalent to /nil/ for the complete-file export flow.
 *** Formatting
 :PROPERTIES:
 :EXPORT_FILE_NAME: formatting

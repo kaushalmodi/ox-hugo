@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-26 14:20:42 kmodi>
+# Time-stamp: <2017-09-28 10:05:44 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -44,7 +44,8 @@ subtree_test_files = all-posts.org \
 
 file_test_files = single-posts/post-toml.org \
 	single-posts/post-yaml.org \
-	single-posts/post-draft.org
+	single-posts/post-draft.org \
+	single-posts/hugo-auto-weight-ineffective-for-per-file-exports.org
 
 # Cannot run tests on the following files, because:
 # - auto-set-lastmod.org - the lastmod field will always get updated.

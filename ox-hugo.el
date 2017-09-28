@@ -1331,7 +1331,9 @@ INFO is a plist used as a communication channel."
                                         org-hugo--subtree-coord)))
                    (if auto-calc
                        (org-hugo--calc-weight)
-                     wt)))
+                     (unless (and (stringp wt) ;Don't allow weight to be "auto" if auto-calc is nil.
+                                  (string= wt "auto"))
+                       wt))))
          (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
          (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
          ;; If menu-alist-override is non-nil, update menu-alist with values from that.

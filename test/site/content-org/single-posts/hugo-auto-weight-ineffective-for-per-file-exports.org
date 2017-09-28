@@ -1,0 +1,10 @@
+#+TITLE: Hugo auto weight ineffective for per-file exports
+#+HUGO_BASE_DIR: ../../
+#+HUGO_WEIGHT: auto
+#+HUGO_TAGS: weight
+
+Even though we have =#+HUGO_WEIGHT: auto= in this file, the weight
+will be treated as nil as this file is exported using the /per-file/
+or /complete-file/ export flow.
+
+The auto-weight calculation works *only* for /per-subtree/ flow.

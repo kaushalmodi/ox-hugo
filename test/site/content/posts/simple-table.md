@@ -5,7 +5,7 @@ tags = ["table"]
 draft = false
 +++
 
-h1 |  h2
----|----
-a  |  b
-c  |  d
+| h1 | h2 |
+|----|----|
+| a  | b  |
+| c  | d  |

@@ -336,6 +336,13 @@ Here is the second post on Emacs.
 | a | b | e | g |
 | c | d | f | h |
 |---+---+---+---|
+** Table with single column
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-with-single-column
+:END:
+| h1 |
+| a  |
+| b  |
 * Source blocks                                                   :src_block:
 ** Example text with code blocks                                    :ARCHIVE:
 :PROPERTIES:

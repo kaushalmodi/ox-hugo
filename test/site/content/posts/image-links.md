@@ -62,21 +62,21 @@ directory structure.
 Example translations between outside `static` directory paths to the
 copied location inside `static`:
 
-Outside `static`                 | Copied-to location inside `static`        | Explanation
----------------------------------|-------------------------------------------|-----------------------------------------------------------------------------------------------------------
-`~/temp/static/images/foo.png`   | `<HUGO_BASE_DIR>/static/images/foo.png`   | If the **outside** path has `/static/` in it, the directory structure after that is preserved when copied.
-`~/temp/static/img/foo.png`      | `<HUGO_BASE_DIR>/static/img/foo.png`      | (same as above)
-`~/temp/static/foo.png`          | `<HUGO_BASE_DIR>/static/foo.png`          | (same as above)
-`~/temp/static/articles/zoo.pdf` | `<HUGO_BASE_DIR>/static/articles/zoo.pdf` | (same as above)
+| Outside `static`                 | Copied-to location inside `static`        | Explanation                                                                                                |
+|----------------------------------|-------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| `~/temp/static/images/foo.png`   | `<HUGO_BASE_DIR>/static/images/foo.png`   | If the **outside** path has `/static/` in it, the directory structure after that is preserved when copied. |
+| `~/temp/static/img/foo.png`      | `<HUGO_BASE_DIR>/static/img/foo.png`      | (same as above)                                                                                            |
+| `~/temp/static/foo.png`          | `<HUGO_BASE_DIR>/static/foo.png`          | (same as above)                                                                                            |
+| `~/temp/static/articles/zoo.pdf` | `<HUGO_BASE_DIR>/static/articles/zoo.pdf` | (same as above)                                                                                            |
 
 
 ### Source path does not contain `/static/` {#source-path-does-not-contain-static}
 
 {{<figure src="/ox-hugo/copy-2-of-unicorn-logo.png">}}
 
-Outside `static`         | Copied-to location inside `static`       | Explanation
--------------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------------
-`~/temp/bar/baz/foo.png` | `<HUGO_BASE_DIR>/static/ox-hugo/foo.png` | Here, as the **outside** path does not have `/static/`, the file is copied to the `ox-hugo/` dir in Hugo `static/` dir.
+| Outside `static`         | Copied-to location inside `static`       | Explanation                                                                                                             |
+|--------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| `~/temp/bar/baz/foo.png` | `<HUGO_BASE_DIR>/static/ox-hugo/foo.png` | Here, as the **outside** path does not have `/static/`, the file is copied to the `ox-hugo/` dir in Hugo `static/` dir. |
 
 -   **Note:** The `ox-hugo` sub-directory name is because of the default
     value of

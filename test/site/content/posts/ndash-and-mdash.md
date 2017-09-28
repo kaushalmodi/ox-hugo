@@ -7,12 +7,12 @@ draft = false
 
 The strings in these two columns should look the exact same.
 
-   | Character | Rendered Actual | Rendered Expection
----|-----------|-----------------|-------------------
- 1 | Hyphen    | a - b           | a - b
- 2 | Ndash     | a -- b          | a – b
- 3 | Mdash     | a --- b         | a — b
- 4 | Ellipsis  | a ... b         | a … b
+|   | Character | Rendered Actual | Rendered Expection |
+|---|-----------|-----------------|--------------------|
+| 1 | Hyphen    | a - b           | a - b              |
+| 2 | Ndash     | a -- b          | a – b              |
+| 3 | Mdash     | a --- b         | a — b              |
+| 4 | Ellipsis  | a ... b         | a … b              |
 
 
 ## Title sanitization {#title-sanitization}

@@ -365,8 +365,8 @@ communication channel."
   (let* ((table (org-export-get-parent-table table-cell))
          (column (cdr (org-export-table-cell-address table-cell info)))
          (width (org-blackfriday-table-col-width table column info))
-         (left-border (if (org-export-table-cell-starts-colgroup-p table-cell info) "" " "))
-         (right-border (if (org-export-table-cell-ends-colgroup-p table-cell info) "" " |"))
+         (left-border (if (org-export-table-cell-starts-colgroup-p table-cell info) "| " " "))
+         (right-border " |")
          (data (or contents ""))
          (cell (concat left-border
                        data

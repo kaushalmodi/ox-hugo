@@ -2,7 +2,7 @@
 
 ;; Authors: Matt Price <moptop99@gmail.com>
 ;;          Kaushal Modi <kaushal.modi@gmail.com>
-;; URL: https://github.com/kaushalmodi/ox-hugo
+;; URL: https://ox-hugo.scripter.co
 ;; Package-Requires: ((emacs "24.5"))
 ;; Version: 0.1
 

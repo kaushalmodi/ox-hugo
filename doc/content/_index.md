@@ -68,7 +68,7 @@ presentation styles._
 
 ### Actual usage examples {#actual-usage-examples}
 
--   <https://ox-hugo.netlify.com> -- `ox-hugo` Documentation Site
+-   <https://ox-hugo.scripter.co> -- `ox-hugo` Documentation Site
 -   <https://scripter.co> -- My blog
 
 

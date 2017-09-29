@@ -47,12 +47,12 @@ comparison.
 =ox-hugo= is unique in a sense that it *itself* is used to generate
 its documentation!
 
-https://ox-hugo.netlify.com/
+https://ox-hugo.scripter.co/
 
 *Make sure you visit the above link to read more on:*
-- [[https://ox-hugo.netlify.com/doc/why-ox-hugo/][Why =ox-hugo=?]]
-- [[https://ox-hugo.netlify.com/doc/auto-export-on-saving/][Auto exporting to Markdown each time the Org file is saved]]
-- [[https://ox-hugo.netlify.com/doc/org-capture-setup/][Using Org Capture to start a new blog post]]
+- [[https://ox-hugo.scripter.co/doc/why-ox-hugo/][Why =ox-hugo=?]]
+- [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto exporting to Markdown each time the Org file is saved]]
+- [[https://ox-hugo.scripter.co/doc/org-capture-setup/][Using Org Capture to start a new blog post]]
 - .. and more topics like those
 ** Source of the Documentation site
 - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/ox-hugo-manual.org][Org source]]
@@ -70,7 +70,7 @@ Now, the test site doesn't look pretty, I know :) .. because:
 /See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
 presentation styles./
 ** Actual usage examples
-- https://ox-hugo.netlify.com -- =ox-hugo= Documentation Site
+- https://ox-hugo.scripter.co -- =ox-hugo= Documentation Site
 - [[https://scripter.co]] -- My blog
 
 * Installation

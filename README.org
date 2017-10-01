@@ -19,6 +19,7 @@ many other tweaks. =ox-hugo= backend extends from this.
 - [[#usage][Usage]]
   - [[#before-you-export][Before you export]]
   - [[#export-bindings][Export bindings]]
+  - [[#customization-options][Customization Options]]
 - [[#changelog][Changelog]]
 - [[#thanks][Thanks]]
 
@@ -44,16 +45,18 @@ need to be managed manually.. just as one would manage the front-matter
 in Markdown files --- See the Org versions in the above screenshots for
 comparison.
 * Documentation
-=ox-hugo= is unique in a sense that it *itself* is used to generate
-its documentation!
+=ox-hugo= uses *itself* to generate its documentation!
 
 https://ox-hugo.scripter.co/
+
+You can generate the same too! Simply clone this repo and do =make
+doc=.
 
 *Make sure you visit the above link to read more on:*
 - [[https://ox-hugo.scripter.co/doc/why-ox-hugo/][Why =ox-hugo=?]]
 - [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto exporting to Markdown each time the Org file is saved]]
 - [[https://ox-hugo.scripter.co/doc/org-capture-setup/][Using Org Capture to start a new blog post]]
-- .. and more topics like those
+- .. and many more topics and examples
 ** Source of the Documentation site
 - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/ox-hugo-manual.org][Org source]]
 - =ox-hugo= exported [[https://github.com/kaushalmodi/ox-hugo/tree/master/doc/content][Markdown files]]
@@ -123,6 +126,9 @@ The common =ox-hugo= export bindings are:
 |---------------+-------------------------------------------------------------------------------------|
 | =C-c C-e H h= | Export the whole Org file to a single post                                          |
 |---------------+-------------------------------------------------------------------------------------|
+** Customization Options
+Do =M-x customize-group=, and select =org-export-hugo= to see the
+available customization options for this package.
 * Changelog
 ** 0.2.1 <2017-09-28 Thu>
 *** Fixes

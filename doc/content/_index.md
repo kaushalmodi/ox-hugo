@@ -137,6 +137,12 @@ The common `ox-hugo` export bindings are:
 | `C-c C-e H h` | Export the whole Org file to a single post                                            |
 
 
+### Customization Options {#customization-options}
+
+Do `M-x customize-group`, and select `org-export-hugo` to see the
+available customization options for this package.
+
+
 ## Thanks {#thanks}
 
 -   Matt Price ([@titaniumbones](https://github.com/titaniumbones))

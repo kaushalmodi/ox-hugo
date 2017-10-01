@@ -61,3 +61,9 @@ The common `ox-hugo` export bindings are:
 | `C-c C-e H H` | Export only the current _valid_ subtree (has the `EXPORT_FILE_NAME` property set)     |
 | `C-c C-e H A` | Export **all** _valid_ subtrees (those that have the `EXPORT_FILE_NAME` property set) |
 | `C-c C-e H h` | Export the whole Org file to a single post                                            |
+
+
+## Customization Options {#customization-options}
+
+Do `M-x customize-group`, and select `org-export-hugo` to see the
+available customization options for this package.

@@ -23,16 +23,18 @@
 #+INCLUDE: "./ox-hugo-manual.org::#screenshots_intro" :only-contents t
 #+INCLUDE: "./ox-hugo-manual.org::#screenshots" :only-contents t
 ** Documentation
-=ox-hugo= is unique in a sense that it *itself* is used to generate
-its documentation!
+=ox-hugo= uses *itself* to generate its documentation!
 
 https://ox-hugo.scripter.co/
+
+You can generate the same too! Simply clone this repo and do =make
+doc=.
 
 *Make sure you visit the above link to read more on:*
 - [[https://ox-hugo.scripter.co/doc/why-ox-hugo/][Why =ox-hugo=?]]
 - [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto exporting to Markdown each time the Org file is saved]]
 - [[https://ox-hugo.scripter.co/doc/org-capture-setup/][Using Org Capture to start a new blog post]]
-- .. and more topics like those
+- .. and many more topics and examples
 *** Source of the Documentation site
 - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/ox-hugo-manual.org][Org source]]
 - =ox-hugo= exported [[https://github.com/kaushalmodi/ox-hugo/tree/master/doc/content][Markdown files]]

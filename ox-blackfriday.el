@@ -12,7 +12,7 @@
 ;; (https://github.com/russross/blackfriday)) for Org exporter, based
 ;; on the ox-md exporter.
 
-;; It is mostly copied from Lats Tveito's GitHub Flavored Markdown
+;; It started off as a clone of Lars Tveito's GitHub Flavored Markdown
 ;; exporter (https://github.com/larstvei/ox-gfm).
 
 ;;; Code:

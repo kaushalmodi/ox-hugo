@@ -80,9 +80,10 @@ Melpa (<https://melpa.org/#/ox-hugo>).
 
 ## Usage {#usage}
 
-Once the package is installed, you will need to require it so that the
-`ox-hugo` export options are available in the _Org Export Dispatcher_
-menu (the one you see when you hit `C-c C-e` to initiate any export).
+Once the package is installed, you will need to _require_ it so that
+the `ox-hugo` export options are available in the _Org Export
+Dispatcher_ menu (the one you see when you hit `C-c C-e` to initiate
+any export).
 
 You can do that by adding the below to your config:
 
@@ -97,6 +98,28 @@ If you use `use-package`, you can do the below instead:
 (use-package ox-hugo
   :after ox)
 ```
+
+**Spacemacs**
+
+Spacemacs users can choose to add this snippet to their
+`dotspacemacs/user-config` function in `.spacemacs`:
+
+```emacs-lisp
+(defun dotspacemacs/user-config ()
+  ;; Other stuff
+  ;; ..
+
+  ;; ox-hugo config
+  (use-package ox-hugo
+    :ensure t                           ;Auto-install the package from Melpa
+    :after ox))
+```
+
+If you do so, you **also need to** add `ox-hugo` to
+`dotspacemacs-additional-packages`.
+
+_Verified to work on Spacemacs `develop` branch with `spacemacs-base`
+distribution, `emacs` editing style._
 
 
 ### Before you export {#before-you-export}

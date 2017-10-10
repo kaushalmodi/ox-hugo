@@ -153,6 +153,13 @@ The common =ox-hugo= export bindings are:
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
 * Changelog
+** 0.2.2 <2017-10-10 Tue>
+*** Backward-incompatible changes
+- Now =ox-hugo= by default requires text, to be sub/super-scripted, to
+  be wrapped in ={}=. So now =a_b= will be exported as =a_b=, but
+  =a_{b}= will be exported as =a<sub>b</sub>=. To revert back to the
+  earlier behavior, user needs to add =#+OPTIONS: ^:t= to their Org
+  file.
 ** 0.2.1 <2017-09-28 Thu>
 *** Fixes
 - Single column tables now export correctly [[[https://github.com/kaushalmodi/ox-hugo/issues/84][84]]].

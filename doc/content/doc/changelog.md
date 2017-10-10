@@ -6,6 +6,18 @@ draft = false
   identifier = "changelog"
 +++
 
+## 0.2.2 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-10 Tue&gt;</span></span> {#0-dot-2-dot-2-span-class-timestamp-wrapper-span-class-timestamp-and-lt-2017-10-10-tue-and-gt-span-span}
+
+
+### Backward-incompatible changes {#backward-incompatible-changes}
+
+-   Now `ox-hugo` by default requires text, to be sub/super-scripted, to
+    be wrapped in `{}`. So now `a_b` will be exported as `a_b`, but
+    `a_{b}` will be exported as `a<sub>b</sub>`. To revert back to the
+    earlier behavior, user needs to add `#+OPTIONS: ^:t` to their Org
+    file.
+
+
 ## 0.2.1 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-28 Thu&gt;</span></span> {#0-dot-2-dot-1-span-class-timestamp-wrapper-span-class-timestamp-and-lt-2017-09-28-thu-and-gt-span-span}
 
 

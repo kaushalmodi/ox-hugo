@@ -1499,6 +1499,24 @@ ghi
 abc
 def
 ghi
+* Export Settings                                           :export_settings:
+** Sub/superscripts require braces
+:PROPERTIES:
+:EXPORT_FILE_NAME: sub-superscripts-require-braces
+:END:
+*** Following text will export =_= and =^= verbatim
+a_b a_bc a^b a^bc
+*** Following text will export =_{..}= as subscript and =^{..}= as superscript
+a_{b} a_{bc} a^{b} a^{bc}
+** Sub/superscripts don't require braces
+:PROPERTIES:
+:EXPORT_FILE_NAME: sub-superscripts-dont-require-braces
+:EXPORT_OPTIONS: ^:t
+:END:
+*** Following text will export =_..= as subscript and =^..= as superscript
+a_b a_bc a^b a^bc
+*** Following text will export =_{..}= as subscript and =^{..}= as superscript
+a_{b} a_{bc} a^{b} a^{bc}
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

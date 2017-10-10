@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-09-25 21:47:44 kmodi>
+;; Time-stamp: <2017-10-10 12:13:14 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version of Org
 
@@ -181,9 +181,6 @@ to be installed.")
   ;; Prevent prompts like:
   ;;   Non-existent agenda file
   (defun org-check-agenda-file (file)))
-
-(with-eval-after-load 'ox
-  (setq org-export-with-sub-superscripts '{}))
 
 (with-eval-after-load 'ox-hugo
   (setq org-hugo-langs-no-descr-in-code-fences '(org)))

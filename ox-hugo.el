@@ -5,7 +5,7 @@
 ;; URL: https://ox-hugo.scripter.co
 ;; Package-Requires: ((emacs "24.5") (org "9.0"))
 ;; Keywords: Org, markdown, docs
-;; Version: 0.2
+;; Version: 0.2.2
 
 ;;; Commentary:
 
@@ -520,6 +520,7 @@ The auto-copying behavior is disabled if this variable is set to nil."
                    (:with-toc nil "toc" nil) ;No TOC by default
                    (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
                    (:with-special-strings nil "-" nil) ;Don't use special strings for ndash, mdash; that is done automatically by Blackfriday
+                   (:with-sub-superscript nil "^" '{}) ;Require curly braces to be wrapped around text to sub/super-scripted
                    (:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
                    (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil 1)
                    (:hugo-preserve-filling "HUGO_PRESERVE_FILLING" nil org-hugo-preserve-filling) ;Preserve breaks so that text filling in Markdown matches that of Org

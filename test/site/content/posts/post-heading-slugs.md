@@ -38,3 +38,37 @@ draft = false
 
 
 ### Ç {#ç}
+
+
+## Headings with HTML {#headings-with-html}
+
+
+### Checklist <code>[1/3]</code> {#checklist}
+
+Above title would render to `Checklist <code>[1/3]</code>` in
+Markdown.
+
+
+#### <span class="todo DONE_">DONE </span> Item 1 {#item-1}
+
+Above would render to `<span class="todo DONE_">DONE </span> Item 1`
+in Markdown.
+
+
+#### <span class="todo TODO_">TODO </span> Item 2 {#item-2}
+
+Above would render to `<span class="todo TODO_">TODO </span> Item 2`
+in Markdown.
+
+
+#### <span class="todo TODO_">TODO </span> Item 3 {#item-3}
+
+Above would render to `<span class="todo TODO_">TODO </span> Item 3`
+in Markdown.
+
+
+### Version 0.1 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-11 Wed&gt;</span></span> {#version-0-dot-1}
+
+Above title would render to `Version 0.1 <span
+class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-11
+Wed&gt;</span></span>` in Markdown.

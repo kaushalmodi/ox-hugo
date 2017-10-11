@@ -6,7 +6,21 @@ draft = false
   identifier = "changelog"
 +++
 
-## 0.2.2 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-10 Tue&gt;</span></span> {#0-dot-2-dot-2-span-class-timestamp-wrapper-span-class-timestamp-and-lt-2017-10-10-tue-and-gt-span-span}
+## v0.2.3 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-11 Wed&gt;</span></span> {#v0-dot-2-dot-3}
+
+
+### Fixes {#fixes}
+
+-   `org-hugo-slug` earlier stripped off only the `code` HTML tag
+    (`<code> .. </code>`) from the input string, if present. Now it does
+    that for **any** HTML tag, like `span`. For example, this HTML gets
+    stripped off from the above heading (only inside `org-hugo-slug`
+    when deriving the slug string): `<span
+      class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-11
+      Wed&gt;</span></span>`.
+
+
+## v0.2.2 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-10 Tue&gt;</span></span> {#v0-dot-2-dot-2}
 
 
 ### Backward-incompatible changes {#backward-incompatible-changes}
@@ -18,7 +32,7 @@ draft = false
     file.
 
 
-## 0.2.1 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-28 Thu&gt;</span></span> {#0-dot-2-dot-1-span-class-timestamp-wrapper-span-class-timestamp-and-lt-2017-09-28-thu-and-gt-span-span}
+## v0.2.1 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-28 Thu&gt;</span></span> {#v0-dot-2-dot-1}
 
 
 ### Fixes {#fixes}
@@ -28,7 +42,7 @@ draft = false
     [[83](https://github.com/kaushalmodi/ox-hugo/issues/83)].
 
 
-## 0.2 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-27 Wed&gt;</span></span> {#0-dot-2-span-class-timestamp-wrapper-span-class-timestamp-and-lt-2017-09-27-wed-and-gt-span-span}
+## v0.2 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-27 Wed&gt;</span></span> {#v0-dot-2}
 
 
 ### Features {#features}
@@ -58,7 +72,7 @@ draft = false
     `nil` [[88ba15ae](https://github.com/kaushalmodi/ox-hugo/commit/88ba15ae9bc809b0983315446c88fecfda3534e5)].
 
 
-## 0.1.3 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-13 Wed&gt;</span></span> {#0-dot-1-dot-3-span-class-timestamp-wrapper-span-class-timestamp-and-lt-2017-09-13-wed-and-gt-span-span}
+## v0.1.3 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-13 Wed&gt;</span></span> {#v0-dot-1-dot-3}
 
 -   Now a HUGO key value set to `"nil"`, like `#+HUGO_CODE_FENCE: nil`,
     will evaluate as _nil_ instead of _t_, as now
@@ -66,7 +80,7 @@ draft = false
     of `plist-get`.
 
 
-## 0.1.2 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-12 Tue&gt;</span></span> {#0-dot-1-dot-2-span-class-timestamp-wrapper-span-class-timestamp-and-lt-2017-09-12-tue-and-gt-span-span}
+## v0.1.2 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-12 Tue&gt;</span></span> {#v0-dot-1-dot-2}
 
 -   Make DateTime matching better; new internal variable
     `org-hugo--date-time-regexp`. Earlier time zones ahead of UTC (with
@@ -74,7 +88,7 @@ draft = false
     thus were unnecessarily quoted.
 
 
-## 0.1.1 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-11 Mon&gt;</span></span> {#0-dot-1-dot-1-span-class-timestamp-wrapper-span-class-timestamp-and-lt-2017-09-11-mon-and-gt-span-span}
+## v0.1.1 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-09-11 Mon&gt;</span></span> {#v0-dot-1-dot-1}
 
 -   Use CLOSED log drawer info if available to set the date in
     front-matter [[68](https://github.com/kaushalmodi/ox-hugo/issues/68)].

@@ -199,6 +199,23 @@ Something 2.1
 *** ÄËÏÖÜ
 *** ÃÐÑÕÞ
 *** Ç
+** Headings with HTML
+*** Checklist [1/3]
+Above title would render to ~Checklist <code>[1/3]</code>~ in
+Markdown.
+**** DONE Item 1
+Above would render to ~<span class="todo DONE_">DONE </span> Item 1~
+in Markdown.
+**** TODO Item 2
+Above would render to ~<span class="todo TODO_">TODO </span> Item 2~
+in Markdown.
+**** TODO Item 3
+Above would render to ~<span class="todo TODO_">TODO </span> Item 3~
+in Markdown.
+*** Version 0.1 <2017-10-11 Wed>
+Above title would render to ~Version 0.1 <span
+class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-11
+Wed&gt;</span></span>~ in Markdown.
 * Title in Front Matter
 ** Awesome title with "quoted text"
 :PROPERTIES:

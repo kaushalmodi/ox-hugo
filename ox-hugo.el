@@ -5,7 +5,7 @@
 ;; URL: https://ox-hugo.scripter.co
 ;; Package-Requires: ((emacs "24.5") (org "9.0"))
 ;; Keywords: Org, markdown, docs
-;; Version: 0.2.2
+;; Version: 0.2.3
 
 ;;; Commentary:
 
@@ -689,7 +689,8 @@ returned slug string has the following specification:
 
 - Should contain only lower case alphabet, number and hyphen
   characters.
-- Remove \"<code>..</code>\" part from STR if present.
+- Remove *any* HTML tag like \"<code>..</code>\", \"<span
+  class=..>..</span>\", etc. from STR if present.
 - URLs if present in STR should be removed.
 - Replace \".\" in STR with \"and\", and \"&\" with \"and\".
 - Parentheses should be replaced with double-hyphens ( \"foo (bar)
@@ -701,8 +702,8 @@ returned slug string has the following specification:
   returned string ."
   (let* (;; All lower-case
          (str (downcase str))
-         ;; Remove "<code>..</code>" stuff if present.
-         (str (replace-regexp-in-string "<code>.*</code>" "" str))
+         ;; Remove "<FOO>..</FOO>" HTML tags if present.
+         (str (replace-regexp-in-string "<\\(?1:[a-z]+\\)[^>]*>.*</\\1>" "" str))
          ;; Remove URLs if present in the string.  The ")" in the
          ;; below regexp is the closing parenthesis of a Markdown
          ;; link: [Desc](Link).

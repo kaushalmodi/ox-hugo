@@ -18,7 +18,7 @@ set.
 
 | Hugo front-matter (TOML)           | Org                                | Org description                                                           |
 |------------------------------------|------------------------------------|---------------------------------------------------------------------------|
-| `title = "foo"​`                    | `* foo`                            | Subtree heading                                                           |
+| `title = "foo"`                    | `* foo`                            | Subtree heading                                                           |
 | `date = 2017-09-11T14:32:00-04:00` | `CLOSED: [2017-09-11 Mon 14:32]`   | Auto-inserted `CLOSED` subtree property when switch to Org **DONE** state |
 | `date = 2017-07-24`                | `:EXPORT_DATE: 2017-07-24`         | Subtree property                                                          |
 | `lastmod = <current date>`         | `:EXPORT_HUGO_AUTO_SET_LASTMOD: t` | Subtree property                                                          |
@@ -41,7 +41,7 @@ set.
 
 | Hugo front-matter (TOML)         | Org                                  |
 |----------------------------------|--------------------------------------|
-| `title = "foo"​`                  | `#+TITLE: foo`                       |
+| `title = "foo"`                  | `#+TITLE: foo`                       |
 | `date = 2017-07-24`              | `#+DATE: 2017-07-24`                 |
 | `lastmod = <current date>`       | `#+HUGO_AUTO_SET_LASTMOD: t`         |
 | `tags = ["abc", "def"]`          | `#+HUGO_TAGS: abc def`               |

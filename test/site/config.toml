@@ -6,6 +6,10 @@ canonifyURLs = true
 enableEmoji = true
 enableGitInfo = true
 
+disableFastRender = true        # Hugo 0.30
+
+pygmentsUseClasses = true       # This applies to Chroma too.
+
 [[menu.main]]
 name = "labs"
 weight = -110

@@ -428,6 +428,32 @@ property needs to be left *empty* instead of setting to =nil=!
 :END:
 #+END_EXAMPLE
 #+INCLUDE: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
+** Source blocks with line number annotation
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-with-line-numbers
+:END:
+- [[http://orgmode.org/manual/Literal-examples.html][Org reference]]
+- [[https://gohugo.io/content-management/syntax-highlighting/][Hugo =highlight= shortcode with line numbers]]
+*** Default new line number start
+#+BEGIN_SRC emacs-lisp -n
+;; this will export with line number 1 (default)
+(message "This is line 2")
+#+END_SRC
+*** Specify new line number start
+#+BEGIN_SRC emacs-lisp -n 20
+;; this will export with line number 20
+(message "This is line 21")
+#+END_SRC
+*** Default continued line numbers
+#+BEGIN_SRC emacs-lisp +n
+;; This will be listed as line 22
+(message "This is line 23")
+#+END_SRC
+*** Specify continued line numbers jump
+#+BEGIN_SRC emacs-lisp +n 10
+;; This will be listed as line 33
+(message "This is line 34")
+#+END_SRC
 ** Source block with caption                                       :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-caption
@@ -621,6 +647,33 @@ in your emacs config to fix it:
 #+BEGIN_EXAMPLE
 This is an example
 #+END_EXAMPLE
+** Example blocks with line number annotation
+:PROPERTIES:
+:EXPORT_FILE_NAME: example-block-with-line-numbers
+:END:
+- [[http://orgmode.org/manual/Literal-examples.html][Org reference]]
+- [[https://gohugo.io/content-management/syntax-highlighting/][Hugo =highlight= shortcode with line numbers]]
+*** Default new line number start
+#+BEGIN_EXAMPLE -n
+line 1
+ line 2
+#+END_EXAMPLE
+*** Specify new line number start
+#+BEGIN_EXAMPLE -n 20
+line 20
+line 21
+#+END_EXAMPLE
+*** Default continued line numbers
+#+BEGIN_EXAMPLE +n
+ line 22
+line 23
+#+END_EXAMPLE
+*** Specify continued line numbers jump
+#+BEGIN_EXAMPLE +n 10
+line 33
+line 34
+#+END_EXAMPLE
+
 * Menu in front matter                                                 :menu:
 ** Menu Meta Data in TOML Front Matter
 :PROPERTIES:

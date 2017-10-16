@@ -511,6 +511,7 @@ The auto-copying behavior is disabled if this variable is set to nil."
             (lambda (a s v _b)
               (org-hugo-export-as-md a s v)))))
   :translate-alist '((code . org-hugo-kbd-tags-maybe)
+                     (example-block . org-hugo-example-block)
                      (headline . org-hugo-headline)
                      (inner-template . org-hugo-inner-template)
                      (keyword . org-hugo-keyword)
@@ -629,10 +630,43 @@ INFO is a plist used as a communication channel."
   "Wrap text in VERBATIM object with HTML kbd tags.
 The kdb wrapping is done if `org-hugo-use-code-for-kbd' is non-nil.
 
-INFO is a plist used as a communication channel."
+CONTENTS is nil.  INFO is a plist used as a communication
+channel."
   (if (org-hugo--plist-get-true-p info :hugo-use-code-for-kbd)
       (format "<kbd>%s</kbd>" (org-element-property :value verbatim))
     (org-md-verbatim verbatim nil nil)))
+
+;;;; Example Block
+(defun org-hugo-example-block (example-block _contents info)
+  "Transcode an EXAMPLE-BLOCK element into Markdown format.
+
+If the example blocks are *not* set to be exported with line
+numbers (See (org) Literal examples), Markdown style
+triple-backquoted code blocks with \"text\" \\='language\\=' are
+created.
+
+Otherwise, a \"text\" \\='language\\=' code block wrapped in Hugo
+\"highlight\" shortcode (See
+https://gohugo.io/content-management/syntax-highlighting) is
+created.
+
+CONTENTS is nil.  INFO is a plist holding contextual
+information."
+  (let ((text (org-export-format-code-default example-block info))
+        ;; See `org-element-example-block-parser' for all EXAMPLE-BLOCK properties.
+        (number-lines (org-element-property :number-lines example-block))) ;Non-nil if -n or +n switch is used
+    (if number-lines
+        (let* ((linenostart-str (progn
+                                  ;; Extract the start line number of the example block.
+                                  (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" text)
+                                  (match-string-no-properties 1 text)))
+               (linenos-str (format "\"linenos=table, linenostart=%s\"" linenostart-str)))
+          ;; Remove Org-inserted numbers from the beginning of each
+          ;; line as the Hugo highlight shortcode will be used instead
+          ;; of literally inserting the line numbers.
+          (setq text (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" text))
+          (format "{{< highlight text %s>}}\n%s{{< /highlight >}}\n" linenos-str text))
+      (format "```text\n%s```" text))))
 
 ;;;; Headline
 (defun org-hugo-headline (headline contents info)
@@ -968,32 +1002,63 @@ communication channel."
 (defun org-hugo-src-block (src-block _contents info)
   "Convert SRC-BLOCK element to Hugo-compatible element.
 
-If the HUGO_CODE_FENCE property is set to t (default), the Markdown
-style triple-backquoted code blocks are created.  Otherwise, the code
-block is wrapped in Hugo `highlight' shortcode.
+If the code blocks are *not* set to be exported with line
+numbers (See (org) Literal examples), and if the HUGO_CODE_FENCE
+property is set to a non-nil value (default), Markdown style
+triple-backquoted code blocks are created.
 
-INFO is a plist used as a communication channel."
-  (let ((lang (org-element-property :language src-block)))
-    (if (org-hugo--plist-get-true-p info :hugo-code-fence)
-        (let ((ret (org-blackfriday-src-block src-block nil info)))
-          (when (member (intern lang) org-hugo-langs-no-descr-in-code-fences)
-            ;; With the pygmentsCodeFences options enabled in Hugo,
-            ;; `org' is not recognized as a "language".  This is
-            ;; probably because Pygments does not have a lexer for Org.
-            ;; Issue on Pygments repo:
-            ;; https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org
-            ;; So attempt to do below:
-            ;;   ```org
-            ;;   # org comment
-            ;;   ```
-            ;; will not result in a <code> tag wrapped block in HTML.
-            ;; So override the language to be an empty string in such cases.
-            (setq ret (replace-regexp-in-string
-                       (concat "\\`\\(```\\)" lang)
-                       "\\1" ret)))
-          ret)
-      (let ((code (org-export-format-code-default src-block info)))
-        (format "{{< highlight %s>}}\n%s{{< /highlight >}}\n" lang code)))))
+Otherwise, the code block is wrapped in Hugo \"highlight\"
+shortcode (See
+https://gohugo.io/content-management/syntax-highlighting).
+
+CONTENTS is nil.  INFO is a plist used as a communication
+channel."
+  (let ((lang (org-element-property :language src-block))
+        ;; See `org-element-src-block-parser' for all SRC-BLOCK properties.
+        (number-lines (org-element-property :number-lines src-block))) ;Non-nil if -n or +n switch is used
+    ;; (message "ox-hugo src [dbg] number-lines: %S" number-lines)
+    (cond
+     ;; 1. If number-lines is nil AND :hugo-code-fence is non-nil
+     ((and (null number-lines)
+           (org-hugo--plist-get-true-p info :hugo-code-fence))
+      (let ((ret (org-blackfriday-src-block src-block nil info)))
+        (when (and org-hugo-langs-no-descr-in-code-fences
+                   (member (intern lang) org-hugo-langs-no-descr-in-code-fences))
+          ;; When using Pygments, with the pygmentsCodeFences
+          ;; options enabled in Hugo, `org' is not recognized as a
+          ;; "language", because Pygments does not have a lexer for
+          ;; Org.
+          ;; Issue on Pygments repo:
+          ;; https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org
+          ;; So attempt to do below:
+          ;;   ```org
+          ;;   # org comment
+          ;;   ```
+          ;; will not result in a <code> tag wrapped block in HTML.
+          ;;
+          ;; So override the language to be an empty string in such cases.
+          ;;
+          ;; *Note* that this issue does NOT exist if using Chroma,
+          ;; which is the default syntax highlighter after Hugo
+          ;; v0.28.
+          (setq ret (replace-regexp-in-string (concat "\\`\\(```\\)" lang) "\\1" ret)))
+        ret))
+     ;; 2. If number-lines is non-nil, or
+     ;; 3. If :hugo-code-fence is nil
+     (t
+      (let ((code (org-export-format-code-default src-block info))
+            (linenos-str ""))
+        (when number-lines
+          (let ((linenostart-str (progn
+                                   ;; Extract the start line number of the code block
+                                   (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" code)
+                                   (match-string-no-properties 1 code))))
+            (setq linenos-str (format " \"linenos=table, linenostart=%s\"" linenostart-str)))
+          ;; Remove Org-inserted numbers from the beginning of each
+          ;; line as the Hugo highlight shortcode will be used instead
+          ;; of literally inserting the line numbers.
+          (setq code (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" code)))
+        (format "{{< highlight %s%s>}}\n%s{{< /highlight >}}\n" lang linenos-str code))))))
 
 
 ;;; Filter Functions

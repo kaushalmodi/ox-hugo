@@ -196,7 +196,7 @@ Returns nil immediately if PLAIN-LIST is not an ordered list."
 
 ;;;; Example Block
 (defun org-blackfriday-example-block (example-block _contents info)
-  "Transcode a EXAMPLE-BLOCK element into Blackfriday Markdown format.
+  "Transcode an EXAMPLE-BLOCK element into Blackfriday Markdown format.
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
   (format "```text\n%s```"
@@ -334,6 +334,7 @@ INFO is a plist used as a communication channel."
          (code (org-export-format-code-default src-block info))
          (parent-element (org-export-get-parent src-block))
          (parent-type (car parent-element)))
+    ;; (message "ox-bf [dbg] code: %s" code)
     ;; (message "dbg parent type: %S" parent-type)
     ;; Hack to avert a bug in Blackfriday
     ;; Details: https://github.com/kaushalmodi/ox-hugo/issues/57

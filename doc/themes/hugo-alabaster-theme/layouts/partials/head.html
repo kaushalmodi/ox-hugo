@@ -11,8 +11,6 @@
 	<link rel="stylesheet" href="{{ .Site.BaseURL }}css/alabaster.css" type="text/css" />
 	{{ with .Site.Params.highlightjs -}}
 	<link rel="stylesheet" href="{{ $.Site.BaseURL }}{{ . }}" type="text/css" />
-	{{- else -}}
-	<link rel="stylesheet" href="{{ $.Site.BaseURL }}css/pygments.css" type="text/css" />
 	{{- end }}
 
 	{{ range .Site.Params.custom_css -}}

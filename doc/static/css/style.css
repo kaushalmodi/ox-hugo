@@ -19,13 +19,20 @@ pre, tt, code {
     font-size: 0.9em;
 }
 
+/* Tue Sep 26 12:32:04 EDT 2017 - kmodi*/
+/* Override the background-color for pre blocks.. overrides the Hugo theme, and Pygments/Chroma CSS. */
+pre, pre code, .chroma {
+    /* background-color: inherit; */
+    background-color: #EEE;
+}
+
 /* Very little padding on the left and right margins of code blocks */
 li pre, pre {
     padding-left: 5px;
     padding-right: 5px;
 }
 
-/* Do not should list bullets for checkbox list items */
+/* Do not show list bullets for checkbox list items */
 ul.task-list {
     list-style-type: none;
 }

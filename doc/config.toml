@@ -26,15 +26,13 @@ enableGitInfo = true
 # 'colorful', 'murphy', 'bw', 'pastie', 'algol_nu', 'paraiso-light', 'trac',
 # 'default', 'algol', 'fruity']
 # pygmentsStyle = "native"
-pygmentsStyle = "trac"
-pygmentsCodeFences = true
+# pygmentsStyle = "trac"        # This is not needed as the theme is set using external CSS -- Tue Sep 26 13:26:59 EDT 2017 - kmodi
+pygmentsCodeFences = true       # This applies to Chroma too.
 # Use pygmentize generated CSS file instead of inlining the code codes in the HTML.
 # See https://gohugo.io/tools/syntax-highlighting/#pygments and
 # https://github.com/richleland/pygments-css
-pygmentsUseClasses = true
-# hugo 0.28+ -- Switched to Go Chroma syntax highlighter by default.
-# Below sets the syntax highlighter back to Python Pygments.
-pygmentsUseClassic=true
+pygmentsUseClasses = true       # This applies to Chroma too.
+pygmentsUseClassic = false      # Needs Hugo 0.28+, default=false => Use Chroma for syntax highlighting
 
 # Fri Sep 22 15:50:42 EDT 2017 - kmodi
 # Disabling Emoji otherwise the ":abc:" portion in `* foo :abc:def:`
@@ -42,6 +40,8 @@ pygmentsUseClassic=true
 enableEmoji = false
 
 LanguageCode = "en-us" # Used in RSS generation
+
+disableFastRender = true        # Hugo 0.30
 
 [Permalinks]
   # post = "/:year/:month/:title/"
@@ -64,9 +64,13 @@ LanguageCode = "en-us" # Used in RSS generation
   github_repo = "ox-hugo"
   github_banner = true
 
-  custom_css = [ "css/style.css"
-                 # Pygments Trac theme
-                 , "css/trac_pygments.css"
+  custom_css = [ # Pygments Trac theme
+                 # "css/trac_pygments.css" # Needs pygmentsUseClasses to be true
+                 # Chroma Trac theme
+                 # "css/trac_chroma.css" # Needs pygmentsUseClasses to be true
+                 # Chroma GitHub theme
+                 "css/github_chroma.css" # Needs pygmentsUseClasses to be true
+                 , "css/style.css"
                ]
   custom_css_absolute = [ # Iosevka fonts
                           "https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/v1.13.2/iosevka.css"

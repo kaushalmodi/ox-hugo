@@ -446,6 +446,10 @@ correctly by Hugo.  In such cases, it is better to leave out the
 language descriptor and allow the code block to render as an Org
 example block.
 
+This issue is with the Pygments syntax highlighter, not with the
+Chroma syntax highlighter (which is the default in Hugo since
+v0.28).
+
 Example value: (org)."
   :group 'org-export-hugo
   :type '(repeat symbol)

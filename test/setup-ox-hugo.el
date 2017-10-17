@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-11 04:31:46 kmodi>
+;; Time-stamp: <2017-10-17 14:47:45 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version
 ;; of Org.
@@ -140,9 +140,6 @@ to be installed.")
   ;; Prevent prompts like:
   ;;   Non-existent agenda file
   (defun org-check-agenda-file (file)))
-
-(with-eval-after-load 'ox-hugo
-  (setq org-hugo-langs-no-descr-in-code-fences '(org)))
 
 ;; Wed Sep 20 13:37:06 EDT 2017 - kmodi
 ;; Below does not get applies when running emacs --batch.. need to

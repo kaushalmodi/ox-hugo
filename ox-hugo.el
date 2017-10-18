@@ -5,7 +5,7 @@
 ;; URL: https://ox-hugo.scripter.co
 ;; Package-Requires: ((emacs "24.5") (org "9.0"))
 ;; Keywords: Org, markdown, docs
-;; Version: 0.2.3
+;; Version: 0.3
 
 ;;; Commentary:
 
@@ -622,6 +622,63 @@ INFO is a plist used as a communication channel."
       ;; 123 -> nil
       (org-string-nw-p value)))))
 
+;; Workaround to retain the :hl_lines parameter in src-block headers
+;; post `org-babel-exp-code'.
+;; http://lists.gnu.org/archive/html/emacs-orgmode/2017-10/msg00300.html
+(defun org-hugo--org-babel-exp-code (orig-fun &rest args)
+  "Return the original code block formatted for export.
+ORIG-FUN is the original function `org-babel-exp-code' that this
+function is designed to advice using `:around'.  ARGS are the
+arguments of the ORIG-FUN.
+
+This advice retains the `:hl_lines' parameter, if added to any
+source block.  This parameter is used in `org-hugo-src-block'.
+
+This advice is added to the ORIG-FUN only while an ox-hugo export
+is in progress.  See `org-hugo--before-export-function' and
+`org-hugo--after-export-function'."
+  (let* ((param-keys-to-be-retained '(:hl_lines))
+         (info (car args))
+         (parameters (nth 2 info))
+         (ox-hugo-params-str (let ((str ""))
+                               (dolist (param parameters)
+                                 (dolist (retain-key param-keys-to-be-retained)
+                                   (when (equal retain-key (car param))
+                                     (setq str (concat str " "
+                                                       (symbol-name retain-key) " "
+                                                       (cdr param))))))
+                               (org-string-nw-p (org-trim str))))
+         ret)
+    ;; (message "[ox-hugo ob-exp] info: %S" info)
+    ;; (message "[ox-hugo ob-exp] parameters: %S" parameters)
+    ;; (message "[ox-hugo ob-exp] ox-hugo-params-str: %S" ox-hugo-params-str)
+    (setq ret (apply orig-fun args))
+    (when ox-hugo-params-str
+      (setq ret (replace-regexp-in-string "\\`#\\+BEGIN_SRC .*" (format "\\& %s" ox-hugo-params-str) ret)))
+    ;; (message "[ox-hugo ob-exp] ret: %S" ret)
+    ret))
+
+(defun org-hugo--before-export-function ()
+  "Function to be run before an ox-hugo export.
+
+This function is called in the very beginning of
+`org-hugo-export-to-md', `org-hugo-export-as-md' and
+`org-hugo-publish-to-md'.
+
+This is an internal function."
+  (advice-add 'org-babel-exp-code :around #'org-hugo--org-babel-exp-code))
+
+(defun org-hugo--after-export-function ()
+  "Function to be run after an ox-hugo export.
+
+This function is called in the very end of
+`org-hugo-export-to-md', `org-hugo-export-as-md' and
+`org-hugo-publish-to-md'.
+
+This is an internal function."
+  (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code))
+
+
 
 ;;; Transcode Functions
 
@@ -728,7 +785,7 @@ returned slug string has the following specification:
 - Should contain only lower case alphabet, number and hyphen
   characters.
 - Remove *any* HTML tag like \"<code>..</code>\", \"<span
-  class=..>..</span>\", etc. from STR if present.
+  class=..>..</span>\", etc from STR if present.
 - URLs if present in STR should be removed.
 - Replace \".\" in STR with \"and\", and \"&\" with \"and\".
 - Parentheses should be replaced with double-hyphens ( \"foo (bar)
@@ -1002,24 +1059,36 @@ communication channel."
 (defun org-hugo-src-block (src-block _contents info)
   "Convert SRC-BLOCK element to Hugo-compatible element.
 
-If the code blocks are *not* set to be exported with line
-numbers (See (org) Literal examples), and if the HUGO_CODE_FENCE
-property is set to a non-nil value (default), Markdown style
-triple-backquoted code blocks are created.
+The Markdown style triple-backquoted code blocks are created
+*only* if the HUGO_CODE_FENCE property is set to a non-nil value,
+and if none of the Hugo \"highlight\" shortcode features are
+used.
 
 Otherwise, the code block is wrapped in Hugo \"highlight\"
 shortcode (See
 https://gohugo.io/content-management/syntax-highlighting).
 
+Hugo \"highlight\" shortcode features:
+  - Code blocks with line numbers (if the -n or +n switch is used)
+  - Highlight certains lines in the code block (if the :hl_lines
+    parameter is used)
+
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
-  (let ((lang (org-element-property :language src-block))
-        ;; See `org-element-src-block-parser' for all SRC-BLOCK properties.
-        (number-lines (org-element-property :number-lines src-block))) ;Non-nil if -n or +n switch is used
+  (let* ((lang (org-element-property :language src-block))
+         ;; See `org-element-src-block-parser' for all SRC-BLOCK properties.
+         (number-lines (org-element-property :number-lines src-block)) ;Non-nil if -n or +n switch is used
+         (parameters-str (org-element-property :parameters src-block))
+         (parameters (org-babel-parse-header-arguments parameters-str))
+         (hl-lines (cdr (assoc :hl_lines parameters)))
+         (hl-lines (when hl-lines
+                     (replace-regexp-in-string "," " " hl-lines)))) ;"1,3-4" -> "1 3-4"
     ;; (message "ox-hugo src [dbg] number-lines: %S" number-lines)
+    ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
     (cond
      ;; 1. If number-lines is nil AND :hugo-code-fence is non-nil
      ((and (null number-lines)
+           (null hl-lines)
            (org-hugo--plist-get-true-p info :hugo-code-fence))
       (let ((ret (org-blackfriday-src-block src-block nil info)))
         (when (and org-hugo-langs-no-descr-in-code-fences
@@ -1044,21 +1113,36 @@ channel."
           (setq ret (replace-regexp-in-string (concat "\\`\\(```\\)" lang) "\\1" ret)))
         ret))
      ;; 2. If number-lines is non-nil, or
-     ;; 3. If :hugo-code-fence is nil
+     ;; 3. If hl-lines is non-nil, or
+     ;; 4. If :hugo-code-fence is nil
      (t
       (let ((code (org-export-format-code-default src-block info))
-            (linenos-str ""))
+            (linenos-str "")
+            (hllines-str "")
+            ;; Formatter string where the first arg si linenos-str and
+            ;; second is hllines-str.
+            (highlight-args-str "%s%s"))
+        (when (or number-lines
+                  hl-lines)
+          (setq highlight-args-str " \"%s%s\""))
         (when number-lines
           (let ((linenostart-str (progn
                                    ;; Extract the start line number of the code block
                                    (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" code)
                                    (match-string-no-properties 1 code))))
-            (setq linenos-str (format " \"linenos=table, linenostart=%s\"" linenostart-str)))
+            (setq linenos-str (format "linenos=table, linenostart=%s" linenostart-str)))
           ;; Remove Org-inserted numbers from the beginning of each
           ;; line as the Hugo highlight shortcode will be used instead
           ;; of literally inserting the line numbers.
           (setq code (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" code)))
-        (format "{{< highlight %s%s>}}\n%s{{< /highlight >}}\n" lang linenos-str code))))))
+        (when hl-lines
+          (setq hllines-str (concat "hl_lines=" hl-lines))
+          (when number-lines
+            (setq hllines-str (concat ", " hllines-str))))
+        (format "{{< highlight %s%s>}}\n%s{{< /highlight >}}\n"
+                lang
+                (format highlight-args-str linenos-str hllines-str)
+                code))))))
 
 
 ;;; Filter Functions
@@ -1735,6 +1819,7 @@ So the value returned for Level C will be (2 . 3)."
                          scope)
         (cons level index)))))
 
+
 ;;; Interactive functions
 
 ;;;###autoload
@@ -1761,13 +1846,15 @@ Export is done in a buffer named \"*Org Hugo Export*\", which will
 be displayed when `org-export-show-temporary-export-buffer' is
 non-nil."
   (interactive)
+  (org-hugo--before-export-function)
   (unless subtreep ;Reset the variables that are used only for subtree exports
     (setq org-hugo--subtree-count 0)
     (setq org-hugo--subtree-coord nil))
   ;; Allow certain `ox-hugo' properties to be inherited.
   (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
     (org-export-to-buffer 'hugo "*Org Hugo Export*"
-      async subtreep visible-only nil nil (lambda () (text-mode)))))
+      async subtreep visible-only nil nil (lambda () (text-mode))))
+  (org-hugo--after-export-function))
 
 ;;;###autoload
 (defun org-hugo-export-to-md (&optional async subtreep visible-only)
@@ -1791,6 +1878,7 @@ contents of hidden elements.
 
 Return output file's name."
   (interactive)
+  (org-hugo--before-export-function)
   (let* ((info (org-combine-plists
                 (org-export--get-export-attributes
                  'hugo subtreep visible-only)
@@ -1812,7 +1900,8 @@ Return output file's name."
     (unless subtreep ;Reset the variables that are used only for subtree exports
       (setq org-hugo--subtree-count 0)
       (setq org-hugo--subtree-coord nil))
-    (org-export-to-file 'hugo outfile async subtreep visible-only)))
+    (org-export-to-file 'hugo outfile async subtreep visible-only))
+  (org-hugo--after-export-function))
 
 ;;;###autoload
 (defun org-hugo-publish-to-md (plist filename pub-dir)
@@ -1823,9 +1912,11 @@ the filename of the Org file to be published.  PUB-DIR is the
 publishing directory.
 
 Return output file name."
+  (org-hugo--before-export-function)
   ;; Allow certain `ox-hugo' properties to be inherited.
   (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
-    (org-publish-org-to 'hugo filename ".md" plist pub-dir)))
+    (org-publish-org-to 'hugo filename ".md" plist pub-dir))
+  (org-hugo--after-export-function))
 
 ;;;###autoload
 (defun org-hugo-export-subtree-to-md (&optional all-subtrees async visible-only)

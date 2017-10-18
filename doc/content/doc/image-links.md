@@ -28,14 +28,14 @@ See the below examples on how to reference images in different ways:
 
 ### Inline image (Unhyperlinked) {#inline-image--unhyperlinked}
 
-```
+```org
 [[/images/foo.png]]
 ```
 
 
 ### Inline image (Hyperlinked to the image itself) {#inline-image--hyperlinked-to-the-image-itself}
 
-```
+```org
 [[file:/images/foo.png][file:/images/foo.png]]
 ```
 
@@ -45,7 +45,7 @@ See the below examples on how to reference images in different ways:
 
 ### Link to an image (Image not inlined) {#link-to-an-image--image-not-inlined}
 
-```
+```org
 [[/images/foo.png][Click here to see foo.png]]
 ```
 
@@ -64,7 +64,7 @@ file is copied by `ox-hugo` to the _static_ directory.
 
 Here is an example link:
 
-```
+```org
 [[../files-to-be-copied-to-static/static/images/copy-of-unicorn-logo.png]]
 ```
 
@@ -92,7 +92,7 @@ See the [Usage → Before you export](/doc/usage#before-you-export) section to l
 Here is an example link where the source path does not contain
 `/static/`:
 
-```
+```org
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
 ```
 

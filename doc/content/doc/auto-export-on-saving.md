@@ -25,7 +25,7 @@ _per-file export flow_.
 
 1.  Add below to the very-end of your posts Org file:
 
-    ```
+    ```org
     ​* Footnotes
     ​* COMMENT Local Variables                                           :ARCHIVE:
     # Local Variables:

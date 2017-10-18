@@ -8,7 +8,10 @@ draft = false
 -   [Hugo `highlight` shortcode with line numbers](https://gohugo.io/content-management/syntax-highlighting/)
 
 
-## Default new line number start {#default-new-line-number-start}
+## Cases {#source-block-line-number-cases}
+
+
+### Default new line number start {#default-new-line-number-start}
 
 {{< highlight emacs-lisp "linenos=table, linenostart=1">}}
 ;; this will export with line number 1 (default)
@@ -16,7 +19,7 @@ draft = false
 {{< /highlight >}}
 
 
-## Specify new line number start {#specify-new-line-number-start}
+### Specify new line number start {#specify-new-line-number-start}
 
 {{< highlight emacs-lisp "linenos=table, linenostart=20">}}
 ;; this will export with line number 20
@@ -24,7 +27,7 @@ draft = false
 {{< /highlight >}}
 
 
-## Default continued line numbers {#default-continued-line-numbers}
+### Default continued line numbers {#default-continued-line-numbers}
 
 {{< highlight emacs-lisp "linenos=table, linenostart=22">}}
 ;; This will be listed as line 22
@@ -32,7 +35,7 @@ draft = false
 {{< /highlight >}}
 
 
-## Specify continued line numbers jump {#specify-continued-line-numbers-jump}
+### Specify continued line numbers jump {#specify-continued-line-numbers-jump}
 
 {{< highlight emacs-lisp "linenos=table, linenostart=33">}}
 ;; This will be listed as line 33

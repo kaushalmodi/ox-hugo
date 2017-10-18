@@ -434,25 +434,66 @@ property needs to be left *empty* instead of setting to =nil=!
 :END:
 - [[http://orgmode.org/manual/Literal-examples.html][Org reference]]
 - [[https://gohugo.io/content-management/syntax-highlighting/][Hugo =highlight= shortcode with line numbers]]
-*** Default new line number start
+*** Cases
+:PROPERTIES:
+:CUSTOM_ID: source-block-line-number-cases
+:END:
+**** Default new line number start
 #+BEGIN_SRC emacs-lisp -n
 ;; this will export with line number 1 (default)
 (message "This is line 2")
 #+END_SRC
-*** Specify new line number start
+**** Specify new line number start
 #+BEGIN_SRC emacs-lisp -n 20
 ;; this will export with line number 20
 (message "This is line 21")
 #+END_SRC
-*** Default continued line numbers
+**** Default continued line numbers
 #+BEGIN_SRC emacs-lisp +n
 ;; This will be listed as line 22
 (message "This is line 23")
 #+END_SRC
-*** Specify continued line numbers jump
+**** Specify continued line numbers jump
 #+BEGIN_SRC emacs-lisp +n 10
 ;; This will be listed as line 33
 (message "This is line 34")
+#+END_SRC
+** Source blocks with highlighting
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-with-highlighting
+:CUSTOM_ID: source-blocks-with-highlighting
+:END:
+*** Without line numbers
+:PROPERTIES:
+:CUSTOM_ID: source-blocks-with-highlighting-no-linenums
+:END:
+#+BEGIN_SRC emacs-lisp :hl_lines 1,3-5 :eval no
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+(message "This is line 4")
+(message "This is line 5")
+(message "This is line 6")
+#+END_SRC
+Above highlighting looks weird as the highlighting spans the full
+page/container width. This is probably a bug in Hugo.
+
+The workaround is below.. *use line numbers too!*.
+*** With line numbers
+:PROPERTIES:
+:CUSTOM_ID: source-blocks-with-highlighting-with-linenums
+:END:
+The highlighting looks better with line numbers enabled because then
+the highlight is limited to the width of the HTML table rows (because
+=ox-hugo= sets the =linenos=table= option in the =highlight= shortcode
+by default when line numbers are enabled).
+#+BEGIN_SRC emacs-lisp -n :hl_lines 1,3-5 :eval no
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+(message "This is line 4")
+(message "This is line 5")
+(message "This is line 6")
 #+END_SRC
 ** Source block with caption                                       :noexport:
 :PROPERTIES:

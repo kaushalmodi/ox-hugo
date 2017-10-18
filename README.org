@@ -155,6 +155,12 @@ The common =ox-hugo= export bindings are:
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
 * Changelog
+** v0.3 <2017-10-18 Wed>
+*** Features
+- Source blocks can now be exported with line numbers and/or
+  highlighting!
+
+  See [[https://ox-hugo.scripter.co/doc/source-blocks][Source Blocks]] for details.
 ** v0.2.3 <2017-10-11 Wed>
 *** Fixes
 - =org-hugo-slug= earlier stripped off only the =code= HTML tag

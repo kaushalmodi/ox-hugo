@@ -1,5 +1,6 @@
 #+HUGO_BASE_DIR: ../
 #+SEQ_TODO: TODO DRAFT DONE
+#+PROPERTY: header-args :eval no
 
 * Preparation
 :PROPERTIES:
@@ -434,66 +435,168 @@ property needs to be left *empty* instead of setting to =nil=!
 :END:
 - [[http://orgmode.org/manual/Literal-examples.html][Org reference]]
 - [[https://gohugo.io/content-management/syntax-highlighting/][Hugo =highlight= shortcode with line numbers]]
+*** Source block with line numbers examples                        :noexport:
+:PROPERTIES:
+:CUSTOM_ID: source-block-with-line-numbers-examples
+:END:
+#+BEGIN_SRC org :noweb-ref src-block-n-default-start
+,#+BEGIN_SRC emacs-lisp -n
+;; this will export with line number 1 (default)
+(message "This is line 2")
+,#+END_SRC
+#+END_SRC
+
+#+BEGIN_SRC org :noweb-ref src-block-n-custom-start
+,#+BEGIN_SRC emacs-lisp -n 20
+;; this will export with line number 20
+(message "This is line 21")
+,#+END_SRC
+#+END_SRC
+
+#+BEGIN_SRC org :noweb-ref src-block-n-default-continue
+,#+BEGIN_SRC emacs-lisp +n
+;; This will be listed as line 22
+(message "This is line 23")
+,#+END_SRC
+#+END_SRC
+
+#+BEGIN_SRC org :noweb-ref src-block-n-custom-continue
+,#+BEGIN_SRC emacs-lisp +n 10
+;; This will be listed as line 33
+(message "This is line 34")
+,#+END_SRC
+#+END_SRC
 *** Cases
 :PROPERTIES:
 :CUSTOM_ID: source-block-line-number-cases
 :END:
 **** Default new line number start
-#+BEGIN_SRC emacs-lisp -n
-;; this will export with line number 1 (default)
-(message "This is line 2")
+***** Org source
+#+BEGIN_SRC org :noweb yes
+<<src-block-n-default-start>>
+#+END_SRC
+***** Output
+#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-default-start>>
 #+END_SRC
 **** Specify new line number start
-#+BEGIN_SRC emacs-lisp -n 20
-;; this will export with line number 20
-(message "This is line 21")
+***** Org source
+#+BEGIN_SRC org :noweb yes
+<<src-block-n-custom-start>>
+#+END_SRC
+***** Output
+#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-custom-start>>
 #+END_SRC
 **** Default continued line numbers
-#+BEGIN_SRC emacs-lisp +n
-;; This will be listed as line 22
-(message "This is line 23")
+***** Org source
+#+BEGIN_SRC org :noweb yes
+<<src-block-n-default-continue>>
+#+END_SRC
+***** Output
+#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-default-continue>>
 #+END_SRC
 **** Specify continued line numbers jump
-#+BEGIN_SRC emacs-lisp +n 10
-;; This will be listed as line 33
-(message "This is line 34")
+***** Org source
+#+BEGIN_SRC org :noweb yes
+<<src-block-n-custom-continue>>
+#+END_SRC
+***** Output
+#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-custom-continue>>
 #+END_SRC
 ** Source blocks with highlighting
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-with-highlighting
 :CUSTOM_ID: source-blocks-with-highlighting
 :END:
+*** Source block with line highlighting examples                   :noexport:
+:PROPERTIES:
+:CUSTOM_ID: source-block-with-line-highlighting-examples
+:END:
+#+BEGIN_SRC org :noweb-ref src-block-hl-without-n
+,#+BEGIN_SRC emacs-lisp :hl_lines 1,3-5
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+(message "This is line 4")
+(message "This is line 5")
+(message "This is line 6")
+,#+END_SRC
+#+END_SRC
+
+#+BEGIN_SRC org :noweb-ref src-block-hl-with-n-not-1
+,#+BEGIN_SRC emacs-lisp -n 7 :hl_lines 1,3-5
+(message "This is line 7 in code, but line 1 for highlighting reference")
+(message "This is line 8 in code, but line 2 for highlighting reference")
+(message "This is line 9 in code, but line 3 for highlighting reference")
+(message "This is line 10 in code, but line 4 for highlighting reference")
+(message "This is line 11 in code, but line 5 for highlighting reference")
+(message "This is line 12 in code, but line 6 for highlighting reference")
+,#+END_SRC
+#+END_SRC
+
+#+BEGIN_SRC org :noweb-ref src-block-hl-with-n
+,#+BEGIN_SRC emacs-lisp -n :hl_lines 1,3-5
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+(message "This is line 4")
+(message "This is line 5")
+(message "This is line 6")
+,#+END_SRC
+#+END_SRC
 *** Without line numbers
 :PROPERTIES:
 :CUSTOM_ID: source-blocks-with-highlighting-no-linenums
 :END:
-#+BEGIN_SRC emacs-lisp :hl_lines 1,3-5 :eval no
-(message "This is line 1")
-(message "This is line 2")
-(message "This is line 3")
-(message "This is line 4")
-(message "This is line 5")
-(message "This is line 6")
+***** Org source
+#+BEGIN_SRC org :noweb yes
+<<src-block-hl-without-n>>
 #+END_SRC
-Above highlighting looks weird as the highlighting spans the full
-page/container width. This is probably a bug in Hugo.
+***** Output
+#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+<<src-block-hl-without-n>>
+#+END_SRC
+Above highlighting might look weird as the highlighting spans the full
+page/container width. This could be either called a bug in Hugo, or
+the HTML limitation.
 
-The workaround is below.. *use line numbers too!*.
+A workaround is below.. *use line numbers too!*.
+*** With line numbers *not* starting from 1
+:PROPERTIES:
+:CUSTOM_ID: source-blocks-with-highlighting-with-linenums-not-starting-from-1
+:END:
+With line numbers enabled, the highlighting is limited to the width of
+the HTML table rows (because =ox-hugo= sets the =linenos=table= option
+in the =highlight= shortcode when line numbers are enabled).
+
+- Note 1 :: When using both, switches (like =-n=), and header args
+            (like =:hl_lines=), the _switches have to come first_.
+- Note 2 :: The line numbers in the value for =:hl_lines= parameter is
+            always with the starting line number reference of 1. That
+            has no relation with the value of the line numbers
+            displayed using the =-n= or =+n= switches!
+***** Org source
+#+BEGIN_SRC org :noweb yes
+<<src-block-hl-with-n-not-1>>
+#+END_SRC
+***** Output
+#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+<<src-block-hl-with-n-not-1>>
+#+END_SRC
 *** With line numbers
 :PROPERTIES:
 :CUSTOM_ID: source-blocks-with-highlighting-with-linenums
 :END:
-The highlighting looks better with line numbers enabled because then
-the highlight is limited to the width of the HTML table rows (because
-=ox-hugo= sets the =linenos=table= option in the =highlight= shortcode
-by default when line numbers are enabled).
-#+BEGIN_SRC emacs-lisp -n :hl_lines 1,3-5 :eval no
-(message "This is line 1")
-(message "This is line 2")
-(message "This is line 3")
-(message "This is line 4")
-(message "This is line 5")
-(message "This is line 6")
+***** Org source
+#+BEGIN_SRC org :noweb yes
+<<src-block-hl-with-n>>
+#+END_SRC
+***** Output
+#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+<<src-block-hl-with-n>>
 #+END_SRC
 ** Source block with caption                                       :noexport:
 :PROPERTIES:
@@ -670,7 +773,7 @@ Example:
 
 If you do not see the above paragraph completely in bold, have below
 in your emacs config to fix it:
-#+BEGIN_SRC emacs-lisp :eval no
+#+BEGIN_SRC emacs-lisp
 (with-eval-after-load 'org
   ;; Allow multiple line Org emphasis markup.
   ;; http://emacs.stackexchange.com/a/13828/115

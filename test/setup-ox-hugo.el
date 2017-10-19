@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-17 14:47:45 kmodi>
+;; Time-stamp: <2017-10-19 10:58:27 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version
 ;; of Org.
@@ -139,7 +139,23 @@ to be installed.")
 
   ;; Prevent prompts like:
   ;;   Non-existent agenda file
-  (defun org-check-agenda-file (file)))
+  (defun org-check-agenda-file (file))
+
+  (let (ob-lang-alist)
+    (add-to-list 'ob-lang-alist '(emacs-lisp . t))
+    (add-to-list 'ob-lang-alist '(org . t))
+    (org-babel-do-load-languages 'org-babel-load-languages ob-lang-alist))
+
+  (with-eval-after-load 'ob-core
+    (defun ox-hugo/org-confirm-babel-evaluate-fn (lang body)
+      "Mark `org' as a safe language for ox-hugo tests and docs."
+      (let* ((ob-enabled-langs '("org"))
+             (ob-enabled-langs-re (regexp-opt ob-enabled-langs 'words))
+             (unsafe t)) ;Set the return value `unsafe' to t by default
+        (when (string-match-p ob-enabled-langs-re lang)
+          (setq unsafe nil))
+        unsafe))
+    (setq org-confirm-babel-evaluate #'ox-hugo/org-confirm-babel-evaluate-fn)))
 
 ;; Wed Sep 20 13:37:06 EDT 2017 - kmodi
 ;; Below does not get applies when running emacs --batch.. need to

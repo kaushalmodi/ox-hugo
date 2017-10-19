@@ -55,9 +55,9 @@ You can generate the same too! Simply clone this repo and do =make
 doc=.
 
 *Make sure you visit the above link to read more on:*
-- [[https://ox-hugo.scripter.co/doc/why-ox-hugo/][Why =ox-hugo=?]]
-- [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto exporting to Markdown each time the Org file is saved]]
-- [[https://ox-hugo.scripter.co/doc/org-capture-setup/][Using Org Capture to start a new blog post]]
+- [[https://ox-hugo.scripter.co/doc/why-ox-hugo][Why =ox-hugo=?]]
+- [[https://ox-hugo.scripter.co/doc/auto-export-on-saving][Auto exporting to Markdown each time the Org file is saved]]
+- [[https://ox-hugo.scripter.co/doc/org-capture-setup][Using Org Capture to start a new blog post]]
 - .. and many more topics and examples
 ** Source of the Documentation site
 - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/ox-hugo-manual.org][Org source]]
@@ -155,6 +155,10 @@ The common =ox-hugo= export bindings are:
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
 * Changelog
+** v0.3.1 <2017-10-19 Thu>
+*** Fixes
+- Fix the source block line number annotation when the line numbers
+  increased in number of digits in the same code block.
 ** v0.3 <2017-10-18 Wed>
 *** Features
 - Source blocks can now be exported with line numbers and/or

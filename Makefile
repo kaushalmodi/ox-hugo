@@ -1,4 +1,4 @@
-# Time-stamp: <2017-09-28 11:16:36 kmodi>
+# Time-stamp: <2017-10-19 11:11:46 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -33,6 +33,8 @@ ORG_FILE=
 # Function to be run in emacs --batch
 FUNC=
 
+test_check=1
+
 subtree_test_files = all-posts.org \
 	construct-hugo-front-matter-from-menu-meta-data.org \
 	src-blocks-with-highlight-shortcode.org \
@@ -53,8 +55,8 @@ file_test_files = single-posts/post-toml.org \
 # - screenshot-subtree-export-example.org - sets the org-hugo-footer using Local Variables.
 # - writing-hugo-blog-in-org-file-export.org - sets the org-hugo-footer using Local Variables.
 
-.PHONY: help mdtree mdfile vcheck hugo serve server diff \
-	test vcheck testmkgold \
+.PHONY: help emacs-batch mdtree mdfile vcheck hugo serve server diff \
+	test gen_test_md testmkgold \
 	test_subtree $(subtree_test_files) \
 	test_file $(file_test_files) \
 	doc_site gh_docs doc \
@@ -63,15 +65,16 @@ file_test_files = single-posts/post-toml.org \
 help:
 	@echo "Help for command-line Org->Markdown for Hugo Exporter"
 	@echo "====================================================="
-	@echo " make example.org   <-- Export the .org file from content-org/ dir to Markdown file(s)"
+	@echo " make test          <-- Run test with checks enabled"
+	@echo " make gen_test_md   <-- Only export the test Org files to Markdown, no checks"
+	@echo " make doc           <-- Build both Doc Site contents and GitHub docs"
+	@echo " make FOO.org       <-- Export the FOO.org file from content-org/ dir to Markdown file(s)"
 	@echo " make vcheck        <-- Print emacs and Org versions"
 	@echo " make hugo          <-- Run hugo"
 	@echo " make serve         <-- Run the hugo server on http://localhost:$(PORT)"
 	@echo " make diff          <-- Run git diff"
 	@echo " make doc_site      <-- Build the Markdown content for the documentation site"
 	@echo " make gh_docs       <-- Build README.org and CONTRIBUTING.org for GitHub"
-	@echo " make doc           <-- Build both Doc Site contents and GitHub docs"
-	@echo " make test          <-- Run test"
 	@echo " make clean         <-- Delete the Hugo public/ directory and auto-installed elisp packages"
 	@echo " make               <-- Show this help"
 
@@ -131,6 +134,10 @@ diff:
 
 test: vcheck testmkgold test_subtree test_file
 
+gen_test_md:
+	@$(MAKE) test_subtree test_check=0
+	@$(MAKE) test_file test_check=0
+
 # https://stackoverflow.com/a/16589534/1219634
 testmkgold:
 	@git checkout --ignore-skip-worktree-bits -- $(OX_HUGO_TEST_SITE_DIR)/content
@@ -144,7 +151,9 @@ $(subtree_test_files):
 	@$(MAKE) mdtree ORG_FILE=$@ \
 	                ORG_FILE_DIR=$(OX_HUGO_TEST_ORG_DIR) \
 	                TIMEZONE=UTC # Use UTC/Universal time zone for tests
+ifeq ($(test_check),1)
 	@$(MAKE) diffgolden
+endif
 
 # Run the mdfile + diffgolden rules in loop on all of $(file_test_files)
 test_file: $(file_test_files)
@@ -152,7 +161,9 @@ $(file_test_files):
 	@$(MAKE) mdfile ORG_FILE=$@ \
 	                ORG_FILE_DIR=$(OX_HUGO_TEST_ORG_DIR) \
 	                TIMEZONE=UTC # Use UTC/Universal time zone for tests
+ifeq ($(test_check),1)
 	@$(MAKE) diffgolden
+endif
 
 doc_site:
 	@echo "[Doc Site] Generating ox-hugo Documentation Site content .."

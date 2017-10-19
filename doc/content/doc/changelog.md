@@ -6,6 +6,15 @@ draft = false
   identifier = "changelog"
 +++
 
+## v0.3.1 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-19 Thu&gt;</span></span> {#v0-dot-3-dot-1}
+
+
+### Fixes {#fixes}
+
+-   Fix the source block line number annotation when the line numbers
+    increased in number of digits in the same code block.
+
+
 ## v0.3 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-18 Wed&gt;</span></span> {#v0-dot-3}
 
 
@@ -14,7 +23,7 @@ draft = false
 -   Source blocks can now be exported with line numbers and/or
     highlighting!
 
-    See [Source Blocks](https://ox-hugo.scripter.co/doc/source-blocks) for details.
+    See [Source Blocks](/doc/source-blocks) for details.
 
 
 ## v0.2.3 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-11 Wed&gt;</span></span> {#v0-dot-2-dot-3}

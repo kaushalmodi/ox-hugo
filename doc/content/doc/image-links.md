@@ -83,8 +83,8 @@ copied location inside `static`:
 | `~/temp/static/foo.png`          | `<HUGO_BASE_DIR>/static/foo.png`          | (same as above)                                                                                            |
 | `~/temp/static/articles/zoo.pdf` | `<HUGO_BASE_DIR>/static/articles/zoo.pdf` | (same as above)                                                                                            |
 
-See the [Usage → Before you export](/doc/usage#before-you-export) section to learn how to set the
-**HUGO\_BASE\_DIR**.
+See the [Usage → Before you export](/doc/usage#before-you-export)
+section to learn how to set the **HUGO\_BASE\_DIR**.
 
 
 ### Source path does not contain `/static/` {#source-path-does-not-contain-static}

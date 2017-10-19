@@ -17,9 +17,10 @@ There are 2 major blogging flows that can be used with this package:
         translate to post `draft` state, auto weight calculation for
         posts and menu items, etc.
 
-See the [Org Capture Setup](/doc/org-capture-setup) page to see how to quickly create new posts.
+See the [Org Capture Setup](/doc/org-capture-setup) page to see how
+to quickly create new posts.
 
-See the [Auto-export on Saving](/doc/auto-export-on-saving) page to learn how to setup up seeing
-live-preview of the Hugo-rendered HTML each time you do `C-x C-s` in
-the Org file. That section explains how to set that up for either of
-the above two blogging flows.
+See the [Auto-export on Saving](/doc/auto-export-on-saving) page to
+learn how to setup up seeing live-preview of the Hugo-rendered HTML
+each time you do `C-x C-s` in the Org file. That section explains how
+to set that up for either of the above two blogging flows.

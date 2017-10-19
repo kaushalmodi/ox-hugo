@@ -5,7 +5,7 @@
 ;; URL: https://ox-hugo.scripter.co
 ;; Package-Requires: ((emacs "24.5") (org "9.0"))
 ;; Keywords: Org, markdown, docs
-;; Version: 0.3
+;; Version: 0.3.1
 
 ;;; Commentary:
 
@@ -1128,13 +1128,13 @@ channel."
         (when number-lines
           (let ((linenostart-str (progn
                                    ;; Extract the start line number of the code block
-                                   (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" code)
+                                   (string-match "\\`\\s-*\\([0-9]+\\)\\s-\\{2\\}" code)
                                    (match-string-no-properties 1 code))))
             (setq linenos-str (format "linenos=table, linenostart=%s" linenostart-str)))
           ;; Remove Org-inserted numbers from the beginning of each
           ;; line as the Hugo highlight shortcode will be used instead
           ;; of literally inserting the line numbers.
-          (setq code (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" code)))
+          (setq code (replace-regexp-in-string "^\\s-*[0-9]+\\s-\\{2\\}" "" code)))
         (when hl-lines
           (setq hllines-str (concat "hl_lines=" hl-lines))
           (when number-lines

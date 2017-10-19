@@ -7,12 +7,16 @@
 #+MACRO: imageclick [[file:./static/images/$1][file:/images/$1]]
 #+MACRO: issue [[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]]
 #+MACRO: ox-hugo-test-file  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]]
-#+MACRO: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
+#+MACRO: doc [[/doc/$1][$2]]
 
 * Changelog
 :PROPERTIES:
 :CUSTOM_ID: changelog
 :END:
+** v0.3.1 <2017-10-19 Thu>
+*** Fixes
+- Fix the source block line number annotation when the line numbers
+  increased in number of digits in the same code block.
 ** v0.3 <2017-10-18 Wed>
 *** Features
 - Source blocks can now be exported with line numbers and/or
@@ -428,9 +432,12 @@ have the exported Markdown files.
    directory. You can name it anything, but I prefer to name it
    =content-org=
 
-   Examples --- [[https://github.com/kaushalmodi/ox-hugo/tree/master/doc][This documentation]], [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][=ox-hugo= test site]], [[https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io][My blog]]
-5. Create an Org file in there and follow the [[/doc/usage][*Usage*]] section to
-   export it.
+   Examples ---
+   - [[https://github.com/kaushalmodi/ox-hugo/tree/master/doc][=ox-hugo= documentation site (you're reading it)]]
+   - [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][=ox-hugo= test site]]
+   - [[https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io][/scripter.co/ -- My blog]]
+5. Create an Org file in there and follow the {{{doc(usage,*Usage*)}}}
+   section to export it.
 *** Blogging Flow
 :PROPERTIES:
 :EXPORT_FILE_NAME: blogging-flow
@@ -445,12 +452,13 @@ There are 2 major blogging flows that can be used with this package:
      translate to post =draft= state, auto weight calculation for
      posts and menu items, etc.
 
-See the [[/doc/org-capture-setup][Org Capture Setup]] page to see how to quickly create new posts.
+See the {{{doc(org-capture-setup,Org Capture Setup)}}} page to see how
+to quickly create new posts.
 
-See the [[/doc/auto-export-on-saving][Auto-export on Saving]] page to learn how to setup up seeing
-live-preview of the Hugo-rendered HTML each time you do =C-x C-s= in
-the Org file. That section explains how to set that up for either of
-the above two blogging flows.
+See the {{{doc(auto-export-on-saving,Auto-export on Saving)}}} page to
+learn how to setup up seeing live-preview of the Hugo-rendered HTML
+each time you do =C-x C-s= in the Org file. That section explains how
+to set that up for either of the above two blogging flows.
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu meta
@@ -580,8 +588,9 @@ The first time setup varies between the /per-subtree export flow/ and
     setup, hit =!= to permanently save that setting and prevent future
     prompts.
 ****** Step 1b: Prevent auto-export during Org Capture
- You might find this step useful if you choose to write new posts using
- =org-capture= as explained in the [[/doc/org-capture-setup][/Org Capture Setup/]] section.
+ You might find this step useful if you choose to write new posts
+ using =org-capture= as explained in the {{{doc(org-capture-setup,/Org
+ Capture Setup/)}}} section.
 
  After saving the below to your emacs config and evaluating it,
  auto-exports will be prevented when saving a new post created using
@@ -848,8 +857,8 @@ copied location inside =static=:
 | =~/temp/static/articles/zoo.pdf= | =<HUGO_BASE_DIR>/static/articles/zoo.pdf= | (same as above)                                                                                                      |
 |----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
 
-See the [[/doc/usage#before-you-export][Usage → Before you export]] section to learn how to set the
-*HUGO_BASE_DIR*.
+See the {{{doc(usage#before-you-export,Usage → Before you export)}}}
+section to learn how to set the *HUGO_BASE_DIR*.
 ***** Source path does not contain =/static/=
 Here is an example link where the source path does not contain
 =/static/=:
@@ -904,23 +913,17 @@ and that's why implementing this needed that hack.
 
 If a user wants to highlight lines 1, and then 3 to 5, they would add
 =:hl_lines 1,3-5= to the source block header.
-#+BEGIN_SRC org
-,#+BEGIN_SRC emacs-lisp :hl_lines 1,3-5
-(message "This is line 1")
-(message "This is line 2")
-(message "This is line 3")
-(message "This is line 4")
-(message "This is line 5")
-(message "This is line 6")
-,#+END_SRC
-#+END_SRC
+# Below 2 include statements fetch the noweb references used in the
+# code inserted by the following include statements.
+#+INCLUDE: "../test/site/content-org/all-posts.org::#source-block-with-line-numbers-examples"
+#+INCLUDE: "../test/site/content-org/all-posts.org::#source-block-with-line-highlighting-examples"
 ***** Without line numbers
 #+INCLUDE: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-no-linenums" :only-contents t
 ***** With line numbers
 The Org source for the below is similar to the above, except that the
 =-n= switch is also added to enable the line numbers.
 
-#+INCLUDE: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-with-linenums" :only-contents t
+#+INCLUDE: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-with-linenums-not-starting-from-1" :only-contents t
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:
 # fill-column: 70

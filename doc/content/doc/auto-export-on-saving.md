@@ -47,8 +47,9 @@ _per-file export flow_.
 
 #### Step 1b: Prevent auto-export during Org Capture {#step-1b-prevent-auto-export-during-org-capture}
 
-You might find this step useful if you choose to write new posts using
-`org-capture` as explained in the [_Org Capture Setup_](/doc/org-capture-setup) section.
+You might find this step useful if you choose to write new posts
+using `org-capture` as explained in the [_Org
+Capture Setup_](/doc/org-capture-setup) section.
 
 After saving the below to your emacs config and evaluating it,
 auto-exports will be prevented when saving a new post created using

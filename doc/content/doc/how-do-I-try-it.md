@@ -21,6 +21,10 @@ draft = false
     directory. You can name it anything, but I prefer to name it
     `content-org`
 
-    Examples --- [This documentation](https://github.com/kaushalmodi/ox-hugo/tree/master/doc), [`ox-hugo` test site](https://github.com/kaushalmodi/ox-hugo/tree/master/test/site), [My blog](https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io)
-5.  Create an Org file in there and follow the [**Usage**](/doc/usage) section to
-    export it.
+    Examples ---
+
+    -   [`ox-hugo` documentation site (you're reading it)](https://github.com/kaushalmodi/ox-hugo/tree/master/doc)
+    -   [`ox-hugo` test site](https://github.com/kaushalmodi/ox-hugo/tree/master/test/site)
+    -   [_scripter.co_ -- My blog](https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io)
+5.  Create an Org file in there and follow the [**Usage**](/doc/usage)
+    section to export it.

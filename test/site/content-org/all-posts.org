@@ -1143,6 +1143,17 @@ This post is in category =catA= and tagged =meow=.
 :EXPORT_DATE: 2017-07-24
 :END:
 This gets both categories =catA= and =catB=.
+** Do not leak post's immediate sub-heading tag into the front-matter :expected_tag:
+:PROPERTIES:
+:EXPORT_FILE_NAME: dont-leak-subheading-tags
+:END:
+*** Sub-heading 1                                            :unexpected_tag:
+This is a *special* case where:
+- A post has a sub-heading as the first line in its body, and
+- That sub-heading has a tag too!
+
+The passing case for this test would be that the =unexpected_tag= does
+not leak into the post's front-matter.
 * Links                                                               :links:
 ** Within the same post
 *** Link to a heading CUSTOM_ID

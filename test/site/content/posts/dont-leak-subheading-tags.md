@@ -1,0 +1,15 @@
++++
+title = "Do not leak post's immediate sub-heading tag into the front-matter"
+tags = ["expected-tag"]
+draft = false
++++
+
+## Sub-heading 1 {#sub-heading-1}
+
+This is a **special** case where:
+
+-   A post has a sub-heading as the first line in its body, and
+-   That sub-heading has a tag too!
+
+The passing case for this test would be that the `unexpected_tag` does
+not leak into the post's front-matter.

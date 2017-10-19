@@ -1160,6 +1160,9 @@ INFO is a plist holding export options."
   ;; Example: Convert ":raised\_hands:" back to ":raised_hands:".
   ;; More Emoji codes: https://www.emoji.codes/
   ;; (Requires setting "enableEmoji = true" in config.toml.)
+  ;; (message "[ox-hugo body filter] ITEM %S" (org-entry-get (point) "ITEM"))
+  ;; (message "[ox-hugo body filter] TAGS: %S" (org-entry-get (point) "TAGS"))
+  ;; (message "[ox-hugo body filter] ALLTAGS: %S" (org-entry-get (point) "ALLTAGS"))
   (setq body (replace-regexp-in-string
               "\\(:[a-z0-9]+\\)[\\]\\(_[a-z0-9]+:\\)"
               "\\1\\2"
@@ -1481,7 +1484,55 @@ INFO is a plist used as a communication channel."
                   (org-hugo--front-matter-value-booleanize (org-hugo--plist-get-true-p info :hugo-draft)))
                  (t
                   "false")))
-         (all-t-and-c-str (org-entry-get (point) "ALLTAGS"))
+         ;; Thu Oct 19 12:14:20 EDT 2017 - kmodi
+         ;; For a reason unknown, if we have:
+         ;;
+         ;;   * Post title                                          :good:
+         ;;   :PROPERTIES:
+         ;;   :EXPORT_FILE_NAME: post-title
+         ;;   :END:
+         ;;   ** Post sub-heading                                   :bad:
+         ;;   Note that the sub-heading is *immediately* after the post heading
+         ;;   (of course, not counting the property).
+         ;;
+         ;; then (org-entry-get (point) "ALLTAGS") will return ":good:bad:"!
+         ;;
+         ;; But if we have:
+         ;;
+         ;;   * Post title                                          :good:
+         ;;   :PROPERTIES:
+         ;;   :EXPORT_FILE_NAME: post-title
+         ;;   :END:
+         ;;   Anything here but not an Org heading (even empty line works).
+         ;;   ** Post sub-heading                                   :bad:
+         ;;
+         ;; then (org-entry-get (point) "ALLTAGS") will return
+         ;; ":good:", as expected.  So the below convoluted code
+         ;; ensures that the "bad" tag does not leak into the post
+         ;; front-matter if the first case above happens (even though
+         ;; that case is rare).
+         (all-t-and-c-str (let ((all-tags (org-entry-get (point) "ALLTAGS")))
+                            ;; (message "[get fm DBG] at heading? %s" (org-at-heading-p))
+                            ;; (message "[get fm DBG] ALLTAGS: %S" all-tags)
+                            (if (org-at-heading-p) ;Sub-heading
+                                ;; Case where a sub-heading is
+                                ;; immediately after post heading.
+                                (let ((this-heading-tag (org-entry-get (point) "TAGS")))
+                                  ;; (message "[get fm DBG] TAGS: %S" this-heading-tag)
+                                  (when this-heading-tag
+                                    ;; Case where that sub-heading has
+                                    ;; a tag too!  So remove that
+                                    ;; sub-heading tag from ALLTAGS.
+                                    (setq all-tags (string-remove-suffix this-heading-tag all-tags))
+                                    ;; Add back the trailing ":".
+                                    (setq all-tags (concat all-tags ":")))
+                                  ;; Case where that sub-heading has
+                                  ;; no tag.
+                                  all-tags)
+                              ;; Case of *no* sub-heading immediately
+                              ;; after the post heading (this is the
+                              ;; usual case).
+                              all-tags)))
          (all-t-and-c (when (stringp all-t-and-c-str)
                         (org-split-string all-t-and-c-str ":")))
          (tags-list (cl-remove-if #'org-hugo--category-p all-t-and-c))
@@ -1558,7 +1609,8 @@ INFO is a plist used as a communication channel."
                  (menu . ,menu-alist)))
          (data `,(append data custom-fm-data)))
     ;; (when tags-list
-    ;;   (message "dbg: tags: tags-list = %s" tags-list))
+    ;; (message "[get fm DBG] tags: tags-list = %s" tags-list))
+    ;; (message "[get fm DBG] tags: %s" tags)
     ;; (when categories-list
     ;;   (message "dbg: categories: categories-list = %s" categories-list))
     ;; (message "dbg: todo-state: keyword=%S draft=%S" todo-keyword draft)

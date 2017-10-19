@@ -1,6 +1,6 @@
 +++
 title = "Source blocks with highlighting"
-tags = ["src-block", "noexport"]
+tags = ["src-block"]
 draft = false
 +++
 

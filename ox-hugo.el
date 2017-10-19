@@ -48,6 +48,8 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'subr-x))   ;For `string-remove-suffix'
+
 (require 'ox-blackfriday)
 (require 'ffap)                         ;For `ffap-url-regexp'
 (require 'ob-core)                      ;For `org-babel-parse-header-arguments'

@@ -155,6 +155,12 @@ The common =ox-hugo= export bindings are:
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
 * Changelog
+** v0.3.2 <2017-10-24 Tue>
+*** Fixes
+- Fix issue with headline metadata parsing (ALLTAGS, CLOSED, TODO)
+  when a post Org heading was immediately followed by that post's
+  sub-heading.  This issue was seen in subtree-based exports
+  [[[https://github.com/kaushalmodi/ox-hugo/issues/87][87]]].
 ** v0.3.1 <2017-10-19 Thu>
 *** Fixes
 - Fix the source block line number annotation when the line numbers

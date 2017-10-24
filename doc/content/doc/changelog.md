@@ -6,6 +6,17 @@ draft = false
   identifier = "changelog"
 +++
 
+## v0.3.2 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-24 Tue&gt;</span></span> {#v0-dot-3-dot-2}
+
+
+### Fixes {#fixes}
+
+-   Fix issue with headline metadata parsing (ALLTAGS, CLOSED, TODO)
+    when a post Org heading was immediately followed by that post's
+    sub-heading.  This issue was seen in subtree-based exports
+    [[87](https://github.com/kaushalmodi/ox-hugo/issues/87)].
+
+
 ## v0.3.1 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-19 Thu&gt;</span></span> {#v0-dot-3-dot-1}
 
 

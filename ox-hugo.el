@@ -5,7 +5,7 @@
 ;; URL: https://ox-hugo.scripter.co
 ;; Package-Requires: ((emacs "24.5") (org "9.0"))
 ;; Keywords: Org, markdown, docs
-;; Version: 0.3.1
+;; Version: 0.3.2
 
 ;;; Commentary:
 
@@ -47,8 +47,6 @@
 ;;   https://ox-hugo.scripter.co
 
 ;;; Code:
-
-(eval-when-compile (require 'subr-x))   ;For `string-remove-suffix'
 
 (require 'ox-blackfriday)
 (require 'ffap)                         ;For `ffap-url-regexp'
@@ -1175,12 +1173,23 @@ INFO is a plist holding export options."
                  (insert body)
                  (delete-trailing-whitespace (point-min) nil)
                  (buffer-substring-no-properties (point-min) (point-max)))))
-  (format "%s%s%s"
-          (org-hugo--get-front-matter info)
-          (if (org-string-nw-p body) ;Insert extra newline if body is non-empty
-              (format "\n%s" body)
-            "")
-          org-hugo-footer))
+  (let ((fm (save-excursion
+              (save-restriction
+                ;; The point is at the beginning of the heading body
+                ;; in this function! So move the point back by 1 char
+                ;; to bring it into the Org headline before calling
+                ;; `org-hugo--get-front-matter', because in there we
+                ;; use `org-entry-get' at (point) to retrieve certain
+                ;; property values.
+                (widen)
+                (ignore-errors ;If the point is at beginning of buffer even after widening
+                 (backward-char))
+                ;; (message "[body filter DBG] line at pt: %s" (thing-at-point 'line))
+                (org-hugo--get-front-matter info))))
+        (body (if (org-string-nw-p body) ;Insert extra newline if body is non-empty
+                  (format "\n%s" body)
+                "")))
+    (format "%s%s%s" fm body org-hugo-footer)))
 
 ;;;;; Hugo Front Matter
 (defun org-hugo--quote-string (val &optional prefer-no-quotes)
@@ -1486,55 +1495,7 @@ INFO is a plist used as a communication channel."
                   (org-hugo--front-matter-value-booleanize (org-hugo--plist-get-true-p info :hugo-draft)))
                  (t
                   "false")))
-         ;; Thu Oct 19 12:14:20 EDT 2017 - kmodi
-         ;; For a reason unknown, if we have:
-         ;;
-         ;;   * Post title                                          :good:
-         ;;   :PROPERTIES:
-         ;;   :EXPORT_FILE_NAME: post-title
-         ;;   :END:
-         ;;   ** Post sub-heading                                   :bad:
-         ;;   Note that the sub-heading is *immediately* after the post heading
-         ;;   (of course, not counting the property).
-         ;;
-         ;; then (org-entry-get (point) "ALLTAGS") will return ":good:bad:"!
-         ;;
-         ;; But if we have:
-         ;;
-         ;;   * Post title                                          :good:
-         ;;   :PROPERTIES:
-         ;;   :EXPORT_FILE_NAME: post-title
-         ;;   :END:
-         ;;   Anything here but not an Org heading (even empty line works).
-         ;;   ** Post sub-heading                                   :bad:
-         ;;
-         ;; then (org-entry-get (point) "ALLTAGS") will return
-         ;; ":good:", as expected.  So the below convoluted code
-         ;; ensures that the "bad" tag does not leak into the post
-         ;; front-matter if the first case above happens (even though
-         ;; that case is rare).
-         (all-t-and-c-str (let ((all-tags (org-entry-get (point) "ALLTAGS")))
-                            ;; (message "[get fm DBG] at heading? %s" (org-at-heading-p))
-                            ;; (message "[get fm DBG] ALLTAGS: %S" all-tags)
-                            (if (org-at-heading-p) ;Sub-heading
-                                ;; Case where a sub-heading is
-                                ;; immediately after post heading.
-                                (let ((this-heading-tag (org-entry-get (point) "TAGS")))
-                                  ;; (message "[get fm DBG] TAGS: %S" this-heading-tag)
-                                  (when this-heading-tag
-                                    ;; Case where that sub-heading has
-                                    ;; a tag too!  So remove that
-                                    ;; sub-heading tag from ALLTAGS.
-                                    (setq all-tags (string-remove-suffix this-heading-tag all-tags))
-                                    ;; Add back the trailing ":".
-                                    (setq all-tags (concat all-tags ":")))
-                                  ;; Case where that sub-heading has
-                                  ;; no tag.
-                                  all-tags)
-                              ;; Case of *no* sub-heading immediately
-                              ;; after the post heading (this is the
-                              ;; usual case).
-                              all-tags)))
+         (all-t-and-c-str (org-entry-get (point) "ALLTAGS"))
          (all-t-and-c (when (stringp all-t-and-c-str)
                         (org-split-string all-t-and-c-str ":")))
          (tags-list (cl-remove-if #'org-hugo--category-p all-t-and-c))

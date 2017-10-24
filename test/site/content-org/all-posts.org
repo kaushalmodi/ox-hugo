@@ -1143,7 +1143,7 @@ This post is in category =catA= and tagged =meow=.
 :EXPORT_DATE: 2017-07-24
 :END:
 This gets both categories =catA= and =catB=.
-** Do not leak post's immediate sub-heading tag into the front-matter :expected_tag:
+** Do not leak post's immediate sub-heading tag into the front-matter :expected_tag:post_heading_followed_soon_with_subheading:
 :PROPERTIES:
 :EXPORT_FILE_NAME: dont-leak-subheading-tags
 :END:
@@ -1669,11 +1669,12 @@ Below, the code block language name will show up before the code.
 :EXPORT_HUGO_WEIGHT: 4567
 :EXPORT_FILE_NAME: hugo-post-weight-4567
 :END:
-* DONE Parsing date from CLOSED property
+* DONE Parsing date from CLOSED property :post_heading_followed_soon_with_subheading:
 CLOSED: [2017-09-11 Mon 14:32]
 :PROPERTIES:
 :EXPORT_FILE_NAME: parsing-date-from-closed-property
 :END:
+** The "CLOSED" state of this heading (which is nil) should be ignored
 When an Org TODO item is switched to the =DONE= state, a =CLOSED=
 property is auto-inserted (default behavior).
 
@@ -1763,16 +1764,15 @@ should be set to =true=.
 Idea is to mark a post as =DRAFT= that you have already started
 writing, or are in the process at the moment, but it is not yet ready
 to be published
-* DRAFT Draft state with other headlines
+* DRAFT Draft state with other headlines :post_heading_followed_soon_with_subheading:
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-other-headings-draft
 :EXPORT_DATE: 2017-07-12T13:46:16-04:00
 :END:
-** Other headlines
-If a post has the =DRAFT= keyword too, the =draft= front matter variable
-should be set to =true=.
-Even if the post has other sub-headings, the post draft state
-should be true.
+** The "TODO" state of this heading (which is nil) should be ignored
+If a post has the =DRAFT= state set, the =draft= front matter variable
+should be set to =true=, even if the post has a sub-heading
+immediately after the post heading.
 * Lorem Ipsum                                              :ARCHIVE:noexport:
 :PROPERTIES:
 :CUSTOM_ID: lorem-ipsum

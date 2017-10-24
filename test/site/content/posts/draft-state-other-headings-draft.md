@@ -1,12 +1,12 @@
 +++
 title = "Draft state with other headlines"
 date = 2017-07-12T13:46:16-04:00
-draft = false
+tags = ["post-heading-followed-soon-with-subheading"]
+draft = true
 +++
 
-## Other headlines {#other-headlines}
+## The "TODO" state of this heading (which is nil) should be ignored {#the-todo-state-of-this-heading--which-is-nil--should-be-ignored}
 
-If a post has the `DRAFT` keyword too, the `draft` front matter variable
-should be set to `true`.
-Even if the post has other sub-headings, the post draft state
-should be true.
+If a post has the `DRAFT` state set, the `draft` front matter variable
+should be set to `true`, even if the post has a sub-heading
+immediately after the post heading.

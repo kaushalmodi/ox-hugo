@@ -1,4 +1,4 @@
-# Time-stamp: <2017-10-19 11:11:46 kmodi>
+# Time-stamp: <2017-10-24 15:33:59 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -56,7 +56,7 @@ file_test_files = single-posts/post-toml.org \
 # - writing-hugo-blog-in-org-file-export.org - sets the org-hugo-footer using Local Variables.
 
 .PHONY: help emacs-batch mdtree mdfile vcheck hugo serve server diff \
-	test gen_test_md testmkgold \
+	test md testmkgold \
 	test_subtree $(subtree_test_files) \
 	test_file $(file_test_files) \
 	doc_site gh_docs doc \
@@ -66,7 +66,7 @@ help:
 	@echo "Help for command-line Org->Markdown for Hugo Exporter"
 	@echo "====================================================="
 	@echo " make test          <-- Run test with checks enabled"
-	@echo " make gen_test_md   <-- Only export the test Org files to Markdown, no checks"
+	@echo " make md            <-- Only export the test Org files to Markdown, no checks"
 	@echo " make doc           <-- Build both Doc Site contents and GitHub docs"
 	@echo " make FOO.org       <-- Export the FOO.org file from content-org/ dir to Markdown file(s)"
 	@echo " make vcheck        <-- Print emacs and Org versions"
@@ -134,7 +134,7 @@ diff:
 
 test: vcheck testmkgold test_subtree test_file
 
-gen_test_md:
+md:
 	@$(MAKE) test_subtree test_check=0
 	@$(MAKE) test_file test_check=0
 

@@ -1,6 +1,6 @@
 +++
 title = "Do not leak post's immediate sub-heading tag into the front-matter"
-tags = ["expected-tag"]
+tags = ["expected-tag", "post-heading-followed-soon-with-subheading"]
 draft = false
 +++
 

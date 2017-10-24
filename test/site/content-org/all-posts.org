@@ -1763,6 +1763,16 @@ should be set to =true=.
 Idea is to mark a post as =DRAFT= that you have already started
 writing, or are in the process at the moment, but it is not yet ready
 to be published
+* DRAFT Draft state with other headlines
+:PROPERTIES:
+:EXPORT_FILE_NAME: draft-state-other-headings-draft
+:EXPORT_DATE: 2017-07-12T13:46:16-04:00
+:END:
+** Other headlines
+If a post has the =DRAFT= keyword too, the =draft= front matter variable
+should be set to =true=.
+Even if the post has other sub-headings, the post draft state
+should be true.
 * Lorem Ipsum                                              :ARCHIVE:noexport:
 :PROPERTIES:
 :CUSTOM_ID: lorem-ipsum

@@ -664,6 +664,47 @@ print(str[1:])
 : 	bc
 
 The whitespace before "bc" in the results block above should be preserved.
+** Indented source block
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-indented
+:END:
+Test that indented source blocks export fine.
+
+    #+BEGIN_SRC emacs-lisp
+    (defun small-shell ()
+	(interactive)
+	(split-window-vertically)
+	(other-window 1)
+	(shrink-window (- (window-height) 12))
+    (ansi-term))
+    #+END_SRC
+*** More tests!
+- List item 1
+  #+BEGIN_SRC emacs-lisp
+  (message "I am in list at level-1 indentation")
+  #+END_SRC
+  - List item 1.1
+    #+BEGIN_SRC emacs-lisp
+    (message "I am in list at level-2 indentation")
+    #+END_SRC
+    - List item 1.1.1
+      #+BEGIN_SRC emacs-lisp
+      (message "I am in list at level-3 indentation")
+      #+END_SRC
+  - List item 2.1
+    #+BEGIN_SRC emacs-lisp
+    (message "I am in list back at level-2 indentation")
+    #+END_SRC
+- List item 2
+  #+BEGIN_SRC emacs-lisp
+  (message "I am in list back at level-1 indentation")
+  #+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(message "And now I am at level-0 indentation")
+#+END_SRC
+
+Reference -- [[https://github.com/gohugoio/hugo/issues/4006][hugo#4006]]
 ** Org Source Block                                                :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-source-block

@@ -154,6 +154,24 @@ Some text before image.
 #+ATTR_HTML: :caption A unicorn!
 [[/images/org-mode-unicorn-logo.png]]
 Some more text, after image.
+*** Setting image size
+The image [[https://www.w3schools.com/tags/att_img_width.asp][width]] can be specified in *pixels* using the =:width=
+parameter. *The height of the image will be resized proportionally.*
+
+Below image is shown 50 pixels wide.
+#+ATTR_HTML: :width 50
+[[/images/org-mode-unicorn-logo.png]]
+
+Below image is shown 100 pixels wide.
+#+ATTR_HTML: :width 100
+[[/images/org-mode-unicorn-logo.png]]
+
+Below image is shown 1000 pixels width! Now the size of this image is
+200px × 200px. But the image will still show up in 1000px × 1000px
+size, but obviously heavily pixelated!
+
+#+ATTR_HTML: :width 1000
+[[/images/org-mode-unicorn-logo.png]]
 *** Other
 Similarly, =:link=, =:attr=, =:attrlink= parameters in =#+ATTR_HTML=
 are also supported to set the corresponding parameter in the Hugo

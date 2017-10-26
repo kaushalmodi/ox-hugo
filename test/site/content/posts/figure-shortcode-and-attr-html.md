@@ -49,6 +49,26 @@ Some text before image.
 Some more text, after image.
 
 
+## Setting image size {#setting-image-size}
+
+The image [width](https://www.w3schools.com/tags/att_img_width.asp) can be specified in **pixels** using the `:width`
+parameter. **The height of the image will be resized proportionally.**
+
+Below image is shown 50 pixels wide.
+
+{{<figure src="/images/org-mode-unicorn-logo.png" width="50">}}
+
+Below image is shown 100 pixels wide.
+
+{{<figure src="/images/org-mode-unicorn-logo.png" width="100">}}
+
+Below image is shown 1000 pixels width! Now the size of this image is
+200px × 200px. But the image will still show up in 1000px × 1000px
+size, but obviously heavily pixelated!
+
+{{<figure src="/images/org-mode-unicorn-logo.png" width="1000">}}
+
+
 ## Other {#other}
 
 Similarly, `:link`, `:attr`, `:attrlink` parameters in `#+ATTR_HTML`

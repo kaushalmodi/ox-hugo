@@ -171,5 +171,5 @@ available customization options for this package.
 -   Matt Price ([@titaniumbones](https://github.com/titaniumbones))
 -   Puneeth Chaganti ([@punchagan](https://github.com/punchagan))
 -   Also thanks to [holgerschurig.de](http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/), [whyarethingsthewaytheyare.com](http://whyarethingsthewaytheyare.com/setting-up-the-blog/) and
-    the [`goorgoeous`](https://github.com/chaseadamsio/goorgeous) project by Chase Adams ([@chaseadamsio](https://github.com/chaseadamsio)) for
+    the [`goorgeous`](https://github.com/chaseadamsio/goorgeous) project by Chase Adams ([@chaseadamsio](https://github.com/chaseadamsio)) for
     inspiration to start this project.

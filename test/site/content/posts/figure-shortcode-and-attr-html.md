@@ -51,6 +51,9 @@ Some more text, after image.
 
 ## Setting image size {#setting-image-size}
 
+
+### Setting `:width` parameter {#setting-width-parameter}
+
 The image [width](https://www.w3schools.com/tags/att_img_width.asp) can be specified in **pixels** using the `:width`
 parameter. **The height of the image will be resized proportionally.**
 
@@ -62,11 +65,52 @@ Below image is shown 100 pixels wide.
 
 {{<figure src="/images/org-mode-unicorn-logo.png" width="100">}}
 
-Below image is shown 1000 pixels width! Now the size of this image is
-200px × 200px. But the image will still show up in 1000px × 1000px
-size, but obviously heavily pixelated!
+Below image is shown with a width of 1000 pixels! Now the size of this
+image is 200px × 200px. But the image will still show up in 1000px ×
+1000px size, but obviously heavily pixelated!
 
 {{<figure src="/images/org-mode-unicorn-logo.png" width="1000">}}
+
+
+### Setting `:height` parameter {#setting-height-parameter}
+
+**NOTE**: Support for specifying `height` parameter to the Hugo `figure`
+ shortcut was only added recently in [hugo PR #4018](https://github.com/gohugoio/hugo/pull/4018). So setting this
+ parameter will need **hugo v0.31** or newer.
+
+---
+
+The image [height](https://www.w3schools.com/tags/att_img_height.asp) can be specified in **pixels** using the `:height`
+parameter. **The weight of the image will be resized proportionally.**
+
+Below image is shown 50 pixels tall.
+
+{{<figure src="/images/org-mode-unicorn-logo.png" height="50">}}
+
+Below image is shown 100 pixels tall.
+
+{{<figure src="/images/org-mode-unicorn-logo.png" height="100">}}
+
+Below image is shown with a height of 1000 pixels! Now the size of
+this image is 200px × 200px. But the image will still show up in
+1000px × 1000px size, but obviously heavily pixelated!
+
+{{<figure src="/images/org-mode-unicorn-logo.png" height="1000">}}
+
+
+### Setting both `:width` and `:height` {#setting-both-width-and-height}
+
+The **NOTE** above applies here too.. needs **hugo v0.31** or newer.
+
+The figure sizes below are intentionally set _mis-proportionally_ just
+for testing.
+
+-   `:width 100 :height 200`
+
+    {{<figure src="/images/org-mode-unicorn-logo.png" width="100" height="200">}}
+-   `:width 200 :height 100`
+
+    {{<figure src="/images/org-mode-unicorn-logo.png" width="200" height="100">}}
 
 
 ## Other {#other}

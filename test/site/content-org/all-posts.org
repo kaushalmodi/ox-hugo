@@ -152,6 +152,7 @@ Some text before image.
 [[/images/org-mode-unicorn-logo.png]]
 Some more text, after image.
 *** Setting image size
+**** Setting =:width= parameter
 The image [[https://www.w3schools.com/tags/att_img_width.asp][width]] can be specified in *pixels* using the =:width=
 parameter. *The height of the image will be resized proportionally.*
 
@@ -163,12 +164,47 @@ Below image is shown 100 pixels wide.
 #+ATTR_HTML: :width 100
 [[/images/org-mode-unicorn-logo.png]]
 
-Below image is shown 1000 pixels width! Now the size of this image is
-200px × 200px. But the image will still show up in 1000px × 1000px
-size, but obviously heavily pixelated!
+Below image is shown with a width of 1000 pixels! Now the size of this
+image is 200px × 200px. But the image will still show up in 1000px ×
+1000px size, but obviously heavily pixelated!
 
 #+ATTR_HTML: :width 1000
 [[/images/org-mode-unicorn-logo.png]]
+**** Setting =:height= parameter
+*NOTE*: Support for specifying =height= parameter to the Hugo =figure=
+ shortcut was only added recently in [[https://github.com/gohugoio/hugo/pull/4018][hugo PR #4018]]. So setting this
+ parameter will need *hugo v0.31* or later.
+
+-----
+
+The image [[https://www.w3schools.com/tags/att_img_height.asp][height]] can be specified in *pixels* using the =:height=
+parameter. *The weight of the image will be resized proportionally.*
+
+Below image is shown 50 pixels tall.
+#+ATTR_HTML: :height 50
+[[/images/org-mode-unicorn-logo.png]]
+
+Below image is shown 100 pixels tall.
+#+ATTR_HTML: :height 100
+[[/images/org-mode-unicorn-logo.png]]
+
+Below image is shown with a height of 1000 pixels! Now the size of
+this image is 200px × 200px. But the image will still show up in
+1000px × 1000px size, but obviously heavily pixelated!
+
+#+ATTR_HTML: :height 1000
+[[/images/org-mode-unicorn-logo.png]]
+**** Setting both =:width= and =:height=
+The *NOTE* above applies here too.. needs *hugo v0.31* or later.
+
+The figure sizes below are intentionally set /mis-proportionally/ just
+for testing.
+- =:width 100 :height 200=
+  #+ATTR_HTML: :width 100 :height 200
+  [[/images/org-mode-unicorn-logo.png]]
+- =:width 200 :height 100=
+  #+ATTR_HTML: :width 200 :height 100
+  [[/images/org-mode-unicorn-logo.png]]
 *** Other
 Similarly, =:link=, =:attr=, =:attrlink= parameters in =#+ATTR_HTML=
 are also supported to set the corresponding parameter in the Hugo

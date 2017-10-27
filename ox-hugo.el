@@ -461,6 +461,22 @@ Example value: (org)."
   :type 'boolean
   :safe #'booleanp)
 
+(defcustom org-hugo-export-with-toc nil
+  "When non-nil, Markdown format TOC will be inserted.
+
+The TOC contains headlines with levels up
+to`org-export-headline-levels'.  When an integer, include levels
+up to N in the toc, this may then be different from
+`org-export-headline-levels', but it will not be allowed to be
+larger than the number of headline levels.  When nil, no table of
+contents is made.
+
+This option can also be set with the OPTIONS keyword,
+e.g. \"toc:nil\", \"toc:t\" or \"toc:3\"."
+  :group 'org-export-hugo
+  :type 'boolean
+  :safe #'booleanp)
+
 (defcustom org-hugo-default-static-subdirectory-for-externals "ox-hugo"
   "Default sub-directory in Hugo static directory for external files.
 If the source path for external files does not contain
@@ -522,7 +538,7 @@ The auto-copying behavior is disabled if this variable is set to nil."
 
   ;;                KEY                       KEYWORD                    OPTION  DEFAULT                     BEHAVIOR
   :options-alist '(;; Variables not setting the front-matter directly
-                   (:with-toc nil "toc" nil) ;No TOC by default
+                   (:with-toc nil "toc" org-hugo-export-with-toc)
                    (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
                    (:with-special-strings nil "-" nil) ;Don't use special strings for ndash, mdash; that is done automatically by Blackfriday
                    (:with-sub-superscript nil "^" '{}) ;Require curly braces to be wrapped around text to sub/super-scripted
@@ -684,6 +700,66 @@ This function is called in the very end of
 This is an internal function."
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code))
 
+(defun org-hugo--build-toc (info &optional n keyword local)
+  "Return table of contents as a string.
+
+INFO is a plist used as a communication channel.
+
+Optional argument N, when non-nil, is a positive integer
+specifying the depth of the table.
+
+Optional argument KEYWORD specifies the TOC keyword, if any, from
+which the table of contents generation has been initiated.
+
+When optional argument LOCAL is non-nil, build a table of
+contents according to the current headline."
+  (let* ((toc-headline
+          (unless local
+            (let ((style (plist-get info :md-headline-style))
+                  (loffset (plist-get info :hugo-level-offset))
+                  (title "Table of Contents"))
+              (org-hugo--headline-title style 1 loffset title))))
+         (toc-items
+          (mapconcat
+           (lambda (headline)
+             (let* ((indentation
+                     (make-string
+                      (* 4 (1- (org-export-get-relative-level headline info)))
+                      ?\s))
+                    (headline-num-list (org-export-get-headline-number headline info))
+                    (number (when headline-num-list
+                              ;; (message "[ox-hugo TOC DBG] headline-num-list: %S" headline-num-list)
+                              (format "%d." (org-last headline-num-list))))
+                    (bullet (when number
+                              (concat number (make-string (- 4 (length number)) ?\s))))
+                    (title (org-export-data (org-element-property :title headline) info))
+                    (toc-entry
+                     (format "[%s](#%s)"
+                             (org-export-data-with-backend
+                              (org-export-get-alt-title headline info)
+                              (org-export-toc-entry-backend 'hugo)
+                              info)
+                             (or (org-element-property :CUSTOM_ID headline)
+                                 (org-hugo-slug title)
+                                 ;; (org-export-get-reference headline info)
+                                 )))
+                    (tags (and (plist-get info :with-tags)
+                               (not (eq 'not-in-toc (plist-get info :with-tags)))
+                               (let ((tags (org-export-get-tags headline info)))
+                                 (and tags
+                                      (format ":%s:"
+                                              (mapconcat #'identity tags ":")))))))
+               (when bullet
+                 (concat indentation bullet toc-entry tags))))
+           (org-export-collect-headlines info n (and local keyword))
+           "\n"))                       ;Newline between TOC items
+         ;; Remove blank lines from in-between TOC items, which can
+         ;; get introduced when using the "UNNUMBERED: t" headline
+         ;; property.
+         (toc-items (replace-regexp-in-string "\n\\{2,\\}" "\n" toc-items)))
+    (concat toc-headline
+            toc-items
+            "\n")))                   ;Final newline at the end of TOC
 
 
 ;;; Transcode Functions
@@ -778,7 +854,7 @@ a communication channel."
               (loffset (plist-get info :hugo-level-offset))
               (todo (when todo
                       (concat (org-html--todo todo info) " "))))
-          (concat (org-hugo--headline-title style level loffset todo title anchor)
+          (concat (org-hugo--headline-title style level loffset title todo anchor)
                   contents)))))))
 
 ;;;;; Headline Helpers
@@ -830,13 +906,18 @@ returned slug string has the following specification:
          (str (replace-regexp-in-string "\\(^[-]*\\|[-]*$\\)" "" str)))
     str))
 
-(defun org-hugo--headline-title (style level loffset todo title &optional anchor)
+(defun org-hugo--headline-title (style level loffset title &optional todo anchor)
   "Generate a headline title in the preferred Markdown headline style.
-STYLE is the preferred style (`atx' or `setext').  LEVEL is the
-header level.  LOFFSET is the offset (a non-negative number) that
-is added to the Markdown heading level for `atx' style.  TODO is
-the Org TODO string.  TITLE is the headline title.  ANCHOR is the
-Hugo anchor tag for the section as a string."
+
+STYLE is the preferred style (`atx' or `setext').
+LEVEL is the header level.
+LOFFSET is the offset (a non-negative number) that is added to the
+Markdown heading level for `atx' style.
+TITLE is the headline title.
+
+Optional argument TODO is the Org TODO string.
+Optional argument ANCHOR is the Hugo anchor tag for the section as a
+string."
   ;; Use "Setext" style
   (if (and (eq style 'setext) (< level 3))
       (let* ((underline-char (if (= level 1) ?= ?-))
@@ -856,10 +937,23 @@ Hugo anchor tag for the section as a string."
   "Return body of document after converting it to Hugo-compatible Markdown.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
-  (org-trim (concat
-             contents
-             "\n"
-             (org-blackfriday-footnote-section info))))
+  (let* ((toc-level (plist-get info :with-toc))
+         (toc-level (if (and toc-level
+                             (not (wholenump toc-level)))
+                        (plist-get info :headline-levels)
+                      toc-level))
+         (toc (if (and toc-level
+                       (wholenump toc-level)
+                       (> toc-level 0)) ;TOC will be exported only if toc-level is positive
+                  (concat (org-hugo--build-toc info toc-level) "\n")
+                "")))
+    (org-trim (concat
+               toc
+               contents
+               ;; Make sure CONTENTS is separated from table of contents
+               ;; and footnotes with at least a blank line.
+               "\n"
+               (org-blackfriday-footnote-section info)))))
 
 ;;;; Keyword
 (defun org-hugo-keyword (keyword contents info)
@@ -874,6 +968,15 @@ channel."
            (string-match-p "\\`\\s-*more\\s-*\\'" value))
       ;; https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting
       "<!--more-->")
+     ((and (equal "TOC" kwd)
+           (string-match-p "\\<headlines\\>" value))
+      (let ((depth (and (string-match "\\<[0-9]+\\>" value)
+                        (string-to-number (match-string 0 value))))
+            (local? (string-match-p "\\<local\\>" value)))
+        (when (and depth
+                   (> depth 0))
+          (org-remove-indentation
+           (org-hugo--build-toc info depth keyword local?)))))
      (t
       (org-md-keyword keyword contents info)))))
 
@@ -2114,6 +2217,7 @@ buffer and returned as a string in Org format."
                                 ,(format "|org-hugo-allow-spaces-in-tags                         |%S|" org-hugo-allow-spaces-in-tags)
                                 ,(format "|org-hugo-langs-no-descr-in-code-fences                |%S|" org-hugo-langs-no-descr-in-code-fences)
                                 ,(format "|org-hugo-auto-set-lastmod                             |%S|" org-hugo-auto-set-lastmod)
+                                ,(format "|org-hugo-export-with-toc                              |%S|" org-hugo-export-with-toc)
                                 ,(format "|org-hugo-front-matter-format                          |%S|" org-hugo-front-matter-format)
                                 ,(format "|org-hugo-default-static-subdirectory-for-externals    |%S|" org-hugo-default-static-subdirectory-for-externals)
                                 ,(format "|org-hugo-external-file-extensions-allowed-for-copying |%S|" org-hugo-external-file-extensions-allowed-for-copying)

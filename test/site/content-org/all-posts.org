@@ -1873,6 +1873,80 @@ This post should be created in =content/section-a/=.
 :EXPORT_FILE_NAME: post-ax
 :END:
 This post should also be created in =content/section-a/=.
+* Table of Contents (TOC)                                               :toc:
+=ox-hugo= has the =with-toc= option disabled by default as Hugo has an
+inbuilt TOC generation feature.
+
+Still some people might prefer to use the Org generated TOC.
+** Example post for TOC tests                                      :noexport:
+:PROPERTIES:
+:CUSTOM_ID: toc-example-post
+:END:
+*** Post sub-heading 1
+**** Post sub-heading 1.1
+***** Post sub-heading 1.1.1
+**** Post sub-heading 1.2
+**** Post sub-heading 1.3
+*** Post sub-heading 2
+**** Post sub-heading 2.1
+**** Post sub-heading 2.2
+***** Post sub-heading 2.2.1
+***** Post sub-heading 2.2.2
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+The =UNNUMBERED= property for this subtree is set to =t=. So even when
+the TOC export option is set to =t= or a number ≥ 3, this title will
+*not* show up in the TOC. That's because the TOC is exported as a
+Markdown /ordered list/, and you cannot have ordered list items
+without a number prefix!
+***** Post sub-heading 2.2.3
+*** Post sub-heading 3
+**** Post sub-heading 3.1
+** TOC set using export option                                :export_option:
+*** Post with TOC export option set to non-nil
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-export-option-t
+:EXPORT_OPTIONS: toc:t
+:END:
+#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
+*** Post with TOC export option set to 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-export-option-2
+:EXPORT_OPTIONS: toc:2
+:END:
+#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
+*** Post with TOC export option set to nil
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-export-option-nil
+:EXPORT_OPTIONS: toc:nil
+:END:
+#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
+*** Post with TOC export option set to 0
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-export-option-0
+:EXPORT_OPTIONS: toc:0
+:END:
+#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
+** TOC set using keyword                                            :keyword:
+*** Post with TOC using keyword set to 0
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-keyword-0
+:END:
+#+TOC: headlines 0
+#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
+*** Post with TOC using keyword set to 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-keyword-2
+:END:
+#+TOC: headlines 2
+#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
+*** Post with TOC using keyword set to 6
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-keyword-6
+:END:
+#+TOC: headlines 6
+#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

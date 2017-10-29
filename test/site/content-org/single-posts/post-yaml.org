@@ -7,7 +7,7 @@
 #+HUGO_FRONT_MATTER_FORMAT: yaml
 
 #+HUGO_SECTION: singles
-#+TAGS: single yaml
+#+HUGO_TAGS: single yaml
 #+HUGO_CATEGORIES: cat1 cat2
 #+HUGO_MENU: :menu "foo" :weight 10 :parent main :identifier single-yaml
 

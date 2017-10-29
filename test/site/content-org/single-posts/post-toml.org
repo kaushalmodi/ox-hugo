@@ -5,7 +5,7 @@
 
 #+HUGO_BASE_DIR: ../../
 #+HUGO_SECTION: singles
-#+TAGS: single toml
+#+HUGO_TAGS: single toml
 #+HUGO_CATEGORIES: cat1 cat2
 #+HUGO_MENU: :menu "foo" :weight 10 :parent main :identifier single-toml
 

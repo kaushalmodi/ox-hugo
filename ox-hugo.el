@@ -5,7 +5,7 @@
 ;; URL: https://ox-hugo.scripter.co
 ;; Package-Requires: ((emacs "24.5") (org "9.0"))
 ;; Keywords: Org, markdown, docs
-;; Version: 0.3.2
+;; Version: 0.4
 
 ;;; Commentary:
 
@@ -578,14 +578,20 @@ The auto-copying behavior is disabled if this variable is set to nil."
                    ;; slug
                    (:hugo-slug "HUGO_SLUG" nil nil)
                    ;; taxomonomies - tags, categories
-                   ;; Org tags parsed from posts as subtrees get the
-                   ;; highest precedence as tag names.
-                   (:tags "TAGS" nil nil newline)
                    (:hugo-tags "HUGO_TAGS" nil nil newline)
-                   ;; Org tags starting with "@" parsed from posts as
-                   ;; subtrees get the highest precedence as category
-                   ;; names.
+                   ;; #+HUGO_TAGS are used to set the post tags in Org
+                   ;; files written for file-based exports.  But for
+                   ;; subtree-based exports, the EXPORT_HUGO_TAGS
+                   ;; property can be used to override inherited tags
+                   ;; and Org-style tags.
                    (:hugo-categories "HUGO_CATEGORIES" nil nil newline)
+                   ;; #+HUGO_CATEGORIES are used to set the post
+                   ;; categories in Org files written for file-based
+                   ;; exports.  But for subtree-based exports, the
+                   ;; EXPORT_HUGO_CATEGORIES property can be used to
+                   ;; override inherited categories and Org-style
+                   ;; categories (Org-style tags with "@" prefix).
+
                    ;; title
                    ;; "title" is parsed from the Org #+TITLE or the subtree heading.
                    ;; type
@@ -1184,7 +1190,7 @@ INFO is a plist holding export options."
                 ;; property values.
                 (widen)
                 (ignore-errors ;If the point is at beginning of buffer even after widening
-                 (backward-char))
+                  (backward-char))
                 ;; (message "[body filter DBG] line at pt: %s" (thing-at-point 'line))
                 (org-hugo--get-front-matter info))))
         (body (if (org-string-nw-p body) ;Insert extra newline if body is non-empty
@@ -1392,7 +1398,7 @@ Example: :some__tag:   -> \"some tag\"."
   "Wrapper function for `org-hugo--transform-org-tags'.
 
 1. Convert the input TAG-STR string to a list,
-2. Passe that to `org-hugo--transform-org-tags', and
+2. Pass that to `org-hugo--transform-org-tags', and
 3. Convert the returned list back to a string, with elements
    separated by `org-hugo--internal-tag-separator'.
 4. Return that string.
@@ -1499,31 +1505,40 @@ INFO is a plist used as a communication channel."
          (all-t-and-c-str (org-entry-get (point) "ALLTAGS"))
          (all-t-and-c (when (stringp all-t-and-c-str)
                         (org-split-string all-t-and-c-str ":")))
-         (tags-list (cl-remove-if #'org-hugo--category-p all-t-and-c))
-         (tags-list (org-hugo--transform-org-tags tags-list info))
-         (tags (org-string-nw-p ;Don't allow tags to be just whitespace
-                (or (org-string-nw-p (mapconcat #'identity
-                                                tags-list
-                                                org-hugo--internal-tag-separator))
-                    (let ((merged-tags (concat
-                                        (let ((tags1 (plist-get info :hugo-tags)))
-                                          (when tags1
-                                            tags1)) " "
-                                        (let ((tags2 (plist-get info :tags)))
-                                          (when tags2
-                                            tags2)))))
-                      (org-hugo--transform-org-tags-str merged-tags info :no-prefer-hyphen)))))
-         (categories-list (cl-remove-if-not #'org-hugo--category-p all-t-and-c))
-         (categories-list (org-hugo--transform-org-tags categories-list info))
-         (categories (or (org-string-nw-p
-                          (mapconcat (lambda (str)
-                                       ;; Remove "@" from beg of categories.
-                                       (replace-regexp-in-string "\\`@" "" str))
-                                     categories-list
-                                     org-hugo--internal-tag-separator))
-                         (org-hugo--transform-org-tags-str
-                          (plist-get info :hugo-categories)
-                          info :no-prefer-hyphen)))
+         (tags (org-string-nw-p ;Don't allow tags to be just whitespace.
+                (or
+                 ;; Look for tags set using #+HUGO_TAGS keyword, or
+                 ;; EXPORT_HUGO_TAGS property if available.
+                 (org-hugo--transform-org-tags-str
+                  (plist-get info :hugo-tags) info :no-prefer-hyphen)
+                 ;; Else use Org tags (the ones set in headlines
+                 ;; and/or inherited) if any.
+                 (let* ((tags-list (cl-remove-if #'org-hugo--category-p all-t-and-c))
+                        (tags-list (org-hugo--transform-org-tags tags-list info)))
+                   ;; (when tags-list
+                   ;;   (message "[get fm DBG] tags: tags-list = %s" tags-list))
+                   (org-string-nw-p (mapconcat #'identity
+                                               tags-list
+                                               org-hugo--internal-tag-separator))))))
+         (categories (or
+                      ;; Look for categories set using
+                      ;; #+HUGO_CATEGORIES keyword, or
+                      ;; EXPORT_HUGO_CATEGORIES property if available.
+                      (org-hugo--transform-org-tags-str
+                       (plist-get info :hugo-categories) info :no-prefer-hyphen)
+                      ;; Else use categories set using Org tags with
+                      ;; "@" prefix (the ones set in headlines and/or
+                      ;; inherited) if any.
+                      (let* ((categories-list (cl-remove-if-not #'org-hugo--category-p all-t-and-c))
+                             (categories-list (org-hugo--transform-org-tags categories-list info)))
+                        ;; (when categories-list
+                        ;;   (message "dbg: categories: categories-list = %s" categories-list))
+                        (org-string-nw-p
+                         (mapconcat (lambda (str)
+                                      ;; Remove "@" from beg of categories.
+                                      (replace-regexp-in-string "\\`@" "" str))
+                                    categories-list
+                                    org-hugo--internal-tag-separator)))))
          (weight (let* ((wt (plist-get info :hugo-weight))
                         (auto-calc (and (stringp wt)
                                         (string= wt "auto")
@@ -1572,14 +1587,9 @@ INFO is a plist used as a communication channel."
                  (blackfriday . ,blackfriday)
                  (menu . ,menu-alist)))
          (data `,(append data custom-fm-data)))
-    ;; (when tags-list
-    ;; (message "[get fm DBG] tags: tags-list = %s" tags-list))
     ;; (message "[get fm DBG] tags: %s" tags)
-    ;; (when categories-list
-    ;;   (message "dbg: categories: categories-list = %s" categories-list))
     ;; (message "dbg: todo-state: keyword=%S draft=%S" todo-keyword draft)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
-    ;; (message "dbg: tags: %S" (plist-get info :tags))
     ;; (message "[get fm info DBG] %S" info)
     ;; (message "[get fm blackfriday DBG] %S" blackfriday)
     ;; (message "[get fm menu DBG] %S" menu-alist)
@@ -1757,7 +1767,6 @@ are \"toml\" and \"yaml\"."
                      "KEYWORDS"
                      "HUGO_MARKUP"
                      "HUGO_OUTPUTS"
-                     "TAGS"
                      "HUGO_TAGS"
                      "HUGO_CATEGORIES"
                      "HUGO_TYPE"

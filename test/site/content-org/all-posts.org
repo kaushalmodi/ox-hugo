@@ -27,10 +27,7 @@ Export this *first* post only by bringing point here and doing =M-x org-hugo-exp
 This post has no date.
 
 Export this *second* post only by bringing point here and doing =M-x org-hugo-export-subtree-to-md=.
-* Image
-:PROPERTIES:
-:EXPORT_TAGS: image
-:END:
+* Image                                                               :image:
 ** Image links
 :PROPERTIES:
 :EXPORT_FILE_NAME: image-links

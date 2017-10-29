@@ -6,6 +6,33 @@ draft = false
   identifier = "changelog"
 +++
 
+## v0.4 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-28 Sat&gt;</span></span> {#v0-dot-4}
+
+
+### Backward-incompatible changes {#backward-incompatible-changes}
+
+-   Restore the default Org behavior of `#+TAGS`. Now that keyword (and
+    the `EXPORT_TAGS` property) is **not** used by `ox-hugo`. Fixes
+    [[89](https://github.com/kaushalmodi/ox-hugo/issues/89)].
+-   File-based exports must now use `#+HUGO_TAGS` to set the post tags.
+-   Subtree-based exports can use the `EXPORT_HUGO_TAGS` property to
+    override Org-style tags on the same headline (and the ones inherited
+    from Org-style tags from any of the parent subtrees and
+    `#+FILETAGS`).
+    -   Note that for subtree-based exports, `#+FILETAGS` can be used to
+        set tags globally in the file. Earlier `#+TAGS` was used for that
+        purpose.
+-   Subtree-based exports can use the `EXPORT_HUGO_CATEGORIES` property
+    to override Org-style categories (tags with "@" prefix) on the same
+    headline (and the ones inherited from Org-style categories from any
+    of the parent subtrees and `#+FILETAGS`).
+    -   Note that for subtree-based exports, `#+FILETAGS` can be used to
+        set categories (tags with "@") globally in the file.
+
+See the new section added to documentation:
+[**Tags and Categories**](/doc/tags-and-categories)
+
+
 ## v0.3.2 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-24 Tue&gt;</span></span> {#v0-dot-3-dot-2}
 
 

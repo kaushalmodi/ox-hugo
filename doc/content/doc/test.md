@@ -7,8 +7,4 @@ draft = false
 +++
 
 1.  Clone this repo.
-2.  `cd` to the `test/site/` directory and do:
-
-    ```text
-    make test
-    ```
+2.  Run `make test`.

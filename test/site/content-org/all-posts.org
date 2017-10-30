@@ -1835,6 +1835,22 @@ a_{b} a_{bc} a^{b} a^{bc}
 a_b a_bc a^b a^bc
 *** Following text will export =_{..}= as subscript and =^{..}= as superscript
 a_{b} a_{bc} a^{b} a^{bc}
+* Section Inheritance                                   :section_inheritance:
+** Section A
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: section-a
+:END:
+*** Post A1
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-a1
+:END:
+This post should be created in =content/section-a/=.
+*** Category X                                                       :@cat_x:
+**** Post AX
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-ax
+:END:
+This post should also be created in =content/section-a/=.
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

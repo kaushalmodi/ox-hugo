@@ -5,7 +5,7 @@
 ;; URL: https://ox-hugo.scripter.co
 ;; Package-Requires: ((emacs "24.5") (org "9.0"))
 ;; Keywords: Org, markdown, docs
-;; Version: 0.4
+;; Version: 0.4.1
 
 ;;; Commentary:
 
@@ -1905,7 +1905,12 @@ contents of hidden elements.
 Return output file's name."
   (interactive)
   (org-hugo--before-export-function)
-  (let* ((info (org-combine-plists
+  ;; Allow certain `ox-hugo' properties to be inherited.  It is
+  ;; important to set the `org-use-property-inheritance' before
+  ;; setting the `info' var so that properties like
+  ;; EXPORT_HUGO_SECTION get inherited.
+  (let* ((org-use-property-inheritance (org-hugo--selective-property-inheritance))
+         (info (org-combine-plists
                 (org-export--get-export-attributes
                  'hugo subtreep visible-only)
                 (org-export--get-buffer-attributes)
@@ -1920,9 +1925,8 @@ Return output file's name."
          (pub-dir (let ((dir (concat base-dir content-dir section-dir)))
                     (make-directory dir :parents) ;Create the directory if it does not exist
                     dir))
-         (outfile (org-export-output-file-name ".md" subtreep pub-dir))
-         ;; Allow certain `ox-hugo' properties to be inherited.
-         (org-use-property-inheritance (org-hugo--selective-property-inheritance)))
+         (outfile (org-export-output-file-name ".md" subtreep pub-dir)))
+    ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (unless subtreep ;Reset the variables that are used only for subtree exports
       (setq org-hugo--subtree-count 0)
       (setq org-hugo--subtree-coord nil))

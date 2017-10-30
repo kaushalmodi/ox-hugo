@@ -76,7 +76,7 @@ image is 200px × 200px. But the image will still show up in 1000px ×
 
 **NOTE**: Support for specifying `height` parameter to the Hugo `figure`
  shortcut was only added recently in [hugo PR #4018](https://github.com/gohugoio/hugo/pull/4018). So setting this
- parameter will need **hugo v0.31** or newer.
+ parameter will need **hugo v0.31** or later.
 
 ---
 
@@ -100,7 +100,7 @@ this image is 200px × 200px. But the image will still show up in
 
 ### Setting both `:width` and `:height` {#setting-both-width-and-height}
 
-The **NOTE** above applies here too.. needs **hugo v0.31** or newer.
+The **NOTE** above applies here too.. needs **hugo v0.31** or later.
 
 The figure sizes below are intentionally set _mis-proportionally_ just
 for testing.

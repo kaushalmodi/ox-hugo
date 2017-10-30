@@ -113,6 +113,31 @@ for testing.
     {{<figure src="/images/org-mode-unicorn-logo.png" width="200" height="100">}}
 
 
+## Multiple `ATTR_HTML` {#multiple-attr-html}
+
+Below in Org source:
+
+```org
+#+HTML: <style>.foo img { border:2px solid black; }</style>
+#+ATTR_HTML: :alt Go is fine though.
+#+ATTR_HTML: :width 300 :class foo
+[[file:https://golang.org/doc/gopher/pkg.png]]
+```
+
+Rendered this:
+
+<style>.foo img { border:2px solid black; }</style>
+
+{{<figure src="https://golang.org/doc/gopher/pkg.png" class="foo" alt="Go is fine though." width="300">}}
+
+**NOTE**: We cannot use `:style` in `#+ATTR_HTML` because Hugo does not
+ _yet_ support a `style` argument in the `figure` shortcode
+ [[Source](https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template_embedded.go#L22-L37)].
+
+So using `#+HTML: <style>.foo img ... </style>` and `#+ATTR_HTML: :class
+ foo` as shown in the workaround above.
+
+
 ## Other {#other}
 
 Similarly, `:link`, `:attr`, `:attrlink` parameters in `#+ATTR_HTML`

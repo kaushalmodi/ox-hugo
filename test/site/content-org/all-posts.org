@@ -205,6 +205,28 @@ for testing.
 - =:width 200 :height 100=
   #+ATTR_HTML: :width 200 :height 100
   [[/images/org-mode-unicorn-logo.png]]
+*** Multiple =ATTR_HTML=
+Below in Org source:
+#+BEGIN_SRC org
+#+HTML: <style>.foo img { border:2px solid black; }</style>
+#+ATTR_HTML: :alt Go is fine though.
+#+ATTR_HTML: :width 300 :class foo
+[[file:https://golang.org/doc/gopher/pkg.png]]
+#+END_SRC
+
+Rendered this:
+
+#+HTML: <style>.foo img { border:2px solid black; }</style>
+#+ATTR_HTML: :alt Go is fine though.
+#+ATTR_HTML: :width 300 :class foo
+[[file:https://golang.org/doc/gopher/pkg.png]]
+
+*NOTE*: We cannot use =:style= in =#+ATTR_HTML= because Hugo does not
+ /yet/ support a =style= argument in the =figure= shortcode
+ [[[https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template_embedded.go#L22-L37][Source]]].
+
+So using =#+HTML: <style>.foo img ... </style>= and =#+ATTR_HTML: :class
+ foo= as shown in the workaround above.
 *** Other
 Similarly, =:link=, =:attr=, =:attrlink= parameters in =#+ATTR_HTML=
 are also supported to set the corresponding parameter in the Hugo

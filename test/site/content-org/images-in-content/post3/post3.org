@@ -1,0 +1,8 @@
+#+HUGO_BASE_DIR: ../../../
+#+HUGO_SECTION: images-in-content
+
+#+TITLE: Post 3
+
+Post 3 contents
+
+[[file:gnu-copy.png]]

@@ -1,0 +1,38 @@
+#+HUGO_BASE_DIR: ../../
+#+HUGO_SECTION: images-in-content
+
+* Post 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: post1
+:END:
+Post 1 contents
+
+
+[[file:gnu.png]]
+* Post 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: post2
+:END:
+Post 2 contents
+
+[[file:org.png]]
+* Proposal
+#+BEGIN_EXAMPLE
+./content-org                    ./content
+├── post1/                        │
+│  ├── post1.org     ------->     ├── post1.md
+│  │                              ├── post1/
+│  └── foo.png       ------->     │  └── foo.png
+└── post2/                        │
+   ├── post2.org     ------->     ├── post2.md
+   │                              └── post2/
+   ├── zoo.pdf       ------->        ├── zoo.pdf
+   └── bar.png       ------->        └── bar.png
+#+END_EXAMPLE
+* Footnotes
+* COMMENT Local Variables                                           :ARCHIVE:
+# Local Variables:
+# fill-column: 70
+# eval: (auto-fill-mode 1)
+# eval: (add-hook 'after-save-hook #'org-hugo-export-subtree-to-md-after-save :append :local)
+# End:

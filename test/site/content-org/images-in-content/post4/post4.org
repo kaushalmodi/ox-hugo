@@ -1,0 +1,8 @@
+#+HUGO_BASE_DIR: ../../../
+#+HUGO_SECTION: images-in-content
+
+#+TITLE: Post 4
+
+Post 4 contents
+
+[[file:org-copy.png]]

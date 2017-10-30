@@ -852,6 +852,9 @@ heading and how it exports to Markdown in [[https://raw.githubusercontent.com/ka
 :PROPERTIES:
 :EXPORT_FILE_NAME: image-links
 :END:
+This section will provides few alternatives for linking to images in
+Org files in a way that's compatible with =ox-hugo= and Hugo.
+
 For the sake of the below explanation, let's have the /HUGO_BASE_DIR/
 (the directory containing the Hugo site's =config.toml= file) be
 =~/hugo/=.
@@ -860,11 +863,13 @@ In that case, the Hugo /static/ directory will be =~/hugo/static/=.
 **** References to files in the /static/ directory
 Now if you have a file =~/hugo/static/images/foo.png=, =ox-hugo= makes
 it convenient for you to reference that image by simply
-=/images/foo.png=. *This is the default behavior of other Org
-exporters.* But in the case of Hugo, as the referenced file will
-normally be in the Hugo /static/ directory, the =/images/foo.png=
-style of short reference is allowed *if* that is a valid path under
-the /static/ directory.
+=/images/foo.png=. Note that this is *not* the default behavior of
+other Org exporters.
+
+But in the case of Hugo, as the referenced file will /normally/ be in
+the Hugo /static/ directory, =ox-hugo= allows the =/images/foo.png=
+style of short reference *if* that is a valid path under that Hugo
+site's /static/ directory.
 
 See the below examples on how to reference images in different ways:
 ***** Inline image (Unhyperlinked)
@@ -881,25 +886,25 @@ See the below examples on how to reference images in different ways:
 #+BEGIN_SRC org
 [[/images/foo.png][Click here to see foo.png]]
 #+END_SRC
-This applies to references to non-image files in the /static/
-directory too.
-**** Having references to files *outside* the /static/ directory
+This style of linking will work for references to non-image files in
+the /static/ directory too.
+**** References to files *outside* the /static/ directory
 This is a unique feature of =ox-hugo=.
 
-If a reference is made to a file outside the Hugo /static/ directory
-and if it has one of these extensions listed in
+(i) If a reference is made to a file outside the Hugo /static/
+directory *and* (ii) if it has one of the extensions listed in
 =org-hugo-external-file-extensions-allowed-for-copying=, then that
 file is copied by =ox-hugo= to the /static/ directory.
 
 Here is an example link:
 #+BEGIN_SRC org
-[[../files-to-be-copied-to-static/static/images/copy-of-unicorn-logo.png]]
+[[~/some-dir/static/images/foo.png]]
 #+END_SRC
-
-*Note*: If you link to files outside of the Hugo =static= directory,
-just ensure that that path contains =/static/= if you would like to
-preserve the directory structure. /The necessary directories are also
-created inside the /static/ directory to preserve the structure./
+***** Source path contains =/static/=
+If you link to files outside of the Hugo =static= directory, just
+ensure that the path contains the string =/static/= /if you like to
+preserve the directory structure/. Necessary directories are then
+created inside the /static/ directory to preserve the structure.
 
 Example translations between outside =static= directory paths to the
 copied location inside =static=:
@@ -918,22 +923,24 @@ section to learn how to set the *HUGO_BASE_DIR*.
 Here is an example link where the source path does not contain
 =/static/=:
 #+BEGIN_SRC org
-[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
+[[~/some-dir/bar/foo.png]]
 #+END_SRC
 
-In that case, that file is copied to the
+In this case, that file is copied directly to the
 =org-hugo-default-static-subdirectory-for-externals= sub-directory
-(=ox-hugo/= by default) within the Hugo static directory.
+(=ox-hugo/= by default) within the Hugo static directory. No directory
+structure generation happens in this case.
 
-|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|
-| Outside =static=         | Copied-to location inside =static=       | Explanation                                                                                                                 |
-|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|
-| =~/temp/bar/baz/foo.png= | =<HUGO_BASE_DIR>/static/ox-hugo/foo.png= | Here, as the *outside* path does not have =/static/= in it, the file is copied to the =ox-hugo/= dir in Hugo =static/= dir. |
-|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|
-
-- Note :: This auto-copying behavior can be disabled by setting
-          =org-hugo-external-file-extensions-allowed-for-copying= to
-          /nil/.
+|--------------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|
+| File location outside =static= | Copied-to location inside =static=       | Explanation                                                                                                                 |
+|--------------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|
+| =~/temp/bar/baz/foo.png=       | =<HUGO_BASE_DIR>/static/ox-hugo/foo.png= | Here, as the *outside* path does not have =/static/= in it, the file is copied to the =ox-hugo/= dir in Hugo =static/= dir. |
+|--------------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|
+***** Disable auto-copying
+This auto-copying behavior can be disabled completely by setting
+=org-hugo-external-file-extensions-allowed-for-copying= to /nil/.. but
+you might not want that if you keep your files *outside* the Hugo
+static directory.
 *** Source blocks
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-blocks

@@ -1077,28 +1077,55 @@ and rewrite link paths to make blogging more seamless."
      ((equal type "radio")
       contents)
      (t
-      (let ((path (cond
-                   ((member type '("http" "https" "ftp"))
-                    (concat type ":" raw-path))
-                   (;; Do not add the "file://" prefix if the raw-path
-                    ;; is in the Hugo "static" dir.
-                    (and (string= type "file")
-                         (let ((static-dir (file-truename
-                                            (concat
-                                             (file-name-as-directory (plist-get info :hugo-base-dir))
-                                             "static/")))
-                               (raw-path-true (file-truename raw-path)))
-                           (string-match-p (regexp-quote static-dir) raw-path-true)))
-                    (let* ((path1 (org-export-file-uri (funcall link-org-files-as-md raw-path)))
-                           (path1 (replace-regexp-in-string "\\`file://" "" path1)))
-                      (org-hugo--attachment-rewrite-maybe path1 info)))
-                   (t
-                    raw-path))))
+      (let* (attributes-plist
+             attributes
+             (path (cond
+                    ((member type '("http" "https" "ftp"))
+                     ;; Taken from ox-html.el -- Extract attributes
+                     ;; from parent's paragraph.  HACK: Only do this
+                     ;; for the first link in parent (inner image link
+                     ;; for inline images).  This is needed as long as
+                     ;; attributes cannot be set on a per link basis.
+                     (setq attributes-plist
+	                   (let ((parent (org-export-get-parent-element link)))
+	                     (and (eq (org-element-map parent 'link #'identity info :first-match) link)
+		                  (org-export-read-attribute :attr_html parent))))
+                     (setq attributes
+	                   (let ((attr (org-html--make-attribute-string attributes-plist)))
+	                     (when (org-string-nw-p attr)
+                               (concat " " attr))))
+                     ;; (message "[ox-hugo-link DBG] attributes: %s" attributes)
+                     (concat type ":" raw-path))
+                    (;; Do not add the "file://" prefix if the raw-path
+                     ;; is in the Hugo "static" dir.
+                     (and (string= type "file")
+                          (let ((static-dir (file-truename
+                                             (concat
+                                              (file-name-as-directory (plist-get info :hugo-base-dir))
+                                              "static/")))
+                                (raw-path-true (file-truename raw-path)))
+                            (string-match-p (regexp-quote static-dir) raw-path-true)))
+                     (let* ((path1 (org-export-file-uri (funcall link-org-files-as-md raw-path)))
+                            (path1 (replace-regexp-in-string "\\`file://" "" path1)))
+                       (org-hugo--attachment-rewrite-maybe path1 info)))
+                    (t
+                     raw-path))))
         (if contents
             (progn
               ;; (message "[ox-hugo DBG org-hugo-link: contents=%s path=%s" contents path)
-              (format "[%s](%s)" contents path))
-          (format "<%s>" path)))))))
+              (if attributes
+                  (format "<a href=\"%s\"%s>%s</a>"
+		          (org-html-encode-plain-text path)
+		          attributes
+		          (org-link-unescape contents))
+                (format "[%s](%s)" contents path)))
+          (if attributes
+              (let ((path (org-html-encode-plain-text path)))
+                (format "<a href=\"%s\"%s>%s</a>"
+		        path
+		        attributes
+		        (org-link-unescape path)))
+            (format "<%s>" path))))))))
 
 ;;;;; Helpers
 (defun org-hugo--attachment-rewrite-maybe (path info)

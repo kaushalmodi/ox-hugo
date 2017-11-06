@@ -1058,7 +1058,9 @@ and rewrite link paths to make blogging more seamless."
                        (org-export-data  ;Look for caption set using #+CAPTION
                         (org-export-get-caption (org-export-get-parent-element link))
                         info)))
-             (figure-params `((src . ,path)
+             (figure-params `((src . ,(if (member type '("http" "https" "ftp"))
+                                          (concat type ":" path)
+                                        path))
                               (link . ,(plist-get attr :link))
                               (title . ,(plist-get attr :title))
                               (caption . ,(if caption

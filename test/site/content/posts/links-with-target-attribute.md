@@ -12,7 +12,7 @@ as it is annotated with `target="_blank"`.
 <a href="http://orgmode.org/manual/Hyperlinks.html" target="_self">Here's the same link</a> but with `target="_self"` annotation. So
 clicking it will open that link in this same tab!
 
-<a href="http://orgmode.org/img/org-mode-unicorn-logo.png" target="_self">{{<figure src="//orgmode.org/img/org-mode-unicorn-logo.png" width="10%">}}</a>
+<a href="http://orgmode.org/img/org-mode-unicorn-logo.png" target="_self">{{<figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" width="10%">}}</a>
 
 Above is a link to an image. The `width` attribute of _10%_ though
 must apply **only** to the image, and not to the link, and the `target`

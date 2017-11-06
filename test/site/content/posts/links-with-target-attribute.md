@@ -12,6 +12,12 @@ as it is annotated with `target="_blank"`.
 <a href="http://orgmode.org/manual/Hyperlinks.html" target="_self">Here's the same link</a> but with `target="_self"` annotation. So
 clicking it will open that link in this same tab!
 
+<a href="http://orgmode.org/img/org-mode-unicorn-logo.png" target="_self">{{<figure src="//orgmode.org/img/org-mode-unicorn-logo.png" width="10%">}}</a>
+
+Above is a link to an image. The `width` attribute of _10%_ though
+must apply **only** to the image, and not to the link, and the `target`
+attribute must apply **only** to the link, and not to the image.
+
 [Here's the same link again](http://orgmode.org/manual/Hyperlinks.html), but this time there is no `#+ATTR_HTML`
 annotation. So the behavior will depend on the browser (typically an
 external link will open in a new tab automatically).

@@ -1304,6 +1304,13 @@ as it is annotated with ~target="_blank"~.
 [[http://orgmode.org/manual/Hyperlinks.html][Here's the same link]] but with ~target="_self"~ annotation. So
 clicking it will open that link in this same tab!
 
+#+ATTR_HTML: :width 10% :target _self
+[[http://orgmode.org/img/org-mode-unicorn-logo.png][http://orgmode.org/img/org-mode-unicorn-logo.png]]
+
+Above is a link to an image. The =width= attribute of /10%/ though
+must apply *only* to the image, and not to the link, and the =target=
+attribute must apply *only* to the link, and not to the image.
+
 [[http://orgmode.org/manual/Hyperlinks.html][Here's the same link again]], but this time there is no =#+ATTR_HTML=
 annotation. So the behavior will depend on the browser (typically an
 external link will open in a new tab automatically).

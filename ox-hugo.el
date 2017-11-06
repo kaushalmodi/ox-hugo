@@ -997,6 +997,7 @@ and rewrite link paths to make blogging more seamless."
              raw-path)))
         (raw-path (org-element-property :path link))
         (type (org-element-property :type link)))
+    ;; (message "[ox-hugo-link DBG] link path: %s" (org-element-property :path link))
     ;; (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
     ;; (message "[ox-hugo-link DBG] link type: %s" type)
     (cond
@@ -1042,7 +1043,15 @@ and rewrite link paths to make blogging more seamless."
       ;; (message "[org-hugo-link DBG] processing an image: %s" contents)
       (let* ((path (org-hugo--attachment-rewrite-maybe raw-path info))
              (parent (org-export-get-parent link))
-             (attr (org-export-read-attribute :attr_html parent))
+             (parent-type (org-element-type parent))
+             ;; If this is a hyper-linked image, it's parent type will
+             ;; be a link too. Get the parent of *that* link in that
+             ;; case.
+             (grand-parent (when (eq parent-type 'link)
+                             (org-export-get-parent parent)))
+             (attr (if grand-parent
+                       (org-export-read-attribute :attr_html grand-parent)
+                     (org-export-read-attribute :attr_html parent)))
              ;; Hugo `figure' shortcode named parameters
              ;; https://gohugo.io/content-management/shortcodes/#figure
              (caption (org-string-nw-p
@@ -1062,6 +1071,7 @@ and rewrite link paths to make blogging more seamless."
                               (width . ,(plist-get attr :width))
                               (height . ,(plist-get attr :height))))
              (figure-param-str ""))
+        ;; (message "[org-hugo-link DBG] parent-type: %s" parent-type)
         (dolist (param figure-params)
           (let ((name (car param))
                 (val (cdr param)))
@@ -1069,6 +1079,7 @@ and rewrite link paths to make blogging more seamless."
               (setq figure-param-str (concat figure-param-str
                                              (format "%s=\"%s\" "
                                                      name val))))))
+        ;; (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
         (format "{{<figure %s>}}" (org-trim figure-param-str))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
@@ -1077,8 +1088,7 @@ and rewrite link paths to make blogging more seamless."
      ((equal type "radio")
       contents)
      (t
-      (let* (attributes-plist
-             attributes
+      (let* ((link-param-str "")
              (path (cond
                     ((member type '("http" "https" "ftp"))
                      ;; Taken from ox-html.el -- Extract attributes
@@ -1086,15 +1096,25 @@ and rewrite link paths to make blogging more seamless."
                      ;; for the first link in parent (inner image link
                      ;; for inline images).  This is needed as long as
                      ;; attributes cannot be set on a per link basis.
-                     (setq attributes-plist
-	                   (let ((parent (org-export-get-parent-element link)))
-	                     (and (eq (org-element-map parent 'link #'identity info :first-match) link)
-		                  (org-export-read-attribute :attr_html parent))))
-                     (setq attributes
-	                   (let ((attr (org-html--make-attribute-string attributes-plist)))
-	                     (when (org-string-nw-p attr)
-                               (concat " " attr))))
-                     ;; (message "[ox-hugo-link DBG] attributes: %s" attributes)
+                     (let* ((attr
+	                     (let ((parent (org-export-get-parent-element link)))
+	                       (and (eq (org-element-map parent 'link #'identity info :first-match) link)
+		                    (org-export-read-attribute :attr_html parent))))
+                            ;; https://www.w3schools.com/tags/tag_link.asp
+                            (link-params `((media . ,(plist-get attr :media))
+                                           (target . ,(plist-get attr :target))
+                                           (rel . ,(plist-get attr :rel))
+                                           (sizes . ,(plist-get attr :sizes))
+                                           (type . ,(plist-get attr :type)))))
+                       (dolist (param link-params)
+                         (let ((name (car param))
+                               (val (cdr param)))
+                           (when val
+                             (setq link-param-str (concat link-param-str
+                                                          (format "%s=\"%s\" "
+                                                                  name val))))))
+                       ;; (message "[ox-hugo-link DBG] link params: %s" link-param-str)
+                       )
                      (concat type ":" raw-path))
                     (;; Do not add the "file://" prefix if the raw-path
                      ;; is in the Hugo "static" dir.
@@ -1109,21 +1129,22 @@ and rewrite link paths to make blogging more seamless."
                             (path1 (replace-regexp-in-string "\\`file://" "" path1)))
                        (org-hugo--attachment-rewrite-maybe path1 info)))
                     (t
-                     raw-path))))
+                     raw-path)))
+             (link-param-str (org-string-nw-p (org-trim link-param-str))))
         (if contents
             (progn
               ;; (message "[ox-hugo DBG org-hugo-link: contents=%s path=%s" contents path)
-              (if attributes
-                  (format "<a href=\"%s\"%s>%s</a>"
+              (if link-param-str
+                  (format "<a href=\"%s\" %s>%s</a>"
 		          (org-html-encode-plain-text path)
-		          attributes
+		          link-param-str
 		          (org-link-unescape contents))
                 (format "[%s](%s)" contents path)))
-          (if attributes
+          (if link-param-str
               (let ((path (org-html-encode-plain-text path)))
-                (format "<a href=\"%s\"%s>%s</a>"
+                (format "<a href=\"%s\" %s>%s</a>"
 		        path
-		        attributes
+		        link-param-str
 		        (org-link-unescape path)))
             (format "<%s>" path))))))))
 

@@ -1161,6 +1161,61 @@ This is some text[fn:1].
 :EXPORT_FILE_NAME: multi-line-footnote
 :END:
 This is some text[fn:3].
+** Footnotes at End of line
+:PROPERTIES:
+:EXPORT_FILE_NAME: footnotes-at-eol
+:END:
+*** Last word, followed by FOOTNOTE PERIOD
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a[fn:1].
+
+ab a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a[fn:1].
+
+abc a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a[fn:1].
+
+abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a[fn:1].
+*** Last word, followed by FOOTNOTE *space* PERIOD
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a[fn:1] .
+
+ab a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a[fn:1] .
+
+abc a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a[fn:1] .
+
+abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a[fn:1] .
+*** Last word, followed by *space* FOOTNOTE *space* PERIOD
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a [fn:1] .
+
+ab a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a [fn:1] .
+
+abc a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a [fn:1] .
+
+abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a [fn:1] .
+
+abcde a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a [fn:1] .
+*** Last word, followed by PERIOD *space* FOOTNOTE
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a. [fn:1]
+
+ab a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a. [fn:1]
+
+abc a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a. [fn:1]
+
+abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a. [fn:1]
 * Tags
 ** Basic tags                                                       :abc:def:
 :PROPERTIES:

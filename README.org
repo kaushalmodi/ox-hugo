@@ -155,6 +155,12 @@ The common =ox-hugo= export bindings are:
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
 * Changelog
+** v0.5 <2017-11-06 Mon>
+*** Features
+- Export TOC as a Markdown ordered list. See [[https://ox-hugo.scripter.co/doc/org-toc][Table of
+  Contents]].
+- =#+ATTR_HTML= above http/https/ftp links is now supported (useful
+  for specifying the =target=, =rel=, attributes, for example).
 ** v0.4.1 <2017-10-29 Sun>
 *** Features
 - Support specifying the =:height= parameter in the =#+ATTR_HTML=

@@ -6,6 +6,17 @@ draft = false
   identifier = "changelog"
 +++
 
+## v0.5 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-11-06 Mon&gt;</span></span> {#v0-dot-5}
+
+
+### Features {#features}
+
+-   Export TOC as a Markdown ordered list. See [Table of
+    Contents](/doc/org-toc).
+-   `#+ATTR_HTML` above http/https/ftp links is now supported (useful
+    for specifying the `target`, `rel`, attributes, for example).
+
+
 ## v0.4.1 <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-29 Sun&gt;</span></span> {#v0-dot-4-dot-1}
 
 

@@ -50,7 +50,8 @@ disableFastRender = true        # Hugo 0.30
   # where foo = section name without double quotes for which we want to have
   # the custom permalinks. If foo is 'posts', it will apply to content in
   # content/posts/ dir. The "bar" portion is how you want the links to look.
-  doc = "/doc/:slug/"
+  # https://gohugo.io/content-management/urls/#permalink-configuration-values
+  doc = "/doc/:filename/"
   test = "/test/:slug/"
 
 [params]

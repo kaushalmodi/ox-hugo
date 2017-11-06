@@ -1165,7 +1165,16 @@ This is some text[fn:3].
 :PROPERTIES:
 :EXPORT_FILE_NAME: footnotes-at-eol
 :END:
-*** Last word, followed by FOOTNOTE PERIOD
+See [[https://github.com/kaushalmodi/ox-hugo/issues/96][Issue#96]].
+
+To test the fix for this, increase/decrease the width of the browser
+window showing this page so that the test lines below start wrapping
+around, and you will see that the footnote references will *never* be
+on their own on a new line.
+*** Last word, followed by FOOTNOTE PERIOD --- /Good Case/
+- As there is no space in-between "word FOOTNOTE PERIOD", this text
+  will stay unmodified.
+
 a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
 a a[fn:1].
 
@@ -1177,7 +1186,9 @@ a a a[fn:1].
 
 abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
 a a a[fn:1].
-*** Last word, followed by FOOTNOTE *space* PERIOD
+*** Last word, followed by FOOTNOTE *space* PERIOD --- /Bad Case 1/
+- In this case, the *space* before the PERIOD at EOL is removed.
+
 a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
 a a[fn:1] .
 
@@ -1189,7 +1200,25 @@ a a a[fn:1] .
 
 abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
 a a a[fn:1] .
-*** Last word, followed by *space* FOOTNOTE *space* PERIOD
+*** Last word, followed by PERIOD *space* FOOTNOTE --- /Bad Case 2/
+- In this case, the *space* before FOOTNOTE is replaced with =&nbsp;=.
+
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a. [fn:1]
+
+ab a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a. [fn:1]
+
+abc a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a. [fn:1]
+
+abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a. [fn:1]
+*** Last word, followed by *space* FOOTNOTE *space* PERIOD --- /Bad Case 3/
+- This is a blend of /Bad Case 1/ and /Bad Case 2/ above.
+- In this case, the *space* before FOOTNOTE is replaced with =&nbsp;=,
+  *AND* the *space* before the PERIOD at EOL is removed.
+
 a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
 a [fn:1] .
 
@@ -1204,18 +1233,6 @@ a a [fn:1] .
 
 abcde a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
 a a a [fn:1] .
-*** Last word, followed by PERIOD *space* FOOTNOTE
-a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
-a a. [fn:1]
-
-ab a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
-a a. [fn:1]
-
-abc a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
-a a a. [fn:1]
-
-abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
-a a a. [fn:1]
 * Tags
 ** Basic tags                                                       :abc:def:
 :PROPERTIES:

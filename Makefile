@@ -1,9 +1,11 @@
-# Time-stamp: <2017-10-24 15:33:59 kmodi>
+# Time-stamp: <2017-11-07 13:34:20 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
 
-EMACS ?= emacs
+EMACS_BIN_SOURCE ?= https://github.com/npostavs/emacs-travis/releases/download/bins
+EMACS_VERSION ?= 25.2
+EMACS ?= /tmp/emacs/bin/emacs
 
 # Set TIMEZONE to the TZ environment variable. If TZ is unset, Emacs
 # uses system wall clock time, which is a platform-dependent default
@@ -106,6 +108,12 @@ mdfile:
 	@echo "[ox-hugo] Done"
 
 vcheck:
+ifneq ("$(wildcard $(EMACS))","")
+	@echo "Emacs binary used: $(EMACS)"
+else
+	@curl -fsSkL --retry 9 --retry-delay 9 -O $(EMACS_BIN_SOURCE)/emacs-bin-$(EMACS_VERSION).tar.gz
+	@tar xf emacs-bin-$(EMACS_VERSION).tar.gz -C /
+endif
 	@$(EMACS) --batch --eval "(progn\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\

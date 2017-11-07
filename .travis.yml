@@ -14,7 +14,7 @@ env:
   # - EMACS_VERSION=master # master branch, built daily
 install:
   - $CURL -O https://github.com/npostavs/emacs-travis/releases/download/bins/emacs-bin-${EMACS_VERSION}.tar.gz
-  - tar -xaf emacs-bin-${EMACS_VERSION}.tar.gz -C /
+  - tar xf emacs-bin-${EMACS_VERSION}.tar.gz -C /
   - export EMACS=/tmp/emacs/bin/emacs
   - $EMACS --version
 script:

@@ -1164,7 +1164,7 @@ This is some text[fn:3].
 ** Bind footnotes to the preceding word
 :PROPERTIES:
 :EXPORT_FILE_NAME: footnotes-bind-to-preceding-word
-:EXPORT_HUGO_ALIASES: posts/footnotes-at-eol/
+:EXPORT_HUGO_ALIASES: footnotes-at-eol
 :END:
 See [[https://github.com/kaushalmodi/ox-hugo/issues/96][Issue#96]].
 
@@ -2106,6 +2106,45 @@ without a number prefix!
 :END:
 #+TOC: headlines 6
 #+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
+* Hugo Aliases                                                      :aliases:
+** Alias without section portion 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: alias-without-section-1
+:EXPORT_HUGO_ALIASES: alias-a
+:END:
+As the specified alias does not contain the "/" string, it will be
+auto-prefixed with the section for the current post.
+** New section just for test
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: alias-test
+:END:
+*** Alias without section portion 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: alias-without-section-2
+:EXPORT_HUGO_ALIASES: alias-b
+:END:
+As the specified alias does not contain the "/" string, it will be
+auto-prefixed with the section for the current post.
+** Alias specifying a different section
+:PROPERTIES:
+:EXPORT_FILE_NAME: alias-different-section
+:EXPORT_HUGO_ALIASES: /alias-test/alias-c
+:END:
+** Alias specifying root section
+:PROPERTIES:
+:EXPORT_FILE_NAME: alias-root-section
+:EXPORT_HUGO_ALIASES: /alias-d
+:END:
+** Multiple aliases without section portion
+:PROPERTIES:
+:EXPORT_FILE_NAME: alias-multiple-without-section
+:EXPORT_HUGO_ALIASES: alias-e alias-f
+:END:
+** Multiple aliases with section portion
+:PROPERTIES:
+:EXPORT_FILE_NAME: alias-multiple-with-section
+:EXPORT_HUGO_ALIASES: /alias-test/alias-g /alias-test/alias-h
+:END:
 * TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo

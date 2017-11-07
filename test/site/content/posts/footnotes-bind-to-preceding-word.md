@@ -1,6 +1,6 @@
 +++
 title = "Bind footnotes to the preceding word"
-aliases = "posts/footnotes-at-eol/"
+aliases = ["/posts/footnotes-at-eol"]
 tags = ["footnote"]
 draft = false
 +++

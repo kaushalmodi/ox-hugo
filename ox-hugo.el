@@ -323,8 +323,9 @@ joinLines
 - Purpose: When enabled, delete newlines and join the lines.  This
            behavior is similar to the default behavior in Org.")
 
-(defvar org-hugo--internal-tag-separator "\n"
-  "String used to separate multiple Org tags.
+(defvar org-hugo--internal-list-separator "\n"
+  "String used to separate elements in list variables.
+Examples are variables holding Hugo tags, categories, aliases.
 This variable is for internal use only, and must not be
 modified.")
 
@@ -1564,7 +1565,7 @@ Example: :some__tag:   -> \"some tag\"."
 1. Convert the input TAG-STR string to a list,
 2. Pass that to `org-hugo--transform-org-tags', and
 3. Convert the returned list back to a string, with elements
-   separated by `org-hugo--internal-tag-separator'.
+   separated by `org-hugo--internal-list-separator'.
 4. Return that string.
 
 Example: \"two__words hyphenated_word\" -> \"two words\nhyphenated-word\".
@@ -1577,16 +1578,16 @@ Return nil if TAG-STR is not a string."
   (when (stringp tag-str)
     (setq tag-str (org-trim tag-str))
     (setq tag-str (replace-regexp-in-string
-                   " +" org-hugo--internal-tag-separator
+                   " +" org-hugo--internal-list-separator
                    tag-str))
     (let* ((tag-str-list (split-string
                           tag-str
-                          org-hugo--internal-tag-separator))
+                          org-hugo--internal-list-separator))
            (tag-str-list (org-hugo--transform-org-tags
                           tag-str-list
                           info
                           no-prefer-hyphen)))
-      (mapconcat #'identity tag-str-list org-hugo--internal-tag-separator))))
+      (mapconcat #'identity tag-str-list org-hugo--internal-list-separator))))
 
 (defun org-hugo--category-p (tag)
   "Return non-nil if TAG begins with \"@\".
@@ -1632,6 +1633,22 @@ INFO is a plist used as a communication channel."
          (date (and (stringp date-nocolon)
                     (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
                                               date-nocolon)))
+         (aliases-raw (let ((aliases-raw-1
+                             (org-string-nw-p
+                              (org-export-data (plist-get info :hugo-aliases) info))))
+                        (when aliases-raw-1
+                          (org-split-string aliases-raw-1 " "))))
+         (aliases (let (alias-list)
+                    (dolist (alias aliases-raw)
+                      (if (string-match-p "/" alias)
+                          (setq alias-list (append alias-list `(,alias)))
+                        (let* ((section (org-export-data (plist-get info :hugo-section) info))
+                               ;; Suffix section with "/" if it isn't already.
+                               (section (replace-regexp-in-string "[^/]\\'" "\\&/" section)))
+                          (setq alias-list (append alias-list `(,(concat "/" section alias)))))))
+                    (org-string-nw-p (mapconcat #'identity
+                                                alias-list
+                                                org-hugo--internal-list-separator))))
          (lastmod-raw (org-string-nw-p (org-export-data (plist-get info :hugo-lastmod) info)))
          (lastmod-nocolon (cond
                            ;; If the set HUGO_LASTMOD is already in
@@ -1683,7 +1700,7 @@ INFO is a plist used as a communication channel."
                    ;;   (message "[get fm DBG] tags: tags-list = %s" tags-list))
                    (org-string-nw-p (mapconcat #'identity
                                                tags-list
-                                               org-hugo--internal-tag-separator))))))
+                                               org-hugo--internal-list-separator))))))
          (categories (or
                       ;; Look for categories set using
                       ;; #+HUGO_CATEGORIES keyword, or
@@ -1702,7 +1719,7 @@ INFO is a plist used as a communication channel."
                                       ;; Remove "@" from beg of categories.
                                       (replace-regexp-in-string "\\`@" "" str))
                                     categories-list
-                                    org-hugo--internal-tag-separator)))))
+                                    org-hugo--internal-list-separator)))))
          (weight (let* ((wt (plist-get info :hugo-weight))
                         (auto-calc (and (stringp wt)
                                         (string= wt "auto")
@@ -1733,7 +1750,7 @@ INFO is a plist used as a communication channel."
                  (date . ,date)
                  (publishDate . ,(org-export-data (plist-get info :hugo-publishdate) info))
                  (expiryDate . ,(org-export-data (plist-get info :hugo-expirydate) info))
-                 (aliases . ,(org-export-data (plist-get info :hugo-aliases) info))
+                 (aliases . ,aliases)
                  (isCJKLanguage . ,(org-hugo--plist-get-true-p info :hugo-iscjklanguage))
                  (keywords . ,(org-export-data (plist-get info :keywords) info))
                  (layout . ,(org-export-data (plist-get info :hugo-layout) info))
@@ -1897,16 +1914,14 @@ are \"toml\" and \"yaml\"."
                           (format "%s %s %s\n"
                                   key
                                   sign
-                                  (cond ((or (string= key "tags")
-                                             (string= key "categories")
-                                             (string= key "keywords"))
+                                  (cond ((member key '("aliases" "tags" "categories" "keywords"))
                                          ;; "abc def" -> "[\"abc\", \"def\"]"
                                          (concat "["
                                                  (mapconcat #'identity
                                                             (mapcar #'org-hugo--quote-string
                                                                     (split-string
                                                                      value
-                                                                     org-hugo--internal-tag-separator))
+                                                                     org-hugo--internal-list-separator))
                                                             ", ")
                                                  "]"))
                                         (t

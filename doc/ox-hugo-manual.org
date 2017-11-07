@@ -337,7 +337,8 @@ for your future contributions to Emacs too!
 2. Add/edit documentation to =doc/ox-hugo-manual.org=.
 3. Run =make doc=.
 4. Review the changes in the generated .org and .md files.
-5. Commit, push branch and create PR.
+5. Commit *only the .org files*, push branch and create PR.
+   - The =.org= → =.md= conversion is done by =ox-hugo= on Netlify.
 *** Contribute to code
 1. Clone this repo.
 2. Add/edit the .el files, *tests* in =test/site/content-org/=, and
@@ -345,6 +346,7 @@ for your future contributions to Emacs too!
 3. Run =make md doc=.
 4. Review the changes in the generated .org and .md files.
 5. Commit (*don't push your branch yet!*).
+   - As mentioned above, commit *only the .org files* for documentation.
 6. Run test: =make test= (you *need* to =git commit= i.e. do the above
    step before this step).
 7. Fix commit if test fails.. repeat till test passes.
@@ -532,8 +534,11 @@ to set that up for either of the above two blogging flows.
 - [X] Travis CI Integration -- Checks with emacs versions starting from
   24.4->25.2, with the latest stable version of =org-plus-contrib=.
 - [X] [[https://ox-hugo.scripter.co][Documentation site]] -- Generated using =ox-hugo= itself (=make
-  doc=).
-- [X] [[../test][Test site]] -- Regenerated after each commit to this repo
+  doc_site=).
+- [X] [[https://github.com/kaushalmodi/ox-hugo/blob/master/README.org][GitHub repo ~README.org~]] -- Generated using =ox-org= (=make
+  gh_docs=).
+- [X] [[../test][Test site]] -- Regenerated after each commit to this repo (=make
+  test=).
 - [X] Passes =make test= and generates documentation using =make doc=
   in [[https://play.google.com/store/apps/details?id=com.termux&hl=en][Termux]] app on Android too.
 - [X] Passes =checkdoc= and =package-lint= ([[https://github.com/purcell/package-lint/issues/89][/almost/]]).

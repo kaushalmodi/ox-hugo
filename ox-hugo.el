@@ -475,8 +475,12 @@ contents is made.
 This option can also be set with the OPTIONS keyword,
 e.g. \"toc:nil\", \"toc:t\" or \"toc:3\"."
   :group 'org-export-hugo
-  :type 'boolean
-  :safe #'booleanp)
+  :type '(choice
+	  (const :tag "No Table of Contents" nil)
+	  (const :tag "Full Table of Contents" t)
+	  (integer :tag "TOC to level"))
+  :safe (lambda (x) (or (booleanp x)
+		   (integerp x))))
 
 (defcustom org-hugo-default-static-subdirectory-for-externals "ox-hugo"
   "Default sub-directory in Hugo static directory for external files.

@@ -534,9 +534,9 @@ to set that up for either of the above two blogging flows.
 - [X] Travis CI Integration -- Checks with emacs versions starting from
   24.4->25.2, with the latest stable version of =org-plus-contrib=.
 - [X] [[https://ox-hugo.scripter.co][Documentation site]] -- Generated using =ox-hugo= itself (=make
-  doc_site=).
-- [X] [[https://github.com/kaushalmodi/ox-hugo/blob/master/README.org][GitHub repo ~README.org~]] -- Generated using =ox-org= (=make
-  gh_docs=).
+  doc_md doc_hugo=).
+- [X] GitHub repo files: [[https://github.com/kaushalmodi/ox-hugo/blob/master/README.org][~README.org~]] and [[https://github.com/kaushalmodi/ox-hugo/blob/master/CONTRIBUTING.org][~CONTRIBUTING.org~]] --
+  Generated using =ox-org= (=make doc_gh=).
 - [X] [[../test][Test site]] -- Regenerated after each commit to this repo (=make
   test=).
 - [X] Passes =make test= and generates documentation using =make doc=

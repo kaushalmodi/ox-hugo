@@ -1214,14 +1214,14 @@ CONTENTS is the paragraph contents.  INFO is a plist used as a
 communication channel."
   (unless (org-hugo--plist-get-true-p info :hugo-preserve-filling)
     (setq contents (concat (mapconcat 'identity (split-string contents) " ") "\n")))
-  ;; Glue EOL footnotes to the last words using &nbsp; so that the
+  ;; Glue footnotes to the words before them using &nbsp; so that the
   ;; footnote reference does not end up on a new line by itself.
   (setq contents (replace-regexp-in-string
-                  ;; "word FN.?$" -> "word&nbsp;FN.?$"
-                  "[[:blank:]]+\\(\\[\\^[^]]+\\]\\)\\([[:blank:]]*[.]*\\)$" "&nbsp;\\1\\2"
+                  ;; "something FN" -> "something&nbsp;FN"
+                  "[[:blank:]]+\\(\\[\\^[^]]+\\]\\)" "&nbsp;\\1"
                   (replace-regexp-in-string
-                   ;; "FN .$" -> "FN.$"
-                   "\\(\\[\\^[^]]+\\]\\)[[:blank:]]*\\(\\.+\\)$" "\\1\\2"
+                   ;; "FN ." -> "FN."
+                   "\\(\\[\\^[^]]+\\]\\)[[:blank:]]*\\([.]+\\)" "\\1\\2"
                    contents)))
   ;; (message "[org-hugo-paragraph DBG] para: %s" contents)
   (org-md-paragraph paragraph contents info))

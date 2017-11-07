@@ -1161,9 +1161,10 @@ This is some text[fn:1].
 :EXPORT_FILE_NAME: multi-line-footnote
 :END:
 This is some text[fn:3].
-** Footnotes at End of line
+** Bind footnotes to the preceding word
 :PROPERTIES:
-:EXPORT_FILE_NAME: footnotes-at-eol
+:EXPORT_FILE_NAME: footnotes-bind-to-preceding-word
+:EXPORT_HUGO_ALIASES: posts/footnotes-at-eol/
 :END:
 See [[https://github.com/kaushalmodi/ox-hugo/issues/96][Issue#96]].
 
@@ -1171,7 +1172,8 @@ To test the fix for this, increase/decrease the width of the browser
 window showing this page so that the test lines below start wrapping
 around, and you will see that the footnote references will *never* be
 on their own on a new line.
-*** Last word, followed by FOOTNOTE PERIOD --- /Good Case/
+*** Footnote ref at EOL
+**** Last word, followed by FOOTNOTE PERIOD --- /Good Case A/
 - As there is no space in-between "word FOOTNOTE PERIOD", this text
   will stay unmodified.
 
@@ -1186,7 +1188,7 @@ a a a[fn:1].
 
 abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
 a a a[fn:1].
-*** Last word, followed by FOOTNOTE *space* PERIOD --- /Bad Case 1/
+**** Last word, followed by FOOTNOTE *space* PERIOD --- /Bad Case A1/
 - In this case, the *space* before the PERIOD at EOL is removed.
 
 a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
@@ -1200,7 +1202,7 @@ a a a[fn:1] .
 
 abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
 a a a[fn:1] .
-*** Last word, followed by PERIOD *space* FOOTNOTE --- /Bad Case 2/
+**** Last word, followed by PERIOD *space* FOOTNOTE --- /Bad Case A2/
 - In this case, the *space* before FOOTNOTE is replaced with =&nbsp;=.
 
 a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
@@ -1214,8 +1216,8 @@ a a a. [fn:1]
 
 abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
 a a a. [fn:1]
-*** Last word, followed by *space* FOOTNOTE *space* PERIOD --- /Bad Case 3/
-- This is a blend of /Bad Case 1/ and /Bad Case 2/ above.
+**** Last word, followed by *space* FOOTNOTE *space* PERIOD --- /Bad Case A3/
+- This is a blend of /Bad Case A1/ and /Bad Case A2/ above.
 - In this case, the *space* before FOOTNOTE is replaced with =&nbsp;=,
   *AND* the *space* before the PERIOD at EOL is removed.
 
@@ -1233,6 +1235,68 @@ a a [fn:1] .
 
 abcde a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
 a a a [fn:1] .
+*** Footnote NOT at EOL
+**** Word, followed by FOOTNOTE PERIOD --- /Good Case B/
+- As there is no space in-between "word FOOTNOTE PERIOD", this text
+  will stay unmodified.
+
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a[fn:1]. B b b.
+
+ab a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a[fn:1]. B b b.
+
+abc a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a[fn:1]. B b b.
+
+abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a[fn:1].
+**** Word, followed by FOOTNOTE *space* PERIOD --- /Bad Case B1/
+- In this case, the *space* before the PERIOD at EOL is removed.
+
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a[fn:1] . B b b.
+
+ab a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a[fn:1] . B b b.
+
+abc a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a[fn:1] . B b b.
+
+abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a[fn:1] . B b b.
+**** Word, followed by PERIOD *space* FOOTNOTE --- /Bad Case B2/
+- In this case, the *space* before FOOTNOTE is replaced with =&nbsp;=.
+
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a. [fn:1] B b b.
+
+ab a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a. [fn:1] B b b.
+
+abc a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a. [fn:1] B b b.
+
+abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a. [fn:1] B b b.
+**** Word, followed by *space* FOOTNOTE *space* PERIOD --- /Bad Case B3/
+- This is a blend of /Bad Case B1/ and /Bad Case B2/ above.
+- In this case, the *space* before FOOTNOTE is replaced with =&nbsp;=,
+  *AND* the *space* before the PERIOD at EOL is removed.
+
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a [fn:1] . B b b.
+
+ab a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a [fn:1] . B b b.
+
+abc a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a [fn:1] . B b b.
+abcd a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a [fn:1] . B b b.
+
+abcde a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
+a a a [fn:1] . B b b.
 * Tags
 ** Basic tags                                                       :abc:def:
 :PROPERTIES:

@@ -1,4 +1,4 @@
-# Time-stamp: <2017-11-07 16:09:53 kmodi>
+# Time-stamp: <2017-11-07 16:22:19 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -65,7 +65,7 @@ file_test_files = single-posts/post-toml.org \
 	test md testmkgold \
 	test_subtree $(subtree_test_files) \
 	test_file $(file_test_files) \
-	doc_site hugo_doc_site gh_docs doc \
+	doc_md doc_hugo doc_gh doc \
 	ctemp diffgolden clean
 
 help:
@@ -79,8 +79,9 @@ help:
 	@echo " make hugo          <-- Run hugo"
 	@echo " make serve         <-- Run the hugo server on http://localhost:$(PORT)"
 	@echo " make diff          <-- Run git diff"
-	@echo " make doc_site      <-- Build the Markdown content for the documentation site"
-	@echo " make gh_docs       <-- Build README.org and CONTRIBUTING.org for GitHub"
+	@echo " make doc_md        <-- Build the Markdown content for the documentation site"
+	@echo " make doc_hugo      <-- Build the documentation site using Hugo"
+	@echo " make doc_gh        <-- Build README.org and CONTRIBUTING.org for GitHub"
 	@echo " make clean         <-- Delete the Hugo public/ directory and auto-installed elisp packages"
 	@echo " make               <-- Show this help"
 
@@ -177,20 +178,20 @@ ifeq ($(test_check),1)
 	@$(MAKE) diffgolden
 endif
 
-doc_site:
+doc_md:
 	@echo "[Doc Site] Generating ox-hugo Documentation Site content .."
 	@$(MAKE) mdtree ORG_FILE=ox-hugo-manual.org ORG_FILE_DIR=./doc
 	@echo "[Doc Site] Done"
 
-hugo_doc_site:
+doc_hugo:
 	@cd ./doc && hugo --baseURL=$(DOC_SITE_URL)
 
-gh_docs:
+doc_gh:
 	@echo "[GitHub Docs] Generating README.org and CONTRIBUTING.org for GitHub .."
 	@$(MAKE) emacs-batch FUNC=ox-hugo-export-gh-doc ORG_FILE=github-files.org ORG_FILE_DIR=./doc
 	@echo "[GitHub Docs] Done"
 
-doc: doc_site gh_docs
+doc: doc_md doc_hugo doc_gh
 
 ctemp:
 	@find $(OX_HUGO_TEST_SITE_DIR)/content -name "*.*~" -delete
@@ -200,8 +201,10 @@ diffgolden:
 	@diff -r $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
 clean: ctemp
+	@find ./doc/content -name "*.md" -delete
 	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/public $(OX_HUGO_TEST_SITE_DIR)/content-golden
 	@rm -rf $(OX_HUGO_ELPA)
+	@rm -rf ./doc/public
 
 # Set a make variable during rule execution
 # https://stackoverflow.com/a/1909390/1219634

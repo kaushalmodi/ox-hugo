@@ -35,6 +35,18 @@
 This check is specifically track if that horizontal rule was
 inserted after the first row of the table.")
 
+(defvar org-blackfriday--code-block-num-backticks-default 3
+  "Variable to store the default number of backticks for code block.
+
+Note that this variable is *only* for internal use.")
+
+(defvar org-blackfriday--code-block-num-backticks org-blackfriday--code-block-num-backticks-default
+  "Variable to store the number of backticks for code block.
+By default, it stays at 3.  This number is incremented for few
+corner cases.
+
+Note that this variable is *only* for internal use.")
+
 
 
 ;;; User-Configurable Variables
@@ -234,6 +246,12 @@ same column as TABLE-CELL.  If no such cookie is found, return
                       ((equal cookie-align "c") 'center)
                       (t 'default)))))))
 
+;;;; Reset org-blackfriday--code-block-num-backticks
+(defun org-blackfriday--reset-org-blackfriday--code-block-num-backticks (_backend)
+  "Reset `org-blackfriday--code-block-num-backticks' to its default value."
+  (setq org-blackfriday--code-block-num-backticks org-blackfriday--code-block-num-backticks-default))
+(add-hook 'org-export-before-processing-hook #'org-blackfriday--reset-org-blackfriday--code-block-num-backticks)
+
 
 
 ;;; Transcode Functions
@@ -243,19 +261,49 @@ same column as TABLE-CELL.  If no such cookie is found, return
   "Transcode an EXAMPLE-BLOCK element into Blackfriday Markdown format.
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
-  (format "```text\n%s```"
-          (org-export-format-code-default example-block info)))
+  (let* ((parent-element (org-export-get-parent example-block))
+         (parent-type (car parent-element))
+         (backticks (make-string org-blackfriday--code-block-num-backticks ?`)))
+    ;; (message "[ox-bf example-block DBG]")
+    ;; (message "[ox-bf example-block DBG] parent type: %S" parent-type)
+    (prog1
+        (format "%stext\n%s%s"
+                backticks
+                (org-export-format-code-default example-block info)
+                backticks)
+      (when (equal 'quote-block parent-type)
+        ;; If the current example block is inside a quote block,
+        ;; future example/code blocks (especially the ones outside
+        ;; this quote block) will require higher number of backticks.
+        ;; Workaround for
+        ;; https://github.com/russross/blackfriday/issues/407.
+        (setq org-blackfriday--code-block-num-backticks
+              (1+ org-blackfriday--code-block-num-backticks))))))
 
 ;;;; Fixed Width
 (defun org-blackfriday-fixed-width (fixed-width _contents info)
   "Transcode a FIXED-WIDTH element into Blackfriday Markdown format.
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
-  (format "```text\n%s```"
-          (let ((org-src-preserve-indentation t))
-            ;; Preserve leading whitespace in the Org Babel Results
-            ;; blocks.
-            (org-export-format-code-default fixed-width info))))
+  (let* ((parent-element (org-export-get-parent fixed-width))
+         (parent-type (car parent-element))
+         (backticks (make-string org-blackfriday--code-block-num-backticks ?`)))
+    (prog1
+        (format "%stext\n%s%s"
+                backticks
+                (let ((org-src-preserve-indentation t))
+                  ;; Preserve leading whitespace in the Org Babel Results
+                  ;; blocks.
+                  (org-export-format-code-default fixed-width info))
+                backticks)
+      (when (equal 'quote-block parent-type)
+        ;; If the current example block is inside a quote block,
+        ;; future example/code blocks (especially the ones outside
+        ;; this quote block) will require higher number of backticks.
+        ;; Workaround for
+        ;; https://github.com/russross/blackfriday/issues/407.
+        (setq org-blackfriday--code-block-num-backticks
+              (1+ org-blackfriday--code-block-num-backticks))))))
 
 ;;;; Footnote Reference
 (defun org-blackfriday-footnote-reference (footnote-reference _contents info)
@@ -363,6 +411,7 @@ communication channel."
          (next-type (org-element-type next))
          (next-is-quote (eq 'quote-block next-type))
          (contents (org-md-quote-block quote-block contents info)))
+    ;; (message "[ox-bf quote-block DBG]")
     (concat contents
             ;; Two consecutive blockquotes in Markdown can be
             ;; separated by a comment.
@@ -377,9 +426,11 @@ INFO is a plist used as a communication channel."
   (let* ((lang (org-element-property :language src-block))
          (code (org-export-format-code-default src-block info))
          (parent-element (org-export-get-parent src-block))
-         (parent-type (car parent-element)))
+         (parent-type (car parent-element))
+         (backticks (make-string org-blackfriday--code-block-num-backticks ?`)))
+    ;; (message "[ox-bf src-block DBG]")
     ;; (message "ox-bf [dbg] code: %s" code)
-    ;; (message "dbg parent type: %S" parent-type)
+    ;; (message "[ox-bf src-block DBG] parent type: %S" parent-type)
     ;; Hack to avert a bug in Blackfriday
     ;; Details: https://github.com/kaushalmodi/ox-hugo/issues/57
     ;; Prefix the ASTERISK (0x2a), PLUS SIGN (0x2b) and HYPHEN-MINUS
@@ -392,7 +443,15 @@ INFO is a plist used as a communication channel."
     ;; There's a ZERO WIDTH SPACE char (0x200b) here ^^,
     ;;                            (after «"», but before «\\&"» above)
     ;; It's not visible (because zero width), but it's there.
-    (format "```%s\n%s```" lang code)))
+    (prog1
+        (format "%s%s\n%s%s" backticks lang code backticks)
+      (when (equal 'quote-block parent-type)
+        ;; If the current code block is inside a quote block, future
+        ;; example/code blocks (especially the ones outside this quote
+        ;; block) will require higher number of backticks.  Workaround
+        ;; for https://github.com/russross/blackfriday/issues/407.
+        (setq org-blackfriday--code-block-num-backticks
+              (1+ org-blackfriday--code-block-num-backticks))))))
 
 ;;;; Strike-Through
 (defun org-blackfriday-strike-through (_strike-through contents _info)

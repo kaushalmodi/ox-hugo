@@ -810,7 +810,7 @@ information."
           ;; of literally inserting the line numbers.
           (setq text (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" text))
           (format "{{< highlight text %s>}}\n%s{{< /highlight >}}\n" linenos-str text))
-      (format "```text\n%s```" text))))
+      (org-blackfriday-example-block example-block nil info))))
 
 ;;;; Headline
 (defun org-hugo-headline (headline contents info)

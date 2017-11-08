@@ -1665,6 +1665,102 @@ Quote 3. This is a multi-paragraph quote.
 This is the second paragraph.
 #+END_QUOTE
 Some other text.
+** Example block inside quote block
+:PROPERTIES:
+:EXPORT_FILE_NAME: example-block-inside-quote-block
+:END:
+Some text.
+#+BEGIN_QUOTE
+Some quoted text.
+
+    #+BEGIN_EXAMPLE
+    (some-example)
+    #+END_EXAMPLE
+#+END_QUOTE
+Some other text.
+** Multiple example blocks inside quote block
+:PROPERTIES:
+:EXPORT_FILE_NAME: multiple-example-blocks-inside-quote-block
+:END:
+Some text.
+#+BEGIN_QUOTE
+Some quoted text.
+
+    #+BEGIN_EXAMPLE
+    (some-example)
+    #+END_EXAMPLE
+    #+BEGIN_EXAMPLE
+    (some-other-example)
+    #+END_EXAMPLE
+#+END_QUOTE
+Some other text.
+** Source block inside quote block, followed by another source block outside
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-inside-quote-block-and-another-source-block
+:END:
+[[https://github.com/russross/blackfriday/issues/407][Blackfriday Issue # 407]]
+
+Some text.
+#+BEGIN_QUOTE
+Some quoted text.
+    #+BEGIN_SRC emacs-lisp
+    (message "hello")
+    #+END_SRC
+#+END_QUOTE
+#+BEGIN_SRC emacs-lisp
+(message "hello again")
+#+END_SRC
+Some other text.
+** Example blocks inside quote block, followed by another example block outside
+:PROPERTIES:
+:EXPORT_FILE_NAME: example-blocks-inside-quote-block-and-another-example-block
+:END:
+[[https://github.com/russross/blackfriday/issues/407][Blackfriday Issue # 407]]
+
+Some text.
+#+BEGIN_QUOTE
+Some quoted text.
+    #+BEGIN_EXAMPLE
+    (some-example)
+    #+END_EXAMPLE
+    #+BEGIN_EXAMPLE
+    (some-other-example)
+    #+END_EXAMPLE
+#+END_QUOTE
+
+#+BEGIN_EXAMPLE
+(yet-another-example)
+#+END_EXAMPLE
+Some other text.
+** Source block, followed by a quote block containing another source block
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-followed-by-a-quote-block-containing-another-source-block
+:END:
+Some text.
+#+BEGIN_SRC emacs-lisp
+(message "hello")
+#+END_SRC
+#+BEGIN_QUOTE
+Some quoted text.
+    #+BEGIN_SRC emacs-lisp
+    (message "hello again")
+    #+END_SRC
+#+END_QUOTE
+Some other text.
+** Example block with escaped Org syntax inside quote block
+:PROPERTIES:
+:EXPORT_FILE_NAME: example-block-with-escaped-org-inside-quote-block
+:END:
+Some text.
+#+BEGIN_QUOTE
+Some quoted text.
+
+    #+BEGIN_EXAMPLE
+    ,#+NAME: some_example
+    (some-example)
+    #+END_EXAMPLE
+#+END_QUOTE
+Some other text.
 * Verse                                                               :verse:
 ** One verse
 :PROPERTIES:

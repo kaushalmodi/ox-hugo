@@ -1286,7 +1286,7 @@ channel."
           ;; *Note* that this issue does NOT exist if using Chroma,
           ;; which is the default syntax highlighter after Hugo
           ;; v0.28.
-          (setq ret (replace-regexp-in-string (concat "\\`\\(```\\)" lang) "\\1" ret)))
+          (setq ret (replace-regexp-in-string (concat "\\`\\(```+\\)" lang) "\\1" ret)))
         ret))
      ;; 2. If number-lines is non-nil, or
      ;; 3. If hl-lines is non-nil, or

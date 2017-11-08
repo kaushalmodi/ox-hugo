@@ -1258,69 +1258,78 @@ channel."
          (parameters (org-babel-parse-header-arguments parameters-str))
          (hl-lines (cdr (assoc :hl_lines parameters)))
          (hl-lines (when hl-lines
-                     (replace-regexp-in-string "," " " hl-lines)))) ;"1,3-4" -> "1 3-4"
+                     (replace-regexp-in-string "," " " hl-lines))) ;"1,3-4" -> "1 3-4"
+         (label (let ((lbl (and (org-element-property :name src-block)
+                                (org-export-get-reference src-block info))))
+                  (if lbl
+                      (format "<a id=\"%s\"></a>\n" lbl)
+                    "")))
+         ret)
     ;; (message "ox-hugo src [dbg] number-lines: %S" number-lines)
     ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
-    (cond
-     ;; 1. If number-lines is nil AND :hugo-code-fence is non-nil
-     ((and (null number-lines)
-           (null hl-lines)
-           (org-hugo--plist-get-true-p info :hugo-code-fence))
-      (let ((ret (org-blackfriday-src-block src-block nil info)))
-        (when (and org-hugo-langs-no-descr-in-code-fences
-                   (member (intern lang) org-hugo-langs-no-descr-in-code-fences))
-          ;; When using Pygments, with the pygmentsCodeFences
-          ;; options enabled in Hugo, `org' is not recognized as a
-          ;; "language", because Pygments does not have a lexer for
-          ;; Org.
-          ;; Issue on Pygments repo:
-          ;; https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org
-          ;; So attempt to do below:
-          ;;   ```org
-          ;;   # org comment
-          ;;   ```
-          ;; will not result in a <code> tag wrapped block in HTML.
-          ;;
-          ;; So override the language to be an empty string in such cases.
-          ;;
-          ;; *Note* that this issue does NOT exist if using Chroma,
-          ;; which is the default syntax highlighter after Hugo
-          ;; v0.28.
-          (setq ret (replace-regexp-in-string (concat "\\`\\(```+\\)" lang) "\\1" ret)))
-        ret))
-     ;; 2. If number-lines is non-nil, or
-     ;; 3. If hl-lines is non-nil, or
-     ;; 4. If :hugo-code-fence is nil
-     (t
-      (let ((code (org-export-format-code-default src-block info))
-            (linenos-str "")
-            (hllines-str "")
-            ;; Formatter string where the first arg si linenos-str and
-            ;; second is hllines-str.
-            (highlight-args-str "%s%s"))
-        (when (or number-lines
-                  hl-lines)
-          (setq highlight-args-str " \"%s%s\""))
-        (when number-lines
-          (let ((linenostart-str (progn
-                                   ;; Extract the start line number of the code block
-                                   (string-match "\\`\\s-*\\([0-9]+\\)\\s-\\{2\\}" code)
-                                   (match-string-no-properties 1 code))))
-            (setq linenos-str (format "linenos=table, linenostart=%s" linenostart-str)))
-          ;; Remove Org-inserted numbers from the beginning of each
-          ;; line as the Hugo highlight shortcode will be used instead
-          ;; of literally inserting the line numbers.
-          (setq code (replace-regexp-in-string "^\\s-*[0-9]+\\s-\\{2\\}" "" code)))
-        (when hl-lines
-          (setq hllines-str (concat "hl_lines=" hl-lines))
-          (when number-lines
-            (setq hllines-str (concat ", " hllines-str))))
-        (format "{{< highlight %s%s>}}\n%s{{< /highlight >}}\n"
-                lang
-                (format highlight-args-str linenos-str hllines-str)
-                code))))))
+    (setq ret
+          (cond
+           ;; 1. If number-lines is nil AND :hugo-code-fence is non-nil
+           ((and (null number-lines)
+                 (null hl-lines)
+                 (org-hugo--plist-get-true-p info :hugo-code-fence))
+            (let ((ret1 (org-blackfriday-src-block src-block nil info)))
+              (when (and org-hugo-langs-no-descr-in-code-fences
+                         (member (intern lang) org-hugo-langs-no-descr-in-code-fences))
+                ;; When using Pygments, with the pygmentsCodeFences
+                ;; options enabled in Hugo, `org' is not recognized as a
+                ;; "language", because Pygments does not have a lexer for
+                ;; Org.
+                ;; Issue on Pygments repo:
+                ;; https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org
+                ;; So attempt to do below:
+                ;;   ```org
+                ;;   # org comment
+                ;;   ```
+                ;; will not result in a <code> tag wrapped block in HTML.
+                ;;
+                ;; So override the language to be an empty string in such cases.
+                ;;
+                ;; *Note* that this issue does NOT exist if using Chroma,
+                ;; which is the default syntax highlighter after Hugo
+                ;; v0.28.
+                (setq ret1 (replace-regexp-in-string (concat "\\`\\(```+\\)" lang) "\\1" ret1)))
+              ret1))
+           ;; 2. If number-lines is non-nil, or
+           ;; 3. If hl-lines is non-nil, or
+           ;; 4. If :hugo-code-fence is nil
+           (t
+            (let ((code (org-export-format-code-default src-block info))
+                  (linenos-str "")
+                  (hllines-str "")
+                  ;; Formatter string where the first arg si linenos-str and
+                  ;; second is hllines-str.
+                  (highlight-args-str "%s%s"))
+              (when (or number-lines
+                        hl-lines)
+                (setq highlight-args-str " \"%s%s\""))
+              (when number-lines
+                (let ((linenostart-str (progn
+                                         ;; Extract the start line number of the code block
+                                         (string-match "\\`\\s-*\\([0-9]+\\)\\s-\\{2\\}" code)
+                                         (match-string-no-properties 1 code))))
+                  (setq linenos-str (format "linenos=table, linenostart=%s" linenostart-str)))
+                ;; Remove Org-inserted numbers from the beginning of each
+                ;; line as the Hugo highlight shortcode will be used instead
+                ;; of literally inserting the line numbers.
+                (setq code (replace-regexp-in-string "^\\s-*[0-9]+\\s-\\{2\\}" "" code)))
+              (when hl-lines
+                (setq hllines-str (concat "hl_lines=" hl-lines))
+                (when number-lines
+                  (setq hllines-str (concat ", " hllines-str))))
+              (format "{{< highlight %s%s>}}\n%s{{< /highlight >}}\n"
+                      lang
+                      (format highlight-args-str linenos-str hllines-str)
+                      code)))))
+    (concat label ret)))
 
 
+
 ;;; Filter Functions
 
 ;;;; Body Filter

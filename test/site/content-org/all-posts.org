@@ -1519,6 +1519,56 @@ link./
 #+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
 
 *Here we refer to item [[target]].*
+*** Links to source blocks                                         :noexport:
+:PROPERTIES:
+:EXPORT_FILE_NAME: links-to-source-blocks
+:END:
+*Note*: This test is marked as =noexport= because the Org generated
+ link IDs are random and thus would fail the tests. So let this test
+ serve just as an example and not as a part of the automated test
+ suite.
+
+To export this test, you'll need to temporarily remove the =noexport=
+tag.
+-----
+From [[http://orgmode.org/manual/Internal-links.html][(org) Internal links]],
+
+#+BEGIN_QUOTE
+   If no dedicated target exists, the link will then try to match the
+exact name of an element within the buffer.  Naming is done with the
+‘#+NAME’ keyword, which has to be put in the line before the element it
+refers to, as in the following example
+    #+BEGIN_EXAMPLE
+    ,#+NAME: My Target
+    | a  | table      |
+    |----+------------|
+    | of | four cells |
+    #+END_EXAMPLE
+#+END_QUOTE
+
+So the below code block:
+#+BEGIN_SRC org
+,#+NAME: code__hello
+,#+BEGIN_SRC emacs-lisp
+(message "Hello")
+,#+END_SRC
+Here we refer to code snippet [[code__hello]].
+#+END_SRC
+
+will output below (/lorem-ipsum/ added to increase page content so
+that the link jump is evident):
+
+#+NAME: code__hello
+#+BEGIN_SRC emacs-lisp
+(message "Hello")
+#+END_SRC
+
+/Scroll to the end of the below 'lorem-ipsum' block to find the test
+link./
+
+#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+
+*Here we refer to code snippet [[code__hello]].*
 * Equations                                                       :equations:
 ** Inline equations
 :PROPERTIES:

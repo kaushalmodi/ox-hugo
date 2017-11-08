@@ -476,11 +476,11 @@ This option can also be set with the OPTIONS keyword,
 e.g. \"toc:nil\", \"toc:t\" or \"toc:3\"."
   :group 'org-export-hugo
   :type '(choice
-	  (const :tag "No Table of Contents" nil)
-	  (const :tag "Full Table of Contents" t)
-	  (integer :tag "TOC to level"))
+          (const :tag "No Table of Contents" nil)
+          (const :tag "Full Table of Contents" t)
+          (integer :tag "TOC to level"))
   :safe (lambda (x) (or (booleanp x)
-		   (integerp x))))
+                   (integerp x))))
 
 (defcustom org-hugo-default-static-subdirectory-for-externals "ox-hugo"
   "Default sub-directory in Hugo static directory for external files.
@@ -1104,9 +1104,9 @@ and rewrite link paths to make blogging more seamless."
                      ;; for inline images).  This is needed as long as
                      ;; attributes cannot be set on a per link basis.
                      (let* ((attr
-	                     (let ((parent (org-export-get-parent-element link)))
-	                       (and (eq (org-element-map parent 'link #'identity info :first-match) link)
-		                    (org-export-read-attribute :attr_html parent))))
+                             (let ((parent (org-export-get-parent-element link)))
+                               (and (eq (org-element-map parent 'link #'identity info :first-match) link)
+                                    (org-export-read-attribute :attr_html parent))))
                             ;; https://www.w3schools.com/tags/tag_link.asp
                             (link-params `((media . ,(plist-get attr :media))
                                            (target . ,(plist-get attr :target))
@@ -1143,16 +1143,16 @@ and rewrite link paths to make blogging more seamless."
               ;; (message "[ox-hugo DBG org-hugo-link: contents=%s path=%s" contents path)
               (if link-param-str
                   (format "<a href=\"%s\" %s>%s</a>"
-		          (org-html-encode-plain-text path)
-		          link-param-str
-		          (org-link-unescape contents))
+                          (org-html-encode-plain-text path)
+                          link-param-str
+                          (org-link-unescape contents))
                 (format "[%s](%s)" contents path)))
           (if link-param-str
               (let ((path (org-html-encode-plain-text path)))
                 (format "<a href=\"%s\" %s>%s</a>"
-		        path
-		        link-param-str
-		        (org-link-unescape path)))
+                        path
+                        link-param-str
+                        (org-link-unescape path)))
             (format "<%s>" path))))))))
 
 ;;;;; Helpers

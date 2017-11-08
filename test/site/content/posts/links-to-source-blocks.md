@@ -4,16 +4,6 @@ tags = ["links", "internal-links"]
 draft = false
 +++
 
-**Note**: This test is marked as `noexport` because the Org generated
- link IDs are random and thus would fail the tests. So let this test
- serve just as an example and not as a part of the automated test
- suite.
-
-To export this test, you'll need to temporarily remove the `noexport`
-tag.
-
----
-
 From [(org) Internal links](http://orgmode.org/manual/Internal-links.html),
 
 >    If no dedicated target exists, the link will then try to match the
@@ -41,7 +31,7 @@ Here we refer to code snippet [[code__hello]].
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="orgd4c64be"></a>
+<a id="org91a03d3"></a>
 ````emacs-lisp
 (message "Hello")
 ````
@@ -101,4 +91,4 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-**Here we refer to code snippet [2](#orgd4c64be).**
+**Here we refer to code snippet [2](#org91a03d3).**

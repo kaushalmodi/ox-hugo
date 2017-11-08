@@ -1,4 +1,4 @@
-# Time-stamp: <2017-11-07 16:29:21 kmodi>
+# Time-stamp: <2017-11-08 17:16:03 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -153,6 +153,7 @@ md:
 	@$(MAKE) test_subtree test_check=0
 	@$(MAKE) test_file test_check=0
 
+# Get rid of all changes in $(OX_HUGO_TEST_SITE_DIR)/content.
 # https://stackoverflow.com/a/16589534/1219634
 testmkgold:
 	@git checkout --ignore-skip-worktree-bits -- $(OX_HUGO_TEST_SITE_DIR)/content
@@ -199,8 +200,19 @@ ctemp:
 	@find $(OX_HUGO_TEST_SITE_DIR)/content -name "*.*~" -delete
 	@find ./doc/content -name "*.*~" -delete
 
+# Before doing the diff, replace the randomly generated org reference
+# id's like "org123abcd" with "orgxxxxxxx" so that the diff doesn't
+# fail on those id mismatches.
+# Also get rid of all changes in $(OX_HUGO_TEST_SITE_DIR)/content
+# after making a copy to $(OX_HUGO_TEST_SITE_DIR)/content-modified.
+# https://stackoverflow.com/a/16589534/1219634
 diffgolden:
-	@diff -r $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-golden
+	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/content-modified
+	@cp -rf $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-modified
+	@git checkout --ignore-skip-worktree-bits -- $(OX_HUGO_TEST_SITE_DIR)/content
+	@find $(OX_HUGO_TEST_SITE_DIR)/content-modified -name "*.md" | xargs sed -r -i 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/'
+	@find $(OX_HUGO_TEST_SITE_DIR)/content-golden -name "*.md" | xargs sed -r -i 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/'
+	@diff -r $(OX_HUGO_TEST_SITE_DIR)/content-modified $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
 clean: ctemp
 	@find ./doc/content -name "*.md" -delete

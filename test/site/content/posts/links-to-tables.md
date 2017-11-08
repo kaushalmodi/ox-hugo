@@ -4,16 +4,6 @@ tags = ["links", "internal-links"]
 draft = false
 +++
 
-**Note**: This test is marked as `noexport` because the Org generated
- link IDs are random and thus would fail the tests. So let this test
- serve just as an example and not as a part of the automated test
- suite.
-
-To export this test, you'll need to temporarily remove the `noexport`
-tag.
-
----
-
 From  [(org) Images and tables](http://orgmode.org/manual/Images-and-tables.html),
 
 **Note**: When targeting a `#+NAME` keyword, `#+CAPTION` keyword is
@@ -30,7 +20,7 @@ Here we refer to table [[tab__simple]].
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="orgf74b4ab"></a>
+<a id="org53dbdfb"></a>
 
 | a | b |
 |---|---|
@@ -91,4 +81,4 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-**Here we refer to table [1](#orgf74b4ab).**
+**Here we refer to table [1](#org53dbdfb).**

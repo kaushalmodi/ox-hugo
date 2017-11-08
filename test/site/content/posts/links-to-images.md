@@ -4,16 +4,6 @@ tags = ["links", "internal-links"]
 draft = false
 +++
 
-**Note**: This test is marked as `noexport` because the Org generated
- link IDs are random and thus would fail the tests. So let this test
- serve just as an example and not as a part of the automated test
- suite.
-
-To export this test, you'll need to temporarily remove the `noexport`
-tag.
-
----
-
 From  [(org) Images and tables](http://orgmode.org/manual/Images-and-tables.html),
 
 **Note**: When targeting a `#+NAME` keyword, `#+CAPTION` keyword is
@@ -29,7 +19,7 @@ Here we refer to image [[img__org_logo]].
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="org22e708b"></a>
+<a id="org87e50de"></a>
 {{<figure src="/images/org-mode-unicorn-logo.png" caption="Org Logo">}}
 
 _Scroll to the end of the below 'lorem-ipsum' block to find the test
@@ -87,4 +77,4 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-**Here we refer to image [6](#org22e708b).**
+**Here we refer to image [4](#org87e50de).**

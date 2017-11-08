@@ -439,6 +439,11 @@ Here is the second post on Emacs.
 :EXPORT_FILE_NAME: table-with-single-row
 :END:
 | a | b |
+** Table with single cell
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-with-single-cell
+:END:
+| a |
 ** Table column alignment
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-column-alignment
@@ -453,10 +458,18 @@ Here is the second post on Emacs.
 | Left | Default | Center | Right |
 | 1    |       2 |   3    |     4 |
 *** Table with 1 row
-/A table with just one row, with alignment markers doesn't make
-sense. But hey, a test is a test./
+/A table with just 1 row with alignment markers is as good as just
+that row without the alignment markers. But hey, a test is a test./
+
 | <l>  |         |  <c>   |   <r> |
 | Left | Default | Center | Right |
+*** Table with 0 rows!
+/A table with zero rows, with just alignment markers, doesn't make
+sense. But hey, a test is a test./
+
+| <l> |   | <c> | <r> |
+
+You should see *no* table exported above.
 * Source blocks                                                   :src_block:
 ** Example text with code blocks                                    :ARCHIVE:
 :PROPERTIES:

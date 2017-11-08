@@ -511,41 +511,34 @@ communication channel."
     row))
 
 ;;;; Table
-(defun org-blackfriday-table (_table contents _info)
+(defun org-blackfriday-table (table contents info)
   "Transcode TABLE element into Blackfriday Markdown format.
 
 CONTENTS is contents of the table.  INFO is a plist holding
 contextual information."
   ;; (message "[ox-bf-table DBG] In contents: %s" contents)
-  (let* (
-         ;; (rows (org-element-map table 'table-row 'identity info))
-         ;; (no-header (or (<= (length rows) 1)))
-         ;; (cols (cdr (org-export-table-dimensions table info)))
-         ;; (build-dummy-header
-         ;;  (function
-         ;;   (lambda ()
-         ;;     (let ((build-empty-cell (org-blackfriday-make-hline-builder table info ?\s))
-         ;;           (build-rule (org-blackfriday-make-hline-builder table info ?-))
-         ;;           (columns (number-sequence 0 (- cols 1))))
-         ;;       (message "ox-bf-table DBG] build-empty-cell: %S" build-empty-cell)
-         ;;       (message "ox-bf-table DBG] build-rule: %S" build-rule)
-         ;;       (concat org-blackfriday-table-left-border
-         ;;               (mapconcat (lambda (col)
-         ;;                            (funcall build-empty-cell col))
-         ;;                          columns
-         ;;                          org-blackfriday-table-separator)
-         ;;               org-blackfriday-table-right-border "\n" org-blackfriday-table-left-border
-         ;;               (mapconcat (lambda (col)
-         ;;                            (funcall build-rule col))
-         ;;                          columns
-         ;;                          org-blackfriday-table-separator)
-         ;;               org-blackfriday-table-right-border "\n")))))
-         (tbl (replace-regexp-in-string "\n\n" "\n" contents)
-              ;; (concat (when no-header
-              ;;           (funcall build-dummy-header))
-              ;;         (replace-regexp-in-string "\n\n" "\n" contents))
-              ))
-    ;;   ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
+  (let* ((rows (org-element-map table 'table-row 'identity info))
+         (no-header (= (length rows) 1)) ;No header if table has just 1 row
+         (tbl (replace-regexp-in-string "\n\n" "\n" contents)))
+    ;; If the table has only 1 row, do *not* make it a header row..
+    ;; instead create an empty header row.
+    ;; For 1-row, tbl would look like this at this point:
+    ;;
+    ;;   | a | b |
+    ;;   |---|---|
+    ;;
+    ;; Below will convert that to:
+    ;;
+    ;;   |   |   |
+    ;;   |---|---|
+    ;;   | a | b |
+    (when no-header
+      (string-match "\\`\\(.*\\)\n\\(.*\\)\n\\'" tbl)
+      (let* ((row-1 (match-string-no-properties 1 tbl))
+             (hrule (match-string-no-properties 2 tbl))
+             (dummy-header (replace-regexp-in-string "[-:]" " " hrule)))
+        (setq tbl (concat dummy-header "\n" hrule "\n" row-1))))
+    ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
     tbl))
 
 ;;;; Verse Block

@@ -21,8 +21,18 @@ draft = false
 
 ## Table with 1 row {#table-with-1-row}
 
-_A table with just one row, with alignment markers doesn't make
+_A table with just 1 row with alignment markers is as good as just
+that row without the alignment markers. But hey, a test is a test._
+
+|      |         |        |       |
+|:-----|---------|:------:|------:|
+| Left | Default | Center | Right |
+
+
+## Table with 0 rows! {#table-with-0-rows}
+
+_A table with zero rows, with just alignment markers, doesn't make
 sense. But hey, a test is a test._
 
-| Left | Default | Center | Right |
-|:-----|---------|:------:|------:|
+
+You should see **no** table exported above.

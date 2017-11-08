@@ -4,5 +4,6 @@ tags = ["table"]
 draft = false
 +++
 
-| a | b |
+|   |   |
 |---|---|
+| a | b |

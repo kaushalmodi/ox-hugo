@@ -434,6 +434,11 @@ Here is the second post on Emacs.
 | h1 |
 | a  |
 | b  |
+** Table with single row
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-with-single-row
+:END:
+| a | b |
 * Source blocks                                                   :src_block:
 ** Example text with code blocks                                    :ARCHIVE:
 :PROPERTIES:

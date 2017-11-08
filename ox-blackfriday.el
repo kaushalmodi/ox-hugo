@@ -133,40 +133,41 @@ INFO is a plist used as communication channel.  Width of a column
 is determined either by inquiring
 `org-blackfriday-width-cookies' in the column, or by the maximum
 cell with in the column."
+  ;; (message "[ox-bf-table-col-width DBG] table: %S" table)
   (let ((cookie (when (hash-table-p org-blackfriday-width-cookies)
                   (gethash column org-blackfriday-width-cookies))))
     (if (and (eq table org-blackfriday-width-cookies-table)
              (not (eq nil cookie)))
         cookie
-      (progn
-        (unless (and (eq table org-blackfriday-width-cookies-table)
-                     (hash-table-p org-blackfriday-width-cookies))
-          (setq org-blackfriday-width-cookies (make-hash-table))
-          (setq org-blackfriday-width-cookies-table table))
-        (let ((max-width 0)
-              (specialp (org-export-table-has-special-column-p table)))
-          (org-element-map
-              table
-              'table-row
-            (lambda (row)
-              (setq max-width
-                    (max (length
-                          (org-export-data
-                           (org-element-contents
-                            (elt (if specialp
-                                     (car (org-element-contents row))
-                                   (org-element-contents row))
-                                 column))
-                           info))
-                         max-width)))
-            info)
-          (puthash column max-width org-blackfriday-width-cookies))))))
+      (unless (and (eq table org-blackfriday-width-cookies-table)
+                   (hash-table-p org-blackfriday-width-cookies))
+        (setq org-blackfriday-width-cookies (make-hash-table))
+        (setq org-blackfriday-width-cookies-table table))
+      (let ((max-width 0)
+            (specialp (org-export-table-has-special-column-p table)))
+        (org-element-map
+            table
+            'table-row
+          (lambda (row)
+            (setq max-width
+                  (max (length
+                        (org-export-data
+                         (org-element-contents
+                          (elt (if specialp
+                                   (car (org-element-contents row))
+                                 (org-element-contents row))
+                               column))
+                         info))
+                       max-width)))
+          info)
+        (puthash column max-width org-blackfriday-width-cookies)))))
 
 (defun org-blackfriday-make-hline-builder (table info char)
   "Return a function to horizontal lines in TABLE.
 Draw the lines using INFO with given CHAR.
 
 INFO is a plist used as a communication channel."
+  ;; (message "[ox-bf-make-hline DBG] table: %S" table)
   `(lambda (col)
      (let ((max-width (max 3 (+ 1 (org-blackfriday-table-col-width ,table col ,info)))))
        (when (< max-width 1)
@@ -399,63 +400,65 @@ communication channel."
       (setq org-blackfriday--hrule-inserted nil))
 
     ;; (message "[ox-bf-table-row DBG] Row # %0d In contents: %s,\ntable-row: %S" row-num contents table-row)
-    (when row
-      (progn
-        (when (and (eq 'rule (org-element-property :type table-row))
-                   ;; In Blackfriday, rule is valid only at second row.
-                   (eq 1 row-num))
-          (let* ((table (org-export-get-parent-table table-row))
-                 ;; (headerp (org-export-table-row-starts-header-p table-row info))
-                 (build-rule (org-blackfriday-make-hline-builder table info ?-))
-                 (cols (cdr (org-export-table-dimensions table info))))
-            (setq row (concat org-blackfriday-table-left-border
-                              (mapconcat (lambda (col)
-                                           (funcall build-rule col))
-                                         (number-sequence 0 (- cols 1))
-                                         org-blackfriday-table-separator)
-                              org-blackfriday-table-right-border))))
+    (when (and row
+               (eq 'rule (org-element-property :type table-row))
+               ;; In Blackfriday, rule is valid only at second row.
+               (eq 1 row-num))
+      (let ((build-rule (org-blackfriday-make-hline-builder table info ?-))
+            (cols (cdr (org-export-table-dimensions table info))))
+        (setq row (concat org-blackfriday-table-left-border
+                          (mapconcat (lambda (col)
+                                       (funcall build-rule col))
+                                     (number-sequence 0 (- cols 1))
+                                     org-blackfriday-table-separator)
+                          org-blackfriday-table-right-border))))
 
-        ;; If the first table row is "abc | def", it needs to have a rule
-        ;; under it for Blackfriday to detect the whole object as a table.
-        (when (and (stringp row)
-                   (null org-blackfriday--hrule-inserted))
-          (let ((rule (replace-regexp-in-string "[^|]" "-" row)))
-            (setq row (concat row "\n" rule))
-            (setq org-blackfriday--hrule-inserted t)))))
+    ;; If the first table row is "abc | def", it needs to have a rule
+    ;; under it for Blackfriday to detect the whole object as a table.
+    (when (and (stringp row)
+               (null org-blackfriday--hrule-inserted))
+      (let ((rule (replace-regexp-in-string "[^|]" "-" row)))
+        (setq row (concat row "\n" rule))
+        (setq org-blackfriday--hrule-inserted t)))
     ;; (message "[ox-bf-table-row DBG] Row:\n%s" row)
     row))
 
 ;;;; Table
-(defun org-blackfriday-table (table contents info)
+(defun org-blackfriday-table (_table contents _info)
   "Transcode TABLE element into Blackfriday Markdown format.
 
 CONTENTS is contents of the table.  INFO is a plist holding
 contextual information."
   ;; (message "[ox-bf-table DBG] In contents: %s" contents)
-  (let* ((rows (org-element-map table 'table-row 'identity info))
-         (no-header (or (<= (length rows) 1)))
-         (cols (cdr (org-export-table-dimensions table info)))
-         (build-dummy-header
-          (function
-           (lambda ()
-             (let ((build-empty-cell (org-blackfriday-make-hline-builder table info ?\s))
-                   (build-rule (org-blackfriday-make-hline-builder table info ?-))
-                   (columns (number-sequence 0 (- cols 1))))
-               (concat org-blackfriday-table-left-border
-                       (mapconcat (lambda (col)
-                                    (funcall build-empty-cell col))
-                                  columns
-                                  org-blackfriday-table-separator)
-                       org-blackfriday-table-right-border "\n" org-blackfriday-table-left-border
-                       (mapconcat (lambda (col)
-                                    (funcall build-rule col))
-                                  columns
-                                  org-blackfriday-table-separator)
-                       org-blackfriday-table-right-border "\n")))))
-         (tbl (concat (when no-header
-                        (funcall build-dummy-header))
-                      (replace-regexp-in-string "\n\n" "\n" contents))))
-    ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
+  (let* (
+         ;; (rows (org-element-map table 'table-row 'identity info))
+         ;; (no-header (or (<= (length rows) 1)))
+         ;; (cols (cdr (org-export-table-dimensions table info)))
+         ;; (build-dummy-header
+         ;;  (function
+         ;;   (lambda ()
+         ;;     (let ((build-empty-cell (org-blackfriday-make-hline-builder table info ?\s))
+         ;;           (build-rule (org-blackfriday-make-hline-builder table info ?-))
+         ;;           (columns (number-sequence 0 (- cols 1))))
+         ;;       (message "ox-bf-table DBG] build-empty-cell: %S" build-empty-cell)
+         ;;       (message "ox-bf-table DBG] build-rule: %S" build-rule)
+         ;;       (concat org-blackfriday-table-left-border
+         ;;               (mapconcat (lambda (col)
+         ;;                            (funcall build-empty-cell col))
+         ;;                          columns
+         ;;                          org-blackfriday-table-separator)
+         ;;               org-blackfriday-table-right-border "\n" org-blackfriday-table-left-border
+         ;;               (mapconcat (lambda (col)
+         ;;                            (funcall build-rule col))
+         ;;                          columns
+         ;;                          org-blackfriday-table-separator)
+         ;;               org-blackfriday-table-right-border "\n")))))
+         (tbl (replace-regexp-in-string "\n\n" "\n" contents)
+              ;; (concat (when no-header
+              ;;           (funcall build-dummy-header))
+              ;;         (replace-regexp-in-string "\n\n" "\n" contents))
+              ))
+    ;;   ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
     tbl))
 
 ;;;; Verse Block
@@ -481,6 +484,7 @@ contextual information."
                  (org-html--make-string (length m) "&nbsp;"))
                ret)))
     ret))
+
 
 
 ;;; Interactive functions

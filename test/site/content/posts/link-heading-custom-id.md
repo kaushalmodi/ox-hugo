@@ -1,7 +1,7 @@
 +++
 title = "Link to a heading CUSTOM_ID"
 date = 2017-07-28
-tags = ["links"]
+tags = ["links", "internal-links"]
 draft = false
 +++
 

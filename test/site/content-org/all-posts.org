@@ -1442,28 +1442,6 @@ This is a *special* case where:
 The passing case for this test would be that the =unexpected_tag= does
 not leak into the post's front-matter.
 * Links                                                               :links:
-** Within the same post
-*** Link to a heading CUSTOM_ID
-:PROPERTIES:
-:EXPORT_FILE_NAME: link-heading-custom-id
-:EXPORT_DATE: 2017-07-28
-:END:
-*Obviously, all the =CUSTOM_ID='s set by the user in this file have to
- be unique.*
-**** Heading 1
-:PROPERTIES:
-:CUSTOM_ID: link-heading-1
-:END:
-- Link to [[#link-heading-2][Heading 2]]
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
-**** Heading 2
-:PROPERTIES:
-:CUSTOM_ID: link-heading-2
-:END:
-- Link to [[#link-heading-1][Heading 1]]
 ** Links with target attribute
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-with-target-attribute
@@ -1487,6 +1465,60 @@ attribute must apply *only* to the link, and not to the image.
 [[http://orgmode.org/manual/Hyperlinks.html][Here's the same link again]], but this time there is no =#+ATTR_HTML=
 annotation. So the behavior will depend on the browser (typically an
 external link will open in a new tab automatically).
+** Within the same post (Internal links)                     :internal_links:
+*** Link to a heading CUSTOM_ID
+:PROPERTIES:
+:EXPORT_FILE_NAME: link-heading-custom-id
+:EXPORT_DATE: 2017-07-28
+:END:
+*Obviously, all the =CUSTOM_ID='s set by the user in this file have to
+ be unique.*
+**** Heading 1
+:PROPERTIES:
+:CUSTOM_ID: link-heading-1
+:END:
+- Link to [[#link-heading-2][Heading 2]]
+#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+**** Heading 2
+:PROPERTIES:
+:CUSTOM_ID: link-heading-2
+:END:
+- Link to [[#link-heading-1][Heading 1]]
+*** Links to Org targets                                           :noexport:
+:PROPERTIES:
+:EXPORT_FILE_NAME: links-to-org-targets
+:END:
+*Note*: This test is marked as =noexport= because the Org generated
+ link IDs are random and thus would fail the tests. So let this test
+ serve just as an example and not as a part of the automated test
+ suite.
+
+To export this test, you'll need to temporarily remove the =noexport=
+tag.
+-----
+From [[http://orgmode.org/manual/Internal-links.html][(org) Internal links]],
+
+#+BEGIN_SRC org
+- one item
+- <<target>>another item
+Here we refer to item [[target]].
+#+END_SRC
+
+will output below (/lorem-ipsum/ added to increase page content so
+that the link jump is evident):
+
+- one item
+- <<target>>another item
+
+/Scroll to the end of the below 'lorem-ipsum' block to find the test
+link./
+
+#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+
+*Here we refer to item [[target]].*
 * Equations                                                       :equations:
 ** Inline equations
 :PROPERTIES:

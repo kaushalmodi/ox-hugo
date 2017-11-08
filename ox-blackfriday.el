@@ -35,6 +35,7 @@
 This check is specifically track if that horizontal rule was
 inserted after the first row of the table.")
 
+
 
 ;;; User-Configurable Variables
 
@@ -42,6 +43,7 @@ inserted after the first row of the table.")
   "Options for exporting Org mode files to Blackfriday Markdown."
   :tag "Org Export Blackfriday"
   :group 'org-export)
+
 
 
 ;;; Define Back-End
@@ -130,10 +132,8 @@ INFO is a plist used as a communication channel."
   "Return width of TABLE at given COLUMN using INFO.
 
 INFO is a plist used as communication channel.  Width of a column
-is determined either by inquiring
-`org-blackfriday-width-cookies' in the column, or by the maximum
-cell with in the column."
-  ;; (message "[ox-bf-table-col-width DBG] table: %S" table)
+is determined either by inquiring `org-blackfriday-width-cookies'
+in the column, or by the maximum cell with in the column."
   (let ((cookie (when (hash-table-p org-blackfriday-width-cookies)
                   (gethash column org-blackfriday-width-cookies))))
     (if (and (eq table org-blackfriday-width-cookies-table)
@@ -191,6 +191,61 @@ Returns nil immediately if PLAIN-LIST is not an ordered list."
                 (setq has-custom-counter t)))))))
     ;; (message "has custom counter: %S" has-custom-counter)
     has-custom-counter))
+
+;;;; Table Cell Alignment
+;; Below function is heavily adapted from
+;; `org-export-table-cell-alignment' from ox.el.  The main difference
+;; is that the below variation can return a `default' value too.
+(defun org-blackfriday-table-cell-alignment (table-cell info)
+  "Return TABLE-CELL contents alignment.
+
+INFO is a plist used as the communication channel.
+
+Return alignment as specified by the last alignment cookie in the
+same column as TABLE-CELL.  If no such cookie is found, return
+`default'.  Possible values are `default', `left', `right' and
+`center'."
+  (let* ((row (org-export-get-parent table-cell))
+         (table (org-export-get-parent row))
+         (cells (org-element-contents row))
+         (columns (length cells))
+         (column (- columns (length (memq table-cell cells))))
+         (cache (or (plist-get info :table-cell-alignment-cache)
+                    (let ((table (make-hash-table :test #'eq)))
+                      (plist-put info :table-cell-alignment-cache table)
+                      table)))
+         (align-vector (or (gethash table cache)
+                           (puthash table (make-vector columns nil) cache))))
+    (or (aref align-vector column)
+        (let (cookie-align)
+          (dolist (row (org-element-contents (org-export-get-parent row)))
+            (cond
+             ;; In a special row, try to find an alignment cookie at
+             ;; COLUMN.
+             ((org-export-table-row-is-special-p row info)
+              (let ((value (org-element-contents
+                            (elt (org-element-contents row) column))))
+                ;; Since VALUE is a secondary string, the following
+                ;; checks avoid useless expansion through
+                ;; `org-export-data'.
+                (when (and value
+                           (not (cdr value))
+                           (stringp (car value))
+                           (string-match "\\`<\\([lrc]\\)?\\([0-9]+\\)?>\\'"
+                                         (car value))
+                           (match-string 1 (car value)))
+                  (setq cookie-align (match-string 1 (car value))))))
+             ;; Ignore table rules.
+             ((eq (org-element-property :type row) 'rule))))
+          ;; Return value.  Alignment specified by cookies has
+          ;; precedence over alignment deduced from cell's contents.
+          (aset align-vector
+                column
+                (cond ((equal cookie-align "l") 'left)
+                      ((equal cookie-align "r") 'right)
+                      ((equal cookie-align "c") 'center)
+                      (t 'default)))))))
+
 
 
 ;;; Transcode Functions
@@ -363,6 +418,7 @@ CONTENTS contains the text with strike-through markup."
 
 CONTENTS is content of the cell.  INFO is a plist used as a
 communication channel."
+  ;; (message "[ox-bf-table-cell DBG]")
   ;; (message "[ox-bf-table-cell DBG] In contents: %s" contents)
   (let* ((table (org-export-get-parent-table table-cell))
          (column (cdr (org-export-table-cell-address table-cell info)))
@@ -375,6 +431,10 @@ communication channel."
                        (make-string (max 0 (- width (string-width data))) ?\s)
                        right-border))
          (cell-width (length cell)))
+    ;; Just calling `org-blackfriday-table-cell-alignment' will save
+    ;; the alignment info for the current cell/column to the INFO
+    ;; channel.. magic!
+    (org-blackfriday-table-cell-alignment table-cell info)
     ;; Each cell needs to be at least 3 characters wide (4 chars,
     ;; including the table border char "|"); otherwise the export
     ;; is not rendered as a table
@@ -389,6 +449,7 @@ communication channel."
 
 CONTENTS is cell contents of TABLE-ROW.  INFO is a plist used as a
 communication channel."
+  ;; (message "[ox-bf-table-row DBG]")
   (let* ((table (org-export-get-parent-table table-row))
          (row-num (cl-position          ;Begins with 0
                    table-row
@@ -417,8 +478,34 @@ communication channel."
     ;; under it for Blackfriday to detect the whole object as a table.
     (when (and (stringp row)
                (null org-blackfriday--hrule-inserted))
-      (let ((rule (replace-regexp-in-string "[^|]" "-" row)))
-        (setq row (concat row "\n" rule))
+      ;; (message "[ox-bf-table-row DBG] row: %s" row)
+      (let ((rule (replace-regexp-in-string "[^|]" "-" row))
+            (pos 0)
+            (new-rule "")
+            matches)
+        ;; (message "[ox-bf-table-row DBG] rule: %s" rule)
+        ;; https://emacs.stackexchange.com/a/7150/115
+        (while (string-match "|-+" rule pos)
+          (push (match-string 0 rule) matches)
+          (setq pos (match-end 0)))
+        (setq matches (nreverse matches))
+        ;; Get the align-vector that was saved in the INFO channel in
+        ;; `org-blackfriday-table-cell-alignment'.
+        (let* ((alignment-cache (plist-get info :table-cell-alignment-cache))
+               (align-vector (gethash table alignment-cache))
+               (col 0))
+          ;; (message "[ox-bf-table-row DBG] align-vector: %S" align-vector)
+          (dolist (match matches)
+            (let ((align (aref align-vector col)))
+              (when (member align '(left center))
+                (setq match (replace-regexp-in-string "\\`|-" "|:" match)))
+              (when (member align '(right center))
+                (setq match (replace-regexp-in-string "-\\'" ":" match))))
+            (setq new-rule (concat new-rule match))
+            (setq col (1+ col))))
+        (setq new-rule (concat new-rule "|"))
+        ;; (message "[ox-bf-table-row DBG] new-rule: %s" new-rule)
+        (setq row (concat row "\n" new-rule))
         (setq org-blackfriday--hrule-inserted t)))
     ;; (message "[ox-bf-table-row DBG] Row:\n%s" row)
     row))

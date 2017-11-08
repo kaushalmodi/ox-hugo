@@ -439,6 +439,24 @@ Here is the second post on Emacs.
 :EXPORT_FILE_NAME: table-with-single-row
 :END:
 | a | b |
+** Table column alignment
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-column-alignment
+:END:
+*** Table with 3 rows
+|             <r> | <l>                  |           |              <c>              |
+|           Right | Left                 | No        |            Center             |
+| Long Content To | Spread Out the Width | Alignment | Of the Table To See Alignment |
+|           Right | Left                 | Marker    |            Center             |
+*** Table with 2 rows
+| <l>  |         |  <c>   |   <r> |
+| Left | Default | Center | Right |
+| 1    |       2 |   3    |     4 |
+*** Table with 1 row
+/A table with just one row, with alignment markers doesn't make
+sense. But hey, a test is a test./
+| <l>  |         |  <c>   |   <r> |
+| Left | Default | Center | Right |
 * Source blocks                                                   :src_block:
 ** Example text with code blocks                                    :ARCHIVE:
 :PROPERTIES:

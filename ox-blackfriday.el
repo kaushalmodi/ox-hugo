@@ -162,18 +162,6 @@ in the column, or by the maximum cell with in the column."
           info)
         (puthash column max-width org-blackfriday-width-cookies)))))
 
-(defun org-blackfriday-make-hline-builder (table info char)
-  "Return a function to horizontal lines in TABLE.
-Draw the lines using INFO with given CHAR.
-
-INFO is a plist used as a communication channel."
-  ;; (message "[ox-bf-make-hline DBG] table: %S" table)
-  `(lambda (col)
-     (let ((max-width (max 3 (+ 1 (org-blackfriday-table-col-width ,table col ,info)))))
-       (when (< max-width 1)
-         (setq max-width 1))
-       (make-string max-width ,char))))
-
 ;;;; Plain List Helper
 (defun org-blackfriday--ordered-list-with-custom-counter-p (plain-list)
   "Return non-nil is PLAIN-LIST element has an item with custom counter.
@@ -436,8 +424,8 @@ communication channel."
     ;; channel.. magic!
     (org-blackfriday-table-cell-alignment table-cell info)
     ;; Each cell needs to be at least 3 characters wide (4 chars,
-    ;; including the table border char "|"); otherwise the export
-    ;; is not rendered as a table
+    ;; including the table border char "|"), otherwise
+    ;; Hugo/Blackfriday does not render that as a table.
     (when (< cell-width 4)
       (setq cell (concat (make-string (- 4 cell-width) ? ) cell)))
     ;; (message "[ox-bf-table-cell DBG] Cell:\n%s" cell)
@@ -465,13 +453,14 @@ communication channel."
                (eq 'rule (org-element-property :type table-row))
                ;; In Blackfriday, rule is valid only at second row.
                (eq 1 row-num))
-      (let ((build-rule (org-blackfriday-make-hline-builder table info ?-))
-            (cols (cdr (org-export-table-dimensions table info))))
+      (let ((cols (cdr (org-export-table-dimensions table info))))
         (setq row (concat org-blackfriday-table-left-border
-                          (mapconcat (lambda (col)
-                                       (funcall build-rule col))
-                                     (number-sequence 0 (- cols 1))
-                                     org-blackfriday-table-separator)
+                          (mapconcat
+                           (lambda (col)
+                             (let ((max-width (max 3 (+ 1 (org-blackfriday-table-col-width table col info)))))
+                               (make-string max-width ?-)))
+                           (number-sequence 0 (- cols 1))
+                           org-blackfriday-table-separator)
                           org-blackfriday-table-right-border))))
 
     ;; If the first table row is "abc | def", it needs to have a rule

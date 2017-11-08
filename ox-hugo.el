@@ -1054,9 +1054,15 @@ and rewrite link paths to make blogging more seamless."
              ;; case.
              (grand-parent (when (eq parent-type 'link)
                              (org-export-get-parent parent)))
-             (attr (if grand-parent
-                       (org-export-read-attribute :attr_html grand-parent)
-                     (org-export-read-attribute :attr_html parent)))
+             (useful-parent (if grand-parent
+                                grand-parent
+                              parent))
+             (label (let ((lbl (and (org-element-property :name useful-parent)
+                                    (org-export-get-reference useful-parent info))))
+                      (if lbl
+                          (format "<a id=\"%s\"></a>\n" lbl)
+                        "")))
+             (attr (org-export-read-attribute :attr_html useful-parent))
              ;; Hugo `figure' shortcode named parameters
              ;; https://gohugo.io/content-management/shortcodes/#figure
              (caption (org-string-nw-p
@@ -1087,7 +1093,7 @@ and rewrite link paths to make blogging more seamless."
                                              (format "%s=\"%s\" "
                                                      name val))))))
         ;; (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
-        (format "{{<figure %s>}}" (org-trim figure-param-str))))
+        (format "%s{{<figure %s>}}" label (org-trim figure-param-str))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
         (format (org-export-get-coderef-format ref contents)

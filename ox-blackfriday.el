@@ -567,6 +567,11 @@ contextual information."
   ;; (message "[ox-bf-table DBG] In contents: %s" contents)
   (let* ((rows (org-element-map table 'table-row 'identity info))
          (no-header (= (length rows) 1)) ;No header if table has just 1 row
+         (label (let ((lbl (and (org-element-property :name table)
+                                (org-export-get-reference table info))))
+                  (if lbl
+                      (format "<a id=\"%s\"></a>\n\n" lbl)
+                    "")))
          (tbl (replace-regexp-in-string "\n\n" "\n" contents)))
     ;; If the table has only 1 row, do *not* make it a header row..
     ;; instead create an empty header row.
@@ -587,7 +592,7 @@ contextual information."
              (dummy-header (replace-regexp-in-string "[-:]" " " hrule)))
         (setq tbl (concat dummy-header "\n" hrule "\n" row-1))))
     ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
-    tbl))
+    (concat label tbl)))
 
 ;;;; Verse Block
 (defun org-blackfriday-verse-block (_verse-block contents info)

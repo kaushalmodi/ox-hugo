@@ -1309,6 +1309,9 @@ channel."
                 ;; which is the default syntax highlighter after Hugo
                 ;; v0.28.
                 (setq ret1 (replace-regexp-in-string (concat "\\`\\(```+\\)" lang) "\\1" ret1)))
+              ;; Only in Markdown (md) source block, escape the Hugo shortcodes.
+              (when (string= lang "md")
+                (setq ret1 (replace-regexp-in-string "\\({{<\\)\\([^>}]+\\)\\(>}}\\)" "\\1/*\\2*/\\3" ret1)))
               ret1))
            ;; 2. If number-lines is non-nil, or
            ;; 3. If hl-lines is non-nil, or
@@ -1337,6 +1340,9 @@ channel."
                 (setq hllines-str (concat "hl_lines=" hl-lines))
                 (when number-lines
                   (setq hllines-str (concat ", " hllines-str))))
+              ;; Only in Markdown (md) source block, escape the Hugo shortcodes.
+              (when (string= lang "md")
+                (setq code (replace-regexp-in-string "\\({{<\\)\\([^>}]+\\)\\(>}}\\)" "\\1/*\\2*/\\3" code)))
               (format "{{< highlight %s%s>}}\n%s{{< /highlight >}}\n"
                       lang
                       (format highlight-args-str linenos-str hllines-str)

@@ -1,6 +1,7 @@
 #+HUGO_BASE_DIR: ../
 #+SEQ_TODO: TODO DRAFT DONE
 #+PROPERTY: header-args :eval no
+#+MACRO: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
 
 * Preparation
 :PROPERTIES:
@@ -814,6 +815,35 @@ Test that indented source blocks export fine.
 #+END_SRC
 
 Reference -- [[https://github.com/gohugoio/hugo/issues/4006][hugo#4006]]
+** Markdown source block with Hugo shortcodes                     :shortcode:
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-md-with-hugo-shortcodes
+:EXPORT_HUGO_CODE_FENCE: t
+:END:
+*** Shortcodes escaped
+The =figure= shortcodes in the two Markdown source code blocks below
+should *not* be expanded.. they should be visible verbatim.
+**** Code block using code fences
+#+BEGIN_SRC md
+{{< figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" >}}
+#+END_SRC
+**** Code block using =highlight= shortcode
+Here, the =-n= switch is added to the Org source block to
+auto-enable[fn:4] using the =highlight= shortcode.
+#+BEGIN_SRC md -n
+{{< figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" >}}
+#+END_SRC
+*** Shortcodes *not* escaped
+The =figure= shortcodes in the Markdown source code blocks below
+*should* be expanded.. you should be seeing a nice little unicorn
+below.
+#+BEGIN_EXAMPLE
+{{< figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" >}}
+#+END_EXAMPLE
+Above a =#+BEGIN_EXAMPLE= .. =#+END_EXAMPLE= block is used just
+arbitrarily. The Hugo shortcodes will remain unescaped in *any*
+source/example block except for _Markdown source blocks_ (annotated
+with =md= language).
 ** Org Source Block                                                :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-source-block
@@ -2549,6 +2579,13 @@ molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 # a comment forces paragraph break in Org
 * Footnotes
+
+[fn:4] Even if the user has set the =HUGO_CODE_FENCE= value to =t=
+(via variable, keyword or subtree property), the Hugo =highlight=
+shortcode will be used automatically instead of code fences if either
+(i) the user has chosen to either show the line numbers, or (ii) has
+chosen to highlight lines of code (See the =ox-hugo= documentation on
+{{{doc(source-blocks,Source Blocks)}}}).
 
 [fn:3] This is a long footnote. It is so long that it gets auto-filled
 over multiple lines. But even then it should be handled fine.

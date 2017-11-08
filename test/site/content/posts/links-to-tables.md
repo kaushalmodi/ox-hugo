@@ -4,30 +4,40 @@ tags = ["links", "internal-links"]
 draft = false
 +++
 
-From  [(org) Images and tables](http://orgmode.org/manual/Images-and-tables.html),
-
-**Note**: When targeting a `#+NAME` keyword, `#+CAPTION` keyword is
-mandatory in order to get proper numbering for images and tables.
+**Note**: When targeting a `#+NAME` keyword, **`#+CAPTION` keyword is
+mandatory in order to get proper numbering** for <span class="underline">source blocks</span>,
+<span class="underline">images</span> and <span class="underline">tables</span>.
 
 ```org
-#+CAPTION: Simple table
-#+NAME: tab__simple
+#+CAPTION: Simple table 1
+#+NAME: tab__simple1
 | a | b |
 | c | d |
-Here we refer to table [[tab__simple]].
+
+*Here we refer to table [[tab__simple2]].*
+
+#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+
+Here's another table:
+
+#+CAPTION: Simple table 2
+#+NAME: tab__simple2
+| e | f |
+| g | h |
+
+*Here we refer to table [[tab__simple1]].*
 ```
 
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="org53dbdfb"></a>
+<a id="org40b5987"></a>
 
 | a | b |
 |---|---|
 | c | d |
 
-_Scroll to the end of the below 'lorem-ipsum' block to find the test
-link._
+**Here we refer to table [2](#org8a6806a).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -81,4 +91,16 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-**Here we refer to table [1](#org53dbdfb).**
+Here's another table:
+
+<a id="org8a6806a"></a>
+
+| e | f |
+|---|---|
+| g | h |
+
+**Here we refer to table [1](#org40b5987).**
+
+---
+
+Reference: [(org) Images and tables](http://orgmode.org/manual/Images-and-tables.html).

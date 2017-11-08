@@ -1530,89 +1530,147 @@ refers to, as in the following example
     #+END_EXAMPLE
 #+END_QUOTE
 
+Also, when targeting a =#+NAME= keyword, *=#+CAPTION= keyword is
+mandatory in order to get proper numbering* for _source blocks_,
+_images_ and _tables_.
+
 So the below code block:
 #+BEGIN_SRC org
+,#+CAPTION: Hello
 ,#+NAME: code__hello
 ,#+BEGIN_SRC emacs-lisp
 (message "Hello")
 ,#+END_SRC
-Here we refer to code snippet [[code__hello]].
+
+,*Here we refer to code snippet [[code__helloagain]].*
+
+,#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+
+,#+CAPTION: Hello Again
+,#+NAME: code__helloagain
+,#+BEGIN_SRC emacs-lisp
+(message "Hello again")
+,#+END_SRC
+
+,*Here we refer to code snippet [[code__hello]].*
 #+END_SRC
 
 will output below (/lorem-ipsum/ added to increase page content so
 that the link jump is evident):
 
+#+CAPTION: Hello
 #+NAME: code__hello
 #+BEGIN_SRC emacs-lisp
 (message "Hello")
 #+END_SRC
 
-/Scroll to the end of the below 'lorem-ipsum' block to find the test
-link./
+*Here we refer to code snippet [[code__helloagain]].*
 
 #+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+
+#+CAPTION: Hello Again
+#+NAME: code__helloagain
+#+BEGIN_SRC emacs-lisp
+(message "Hello again")
+#+END_SRC
 
 *Here we refer to code snippet [[code__hello]].*
 *** Links to tables
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-tables
 :END:
-From  [[http://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]],
-
-*Note*: When targeting a =#+NAME= keyword, =#+CAPTION= keyword is
-mandatory in order to get proper numbering for images and tables.
+*Note*: When targeting a =#+NAME= keyword, *=#+CAPTION= keyword is
+mandatory in order to get proper numbering* for _source blocks_,
+_images_ and _tables_.
 
 #+BEGIN_SRC org
-,#+CAPTION: Simple table
-,#+NAME: tab__simple
+,#+CAPTION: Simple table 1
+,#+NAME: tab__simple1
 | a | b |
 | c | d |
-Here we refer to table [[tab__simple]].
+
+,*Here we refer to table [[tab__simple2]].*
+
+,#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+
+Here's another table:
+
+,#+CAPTION: Simple table 2
+,#+NAME: tab__simple2
+| e | f |
+| g | h |
+
+,*Here we refer to table [[tab__simple1]].*
 #+END_SRC
 
 will output below (/lorem-ipsum/ added to increase page content so
 that the link jump is evident):
 
-#+CAPTION: Simple table
-#+NAME: tab__simple
+#+CAPTION: Simple table 1
+#+NAME: tab__simple1
 | a | b |
 | c | d |
 
-/Scroll to the end of the below 'lorem-ipsum' block to find the test
-link./
+*Here we refer to table [[tab__simple2]].*
 
 #+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
 
-*Here we refer to table [[tab__simple]].*
+Here's another table:
+
+#+CAPTION: Simple table 2
+#+NAME: tab__simple2
+| e | f |
+| g | h |
+
+*Here we refer to table [[tab__simple1]].*
+-----
+Reference: [[http://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
 *** Links to images
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-images
 :END:
-From  [[http://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]],
-
-*Note*: When targeting a =#+NAME= keyword, =#+CAPTION= keyword is
-mandatory in order to get proper numbering for images and images.
+*Note*: When targeting a =#+NAME= keyword, *=#+CAPTION= keyword is
+mandatory in order to get proper numbering* for _source blocks_,
+_images_ and _tables_.
 
 #+BEGIN_SRC org
 ,#+CAPTION: Org Logo
-,#+NAME: img__org_logo
+,#+NAME: img__org_logo1
 [[/images/org-mode-unicorn-logo.png]]
-Here we refer to image [[img__org_logo]].
+
+,*Here we refer to image [[img__org_logo2]].*
+
+,#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+
+Here's the same image again, but with a different Org link ID:
+
+,#+CAPTION: Same Org Logo
+,#+NAME: img__org_logo2
+[[/images/org-mode-unicorn-logo.png]]
+
+,*Here we refer to image [[img__org_logo1]].*
 #+END_SRC
 
 will output below (/lorem-ipsum/ added to increase page content so
 that the link jump is evident):
 
 #+CAPTION: Org Logo
-#+NAME: img__org_logo
+#+NAME: img__org_logo1
 [[/images/org-mode-unicorn-logo.png]]
 
-/Scroll to the end of the below 'lorem-ipsum' block to find the test
-link./
+*Here we refer to image [[img__org_logo2]].*
 
 #+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
 
-*Here we refer to image [[img__org_logo]].*
+Here's the same image again, but with a different Org link ID:
+
+#+CAPTION: Same Org Logo
+#+NAME: img__org_logo2
+[[/images/org-mode-unicorn-logo.png]]
+
+*Here we refer to image [[img__org_logo1]].*
+-----
+Reference: [[http://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
 * Equations                                                       :equations:
 ** Inline equations
 :PROPERTIES:

@@ -25,7 +25,7 @@
 ;;
 ;; Commonly used export commands:
 ;;
-;; ** For one-post-per-subtree flow, where a single Org file can have
+;; ## For one-post-per-subtree flow, where a single Org file can have
 ;;    multiple Org subtrees which export to individual Hugo posts:
 ;;
 ;;    - C-c C-e H H  ->  Export the *current* 'valid Hugo post subtree'
@@ -34,7 +34,7 @@
 ;;    - C-c C-e H A  ->  Export *all* 'valid Hugo post subtrees' to
 ;;                        Hugo posts in Markdown.
 ;;
-;; ** For one-post-per-file flow, where a single Org file exports to
+;; ## For one-post-per-file flow, where a single Org file exports to
 ;;    only *one* Hugo post:
 ;;
 ;;    - C-c C-e H h  ->  Export the Org file to a Hugo post in Markdown.
@@ -766,6 +766,12 @@ contents according to the current headline."
             toc-items
             "\n")))                   ;Final newline at the end of TOC
 
+(defalias 'org-hugo--has-caption-p 'org-html--has-caption-p
+  "Non-nil when ELEMENT has a caption affiliated keyword.
+This function is meant to be used as a predicate for
+`org-export-get-ordinal'.")
+
+
 
 ;;; Transcode Functions
 
@@ -1035,11 +1041,14 @@ and rewrite link paths to make blogging more seamless."
           (_
            (let ((description
                   (or (org-string-nw-p contents)
-                      (let ((number (org-export-get-ordinal destination info)))
+                      (let ((number (org-export-get-ordinal
+                                     destination info
+                                     nil #'org-hugo--has-caption-p)))
                         (cond
                          ((not number) nil)
                          ((atom number) (number-to-string number))
                          (t (mapconcat #'number-to-string number ".")))))))
+             ;; (message "[ox-hugo-link DBG] link description: %s" description)
              (when description
                (format "[%s](#%s)"
                        description

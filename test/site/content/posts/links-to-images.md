@@ -4,26 +4,35 @@ tags = ["links", "internal-links"]
 draft = false
 +++
 
-From  [(org) Images and tables](http://orgmode.org/manual/Images-and-tables.html),
-
-**Note**: When targeting a `#+NAME` keyword, `#+CAPTION` keyword is
-mandatory in order to get proper numbering for images and images.
+**Note**: When targeting a `#+NAME` keyword, **`#+CAPTION` keyword is
+mandatory in order to get proper numbering** for <span class="underline">source blocks</span>,
+<span class="underline">images</span> and <span class="underline">tables</span>.
 
 ```org
 #+CAPTION: Org Logo
-#+NAME: img__org_logo
+#+NAME: img__org_logo1
 [[/images/org-mode-unicorn-logo.png]]
-Here we refer to image [[img__org_logo]].
+
+*Here we refer to image [[img__org_logo2]].*
+
+#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+
+Here's the same image again, but with a different Org link ID:
+
+#+CAPTION: Same Org Logo
+#+NAME: img__org_logo2
+[[/images/org-mode-unicorn-logo.png]]
+
+*Here we refer to image [[img__org_logo1]].*
 ```
 
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="org87e50de"></a>
+<a id="org1e79f45"></a>
 {{<figure src="/images/org-mode-unicorn-logo.png" caption="Org Logo">}}
 
-_Scroll to the end of the below 'lorem-ipsum' block to find the test
-link._
+**Here we refer to image [2](#org326a72f).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -77,4 +86,13 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-**Here we refer to image [4](#org87e50de).**
+Here's the same image again, but with a different Org link ID:
+
+<a id="org326a72f"></a>
+{{<figure src="/images/org-mode-unicorn-logo.png" caption="Same Org Logo">}}
+
+**Here we refer to image [1](#org1e79f45).**
+
+---
+
+Reference: [(org) Images and tables](http://orgmode.org/manual/Images-and-tables.html).

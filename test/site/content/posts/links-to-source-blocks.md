@@ -18,26 +18,41 @@ From [(org) Internal links](http://orgmode.org/manual/Internal-links.html),
 > | of | four cells |
 > ```
 
+Also, when targeting a `#+NAME` keyword, **`#+CAPTION` keyword is
+mandatory in order to get proper numbering** for <span class="underline">source blocks</span>,
+<span class="underline">images</span> and <span class="underline">tables</span>.
+
 So the below code block:
 
 ````org
+#+CAPTION: Hello
 #+NAME: code__hello
 #+BEGIN_SRC emacs-lisp
 (message "Hello")
 #+END_SRC
-Here we refer to code snippet [[code__hello]].
+
+*Here we refer to code snippet [[code__helloagain]].*
+
+#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+
+#+CAPTION: Hello Again
+#+NAME: code__helloagain
+#+BEGIN_SRC emacs-lisp
+(message "Hello again")
+#+END_SRC
+
+*Here we refer to code snippet [[code__hello]].*
 ````
 
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="org91a03d3"></a>
+<a id="orgb893397"></a>
 ````emacs-lisp
 (message "Hello")
 ````
 
-_Scroll to the end of the below 'lorem-ipsum' block to find the test
-link._
+**Here we refer to code snippet [2](#orgd60f488).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -91,4 +106,9 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-**Here we refer to code snippet [2](#org91a03d3).**
+<a id="orgd60f488"></a>
+````emacs-lisp
+(message "Hello again")
+````
+
+**Here we refer to code snippet [1](#orgb893397).**

@@ -23,19 +23,31 @@
          h1, h2, h3 {
              line-height: 1.2;
          }
+         .masthead-title {
+             font-size: 40px;
+             font-weight: bold;
+         }
+         .masthead-title a {
+             text-decoration: none;
+         }
+         .masthead-body {
+             font-size: 0.8em;
+         }
         </style>
         {{ block "head" . }}{{ end }}
     </head>
 
     <body lang="en">
-        <h1>{{ .Site.Title }}</h1>
-        <div>
+        <div class="masthead-title"><a href="/">{{ .Site.Title }}</a></div>
+        <div class="masthead-body">
             This is the test site for the <a href="https://github.com/kaushalmodi/ox-hugo">
-            <code>ox-hugo</code> package</a> for Emacs/Org-mode generated using Hugo {{ .Hugo.Version }}.
-            <p>It is <b>updated automatically after each commit</b> to the repo <i>(thanks Netlify!)</i>.
-                Visit the repo link above for more information.</p>
+            <code>ox-hugo</code></a> package for Emacs/Org-mode. It is generated using <code>ox-hugo</code> itself
+            + Hugo {{ $.Hugo.Version }} {{ with .Hugo.CommitHash }}(commit {{ . | replaceRE "^[0-9a-f]{7,}" "<a href=\"https://github.com/gohugoio/hugo/commit/${0}\">${0}</a>" | replaceRE ":chroma-([0-9a-f]{7,})" ", using Chroma commit <a href=\"https://github.com/alecthomas/chroma/commit/${1}\">${1}</a>" | safeHTML }}){{ else }}{{ end }}.
+            <p>It is <b>updated automatically after each commit</b> to the <code>ox-hugo</code> repo linked above.
+                It was last updated on <i>{{ now.Format "Jan 02, 2006 15:04 MST" }}</i>.
+            </p>
             <ul>
-                <li><a href="https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org">Org source for the content</a></li>
+                <li>The <i>actual <b>source</b></i>.. <a href="https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org">Org source</a></li>
                 <li><a href="https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content">Markdown exported from Org by <code>ox-hugo</code></a></li>
             </ul>
             <hr>
@@ -44,11 +56,10 @@
         {{ block "main" . }}{{ end }}
 
         <hr>
-        <p>
-            [<a href="/">Back to Test Site home</a>]
-        </p>
-        <p>
-            [<a href="https://ox-hugo.scripter.co/">Back to <code>ox-hugo</code> home</a>]
-        </p>
+        <center>
+            [<a href="/">Test Site home</a> | <a href="https://ox-hugo.scripter.co/"><code>ox-hugo</code> home</a>]
+        </center>
     </body>
 </html>
+
+<!-- Reference time used in Go: Mon Jan 2 15:04:05 MST 2006, https://golang.org/pkg/time/#pkg-constants -->

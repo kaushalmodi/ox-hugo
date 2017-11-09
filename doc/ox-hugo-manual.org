@@ -336,6 +336,9 @@ for your future contributions to Emacs too!
 1. Clone this repo.
 2. Add/edit documentation to =doc/ox-hugo-manual.org=.
 3. Run =make doc=.
+   - This generates the Markdown files for the =ox-hugo= documentation
+     site and the .org files like =README.org= and =CONTRIBUTING.org=
+     for GitHub.
 4. Review the changes in the generated .org and .md files.
 5. Commit *only the .org files*, push branch and create PR.
    - The =.org= → =.md= conversion is done by =ox-hugo= on Netlify.
@@ -345,12 +348,14 @@ for your future contributions to Emacs too!
    *documentation* to =doc/ox-hugo-manual.org=.
 3. Run =make md doc=.
 4. Review the changes in the generated .org and .md files.
+   - Ignore the changes shown in =git diff= related to *only* the
+     randomly generated Org ID's (like =org17de7a9=).
 5. Commit (*don't push your branch yet!*).
    - As mentioned above, commit *only the .org files* for documentation.
 6. Run test: =make test= (you *need* to =git commit= i.e. do the above
    step before this step).
-7. Fix commit if test fails.. repeat till test passes.
-8. Push branch and create PR.
+7. Fix your commit(s) if the test fails.. repeat till you succeed.
+8. Push your feature branch and create PR.
 ** Debug
 :PROPERTIES:
 :CUSTOM_ID: debug
@@ -534,7 +539,7 @@ to set that up for either of the above two blogging flows.
 - [X] Travis CI Integration -- Checks with emacs versions starting from
   24.4->25.2, with the latest stable version of =org-plus-contrib=.
 - [X] [[https://ox-hugo.scripter.co][Documentation site]] -- Generated using =ox-hugo= itself (=make
-  doc_md doc_hugo=).
+  doc_md hugo_doc=).
 - [X] GitHub repo files: [[https://github.com/kaushalmodi/ox-hugo/blob/master/README.org][~README.org~]] and [[https://github.com/kaushalmodi/ox-hugo/blob/master/CONTRIBUTING.org][~CONTRIBUTING.org~]] --
   Generated using =ox-org= (=make doc_gh=).
 - [X] [[../test][Test site]] -- Regenerated after each commit to this repo (=make
@@ -584,21 +589,20 @@ Check out the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/tes
 Org->Hugo content and meta-data translation features. [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content/posts][Here]] are the
 exported Markdown files.
 **** How to try =ox-hugo= on that site?
-1. Clone this repo.
-2. =cd= to the =test/site/= directory and do:
+1. Clone this repo and do:
    #+BEGIN_EXAMPLE
-   make serve
+   make serve HUGO_BASE_DIR=test/site
    #+END_EXAMPLE
-   - *Requires Hugo 0.25+*
-3. Open =http://localhost:1337= in your browser.
-4. In a different terminal, =cd= to the same =test/site/= directory.
-5. Run:
+   - *Requires Hugo 0.25+ for =--navigateToChanged= switch.*
+2. Open =http://localhost:1337= in your browser.
+3. In a different terminal, =cd= to the repo directory.
+4. Run:
    #+BEGIN_EXAMPLE
-   make mdtree ORG=content-org/all-posts.org
+   make md
    #+END_EXAMPLE
-6. In few seconds, dozens of test posts will get created, with the
-   =hugo server= aided preview in the browser zapping through each new
-   created post.
+5. In few seconds, over a hundred test posts will get created, with
+   the =hugo server= aided preview in the browser zapping through each
+   new created post.
 **** Alternative way
 1. Clone this repo.
 2. =cd= to the =test/site/= directory and do:
@@ -613,9 +617,9 @@ exported Markdown files.
 5. Open the {{{ox-hugo-test-file}}} file.
 6. =C-c C-e H A= -- That will export *all* subtrees in the file to
    Markdown files.
-7. In few seconds, dozens of test posts will get created, with the
-   =hugo server= aided preview in the browser zapping through each new
-   created post (needs that new feature =--navigateToChanged=
+7. In few seconds, over a hundred test posts will get created, with
+   the =hugo server= aided preview in the browser zapping through each
+   new created post (because of that new feature =--navigateToChanged=
    introduced in Hugo 0.25).
 ** Enhancements
 :PROPERTIES:

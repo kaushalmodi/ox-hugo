@@ -1,4 +1,4 @@
-# Time-stamp: <2017-11-08 17:16:03 kmodi>
+# Time-stamp: <2017-11-09 11:19:26 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -9,8 +9,28 @@ ifeq ("$(EMACS_exists)","")
 	EMACS := /tmp/emacs/bin/emacs
 endif
 
+# EMACS_BIN_SOURCE and EMACS_VERSION are used later in the vcheck rule
+# only if EMACS_exists has evaluated to "".
 EMACS_BIN_SOURCE ?= https://github.com/npostavs/emacs-travis/releases/download/bins
 EMACS_VERSION ?= 25.2
+
+HUGO ?= hugo
+HUGO_exists := $(shell command -v $(HUGO) 2> /dev/null)
+ifeq ("$(HUGO_exists)","")
+	HUGO := /tmp/hugo/bin/hugo
+endif
+
+# HUGO_BIN_SOURCE and HUGO_VERSION are used later in the vcheck rule
+# only if HUGO_exists has evaluated to "".
+HUGO_BIN_SOURCE ?= https://gitlab.com/kaushalmodi/unofficial-hugo-dev-builds.git
+HUGO_VERSION ?= DEV
+
+# Directory containing the Hugo site's config.toml
+HUGO_BASE_DIR=./
+# Value to be passed to hugo's --baseURL argument
+HUGO_BASE_URL=http://localhost
+# Other hugo arguments
+HUGO_ARGS=
 
 # Set TIMEZONE to the TZ environment variable. If TZ is unset, Emacs
 # uses system wall clock time, which is a platform-dependent default
@@ -40,8 +60,6 @@ ORG_FILE=
 # Function to be run in emacs --batch
 FUNC=
 
-DOC_SITE_URL=https://ox-hugo.scripter.co/
-
 test_check=1
 
 subtree_test_files = all-posts.org \
@@ -64,11 +82,11 @@ file_test_files = single-posts/post-toml.org \
 # - screenshot-subtree-export-example.org - sets the org-hugo-footer using Local Variables.
 # - writing-hugo-blog-in-org-file-export.org - sets the org-hugo-footer using Local Variables.
 
-.PHONY: help emacs-batch mdtree mdfile vcheck hugo serve server diff \
+.PHONY: help emacs-batch mdtree mdfile vcheck hugo hugo_doc hugo_test serve server diff \
 	test md testmkgold \
 	test_subtree $(subtree_test_files) \
 	test_file $(file_test_files) \
-	doc_md doc_hugo doc_gh doc \
+	doc_md doc_gh doc \
 	ctemp diffgolden clean
 
 help:
@@ -83,8 +101,9 @@ help:
 	@echo " make serve         <-- Run the hugo server on http://localhost:$(PORT)"
 	@echo " make diff          <-- Run git diff"
 	@echo " make doc_md        <-- Build the Markdown content for the documentation site"
-	@echo " make doc_hugo      <-- Build the documentation site using Hugo"
+	@echo " make hugo_doc      <-- Build the documentation site using Hugo"
 	@echo " make doc_gh        <-- Build README.org and CONTRIBUTING.org for GitHub"
+	@echo " make hugo_test     <-- Build the test site using Hugo"
 	@echo " make clean         <-- Delete the Hugo public/ directory and auto-installed elisp packages"
 	@echo " make               <-- Show this help"
 
@@ -128,21 +147,26 @@ endif
 	(message \"[Version check] %s\" (org-version nil :full))\
 	)" \
 	--kill
-# Thu Sep 21 00:36:23 EDT 2017 - kmodi
-# Don't check hugo version for now, as Travis fails
-#	@hugo version
+ifeq ("$(HUGO_exists)","")
+	@mkdir -p /tmp/hugo
+	@find /tmp/hugo -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
+	@git clone $(HUGO_BIN_SOURCE) /tmp/hugo/bin
+	@tar xf /tmp/hugo/bin/hugo_DEV-Linux-64bit.tar.xz -C /tmp/hugo/bin
+endif
+	@$(HUGO) version
 
 hugo: vcheck
-	@hugo
+	@cd $(HUGO_BASE_DIR) && $(HUGO) --baseURL=$(HUGO_BASE_URL) $(HUGO_ARGS)
+
+hugo_doc:
+	@$(MAKE) hugo HUGO_BASE_DIR=./doc HUGO_BASE_URL=https://ox-hugo.scripter.co/
+
+hugo_test:
+	@$(MAKE) hugo HUGO=/tmp/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASE_URL=https://ox-hugo.scripter.co/test HUGO_ARGS=--buildDrafts
 
 serve server: vcheck
-	@echo "Serving the site on http://localhost:$(PORT) .."
-	@hugo server \
-	--buildDrafts \
-	--buildFuture \
-	--navigateToChanged \
-	--baseURL http://localhost \
-	--port $(PORT)
+	@echo "Serving the site on $(HUGO_BASE_URL):$(PORT) .."
+	@cd $(HUGO_BASE_DIR) && $(HUGO) server --baseURL=$(HUGO_BASE_URL) --port $(PORT) --buildDrafts --buildFuture --navigateToChanged
 
 diff:
 	@git diff
@@ -186,15 +210,12 @@ doc_md:
 	@$(MAKE) mdtree ORG_FILE=ox-hugo-manual.org ORG_FILE_DIR=./doc
 	@echo "[Doc Site] Done"
 
-doc_hugo:
-	@cd ./doc && hugo --baseURL=$(DOC_SITE_URL)
-
 doc_gh:
 	@echo "[GitHub Docs] Generating README.org and CONTRIBUTING.org for GitHub .."
 	@$(MAKE) emacs-batch FUNC=ox-hugo-export-gh-doc ORG_FILE=github-files.org ORG_FILE_DIR=./doc
 	@echo "[GitHub Docs] Done"
 
-doc: doc_md doc_hugo doc_gh
+doc: doc_md hugo_doc doc_gh
 
 ctemp:
 	@find $(OX_HUGO_TEST_SITE_DIR)/content -name "*.*~" -delete
@@ -219,6 +240,7 @@ clean: ctemp
 	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/public $(OX_HUGO_TEST_SITE_DIR)/content-golden
 	@rm -rf $(OX_HUGO_ELPA)
 	@rm -rf ./doc/public
+	@rm -rf /tmp/hugo/bin
 
 # Set a make variable during rule execution
 # https://stackoverflow.com/a/1909390/1219634

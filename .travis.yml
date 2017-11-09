@@ -18,7 +18,7 @@ install:
   - export EMACS=/tmp/emacs/bin/emacs
   - $EMACS --version
 script:
-  - make doc_md doc_gh EMACS=${EMACS} # Just ensure that "make doc_md" and "make doc_gh" don't fail for any reason.. this is *not* used to do Org->Markdown doc conversion using Travis.
+  - make doc EMACS=${EMACS} # Just ensure that "make doc" doesn't fail for any reason.. this is *not* used to do Org->Markdown doc conversion using Travis.
   - make test EMACS=${EMACS}
   - make vcheck EMACS=${EMACS}
 notifications:

@@ -771,6 +771,23 @@ contents according to the current headline."
 This function is meant to be used as a predicate for
 `org-export-get-ordinal'.")
 
+(defun org-hugo--escape-hugo-shortcode (code lang)
+  "Escape Hugo shortcodes if present in CODE string.
+
+The escaping is enabled only if LANG is \"md\".
+
+ - Shortcode with Markdown    : {{% foo %}} -> {{%/* foo */%}}
+
+ - Shortcode without Markdown : {{< foo >}} -> {{</* foo */>}}
+
+Return the escaped/unescaped string."
+  (if (string= lang "md")
+      (replace-regexp-in-string
+       "\\({{<\\)\\([^}][^}]*\\)\\(>}}\\)" "\\1/*\\2*/\\3"
+       (replace-regexp-in-string
+        "\\({{%\\)\\([^}][^}]*\\)\\(%}}\\)" "\\1/*\\2*/\\3" code))
+    code))
+
 
 
 ;;; Transcode Functions
@@ -1309,9 +1326,7 @@ channel."
                 ;; which is the default syntax highlighter after Hugo
                 ;; v0.28.
                 (setq ret1 (replace-regexp-in-string (concat "\\`\\(```+\\)" lang) "\\1" ret1)))
-              ;; Only in Markdown (md) source block, escape the Hugo shortcodes.
-              (when (string= lang "md")
-                (setq ret1 (replace-regexp-in-string "\\({{<\\)\\([^>}]+\\)\\(>}}\\)" "\\1/*\\2*/\\3" ret1)))
+              (setq ret1 (org-hugo--escape-hugo-shortcode ret1 lang))
               ret1))
            ;; 2. If number-lines is non-nil, or
            ;; 3. If hl-lines is non-nil, or
@@ -1340,9 +1355,7 @@ channel."
                 (setq hllines-str (concat "hl_lines=" hl-lines))
                 (when number-lines
                   (setq hllines-str (concat ", " hllines-str))))
-              ;; Only in Markdown (md) source block, escape the Hugo shortcodes.
-              (when (string= lang "md")
-                (setq code (replace-regexp-in-string "\\({{<\\)\\([^>}]+\\)\\(>}}\\)" "\\1/*\\2*/\\3" code)))
+              (setq code (org-hugo--escape-hugo-shortcode code lang))
               (format "{{< highlight %s%s>}}\n%s{{< /highlight >}}\n"
                       lang
                       (format highlight-args-str linenos-str hllines-str)

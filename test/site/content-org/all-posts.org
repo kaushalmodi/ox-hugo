@@ -823,24 +823,29 @@ Reference -- [[https://github.com/gohugoio/hugo/issues/4006][hugo#4006]]
 *** Shortcodes escaped
 The =figure= shortcodes in the two Markdown source code blocks below
 should *not* be expanded.. they should be visible verbatim.
+
+- {&lbrace;< .. >}&rbrace; --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown][Shortcodes without Markdown]]
+- {&lbrace;% .. %}&rbrace; --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown][Shortcodes with Markdown]]
 **** Code block using code fences
 #+BEGIN_SRC md
 {{< figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" >}}
+{{% figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" %}}
 #+END_SRC
 **** Code block using =highlight= shortcode
 Here, the =-n= switch is added to the Org source block to
 auto-enable[fn:4] using the =highlight= shortcode.
 #+BEGIN_SRC md -n
 {{< figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" >}}
+{{% figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" %}}
 #+END_SRC
 *** Shortcodes *not* escaped
-The =figure= shortcodes in the Markdown source code blocks below
-*should* be expanded.. you should be seeing a nice little unicorn
-below.
+The =figure= shortcodes in the below example block *should* be
+expanded.. you should be seeing little unicorns below.
 #+BEGIN_EXAMPLE
 {{< figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" >}}
+{{% figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" %}}
 #+END_EXAMPLE
-Above a =#+BEGIN_EXAMPLE= .. =#+END_EXAMPLE= block is used just
+Above a =#+BEGIN_EXAMPLE= .. =#+END_EXAMPLE= block is chosen
 arbitrarily. The Hugo shortcodes will remain unescaped in *any*
 source/example block except for _Markdown source blocks_ (annotated
 with =md= language).

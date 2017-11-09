@@ -9,11 +9,15 @@ draft = false
 The `figure` shortcodes in the two Markdown source code blocks below
 should **not** be expanded.. they should be visible verbatim.
 
+-   {&lbrace;< .. >}&rbrace; --- [Shortcodes without Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown)
+-   {&lbrace;% .. %}&rbrace; --- [Shortcodes with Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown)
+
 
 ### Code block using code fences {#code-block-using-code-fences}
 
 ```md
 {{</* figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" */>}}
+{{%/* figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" */%}}
 ```
 
 
@@ -24,20 +28,21 @@ auto-enable[^fn:1] using the `highlight` shortcode.
 
 {{< highlight md "linenos=table, linenostart=1">}}
 {{</* figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" */>}}
+{{%/* figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" */%}}
 {{< /highlight >}}
 
 
 ## Shortcodes **not** escaped {#shortcodes-not-escaped}
 
-The `figure` shortcodes in the Markdown source code blocks below
-**should** be expanded.. you should be seeing a nice little unicorn
-below.
+The `figure` shortcodes in the below example block **should** be
+expanded.. you should be seeing little unicorns below.
 
 ```text
 {{< figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" >}}
+{{% figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" %}}
 ```
 
-Above a `#+BEGIN_EXAMPLE` .. `#+END_EXAMPLE` block is used just
+Above a `#+BEGIN_EXAMPLE` .. `#+END_EXAMPLE` block is chosen
 arbitrarily. The Hugo shortcodes will remain unescaped in **any**
 source/example block except for <span class="underline">Markdown source blocks</span> (annotated
 with `md` language).

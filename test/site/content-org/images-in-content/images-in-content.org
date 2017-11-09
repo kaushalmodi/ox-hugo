@@ -1,5 +1,6 @@
 #+HUGO_BASE_DIR: ../../
 #+HUGO_SECTION: images-in-content
+#+STARTUP: inlineimages
 
 * Post 1
 :PROPERTIES:
@@ -7,6 +8,24 @@
 :END:
 Post 1 contents
 
+I have the =gnu.png= file in the same directory that contains the
+source Org file of this post.
+
+#+BEGIN_EXAMPLE
+./content-org
+├── images-in-content/
+│  ├── images-in-content.org
+│  │    * Post 1 (Org subtree)   →  ./content/images-in-content/post1.md  **THIS POST**
+│  │    * Post 2 (Org subtree)   →  ./content/images-in-content/post2.md
+│  ├── gnu.png                   →  ./static/ox-hugo/gnu.png              **BELOW IMAGE**
+│  └── org.png                   →  ./static/ox-hugo/org.png
+├── post3/
+│  ├── post3.org                 →  ./content/images-in-content/post3.md
+│  └── gnu-copy.png              →  ./static/ox-hugo/gnu-copy.png
+└── post4/
+   ├── post4.org                 →  ./content/images-in-content/post4.md
+   └── org-copy.png              →  ./static/ox-hugo/org-copy.png
+#+END_EXAMPLE
 
 [[file:gnu.png]]
 * Post 2
@@ -15,20 +34,26 @@ Post 1 contents
 :END:
 Post 2 contents
 
-[[file:org.png]]
-* Proposal
+I have the =org.png= file in the same directory that contains the
+source Org file of this post.
+
 #+BEGIN_EXAMPLE
-./content-org                    ./content
-├── post1/                        │
-│  ├── post1.org     ------->     ├── post1.md
-│  │                              ├── post1/
-│  └── foo.png       ------->     │  └── foo.png
-└── post2/                        │
-   ├── post2.org     ------->     ├── post2.md
-   │                              └── post2/
-   ├── zoo.pdf       ------->        ├── zoo.pdf
-   └── bar.png       ------->        └── bar.png
+./content-org
+├── images-in-content/
+│  ├── images-in-content.org
+│  │    * Post 1 (Org subtree)   →  ./content/images-in-content/post1.md
+│  │    * Post 2 (Org subtree)   →  ./content/images-in-content/post2.md  **THIS POST**
+│  ├── gnu.png                   →  ./static/ox-hugo/gnu.png
+│  └── org.png                   →  ./static/ox-hugo/org.png              **BELOW IMAGE**
+├── post3/
+│  ├── post3.org                 →  ./content/images-in-content/post3.md
+│  └── gnu-copy.png              →  ./static/ox-hugo/gnu-copy.png
+└── post4/
+   ├── post4.org                 →  ./content/images-in-content/post4.md
+   └── org-copy.png              →  ./static/ox-hugo/org-copy.png
 #+END_EXAMPLE
+
+[[file:org.png]]
 * Footnotes
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:

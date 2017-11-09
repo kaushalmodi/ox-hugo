@@ -678,6 +678,9 @@ For the sake of the below explanation, let's have the /HUGO_BASE_DIR/
 
 In that case, the Hugo /static/ directory will be =~/hugo/static/=.
 **** References to files in the /static/ directory
+:PROPERTIES:
+:CUSTOM_ID: references-to-files-in-the-static-directory
+:END:
 Now if you have a file =~/hugo/static/images/foo.png=, =ox-hugo= makes
 it convenient for you to reference that image by simply
 =/images/foo.png=. Note that this is *not* the default behavior of
@@ -706,6 +709,9 @@ See the below examples on how to reference images in different ways:
 This style of linking will work for references to non-image files in
 the /static/ directory too.
 **** References to files *outside* the /static/ directory
+:PROPERTIES:
+:CUSTOM_ID: references-to-files-outside-the-static-directory
+:END:
 This is a unique feature of =ox-hugo=.
 
 (i) If a reference is made to a file outside the Hugo /static/
@@ -1092,10 +1098,70 @@ See `org-capture-templates' for more information."
                  (file+olp "all-posts.org" "Blog Ideas")
                  (function org-hugo-new-subtree-post-capture-template))))
 #+END_SRC
-*** TODO Images along with Content
+*** Images in Content
 :PROPERTIES:
-:EXPORT_FILE_NAME: images-along-with-content
+:EXPORT_FILE_NAME: images-in-content
 :END:
+Conventionally any static content for a Hugo site, like images, PDF
+files, and other attachments are put in the site =static/=
+directory. Files in that directory are served at the site root when
+the Hugo publishes that site. So all the content in there can be
+accessed using the root prefix =/=. So a =static/foo.png= file can be
+accessed at =/foo.png=.
+
+More detail for this conventional approach can be found in the
+documentation for
+{{{doc(image-links#references-to-files-in-the-static-directory,referencing
+files in static directory)}}}.
+**** But.. what about putting images along with the content?
+OK, so with that short intro out of the way, =ox-hugo= supports
+putting the /attachment files/ in the same directory as the source Org
+files!
+
+In the below example, the left hand side shows the Org content and
+attachment file organization that the user would need to do
+manually. And the right hand side shows the structure that =ox-hugo=
+will generate in the =content/= and =static/= (the /conventional/ way
+discussed above) directories.
+
+#+BEGIN_EXAMPLE
+./content-org
+├── images-in-content/
+│  ├── images-in-content.org
+│  │    * Post 1 (Org subtree)   →  ./content/images-in-content/post1.md
+│  │    * Post 2 (Org subtree)   →  ./content/images-in-content/post2.md
+│  ├── gnu.png                   →  ./static/ox-hugo/gnu.png
+│  └── org.png                   →  ./static/ox-hugo/org.png
+├── post3/
+│  ├── post3.org                 →  ./content/images-in-content/post3.md
+│  └── gnu-copy.png              →  ./static/ox-hugo/gnu-copy.png
+└── post4/
+   ├── post4.org                 →  ./content/images-in-content/post4.md
+   └── org-copy.png              →  ./static/ox-hugo/org-copy.png
+#+END_EXAMPLE
+
+Have a look at the
+[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/images-in-content/images-in-content.org][=content-org/images-in-content/images-in-content.org=]] file for an
+example of how to reference same-directory files (=gnu.png= and
+=org.png= in this example) in an Org file (/Hint: Just as you would do
+in a normal Org file/).
+
+The benefit of this /same-directory-attachment/ approach is that you
+don't need to use any directory prefix to reference those files
+(example: =[[file:gnu.png]]=). When =ox-hugo= exports those posts though,
+the images are auto-copied to the =static/ox-hugo/= directory[fn:1]
+and =/ox-hugo/= prefix is added to those file references in the
+exported Markdown files.
+
+Also as the image file references are valid within the Org file, you
+can see those images inline too!
+[[file:/images/images-in-content-screenshot.png]]
+**** Examples
+Whether you prefer the subtree-based approach or file-based approach
+for writing your posts in Org, there are examples for both in the
+=ox-hugo= test suite:
+- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org/images-in-content][Org source]]
+- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content/images-in-content][Exported Markdown]]
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu meta
@@ -1136,6 +1202,12 @@ See `org-capture-templates' for more information."
 :EXPORT_FILE_NAME: test
 :END:
 #+INCLUDE: "./ox-hugo-manual.org::#test" :only-contents t
+* Footnotes
+
+[fn:1] To understand why the attachment files get copied to the
+=static/ox-hugo/= directory, have a look at the documentation for
+{{{doc(image-links#references-to-files-outside-the-static-directory,referencing
+files outside static directory)}}}.
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:
 # fill-column: 70

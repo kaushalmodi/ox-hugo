@@ -818,8 +818,20 @@ contents according to the current headline."
               "<div></div>\n"        ;till Hugo/Blackfriday support
               toc-headline           ;wrapping Markdown in HTML div's.
               toc-items ;https://github.com/kaushalmodi/ox-hugo/issues/93
-              "\n</div>"
-              "\n"))))                ;Final newline at the end of TOC
+              "\n"
+              "</div>\n"
+              ;; Special comment that can be use to filter out the TOC
+              ;; from .Summary in Hugo templates.
+              ;;
+              ;;     {{ $summary_splits := split .Summary "<!--endtoc-->" }}
+              ;;     {{ if eq (len $summary_splits) 2 }}
+              ;;         <!-- If that endtoc special comment is present, output only the part after that comment as Summary. -->
+              ;;         {{ index $summary_splits 1 | safeHTML }}
+              ;;     {{ else }}
+              ;;         <!-- Print the whole Summary if endtoc special comment is not found. -->
+              ;;         {{ .Summary }}
+              ;;     {{ end }}
+              "<!--endtoc-->\n"))))
 
 (defalias 'org-hugo--has-caption-p 'org-html--has-caption-p
   "Non-nil when ELEMENT has a caption affiliated keyword.

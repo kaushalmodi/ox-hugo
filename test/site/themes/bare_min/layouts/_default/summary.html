@@ -8,7 +8,7 @@
      3. Displays a Hugo-generated summary of the post
      4. Provides a link with text Read More that points to the post, only if
      the summary is shorter than the full post.
-   -->
+-->
 
 <article class="summary">
     <header>
@@ -19,7 +19,14 @@
     </header>
 
     <div class="post" >
-        {{ .Summary }}
+        {{ $summary_splits := split .Summary "<!--endtoc-->" }}
+        {{ if eq (len $summary_splits) 2 }}
+            <!-- If that endtoc special comment is present, output only the part after that comment as Summary. -->
+            {{ index $summary_splits 1 | safeHTML }}
+        {{ else }}
+            <!-- Print the whole Summary if endtoc special comment is not found. -->
+            {{ .Summary }}
+        {{ end }}
     </div>
 
     <!-- https://gohugo.io/content/summaries/ -->

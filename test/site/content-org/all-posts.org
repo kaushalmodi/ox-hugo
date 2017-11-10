@@ -2453,6 +2453,46 @@ Still some people might prefer to use the Org generated TOC.
 :EXPORT_OPTIONS: num:onlytoc toc:1
 :END:
 #+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+**** No TOC in Summary
+:PROPERTIES:
+:EXPORT_FILE_NAME: no-toc-in-summary
+:EXPORT_OPTIONS: toc:t
+:END:
+By default, Hugo will dump everything at the beginning of a post into
+its =.Summary= (See [[https://gohugo.io/content-management/summaries/][Hugo content summaries]]). As TOC enabled using the
+export option like =toc:t= is inserted at the beginning of a post, TOC
+will be shown in that summary too!
+
+#+HUGO: more
+
+***** =ox-hugo='s Solution
+=ox-hugo= helps prevent that with a workaround.. it inserts a special
+HTML comment *=<!--endtoc-->=* after the TOC.
+
+It is important to insert a user-defined summary split by using
+=#+HUGO: more=. Otherwise it is very likely that the TOC is big enough
+to exceed the Hugo-defined max-summary length and so the
+=<!--endtoc-->= that appears *after* the TOC never gets parsed.
+
+#+BEGIN_QUOTE
+*Always use =#+HUGO: more= when you enable Org generated TOC's.*
+#+END_QUOTE
+
+In your site's Hugo template, you can then filter that out with
+something like:
+***** Snippet
+#+BEGIN_SRC html
+{{ $summary_splits := split .Summary "<!--endtoc-->" }}
+{{ if eq (len $summary_splits) 2 }}
+    <!-- If that endtoc special comment is present, output only the part after that comment as Summary. -->
+    {{ index $summary_splits 1 | safeHTML }}
+{{ else }}
+    <!-- Print the whole Summary if endtoc special comment is not found. -->
+    {{ .Summary }}
+{{ end }}
+#+END_SRC
+***** Example
+See this test site's [[https://github.com/kaushalmodi/ox-hugo/blob/master/test/site/themes/bare_min/layouts/_default/summary.html][=summary.html=]] as an example.
 * Hugo Aliases                                                      :aliases:
 ** Alias without section portion 1
 :PROPERTIES:
@@ -2669,7 +2709,6 @@ molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 # a comment forces paragraph break in Org
 * Footnotes
-
 [fn:4] Even if the user has set the =HUGO_CODE_FENCE= value to =t=
 (via variable, keyword or subtree property), the Hugo =highlight=
 shortcode will be used automatically instead of code fences if either

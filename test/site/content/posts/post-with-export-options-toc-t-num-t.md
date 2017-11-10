@@ -7,7 +7,8 @@ draft = false
 <style>
   .ox-hugo ul {
     list-style: none;
-  }</style>
+  }
+</style>
 <div class="ox-hugo toc">
 <div></div>
 

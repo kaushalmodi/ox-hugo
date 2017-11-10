@@ -184,7 +184,7 @@ available customization options for this package.
   in the final HTML.
 - If you have a case where you need to have an Org source block
   instead a quote block, and then a source block after that quote
-  block (/I know, a very common case.. :wink:/), Blackfriday barfs
+  block (/I know, a very common case../ :wink:), Blackfriday barfs
   (Blackfriday # [[https://github.com/russross/blackfriday/issues/407][407]]). But we now have a workaround, which /just
   works/ -- [[[https://github.com/kaushalmodi/ox-hugo/issues/98][98]]].
 - Now =ATTR_HTML= above even hyper-linked images works (earlier it

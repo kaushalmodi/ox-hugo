@@ -812,7 +812,7 @@ contents according to the current headline."
                 (concat "<style>\n"
                         "  .ox-hugo ul {\n"
                         "    list-style: none;\n"
-                        "  }"
+                        "  }\n"
                         "</style>\n"))
               "<div class=\"ox-hugo toc\">\n" ;This is a nasty workaround
               "<div></div>\n"        ;till Hugo/Blackfriday support

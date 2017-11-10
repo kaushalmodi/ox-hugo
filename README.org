@@ -155,10 +155,66 @@ The common =ox-hugo= export bindings are:
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
 * Changelog
+** v0.6 <2017-11-09 Thu>
+*** Features
+- Support the =num= export option. Now you can prefix all post
+  headings (or some not.. the ones with =UNNUMBERED= property set to
+  =t=) with their section numbers --- [[[https://github.com/kaushalmodi/ox-hugo/issues/76][76]]].
+- Org TOC's are now exported as unordered Markdown lists. This allows
+  having TOC's with unnumbered headings too! This also enables
+  prefixing the section headings with their full section numbers, and
+  also having only selected headings unnumbered (both in the post body
+  and the TOC).
+- Add support for exporting internal links to source blocks, tables
+  and images by their block names! -- [[[https://github.com/kaushalmodi/ox-hugo/issues/29][29]]].
+- Org table column alignment markers (=<l>=, =<r>=, =<c>=) are now
+  exported to equivalent Markdown tables.. so a center-aligned column
+  in Org buffer will remain center-aligned in the final HTML too! --
+  [[[https://github.com/kaushalmodi/ox-hugo/issues/95][95]]].
+- Allow setting multiple Hugo aliases for a post. Also infer the
+  section name from inherited =HUGO_SECTION= values (subtree-based
+  exports) for those alias prefixes.
+- Prevent a footnote ref to appear by itself on a newline (based on
+  wrapping) in the browser -- [[[https://github.com/kaushalmodi/ox-hugo/issues/96][96]]].
+- If Hugo shortcodes are used specifically in Markdown (=md=) source
+  blocks, they will be auto-escaped (useful when you want to
+  document/talk about some Hugo shortcode in a blog post) --
+  [[[https://github.com/kaushalmodi/ox-hugo/issues/94][94]]].
+- If an Org table has just 1 row, don't make it render as a header row
+  in the final HTML.
+- If you have a case where you need to have an Org source block
+  instead a quote block, and then a source block after that quote
+  block (/I know, a very common case.. :wink:/), Blackfriday barfs
+  (Blackfriday # [[https://github.com/russross/blackfriday/issues/407][407]]). But we now have a workaround, which /just
+  works/ -- [[[https://github.com/kaushalmodi/ox-hugo/issues/98][98]]].
+- Now =ATTR_HTML= above even hyper-linked images works (earlier it
+  worked only above non-hyper-linked images).
+*** Backward-incompatible changes
+- Org TOC's are exported as unordered Markdown lists instead of
+  ordered Markdown lists, and now full section numbers (like 1.2.3)
+  are shown in the TOC instead of just the last digit (like 3.) --
+  commit [[https://github.com/kaushalmodi/ox-hugo/commit/4be378e7][4be378e7]].
+- The =num= Org export option is default to =nil= (only for
+  =ox-hugo=). So Org TOC's are exported without section numbers by
+  default. To get section numbers, set =num= to =t= or =onlytoc=.
+*** Fixes
+- Now exporting 1-row Org tables works too.
+- Add missing http/https/ftp prefix for hyper-linked images.
+*** Meta
+- Add documentation on how you can have
+  [[https://ox-hugo.scripter.co/doc/images-in-content][Images live in the same directory as Org
+  source]] -- [[[https://github.com/kaushalmodi/ox-hugo/issues/91][91]]].
+- Now only Org files for the [[https://ox-hugo.scripter.co][documentation site]] need to be committed
+  to git. =ox-hugo= then exports those to Markdown, and then Hugo
+  publishes those to HTML (as before) --- all on Netlify.
+- Be sure to check out the moderately revamped [[https://ox-hugo.scripter.co/test/][Test Site]]. That might
+  be of interest even if you want to check out what the new features
+  and changes look like, without first installing/updating =ox-hugo=
+  yourself :smile:.
 ** v0.5 <2017-11-06 Mon>
 *** Features
 - Export TOC as a Markdown ordered list. See [[https://ox-hugo.scripter.co/doc/org-toc][Table of
-  Contents]].
+  Contents]] -- [[[https://github.com/kaushalmodi/ox-hugo/issues/88][88]]].
 - =#+ATTR_HTML= above http/https/ftp links is now supported (useful
   for specifying the =target=, =rel=, attributes, for example).
 ** v0.4.1 <2017-10-29 Sun>

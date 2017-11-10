@@ -5,7 +5,9 @@
 #+HUGO_SECTION: doc
 
 #+MACRO: imageclick [[file:./static/images/$1][file:/images/$1]]
+#+MACRO: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
 #+MACRO: issue [[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]]
+#+MACRO: bfissue Blackfriday # [[https://github.com/russross/blackfriday/issues/$1][$1]]
 #+MACRO: ox-hugo-test-file  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]]
 #+MACRO: doc [[/doc/$1][$2]]
 
@@ -13,10 +15,66 @@
 :PROPERTIES:
 :CUSTOM_ID: changelog
 :END:
+** v0.6 <2017-11-09 Thu>
+*** Features
+- Support the =num= export option. Now you can prefix all post
+  headings (or some not.. the ones with =UNNUMBERED= property set to
+  =t=) with their section numbers --- {{{issue(76)}}}.
+- Org TOC's are now exported as unordered Markdown lists. This allows
+  having TOC's with unnumbered headings too! This also enables
+  prefixing the section headings with their full section numbers, and
+  also having only selected headings unnumbered (both in the post body
+  and the TOC).
+- Add support for exporting internal links to source blocks, tables
+  and images by their block names! -- {{{issue(29)}}}.
+- Org table column alignment markers (=<l>=, =<r>=, =<c>=) are now
+  exported to equivalent Markdown tables.. so a center-aligned column
+  in Org buffer will remain center-aligned in the final HTML too! --
+  {{{issue(95)}}}.
+- Allow setting multiple Hugo aliases for a post. Also infer the
+  section name from inherited =HUGO_SECTION= values (subtree-based
+  exports) for those alias prefixes.
+- Prevent a footnote ref to appear by itself on a newline (based on
+  wrapping) in the browser -- {{{issue(96)}}}.
+- If Hugo shortcodes are used specifically in Markdown (=md=) source
+  blocks, they will be auto-escaped (useful when you want to
+  document/talk about some Hugo shortcode in a blog post) --
+  {{{issue(94)}}}.
+- If an Org table has just 1 row, don't make it render as a header row
+  in the final HTML.
+- If you have a case where you need to have an Org source block
+  instead a quote block, and then a source block after that quote
+  block (/I know, a very common case.. :wink:/), Blackfriday barfs
+  ({{{bfissue(407)}}}). But we now have a workaround, which /just
+  works/ -- {{{issue(98)}}}.
+- Now =ATTR_HTML= above even hyper-linked images works (earlier it
+  worked only above non-hyper-linked images).
+*** Backward-incompatible changes
+- Org TOC's are exported as unordered Markdown lists instead of
+  ordered Markdown lists, and now full section numbers (like 1.2.3)
+  are shown in the TOC instead of just the last digit (like 3.) --
+  {{{commit(4be378e7)}}}.
+- The =num= Org export option is default to =nil= (only for
+  =ox-hugo=). So Org TOC's are exported without section numbers by
+  default. To get section numbers, set =num= to =t= or =onlytoc=.
+*** Fixes
+- Now exporting 1-row Org tables works too.
+- Add missing http/https/ftp prefix for hyper-linked images.
+*** Meta
+- Add documentation on how you can have
+  {{{doc(images-in-content,Images live in the same directory as Org
+  source)}}} -- {{{issue(91)}}}.
+- Now only Org files for the [[https://ox-hugo.scripter.co][documentation site]] need to be committed
+  to git. =ox-hugo= then exports those to Markdown, and then Hugo
+  publishes those to HTML (as before) --- all on Netlify.
+- Be sure to check out the moderately revamped [[https://ox-hugo.scripter.co/test/][Test Site]]. That might
+  be of interest even if you want to check out what the new features
+  and changes look like, without first installing/updating =ox-hugo=
+  yourself :smile:.
 ** v0.5 <2017-11-06 Mon>
 *** Features
 - Export TOC as a Markdown ordered list. See {{{doc(org-toc,Table of
-  Contents)}}}.
+  Contents)}}} -- {{{issue(88)}}}.
 - =#+ATTR_HTML= above http/https/ftp links is now supported (useful
   for specifying the =target=, =rel=, attributes, for example).
 ** v0.4.1 <2017-10-29 Sun>
@@ -612,7 +670,7 @@ set.
 | =date = 2017-07-24=                | =:EXPORT_DATE: 2017-07-24=         | Subtree property                                                        |
 | =lastmod = <current date>=         | =:EXPORT_HUGO_AUTO_SET_LASTMOD: t= | Subtree property                                                        |
 | =lastmod = <current date>=         | =#+HUGO_AUTO_SET_LASTMOD: t=       | Org keyword                                                             |
-| =tags = ["abc", "def"]=            | =* foo :abc:def:=                   | Subtree heading tags                                                    |
+| =tags = ["toto", "zulu"]=          | =* foo :toto:zulu:=                 | Subtree heading tags                                                    |
 | =categories = ["x", "y"]=          | =* foo :@x:@y:=                     | Subtree heading tags with =@= prefix                                    |
 | =draft = true=                     | =* TODO foo=                       | Subtree heading Org Todo state set to =TODO= (or =DRAFT=)               |
 | =draft = false=                    | =* foo=                            | Subtree heading Org Todo state *not* set to =TODO= (or =DRAFT=)         |
@@ -629,7 +687,7 @@ set.
 | =title = "foo"=                  | =#+TITLE: foo=                       |
 | =date = 2017-07-24=              | =#+DATE: 2017-07-24=                 |
 | =lastmod = <current date>=       | =#+HUGO_AUTO_SET_LASTMOD: t=         |
-| =tags = ["abc", "def"]=          | =#+HUGO_TAGS: abc def=               |
+| =tags = ["toto", "zulu"]=        | =#+HUGO_TAGS: toto zulu=             |
 | =categories = ["x", "y"]=        | =#+HUGO_CATEGORIES: x y=             |
 | =draft = true=                   | =#+HUGO_DRAFT: true=                 |
 | =draft = false=                  | =#+HUGO_DRAFT: false= (default)      |
@@ -1169,6 +1227,11 @@ for writing your posts in Org, there are examples for both in the
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu meta
 :END:
+*** Changelog
+:PROPERTIES:
+:EXPORT_FILE_NAME: changelog
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#changelog" :only-contents t
 *** Meta Features
 :PROPERTIES:
 :EXPORT_FILE_NAME: meta-features
@@ -1185,11 +1248,6 @@ for writing your posts in Org, there are examples for both in the
 - [X] Passes =make test= and generates documentation using =make doc=
   in [[https://play.google.com/store/apps/details?id=com.termux&hl=en][Termux]] app on Android too.
 - [X] Passes =checkdoc= and =package-lint= ([[https://github.com/purcell/package-lint/issues/89][/almost/]]).
-*** Changelog
-:PROPERTIES:
-:EXPORT_FILE_NAME: changelog
-:END:
-#+INCLUDE: "./ox-hugo-manual.org::#changelog" :only-contents t
 *** Contributing Guide
 :PROPERTIES:
 :EXPORT_FILE_NAME: contributing-guide

@@ -34,10 +34,7 @@ pygmentsCodeFences = true       # This applies to Chroma too.
 pygmentsUseClasses = true       # This applies to Chroma too.
 pygmentsUseClassic = false      # Needs Hugo 0.28+, default=false => Use Chroma for syntax highlighting
 
-# Fri Sep 22 15:50:42 EDT 2017 - kmodi
-# Disabling Emoji otherwise the ":abc:" portion in `* foo :abc:def:`
-# renders to an Emoji!
-enableEmoji = false
+enableEmoji = true
 
 LanguageCode = "en-us" # Used in RSS generation
 

@@ -1,7 +1,9 @@
 #+TITLE: GitHub Ancillary Files
 #+AUTHOR: Kaushal Modi
 
+#+MACRO: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
 #+MACRO: issue [[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]]
+#+MACRO: bfissue Blackfriday # [[https://github.com/russross/blackfriday/issues/$1][$1]]
 #+MACRO: imageclick [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1]]
 #+MACRO: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
 #+MACRO: travis [[https://travis-ci.org/kaushalmodi/ox-hugo][https://travis-ci.org/kaushalmodi/ox-hugo.svg?branch=master]]

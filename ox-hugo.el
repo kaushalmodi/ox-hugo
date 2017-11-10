@@ -482,6 +482,29 @@ e.g. \"toc:nil\", \"toc:t\" or \"toc:3\"."
   :safe (lambda (x) (or (booleanp x)
                    (integerp x))))
 
+(defcustom org-hugo-export-with-section-numbers 'onlytoc
+  "Configuration for adding section numbers to headlines.
+
+When set to `onlytoc', none of the headlines will be numbered
+in the body, but TOC generation will use the section numbers.
+
+When set to an integer N, numbering will only happen for
+headlines whose relative level is higher or equal to N.
+
+When set to any other non-nil value, numbering will happen for
+all the headlines.
+
+This option can also be set with the OPTIONS keyword,
+e.g. \"num:onlytoc\", \"num:nil\", \"num:t\" or \"num:3\"."
+  :group 'org-export-hugo
+  :type '(choice
+          (const :tag "Don't number only in body" 'onlytoc)
+          (const :tag "Don't number any headline" nil)
+          (const :tag "Number all headlines" t)
+          (integer :tag "Number to level"))
+  :safe (lambda (x) (or (booleanp x)
+                   (integerp x))))
+
 (defcustom org-hugo-default-static-subdirectory-for-externals "ox-hugo"
   "Default sub-directory in Hugo static directory for external files.
 If the source path for external files does not contain
@@ -544,6 +567,7 @@ The auto-copying behavior is disabled if this variable is set to nil."
   ;;                KEY                       KEYWORD                    OPTION  DEFAULT                     BEHAVIOR
   :options-alist '(;; Variables not setting the front-matter directly
                    (:with-toc nil "toc" org-hugo-export-with-toc)
+                   (:section-numbers nil "num" org-hugo-export-with-section-numbers)
                    (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
                    (:with-special-strings nil "-" nil) ;Don't use special strings for ndash, mdash; that is done automatically by Blackfriday
                    (:with-sub-superscript nil "^" '{}) ;Require curly braces to be wrapped around text to sub/super-scripted
@@ -761,10 +785,13 @@ contents according to the current headline."
          ;; Remove blank lines from in-between TOC items, which can
          ;; get introduced when using the "UNNUMBERED: t" headline
          ;; property.
-         (toc-items (replace-regexp-in-string "\n\\{2,\\}" "\n" toc-items)))
-    (concat toc-headline
-            toc-items
-            "\n")))                   ;Final newline at the end of TOC
+         (toc-items (org-string-nw-p
+                     (replace-regexp-in-string "\n\\{2,\\}" "\n" toc-items))))
+    ;; (message "[ox-hugo build-toc DBG] toc-items:%s" toc-items)
+    (when toc-items
+      (concat toc-headline
+              toc-items
+              "\n"))))                ;Final newline at the end of TOC
 
 (defalias 'org-hugo--has-caption-p 'org-html--has-caption-p
   "Non-nil when ELEMENT has a caption affiliated keyword.
@@ -841,7 +868,15 @@ information."
 CONTENTS is the headline contents.  INFO is a plist used as
 a communication channel."
   (unless (org-element-property :footnote-section-p headline)
-    (let* ((level (org-export-get-relative-level headline info))
+    (let* ((numbers
+            (when (and (not (equal 'onlytoc (plist-get info :section-numbers)))
+                       (org-export-numbered-headline-p headline info))
+              (concat
+               (mapconcat
+                'number-to-string
+                (org-export-get-headline-number headline info) ".")
+               " ")))
+           (level (org-export-get-relative-level headline info))
            (title (org-export-data (org-element-property :title headline) info))
            (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
                       (let ((todo (org-element-property :todo-keyword
@@ -859,6 +894,7 @@ a communication channel."
            ;; Headline text without tags.
            (heading (concat todo priority title))
            (style (plist-get info :md-headline-style)))
+      ;; (message "[ox-hugo-headline DBG] num: %s" numbers)
       (cond
        ;; Cannot create a headline.  Fall-back to a list.
        ((or (org-export-low-level-p headline info)
@@ -882,7 +918,7 @@ a communication channel."
               (loffset (plist-get info :hugo-level-offset))
               (todo (when todo
                       (concat (org-html--todo todo info) " "))))
-          (concat (org-hugo--headline-title style level loffset title todo anchor)
+          (concat (org-hugo--headline-title style level loffset title todo anchor numbers)
                   contents)))))))
 
 ;;;;; Headline Helpers
@@ -934,7 +970,7 @@ returned slug string has the following specification:
          (str (replace-regexp-in-string "\\(^[-]*\\|[-]*$\\)" "" str)))
     str))
 
-(defun org-hugo--headline-title (style level loffset title &optional todo anchor)
+(defun org-hugo--headline-title (style level loffset title &optional todo anchor numbers)
   "Generate a headline title in the preferred Markdown headline style.
 
 STYLE is the preferred style (`atx' or `setext').
@@ -944,21 +980,29 @@ Markdown heading level for `atx' style.
 TITLE is the headline title.
 
 Optional argument TODO is the Org TODO string.
+
 Optional argument ANCHOR is the Hugo anchor tag for the section as a
-string."
-  ;; Use "Setext" style
-  (if (and (eq style 'setext) (< level 3))
-      (let* ((underline-char (if (= level 1) ?= ?-))
-             (underline (concat (make-string (length title) underline-char)
-                                "\n")))
-        (concat "\n" title " " anchor "\n" underline "\n"))
-    ;; Use "Atx" style
-    ;; Always translate level N Org headline to level N+1 Markdown
-    ;; headline because Markdown level 1 headline and HTML title both
-    ;; get the HTML <h1> tag, and we do not want the top-most heading
-    ;; of a post to look the exact same as the post's title.
-    (let ((level-mark (make-string (+ loffset level) ?#)))
-      (concat "\n" level-mark " " todo title " " anchor "\n\n"))))
+string.
+
+Optional argument NUMBERS, if non-nil, is a string containing the
+TITLE's number."
+  (let* ((numbers-html (when numbers
+                         (concat "<span class=\"section-num\">"
+                                 numbers "</span>")))
+         (headline (concat todo numbers-html title " " anchor "\n")))
+    ;; Use "Setext" style
+    (if (and (eq style 'setext) (< level 3))
+        (let* ((underline-char (if (= level 1) ?= ?-))
+               (underline (concat (make-string (length headline) underline-char)
+                                  "\n")))
+          (concat "\n" headline underline "\n"))
+      ;; Use "Atx" style
+      ;; Always translate level N Org headline to level N+1 Markdown
+      ;; headline because Markdown level 1 headline and HTML title both
+      ;; get the HTML <h1> tag, and we do not want the top-most heading
+      ;; of a post to look the exact same as the post's title.
+      (let ((level-mark (make-string (+ loffset level) ?#)))
+        (concat "\n" level-mark " " headline "\n")))))
 
 ;;;; Inner Template
 (defun org-hugo-inner-template (contents info)
@@ -975,6 +1019,7 @@ holding export options."
                        (> toc-level 0)) ;TOC will be exported only if toc-level is positive
                   (concat (org-hugo--build-toc info toc-level) "\n")
                 "")))
+    ;; (message "[org-hugo-inner-template DBG] toc-level: %s" toc-level)
     (org-trim (concat
                toc
                contents
@@ -2340,6 +2385,7 @@ buffer and returned as a string in Org format."
                                 ,(format "|org-hugo-langs-no-descr-in-code-fences                |%S|" org-hugo-langs-no-descr-in-code-fences)
                                 ,(format "|org-hugo-auto-set-lastmod                             |%S|" org-hugo-auto-set-lastmod)
                                 ,(format "|org-hugo-export-with-toc                              |%S|" org-hugo-export-with-toc)
+                                ,(format "|org-hugo-export-with-section-numbers                  |%S|" org-hugo-export-with-section-numbers)
                                 ,(format "|org-hugo-front-matter-format                          |%S|" org-hugo-front-matter-format)
                                 ,(format "|org-hugo-default-static-subdirectory-for-externals    |%S|" org-hugo-default-static-subdirectory-for-externals)
                                 ,(format "|org-hugo-external-file-extensions-allowed-for-copying |%S|" org-hugo-external-file-extensions-allowed-for-copying)

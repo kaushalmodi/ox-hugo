@@ -1,6 +1,6 @@
 +++
-title = "Post with TOC export option set to 2"
-tags = ["toc", "export-option"]
+title = "Post with toc set to 2"
+tags = ["export-option", "toc"]
 draft = false
 +++
 

@@ -1,6 +1,6 @@
 +++
-title = "Post with TOC using keyword set to 2"
-tags = ["keyword", "toc"]
+title = "Post with toc set to non-nil and num set to onlytoc"
+tags = ["export-option", "toc"]
 draft = false
 +++
 
@@ -8,11 +8,14 @@ draft = false
 
 1.  [Post sub-heading 1](#post-sub-heading-1)
     1.  [Post sub-heading 1.1](#post-sub-heading-1-dot-1)
+        1.  [Post sub-heading 1.1.1](#post-sub-heading-1-dot-1-dot-1)
     2.  [Post sub-heading 1.2](#post-sub-heading-1-dot-2)
     3.  [Post sub-heading 1.3](#post-sub-heading-1-dot-3)
 2.  [Post sub-heading 2](#post-sub-heading-2)
     1.  [Post sub-heading 2.1](#post-sub-heading-2-dot-1)
     2.  [Post sub-heading 2.2](#post-sub-heading-2-dot-2)
+        1.  [Post sub-heading 2.2.1](#post-sub-heading-2-dot-2-dot-1)
+        2.  [Post sub-heading 2.2.3](#post-sub-heading-2-dot-2-dot-3)
 3.  [Post sub-heading 3](#post-sub-heading-3)
     1.  [Post sub-heading 3.1](#post-sub-heading-3-dot-1)
 

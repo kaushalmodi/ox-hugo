@@ -2384,80 +2384,100 @@ This post should be created in =content/section-a/=.
 :EXPORT_FILE_NAME: post-ax
 :END:
 This post should also be created in =content/section-a/=.
-* Table of Contents (TOC)                                               :toc:
-=ox-hugo= has the =with-toc= option disabled by default as Hugo has an
-inbuilt TOC generation feature.
-
-Still some people might prefer to use the Org generated TOC.
-** Example post for TOC tests                                      :noexport:
-:PROPERTIES:
-:CUSTOM_ID: toc-example-post
-:END:
-*** Post sub-heading 1
-**** Post sub-heading 1.1
-***** Post sub-heading 1.1.1
-**** Post sub-heading 1.2
-**** Post sub-heading 1.3
-*** Post sub-heading 2
-**** Post sub-heading 2.1
-**** Post sub-heading 2.2
-***** Post sub-heading 2.2.1
-***** Post sub-heading 2.2.2
-:PROPERTIES:
-:UNNUMBERED: t
-:END:
-The =UNNUMBERED= property for this subtree is set to =t=. So even when
-the TOC export option is set to =t= or a number ≥ 3, this title will
-*not* show up in the TOC. That's because the TOC is exported as a
-Markdown /ordered list/, and you cannot have ordered list items
-without a number prefix!
-***** Post sub-heading 2.2.3
-*** Post sub-heading 3
-**** Post sub-heading 3.1
-** TOC set using export option                                :export_option:
-*** Post with TOC export option set to non-nil
-:PROPERTIES:
-:EXPORT_FILE_NAME: post-with-toc-export-option-t
-:EXPORT_OPTIONS: toc:t
-:END:
-#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
-*** Post with TOC export option set to 2
-:PROPERTIES:
-:EXPORT_FILE_NAME: post-with-toc-export-option-2
-:EXPORT_OPTIONS: toc:2
-:END:
-#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
-*** Post with TOC export option set to nil
-:PROPERTIES:
-:EXPORT_FILE_NAME: post-with-toc-export-option-nil
-:EXPORT_OPTIONS: toc:nil
-:END:
-#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
-*** Post with TOC export option set to 0
-:PROPERTIES:
-:EXPORT_FILE_NAME: post-with-toc-export-option-0
-:EXPORT_OPTIONS: toc:0
-:END:
-#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
-** TOC set using keyword                                            :keyword:
+* Keywords                                                          :keyword:
+** TOC                                                                  :toc:
 *** Post with TOC using keyword set to 0
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-toc-keyword-0
 :END:
 #+TOC: headlines 0
-#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
 *** Post with TOC using keyword set to 2
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-toc-keyword-2
 :END:
 #+TOC: headlines 2
-#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
 *** Post with TOC using keyword set to 6
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-toc-keyword-6
 :END:
 #+TOC: headlines 6
-#+INCLUDE: "./all-posts.org::#toc-example-post" :only-contents t
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+* Export Options                                              :export_option:
+** Table of Contents (TOC)                                              :toc:
+=ox-hugo= has the =with-toc= option disabled by default as Hugo has an
+inbuilt TOC generation feature.
+
+Still some people might prefer to use the Org generated TOC.
+*** Section Numbers                                                     :num:
+**** Don't number headlines or TOC
+:PROPERTIES:
+:EXPORT_FILE_NAME: options-num-nil
+:EXPORT_OPTIONS: num:nil
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+**** Don't number headlines (but yes in TOC)
+:PROPERTIES:
+:EXPORT_FILE_NAME: options-num-onlytoc
+:EXPORT_OPTIONS: num:onlytoc
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+**** Number 0 levels
+:PROPERTIES:
+:EXPORT_FILE_NAME: options-num-0
+:EXPORT_OPTIONS: num:0
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+**** Number 2 levels
+:PROPERTIES:
+:EXPORT_FILE_NAME: options-num-2
+:EXPORT_OPTIONS: num:2
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+**** Number all levels
+:PROPERTIES:
+:EXPORT_FILE_NAME: options-num-all
+:EXPORT_OPTIONS: num:t
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+*** TOC
+**** Post with toc set to non-nil
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-export-option-t
+:EXPORT_OPTIONS: toc:t
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+**** Post with toc set to 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-export-option-2
+:EXPORT_OPTIONS: toc:2
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+**** Post with toc set to nil
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-export-option-nil
+:EXPORT_OPTIONS: toc:nil
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+**** Post with toc set to 0
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-export-option-0
+:EXPORT_OPTIONS: toc:0
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+**** Post with toc set to non-nil and num set to nil
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-export-option-t-and-num-nil
+:EXPORT_OPTIONS: toc:t num:nil
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+**** Post with toc set to non-nil and num set to onlytoc
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-export-option-t-and-num-onlytoc
+:EXPORT_OPTIONS: toc:t num:onlytoc
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
 * Hugo Aliases                                                      :aliases:
 ** Alias without section portion 1
 :PROPERTIES:
@@ -2527,7 +2547,33 @@ to be published
 If a post has the =DRAFT= state set, the =draft= front matter variable
 should be set to =true=, even if the post has a sub-heading
 immediately after the post heading.
-* Lorem Ipsum                                              :ARCHIVE:noexport:
+* Reusable sections                                        :noexport:ARCHIVE:
+** Nested sections example
+:PROPERTIES:
+:CUSTOM_ID: nested-sections-example
+:END:
+*** Post sub-heading 1
+**** Post sub-heading 1.1
+***** Post sub-heading 1.1.1
+**** Post sub-heading 1.2
+**** Post sub-heading 1.3
+*** Post sub-heading 2
+**** Post sub-heading 2.1
+**** Post sub-heading 2.2
+***** Post sub-heading 2.2.1
+***** Post sub-heading 2.2.2
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+The =UNNUMBERED= property for this subtree is set to =t=. So even when
+the TOC export option is set to =t= or a number ≥ 3, this title will
+*not* show up in the TOC. That's because the TOC is exported as a
+Markdown /ordered list/, and you cannot have ordered list items
+without a number prefix!
+***** Post sub-heading 2.2.3
+*** Post sub-heading 3
+**** Post sub-heading 3.1
+** Lorem Ipsum
 :PROPERTIES:
 :CUSTOM_ID: lorem-ipsum
 :END:

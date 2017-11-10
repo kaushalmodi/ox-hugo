@@ -1,6 +1,6 @@
 +++
-title = "Post with TOC export option set to non-nil"
-tags = ["toc", "export-option"]
+title = "Post with toc set to non-nil"
+tags = ["export-option", "toc"]
 draft = false
 +++
 

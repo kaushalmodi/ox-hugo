@@ -1,6 +1,6 @@
 +++
 title = "Post with TOC using keyword set to 0"
-tags = ["toc", "keyword"]
+tags = ["keyword", "toc"]
 draft = false
 +++
 

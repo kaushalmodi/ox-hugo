@@ -1104,20 +1104,23 @@ and rewrite link paths to make blogging more seamless."
              (if contents
                  (format "[%s](%s)" contents path)
                (format "<%s>" path))))
-          (`headline
-           (format
-            "[%s](#%s)"
-            ;; Description
-            (cond ((org-string-nw-p contents))
-                  ((org-export-numbered-headline-p destination info)
-                   (mapconcat #'number-to-string
-                              (org-export-get-headline-number destination info)
-                              "."))
-                  (t (org-export-data (org-element-property :title destination)
-                                      info)))
-            ;; Reference
-            (or (org-element-property :CUSTOM_ID destination)
-                (org-export-get-reference destination info))))
+          (`headline                 ;Links of type [[* Some heading]]
+           (let ((title (org-export-data (org-element-property :title destination) info)))
+             ;; (message "[ox-hugo-link DBG] headline title: %s" title)
+             (format
+              "[%s](#%s)"
+              ;; Description
+              (cond ((org-string-nw-p contents))
+                    ((org-export-numbered-headline-p destination info)
+                     (mapconcat #'number-to-string
+                                (org-export-get-headline-number destination info)
+                                "."))
+                    (t title))
+              ;; Reference
+              (or (org-element-property :CUSTOM_ID destination)
+                  (org-hugo-slug title)
+                  ;; (org-export-get-reference destination info)
+                  ))))
           (_
            (let ((description
                   (or (org-string-nw-p contents)

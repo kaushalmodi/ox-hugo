@@ -1434,6 +1434,33 @@ attribute must apply *only* to the link, and not to the image.
 annotation. So the behavior will depend on the browser (typically an
 external link will open in a new tab automatically).
 ** Within the same post (Internal links)                     :internal_links:
+*** Link to headings by name                                   :toc:headings:
+:PROPERTIES:
+:EXPORT_FILE_NAME: link-to-headings-by-name
+:EXPORT_OPTIONS: num:t toc:t
+:END:
+**** Alpha 101
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+- Link (with description) to a heading with section number: [[* Beta 102][Link to
+  /Beta 102/ heading]]
+- Link (no description) to a heading without section number: [[* Zeta
+  103]]
+**** Beta 102
+- Link (with description) to a heading without section number: [[* Alpha 101][Link to
+  /Alpha 101/ heading]]
+***** Gamma 102.1
+****** Delta 102.1.1
+****** Epsilon 102.1.2
+**** Zeta 103
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+***** Links (no descriptions) to headings with section numbers
+- Section [[* Gamma 102.1]]
+- Section [[* Delta 102.1.1]]
+- Section [[* Epsilon 102.1.2]]
 *** Link to a heading CUSTOM_ID
 :PROPERTIES:
 :EXPORT_FILE_NAME: link-heading-custom-id

@@ -810,11 +810,11 @@ contents according to the current headline."
                 ;; Hide the bullets if section numbers are present for
                 ;; even one heading.
                 (concat "<style>\n"
-                        "  .ox-hugo ul {\n"
+                        "  .ox-hugo-toc ul {\n"
                         "    list-style: none;\n"
                         "  }\n"
                         "</style>\n"))
-              "<div class=\"ox-hugo toc\">\n" ;This is a nasty workaround
+              "<div class=\"ox-hugo-toc toc\">\n" ;This is a nasty workaround
               "<div></div>\n"        ;till Hugo/Blackfriday support
               toc-headline           ;wrapping Markdown in HTML div's.
               toc-items ;https://github.com/kaushalmodi/ox-hugo/issues/93

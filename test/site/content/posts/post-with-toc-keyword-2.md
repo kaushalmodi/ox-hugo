@@ -4,7 +4,7 @@ tags = ["keyword", "toc"]
 draft = false
 +++
 
-<div class="ox-hugo toc">
+<div class="ox-hugo-toc toc">
 <div></div>
 
 ## Table of Contents

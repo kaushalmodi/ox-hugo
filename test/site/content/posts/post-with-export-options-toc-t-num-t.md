@@ -5,11 +5,11 @@ draft = false
 +++
 
 <style>
-  .ox-hugo ul {
+  .ox-hugo-toc ul {
     list-style: none;
   }
 </style>
-<div class="ox-hugo toc">
+<div class="ox-hugo-toc toc">
 <div></div>
 
 ## Table of Contents

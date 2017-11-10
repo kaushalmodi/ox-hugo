@@ -482,11 +482,12 @@ e.g. \"toc:nil\", \"toc:t\" or \"toc:3\"."
   :safe (lambda (x) (or (booleanp x)
                    (integerp x))))
 
-(defcustom org-hugo-export-with-section-numbers 'onlytoc
+(defcustom org-hugo-export-with-section-numbers nil
   "Configuration for adding section numbers to headlines.
 
-When set to `onlytoc', none of the headlines will be numbered
-in the body, but TOC generation will use the section numbers.
+When set to `onlytoc', none of the headlines will be numbered in
+the exported post body, but TOC generation will use the section
+numbers.
 
 When set to an integer N, numbering will only happen for
 headlines whose relative level is higher or equal to N.
@@ -729,6 +730,25 @@ This function is called in the very end of
 This is an internal function."
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code))
 
+(defun org-hugo--get-headline-number (headline info &optional toc)
+  "Return htmlized section number for the HEADLINE.
+INFO is a plist used as a communication channel.
+
+When the \"num\" export option is `onlytoc', headline number is
+returned only if the optional argument TOC is non-nil.
+
+Return nil if there is no headline number, or if it has been
+disabled."
+  (let ((onlytoc (equal 'onlytoc (plist-get info :section-numbers))))
+    (when (and (if toc
+                   t
+                 (not onlytoc)) ;If `toc' is nil, but `onlytoc' is non-nil, return nil
+               (org-export-numbered-headline-p headline info))
+      (let ((number-str (mapconcat
+                         'number-to-string
+                         (org-export-get-headline-number headline info) ".")))
+        (format "<span class=\"section-num\">%s</span> " number-str)))))
+
 (defun org-hugo--build-toc (info &optional n keyword local)
   "Return table of contents as a string.
 
@@ -751,16 +771,13 @@ contents according to the current headline."
          (toc-items
           (mapconcat
            (lambda (headline)
-             (let* ((indentation
-                     (make-string
-                      (* 4 (1- (org-export-get-relative-level headline info)))
-                      ?\s))
+             (let* ((level (org-export-get-relative-level headline info))
+                    (indentation (make-string (* 4 (1- level)) ?\s))
                     (headline-num-list (org-export-get-headline-number headline info))
-                    (number (when headline-num-list
-                              ;; (message "[ox-hugo TOC DBG] headline-num-list: %S" headline-num-list)
-                              (format "%d." (org-last headline-num-list))))
-                    (bullet (when number
-                              (concat number (make-string (- 4 (length number)) ?\s))))
+                    (number (if headline-num-list
+                                ;; (message "[ox-hugo TOC DBG] headline-num-list: %S" headline-num-list)
+                                (org-hugo--get-headline-number headline info :toc)
+                              ""))
                     (title (org-export-data (org-element-property :title headline) info))
                     (toc-entry
                      (format "[%s](#%s)"
@@ -778,8 +795,8 @@ contents according to the current headline."
                                  (and tags
                                       (format ":%s:"
                                               (mapconcat #'identity tags ":")))))))
-               (when bullet
-                 (concat indentation bullet toc-entry tags))))
+               ;; (message "[ox-hugo build-toc DBG] level:%d, number:%s" level number)
+               (concat indentation "- " number toc-entry tags)))
            (org-export-collect-headlines info n (and local keyword))
            "\n"))                       ;Newline between TOC items
          ;; Remove blank lines from in-between TOC items, which can
@@ -789,8 +806,19 @@ contents according to the current headline."
                      (replace-regexp-in-string "\n\\{2,\\}" "\n" toc-items))))
     ;; (message "[ox-hugo build-toc DBG] toc-items:%s" toc-items)
     (when toc-items
-      (concat toc-headline
-              toc-items
+      (concat (when (string-match-p "^\\s-*\\-\\s-<span class=\"section\\-num\"" toc-items)
+                ;; Hide the bullets if section numbers are present for
+                ;; even one heading.
+                (concat "<style>\n"
+                        "  .ox-hugo ul {\n"
+                        "    list-style: none;\n"
+                        "  }"
+                        "</style>\n"))
+              "<div class=\"ox-hugo toc\">\n" ;This is a nasty workaround
+              "<div></div>\n"        ;till Hugo/Blackfriday support
+              toc-headline           ;wrapping Markdown in HTML div's.
+              toc-items ;https://github.com/kaushalmodi/ox-hugo/issues/93
+              "\n</div>"
               "\n"))))                ;Final newline at the end of TOC
 
 (defalias 'org-hugo--has-caption-p 'org-html--has-caption-p
@@ -868,14 +896,7 @@ information."
 CONTENTS is the headline contents.  INFO is a plist used as
 a communication channel."
   (unless (org-element-property :footnote-section-p headline)
-    (let* ((numbers
-            (when (and (not (equal 'onlytoc (plist-get info :section-numbers)))
-                       (org-export-numbered-headline-p headline info))
-              (concat
-               (mapconcat
-                'number-to-string
-                (org-export-get-headline-number headline info) ".")
-               " ")))
+    (let* ((numbers (org-hugo--get-headline-number headline info nil))
            (level (org-export-get-relative-level headline info))
            (title (org-export-data (org-element-property :title headline) info))
            (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
@@ -984,12 +1005,9 @@ Optional argument TODO is the Org TODO string.
 Optional argument ANCHOR is the Hugo anchor tag for the section as a
 string.
 
-Optional argument NUMBERS, if non-nil, is a string containing the
-TITLE's number."
-  (let* ((numbers-html (when numbers
-                         (concat "<span class=\"section-num\">"
-                                 numbers "</span>")))
-         (headline (concat todo numbers-html title " " anchor "\n")))
+Optional argument NUMBERS, if non-nil, is an htmlized string
+containing the TITLE's number."
+  (let ((headline (concat todo numbers title " " anchor "\n")))
     ;; Use "Setext" style
     (if (and (eq style 'setext) (< level 3))
         (let* ((underline-char (if (= level 1) ?= ?-))

@@ -545,37 +545,6 @@ property needs to be left *empty* instead of setting to =nil=!
 :END:
 - [[http://orgmode.org/manual/Literal-examples.html][Org reference]]
 - [[https://gohugo.io/content-management/syntax-highlighting/][Hugo =highlight= shortcode with line numbers]]
-*** Source block with line numbers examples                        :noexport:
-:PROPERTIES:
-:CUSTOM_ID: source-block-with-line-numbers-examples
-:END:
-#+BEGIN_SRC org :noweb-ref src-block-n-default-start
-,#+BEGIN_SRC emacs-lisp -n
-;; this will export with line number 1 (default)
-(message "This is line 2")
-,#+END_SRC
-#+END_SRC
-
-#+BEGIN_SRC org :noweb-ref src-block-n-custom-start
-,#+BEGIN_SRC emacs-lisp -n 20
-;; this will export with line number 20
-(message "This is line 21")
-,#+END_SRC
-#+END_SRC
-
-#+BEGIN_SRC org :noweb-ref src-block-n-default-continue
-,#+BEGIN_SRC emacs-lisp +n
-;; This will be listed as line 22
-(message "This is line 23")
-,#+END_SRC
-#+END_SRC
-
-#+BEGIN_SRC org :noweb-ref src-block-n-custom-continue
-,#+BEGIN_SRC emacs-lisp +n 10
-;; This will be listed as line 33
-(message "This is line 34")
-,#+END_SRC
-#+END_SRC
 *** Cases
 :PROPERTIES:
 :CUSTOM_ID: source-block-line-number-cases
@@ -621,42 +590,6 @@ property needs to be left *empty* instead of setting to =nil=!
 :EXPORT_FILE_NAME: source-block-with-highlighting
 :CUSTOM_ID: source-blocks-with-highlighting
 :END:
-*** Source block with line highlighting examples                   :noexport:
-:PROPERTIES:
-:CUSTOM_ID: source-block-with-line-highlighting-examples
-:END:
-#+BEGIN_SRC org :noweb-ref src-block-hl-without-n
-,#+BEGIN_SRC emacs-lisp :hl_lines 1,3-5
-(message "This is line 1")
-(message "This is line 2")
-(message "This is line 3")
-(message "This is line 4")
-(message "This is line 5")
-(message "This is line 6")
-,#+END_SRC
-#+END_SRC
-
-#+BEGIN_SRC org :noweb-ref src-block-hl-with-n-not-1
-,#+BEGIN_SRC emacs-lisp -n 7 :hl_lines 1,3-5
-(message "This is line 7 in code, but line 1 for highlighting reference")
-(message "This is line 8 in code, but line 2 for highlighting reference")
-(message "This is line 9 in code, but line 3 for highlighting reference")
-(message "This is line 10 in code, but line 4 for highlighting reference")
-(message "This is line 11 in code, but line 5 for highlighting reference")
-(message "This is line 12 in code, but line 6 for highlighting reference")
-,#+END_SRC
-#+END_SRC
-
-#+BEGIN_SRC org :noweb-ref src-block-hl-with-n
-,#+BEGIN_SRC emacs-lisp -n :hl_lines 1,3-5
-(message "This is line 1")
-(message "This is line 2")
-(message "This is line 3")
-(message "This is line 4")
-(message "This is line 5")
-(message "This is line 6")
-,#+END_SRC
-#+END_SRC
 *** Without line numbers
 :PROPERTIES:
 :CUSTOM_ID: source-blocks-with-highlighting-no-linenums
@@ -2442,40 +2375,55 @@ Still some people might prefer to use the Org generated TOC.
 :END:
 #+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
 *** TOC
-**** Post with toc set to non-nil
+**** =num= set to =nil=
+***** TOC with all headings (unnumbered)
 :PROPERTIES:
-:EXPORT_FILE_NAME: post-with-toc-export-option-t
-:EXPORT_OPTIONS: toc:t
+:EXPORT_FILE_NAME: post-with-export-options-toc-t-num-nil
+:EXPORT_OPTIONS: num:nil toc:t
 :END:
 #+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
-**** Post with toc set to 2
+***** TOC with headings (unnumbered) only till level 2
 :PROPERTIES:
-:EXPORT_FILE_NAME: post-with-toc-export-option-2
-:EXPORT_OPTIONS: toc:2
+:EXPORT_FILE_NAME: post-with-export-options-toc-2-num-nil
+:EXPORT_OPTIONS: num:nil toc:2
 :END:
 #+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
-**** Post with toc set to nil
+***** No TOC as toc set to nil
 :PROPERTIES:
-:EXPORT_FILE_NAME: post-with-toc-export-option-nil
-:EXPORT_OPTIONS: toc:nil
+:EXPORT_FILE_NAME: post-with-export-options-toc-nil-num-nil
+:EXPORT_OPTIONS: num:nil toc:nil
 :END:
 #+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
-**** Post with toc set to 0
+**** =num= set to =t=
+***** TOC with all headings (numbered, except for selected unnumbered)
 :PROPERTIES:
-:EXPORT_FILE_NAME: post-with-toc-export-option-0
-:EXPORT_OPTIONS: toc:0
+:EXPORT_FILE_NAME: post-with-export-options-toc-t-num-t
+:EXPORT_OPTIONS: num:t toc:t
 :END:
 #+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
-**** Post with toc set to non-nil and num set to nil
+***** TOC with headings (numbered, except for selected unnumbered) only till level 2
 :PROPERTIES:
-:EXPORT_FILE_NAME: post-with-toc-export-option-t-and-num-nil
-:EXPORT_OPTIONS: toc:t num:nil
+:EXPORT_FILE_NAME: post-with-export-options-toc-2-num-t
+:EXPORT_OPTIONS: num:t toc:2
 :END:
 #+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
-**** Post with toc set to non-nil and num set to onlytoc
+***** No TOC as toc set to 0
 :PROPERTIES:
-:EXPORT_FILE_NAME: post-with-toc-export-option-t-and-num-onlytoc
-:EXPORT_OPTIONS: toc:t num:onlytoc
+:EXPORT_FILE_NAME: post-with-export-options-toc-0-num-t
+:EXPORT_OPTIONS: num:t toc:0
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+**** =num= set to =onlytoc=
+***** TOC with all headings (post-unnumbered, TOC-numbered)
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-export-options-toc-t-num-onlytoc
+:EXPORT_OPTIONS: num:onlytoc toc:t
+:END:
+#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+***** TOC with headings (post-unnumbered, TOC-numbered) only till level 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-export-options-toc-1-num-onlytoc
+:EXPORT_OPTIONS: num:onlytoc toc:1
 :END:
 #+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
 * Hugo Aliases                                                      :aliases:
@@ -2565,14 +2513,78 @@ immediately after the post heading.
 :PROPERTIES:
 :UNNUMBERED: t
 :END:
-The =UNNUMBERED= property for this subtree is set to =t=. So even when
-the TOC export option is set to =t= or a number ≥ 3, this title will
-*not* show up in the TOC. That's because the TOC is exported as a
-Markdown /ordered list/, and you cannot have ordered list items
-without a number prefix!
+The =UNNUMBERED= property for this subtree is set to =t=. So this
+heading will show up as unnumbered in both the post body and the TOC.
 ***** Post sub-heading 2.2.3
 *** Post sub-heading 3
 **** Post sub-heading 3.1
+** Source block with line numbers examples
+:PROPERTIES:
+:CUSTOM_ID: source-block-with-line-numbers-examples
+:END:
+#+BEGIN_SRC org :noweb-ref src-block-n-default-start
+,#+BEGIN_SRC emacs-lisp -n
+;; this will export with line number 1 (default)
+(message "This is line 2")
+,#+END_SRC
+#+END_SRC
+
+#+BEGIN_SRC org :noweb-ref src-block-n-custom-start
+,#+BEGIN_SRC emacs-lisp -n 20
+;; this will export with line number 20
+(message "This is line 21")
+,#+END_SRC
+#+END_SRC
+
+#+BEGIN_SRC org :noweb-ref src-block-n-default-continue
+,#+BEGIN_SRC emacs-lisp +n
+;; This will be listed as line 22
+(message "This is line 23")
+,#+END_SRC
+#+END_SRC
+
+#+BEGIN_SRC org :noweb-ref src-block-n-custom-continue
+,#+BEGIN_SRC emacs-lisp +n 10
+;; This will be listed as line 33
+(message "This is line 34")
+,#+END_SRC
+#+END_SRC
+** Source block with line highlighting examples
+:PROPERTIES:
+:CUSTOM_ID: source-block-with-line-highlighting-examples
+:END:
+#+BEGIN_SRC org :noweb-ref src-block-hl-without-n
+,#+BEGIN_SRC emacs-lisp :hl_lines 1,3-5
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+(message "This is line 4")
+(message "This is line 5")
+(message "This is line 6")
+,#+END_SRC
+#+END_SRC
+
+#+BEGIN_SRC org :noweb-ref src-block-hl-with-n-not-1
+,#+BEGIN_SRC emacs-lisp -n 7 :hl_lines 1,3-5
+(message "This is line 7 in code, but line 1 for highlighting reference")
+(message "This is line 8 in code, but line 2 for highlighting reference")
+(message "This is line 9 in code, but line 3 for highlighting reference")
+(message "This is line 10 in code, but line 4 for highlighting reference")
+(message "This is line 11 in code, but line 5 for highlighting reference")
+(message "This is line 12 in code, but line 6 for highlighting reference")
+,#+END_SRC
+#+END_SRC
+
+#+BEGIN_SRC org :noweb-ref src-block-hl-with-n
+,#+BEGIN_SRC emacs-lisp -n :hl_lines 1,3-5
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+(message "This is line 4")
+(message "This is line 5")
+(message "This is line 6")
+,#+END_SRC
+#+END_SRC
 ** Lorem Ipsum
 :PROPERTIES:
 :CUSTOM_ID: lorem-ipsum

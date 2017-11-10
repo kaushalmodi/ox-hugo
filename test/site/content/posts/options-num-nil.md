@@ -33,11 +33,8 @@ draft = false
 
 #### Post sub-heading 2.2.2 {#post-sub-heading-2-dot-2-dot-2}
 
-The `UNNUMBERED` property for this subtree is set to `t`. So even when
-the TOC export option is set to `t` or a number ≥ 3, this title will
-**not** show up in the TOC. That's because the TOC is exported as a
-Markdown _ordered list_, and you cannot have ordered list items
-without a number prefix!
+The `UNNUMBERED` property for this subtree is set to `t`. So this
+heading will show up as unnumbered in both the post body and the TOC.
 
 
 #### Post sub-heading 2.2.3 {#post-sub-heading-2-dot-2-dot-3}

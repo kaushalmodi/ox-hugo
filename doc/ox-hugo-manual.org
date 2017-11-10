@@ -912,8 +912,11 @@ control on:
   Org content.
 - How many headlines to include in the TOC --- /Example: =#+TOC:
   headlines 2=/ or =:EXPORT_OPTIONS: toc:2=.
-- Whether you want to *not* include a headline in the TOC --- Set the
-  =UNNUMBERED= property of that headline to =t=.
+- Whether you want *all* the headlines in the TOC to be numbered or
+  not --- See =org-hugo-export-with-section-numbers=.
+- Whether you want *only some* headlines numbered (both in post body
+  and the TOC) --- Set the =UNNUMBERED= property of that headline to
+  =t=.
 
 If you'd like to use the Org-generated TOC instead of the
 Hugo-generated one, you can do it one of these many ways:

@@ -81,34 +81,19 @@
         {{ end }}
     </p>
     <p>
-        {{ with .Params.weight }}
-            Weight (for debug): {{ . }}
-        {{ end }}
-    </p>
-    <p>
-        {{ if .Params.blackfriday }}
-            Blackfriday (for debug): {{ .Params.blackfriday }}
-        {{ end }}
-    </p>
-    <p>
-        {{ if .Params.menu }}
-            Menu (for debug): {{ .Params.menu }}
-        {{ end }}
-    </p>
-    <p>
         {{ if .Params.draft }}
             <b>--- This is a Draft ---</b>
         {{ end }}
     </p>
     {{ .Content }}
+
     <hr>
     <h3>All Page Params (for debug)</h3>
-    <p>
-        {{ range .Params }}
-            {{ printf "%#v" . }} <br/>
+    <table>
+        {{ range $key, $value := .Params }}
+            {{ printf "<tr><td>%#v</td><td>%#v</td></tr>" $key $value | safeHTML }}
         {{ end }}
-    </p>
-
+    </table>
 </div>
 
 {{ end }}

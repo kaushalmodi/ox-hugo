@@ -2043,7 +2043,21 @@ are \"toml\" and \"yaml\"."
                           (format "%s %s %s\n"
                                   key
                                   sign
-                                  (cond ((member key '("aliases" "tags" "categories" "keywords"))
+                                  (cond ((or (member key '("aliases" "tags" "categories" "keywords"))
+                                             (listp value)) ;Custom front matter which are lists
+                                         (when (listp value)
+                                           ;; Convert value to a string
+                                           (setq value (mapconcat
+                                                        (lambda (v)
+                                                          (cond
+                                                           ((symbolp v)
+                                                            (symbol-name v))
+                                                           ((numberp v)
+                                                            (number-to-string v))
+                                                           (t
+                                                            v)))
+                                                        value
+                                                        org-hugo--internal-list-separator)))
                                          ;; "abc def" -> "[\"abc\", \"def\"]"
                                          (concat "["
                                                  (mapconcat #'identity

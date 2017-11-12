@@ -1059,6 +1059,29 @@ The following results in the 'genres' property having the value
 :GENRES+:   Baroque
 :END:
 #+END_EXAMPLE
+** Custom front matter with list values                         :list_values:
+*** Custom front matter with list values in TOML
+:PROPERTIES:
+:EXPORT_FILE_NAME: custom-front-matter-with-list-values-toml
+:EXPORT_HUGO_FRONT_MATTER_FORMAT: toml
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :animals '(dog cat "penguin" "mountain gorilla")
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :strings-symbols '("abc" def "two words")
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :integers '(123 -5 17 1_234)
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :floats '(12.3 -5.0 -17E-6)
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :booleans '(true false)
+:END:
+[[https://github.com/kaushalmodi/ox-hugo/issues/99][Issue # 99]]
+*** Custom front matter with list values in YAML
+:PROPERTIES:
+:EXPORT_FILE_NAME: custom-front-matter-with-list-values-yaml
+:EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :animals '(dog cat "penguin" "mountain gorilla")
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :strings-symbols '("abc" def "two words")
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :integers '(123 -5 17 1_234)
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :floats '(12.3 -5.0 -17E-6)
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :booleans '(true false)
+:END:
+[[https://github.com/kaushalmodi/ox-hugo/issues/99][Issue # 99]]
 * Post body                                                            :body:
 ** Summary Splitter
 :PROPERTIES:

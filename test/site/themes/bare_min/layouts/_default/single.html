@@ -101,6 +101,14 @@
         {{ end }}
     </p>
     {{ .Content }}
+    <hr>
+    <h3>All Page Params (for debug)</h3>
+    <p>
+        {{ range .Params }}
+            {{ printf "%#v" . }} <br/>
+        {{ end }}
+    </p>
+
 </div>
 
 {{ end }}

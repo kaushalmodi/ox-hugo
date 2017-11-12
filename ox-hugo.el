@@ -1511,8 +1511,12 @@ string with just alphanumeric characters."
         (string= "false" val)
         ;; or if it is a date (date, publishDate, expiryDate, lastmod)
         (string-match-p org-hugo--date-time-regexp val)
-        ;; or if it is any number
-        (string-match-p "\\`[[:digit:]]+\\'" val))
+        ;; or if it is any number (integer or float)
+        ;; https://github.com/toml-lang/toml#integer
+        ;; Integer examples: 7, +7, -7, 7_000
+        ;; https://github.com/toml-lang/toml#float
+        ;; Float examples: 7.8, +7.8, -7.8, 7e-8, -7E+8
+        (string-match-p "\\`[+-]?[[:digit:]_]+\\(\\(\\.\\|[eE][+-]?\\)[[:digit:]]+\\)*\\'" val))
     val)
    ((and prefer-no-quotes
          (string-match-p "\\`[a-zA-Z0-9]+\\'" val))

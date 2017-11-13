@@ -5,6 +5,7 @@
 {{ $typeIsString         := (eq "string" $type) }}
 {{ $typeIsTime           := (eq "time.Time" $type) }}
 {{ $typeIsArray          := (findRE "^[[][]]" $type 1 | len | eq 1) }} <!-- match ^[] -->
+{{ $typeIsInterface      := (eq "interface" $type) }}
 {{ $typeIsStringArray    := (findRE "^[[][]]string" $type 1 | len | eq 1) }} <!-- match ^[]string -->
 {{ $typeIsInterfaceArray := (findRE "^[[][]]interface" $type 1 | len | eq 1) }} <!-- match ^[]interface -->
 {{ $typeIsMap            := (findRE "^map[[].+[]]" $type 1 | len | eq 1) }} <!-- match ^map[*] -->
@@ -16,38 +17,40 @@
         {{ else }}
             {{ printf "<span class=\"false\">%#v</span>" $value | safeHTML }}
         {{ end }}
-    {{ else if (or $typeIsString $typeIsTime) }}
+    {{ else if (or $typeIsString $typeIsTime $typeIsInterface) }}
         {{ printf "%s" $value | safeHTML }}
     {{ else if $typeIsArray }}
-        {{ range $value }}
-            {{ if $typeIsStringArray }}
-                <!-- Quoting strings so that strings with spaces can be easily identified -->
-                {{ printf "\"%s\"" . | safeHTML }}
-            {{ else if $typeIsInterfaceArray }}
-                {{ printf "%s" . | safeHTML }}
-            {{ else }}
-                {{ printf "%#v" . | safeHTML }}
+        {{ if (gt (len $value) 0) }}
+            {{ range $value }}
+                {{ if $typeIsStringArray }}
+                    <!-- Quoting strings so that strings with spaces can be easily identified -->
+                    {{ printf "\"%s\"" . | safeHTML }}
+                {{ else }}
+                    {{ partial "debugprint.html" . }} <!-- Recursive call FTW! -->
+                {{ end }}
             {{ end }}
         {{ end }}
     {{ else if $typeIsMap }}
-        <table>
-            <tr><th class="key">Key</th><th class="type">Type</th><th class="value">Value</th></tr>
-            {{ range $key1, $value1 := $value }}
-                {{ $type1       := (printf "%T" $value1) }}
-                {{ $type1IsTime := (eq "time.Time" $type1) }}
-                {{ if $type1IsTime }}
-                    <!-- Print the date only if it is not at its initial value of Jan 1, 0001 -->
-                    {{ if (ne "0001-01-01" ($value1.Format "2006-01-02")) }}
+        {{ if (gt (len $value) 0) }}
+            <table>
+                <tr><th class="key">Key</th><th class="type">Type</th><th class="value">Value</th></tr>
+                {{ range $key1, $value1 := $value }}
+                    {{ $type1       := (printf "%T" $value1) }}
+                    {{ $type1IsTime := (eq "time.Time" $type1) }}
+                    {{ if $type1IsTime }}
+                        <!-- Print the date only if it is not at its initial value of Jan 1, 0001 -->
+                        {{ if (ne "0001-01-01" ($value1.Format "2006-01-02")) }}
+                            {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">" $key1 $type1 | safeHTML }}
+                            {{ partial "debugprint.html" $value1 }} <!-- Recursive call FTW! -->
+                            {{ printf "</td></tr>" | safeHTML }}
+                        {{ end }}
+                    {{ else }}
                         {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">" $key1 $type1 | safeHTML }}
                         {{ partial "debugprint.html" $value1 }} <!-- Recursive call FTW! -->
                         {{ printf "</td></tr>" | safeHTML }}
                     {{ end }}
-                {{ else }}
-                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">" $key1 $type1 | safeHTML }}
-                    {{ partial "debugprint.html" $value1 }} <!-- Recursive call FTW! -->
-                    {{ printf "</td></tr>" | safeHTML }}
                 {{ end }}
-            {{ end }}
+        {{ end }}
         </table>
     {{ else }}
         {{ printf "%#v" . | safeHTML }}

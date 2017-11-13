@@ -1,129 +1,62 @@
 <!-- Pretty Print for Debug -->
-<!-- I wish I can call this recursively.. -->
-{{ $value0 := . }}
-{{ $type0 := (printf "%T" $value0) }}
-{{ $type0IsBool := (eq "bool" $type0) }}
-{{ $type0IsString := (eq "string" $type0) }}
-{{ $type0IsTime := (eq "time.Time" $type0) }}
-{{ $type0IsArray := (findRE "^[[][]]" $type0 1 | len | eq 1) }} <!-- match ^[] -->
-{{ $type0IsStringArray := (findRE "^[[][]]string" $type0 1 | len | eq 1) }} <!-- match ^[]string -->
-{{ $type0IsInterfaceArray := (findRE "^[[][]]interface" $type0 1 | len | eq 1) }} <!-- match ^[]interface -->
-{{ $type0IsMap := (findRE "^map[[].+[]]" $type0 1 | len | eq 1) }} <!-- match ^map[*] -->
+{{ $value                := . }}
+{{ $type                 := (printf "%T" $value) }}
+{{ $typeIsBool           := (eq "bool" $type) }}
+{{ $typeIsString         := (eq "string" $type) }}
+{{ $typeIsTime           := (eq "time.Time" $type) }}
+{{ $typeIsArray          := (findRE "^[[][]]" $type 1 | len | eq 1) }} <!-- match ^[] -->
+{{ $typeIsStringArray    := (findRE "^[[][]]string" $type 1 | len | eq 1) }} <!-- match ^[]string -->
+{{ $typeIsInterfaceArray := (findRE "^[[][]]interface" $type 1 | len | eq 1) }} <!-- match ^[]interface -->
+{{ $typeIsMap            := (findRE "^map[[].+[]]" $type 1 | len | eq 1) }} <!-- match ^map[*] -->
 
-<table class="debugprint">
-    {{ if $type0IsBool }}
-        {{ if $value0 }}
-            {{ printf "<tr><td class=\"key\"></td><td class=\"type\">%s</td><td class=\"value true\">%s</td></tr>" $type0 $value0 | safeHTML }}
+<div class="debugprint">
+    {{ if $typeIsBool }}
+        {{ if $value }}
+            {{ printf "<span class=\"true\">%#v</span>" $value | safeHTML }}
         {{ else }}
-            {{ printf "<tr><td class=\"key\"></td><td class=\"type\">%s</td><td class=\"value false\">%s</td></tr>" $type0 $value0 | safeHTML }}
+            {{ printf "<span class=\"false\">%#v</span>" $value | safeHTML }}
         {{ end }}
-    {{ else if $type0IsString }}
-        {{ printf "<tr><td class=\"key\"></td><td class=\"type\">%s</td><td class=\"value\">%s</td></tr>" $type0 $value0 | safeHTML }}
-    {{ else if $type0IsTime }}
-        <!-- Print the date only if it is not at its initial value of Jan 1, 0001 -->
-        {{ if ne ($value0.Format "2006-01-02") "0001-01-01" }}
-            {{ printf "<tr><td class=\"key\"></td><td class=\"type\">%s</td><td class=\"value\">%s</td></tr>" $type0 $value0 | safeHTML }}
-        {{ end }}
-    {{ else if $type0IsArray }}
-        {{ printf "<tr><td class=\"key\"></td><td class=\"type\">%s</td><td class=\"value\">" $type0 | safeHTML }}
-        {{ range $value0 }}
-            {{ if $type0IsStringArray }}
+    {{ else if (or $typeIsString $typeIsTime) }}
+        {{ printf "%s" $value | safeHTML }}
+    {{ else if $typeIsArray }}
+        {{ range $value }}
+            {{ if $typeIsStringArray }}
                 <!-- Quoting strings so that strings with spaces can be easily identified -->
-                {{ printf "\"%s\"" . }}
-            {{ else if $type0IsInterfaceArray }}
-                {{ printf "%s" . }}
+                {{ printf "\"%s\"" . | safeHTML }}
+            {{ else if $typeIsInterfaceArray }}
+                {{ printf "%s" . | safeHTML }}
             {{ else }}
-                {{ printf "%#v" . }}
+                {{ printf "%#v" . | safeHTML }}
             {{ end }}
         {{ end }}
-        {{ printf "</td></tr>" | safeHTML }}
-    {{ else if $type0IsMap }}
-        <tr><th class="key">Key</th><th class="type">Type</th><th class="value">Value</th></tr>
-        {{ range $key1, $value1 := $value0 }}
-            {{ $type1 := (printf "%T" $value1) }}
-            {{ $type1IsBool := (eq "bool" $type1) }}
-            {{ $type1IsString := (eq "string" $type1) }}
-            {{ $type1IsTime := (eq "time.Time" $type1) }}
-            {{ $type1IsArray := (findRE "^[[][]]" $type1 1 | len | eq 1) }} <!-- match ^[] -->
-            {{ $type1IsStringArray := (findRE "^[[][]]string" $type1 1 | len | eq 1) }} <!-- match ^[]string -->
-            {{ $type1IsInterfaceArray := (findRE "^[[][]]interface" $type1 1 | len | eq 1) }} <!-- match ^[]interface -->
-            {{ $type1IsMap := (findRE "^map[[].+[]]" $type1 1 | len | eq 1) }} <!-- match ^map[*] -->
-
-            {{ if $type1IsBool }}
-                {{ if $value1 }}
-                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value true\">%#v</td></tr>" $key1 $type1 $value1 | safeHTML }}
+    {{ else if $typeIsMap }}
+        <table>
+            <tr><th class="key">Key</th><th class="type">Type</th><th class="value">Value</th></tr>
+            {{ range $key1, $value1 := $value }}
+                {{ $type1       := (printf "%T" $value1) }}
+                {{ $type1IsTime := (eq "time.Time" $type1) }}
+                {{ if $type1IsTime }}
+                    <!-- Print the date only if it is not at its initial value of Jan 1, 0001 -->
+                    {{ if (ne "0001-01-01" ($value1.Format "2006-01-02")) }}
+                        {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">" $key1 $type1 | safeHTML }}
+                        {{ partial "debugprint.html" $value1 }} <!-- Recursive call FTW! -->
+                        {{ printf "</td></tr>" | safeHTML }}
+                    {{ end }}
                 {{ else }}
-                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value false\">%#v</td></tr>" $key1 $type1 $value1 | safeHTML }}
+                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">" $key1 $type1 | safeHTML }}
+                    {{ partial "debugprint.html" $value1 }} <!-- Recursive call FTW! -->
+                    {{ printf "</td></tr>" | safeHTML }}
                 {{ end }}
-            {{ else if $type1IsString }}
-                {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">%s</td></tr>" $key1 $type1 $value1 | safeHTML }}
-            {{ else if $type1IsTime }}
-                {{ if ne ($value1.Format "2006-01-02") "0001-01-01" }}
-                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">%s</td></tr>" $key1 $type1 $value1 | safeHTML }}
-                {{ end }}
-            {{ else if $type1IsArray }}
-                {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">" $key1 $type1 | safeHTML }}
-                {{ range $value1 }}
-                    {{ if $type1IsStringArray }}
-                        {{ printf "\"%s\"" . }}
-                    {{ else if $type1IsInterfaceArray }}
-                        {{ printf "%s" . }}
-                    {{ else }}
-                        {{ printf "%#v" . }}
-                    {{ end }}
-                {{ end }}
-                {{ printf "</td></tr>" | safeHTML }}
-            {{ else if $type1IsMap }}
-                {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">" $key1 $type1 | safeHTML }}
-                <table>
-                    <tr><th class="key">Key</th><th class="type">Type</th><th class="value">Value</th></tr>
-                    {{ range $key2, $value2 := $value1 }}
-                        {{ $type2 := (printf "%T" $value2) }}
-                        {{ $type2IsBool := (eq "bool" $type2) }}
-                        {{ $type2IsString := (eq "string" $type2) }}
-                        {{ $type2IsTime := (eq "time.Time" $type2) }}
-                        {{ $type2IsArray := (findRE "^[[][]]" $type2 1 | len | eq 1) }} <!-- match ^[] -->
-                        {{ $type2IsStringArray := (findRE "^[[][]]string" $type2 1 | len | eq 1) }} <!-- match ^[]string -->
-                        {{ $type2IsInterfaceArray := (findRE "^[[][]]interface" $type2 1 | len | eq 1) }} <!-- match ^[]interface -->
-                        {{ $type2IsMap := (findRE "^map[[].+[]]" $type2 1 | len | eq 1) }} <!-- match ^map[*] -->
-
-                        {{ if $type2IsBool }}
-                            {{ if $value2 }}
-                                {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value true\">%#v</td></tr>" $key2 $type2 $value2 | safeHTML }}
-                            {{ else }}
-                                {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value false\">%#v</td></tr>" $key2 $type2 $value2 | safeHTML }}
-                            {{ end }}
-                        {{ else if $type2IsString }}
-                            {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">%s</td></tr>" $key2 $type2 $value2 | safeHTML }}
-                        {{ else if $type2IsTime }}
-                            {{ if ne ($value2.Format "2006-01-02") "0001-01-01" }}
-                                {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">%s</td></tr>" $key2 $type2 $value2 | safeHTML }}
-                            {{ end }}
-                        {{ else if $type2IsArray }}
-                            {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">" $key2 $type2 | safeHTML }}
-                            {{ range $value2 }}
-                                {{ if $type2IsStringArray }}
-                                    {{ printf "\"%s\"" . }}
-                                {{ else if $type2IsInterfaceArray }}
-                                    {{ printf "%s" . }}
-                                {{ else }}
-                                    {{ printf "%#v" . }}
-                                {{ end }}
-                            {{ end }}
-                            {{ printf "</td></tr>" | safeHTML }}
-                        {{ else }}
-                            {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">%#v</td></tr>" $key2 $type2 $value2 | safeHTML }}
-                        {{ end }}
-                    {{ end }}
-                </table>
-                {{ printf "</td></tr>" | safeHTML }}
-            {{ else }}
-                {{ printf "<tr><td class=\"key\">%s</td><td class=\"type\">%s</td><td class=\"value\">%#v</td></tr>" $key1 $type1 $value1 | safeHTML }}
             {{ end }}
-        {{ end }}
+        </table>
+    {{ else }}
+        {{ printf "%#v" . | safeHTML }}
     {{ end }}
-    <!-- Older, simpler version -->
-    {{/* range $key1, $value1 := . */}}
-    {{/* printf "<tr><td>%#v</td><td>%#v</td></tr>" $key1 $value1 | safeHTML */}}
-    {{/* end */}}
-</table>
+</div>
+
+<!-- Older, simpler version -->
+<!-- <table class="debugprint"> -->
+{{/* range $key1, $value1 := . */}}
+{{/* printf "<tr><td>%#v</td><td>%#v</td></tr>" $key1 $value1 | safeHTML */}}
+{{/* end */}}
+<!-- </table> -->

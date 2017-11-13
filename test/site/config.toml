@@ -2,6 +2,7 @@ baseURL = "http://example.org/"
 languageCode = "en-us"
 title = "ox-hugo Test Site"
 theme = "bare_min"
+
 canonifyURLs = true
 enableEmoji = true
 enableGitInfo = true
@@ -11,8 +12,11 @@ disableFastRender = true        # Hugo 0.30
 pygmentsCodeFences = true       # This applies to Chroma too.
 pygmentsUseClasses = true       # This applies to Chroma too.
 
-[[menu.main]]
-name = "labs"
-weight = -110
-identifier = "labs"
-url = "/labs/"
+[Author]
+  name = "Kaushal Modi"
+
+[Social]
+  github = "kaushalmodi"
+
+[Params]
+  description = "Test site for ox-hugo package for Emacs/Org-mode."

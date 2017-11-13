@@ -1,14 +1,14 @@
 <!-- Pretty Print for Debug -->
-{{ $value                := . }}
-{{ $type                 := (printf "%T" $value) }}
-{{ $typeIsBool           := (eq "bool" $type) }}
-{{ $typeIsString         := (eq "string" $type) }}
-{{ $typeIsTime           := (eq "time.Time" $type) }}
-{{ $typeIsArray          := (findRE "^[[][]]" $type 1 | len | eq 1) }} <!-- match ^[] -->
-{{ $typeIsInterface      := (eq "interface" $type) }}
-{{ $typeIsStringArray    := (findRE "^[[][]]string" $type 1 | len | eq 1) }} <!-- match ^[]string -->
-{{ $typeIsInterfaceArray := (findRE "^[[][]]interface" $type 1 | len | eq 1) }} <!-- match ^[]interface -->
-{{ $typeIsMap            := (findRE "^map[[].+[]]" $type 1 | len | eq 1) }} <!-- match ^map[*] -->
+{{ $value           := . }}
+{{ $type            := (printf "%T" $value) }}
+{{ $typeIsBool      := (eq "bool" $type) }}
+{{ $typeIsString    := (eq "string" $type) }}
+{{ $typeIsTime      := (eq "time.Time" $type) }}
+{{ $typeIsInterface := (eq "interface" $type) }}
+{{ $typeIsArray     := (findRE "^([[][]]|.*TaxonomyList)" $type 1 | len | eq 1) }} <!-- match ^[] -->
+{{ $typeIsMap       := (findRE "^(map[[].+[]]|.*SiteSocial)" $type 1 | len | eq 1) }} <!-- match ^map[*] -->
+
+{{ $typeIsSiteInfo  := (eq "*hugolib.SiteInfo" $type) }}
 
 <div class="debugprint">
     {{ if $typeIsBool }}
@@ -20,14 +20,13 @@
     {{ else if (or $typeIsString $typeIsTime $typeIsInterface) }}
         {{ printf "%s" $value | safeHTML }}
     {{ else if $typeIsArray }}
-        {{ if (gt (len $value) 0) }}
-            {{ range $value }}
-                {{ if $typeIsStringArray }}
-                    <!-- Quoting strings so that strings with spaces can be easily identified -->
-                    {{ printf "\"%s\"" . | safeHTML }}
-                {{ else }}
-                    {{ partial "debugprint.html" . }} <!-- Recursive call FTW! -->
-                {{ end }}
+        {{ $typeIsStringArray := (findRE "^[[][]]string" $type 1 | len | eq 1) }} <!-- match ^[]string -->
+        {{ range $value }}
+            {{ if $typeIsStringArray }}
+                <!-- Quoting strings so that strings with spaces can be easily identified -->
+                {{ printf "\"%s\"" . | safeHTML }}
+            {{ else }}
+                {{ partial "debugprint.html" . }} <!-- Recursive call FTW! -->
             {{ end }}
         {{ end }}
     {{ else if $typeIsMap }}
@@ -50,7 +49,34 @@
                         {{ printf "</td></tr>" | safeHTML }}
                     {{ end }}
                 {{ end }}
+            </table>
         {{ end }}
+    {{ else if $typeIsSiteInfo }}
+        <table>
+            <tr><th class="key">SiteInfo variable</th><th class="value">Value</th></tr>
+            {{ printf "<tr><td class=\"key\">Title</td><td class=\"value\">"           | safeHTML }}{{ partial "debugprint.html" .Title }}{{ printf "</td></tr>" | safeHTML }}
+            {{ printf "<tr><td class=\"key\">Author</td><td class=\"value\">"          | safeHTML }}{{ partial "debugprint.html" .Author }}{{ printf "</td></tr>" | safeHTML }}
+            {{ printf "<tr><td class=\"key\">Social</td><td class=\"value\">"          | safeHTML }}{{ partial "debugprint.html" .Social }}{{ printf "</td></tr>" | safeHTML }}
+            {{ printf "<tr><td class=\"key\">LastChange</td><td class=\"value\">"      | safeHTML }}{{ partial "debugprint.html" .LastChange }}{{ printf "</td></tr>" | safeHTML }}
+            {{ printf "<tr><td class=\"key\">DisqusShortname</td><td class=\"value\">" | safeHTML }}{{ partial "debugprint.html" .DisqusShortname }}{{ printf "</td></tr>" | safeHTML }}
+            {{ printf "<tr><td class=\"key\">GoogleAnalytics</td><td class=\"value\">" | safeHTML }}{{ partial "debugprint.html" .GoogleAnalytics }}{{ printf "</td></tr>" | safeHTML }}
+            {{ printf "<tr><td class=\"key\">Copyright</td><td class=\"value\">"       | safeHTML }}{{ partial "debugprint.html" .Copyright }}{{ printf "</td></tr>" | safeHTML }}
+            {{ printf "<tr><td class=\"key\">RSSLink</td><td class=\"value\">"         | safeHTML }}{{ partial "debugprint.html" .RSSLink }}{{ printf "</td></tr>" | safeHTML }}
+            {{ printf "<tr><td class=\"key\">LanguageCode</td><td class=\"value\">"    | safeHTML }}{{ partial "debugprint.html" .LanguageCode }}{{ printf "</td></tr>" | safeHTML }}
+            {{ printf "<tr><td class=\"key\">BuildDrafts</td><td class=\"value\">"     | safeHTML }}{{ partial "debugprint.html" .BuildDrafts }}{{ printf "</td></tr>" | safeHTML }}
+            {{ printf "<tr><td class=\"key\">Params</td><td class=\"value\">"          | safeHTML }}{{ partial "debugprint.html" .Params }}{{ printf "</td></tr>" | safeHTML }}
+
+            {{/* printf "<tr><td class=\"key\">Taxonomies</td><td class=\"value\">%#v</td></tr>" .Taxonomies | safeHTML */}}
+            {{/* printf "<tr><td class=\"key\">*PageCollections</td><td class=\"value\">%#v</td></tr>" .PageCollections | safeHTML */}}
+            {{/* printf "<tr><td class=\"key\">Hugo</td><td class=\"value\">%#v</td></tr>" .Hugo | safeHTML */}}
+            {{/* printf "<tr><td class=\"key\">Data</td><td class=\"value\">%#v</td></tr>" .Data | safeHTML */}}
+
+            {{/* printf "<tr><td class=\"key\">Files</td><td class=\"value\">%#v</td></tr>" .Files | safeHTML */}}
+            {{/* printf "<tr><td class=\"key\">Menus</td><td class=\"value\">%#v</td></tr>" .Menus | safeHTML */}}
+            {{/* printf "<tr><td class=\"key\">Permalinks</td><td class=\"value\">%#v</td></tr>" .Permalinks | safeHTML */}}
+            {{/* printf "<tr><td class=\"key\">Language</td><td class=\"value\">%#v</td></tr>" .Language | safeHTML */}}
+            {{/* printf "<tr><td class=\"key\">LanguagePrefix</td><td class=\"value\">%#v</td></tr>" .LanguagePrefix | safeHTML */}}
+            {{/* printf "<tr><td class=\"key\">Languages</td><td class=\"value\">%#v</td></tr>" .Languages | safeHTML */}}
         </table>
     {{ else }}
         {{ printf "%#v" . | safeHTML }}

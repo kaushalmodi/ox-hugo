@@ -368,13 +368,13 @@ comparison.
 :PROPERTIES:
 :CUSTOM_ID: demo
 :END:
-[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content][Exported Markdown]] → [[../test][*Hugo published test site*]]
+[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content][=ox-hugo= Exported Markdown]] → https://ox-hugo.scripter.co/test
 
-Now, the test site doesn't look pretty, I know :) .. because:
+Now, the test site looks very simple, because:
 - It is designed to verify if all the content translates from Org to
   Markdown as expected.
 - It uses a [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/themes/bare_min/][*bare_min*]] /theme/ written just for the debug purpose (not
-  presentation).
+  extra aesthetics).
 
 /See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
 presentation styles./

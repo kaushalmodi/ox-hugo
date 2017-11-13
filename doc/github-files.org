@@ -34,7 +34,7 @@
 https://ox-hugo.scripter.co/
 
 You can generate the same too! Simply clone this repo and do =make
-doc=.
+doc_md=.
 
 *Make sure you visit the above link to read more on:*
 - {{{doc(why-ox-hugo,Why =ox-hugo=?)}}}
@@ -43,8 +43,10 @@ doc=.
 - .. and many more topics and examples
 *** Source of the Documentation site
 - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/ox-hugo-manual.org][Org source]]
-- =ox-hugo= exported [[https://github.com/kaushalmodi/ox-hugo/tree/master/doc/content][Markdown files]]
 
+The documentation site is published by first using =ox-hugo= to
+export from Org to Markdown, and then finally =hugo=.
+/So no Markdown files are committed in the =doc/content/= directory./
 #+INCLUDE: "./ox-hugo-manual.org::#demo" :minlevel 2
 
 ** Installation

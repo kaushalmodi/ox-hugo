@@ -52,7 +52,7 @@ comparison.
 https://ox-hugo.scripter.co/
 
 You can generate the same too! Simply clone this repo and do =make
-doc=.
+doc_md=.
 
 *Make sure you visit the above link to read more on:*
 - [[https://ox-hugo.scripter.co/doc/why-ox-hugo][Why =ox-hugo=?]]
@@ -61,16 +61,18 @@ doc=.
 - .. and many more topics and examples
 ** Source of the Documentation site
 - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/ox-hugo-manual.org][Org source]]
-- =ox-hugo= exported [[https://github.com/kaushalmodi/ox-hugo/tree/master/doc/content][Markdown files]]
 
+The documentation site is published by first using =ox-hugo= to
+export from Org to Markdown, and then finally =hugo=.
+/So no Markdown files are committed in the =doc/content/= directory./
 * Demo
-[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content][Exported Markdown]] → [[file:../test][*Hugo published test site*]]
+[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content][=ox-hugo= Exported Markdown]] → https://ox-hugo.scripter.co/test
 
-Now, the test site doesn't look pretty, I know :) .. because:
+Now, the test site looks very simple, because:
 - It is designed to verify if all the content translates from Org to
   Markdown as expected.
 - It uses a [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/themes/bare_min/][*bare_min*]] /theme/ written just for the debug purpose (not
-  presentation).
+  extra aesthetics).
 
 /See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
 presentation styles./

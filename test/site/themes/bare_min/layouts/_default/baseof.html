@@ -33,6 +33,34 @@
          .masthead-body {
              font-size: 0.8em;
          }
+         .debugprint td {
+             padding-left: 4px;
+             padding-right: 4px;
+         }
+         .debugprint td.key {
+             font-weight: bold;
+         }
+         .debugprint td.type {
+             font-size: 0.9em;
+             font-family: monospace;
+         }
+         .debugprint td.value {
+             font-family: monospace;
+         }
+         .debugprint td.value.true {
+             color: green;
+         }
+         .debugprint td.value.false {
+             color: red;
+         }
+         /* Hide Type columns in debugprint */
+         /*
+         .debugprint .type {
+             display: none;
+         }*/
+         .debugprint td.type {
+             font-style: italic;
+         }
         </style>
         {{ block "head" . }}{{ end }}
     </head>

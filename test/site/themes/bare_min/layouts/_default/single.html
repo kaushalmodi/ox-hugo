@@ -32,24 +32,6 @@
 
 <div class="post">
     <h1 class="post-title">{{ .Title }}</h1>
-    <p>
-        {{ with .Params.date }}
-            Date: {{ . }}
-        {{ end }}
-    </p>
-    <p>
-        {{ if ne (.PublishDate.Format "2006-01-02") "0001-01-01" }}
-            <!-- Print the publishdate only if it is not at its initial value of Jan 1, 0001 -->
-            PublishDate: {{ .PublishDate.Format "2006-01-02" }}
-        {{ end }}
-    </p>
-    <p>
-        {{ if ne (dateFormat "2006-01-02" .Params.LastMod) "0001-01-01" }}
-            <!-- Print the lastmod date only if it is not at its initial value of Jan 1, 0001 -->
-            <!-- Need to use dateFormat instead of .Format for lastmod as it is not a declared variable internally -->
-            LastMod Date: {{ dateFormat "2006-01-02" .Params.LastMod }}
-        {{ end }}
-    </p>
     {{ if $.GitInfo }}      <!-- To enable this, put "enableGitInfo = true" in your site config.toml -->
         This test was created/modified in commit <a href="https://github.com/kaushalmodi/ox-hugo/commit/{{- $.GitInfo.Hash -}}">
         {{- $.GitInfo.AbbreviatedHash -}}</a> on <b>{{ dateFormat "2006-01-02" $.GitInfo.AuthorDate }}</b>.
@@ -82,18 +64,16 @@
     </p>
     <p>
         {{ if .Params.draft }}
-            <b>--- This is a Draft ---</b>
+            <hr>
+            <center><h2>This is a Draft</h2></center>
+            <hr>
         {{ end }}
     </p>
     {{ .Content }}
 
     <hr>
-    <h3>All Page Params (for debug)</h3>
-    <table>
-        {{ range $key, $value := .Params }}
-            {{ printf "<tr><td>%#v</td><td>%#v</td></tr>" $key $value | safeHTML }}
-        {{ end }}
-    </table>
+    <h3>Page Params (Debug)</h3>
+    {{ partial "debugprint.html" .Params }}
 </div>
 
 {{ end }}

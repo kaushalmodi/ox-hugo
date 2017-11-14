@@ -58,8 +58,10 @@
     </div>
 </p>
 
-<hr>
-<h3 id="debug">SiteInfo (Debug)</h3>
-{{ partial "debugprint.html" $.Site }}
+{{ if (eq 1 $paginator.PageNumber) }}
+    <hr>
+    <h3 id="debug">SiteInfo (Debug)</h3>
+    {{ partial "debugprint.html" $.Site }}
+{{ end }}
 
 {{ end }}

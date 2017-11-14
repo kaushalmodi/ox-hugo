@@ -1,27 +1,32 @@
 <!-- Pretty Print for Debug -->
+<!-- Usage examples:
+     {{/* partial "debugprint.html" .Params */}}
+     {{/* partial "debugprint.html" .Site */}}
+     {{/* partial "debugprint.html" .GitInfo */}}
+-->
 {{ $value           := . }}
 {{ $type            := (printf "%T" $value) }}
 {{ $typeIsBool      := (eq "bool" $type) }}
 {{ $typeIsString    := (eq "string" $type) }}
 {{ $typeIsTime      := (eq "time.Time" $type) }}
 {{ $typeIsInterface := (eq "interface" $type) }}
-{{ $typeIsArray     := (findRE "^([[][]]|.*TaxonomyList)" $type 1) }} <!-- match ^[] -->
-{{ $typeIsMap       := (findRE "^(map[[].+[]]|.*SiteSocial)" $type 1) }} <!-- match ^map[*] -->
+{{ $typeIsSlice     := (findRE "^([[][]]|.*TaxonomyList)" $type) }} <!-- match ^[] -->
+{{ $typeIsMap       := (findRE "^(map[[].+[]]|.*SiteSocial)" $type) }} <!-- match ^map[*] -->
 
 {{ $typeIsSiteInfo  := (eq "*hugolib.SiteInfo" $type) }}
+{{ $typeIsGitInfo   := (findRE "^.*gitmap\\.GitInfo" $type) }}
+{{ $typeIsFile      := (eq "source.File" $type) }}
+{{ $typeIsSpecial   := or $typeIsSiteInfo $typeIsGitInfo $typeIsFile }}
 
 {{ if $typeIsBool }}
     {{ printf "<span class=\"debugprint\"><span class=\"%#v\">%#v</span></span>" $value $value | safeHTML }}
 {{ else if $typeIsString }}
-    {{ if (findRE " " $value 1) }}
-        <!-- Double-quote if the value has a space in it. -->
-        {{ printf "\"%s\"" $value | safeHTML }}
-    {{ else }}
-        {{ printf "%s" $value | safeHTML }}
-    {{ end }}
+    <!-- Use %#v for strings so that their values always get double-quoted.
+         That is helpful to tell if a space char is within a string. -->
+    {{ printf "%#v" $value | safeHTML }}
 {{ else if (or $typeIsTime $typeIsInterface) }}
     {{ printf "%s" $value | safeHTML }}
-{{ else if $typeIsArray }}
+{{ else if $typeIsSlice }}
     {{ range $value }}
         {{ partial "debugprint.html" . }} <!-- Recursive call FTW! -->
     {{ end }}
@@ -47,19 +52,54 @@
             {{ end }}
         </table>
     {{ end }}
-{{ else if $typeIsSiteInfo }}
-    {{ $siteVarNames   := (slice "Title" "Author" "Social" "LastChange" "DisqusShortname" "GoogleAnalytics" "Copyright" "RSSLink" "LanguageCode" "BuildDrafts" "Params") }}
-    {{ $siteVarSymbols := (slice .Title  .Author  .Social  .LastChange  .DisqusShortname  .GoogleAnalytics  .Copyright  .RSSLink  .LanguageCode  .BuildDrafts  .Params ) }}
-    <table class="debugprint">
-        <tr><th class="key">SiteInfo variable</th><th class="value">Value</th></tr>
-        {{ range $idx, $elem := $siteVarNames }}
-            {{ printf "<tr><td class=\"key\">%s</td><td class=\"value\">" $elem| safeHTML }}
-            {{ partial "debugprint.html" (index $siteVarSymbols $idx) }}
-            {{ printf "</td></tr>" | safeHTML }}
+{{ else if $typeIsSpecial }}
+    <div class="debugprint">
+        {{ if $typeIsSiteInfo }}
+            {{ $siteVarNames   := (slice "Title" "Author" "Social" "LastChange" "DisqusShortname" "GoogleAnalytics" "Copyright" "RSSLink" "LanguageCode" "BuildDrafts" "Params") }}
+            {{ $siteVarSymbols := (slice .Title  .Author  .Social  .LastChange  .DisqusShortname  .GoogleAnalytics  .Copyright  .RSSLink  .LanguageCode  .BuildDrafts  .Params ) }}
+            <table>
+                <tr><th class="key">SiteInfo Variable</th><th class="value">Value</th></tr>
+                {{ range $idx, $elem := $siteVarNames }}
+                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"value\">" $elem | safeHTML }}
+                    {{ partial "debugprint.html" (index $siteVarSymbols $idx) }}
+                    {{ printf "</td></tr>" | safeHTML }}
+                {{ end }}
+            </table>
+        {{ else if $typeIsGitInfo }}
+            {{ $gitInfoVarNames   := (slice "Hash" "AbbreviatedHash" "Subject" "AuthorName" "AuthorEmail" "AuthorDate") }}
+            {{ $gitInfoVarSymbols := (slice .Hash  .AbbreviatedHash  .Subject  .AuthorName  .AuthorEmail  .AuthorDate ) }}
+            <table>
+                <tr><th class="key">GitInfo Variable</th><th class="value">Value</th></tr>
+                {{ range $idx, $elem := $gitInfoVarNames }}
+                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"value\">" $elem | safeHTML }}
+                    {{ partial "debugprint.html" (index $gitInfoVarSymbols $idx) }}
+                    {{ printf "</td></tr>" | safeHTML }}
+                {{ end }}
+            </table>
+        {{ else if $typeIsFile }}
+            {{ $fileVarNames   := (slice "Path" "LogicalName" "TranslationBaseName" "Ext" "Lang" "Dir") }}
+            <!-- Below does not work.. needs to be fixed.
+                 The error is seen when you use access this if condition as:
+                 {{/* partial "debugprint.html" .File */}}
+                 The issue is that I don't know how set the $fileVarSymbols values so that the elements are
+                 called as functions instead of fields. i.e. call Path function in .File instead of trying
+                 to get the value of the field Path.
+            -->
+            {{ $fileVarSymbols := (slice .Path  .LogicalName  .TranslationBaseName  .Ext  .Lang  .Dir ) }}
+            <table>
+                <tr><th class="key">File Variable</th><th class="value">Value</th></tr>
+                {{ range $idx, $elem := $fileVarNames }}
+                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"value\">" $elem | safeHTML }}
+                    {{ partial "debugprint.html" (index $fileVarSymbols $idx) }}
+                    {{ printf "</td></tr>" | safeHTML }}
+                {{ end }}
+            </table>
+        {{ else }}
+            {{ printf "%#v" $value | safeHTML }}
         {{ end }}
-    </table>
+    </div>
 {{ else }}
-    {{ printf "%#v" . | safeHTML }}
+    {{ printf "%#v (type:%s)" $value $type | safeHTML }}
 {{ end }}
 
 <!-- Older, simpler version -->

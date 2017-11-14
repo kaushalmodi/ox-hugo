@@ -37,14 +37,17 @@
              padding-left: 4px;
              padding-right: 4px;
          }
-         .debugprint td.key {
+         .debugprint .key {
              font-weight: bold;
          }
-         .debugprint td.type {
+         .debugprint .type {
+             /* Hide Type columns in debugprint */
+             /* display: none; */
              font-size: 0.9em;
              font-family: monospace;
+             font-style: italic;
          }
-         .debugprint td.value {
+         .debugprint .value {
              font-family: monospace;
          }
          .debugprint .true {
@@ -52,14 +55,6 @@
          }
          .debugprint .false {
              color: red;
-         }
-         /* Hide Type columns in debugprint */
-         /*
-         .debugprint .type {
-             display: none;
-         }*/
-         .debugprint td.type {
-             font-style: italic;
          }
         </style>
         {{ block "head" . }}{{ end }}

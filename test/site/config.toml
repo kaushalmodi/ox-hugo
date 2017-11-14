@@ -12,6 +12,10 @@ disableFastRender = true        # Hugo 0.30
 pygmentsCodeFences = true       # This applies to Chroma too.
 pygmentsUseClasses = true       # This applies to Chroma too.
 
+[Taxonomies]
+  category = "categories" # SINGULAR = "PLURAL"
+  tag = "tags"
+
 [Author]
   name = "Kaushal Modi"
 

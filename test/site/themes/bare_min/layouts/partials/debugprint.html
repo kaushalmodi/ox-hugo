@@ -3,6 +3,7 @@
      {{/* partial "debugprint.html" .Params */}}
      {{/* partial "debugprint.html" .Site */}}
      {{/* partial "debugprint.html" .GitInfo */}}
+     {{/* partial "debugprint.html" (slice "File" .) */}}
 -->
 {{ $value           := . }}
 {{ $type            := (printf "%T" $value) }}
@@ -15,8 +16,7 @@
 
 {{ $typeIsSiteInfo  := (eq "*hugolib.SiteInfo" $type) }}
 {{ $typeIsGitInfo   := (findRE "^.*gitmap\\.GitInfo" $type) }}
-{{ $typeIsFile      := (eq "source.File" $type) }}
-{{ $typeIsSpecial   := or $typeIsSiteInfo $typeIsGitInfo $typeIsFile }}
+{{ $typeIsSpecial   := (or $typeIsSiteInfo $typeIsGitInfo) }}
 
 {{ if $typeIsBool }}
     {{ printf "<span class=\"debugprint\"><span class=\"%#v\">%#v</span></span>" $value $value | safeHTML }}
@@ -27,8 +27,25 @@
 {{ else if (or $typeIsTime $typeIsInterface) }}
     {{ printf "%s" $value | safeHTML }}
 {{ else if $typeIsSlice }}
-    {{ range $value }}
-        {{ partial "debugprint.html" . }} <!-- Recursive call FTW! -->
+    {{ if eq 2 (len $value) }}
+        {{ $slice_elem_0 := (index $value 0) }}
+        {{ $slice_elem_1 := (index $value 1) }}
+        <!-- Special treatment for File object
+             Go templates limitation: https://discourse.gohugo.io/t/how-to-specify-a-function-call-instead-of-field-reference-in-a-partial/9219 -->
+        {{ if (and (eq "*hugolib.PageOutput" (printf "%T" $slice_elem_1)) (eq "File" $slice_elem_0)) }}
+            {{ with $slice_elem_1 }} <!-- This carries the .Page scope -->
+                {{ $fileVars := (dict "UniqueID" .File.UniqueID "BaseFileName" .File.BaseFileName "TranslationBaseName" .File.TranslationBaseName "Lang" .File.Lang "Section" .File.Section "LogicalName" .File.LogicalName "Dir" .File.Dir "Ext" .File.Ext "Path" .File.Path) }}
+                {{ partial "debugprint.html" $fileVars }} <!-- Recursive call FTW! -->
+            {{ end }}
+        {{ else }}
+            {{ range $value }}
+                {{ partial "debugprint.html" . }} <!-- Recursive call FTW! -->
+            {{ end }}
+        {{ end }}
+    {{ else }}
+        {{ range $value }}
+            {{ partial "debugprint.html" . }} <!-- Recursive call FTW! -->
+        {{ end }}
     {{ end }}
 {{ else if $typeIsMap }}
     {{ if (gt (len $value) 0) }}
@@ -61,7 +78,7 @@
                 <tr><th class="key">SiteInfo Variable</th><th class="value">Value</th></tr>
                 {{ range $idx, $elem := $siteVarNames }}
                     {{ printf "<tr><td class=\"key\">%s</td><td class=\"value\">" $elem | safeHTML }}
-                    {{ partial "debugprint.html" (index $siteVarSymbols $idx) }}
+                    {{ partial "debugprint.html" (index $siteVarSymbols $idx) }} <!-- Recursive call FTW! -->
                     {{ printf "</td></tr>" | safeHTML }}
                 {{ end }}
             </table>
@@ -72,25 +89,7 @@
                 <tr><th class="key">GitInfo Variable</th><th class="value">Value</th></tr>
                 {{ range $idx, $elem := $gitInfoVarNames }}
                     {{ printf "<tr><td class=\"key\">%s</td><td class=\"value\">" $elem | safeHTML }}
-                    {{ partial "debugprint.html" (index $gitInfoVarSymbols $idx) }}
-                    {{ printf "</td></tr>" | safeHTML }}
-                {{ end }}
-            </table>
-        {{ else if $typeIsFile }}
-            {{ $fileVarNames   := (slice "Path" "LogicalName" "TranslationBaseName" "Ext" "Lang" "Dir") }}
-            <!-- Below does not work.. needs to be fixed.
-                 The error is seen when you use access this if condition as:
-                 {{/* partial "debugprint.html" .File */}}
-                 The issue is that I don't know how set the $fileVarSymbols values so that the elements are
-                 called as functions instead of fields. i.e. call Path function in .File instead of trying
-                 to get the value of the field Path.
-            -->
-            {{ $fileVarSymbols := (slice .Path  .LogicalName  .TranslationBaseName  .Ext  .Lang  .Dir ) }}
-            <table>
-                <tr><th class="key">File Variable</th><th class="value">Value</th></tr>
-                {{ range $idx, $elem := $fileVarNames }}
-                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"value\">" $elem | safeHTML }}
-                    {{ partial "debugprint.html" (index $fileVarSymbols $idx) }}
+                    {{ partial "debugprint.html" (index $gitInfoVarSymbols $idx) }} <!-- Recursive call FTW! -->
                     {{ printf "</td></tr>" | safeHTML }}
                 {{ end }}
             </table>

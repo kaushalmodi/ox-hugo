@@ -71,8 +71,11 @@
     {{ .Content }}
 
     <hr>
-    <h3 id="debug">Page Params (Debug)</h3>
+    <a id="debug"></a>
+    <h3 id="page-debug">Page Params (Debug)</h3>
     {{ partial "debugprint.html" .Params }}
+    <h3 id="file-debug">File Object (Debug)</h3>
+    {{ partial "debugprint.html" (slice "File" .) }}
 </div>
 
 {{ end }}

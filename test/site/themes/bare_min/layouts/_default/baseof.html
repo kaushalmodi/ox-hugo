@@ -56,6 +56,14 @@
          .debugprint .false {
              color: red;
          }
+         /* Don't touch the table headers */
+         .debugprint th.key,
+         .debugprint th.type,
+         .debugprint th.value {
+             font-family: normal;
+             font-size: 1em;
+             font-style: normal;
+         }
         </style>
         {{ block "head" . }}{{ end }}
     </head>

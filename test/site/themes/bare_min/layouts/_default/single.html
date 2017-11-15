@@ -32,18 +32,9 @@
 
 <div class="post">
     <h1 class="post-title">{{ .Title }}</h1>
-    {{ if $.GitInfo }}      <!-- To enable this, put "enableGitInfo = true" in your site config.toml -->
-        This test was created/modified in commit <a href="https://github.com/kaushalmodi/ox-hugo/commit/{{- $.GitInfo.Hash -}}">
-        {{- $.GitInfo.AbbreviatedHash -}}</a> on <b>{{ dateFormat "2006-01-02" $.GitInfo.AuthorDate }}</b>.
-<pre>
-{{- /* printf "GitInfo debug:: %#v" $.GitInfo */ -}}
-{{- /* printf "GitInfo Hash                           :: %#v" $.GitInfo.Hash */ -}}
-{{- /* printf "GitInfo AbbreviatedHash                :: %#v" $.GitInfo.AbbreviatedHash */ -}}
-{{ printf "GitInfo Subject                        :: %#v" $.GitInfo.Subject }}
-{{ printf "GitInfo AuthorName                     :: %#v" $.GitInfo.AuthorName }}
-{{- /* printf "GitInfo AuthorEmail:: %#v" $.GitInfo.AuthorEmail */ -}}
-{{- /* printf "GitInfo AuthorDate (lastmod date)      :: %#v" $.GitInfo.AuthorDate */ -}}
-</pre>
+    {{ with .GitInfo }} <!-- To enable this, put "enableGitInfo = true" in your site config.toml -->
+        This test was created/modified in commit <a href="https://github.com/kaushalmodi/ox-hugo/commit/{{- .Hash -}}">
+        {{- .AbbreviatedHash -}}</a> "{{ .Subject }}" on <b>{{ dateFormat "2006-01-02" .AuthorDate }}</b>.
     {{ end }}
     <p>
         {{ if .Params.categories }}

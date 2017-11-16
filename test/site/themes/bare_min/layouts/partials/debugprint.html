@@ -5,18 +5,19 @@
      {{/* partial "debugprint.html" .GitInfo */}}
      {{/* partial "debugprint.html" (slice "File" .) */}}
 -->
-{{ $value           := . }}
-{{ $type            := (printf "%T" $value) }}
-{{ $typeIsBool      := (eq "bool" $type) }}
-{{ $typeIsString    := (eq "string" $type) }}
-{{ $typeIsTime      := (eq "time.Time" $type) }}
-{{ $typeIsInterface := (eq "interface" $type) }}
-{{ $typeIsSlice     := (findRE "^([[][]]|.*TaxonomyList)" $type) }} <!-- match ^[] -->
-{{ $typeIsMap       := (findRE "^(map[[].+[]]|.*SiteSocial)" $type) }} <!-- match ^map[*] -->
+{{ $value              := . }}
+{{ $type               := (printf "%T" $value) }}
+{{ $typeIsBool         := (eq "bool" $type) }}
+{{ $typeIsString       := (eq "string" $type) }}
+{{ $typeIsTime         := (eq "time.Time" $type) }}
+{{ $typeIsInterface    := (eq "interface" $type) }}
+{{ $typeIsSlice        := (findRE "^([[][]]|.*TaxonomyList|output\\.Formats)" $type) }} <!-- match ^[] -->
+{{ $typeIsMap          := (findRE "^(map[[].+[]]|.*SiteSocial)" $type) }} <!-- match ^map[*] -->
 
-{{ $typeIsSiteInfo  := (eq "*hugolib.SiteInfo" $type) }}
-{{ $typeIsGitInfo   := (findRE "^.*gitmap\\.GitInfo" $type) }}
-{{ $typeIsSpecial   := (or $typeIsSiteInfo $typeIsGitInfo) }}
+{{ $typeIsSiteInfo     := (eq "*hugolib.SiteInfo" $type) }}
+{{ $typeIsGitInfo      := (findRE "^.*gitmap\\.GitInfo" $type) }}
+{{ $typeIsOutputFormat := (eq "output.Format" $type) }}
+{{ $typeIsSpecial      := (or $typeIsSiteInfo $typeIsGitInfo $typeIsOutputFormat) }}
 
 {{ if $typeIsBool }}
     {{ printf "<span class=\"debugprint\"><span class=\"%#v\">%#v</span></span>" $value $value | safeHTML }}
@@ -90,6 +91,17 @@
                 {{ range $idx, $elem := $gitInfoVarNames }}
                     {{ printf "<tr><td class=\"key\">%s</td><td class=\"value\">" $elem | safeHTML }}
                     {{ partial "debugprint.html" (index $gitInfoVarSymbols $idx) }} <!-- Recursive call FTW! -->
+                    {{ printf "</td></tr>" | safeHTML }}
+                {{ end }}
+            </table>
+        {{ else if $typeIsOutputFormat }}
+            {{ $OutputFormatVarNames   := (slice "Name" "MediaType" "Path" "BaseName" "Rel" "Protocol" "IsPlainText" "IsHTML" "NoUgly" "NotAlternative") }}
+            {{ $OutputFormatVarSymbols := (slice .Name  .MediaType  .Path  .BaseName  .Rel  .Protocol  .IsPlainText  .IsHTML  .NoUgly  .NotAlternative ) }}
+            <table>
+                <tr><th class="key">OutputFormat Variable</th><th class="value">Value</th></tr>
+                {{ range $idx, $elem := $OutputFormatVarNames }}
+                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"value\">" $elem | safeHTML }}
+                    {{ partial "debugprint.html" (index $OutputFormatVarSymbols $idx) }} <!-- Recursive call FTW! -->
                     {{ printf "</td></tr>" | safeHTML }}
                 {{ end }}
             </table>

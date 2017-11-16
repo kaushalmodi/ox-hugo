@@ -1778,6 +1778,10 @@ INFO is a plist used as a communication channel."
                     (org-string-nw-p (mapconcat #'identity
                                                 alias-list
                                                 org-hugo--internal-list-separator))))
+         (outputs-raw (org-string-nw-p
+                       (org-export-data (plist-get info :hugo-outputs) info)))
+         (outputs (when outputs-raw
+                    (org-split-string outputs-raw " ")))
          (lastmod-raw (org-string-nw-p (org-export-data (plist-get info :hugo-lastmod) info)))
          (lastmod-nocolon (cond
                            ;; If the set HUGO_LASTMOD is already in
@@ -1886,7 +1890,7 @@ INFO is a plist used as a communication channel."
                  (lastmod . ,lastmod)
                  (linkTitle . ,(org-export-data (plist-get info :hugo-linktitle) info))
                  (markup . ,(org-export-data (plist-get info :hugo-markup) info))
-                 (outputs . ,(org-export-data (plist-get info :hugo-outputs) info))
+                 (outputs . ,outputs)
                  (slug . ,(org-export-data (plist-get info :hugo-slug) info))
                  (tags . ,tags)
                  (categories . ,categories)

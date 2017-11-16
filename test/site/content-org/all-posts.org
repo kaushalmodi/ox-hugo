@@ -1082,6 +1082,24 @@ The following results in the 'genres' property having the value
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :booleans '(true false)
 :END:
 [[https://github.com/kaushalmodi/ox-hugo/issues/99][Issue # 99]]
+* Outputs                                                           :outputs:
+** Output HTML and JSON                                                :json:
+:PROPERTIES:
+:EXPORT_FILE_NAME: output-html-and-json
+:EXPORT_HUGO_OUTPUTS: html json
+:END:
+*Note*: A =single.json= is required to be at a valid location in the
+template lookup hierarchy for the JSON outputs to be created.
+
+[[./index.json][Here's the JSON output version of this page]].
+** Setting empty outputs is fine                                      :empty:
+:PROPERTIES:
+:EXPORT_FILE_NAME: output-empty
+:EXPORT_HUGO_OUTPUTS:
+:END:
+If the =EXPORT_HUGO_OUTPUTS= property is left empty/unset, =ox-hugo=
+will not set the =outputs= variable in the front-matter at all. So
+only the HTML output will be created (default).
 * Post body                                                            :body:
 ** Summary Splitter
 :PROPERTIES:

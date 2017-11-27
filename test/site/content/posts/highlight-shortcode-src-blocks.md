@@ -1,7 +1,7 @@
 +++
 title = "Source blocks with highlight shortcode"
 date = 2017-07-31
-tags = ["src-block"]
+tags = ["src-block", "highlight", "shortcode"]
 draft = false
 +++
 
@@ -23,8 +23,8 @@ Here are few variables that you might like to change in the `local.mk`:
     {{< /highlight >}}
 
     The `.el` files will go to `$(prefix)/emacs/site-lisp/org` by
-                 default. If you'd like to change that, you can tweak the
-                 `lispdir` variable.
+                default. If you'd like to change that, you can tweak the
+                `lispdir` variable.
 -   **`infodir`:** Org Info installation directory. I like to keep the
     Info file for development version of Org in a separate
     directory.
@@ -51,3 +51,12 @@ Here are few variables that you might like to change in the `local.mk`:
     #   org-mime - Convert org buffer to htmlized format for email
     ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
     {{< /highlight >}}
+
+Here's an example of an `emacs-lisp` block:
+
+{{< highlight emacs-lisp>}}
+(defvar emacs-version-short (format "%s_%s"
+                                    emacs-major-version emacs-minor-version)
+  "A variable to store the current emacs versions as <MAJORVER>_<MINORVER>.
+So, for emacs version 25.0.50.1, this variable will be 25_0.")
+{{< /highlight >}}

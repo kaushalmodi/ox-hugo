@@ -47,4 +47,10 @@ arbitrarily. The Hugo shortcodes will remain unescaped in **any**
 source/example block except for <span class="underline">Markdown source blocks</span> (annotated
 with `md` language).
 
+---
+
+**It is necessary to set the Hugo site config variable
+`pygmentsCodeFences` to `true` for syntax highlighting to work for
+fenced code blocks.**
+
 [^fn:1]: Even if the user has set the `HUGO_CODE_FENCE` value to `t` (via variable, keyword or subtree property), the Hugo `highlight` shortcode will be used automatically instead of code fences if either (i) the user has chosen to either show the line numbers, or (ii) has chosen to highlight lines of code (See the `ox-hugo` documentation on [Source Blocks](https://ox-hugo.scripter.co/doc/source-blocks)).

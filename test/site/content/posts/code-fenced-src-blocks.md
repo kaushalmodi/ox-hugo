@@ -1,7 +1,7 @@
 +++
 title = "Code-fenced source blocks"
 date = 2017-07-13T17:49:22-04:00
-tags = ["src-block"]
+tags = ["src-block", "code-fence"]
 draft = false
 +++
 
@@ -17,8 +17,8 @@ Here are few variables that you might like to change in the `local.mk`:
     ```
 
     The `.el` files will go to `$(prefix)/emacs/site-lisp/org` by
-                 default. If you'd like to change that, you can tweak the
-                 `lispdir` variable.
+                default. If you'd like to change that, you can tweak the
+                `lispdir` variable.
 -   **`infodir`:** Org Info installation directory. I like to keep the
     Info file for development version of Org in a separate
     directory.
@@ -45,3 +45,18 @@ Here are few variables that you might like to change in the `local.mk`:
     #   org-mime - Convert org buffer to htmlized format for email
     ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
     ```
+
+Here's an example of an `emacs-lisp` block:
+
+```emacs-lisp
+(defvar emacs-version-short (format "%s_%s"
+                                    emacs-major-version emacs-minor-version)
+  "A variable to store the current emacs versions as <MAJORVER>_<MINORVER>.
+So, for emacs version 25.0.50.1, this variable will be 25_0.")
+```
+
+---
+
+**It is necessary to set the Hugo site config variable
+`pygmentsCodeFences` to `true` for syntax highlighting to work for
+fenced code blocks.**

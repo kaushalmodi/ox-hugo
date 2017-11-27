@@ -436,26 +436,6 @@ using the \"@\" prefix."
   :type 'boolean
   :safe #'booleanp)
 
-(defcustom org-hugo-langs-no-descr-in-code-fences '()
-  "List of languages whose descriptors should not be exported to Markdown.
-
-This variable is effective only if the HUGO_CODE_FENCE option is set.
-
-If `pygmentsCodeFences' is `true', and if a language is not supported
-by Pygments, the HTML of that fenced code block is not rendered
-correctly by Hugo.  In such cases, it is better to leave out the
-language descriptor and allow the code block to render as an Org
-example block.
-
-This issue is with the Pygments syntax highlighter, not with the
-Chroma syntax highlighter (which is the default in Hugo since
-v0.28).
-
-Example value: (org)."
-  :group 'org-export-hugo
-  :type '(repeat symbol)
-  :safe #'listp)
-
 (defcustom org-hugo-auto-set-lastmod nil
   "When non-nil, set the lastmod field in front-matter to current time."
   :group 'org-export-hugo
@@ -524,9 +504,37 @@ If an Org link references a file with one of these extensions,
 and if that file is not in the Hugo static directory, that file
 is copied over to the static directory.
 
-The auto-copying behavior is disabled if this variable is set to nil."
+The auto-copying behavior is disabled if this variable is set to
+nil."
   :group 'org-export-hugo
   :type '(repeat string))
+
+(defcustom org-hugo-langs-no-descr-in-code-fences '()
+  "List of languages whose descriptors should not be exported to Markdown.
+
+This variable is effective only if the HUGO_CODE_FENCE option is
+non-nil (default), AND if none of the Hugo \"highlight\"
+shortcode features are needed (see `org-hugo-src-block' for more
+information).
+
+If `pygmentsCodeFences' in the Hugo site's config is `true', and
+if a language is not supported by Pygments, the HTML of that
+fenced code block is not rendered correctly by Hugo.  In such
+cases, it is better to leave out the language descriptor and
+allow the code block to render as an Org example block.
+
+This variable helps get around the above issue which is present
+only when using the Pygments syntax highlighter.  This issue does
+not exist when using the Chroma syntax highlighter.  So, setting
+this variable to something like (org) is useful only if using the
+Pygments syntax highlighter.
+
+It is suggested to instead leave this value at its default value
+and use the Chroma syntax highlighter (default) in Hugo v0.28 and
+newer."
+  :group 'org-export-hugo
+  :type '(repeat symbol)
+  :safe #'listp)
 
 
 ;;; Define Back-End
@@ -578,7 +586,7 @@ The auto-copying behavior is disabled if this variable is set to nil."
                    (:hugo-delete-trailing-ws "HUGO_DELETE_TRAILING_WS" nil org-hugo-delete-trailing-ws)
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
-                   (:hugo-code-fence "HUGO_CODE_FENCE" nil t)
+                   (:hugo-code-fence "HUGO_CODE_FENCE" nil t) ;Prefer to generate triple-backquoted Markdown code blocks by default.
                    (:hugo-menu "HUGO_MENU" nil nil)
                    (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)
                    (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
@@ -1345,14 +1353,20 @@ communication channel."
 (defun org-hugo-src-block (src-block _contents info)
   "Convert SRC-BLOCK element to Hugo-compatible element.
 
-The Markdown style triple-backquoted code blocks are created
-*only* if the HUGO_CODE_FENCE property is set to a non-nil value,
-and if none of the Hugo \"highlight\" shortcode features are
-used.
+The Markdown style triple-backquoted code blocks are created if:
+  - If the HUGO_CODE_FENCE property is set to a non-nil value
+    (default),
+  - *AND* if none of the Hugo \"highlight\" shortcode features
+    are needed (see below).
 
-Otherwise, the code block is wrapped in Hugo \"highlight\"
-shortcode (See
-https://gohugo.io/content-management/syntax-highlighting).
+The code block is wrapped in Hugo \"highlight\" shortcode (See
+https://gohugo.io/content-management/syntax-highlighting) if one
+of the above conditions is false.
+
+Note that even with the default non-nil value of HUGO_CODE_FENCE,
+the user *needs* to set the `pygmentsCodeFences' variable to
+`true' in their Hugo site's config, otherwise syntax highlighting
+will not work in the generated fenced code blocks!
 
 Hugo \"highlight\" shortcode features:
   - Code blocks with line numbers (if the -n or +n switch is used)
@@ -1379,7 +1393,8 @@ channel."
     ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
     (setq ret
           (cond
-           ;; 1. If number-lines is nil AND :hugo-code-fence is non-nil
+           ;; If both number-lines and hl-lines are nil
+           ;; , AND if :hugo-code-fence is non-nil (which is, by default).
            ((and (null number-lines)
                  (null hl-lines)
                  (org-hugo--plist-get-true-p info :hugo-code-fence))
@@ -1406,9 +1421,9 @@ channel."
                 (setq ret1 (replace-regexp-in-string (concat "\\`\\(```+\\)" lang) "\\1" ret1)))
               (setq ret1 (org-hugo--escape-hugo-shortcode ret1 lang))
               ret1))
-           ;; 2. If number-lines is non-nil, or
-           ;; 3. If hl-lines is non-nil, or
-           ;; 4. If :hugo-code-fence is nil
+           ;; If number-lines is non-nil
+           ;; , or if hl-lines is non-nil
+           ;; , or if :hugo-code-fence is nil
            (t
             (let ((code (org-export-format-code-default src-block info))
                   (linenos-str "")
@@ -2437,13 +2452,13 @@ buffer and returned as a string in Org format."
                                 ,(format "|org-hugo-delete-trailing-ws                           |%S|" org-hugo-delete-trailing-ws)
                                 ,(format "|org-hugo-prefer-hyphen-in-tags                        |%S|" org-hugo-prefer-hyphen-in-tags)
                                 ,(format "|org-hugo-allow-spaces-in-tags                         |%S|" org-hugo-allow-spaces-in-tags)
-                                ,(format "|org-hugo-langs-no-descr-in-code-fences                |%S|" org-hugo-langs-no-descr-in-code-fences)
                                 ,(format "|org-hugo-auto-set-lastmod                             |%S|" org-hugo-auto-set-lastmod)
                                 ,(format "|org-hugo-export-with-toc                              |%S|" org-hugo-export-with-toc)
                                 ,(format "|org-hugo-export-with-section-numbers                  |%S|" org-hugo-export-with-section-numbers)
                                 ,(format "|org-hugo-front-matter-format                          |%S|" org-hugo-front-matter-format)
                                 ,(format "|org-hugo-default-static-subdirectory-for-externals    |%S|" org-hugo-default-static-subdirectory-for-externals)
                                 ,(format "|org-hugo-external-file-extensions-allowed-for-copying |%S|" org-hugo-external-file-extensions-allowed-for-copying)
+                                ,(format "|org-hugo-langs-no-descr-in-code-fences                |%S|" org-hugo-langs-no-descr-in-code-fences)
                                 ,(format "|org-hugo-front-matter-format                          |%S|" org-hugo-front-matter-format))
                               "\n"))
          (org-export-with-toc nil)

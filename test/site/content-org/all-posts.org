@@ -472,41 +472,6 @@ sense. But hey, a test is a test./
 
 You should see *no* table exported above.
 * Source blocks                                                   :src_block:
-** Example text with code blocks                                    :ARCHIVE:
-:PROPERTIES:
-:CUSTOM_ID: example-text-with-code-blocks
-:END:
-Here are few variables that you might like to change in the =local.mk=:
-- =prefix= :: Org installation directory
- #+BEGIN_SRC makefile
-prefix = /dir/where/you/want/to/install/org # Default: /usr/share
-#+END_SRC
- The =.el= files will go to =$(prefix)/emacs/site-lisp/org= by
-              default. If you'd like to change that, you can tweak the
-              =lispdir= variable.
-- =infodir= :: Org Info installation directory. I like to keep the
-                   Info file for development version of Org in a separate
-                   directory.
- #+BEGIN_SRC makefile
-infodir = $(prefix)/org/info # Default: $(prefix)/info
-#+END_SRC
-- =ORG_MAKE_DOC= :: Types of Org documentation you'd like to build by
-                    default.
- #+BEGIN_SRC makefile
-# Define below you only need info documentation, the default includes html and pdf
-ORG_MAKE_DOC = info pdf card # html
-#+END_SRC
-- =ORG_ADD_CONTRIB= :: Packages from the =contrib/= directory that
-     you'd like to build along with Org. Below are the ones on my
-     /must-have/ list.
- #+BEGIN_SRC makefile
-# Define if you want to include some (or all) files from contrib/lisp
-# just the filename please (no path prefix, no .el suffix), maybe with globbing
-#   org-eldoc - Headline breadcrumb trail in minibuffer
-#   ox-extra - Allow ignoring just the heading, but still export the body of those headings
-#   org-mime - Convert org buffer to htmlized format for email
-ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
-#+END_SRC
 ** Code-fenced source blocks (default behavior)
 :PROPERTIES:
 :EXPORT_FILE_NAME: code-fenced-src-blocks-default
@@ -515,7 +480,11 @@ ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
 The source blocks are code-fenced by default.
 
 #+INCLUDE: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
-** Code-fenced source blocks
+-----
+*It is necessary to set the Hugo site config variable
+=pygmentsCodeFences= to =true= for syntax highlighting to work for
+fenced code blocks.*
+** Code-fenced source blocks                                     :code_fence:
 :PROPERTIES:
 :EXPORT_HUGO_CODE_FENCE: t
 :EXPORT_FILE_NAME: code-fenced-src-blocks
@@ -525,7 +494,11 @@ Here the source blocks are explicitly set to be code-fenced by setting
 the =EXPORT_HUGO_CODE_FENCE= property to =t=.
 
 #+INCLUDE: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
-** Source blocks with =highlight= shortcode
+-----
+*It is necessary to set the Hugo site config variable
+=pygmentsCodeFences= to =true= for syntax highlighting to work for
+fenced code blocks.*
+** Source blocks with =highlight= shortcode             :highlight:shortcode:
 :PROPERTIES:
 :EXPORT_HUGO_CODE_FENCE:
 :EXPORT_FILE_NAME: highlight-shortcode-src-blocks
@@ -782,6 +755,10 @@ Above a =#+BEGIN_EXAMPLE= .. =#+END_EXAMPLE= block is chosen
 arbitrarily. The Hugo shortcodes will remain unescaped in *any*
 source/example block except for _Markdown source blocks_ (annotated
 with =md= language).
+-----
+*It is necessary to set the Hugo site config variable
+=pygmentsCodeFences= to =true= for syntax highlighting to work for
+fenced code blocks.*
 ** Org Source Block                                                :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-source-block
@@ -2626,6 +2603,49 @@ heading will show up as unnumbered in both the post body and the TOC.
 ***** Post sub-heading 2.2.3
 *** Post sub-heading 3
 **** Post sub-heading 3.1
+** Example text with code blocks
+:PROPERTIES:
+:CUSTOM_ID: example-text-with-code-blocks
+:END:
+Here are few variables that you might like to change in the =local.mk=:
+- =prefix= :: Org installation directory
+  #+BEGIN_SRC makefile
+  prefix = /dir/where/you/want/to/install/org # Default: /usr/share
+  #+END_SRC
+  The =.el= files will go to =$(prefix)/emacs/site-lisp/org= by
+              default. If you'd like to change that, you can tweak the
+              =lispdir= variable.
+- =infodir= :: Org Info installation directory. I like to keep the
+                   Info file for development version of Org in a separate
+                   directory.
+  #+BEGIN_SRC makefile
+  infodir = $(prefix)/org/info # Default: $(prefix)/info
+  #+END_SRC
+- =ORG_MAKE_DOC= :: Types of Org documentation you'd like to build by
+                    default.
+  #+BEGIN_SRC makefile
+  # Define below you only need info documentation, the default includes html and pdf
+  ORG_MAKE_DOC = info pdf card # html
+  #+END_SRC
+- =ORG_ADD_CONTRIB= :: Packages from the =contrib/= directory that
+     you'd like to build along with Org. Below are the ones on my
+     /must-have/ list.
+  #+BEGIN_SRC makefile
+  # Define if you want to include some (or all) files from contrib/lisp
+  # just the filename please (no path prefix, no .el suffix), maybe with globbing
+  #   org-eldoc - Headline breadcrumb trail in minibuffer
+  #   ox-extra - Allow ignoring just the heading, but still export the body of those headings
+  #   org-mime - Convert org buffer to htmlized format for email
+  ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
+  #+END_SRC
+
+Here's an example of an =emacs-lisp= block:
+#+BEGIN_SRC emacs-lisp
+(defvar emacs-version-short (format "%s_%s"
+                                    emacs-major-version emacs-minor-version)
+  "A variable to store the current emacs versions as <MAJORVER>_<MINORVER>.
+So, for emacs version 25.0.50.1, this variable will be 25_0.")
+#+END_SRC
 ** Source block with line numbers examples
 :PROPERTIES:
 :CUSTOM_ID: source-block-with-line-numbers-examples

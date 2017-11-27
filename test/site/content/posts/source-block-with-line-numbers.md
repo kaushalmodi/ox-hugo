@@ -1,6 +1,6 @@
 +++
 title = "Source blocks with line number annotation"
-tags = ["src-block"]
+tags = ["src-block", "highlight", "shortcode"]
 draft = false
 +++
 

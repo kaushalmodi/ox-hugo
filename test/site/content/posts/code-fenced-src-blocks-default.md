@@ -1,7 +1,7 @@
 +++
 title = "Code-fenced source blocks (default behavior)"
 date = 2017-07-31
-tags = ["src-block"]
+tags = ["src-block", "code-fence"]
 draft = false
 +++
 

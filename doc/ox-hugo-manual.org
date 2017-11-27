@@ -826,8 +826,35 @@ static directory.
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-blocks
 :END:
-=ox-hugo= supports exporting source blocks with line numbers and/or
-highlighting enabled for specific lines.
+=ox-hugo= tries to generate Markdown with fenced code blocks if
+possible. It also supports exporting source blocks with line numbers
+and/or highlighting enabled for specific lines.
+**** Code Fences
+By default, the =HUGO_CODE_FENCE= property is set to a non-nil
+value. So the code blocks will be exported with GitHub-style
+code-fencing with triple-backticks when possible.
+
+Example:
+
+#+BEGIN_SRC md
+```emacs-lisp
+(message "Hello")
+```
+#+END_SRC
+
+- Note :: It is necessary to set the Hugo site config variable
+          =pygmentsCodeFences= to =true= for syntax highlighting to
+          work for fenced code blocks.
+
+The Hugo =highlight= shortcode is automatically used instead of code
+fences (even with this property at a non-nil value) if:
+- Line numbers are enabled using the Org =-n= / =+n= syntax (see
+  below), or
+- Line highlighting is enabled using the =:hl_lines= parameter in the
+  source block header (see below).
+
+Set the =HUGO_CODE_FENCE= property to =nil= if you want to *always*
+use the Hugo =highlight= shortcode.
 **** Line numbers
 Line numbers can be enabled/configured using the Org =-n= / =+n=
 syntax. See the Info node [[http://orgmode.org/manual/Literal-examples.html][=(org) Literal examples=]] for more

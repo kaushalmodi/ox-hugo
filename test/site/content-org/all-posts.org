@@ -499,6 +499,31 @@ the =EXPORT_HUGO_CODE_FENCE= property to =t=.
 *It is necessary to set the Hugo site config variable
 =pygmentsCodeFences= to =true= for syntax highlighting to work for
 fenced code blocks.*
+*** Code-fenced source blocks with backticks                      :backticks:
+:PROPERTIES:
+:EXPORT_HUGO_CODE_FENCE: t
+:EXPORT_FILE_NAME: code-fenced-src-blocks-with-backticks
+:END:
+This code block is fenced with 4 backticks:
+#+BEGIN_SRC md
+````emacs-lisp
+(message "Hello")
+````
+#+END_SRC
+
+This code block is fenced with 3 backticks:
+#+BEGIN_SRC md
+```emacs-lisp
+(message "Hello again")
+```
+#+END_SRC
+
+This code block is fenced again with 4 backticks:
+#+BEGIN_SRC md
+````emacs-lisp
+(message "Hello again, again")
+````
+#+END_SRC
 ** Highlight Shortcode                                  :highlight:shortcode:
 *** Source blocks with =highlight= shortcode
 :PROPERTIES:

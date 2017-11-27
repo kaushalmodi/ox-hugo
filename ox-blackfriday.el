@@ -427,7 +427,23 @@ INFO is a plist used as a communication channel."
          (code (org-export-format-code-default src-block info))
          (parent-element (org-export-get-parent src-block))
          (parent-type (car parent-element))
-         (backticks (make-string org-blackfriday--code-block-num-backticks ?`)))
+         (num-backticks-in-code (when (string-match "^[[:blank:]]*\\(`\\{3,\\}\\)" code)
+                                  (length (match-string-no-properties 1 code))))
+         backticks)
+    ;; In order to show the code-fence backticks in a code-fenced code
+    ;; block, you need to have the wrapping code fence to have at
+    ;; least 1 more backtick in the fence compared to those in the
+    ;; being-wrapped code fence. This example will explain better:
+    ;;
+    ;;   ````md
+    ;;   ```emacs-lisp
+    ;;   (message "Hello")
+    ;;   ```
+    ;;   ````
+    (when num-backticks-in-code
+      (setq org-blackfriday--code-block-num-backticks
+            (1+ (max num-backticks-in-code org-blackfriday--code-block-num-backticks))))
+    (setq backticks (make-string org-blackfriday--code-block-num-backticks ?`))
     ;; (message "[ox-bf src-block DBG]")
     ;; (message "ox-bf [dbg] code: %s" code)
     ;; (message "[ox-bf src-block DBG] parent type: %S" parent-type)

@@ -455,10 +455,6 @@ a:hover tt, a:hover code {
     	width: auto;
     }
 
-    .footer {
-    	width: auto;
-    }
-
     .bodywrapper {
     	margin: 0;
     }
@@ -518,7 +514,10 @@ a:hover tt, a:hover code {
     }
 
     div.footer {
-        display: none;
+        width: auto;
+        margin-top: 30px;
+        margin-bottom: 0;
+        text-align: center;
     }
 
     div.bodywrapper {
@@ -535,10 +534,6 @@ a:hover tt, a:hover code {
     }
 
     .document {
-        width: auto;
-    }
-
-    .footer {
         width: auto;
     }
 

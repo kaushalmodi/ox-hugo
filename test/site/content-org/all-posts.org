@@ -537,6 +537,13 @@ This code block contains a fenced code block with 6 backticks:
 ``````
 #+END_SRC
 
+This code block again contains a fenced code block with 3 backticks:
+#+BEGIN_SRC md
+```emacs-lisp
+(message "Hello again x5")
+```
+#+END_SRC
+
 This code block once again contains no backticks:
 #+BEGIN_SRC emacs-lisp
 (message "Hello again x6")

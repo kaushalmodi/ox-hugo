@@ -42,6 +42,14 @@ This code block contains a fenced code block with 6 backticks:
 ``````
 ```````
 
+This code block again contains a fenced code block with 3 backticks:
+
+```````md
+```emacs-lisp
+(message "Hello again x5")
+```
+```````
+
 This code block once again contains no backticks:
 
 ```````emacs-lisp

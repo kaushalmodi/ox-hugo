@@ -504,25 +504,42 @@ fenced code blocks.*
 :EXPORT_HUGO_CODE_FENCE: t
 :EXPORT_FILE_NAME: code-fenced-src-blocks-with-backticks
 :END:
-This code block is fenced with 4 backticks:
+This code block contains a fenced code block with 4 backticks:
 #+BEGIN_SRC md
 ````emacs-lisp
 (message "Hello")
 ````
 #+END_SRC
 
-This code block is fenced with 3 backticks:
+This code block contains a fenced code block with 3 backticks:
 #+BEGIN_SRC md
 ```emacs-lisp
 (message "Hello again")
 ```
 #+END_SRC
 
-This code block is fenced again with 4 backticks:
+This code block contains no backticks:
+#+BEGIN_SRC emacs-lisp
+(message "Hello again x2")
+#+END_SRC
+
+This code block again contains a fenced code block with 4 backticks:
 #+BEGIN_SRC md
 ````emacs-lisp
-(message "Hello again, again")
+(message "Hello again x3")
 ````
+#+END_SRC
+
+This code block contains a fenced code block with 6 backticks:
+#+BEGIN_SRC md
+``````emacs-lisp
+(message "Hello again x4")
+``````
+#+END_SRC
+
+This code block once again contains no backticks:
+#+BEGIN_SRC emacs-lisp
+(message "Hello again x6")
 #+END_SRC
 ** Highlight Shortcode                                  :highlight:shortcode:
 *** Source blocks with =highlight= shortcode

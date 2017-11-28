@@ -440,9 +440,9 @@ INFO is a plist used as a communication channel."
     ;;   (message "Hello")
     ;;   ```
     ;;   ````
-    (when num-backticks-in-code
-      (setq org-blackfriday--code-block-num-backticks
-            (1+ (max num-backticks-in-code org-blackfriday--code-block-num-backticks))))
+    (when (and (numberp num-backticks-in-code)
+               (<= org-blackfriday--code-block-num-backticks num-backticks-in-code))
+      (setq org-blackfriday--code-block-num-backticks (1+ num-backticks-in-code)))
     (setq backticks (make-string org-blackfriday--code-block-num-backticks ?`))
     ;; (message "[ox-bf src-block DBG]")
     ;; (message "ox-bf [dbg] code: %s" code)

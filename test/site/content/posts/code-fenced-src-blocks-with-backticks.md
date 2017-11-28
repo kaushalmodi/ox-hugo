@@ -4,7 +4,7 @@ tags = ["src-block", "code-fence", "backticks"]
 draft = false
 +++
 
-This code block is fenced with 4 backticks:
+This code block contains a fenced code block with 4 backticks:
 
 `````md
 ````emacs-lisp
@@ -12,18 +12,38 @@ This code block is fenced with 4 backticks:
 ````
 `````
 
-This code block is fenced with 3 backticks:
+This code block contains a fenced code block with 3 backticks:
 
-``````md
+`````md
 ```emacs-lisp
 (message "Hello again")
 ```
-``````
+`````
 
-This code block is fenced again with 4 backticks:
+This code block contains no backticks:
+
+`````emacs-lisp
+(message "Hello again x2")
+`````
+
+This code block again contains a fenced code block with 4 backticks:
+
+`````md
+````emacs-lisp
+(message "Hello again x3")
+````
+`````
+
+This code block contains a fenced code block with 6 backticks:
 
 ```````md
-````emacs-lisp
-(message "Hello again, again")
-````
+``````emacs-lisp
+(message "Hello again x4")
+``````
+```````
+
+This code block once again contains no backticks:
+
+```````emacs-lisp
+(message "Hello again x6")
 ```````

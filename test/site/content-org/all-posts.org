@@ -2599,11 +2599,11 @@ auto-prefixed with the section for the current post.
 :EXPORT_HUGO_SECTION: real-examples
 :END:
 ** DONE Multifractals in ecology using R                     :math:equations:
-CLOSED: [2017-11-28 Tue 10:48]
 :PROPERTIES:
 :EXPORT_FILE_NAME: multifractals-in-ecology-using-r
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :author Leonardo A. Saravia
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :source https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md
+:EXPORT_DATE: 2017-11-28T10:48:00-05:00
 :END:
 - Disclaimer :: This post is from the [[https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md][link]] posted by GitHub user
                 [[https://github.com/lsaravia][*lsaravia*]] in [[https://github.com/gohugoio/hugo/issues/234#issuecomment-347532166][this comment]]. All credits for this post

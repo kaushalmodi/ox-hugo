@@ -4,7 +4,7 @@ tags = ["image"]
 draft = false
 +++
 
-[Issue # 17](https://github.com/kaushalmodi/ox-hugo/issues/17)
+`ox-hugo` Issue #[17](https://github.com/kaushalmodi/ox-hugo/issues/17)
 
 
 ## Setting `class` parameter {#setting-class-parameter}

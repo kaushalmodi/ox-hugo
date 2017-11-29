@@ -2,6 +2,7 @@
 #+SEQ_TODO: TODO DRAFT DONE
 #+PROPERTY: header-args :eval no
 #+MACRO: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
+#+MACRO: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
 
 * Preparation
 :PROPERTIES:
@@ -105,7 +106,7 @@ Some more text, after image.
 :PROPERTIES:
 :EXPORT_FILE_NAME: figure-shortcode-and-attr-html
 :END:
-[[https://github.com/kaushalmodi/ox-hugo/issues/17][Issue # 17]]
+{{{oxhugoissue(17)}}}
 *** Setting =class= parameter
 #+ATTR_HTML: :class inset
 [[/images/org-mode-unicorn-logo.png]]
@@ -1239,7 +1240,7 @@ This is some text[fn:3].
 :EXPORT_FILE_NAME: footnotes-bind-to-preceding-word
 :EXPORT_HUGO_ALIASES: footnotes-at-eol
 :END:
-See [[https://github.com/kaushalmodi/ox-hugo/issues/96][Issue#96]].
+{{{oxhugoissue(96)}}}
 
 To test the fix for this, increase/decrease the width of the browser
 window showing this page so that the test lines below start wrapping

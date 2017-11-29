@@ -5,7 +5,7 @@ tags = ["footnote"]
 draft = false
 +++
 
-See [Issue#96](https://github.com/kaushalmodi/ox-hugo/issues/96).
+`ox-hugo` Issue #[96](https://github.com/kaushalmodi/ox-hugo/issues/96)
 
 To test the fix for this, increase/decrease the width of the browser
 window showing this page so that the test lines below start wrapping

@@ -375,7 +375,13 @@ INFO is a plist holding contextual information."
              ;; Need to escape the backslash in "\(", "\)", .. to
              ;; make Blackfriday happy. So \( -> \\(, \) -> \\),
              ;; \[ -> \\[ and \] -> \\].
-             (frag (replace-regexp-in-string "\\(\\\\[]()[]\\)" "\\\\\\1" frag)))
+             (frag (replace-regexp-in-string "\\(\\\\[]()[]\\)" "\\\\\\1" frag))
+             ;; Insert an extra space to trick Blackfriday/smartParens
+             ;; from activating inside equations.  That extra space
+             ;; anyways doesn't matter in equations.
+             ;; https://github.com/kaushalmodi/ox-hugo/issues/104
+             ;; (c) -> ( c), (r) -> ( r), (tm) -> ( tm)
+             (frag (replace-regexp-in-string "(\\(c\\|r\\|tm\\))" "( \\1)" frag)))
         frag))
      ((assq processing-type org-preview-latex-process-alist)
       (let ((formula-link

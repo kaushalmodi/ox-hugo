@@ -1781,6 +1781,34 @@ If $a^2=b$ and \( b=2 \), then the solution must be either
 $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \]
 
 (Note that the last two equations show up on their own lines.)
+** Equations with (r), (c), ..                                     :@upstream:
+:PROPERTIES:
+:EXPORT_FILE_NAME: equations-with-r-c
+:END:
+{{{oxhugoissue(104)}}}
+
+Below, =(r)= or =(R)= should not get converted to &reg;, =(c)= or
+=(C)= should not get converted to &copy;, and =(tm)= or =(TM)= should
+not get converted to &trade;:
+
+- $(r)$ $(R)$
+- $(c)$ $(C)$
+- $(tm)$ $(TM)$
+
+
+- \( (r) \) \( (R) \)
+- \( (c) \) \( (C) \)
+- \( (tm) \) \( (TM) \)
+
+Same as above but in /Block Math equations/:
+
+$$ (r) (R) $$
+$$ (c) (C) $$
+$$ (tm) (TM) $$
+
+\[ (r) (R) \]
+\[ (c) (C) \]
+\[ (tm) (TM) \]
 * Lists                                                               :lists:
 ** List following a list
 :PROPERTIES:
@@ -2626,7 +2654,7 @@ auto-prefixed with the section for the current post.
 *** Multifractal definition
 - Consider a given object $\Omega$, its multifractal nature is
   practically determined by covering the system with a set of boxes
-  $\{B_i(r)\}$ with $(i=1,..., N(r))$ of side lenght $r$
+  $\{B_i(r)\}$ with $(i=1,..., N(r))$ of side length $r$
 - These boxes are nonoverlaping and such that
 
   $$\Omega = \bigcup_{i=1}^{N(r)} B_i(r)$$

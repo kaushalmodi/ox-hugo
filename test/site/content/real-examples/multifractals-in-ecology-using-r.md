@@ -28,10 +28,10 @@ source = "https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md"
 
 -   Consider a given object \\(\Omega\\), its multifractal nature is
     practically determined by covering the system with a set of boxes
-    \\(\{B\_i(r)\}\\) with \\((i=1,..., N(r))\\) of side lenght \\(r\\)
+    \\(\{B\_i( r)\}\\) with \\((i=1,..., N( r))\\) of side length \\(r\\)
 -   These boxes are nonoverlaping and such that
 
-    \\[\Omega = \bigcup\_{i=1}^{N(r)} B\_i(r)\\]
+    \\[\Omega = \bigcup\_{i=1}^{N( r)} B\_i( r)\\]
 
     This is the box-counting method but now a measure \\(\mu(B\_n)\\) for each
     box is computed. This measure corresponds to the total population or
@@ -51,16 +51,16 @@ source = "https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md"
     infinite spectrum of so-called correlation dimension of order \\(q\\) or
     also called Renyi entropies.
 
-    \\[D\_q = \lim\_{r \to 0} \frac{1}{q-1}\frac{log \left[ \sum\_{i=1}^{N(r)}p\_i^q \right]}{\log r}\\]
+    \\[D\_q = \lim\_{r \to 0} \frac{1}{q-1}\frac{log \left[ \sum\_{i=1}^{N( r)}p\_i^q \right]}{\log r}\\]
 
     where \\(p\_i=\mu(B\_i)\\) and a normalization is assumed:
 
-    \\[\sum\_{i=1}^{N(r)}p\_i=1\\]
+    \\[\sum\_{i=1}^{N( r)}p\_i=1\\]
 
 -   For \\(q=0\\) we have the familiar definition of fractal dimension. To see
     this we replace \\(q=0\\)
 
-    \\[D\_0 = -\lim\_{r \to 0}\frac{N(r)}{\log r}\\]
+    \\[D\_0 = -\lim\_{r \to 0}\frac{N( r)}{\log r}\\]
 
 
 ## Generalized dimensions 1 {#generalized-dimensions-1}
@@ -69,7 +69,7 @@ source = "https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md"
     \\(q' \geq q\\)
 -   The sum
 
-    \\[M\_q(r) = \sum\_{i=1}^{N(r)}[\mu(B\_i(r))]^q = \sum\_{i=1}^{N(r)}p\_i^q\\]
+    \\[M\_q( r) = \sum\_{i=1}^{N( r)}[\mu(B\_i( r))]^q = \sum\_{i=1}^{N( r)}p\_i^q\\]
 
     is the so-called moment or partition function of order \\(q\\).
 -   Varying q allows to measure the non-homogeneity of the pattern. The
@@ -94,11 +94,11 @@ source = "https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md"
     the Shannon entropy or also called by ecologist the Shannon's index of
     diversity.
 
-    \\[D\_1 = -\lim\_{r \to 0}\sum\_{i=1}^{N(r)} p\_i \log p\_i\\]
+    \\[D\_1 = -\lim\_{r \to 0}\sum\_{i=1}^{N( r)} p\_i \log p\_i\\]
 
     and the second is the so-called correlation dimension:
 
-    \\[D\_2 = -\lim\_{r \to 0} \frac{\log \left[ \sum\_{i=1}^{N(r)} p\_i^2 \right]}{\log r} \\]
+    \\[D\_2 = -\lim\_{r \to 0} \frac{\log \left[ \sum\_{i=1}^{N( r)} p\_i^2 \right]}{\log r} \\]
 
     the numerator is the log of the Simpson index.
 
@@ -125,7 +125,7 @@ source = "https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md"
 -   The same information contained in the generalized dimensions can be
     expressed using mass exponents:
 
-    \\[M\_q(r) \propto r^{-\tau\_q}\\]
+    \\[M\_q( r) \propto r^{-\tau\_q}\\]
 
     This is the scaling of the partition function. For monofractals
     \\(\tau\_q\\) is linear and related to the Hurst exponent:

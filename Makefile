@@ -1,4 +1,4 @@
-# Time-stamp: <2017-11-09 16:37:14 kmodi>
+# Time-stamp: <2017-11-29 14:56:39 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -165,7 +165,7 @@ hugo_doc:
 	@$(MAKE) hugo HUGO_BASE_DIR=./doc HUGO_BASE_URL=https://ox-hugo.scripter.co/
 
 hugo_test:
-	@$(MAKE) hugo HUGO=/tmp/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASE_URL=https://ox-hugo.scripter.co/test HUGO_ARGS=--buildDrafts
+	@$(MAKE) hugo HUGO=/tmp/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASE_URL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
 
 serve server: vcheck
 	@echo "Serving the site on $(HUGO_BASE_URL):$(PORT) .."

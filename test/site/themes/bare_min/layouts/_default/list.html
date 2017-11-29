@@ -1,17 +1,11 @@
 {{ define "main" }}             <!-- List of all posts -->
 
-<p>
-    Here are all my {{ .Type }}, in descending order by creation date.
-</p>
+<h2>Posts with the {{ .Type | singularize }} ‘{{ .URL | replaceRE (printf "/%s/" .Type) "" | replaceRE "/" "" }}’</h2>
 
 <section>
     <ul class="post-list">
-        <!-- https://github.com/juh2/hugo-phantom/blob/master/layouts/_default/list.html -->
-        {{ range .Data.Pages.GroupByDate "2006" }}
-            <h1>{{ .Key }}</h1>
-            {{ range .Pages }}
-                {{ .Render "li" }}
-            {{ end }}
+        {{ range .Pages }}
+            {{ .Render "li" }}
         {{ end }}
     </ul>
 </section>

@@ -78,6 +78,7 @@ Note that this variable is *only* for internal use.")
                      (inner-template . org-blackfriday-inner-template)
                      (italic . org-blackfriday-italic)
                      (item . org-blackfriday-item)
+                     (latex-environment . org-blackfriday-latex-environment)
                      (latex-fragment . org-blackfriday-latex-fragment)
                      (plain-list . org-blackfriday-plain-list)
                      (quote-block . org-blackfriday-quote-block)
@@ -361,6 +362,37 @@ contextual information."
                                    (org-element-property :counter item))
       (org-md-item item contents info))))
 
+;;;; Latex Environment
+(defun org-blackfriday-latex-environment (latex-environment _contents info)
+  "Transcode a LATEX-ENVIRONMENT object into Blackfriday Markdown format.
+INFO is a plist holding contextual information."
+  (let ((latex-env (org-element-property :value latex-environment))
+        (processing-type (plist-get info :with-latex)))
+    ;; (message "[ox-bf-latex-env DBG] latex-env: %s" latex-env)
+    ;; (message "[ox-bf-processing-type DBG] processing-type: %s" processing-type)
+    (cond
+     ((memq processing-type '(t mathjax))
+      (let* ((env (org-html-format-latex latex-env 'mathjax info))
+             ;; https://gohugo.io/content-management/formats#solution
+             ;; Need to escape the Markdown formatting characters _ and *
+             (env (replace-regexp-in-string "_" "\\\\_" env)) ;_ -> \_
+             (env (replace-regexp-in-string "\\*" "\\\\*" env)) ;* -> \*
+             ;; Insert an extra space to trick Blackfriday/smartParens
+             ;; from activating inside equations.  That extra space
+             ;; anyways doesn't matter in equations.
+             ;; https://github.com/kaushalmodi/ox-hugo/issues/104
+             ;; (c) -> ( c), (r) -> ( r), (tm) -> ( tm)
+             (env (replace-regexp-in-string "(\\(c\\|r\\|tm\\))" "( \\1)" env)))
+        ;; (message "[ox-bf-latex-env DBG] env: %s" env)
+        env))
+     ((assq processing-type org-preview-latex-process-alist)
+      (let ((formula-link
+             (org-html-format-latex latex-env processing-type info)))
+        (when (and formula-link (string-match "file:\\([^]]*\\)" formula-link))
+          (org-html--format-image (match-string 1 formula-link) nil info))))
+     (t
+      latex-env))))
+
 ;;;; Latex Fragment
 (defun org-blackfriday-latex-fragment (latex-fragment _contents info)
   "Transcode a LATEX-FRAGMENT object into Blackfriday Markdown format.
@@ -371,7 +403,9 @@ INFO is a plist holding contextual information."
      ((memq processing-type '(t mathjax))
       (let* ((frag (org-html-format-latex latex-frag 'mathjax info))
              ;; https://gohugo.io/content-management/formats#solution
+             ;; Need to escape the Markdown formatting characters _ and *
              (frag (replace-regexp-in-string "_" "\\\\_" frag)) ;_ -> \_
+             (frag (replace-regexp-in-string "\\*" "\\\\*" frag)) ;* -> \*
              ;; Need to escape the backslash in "\(", "\)", .. to
              ;; make Blackfriday happy. So \( -> \\(, \) -> \\),
              ;; \[ -> \\[ and \] -> \\].
@@ -382,13 +416,15 @@ INFO is a plist holding contextual information."
              ;; https://github.com/kaushalmodi/ox-hugo/issues/104
              ;; (c) -> ( c), (r) -> ( r), (tm) -> ( tm)
              (frag (replace-regexp-in-string "(\\(c\\|r\\|tm\\))" "( \\1)" frag)))
+        ;; (message "[ox-bf-latex-frag DBG] frag: %s" frag)
         frag))
      ((assq processing-type org-preview-latex-process-alist)
       (let ((formula-link
              (org-html-format-latex latex-frag processing-type info)))
         (when (and formula-link (string-match "file:\\([^]]*\\)" formula-link))
           (org-html--format-image (match-string 1 formula-link) nil info))))
-     (t latex-frag))))
+     (t
+      latex-frag))))
 
 ;;;; Plain List
 (defun org-blackfriday-plain-list (plain-list contents info)

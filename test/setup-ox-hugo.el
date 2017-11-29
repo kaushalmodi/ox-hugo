@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-10-19 10:58:27 kmodi>
+;; Time-stamp: <2017-11-29 12:28:21 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version
 ;; of Org.
@@ -155,7 +155,10 @@ to be installed.")
         (when (string-match-p ob-enabled-langs-re lang)
           (setq unsafe nil))
         unsafe))
-    (setq org-confirm-babel-evaluate #'ox-hugo/org-confirm-babel-evaluate-fn)))
+    (setq org-confirm-babel-evaluate #'ox-hugo/org-confirm-babel-evaluate-fn))
+
+  (with-eval-after-load 'ox
+    (setq org-export-headline-levels 4))) ;default is 3
 
 ;; Wed Sep 20 13:37:06 EDT 2017 - kmodi
 ;; Below does not get applies when running emacs --batch.. need to

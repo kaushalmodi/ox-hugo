@@ -247,6 +247,36 @@ same column as TABLE-CELL.  If no such cookie is found, return
                       ((equal cookie-align "c") 'center)
                       (t 'default)))))))
 
+;;;; Escape certain characters inside equations (Blackfriday bug workaround)
+(defun org-blackfriday-escape-chars-in-equation (str)
+  "Escape few characters in STR so that Blackfriday doesn't parse them.
+
+Do not interpret underscores and asterisks in equations as
+Markdown formatting
+characters (https://gohugo.io/content-management/formats#solution):
+
+  \"_\" -> \"\\=\\_\"
+  \"*\" -> \"\\=\\*\"
+
+https://github.com/kaushalmodi/ox-hugo/issues/104
+
+Blackfriday converts \"(r)\" to Registered Trademark symbol,
+\"(c)\" to Copyright symbol, and \"(tm)\" to Trademark symbol if
+the SmartyPants extension is enabled (and there is no way to
+disable just this).  So insert an extra space after the opening
+parentheses in those strings to trick Blackfriday/smartParens
+from activating inside equations.  That extra space anyways
+doesn't matter in equations.
+
+  \"(c)\" -> \"( c)\"
+  \"(r)\" -> \"( r)\"
+  \"(tm)\" -> \"( tm)\"."
+  (let* (;; _ -> \_, * -> \*
+         (escaped-str (replace-regexp-in-string "[_*]" "\\\\\\&" str))
+         ;; (c) -> ( c), (r) -> ( r), (tm) -> ( tm)
+         (escaped-str (replace-regexp-in-string "(\\(c\\|r\\|tm\\))" "( \\1)" escaped-str)))
+    escaped-str))
+
 ;;;; Reset org-blackfriday--code-block-num-backticks
 (defun org-blackfriday--reset-org-blackfriday--code-block-num-backticks (_backend)
   "Reset `org-blackfriday--code-block-num-backticks' to its default value."
@@ -373,18 +403,11 @@ INFO is a plist holding contextual information."
     (cond
      ((memq processing-type '(t mathjax))
       (let* ((env (org-html-format-latex latex-env 'mathjax info))
-             ;; https://gohugo.io/content-management/formats#solution
-             ;; Need to escape the Markdown formatting characters _ and *
-             (env (replace-regexp-in-string "_" "\\\\_" env)) ;_ -> \_
-             (env (replace-regexp-in-string "\\*" "\\\\*" env)) ;* -> \*
-             ;; Insert an extra space to trick Blackfriday/smartParens
-             ;; from activating inside equations.  That extra space
-             ;; anyways doesn't matter in equations.
-             ;; https://github.com/kaushalmodi/ox-hugo/issues/104
-             ;; (c) -> ( c), (r) -> ( r), (tm) -> ( tm)
-             (env (replace-regexp-in-string "(\\(c\\|r\\|tm\\))" "( \\1)" env)))
+             (env (org-blackfriday-escape-chars-in-equation env)))
         ;; (message "[ox-bf-latex-env DBG] env: %s" env)
         env))
+     ;; Rest of the below is copied from
+     ;; `org-blackfriday-latex-fragment'.
      ((assq processing-type org-preview-latex-process-alist)
       (let ((formula-link
              (org-html-format-latex latex-env processing-type info)))
@@ -403,19 +426,11 @@ INFO is a plist holding contextual information."
      ((memq processing-type '(t mathjax))
       (let* ((frag (org-html-format-latex latex-frag 'mathjax info))
              ;; https://gohugo.io/content-management/formats#solution
-             ;; Need to escape the Markdown formatting characters _ and *
-             (frag (replace-regexp-in-string "_" "\\\\_" frag)) ;_ -> \_
-             (frag (replace-regexp-in-string "\\*" "\\\\*" frag)) ;* -> \*
              ;; Need to escape the backslash in "\(", "\)", .. to
-             ;; make Blackfriday happy. So \( -> \\(, \) -> \\),
+             ;; make Blackfriday happy.  So \( -> \\(, \) -> \\),
              ;; \[ -> \\[ and \] -> \\].
              (frag (replace-regexp-in-string "\\(\\\\[]()[]\\)" "\\\\\\1" frag))
-             ;; Insert an extra space to trick Blackfriday/smartParens
-             ;; from activating inside equations.  That extra space
-             ;; anyways doesn't matter in equations.
-             ;; https://github.com/kaushalmodi/ox-hugo/issues/104
-             ;; (c) -> ( c), (r) -> ( r), (tm) -> ( tm)
-             (frag (replace-regexp-in-string "(\\(c\\|r\\|tm\\))" "( \\1)" frag)))
+             (frag (org-blackfriday-escape-chars-in-equation frag)))
         ;; (message "[ox-bf-latex-frag DBG] frag: %s" frag)
         frag))
      ((assq processing-type org-preview-latex-process-alist)

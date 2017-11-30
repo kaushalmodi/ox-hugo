@@ -21,14 +21,14 @@
 :EXPORT_FILE_NAME: post-1
 :EXPORT_DATE: 2017-07-12T17:31:56-04:00
 :END:
-Export this *first* post only by bringing point here and doing =M-x org-hugo-export-subtree-to-md=.
+Export this *first* post only by bringing point here and doing =M-x org-hugo-export-wim-to-md=.
 * Post 2
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-2
 :END:
 This post has no date.
 
-Export this *second* post only by bringing point here and doing =M-x org-hugo-export-subtree-to-md=.
+Export this *second* post only by bringing point here and doing =M-x org-hugo-export-wim-to-md=.
 * Image                                                               :image:
 ** Image links
 :PROPERTIES:

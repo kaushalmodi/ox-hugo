@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-11-29 12:28:21 kmodi>
+;; Time-stamp: <2017-12-01 10:43:44 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version
 ;; of Org.
@@ -6,6 +6,8 @@
 ;; Some sane settings
 (setq-default require-final-newline t)
 (setq-default indent-tabs-mode nil)
+
+(defvar ox-hugo-test-setup-verbose nil)
 
 (defvar ox-hugo-elpa (let ((dir (getenv "OX_HUGO_ELPA")))
                        (unless dir
@@ -15,7 +17,8 @@
                        (setq dir (file-name-as-directory dir))
                        (make-directory dir :parents)
                        dir))
-(message "ox-hugo-elpa: %s" ox-hugo-elpa)
+(when ox-hugo-test-setup-verbose
+  (message "ox-hugo-elpa: %s" ox-hugo-elpa))
 
 (let* ((bin-dir (when (and invocation-directory
                            (file-exists-p invocation-directory))
@@ -35,11 +38,12 @@
                      (concat share-dir "emacs/"
                              (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
                              "/lisp/"))))
-  (message "emacs bin-dir: %s" bin-dir)
-  (message "emacs prefix-dir: %s" prefix-dir)
-  (message "emacs share-dir: %s" share-dir)
-  (message "emacs lisp-dir-1: %s" lisp-dir-1)
-  (message "emacs lisp-dir-2: %s" lisp-dir-2)
+  (when ox-hugo-test-setup-verbose
+    (message "emacs bin-dir: %s" bin-dir)
+    (message "emacs prefix-dir: %s" prefix-dir)
+    (message "emacs share-dir: %s" share-dir)
+    (message "emacs lisp-dir-1: %s" lisp-dir-1)
+    (message "emacs lisp-dir-2: %s" lisp-dir-2))
   (defvar my/default-lisp-directory (cond
                                      ((file-exists-p lisp-dir-1)
                                       lisp-dir-1)
@@ -53,7 +57,8 @@ This value must match the path to the lisp/ directory of the
 Emacs installation.  If Emacs is installed using
 --prefix=\"${PREFIX_DIR}\" this value would typically be
 \"${PREFIX_DIR}/share/emacs/<VERSION>/lisp/\"."))
-(message "my/default-lisp-directory: %S" my/default-lisp-directory)
+(when ox-hugo-test-setup-verbose
+  (message "my/default-lisp-directory: %S" my/default-lisp-directory))
 
 ;; `org' will always be detected as installed, so use `org-plus-contrib'.
 ;; Fri Sep 22 18:24:19 EDT 2017 - kmodi
@@ -66,7 +71,8 @@ Emacs installation.  If Emacs is installed using
 (defvar ox-hugo-git-root (progn
                            (require 'vc-git)
                            (file-truename (vc-git-root "."))))
-(message "ox-hugo-git-root: %S" ox-hugo-git-root)
+(when ox-hugo-test-setup-verbose
+  (message "ox-hugo-git-root: %S" ox-hugo-git-root))
 
 (if (and (stringp ox-hugo-elpa)
          (file-exists-p ox-hugo-elpa))
@@ -124,8 +130,8 @@ to be installed.")
 ;; (message (list-load-path-shadows :stringp))
 
 (require 'ox-hugo)
-(defun org-hugo-export-all-subtrees-to-md ()
-  (org-hugo-export-subtree-to-md :all-subtrees))
+(defun org-hugo-export-all-wim-to-md ()
+  (org-hugo-export-wim-to-md :all-subtrees nil nil :noerror))
 
 (require 'ox-hugo-export-gh-doc)        ;For `ox-hugo-export-gh-doc'
 
@@ -158,7 +164,8 @@ to be installed.")
     (setq org-confirm-babel-evaluate #'ox-hugo/org-confirm-babel-evaluate-fn))
 
   (with-eval-after-load 'ox
-    (setq org-export-headline-levels 4))) ;default is 3
+    (setq org-export-headline-levels 4) ;default is 3
+    (add-to-list 'org-export-exclude-tags "dont_export_during_make_test")))
 
 ;; Wed Sep 20 13:37:06 EDT 2017 - kmodi
 ;; Below does not get applies when running emacs --batch.. need to

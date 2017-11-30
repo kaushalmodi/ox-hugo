@@ -1,8 +1,8 @@
 +++
 title = "Writing Hugo blog in Org"
 date = 2017-09-10
-lastmod = 2017-09-11T12:48:28-04:00
-tags = ["hugo", "org"]
+lastmod = 2017-11-30T14:22:00-05:00
+tags = ["dont-export-during-make-test", "hugo", "org"]
 categories = ["emacs"]
 weight = 2001
 draft = true

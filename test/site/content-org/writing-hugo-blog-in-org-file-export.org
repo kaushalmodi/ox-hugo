@@ -7,6 +7,7 @@
 #+TITLE: Writing Hugo blog in Org (File Export)
 
 #+DATE: 2017-09-10
+#+FILETAGS: dont_export_during_make_test
 #+HUGO_TAGS: hugo org
 #+HUGO_CATEGORIES: emacs
 #+HUGO_MENU: :menu "main" :weight 2001
@@ -38,6 +39,6 @@ Variables/ section below.
 # Local Variables:
 # fill-column: 70
 # eval: (auto-fill-mode 1)
-# eval: (add-hook 'after-save-hook #'org-hugo-export-subtree-to-md-after-save :append :local)
+# eval: (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local)
 # org-hugo-footer: "\n\n[//]: # \"Exported with love from a post written in Org mode\"\n[//]: # \"- https://github.com/kaushalmodi/ox-hugo\""
 # End:

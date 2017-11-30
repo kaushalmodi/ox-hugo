@@ -316,14 +316,24 @@ Before you export check that these properties are set as you need:
  used by this package to figure out where the current post starts.
 *** Export bindings
 The common =ox-hugo= export bindings are:
-|---------------+-------------------------------------------------------------------------------------|
-| Binding       | Description                                                                         |
-|---------------+-------------------------------------------------------------------------------------|
-| =C-c C-e H H= | Export only the current /valid/ subtree (has the =EXPORT_FILE_NAME= property set)   |
-| =C-c C-e H A= | Export *all* /valid/ subtrees (those that have the =EXPORT_FILE_NAME= property set) |
-|---------------+-------------------------------------------------------------------------------------|
-| =C-c C-e H h= | Export the whole Org file to a single post                                          |
-|---------------+-------------------------------------------------------------------------------------|
+**** For both one-post-per-subtree and one-post-per-file flows
+- =C-c C-e H H= :: Export "What I Mean".
+  - If point is in a /valid Hugo post subtree/, export that
+    subtree to a Hugo post in Markdown.
+
+    A /valid Hugo post subtree/ is an Org subtree has the
+    =EXPORT_FILE_NAME= property set.
+  - If the file is intended to be exported as a whole i.e. it must have
+    the #+TITLE keyword set, export the whole Org file a Hugo post in
+    Markdown.
+- =C-c C-e H A= :: Export *all* "What I Mean"
+  - If the Org file has one or more 'valid Hugo post subtrees', export
+    them to Hugo posts in Markdown.
+  - If the file is intended to be exported as a whole (no 'valid Hugo
+    post subtrees' at all) i.e. it must have the #+TITLE keyword set,
+    export the whole Org file a Hugo post in Markdown.
+**** For only the one-post-per-file flow
+- =C-c C-e H h= :: Export the Org file to a Hugo post in Markdown.
 *** Customization Options
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
@@ -654,7 +664,7 @@ exported Markdown files.
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-meta-data-to-hugo-front-matter
 :END:
-**** For subtree exports (=C-c C-e H H= or =C-c C-e H A=)
+**** For subtree exports
 When organizing the posts as Org *subtrees*, many Hugo front-matter
 variables get set implicitly using the meta-data parsed from the posts
 in Org.
@@ -680,7 +690,7 @@ set.
 ***** Notes
 - Precedence for =date= parsing: =CLOSED= subtree property /more than/
   =EXPORT_DATE= subtree property /more than/ =#+DATE:= keyword.
-**** For complete-file exports (=C-c C-e H h=)
+**** For complete-file exports
 |----------------------------------+--------------------------------------|
 | Hugo front-matter (TOML)         | Org                                  |
 |----------------------------------+--------------------------------------|
@@ -917,6 +927,18 @@ If the =EXPORT_HUGO_TAGS= property is set for a valid Hugo post
 subtree, the value of that property will *completely override* the Org
 tags set even on that subtree, the inherited values of Org-style tags
 from parent headlines and even =#+FILETAGS=.
+****** Marking files to not be exported
+Note that if you want to prevent a file from getting exported, you can
+assign a special tag to the whole file (example: =no_no_dont_export=),
+but that tag *has to be set using the =#+FILETAGS= keyword*
+(=#+HUGO_TAGS= keyword is *only* for setting the tags in Hugo
+front-matter). This applies to both, file-based and subtree-based[fn:2]
+export flows.
+
+Then in your batch export setup, add that special tag to the
+=org-export-exclude-tags= variable. You can grep through this repo for
+the special tag =dont_export_during_make_test= that is used to mark
+few Org files to not be exported during =make test=.
 ****** Why use =#+FILETAGS= and not =#+TAGS=?
 - About =#+FILETAGS= -- [[http://orgmode.org/manual/Tag-inheritance.html][Tag Inheritance]] or =C-h i g (org) Tag
   inheritance=
@@ -1034,58 +1056,63 @@ Hugo-rendered post each time you saved your post in Org?
 
 Well.. you can do that with these steps:
 **** First time setup
-The first time setup varies between the /per-subtree export flow/ and
-/per-file export flow/.
-***** One post per Org subtree
+***** =after-save-hook= setup for both /per-subtree/ and /per-file/ flows
+This step applies whether you intend to use the /per-subtree export
+flow/ or the /per-file/ export flow.
 ****** Step 1a: Set up the =after-save-hook=
- 1. Add below to the very-end of your posts Org file:
-    #+BEGIN_SRC org
-    * Footnotes
-    * COMMENT Local Variables                                           :ARCHIVE:
-    # Local Variables:
-    # eval: (add-hook 'after-save-hook #'org-hugo-export-subtree-to-md-after-save :append :local)
-    # End:
-    #+END_SRC
-
-    Here I recommend adding the =* Footnotes= header too so that in
-    case you add any Org footnotes, they go directly to that section
-    you created. Otherwise, in the absence of an existing /Footnotes/
-    heading, Org would create a new /Footnotes/ heading *at the end of
-    the file* -- so the /Local Variables/ heading will then no longer be
-    at the end of the file.
- 2. Then save the file, and do =revert-buffer=.
- 3. You will be prompted to add that =eval= line to your /Customize/
-    setup, hit =!= to permanently save that setting and prevent future
-    prompts.
+1. Add below to the very-end of your Org file:
+   #+BEGIN_SRC org
+   ,* Footnotes
+   ,* COMMENT Local Variables                          :ARCHIVE:
+   # Local Variables:
+   # eval: (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local)
+   # End:
+   #+END_SRC
+   *About Footnotes*: Here I recommend adding the =* Footnotes= header
+   too so that in case you add any Org footnotes, they go directly to
+   that section you created. Otherwise, Org will auto-create a new
+   /Footnotes/ heading *at the end of the file*.. and the /Local
+   Variables/ heading would then no longer be at the end of the file.
+2. Then save the file, and do =revert-buffer=.
+3. You will be prompted to add that =eval= line to your /Customize/
+   setup, hit ~!~ to permanently save that setting and prevent future
+   prompts.
 ****** Step 1b: Prevent auto-export during Org Capture
- You might find this step useful if you choose to write new posts
- using =org-capture= as explained in the {{{doc(org-capture-setup,/Org
- Capture Setup/)}}} section.
+While this sub-step is useful for the /per-subtree/ export flow, it
+won't hurt to implement even if you are using the /per-file/ flow.
 
- After saving the below to your emacs config and evaluating it,
- auto-exports will be prevented when saving a new post created using
- Org Capture.
- #+BEGIN_SRC emacs-lisp
- (with-eval-after-load 'org-capture
-   ;; Do not cause auto Org->Hugo export to happen when saving captures
-   (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
-     "Function for `org-capture-before-finalize-hook'.
- Disable `org-hugo-export-subtree-to-md-after-save'."
-     (setq org-hugo-allow-export-after-save nil))
+This step is useful if you choose to write new posts using
+=org-capture= as explained in the {{{doc(org-capture-setup,/Org
+Capture Setup/)}}} section.
 
-   (defun modi/org-capture--add-auto-org-to-hugo-export-maybe ()
-     "Function for `org-capture-after-finalize-hook'.
- Enable `org-hugo-export-subtree-to-md-after-save'."
-     (setq org-hugo-allow-export-after-save t))
+After saving the below to your emacs config and evaluating it,
+auto-exports will be prevented when saving a new post created using
+Org Capture.
 
-   (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
-   (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
- #+END_SRC
-***** One post per Org file
-****** Step 1: Set up the =after-save-hook=
+/If you don't do the below, auto-exports would happen as soon as you
+=C-c C-c= on your initial capture.. which could get annoying./
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'org-capture
+  ;; Do not cause auto Org->Hugo export to happen when saving captures
+  (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
+    "Function for `org-capture-before-finalize-hook'.
+Disable `org-hugo-export-wim-to-md-after-save'."
+    (setq org-hugo-allow-export-after-save nil))
+
+  (defun modi/org-capture--add-auto-org-to-hugo-export-maybe ()
+    "Function for `org-capture-after-finalize-hook'.
+Enable `org-hugo-export-wim-to-md-after-save'."
+    (setq org-hugo-allow-export-after-save t))
+
+  (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
+  (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
+#+END_SRC
+***** Alternative =after-save-hook= setup only for /per-file/ flow
+This step applies *only* to the /per-file/ export flow.
+****** Step 1: Set up the =after-save-hook= (only for /per-file/ flow)
 If you use a seperate Org file for each blog post, you can add the
-below to your config:
-
+below to your config *instead* of doing the above. Skip /Step 1b/
+below altogether if you use this alternative.
 #+BEGIN_SRC emacs-lisp
 (use-package ox-hugo
   :ensure t
@@ -1292,6 +1319,11 @@ for writing your posts in Org, there are examples for both in the
 #+INCLUDE: "./ox-hugo-manual.org::#test" :only-contents t
 * Footnotes
 
+[fn:2] For only subtree-based exports, you can set that special tag as
+Org style tags too. Example: ~* I don't want to export this post
+:no_no_dont_export:~.. and don't forget to add that tag to
+=org-export-exclude-tags= too!
+
 [fn:1] To understand why the attachment files get copied to the
 =static/ox-hugo/= directory, have a look at the documentation for
 {{{doc(image-links#references-to-files-outside-the-static-directory,referencing
@@ -1301,5 +1333,5 @@ files outside static directory)}}}.
 # fill-column: 70
 # eval: (auto-fill-mode 1)
 # eval: (toggle-truncate-lines 1)
-# eval: (add-hook 'after-save-hook #'org-hugo-export-subtree-to-md-after-save :append :local)
+# eval: (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local)
 # End:

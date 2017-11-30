@@ -1,4 +1,4 @@
-# Time-stamp: <2017-11-29 14:56:39 kmodi>
+# Time-stamp: <2017-12-01 10:44:11 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -53,8 +53,13 @@ OX_HUGO_TEST_SITE_DIR=$(OX_HUGO_TEST_DIR)/site
 
 # Directory containing Org files for the test site
 OX_HUGO_TEST_ORG_DIR=$(OX_HUGO_TEST_SITE_DIR)/content-org
+# https://stackoverflow.com/a/3774731/1219634
+# Note that the use of immediate assignment := rather than recursive
+# assignment = is important here: you do not want to be running the
+# shell escape every time SOURCES is inspected by make.
+test_org_files := $(shell find ${OX_HUGO_TEST_ORG_DIR} -type f -name '*.org')
 
-# Path to the Org file relative to $(OX_HUGO_TEST_ORG_DIR)
+# Path to the Org file (relative to pwd, or absolute)
 ORG_FILE=
 
 # Function to be run in emacs --batch
@@ -62,33 +67,14 @@ FUNC=
 
 test_check=1
 
-subtree_test_files = all-posts.org \
-	construct-hugo-front-matter-from-menu-meta-data.org \
-	src-blocks-with-highlight-shortcode.org \
-	mandatory-EXPORT_FILE_NAME-for-subtree-export.org \
-	hugo-menu-as-keyword.org \
-	tags-keyword.org \
-	hugo-weight-as-keyword-auto-calc.org \
-	deep-nesting.org \
-	images-in-content/images-in-content.org
-
-file_test_files = single-posts/post-toml.org \
-	single-posts/post-yaml.org \
-	single-posts/post-draft.org \
-	single-posts/hugo-auto-weight-ineffective-for-per-file-exports.org \
-	single-posts/export-without-emphasize.org \
-	images-in-content/post3/post3.org \
-	images-in-content/post4/post4.org
-
 # Cannot run tests on the following files, because:
 # - auto-set-lastmod.org - the lastmod field will always get updated.
 # - screenshot-subtree-export-example.org - sets the org-hugo-footer using Local Variables.
 # - writing-hugo-blog-in-org-file-export.org - sets the org-hugo-footer using Local Variables.
 
-.PHONY: help emacs-batch mdtree mdfile vcheck hugo hugo_doc hugo_test serve server diff \
+.PHONY: help emacs-batch md1 vcheck hugo hugo_doc hugo_test serve server diff \
 	test md testmkgold \
-	test_subtree $(subtree_test_files) \
-	test_file $(file_test_files) \
+	do_test $(test_org_files) \
 	doc_md doc_gh doc \
 	ctemp diffgolden clean
 
@@ -123,19 +109,12 @@ emacs-batch:
 	(when (> (length \"$(TIMEZONE)\") 0) (setenv \"TZ\" \"$(TIMEZONE)\"))\
 	(setq-default make-backup-files nil)\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
-	)" $(ORG_FILE_DIR)/$(ORG_FILE) \
+	)" $(ORG_FILE) \
 	-f $(FUNC) \
 	--kill
 
-mdtree:
-	@echo "[ox-hugo] Exporting Org to Md in 'Subtree' mode .."
-	@$(MAKE) emacs-batch FUNC=org-hugo-export-all-subtrees-to-md
-	@echo "[ox-hugo] Done"
-
-mdfile:
-	@echo "[ox-hugo] Exporting Org to Md in 'File' mode .."
-	@$(MAKE) emacs-batch FUNC=org-hugo-export-to-md
-	@echo "[ox-hugo] Done"
+md1:
+	@$(MAKE) emacs-batch FUNC=org-hugo-export-all-wim-to-md
 
 vcheck:
 ifeq ("$(EMACS_exists)","")
@@ -174,11 +153,10 @@ serve server: vcheck
 diff:
 	@git diff
 
-test: vcheck testmkgold test_subtree test_file
+test: vcheck testmkgold do_test
 
 md:
-	@$(MAKE) test_subtree test_check=0
-	@$(MAKE) test_file test_check=0
+	@$(MAKE) do_test test_check=0
 
 # Get rid of all changes in $(OX_HUGO_TEST_SITE_DIR)/content.
 # https://stackoverflow.com/a/16589534/1219634
@@ -187,35 +165,23 @@ testmkgold:
 	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/content-golden
 	@cp -rf $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
-# Run the mdtree + diffgolden rules in loop on all of $(subtree_test_files)
+# Run the md1 + diffgolden rules in loop on all of $(subtree_test_files)
 # https://stackoverflow.com/a/37748952/1219634
-test_subtree: $(subtree_test_files)
-$(subtree_test_files):
-	@$(MAKE) mdtree ORG_FILE=$@ \
-	                ORG_FILE_DIR=$(OX_HUGO_TEST_ORG_DIR) \
-	                TIMEZONE=UTC # Use UTC/Universal time zone for tests
-ifeq ($(test_check),1)
-	@$(MAKE) diffgolden
-endif
-
-# Run the mdfile + diffgolden rules in loop on all of $(file_test_files)
-test_file: $(file_test_files)
-$(file_test_files):
-	@$(MAKE) mdfile ORG_FILE=$@ \
-	                ORG_FILE_DIR=$(OX_HUGO_TEST_ORG_DIR) \
-	                TIMEZONE=UTC # Use UTC/Universal time zone for tests
+do_test: $(test_org_files)
+$(test_org_files):
+	@$(MAKE) md1 ORG_FILE=$@ TIMEZONE=UTC # Use UTC/Universal time zone for tests
 ifeq ($(test_check),1)
 	@$(MAKE) diffgolden
 endif
 
 doc_md:
 	@echo "[Doc Site] Generating ox-hugo Documentation Site content .."
-	@$(MAKE) mdtree ORG_FILE=ox-hugo-manual.org ORG_FILE_DIR=./doc
+	@$(MAKE) md1 ORG_FILE=./doc/ox-hugo-manual.org
 	@echo "[Doc Site] Done"
 
 doc_gh:
 	@echo "[GitHub Docs] Generating README.org and CONTRIBUTING.org for GitHub .."
-	@$(MAKE) emacs-batch FUNC=ox-hugo-export-gh-doc ORG_FILE=github-files.org ORG_FILE_DIR=./doc
+	@$(MAKE) emacs-batch FUNC=ox-hugo-export-gh-doc ORG_FILE=./doc/github-files.org
 	@echo "[GitHub Docs] Done"
 
 doc: doc_md hugo_doc doc_gh

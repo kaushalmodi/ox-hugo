@@ -1,5 +1,7 @@
 #+HUGO_BASE_DIR: ../
 
+#+AUTHOR:
+
 * Introduction
 See https://github.com/kaushalmodi/ox-hugo/issues/81
 

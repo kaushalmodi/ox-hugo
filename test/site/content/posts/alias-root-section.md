@@ -1,6 +1,6 @@
 +++
 title = "Alias specifying root section"
 aliases = ["/alias-d"]
-tags = ["aliases"]
+tags = ["front-matter", "aliases"]
 draft = false
 +++

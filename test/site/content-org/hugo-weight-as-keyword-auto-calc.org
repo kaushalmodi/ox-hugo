@@ -3,6 +3,8 @@
 #+HUGO_WEIGHT: auto
 #+HUGO_TAGS: weight
 
+#+AUTHOR:
+
 * Post 1 with auto calculation of weight (HUGO_WEIGHT as keyword)
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-1-with-auto-calc-of-weight--hugo-weight-as-keyword

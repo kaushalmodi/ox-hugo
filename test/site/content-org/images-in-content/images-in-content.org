@@ -2,6 +2,8 @@
 #+HUGO_SECTION: images-in-content
 #+STARTUP: inlineimages
 
+#+AUTHOR:
+
 * Post 1
 :PROPERTIES:
 :EXPORT_FILE_NAME: post1

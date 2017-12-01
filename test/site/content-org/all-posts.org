@@ -1,8 +1,11 @@
 #+HUGO_BASE_DIR: ../
 #+SEQ_TODO: TODO DRAFT DONE
 #+PROPERTY: header-args :eval no
+
 #+MACRO: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
 #+MACRO: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+
+#+AUTHOR:
 
 * Preparation
 :PROPERTIES:
@@ -2609,45 +2612,68 @@ a_{b} a_{bc} a^{b} a^{bc}
 :END:
 This post will be exported without =title= in the front-matter because
 it is disabled using =:EXPORT_OPTIONS: title:nil=.
-* Hugo Aliases                                                      :aliases:
-** Alias without section portion 1
+** Disable exporting author                                    :author:disable:
+:PROPERTIES:
+:EXPORT_OPTIONS: author:nil
+:EXPORT_FILE_NAME: disable-author
+:EXPORT_AUTHOR: Foo Bar
+:END:
+This post will be exported without =author= in the front-matter because
+it is disabled using =:EXPORT_OPTIONS: author:nil=.
+* Miscellaneous Front Matter                                   :front_matter:
+** Hugo Aliases                                                     :aliases:
+*** Alias without section portion 1
 :PROPERTIES:
 :EXPORT_FILE_NAME: alias-without-section-1
 :EXPORT_HUGO_ALIASES: alias-a
 :END:
 As the specified alias does not contain the "/" string, it will be
 auto-prefixed with the section for the current post.
-** New section just for test
+*** New section just for test
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: alias-test
 :END:
-*** Alias without section portion 2
+**** Alias without section portion 2
 :PROPERTIES:
 :EXPORT_FILE_NAME: alias-without-section-2
 :EXPORT_HUGO_ALIASES: alias-b
 :END:
 As the specified alias does not contain the "/" string, it will be
 auto-prefixed with the section for the current post.
-** Alias specifying a different section
+*** Alias specifying a different section
 :PROPERTIES:
 :EXPORT_FILE_NAME: alias-different-section
 :EXPORT_HUGO_ALIASES: /alias-test/alias-c
 :END:
-** Alias specifying root section
+*** Alias specifying root section
 :PROPERTIES:
 :EXPORT_FILE_NAME: alias-root-section
 :EXPORT_HUGO_ALIASES: /alias-d
 :END:
-** Multiple aliases without section portion
+*** Multiple aliases without section portion
 :PROPERTIES:
 :EXPORT_FILE_NAME: alias-multiple-without-section
 :EXPORT_HUGO_ALIASES: alias-e alias-f
 :END:
-** Multiple aliases with section portion
+*** Multiple aliases with section portion
 :PROPERTIES:
 :EXPORT_FILE_NAME: alias-multiple-with-section
 :EXPORT_HUGO_ALIASES: /alias-test/alias-g /alias-test/alias-h
 :END:
+** Author                                                            :author:
+*** Single author
+:PROPERTIES:
+:EXPORT_FILE_NAME: single-author
+:EXPORT_AUTHOR: Foo Bar
+:END:
+This post has 1 author.
+*** Multiple authors
+:PROPERTIES:
+:EXPORT_FILE_NAME: multiple-authors
+:EXPORT_AUTHOR: Foo Bar, Toto Kumar  , Zulu ,Ágota Kristóf
+:END:
+This post has multiple authors. In Org, multiple authors are added
+comma-separated.
 * Real Examples                                               :real_examples:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: real-examples
@@ -2655,7 +2681,7 @@ auto-prefixed with the section for the current post.
 ** Multifractals in ecology using R                          :math:equations:
 :PROPERTIES:
 :EXPORT_FILE_NAME: multifractals-in-ecology-using-r
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :author Leonardo A. Saravia
+:EXPORT_AUTHOR: Leonardo A. Saravia
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :source https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md
 :EXPORT_DATE: 2017-11-28T10:48:00-05:00
 :END:
@@ -2767,6 +2793,8 @@ auto-prefixed with the section for the current post.
 ** 神经网络基础    :math:equations:not_english:table:latex:latex_environment:
 :PROPERTIES:
 :EXPORT_FILE_NAME: nn-intro
+:EXPORT_AUTHOR: Feng Ruohang
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :source https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md
 :EXPORT_DATE: 2017-11-29
 :END:
 - Disclaimer :: This post is from the [[https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md][link]] posted by GitHub user

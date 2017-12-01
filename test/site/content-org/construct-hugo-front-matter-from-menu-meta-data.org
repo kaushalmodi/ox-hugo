@@ -2,6 +2,8 @@
 #+HUGO_FRONT_MATTER_FORMAT: yaml
 #+HUGO_MENU: :menu main :parent posts
 
+#+AUTHOR:
+
 * Menu Meta Data in YAML Front Matter                             :menu:yaml:
 :PROPERTIES:
 :EXPORT_FILE_NAME: menu-meta-data-yaml

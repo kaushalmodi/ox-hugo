@@ -3,6 +3,8 @@
 # Auto-set lastmod field in the below posts.
 #+HUGO_AUTO_SET_LASTMOD: t
 
+#+AUTHOR:
+
 #+FILETAGS: dont_export_during_make_test
 
 * Auto-set Lastmod

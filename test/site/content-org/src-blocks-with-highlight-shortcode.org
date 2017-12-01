@@ -8,6 +8,8 @@
 # shortcode.
 # #+HUGO_CODE_FENCE: t
 
+#+AUTHOR:
+
 #+SEQ_TODO: TODO DRAFT DONE
 
 * Source blocks with Hugo =highlight= shortcode

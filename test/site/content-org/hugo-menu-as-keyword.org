@@ -2,6 +2,8 @@
 #+SEQ_TODO: TODO DRAFT DONE
 #+HUGO_MENU: :menu "auto weight"
 
+#+AUTHOR:
+
 * Post with menu 1 (HUGO_MENU as keyword)
 :PROPERTIES:
 :EXPORT_FILE_NAME: hugo-menu-as-keyword--post-with-menu-1

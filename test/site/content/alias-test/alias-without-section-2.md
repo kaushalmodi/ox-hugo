@@ -1,7 +1,7 @@
 +++
 title = "Alias without section portion 2"
 aliases = ["/alias-test/alias-b"]
-tags = ["aliases"]
+tags = ["front-matter", "aliases"]
 draft = false
 +++
 

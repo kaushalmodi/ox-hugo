@@ -1,4 +1,6 @@
 #+TITLE: My Blog
+#+AUTHOR:
+
 #+HUGO_BASE_DIR: ../
 
 #+TAGS: these tags do not get globally applied to the posts

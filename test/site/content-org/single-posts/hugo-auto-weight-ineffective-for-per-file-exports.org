@@ -1,4 +1,6 @@
 #+TITLE: Hugo auto weight ineffective for per-file exports
+#+AUTHOR:
+
 #+HUGO_BASE_DIR: ../../
 #+HUGO_WEIGHT: auto
 #+HUGO_TAGS: weight

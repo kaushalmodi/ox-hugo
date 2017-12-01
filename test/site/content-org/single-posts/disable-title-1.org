@@ -1,6 +1,7 @@
 #+HUGO_BASE_DIR: ../../
 
 #+TITLE: Disable exporting title
+#+AUTHOR:
 #+OPTIONS: title:nil
 
 #+FILETAGS: disable title

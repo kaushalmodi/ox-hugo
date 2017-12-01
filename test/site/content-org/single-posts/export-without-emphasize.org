@@ -1,4 +1,5 @@
 #+TITLE: Table with Org markup where the markup is ignored
+#+AUTHOR:
 
 # Ignore the Org emphasis characters like * and /
 #+OPTIONS: *:nil

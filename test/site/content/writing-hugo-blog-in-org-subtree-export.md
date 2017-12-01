@@ -1,7 +1,8 @@
 +++
 title = "Writing Hugo blog in Org"
+author = ["Kaushal Modi"]
 date = 2017-09-10
-lastmod = 2017-11-30T14:22:00-05:00
+lastmod = 2017-12-01T16:24:07-05:00
 tags = ["dont-export-during-make-test", "hugo", "org"]
 categories = ["emacs"]
 weight = 2001

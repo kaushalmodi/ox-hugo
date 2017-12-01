@@ -1789,6 +1789,15 @@ INFO is a plist used as a communication channel."
   ;; (message "[hugo front matter DBG] info: %S" (pp info))
   (let* ((fm-format (plist-get info :hugo-front-matter-format))
          (title (org-entry-get (point) "ITEM")) ;Post title
+         (author-list (and (plist-get info :with-author)
+                           (let ((author-raw
+                                  (org-string-nw-p
+                                   (org-export-data (plist-get info :author) info))))
+                             (when author-raw
+                               ;; Comma-separated multiple authors
+                               (let ((author-list-1 (org-split-string author-raw ",")))
+                                 ;; Don't allow spaces around author names.
+                                 (mapcar #'org-trim author-list-1))))))
          (hugo-date-fmt "%Y-%m-%dT%T%z")
          (date-raw (or
                     ;; Get the date from the "CLOSED" property;
@@ -1935,6 +1944,7 @@ INFO is a plist used as a communication channel."
          (data `(;; The order of the elements below will be the order in which the front matter
                  ;; variables will be ordered.
                  (title . ,(org-hugo--sanitize-title info))
+                 (author . ,author-list)
                  (description . ,(org-export-data (plist-get info :description) info))
                  (date . ,date)
                  (publishDate . ,(org-export-data (plist-get info :hugo-publishdate) info))

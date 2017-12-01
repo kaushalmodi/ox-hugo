@@ -1,8 +1,10 @@
 +++
 title = "神经网络基础"
+author = ["Feng Ruohang"]
 date = 2017-11-29
 tags = ["real-examples", "math", "equations", "not-english", "table", "latex", "latex-environment"]
 draft = false
+source = "https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md"
 +++
 
 -   **Disclaimer:** This post is from the [link](https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md) posted by GitHub user

@@ -3,6 +3,7 @@
 #+STARTUP: inlineimages
 
 #+TITLE: Post 3
+#+AUTHOR:
 
 Post 3 contents
 

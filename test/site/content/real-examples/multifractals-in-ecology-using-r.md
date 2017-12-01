@@ -1,9 +1,9 @@
 +++
 title = "Multifractals in ecology using R"
+author = ["Leonardo A. Saravia"]
 date = 2017-11-28T10:48:00-05:00
 tags = ["real-examples", "math", "equations"]
 draft = false
-author = "Leonardo A. Saravia"
 source = "https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md"
 +++
 

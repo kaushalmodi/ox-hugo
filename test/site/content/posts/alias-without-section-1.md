@@ -1,7 +1,7 @@
 +++
 title = "Alias without section portion 1"
 aliases = ["/posts/alias-a"]
-tags = ["aliases"]
+tags = ["front-matter", "aliases"]
 draft = false
 +++
 

@@ -2612,7 +2612,7 @@ a_{b} a_{bc} a^{b} a^{bc}
 :END:
 This post will be exported without =title= in the front-matter because
 it is disabled using =:EXPORT_OPTIONS: title:nil=.
-** Disable exporting author                                    :author:disable:
+** Disable exporting author                                  :author:disable:
 :PROPERTIES:
 :EXPORT_OPTIONS: author:nil
 :EXPORT_FILE_NAME: disable-author
@@ -2620,6 +2620,21 @@ it is disabled using =:EXPORT_OPTIONS: title:nil=.
 :END:
 This post will be exported without =author= in the front-matter because
 it is disabled using =:EXPORT_OPTIONS: author:nil=.
+** Creator                                             :creator:front_matter:
+*** Default Creator                            :dont_export_during_make_test:
+:PROPERTIES:
+:EXPORT_DATE: 2017-12-01
+:EXPORT_OPTIONS: creator:t
+:EXPORT_FILE_NAME: default-creator
+:END:
+The front-matter for this post contains the default Creator string.
+*** Custom Creator
+:PROPERTIES:
+:EXPORT_CREATOR: The awesome Emacs + Org-mode + ox-hugo + Hugo
+:EXPORT_OPTIONS: creator:t
+:EXPORT_FILE_NAME: custom-creator
+:END:
+The front-matter for this post contains a custom Creator string.
 * Miscellaneous Front Matter                                   :front_matter:
 ** Hugo Aliases                                                     :aliases:
 *** Alias without section portion 1

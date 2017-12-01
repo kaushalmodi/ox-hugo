@@ -536,6 +536,23 @@ nil."
   :group 'org-export-hugo
   :type '(repeat string))
 
+(defcustom org-hugo-export-creator-string
+  (format "Emacs %s (Org mode%s + ox-hugo) + Hugo%s"
+	  emacs-version
+	  (if (fboundp 'org-version)
+              (concat " " (org-version))
+            "")
+          (if (executable-find "hugo")
+              (let* ((long-ver (shell-command-to-string "hugo version"))
+                     (short-ver (replace-regexp-in-string ".* \\(v[^ ]+\\).*\n*" "\\1" long-ver)))
+                (concat " " short-ver))
+            ""))
+  "Information about the creator of the document.
+This option can also be set on with the CREATOR keyword."
+  :group 'org-export-hugo
+  :type '(string :tag "Creator string")
+  :safe #'stringp)
+
 (defcustom org-hugo-langs-no-descr-in-code-fences '()
   "List of languages whose descriptors should not be exported to Markdown.
 
@@ -604,6 +621,7 @@ newer."
   :options-alist '(;; Variables not setting the front-matter directly
                    (:with-toc nil "toc" org-hugo-export-with-toc)
                    (:section-numbers nil "num" org-hugo-export-with-section-numbers)
+                   (:creator "CREATOR" nil org-hugo-export-creator-string)
                    (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
                    (:with-special-strings nil "-" nil) ;Don't use special strings for ndash, mdash; that is done automatically by Blackfriday
                    (:with-sub-superscript nil "^" '{}) ;Require curly braces to be wrapped around text to sub/super-scripted
@@ -1798,6 +1816,8 @@ INFO is a plist used as a communication channel."
                                (let ((author-list-1 (org-split-string author-raw ",")))
                                  ;; Don't allow spaces around author names.
                                  (mapcar #'org-trim author-list-1))))))
+         (creator (and (plist-get info :with-creator)
+	               (plist-get info :creator)))
          (hugo-date-fmt "%Y-%m-%dT%T%z")
          (date-raw (or
                     ;; Get the date from the "CLOSED" property;
@@ -1964,6 +1984,7 @@ INFO is a plist used as a communication channel."
                  (url . ,(org-export-data (plist-get info :hugo-url) info))
                  (weight . ,weight)
                  (draft . ,draft)
+                 (creator . ,creator)
                  (blackfriday . ,blackfriday)
                  (menu . ,menu-alist)))
          (data `,(append data custom-fm-data)))

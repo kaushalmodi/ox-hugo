@@ -1,5 +1,5 @@
 +++
-tags = ["title", "disable"]
+tags = ["export-option", "title", "disable"]
 draft = false
 +++
 

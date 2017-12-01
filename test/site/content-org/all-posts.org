@@ -313,13 +313,6 @@ get escaped.. =foo_bar= must not become =foo\_bar=.
 :END:
 This post will be exported without =title= in the front-matter because
 it is explicitly set to /empty/ using =:EXPORT_TITLE:=.
-** Disable exporting title                                          :disable:
-:PROPERTIES:
-:EXPORT_OPTIONS: title:nil
-:EXPORT_FILE_NAME: disable-title-2
-:END:
-This post will be exported without =title= in the front-matter because
-it is disabled using =:EXPORT_OPTIONS: title:nil=.
 * Description meta-data with "quoted text"
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-description-quotes
@@ -1518,7 +1511,7 @@ attribute must apply *only* to the link, and not to the image.
 annotation. So the behavior will depend on the browser (typically an
 external link will open in a new tab automatically).
 ** Within the same post (Internal links)                     :internal_links:
-*** Link to headings by name                                   :toc:headings:
+*** Link to headings by name                     :toc:headings:export_option:
 :PROPERTIES:
 :EXPORT_FILE_NAME: link-to-headings-by-name
 :EXPORT_OPTIONS: num:t toc:t
@@ -2422,24 +2415,6 @@ ghi
 abc
 def
 ghi
-* Export Settings                                           :export_settings:
-** Sub/superscripts require braces
-:PROPERTIES:
-:EXPORT_FILE_NAME: sub-superscripts-require-braces
-:END:
-*** Following text will export =_= and =^= verbatim
-a_b a_bc a^b a^bc
-*** Following text will export =_{..}= as subscript and =^{..}= as superscript
-a_{b} a_{bc} a^{b} a^{bc}
-** Sub/superscripts don't require braces
-:PROPERTIES:
-:EXPORT_FILE_NAME: sub-superscripts-dont-require-braces
-:EXPORT_OPTIONS: ^:t
-:END:
-*** Following text will export =_..= as subscript and =^..= as superscript
-a_b a_bc a^b a^bc
-*** Following text will export =_{..}= as subscript and =^{..}= as superscript
-a_{b} a_{bc} a^{b} a^{bc}
 * Section Inheritance                                   :section_inheritance:
 ** Section A
 :PROPERTIES:
@@ -2605,6 +2580,35 @@ something like:
 #+END_SRC
 ***** Example
 See this test site's [[https://github.com/kaushalmodi/ox-hugo/blob/master/test/site/themes/bare_min/layouts/_default/summary.html][=summary.html=]] as an example.
+** Sub/superscripts                                 :superscripts:subscripts:
+*** Sub/superscripts require braces
+:PROPERTIES:
+:EXPORT_FILE_NAME: sub-superscripts-require-braces
+:END:
+By default, =ox-hugo= implements the =^:{}= export option. See =C-h v
+org-export-with-sub-superscripts= for details. With this option, the
+text that needs to be subscripted or superscripted has to be
+surrounded by braces ={..}= following the =_= or =^=.
+**** Following text will export =_= and =^= verbatim
+a_b a_bc a^b a^bc
+**** Following text will export =_{..}= as subscript and =^{..}= as superscript
+a_{b} a_{bc} a^{b} a^{bc}
+*** Sub/superscripts don't require braces
+:PROPERTIES:
+:EXPORT_FILE_NAME: sub-superscripts-dont-require-braces
+:EXPORT_OPTIONS: ^:t
+:END:
+**** Following text will export =_..= as subscript and =^..= as superscript
+a_b a_bc a^b a^bc
+**** Following text will export =_{..}= as subscript and =^{..}= as superscript
+a_{b} a_{bc} a^{b} a^{bc}
+** Disable exporting title                                    :title:disable:
+:PROPERTIES:
+:EXPORT_OPTIONS: title:nil
+:EXPORT_FILE_NAME: disable-title-2
+:END:
+This post will be exported without =title= in the front-matter because
+it is disabled using =:EXPORT_OPTIONS: title:nil=.
 * Hugo Aliases                                                      :aliases:
 ** Alias without section portion 1
 :PROPERTIES:

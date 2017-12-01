@@ -1,6 +1,6 @@
 +++
 title = "Sub/superscripts don't require braces"
-tags = ["export-settings"]
+tags = ["export-option", "superscripts", "subscripts"]
 draft = false
 +++
 

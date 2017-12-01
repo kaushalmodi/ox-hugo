@@ -1,6 +1,6 @@
 +++
 title = "Link to headings by name"
-tags = ["links", "internal-links", "toc", "headings"]
+tags = ["links", "internal-links", "toc", "headings", "export-option"]
 draft = false
 +++
 

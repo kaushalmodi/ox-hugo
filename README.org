@@ -145,14 +145,24 @@ Before you export check that these properties are set as you need:
  used by this package to figure out where the current post starts.
 ** Export bindings
 The common =ox-hugo= export bindings are:
-|---------------+-------------------------------------------------------------------------------------|
-| Binding       | Description                                                                         |
-|---------------+-------------------------------------------------------------------------------------|
-| =C-c C-e H H= | Export only the current /valid/ subtree (has the =EXPORT_FILE_NAME= property set)   |
-| =C-c C-e H A= | Export *all* /valid/ subtrees (those that have the =EXPORT_FILE_NAME= property set) |
-|---------------+-------------------------------------------------------------------------------------|
-| =C-c C-e H h= | Export the whole Org file to a single post                                          |
-|---------------+-------------------------------------------------------------------------------------|
+*** For both one-post-per-subtree and one-post-per-file flows
+- =C-c C-e H H= :: Export "What I Mean".
+  - If point is in a /valid Hugo post subtree/, export that
+    subtree to a Hugo post in Markdown.
+
+    A /valid Hugo post subtree/ is an Org subtree has the
+    =EXPORT_FILE_NAME= property set.
+  - If the file is intended to be exported as a whole i.e. it must have
+    the #+TITLE keyword set, export the whole Org file a Hugo post in
+    Markdown.
+- =C-c C-e H A= :: Export *all* "What I Mean"
+  - If the Org file has one or more 'valid Hugo post subtrees', export
+    them to Hugo posts in Markdown.
+  - If the file is intended to be exported as a whole (no 'valid Hugo
+    post subtrees' at all) i.e. it must have the #+TITLE keyword set,
+    export the whole Org file a Hugo post in Markdown.
+*** For only the one-post-per-file flow
+- =C-c C-e H h= :: Export the Org file to a Hugo post in Markdown.
 ** Customization Options
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.

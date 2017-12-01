@@ -1671,15 +1671,20 @@ to ((name . \"foo\") (weight . 80))."
 - Remove bold, italics, monospace Markdown markup characters.
 - Do not escape underscore characters in the title.
 
+If exporting title is disabled by setting `org-export-with-title'
+to nil or using the OPTIONS keyword e.g. \"title:nil\", return
+nil.
+
 INFO is a plist used as a communication channel."
-  (let* ((title (org-export-data (plist-get info :title) info))
-         ;; Sanitize title.. cannot do bold, italics, monospace in title
-         (title (replace-regexp-in-string "\\\\?`" "" title))
-         (title (replace-regexp-in-string "\\`__?\\|\\`\\*\\*?\\|__?\\'\\|\\*\\*?\\'" "" title))
-         (title (replace-regexp-in-string " __?\\|__? \\| \\*\\*?\\|\\*\\*? " " " title))
-         ;; Do not escape underscores in title
-         (title (replace-regexp-in-string "\\\\_" "_" title)))
-    title))
+  (when (plist-get info :with-title)
+    (let* ((title (org-export-data (plist-get info :title) info))
+           ;; Sanitize title.. cannot do bold, italics, monospace in title
+           (title (replace-regexp-in-string "\\\\?`" "" title))
+           (title (replace-regexp-in-string "\\`__?\\|\\`\\*\\*?\\|__?\\'\\|\\*\\*?\\'" "" title))
+           (title (replace-regexp-in-string " __?\\|__? \\| \\*\\*?\\|\\*\\*? " " " title))
+           ;; Do not escape underscores in title
+           (title (replace-regexp-in-string "\\\\_" "_" title)))
+      title)))
 
 (defun org-hugo--transform-org-tags (tag-list info &optional no-prefer-hyphen)
   "Transform Org TAG-LIST for use in Hugo tags and categories.
@@ -2484,13 +2489,14 @@ approach)."
                       err msg)
                   (if valid-subtree-found
                       (setq msg "Point is not in a valid Hugo post subtree; move to one and try again")
-                    (let* ((info (org-export-get-environment 'hugo))
-                           (title (car (plist-get info :title))))
+                    (let ((title (save-excursion
+                                   (goto-char (point-min))
+                                   (re-search-forward "^#\\+TITLE:" nil :noerror))))
                       (if title
                           (setq do-export t)
                         (setq err t)
                         (setq msg (concat "The file neither contains a valid Hugo post subtree, "
-                                          "nor has the #+TITLE keyword set")))))
+                                          "nor has the #+TITLE keyword")))))
                   (unless do-export
                     (let ((error-fn (if (or (not err)
                                             noerror)

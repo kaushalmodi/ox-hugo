@@ -292,7 +292,7 @@ in Markdown.
 Above title would render to ~Version 0.1 <span
 class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-11
 Wed&gt;</span></span>~ in Markdown.
-* Title in Front Matter
+* Title in Front Matter                                               :title:
 ** Awesome title with "quoted text"
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-title-quotes
@@ -306,6 +306,20 @@ Testing a post with double quotes in the title.
 :END:
 Ensure that the underscores in =title= string of front matter do not
 get escaped.. =foo_bar= must not become =foo\_bar=.
+** Allow empty titles                                                 :empty:
+:PROPERTIES:
+:EXPORT_FILE_NAME: allow-empty-titles-2
+:EXPORT_TITLE:
+:END:
+This post will be exported without =title= in the front-matter because
+it is explicitly set to /empty/ using =:EXPORT_TITLE:=.
+** Disable exporting title                                          :disable:
+:PROPERTIES:
+:EXPORT_OPTIONS: title:nil
+:EXPORT_FILE_NAME: disable-title-2
+:END:
+This post will be exported without =title= in the front-matter because
+it is disabled using =:EXPORT_OPTIONS: title:nil=.
 * Description meta-data with "quoted text"
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-description-quotes

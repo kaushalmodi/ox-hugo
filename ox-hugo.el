@@ -2266,7 +2266,8 @@ is non-nil.
 Return the buffer the export happened to."
   (interactive)
   (org-hugo--before-export-function)
-  (unless subtreep ;Reset the variables that are used only for subtree exports
+  (unless subtreep
+    ;; Reset the variables that are used only for subtree exports.
     (setq org-hugo--subtree-count 0)
     (setq org-hugo--subtree-coord nil))
   ;; Allow certain `ox-hugo' properties to be inherited.
@@ -2324,6 +2325,7 @@ Return output file's name."
          (do-export t))
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (unless subtreep
+      ;; Below stuff applies only to per-file export flow.
       (let ((org-use-tag-inheritance t)
             ;; `org-get-tags' returns a list of tags *only*
             ;; at the current heading; `org-get-tags-at'
@@ -2337,11 +2339,10 @@ Return output file's name."
               ;; Reset the variables that are used only for subtree exports.
               (setq org-hugo--subtree-count 0)
               (setq org-hugo--subtree-coord nil)
-              (when do-export
-                ;; Print below only when file-based exports happen.
-                (message "[ox-hugo file] Exporting `%s' (%s)"
-                         title (file-name-nondirectory (buffer-file-name)))))
-          (message "[ox-hugo file] `%s' was not exported as that file was tagged with one of `org-export-exclude-tags'"
+              (message "[ox-hugo file] Exporting `%s' (%s)"
+                       title (file-name-nondirectory (buffer-file-name))))
+          (message (concat "[ox-hugo file] `%s' was not exported as that file "
+                           "was tagged with one of `org-export-exclude-tags'")
                    title))))
     (when do-export
       (prog1

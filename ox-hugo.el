@@ -903,6 +903,42 @@ Return the escaped/unescaped string."
         "\\({{%\\)\\([^}][^}]*\\)\\(%}}\\)" "\\1/*\\2*/\\3" code))
     code))
 
+(defun org-hugo--hugo-version ()
+  "Return hugo version.
+
+If hugo is found in PATH, return (LONG . SHORT).
+
+LONG is the exact string returned by \"hugo version\".
+
+SHORT is the short version of above.
+Examples: \"0.31.1\", \"0.31.99\" (for \"0.32-DEV\" version).
+
+If hugo is not found, return nil."
+  (when (executable-find "hugo")
+    (let* ((long-ver (org-trim (shell-command-to-string "hugo version")))
+           (short-ver (replace-regexp-in-string ".* v\\([^ ]+\\) .*" "\\1" long-ver)))
+      (when (string-match "-DEV-.*" short-ver)
+        ;; Replace "-DEV-*" in version string with "-BETA" because
+        ;; `version-to-list' does not understand "-DEV".
+        (setq short-ver (replace-match "-BETA" nil nil short-ver))
+        ;; Below, convert "0.32-DEV" -> "0.31.99" (example) so that
+        ;; version strings can be compared with functions like
+        ;; `version<'.
+        (let* ((short-ver-list (version-to-list short-ver))
+               (major-ver (nth 0 short-ver-list))
+               (minor-ver (nth 1 short-ver-list))
+               (micro-ver (nth 2 short-ver-list)))
+          ;; micro-ver will be -2 for "-beta" (DEV) versions.
+          (setq micro-ver 99)  ;Assuming that the real micro-ver will never become 99
+          (if (= 0 minor-ver)  ;Example: "1.0-DEV" -> (1 0 99) -> (0 99 99)
+              (progn
+                (setq minor-ver 99) ;Assuming that the max minor version is 99
+                (setq major-ver (1- major-ver))) ;Assuming that major-ver is not 0 to begin with
+            (setq minor-ver (1- minor-ver))) ;Example: "0.32-DEV" -> (0 32 99) -> (0 31 99)
+          (setq short-ver-list (list major-ver minor-ver micro-ver))
+          (setq short-ver (mapconcat #'number-to-string short-ver-list "."))))
+      (cons long-ver short-ver))))
+
 
 
 ;;; Transcode Functions
@@ -2557,11 +2593,10 @@ buffer and returned as a string in Org format."
   (interactive)
   (let* ((emacs-version (emacs-version))
          (org-version (org-version nil :full))
-         (hugo-binary (executable-find "hugo"))
-         (hugo-version (when hugo-binary
-                         (org-trim
-                          (shell-command-to-string
-                           (concat hugo-binary " version")))))
+         (hugo-version (org-hugo--hugo-version))
+         (hugo-version (if hugo-version
+                           (car hugo-version) ;Long version
+                         "=hugo= binary not found in PATH"))
          (info-org (mapconcat #'identity
                               `("* Debug information for =ox-hugo="
                                 "** Emacs Version"
@@ -2574,7 +2609,11 @@ buffer and returned as a string in Org format."
                                 "#+END_EXAMPLE"
                                 "** Org Version"
                                 "#+BEGIN_EXAMPLE" ;Prevent the forward slashes in paths being interpreted as Org markup
-                                ,(format "%s" org-version)
+                                ,org-version
+                                "#+END_EXAMPLE"
+                                "** Hugo Version"
+                                "#+BEGIN_EXAMPLE" ;Prevent the forward slashes in paths being interpreted as Org markup
+                                ,hugo-version
                                 "#+END_EXAMPLE"
                                 "*** Org =load-path= shadows"
                                 ,(let* ((str (list-load-path-shadows :stringp))
@@ -2592,10 +2631,6 @@ buffer and returned as a string in Org format."
                                                     "Study the output of =M-x list-load-path-shadows=.")
                                                   "\n")
                                      "No Org mode shadows found in =load-path="))
-                                "** Hugo Version"
-                                ,(if hugo-binary
-                                     (format "%s" hugo-version)
-                                   "=hugo= binary not found in PATH")
                                 "** =ox-hugo= defcustoms"
                                 ,(format "|org-hugo-default-section-directory                    |%S|" org-hugo-default-section-directory)
                                 ,(format "|org-hugo-use-code-for-kbd                             |%S|" org-hugo-use-code-for-kbd)

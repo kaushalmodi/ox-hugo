@@ -1,4 +1,4 @@
-# Time-stamp: <2017-12-01 10:44:11 kmodi>
+# Time-stamp: <2017-12-02 00:57:10 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -104,6 +104,8 @@ help:
 # loads the new Org version.. and thus we'll end up with mixed Org in
 # the load-path.
 emacs-batch:
+	@echo ""
+	@echo "$(ORG_FILE) ::"
 	@$(EMACS) --batch --eval "(progn\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
 	(when (> (length \"$(TIMEZONE)\") 0) (setenv \"TZ\" \"$(TIMEZONE)\"))\

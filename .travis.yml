@@ -18,9 +18,9 @@ install:
   - export EMACS=/tmp/emacs/bin/emacs
   - $EMACS --version
 script:
-  - make doc EMACS=${EMACS} # Just ensure that "make doc" doesn't fail for any reason.. this is *not* used to do Org->Markdown doc conversion using Travis.
-  - make test EMACS=${EMACS}
-  - make vcheck EMACS=${EMACS}
+  - make --no-print-directory doc EMACS=${EMACS} # Just ensure that "make doc" doesn't fail for any reason.. this is *not* used to do Org->Markdown doc conversion using Travis.
+  - make --no-print-directory test EMACS=${EMACS}
+  - make --no-print-directory vcheck EMACS=${EMACS}
 notifications:
   email:
     # Default is change, but that includes a new branch's 1st success.

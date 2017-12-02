@@ -1926,7 +1926,7 @@ INFO is a plist used as a communication channel."
                   "true")
                  ((and todo-keyword
                        (string= "DRAFT" todo-keyword))
-                  (message "[ox-hugo] `%s' post is marked as a draft" title)
+                  (message "[ox-hugo] `%s' post is marked as a DRAFT" title)
                   "true")
                  ((org-hugo--plist-get-true-p info :hugo-draft)
                   (org-hugo--front-matter-value-booleanize (org-hugo--plist-get-true-p info :hugo-draft)))
@@ -2378,24 +2378,26 @@ Return output file's name."
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (unless subtreep
       ;; Below stuff applies only to per-file export flow.
-      (let ((org-use-tag-inheritance t)
+      (let ((fname (file-name-nondirectory (buffer-file-name)))
+            (org-use-tag-inheritance t)
             ;; `org-get-tags' returns a list of tags *only*
             ;; at the current heading; `org-get-tags-at'
             ;; returns inherited tags too.
-            (all-tags (org-get-tags-at)))
-        (dolist (exclude-tag org-export-exclude-tags)
-          (when (member exclude-tag all-tags)
-            (setq do-export nil)))
+            (all-tags (org-get-tags-at))
+            matched-exclude-tag)
+        (when all-tags
+          (dolist (exclude-tag org-export-exclude-tags)
+            (when (member exclude-tag all-tags)
+              (setq matched-exclude-tag exclude-tag)
+              (setq do-export nil))))
         (if do-export
             (progn
               ;; Reset the variables that are used only for subtree exports.
               (setq org-hugo--subtree-count 0)
               (setq org-hugo--subtree-coord nil)
-              (message "[ox-hugo file] Exporting `%s' (%s)"
-                       title (file-name-nondirectory (buffer-file-name))))
-          (message (concat "[ox-hugo file] `%s' was not exported as that file "
-                           "was tagged with one of `org-export-exclude-tags'")
-                   title))))
+              (message "[ox-hugo] Exporting `%s' (%s)" title fname))
+          (message "[ox-hugo] %s was not exported as it is tagged with an exclude tag `%s'"
+                   fname matched-exclude-tag))))
     (when do-export
       (prog1
           (org-export-to-file 'hugo outfile async subtreep visible-only)
@@ -2487,7 +2489,7 @@ approach)."
             (ignore-errors
               (org-back-to-heading :invisible-ok))
             (let ((subtree (org-hugo--get-valid-subtree))
-                  is-commented is-excluded do-export)
+                  is-commented is-excluded matched-exclude-tag do-export)
               (if subtree
                   (progn
                     ;; If subtree is a valid Hugo post subtree, proceed ..
@@ -2498,9 +2500,11 @@ approach)."
                           ;; at the current heading; `org-get-tags-at'
                           ;; returns inherited tags too.
                           (all-tags (org-get-tags-at)))
-                      (dolist (exclude-tag org-export-exclude-tags)
-                        (when (member exclude-tag all-tags)
-                          (setq is-excluded t))))
+                      (when all-tags
+                        (dolist (exclude-tag org-export-exclude-tags)
+                          (when (member exclude-tag all-tags)
+                            (setq matched-exclude-tag exclude-tag)
+                            (setq is-excluded t)))))
 
                     ;; (message "[current subtree DBG] subtree: %S" subtree)
                     ;; (message "[current subtree DBG] is-commented:%S, tags:%S, is-excluded:%S"
@@ -2508,13 +2512,15 @@ approach)."
                     (let ((title (org-element-property :title subtree)))
                       (cond
                        (is-commented
-                        (message "[ox-hugo] `%s' was not exported as that subtree is commented" title))
+                        (message "[ox-hugo] `%s' was not exported as that subtree is commented"
+                                 title))
                        (is-excluded
-                        (message "[ox-hugo] `%s' was not exported as it is tagged with one of `org-export-exclude-tags'" title))
+                        (message "[ox-hugo] `%s' was not exported as it is tagged with an exclude tag `%s'"
+                                 title matched-exclude-tag))
                        (t
-                        (message "[ox-hugo] Exporting `%s' .." title)
                         (when (numberp org-hugo--subtree-count)
                           (setq org-hugo--subtree-count (1+ org-hugo--subtree-count)))
+                        (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title)
                         ;; Get the current subtree coordinates for
                         ;; auto-calculation of menu item weight or post
                         ;; weight.

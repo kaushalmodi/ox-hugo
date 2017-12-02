@@ -537,15 +537,10 @@ nil."
   :type '(repeat string))
 
 (defcustom org-hugo-export-creator-string
-  (format "Emacs %s (Org mode%s + ox-hugo) + Hugo%s"
-	  emacs-version
-	  (if (fboundp 'org-version)
+  (format "Emacs %s (Org mode%s + ox-hugo)"
+          emacs-version
+          (if (fboundp 'org-version)
               (concat " " (org-version))
-            "")
-          (if (executable-find "hugo")
-              (let* ((long-ver (shell-command-to-string "hugo version"))
-                     (short-ver (replace-regexp-in-string ".* \\(v[^ ]+\\).*\n*" "\\1" long-ver)))
-                (concat " " short-ver))
             ""))
   "Information about the creator of the document.
 This option can also be set on with the CREATOR keyword."
@@ -1817,7 +1812,7 @@ INFO is a plist used as a communication channel."
                                  ;; Don't allow spaces around author names.
                                  (mapcar #'org-trim author-list-1))))))
          (creator (and (plist-get info :with-creator)
-	               (plist-get info :creator)))
+                       (plist-get info :creator)))
          (hugo-date-fmt "%Y-%m-%dT%T%z")
          (date-raw (or
                     ;; Get the date from the "CLOSED" property;

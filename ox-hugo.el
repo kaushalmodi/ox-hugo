@@ -394,7 +394,7 @@ This variable is the name of the directory under the \"content/\"
 directory where all Hugo posts should go by default."
   :group 'org-export-hugo
   :type 'directory
-  :safe 'stringp)
+  :safe #'stringp)
 
 (defcustom org-hugo-footer ""
   "String to be appended at the end of each Hugo post.
@@ -402,7 +402,7 @@ directory where all Hugo posts should go by default."
 The string needs to be in a Hugo-compatible Markdown format or HTML."
   :group 'org-export-hugo
   :type 'string
-  :safe 'stringp)
+  :safe #'stringp)
 
 (defcustom org-hugo-preserve-filling t
   "When non-nil, text filling done in Org will be retained in Markdown."
@@ -486,8 +486,9 @@ e.g. \"toc:nil\", \"toc:t\" or \"toc:3\"."
           (const :tag "No Table of Contents" nil)
           (const :tag "Full Table of Contents" t)
           (integer :tag "TOC to level"))
-  :safe (lambda (x) (or (booleanp x)
-                        (integerp x))))
+  :safe (lambda (x)
+          (or (booleanp x)
+              (integerp x))))
 
 (defcustom org-hugo-export-with-section-numbers nil
   "Configuration for adding section numbers to headlines.
@@ -510,8 +511,9 @@ e.g. \"num:onlytoc\", \"num:nil\", \"num:t\" or \"num:3\"."
           (const :tag "Don't number any headline" nil)
           (const :tag "Number all headlines" t)
           (integer :tag "Number to level"))
-  :safe (lambda (x) (or (booleanp x)
-                        (integerp x))))
+  :safe (lambda (x)
+          (or (booleanp x)
+              (integerp x))))
 
 (defcustom org-hugo-default-static-subdirectory-for-externals "ox-hugo"
   "Default sub-directory in Hugo static directory for external files.
@@ -521,7 +523,7 @@ create inside the Hugo static directory.  So all such files are
 copied to this sub-directory inside the Hugo static directory."
   :group 'org-export-hugo
   :type 'string
-  :safe 'stringp)
+  :safe #'stringp)
 
 (defcustom org-hugo-external-file-extensions-allowed-for-copying
   '("jpg" "jpeg" "tiff" "png" "svg"
@@ -2373,12 +2375,12 @@ Return output file's name."
                     (make-directory dir :parents) ;Create the directory if it does not exist
                     dir))
          (outfile (org-export-output-file-name ".md" subtreep pub-dir))
-         (title (format "%s" (car (plist-get info :title))))
          (do-export t))
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (unless subtreep
       ;; Below stuff applies only to per-file export flow.
       (let ((fname (file-name-nondirectory (buffer-file-name)))
+            (title (format "%s" (or (car (plist-get info :title)) "<EMPTY TITLE>")))
             (org-use-tag-inheritance t)
             ;; `org-get-tags' returns a list of tags *only*
             ;; at the current heading; `org-get-tags-at'
@@ -2481,8 +2483,10 @@ approach)."
                 ;; that function, it will be checked if the whole Org
                 ;; file can be exported.
                 (if ret
-                    (message "[ox-hugo] Exported %d subtrees from %s"
-                             org-hugo--subtree-count f-or-b-name)
+                    (message "[ox-hugo] Exported %d subtree%s from %s"
+                             org-hugo--subtree-count
+                             (if (= 1 org-hugo--subtree-count) "" "s")
+                             f-or-b-name)
                   (setq ret (org-hugo-export-wim-to-md nil async visible-only noerror)))
                 ret)
             ;; Publish only the current subtree

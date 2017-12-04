@@ -45,18 +45,18 @@
 ;;                        export that subtree to a Hugo post in
 ;;                        Markdown.
 ;;                      - If the file is intended to be exported as a
-;;                        whole i.e. it must have the #+TITLE keyword
-;;                        set, export the whole Org file a Hugo post
-;;                        in Markdown.
+;;                        whole (i.e. has the #+TITLE keyword),
+;;                        export the whole Org file to a Hugo post in
+;;                        Markdown.
 ;;
 ;;    - C-c C-e H A  -> Export *all* "What I Mean"
 ;;                      - If the Org file has one or more 'valid Hugo
 ;;                        post subtrees', export them to Hugo posts in
 ;;                        Markdown.
 ;;                      - If the file is intended to be exported as a
-;;                        whole (no 'valid Hugo post subtrees' at all)
-;;                        i.e. it must have the #+TITLE keyword set,
-;;                        export the whole Org file a Hugo post in
+;;                        whole (i.e. no 'valid Hugo post subtrees'
+;;                        at all, and has the #+TITLE keyword),
+;;                        export the whole Org file to a Hugo post in
 ;;                        Markdown.
 ;;
 ;; ## For only the one-post-per-file flow
@@ -2322,7 +2322,7 @@ Return the buffer the export happened to."
   (org-hugo--before-export-function)
   (unless subtreep
     ;; Reset the variables that are used only for subtree exports.
-    (setq org-hugo--subtree-count 0)
+    (setq org-hugo--subtree-count nil)
     (setq org-hugo--subtree-coord nil))
   ;; Allow certain `ox-hugo' properties to be inherited.
   (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
@@ -2395,7 +2395,7 @@ Return output file's name."
         (if do-export
             (progn
               ;; Reset the variables that are used only for subtree exports.
-              (setq org-hugo--subtree-count 0)
+              (setq org-hugo--subtree-count nil)
               (setq org-hugo--subtree-coord nil)
               (message "[ox-hugo] Exporting `%s' (%s)" title fname))
           (message "[ox-hugo] %s was not exported as it is tagged with an exclude tag `%s'"
@@ -2423,8 +2423,8 @@ Return output file's name."
 ;;       (org-hugo--after-export-function))))
 
 ;;;###autoload
-(defun org-hugo-export-wim-to-md (&optional all-subtrees async visible-only noerror)
-  "Publish the current subtree/all subtrees/current file to a Hugo post.
+(defun org-hugo-export-wim-to-md (&optional all-subtrees async visible-only noerror nested-call)
+  "Export the current subtree/all subtrees/current file to a Hugo post.
 
 This is an Export \"What I Mean\" function:
 
@@ -2433,19 +2433,24 @@ This is an Export \"What I Mean\" function:
 - If the current subtree doesn't have that property, but one of its
   parent subtrees has, then export from that subtree's scope.
 - If none of the subtrees have that property (or if there are no Org
-  subtrees), but the Org #+TITLE keyword is set, export the whole Org
-  file as a post with that title (calls `org-hugo-export-to-md' with
-  its SUBTREEP argument set to nil).
+  subtrees at all), but the Org #+TITLE keyword is present,
+  export the whole Org file as a post with that title (calls
+  `org-hugo-export-to-md' with its SUBTREEP argument set to nil).
 
-- If ALL-SUBTREES is non-nil, publish all valid Hugo subtrees (that
-  have the \"EXPORT_FILE_NAME\" property) in the current file.
-- Again, if ALL-SUBTREES is non-nil, and if none of the subtrees have
+- If ALL-SUBTREES is non-nil, export all valid Hugo post subtrees
+  \(that have the \"EXPORT_FILE_NAME\" property) in the current file
+  to multiple Markdown posts.
+- If ALL-SUBTREES is non-nil, and again if none of the subtrees have
   that property (or if there are no Org subtrees), but the Org #+TITLE
-  keyword is set, export the whole Org file.
+  keyword is present, export the whole Org file.
 
-- If the file neither has valid Hugo subtrees, nor has the #+TITLE
-  set, throw a user error.  If NOERROR is non-nil, use `message' to
-  display the error message instead of signaling a user error.
+- If the file neither has valid Hugo post subtrees, nor has the
+  #+TITLE present, throw a user error.  If NOERROR is non-nil, use
+  `message' to display the error message instead of signaling a user
+  error.
+
+The NESTED-CALL argument is for internal use.  It is set to a
+non-nil value when this function calls itself.
 
 A non-nil optional argument ASYNC means the process should happen
 asynchronously.  The resulting file should be accessible through
@@ -2473,21 +2478,21 @@ approach)."
                 (setq org-hugo--subtree-count 0)
                 (setq ret (org-map-entries
                            (lambda ()
-                             (org-hugo-export-wim-to-md nil async visible-only noerror))
+                             (org-hugo-export-wim-to-md nil async visible-only noerror :nested-call))
                            ;; Export only the subtrees where
                            ;; EXPORT_FILE_NAME property is not
                            ;; empty.
                            "EXPORT_FILE_NAME<>\"\""))
-                ;; If `ret' is nil, no valid Hugo subtree was found.  So
-                ;; call `org-hugo-export-wim-to-md' directly.  In
-                ;; that function, it will be checked if the whole Org
-                ;; file can be exported.
                 (if ret
                     (message "[ox-hugo] Exported %d subtree%s from %s"
                              org-hugo--subtree-count
                              (if (= 1 org-hugo--subtree-count) "" "s")
                              f-or-b-name)
-                  (setq ret (org-hugo-export-wim-to-md nil async visible-only noerror)))
+                  ;; If `ret' is nil, no valid Hugo subtree was found.
+                  ;; So call `org-hugo-export-wim-to-md' directly.  In
+                  ;; that function, it will be checked if the whole
+                  ;; Org file can be exported.
+                  (setq ret (org-hugo-export-wim-to-md nil async visible-only noerror :nested-call)))
                 ret)
             ;; Publish only the current subtree
             (ignore-errors
@@ -2522,9 +2527,11 @@ approach)."
                         (message "[ox-hugo] `%s' was not exported as it is tagged with an exclude tag `%s'"
                                  title matched-exclude-tag))
                        (t
-                        (when (numberp org-hugo--subtree-count)
-                          (setq org-hugo--subtree-count (1+ org-hugo--subtree-count)))
-                        (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title)
+                        (if nested-call
+                            (progn
+                              (setq org-hugo--subtree-count (1+ org-hugo--subtree-count))
+                              (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))
+                          (message "[ox-hugo] Exporting `%s' .." title))
                         ;; Get the current subtree coordinates for
                         ;; auto-calculation of menu item weight or post
                         ;; weight.

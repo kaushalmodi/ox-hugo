@@ -2322,7 +2322,6 @@ Return the buffer the export happened to."
   (org-hugo--before-export-function)
   (unless subtreep
     ;; Reset the variables that are used only for subtree exports.
-    (setq org-hugo--subtree-count nil)
     (setq org-hugo--subtree-coord nil))
   ;; Allow certain `ox-hugo' properties to be inherited.
   (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
@@ -2395,7 +2394,6 @@ Return output file's name."
         (if do-export
             (progn
               ;; Reset the variables that are used only for subtree exports.
-              (setq org-hugo--subtree-count nil)
               (setq org-hugo--subtree-coord nil)
               (message "[ox-hugo] Exporting `%s' (%s)" title fname))
           (message "[ox-hugo] %s was not exported as it is tagged with an exclude tag `%s'"
@@ -2423,7 +2421,7 @@ Return output file's name."
 ;;       (org-hugo--after-export-function))))
 
 ;;;###autoload
-(defun org-hugo-export-wim-to-md (&optional all-subtrees async visible-only noerror nested-call)
+(defun org-hugo-export-wim-to-md (&optional all-subtrees async visible-only noerror)
   "Export the current subtree/all subtrees/current file to a Hugo post.
 
 This is an Export \"What I Mean\" function:
@@ -2448,9 +2446,6 @@ This is an Export \"What I Mean\" function:
   #+TITLE present, throw a user error.  If NOERROR is non-nil, use
   `message' to display the error message instead of signaling a user
   error.
-
-The NESTED-CALL argument is for internal use.  It is set to a
-non-nil value when this function calls itself.
 
 A non-nil optional argument ASYNC means the process should happen
 asynchronously.  The resulting file should be accessible through
@@ -2478,21 +2473,23 @@ approach)."
                 (setq org-hugo--subtree-count 0)
                 (setq ret (org-map-entries
                            (lambda ()
-                             (org-hugo-export-wim-to-md nil async visible-only noerror :nested-call))
+                             (org-hugo-export-wim-to-md nil async visible-only noerror))
                            ;; Export only the subtrees where
                            ;; EXPORT_FILE_NAME property is not
                            ;; empty.
                            "EXPORT_FILE_NAME<>\"\""))
                 (if ret
-                    (message "[ox-hugo] Exported %d subtree%s from %s"
-                             org-hugo--subtree-count
-                             (if (= 1 org-hugo--subtree-count) "" "s")
-                             f-or-b-name)
+                    (progn
+                      (message "[ox-hugo] Exported %d subtree%s from %s"
+                               org-hugo--subtree-count
+                               (if (= 1 org-hugo--subtree-count) "" "s")
+                               f-or-b-name)
+                      (setq org-hugo--subtree-count nil)) ;Reset the variable
                   ;; If `ret' is nil, no valid Hugo subtree was found.
                   ;; So call `org-hugo-export-wim-to-md' directly.  In
                   ;; that function, it will be checked if the whole
                   ;; Org file can be exported.
-                  (setq ret (org-hugo-export-wim-to-md nil async visible-only noerror :nested-call)))
+                  (setq ret (org-hugo-export-wim-to-md nil async visible-only noerror)))
                 ret)
             ;; Publish only the current subtree
             (ignore-errors
@@ -2527,7 +2524,7 @@ approach)."
                         (message "[ox-hugo] `%s' was not exported as it is tagged with an exclude tag `%s'"
                                  title matched-exclude-tag))
                        (t
-                        (if nested-call
+                        (if (numberp org-hugo--subtree-count)
                             (progn
                               (setq org-hugo--subtree-count (1+ org-hugo--subtree-count))
                               (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))

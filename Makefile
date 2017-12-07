@@ -1,4 +1,4 @@
-# Time-stamp: <2017-12-02 00:57:10 kmodi>
+# Time-stamp: <2017-12-07 14:47:14 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -12,7 +12,7 @@ endif
 # EMACS_BIN_SOURCE and EMACS_VERSION are used later in the vcheck rule
 # only if EMACS_exists has evaluated to "".
 EMACS_BIN_SOURCE ?= https://github.com/npostavs/emacs-travis/releases/download/bins
-EMACS_VERSION ?= 25.2
+EMACS_VERSION ?= 25.3
 
 HUGO ?= hugo
 HUGO_exists := $(shell command -v $(HUGO) 2> /dev/null)

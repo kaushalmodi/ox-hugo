@@ -1900,10 +1900,22 @@ INFO is a plist used as a communication channel."
                                 ;; If the set DATE is already in
                                 ;; Hugo-compatible date format, use it.
                                 date-raw
-                              (format-time-string
-                               hugo-date-fmt
-                               ;; Else try to parse the date.
-                               (apply #'encode-time (org-parse-time-string date-raw))))))
+                              ;; Else try to parse the date.
+                              (condition-case err
+                                  (format-time-string
+                                   hugo-date-fmt
+                                   (apply #'encode-time (org-parse-time-string date-raw)))
+                                (error
+                                 ;; Set date-nocolon to nil if error happens.
+                                 ;; An example: If #+DATE is set to
+                                 ;; 2012-2017 to set the copyright
+                                 ;; years, just set the date to nil
+                                 ;; instead of throwing an error like:
+                                 ;; org-parse-time-string: Not a standard Org time string: 2012-2017
+                                 (message
+                                  (format "[ox-hugo] Date will not be set in the front-matter: %s"
+                                          (nth 1 err)))
+                                 nil)))))
          ;; Hugo expects the date stamp in this format:
          ;;   2017-07-06T14:59:45-04:00
          ;; But the "%Y-%m-%dT%T%z" format produces the date in this format:

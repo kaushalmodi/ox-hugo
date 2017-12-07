@@ -2638,6 +2638,16 @@ The front-matter for this post contains the default Creator string.
 :EXPORT_FILE_NAME: custom-creator
 :END:
 The front-matter for this post contains a custom Creator string.
+* Export snippets and blocks                    :export_snippet:export_block:
+:PROPERTIES:
+:EXPORT_FILE_NAME: export_snippets_and_blocks
+:END:
+** Export snippet
+@@hugo:This will get exported only for Hugo exports, `verbatim`.@@
+** Export block
+#+BEGIN_EXPORT hugo
+and **this too**.. `verbatim`.
+#+END_EXPORT
 * Miscellaneous Front Matter                                   :front_matter:
 ** Hugo Aliases                                                     :aliases:
 *** Alias without section portion 1

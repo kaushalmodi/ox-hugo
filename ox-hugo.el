@@ -606,6 +606,8 @@ newer."
               (org-hugo-export-as-md a s v)))))
   :translate-alist '((code . org-hugo-kbd-tags-maybe)
                      (example-block . org-hugo-example-block)
+                     (export-block . org-hugo-export-block)
+                     (export-snippet . org-hugo-export-snippet)
                      (headline . org-hugo-headline)
                      (inner-template . org-hugo-inner-template)
                      (keyword . org-hugo-keyword)
@@ -987,6 +989,36 @@ information."
           (setq text (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" text))
           (format "{{< highlight text %s>}}\n%s{{< /highlight >}}\n" linenos-str text))
       (org-blackfriday-example-block example-block nil info))))
+
+;;;; Export Snippet
+(defun org-hugo-export-snippet (export-snippet _contents _info)
+  "Transcode a EXPORT-SNIPPET object from Org to Hugo-compatible Markdown.
+CONTENTS is nil.  INFO is a plist holding contextual information.
+
+Example:
+
+  \"@@hugo:foo@@\"
+
+exports verbatim to \"foo\" only when exported using `hugo'
+backend."
+  (when (eq (org-export-snippet-backend export-snippet) 'hugo)
+    (org-element-property :value export-snippet)))
+
+;;;; Export Block
+(defun org-hugo-export-block (export-block _contents info)
+  "Transcode a EXPORT-BLOCK element from Org to Hugo-compatible Markdown.
+CONTENTS is nil.  INFO is a plist holding contextual information.
+
+Example:
+
+  #+BEGIN_EXPORT hugo
+  foo
+  #+END_EXPORT
+
+exports verbatim to \"foo\" only when exported using `hugo'
+backend."
+  (when (string= (org-element-property :type export-block) "HUGO")
+    (org-element-property :value export-block)))
 
 ;;;; Headline
 (defun org-hugo-headline (headline contents info)

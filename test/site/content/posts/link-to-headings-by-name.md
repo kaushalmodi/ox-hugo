@@ -29,7 +29,10 @@ draft = false
 
 -   Link (with description) to a heading with section number: [Link to
     _Beta 102_ heading](#beta-102)
--   Link (no description) to a heading without section number: [Zeta 103](#zeta-103)
+-   Link (no description) to a heading without section number: [Zeta 103](#zeta-103).
+
+    The space after that `*` in the link is optional.. so this also
+    works: [Zeta 103](#zeta-103).
 
 
 ## <span class="section-num">1</span> Beta 102 {#beta-102}

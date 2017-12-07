@@ -1526,7 +1526,10 @@ external link will open in a new tab automatically).
 - Link (with description) to a heading with section number: [[* Beta 102][Link to
   /Beta 102/ heading]]
 - Link (no description) to a heading without section number: [[* Zeta
-  103]]
+  103]].
+
+  The space after that =*= in the link is optional.. so this also
+  works: [[*Zeta 103]].
 **** Beta 102
 - Link (with description) to a heading without section number: [[* Alpha 101][Link to
   /Alpha 101/ heading]]

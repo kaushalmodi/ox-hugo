@@ -1000,12 +1000,22 @@ Example:
   \"@@hugo:foo@@\"
 
 exports verbatim to \"foo\" only when exported using `hugo'
-backend."
-  (when (eq (org-export-snippet-backend export-snippet) 'hugo)
-    (org-element-property :value export-snippet)))
+backend.
+
+Export snippets with backend tags \"markdown:\" and \"md:\" are
+also handled.  Exporting of export snippets with backend tag
+\"html:\" uses the HTML exporter."
+  (cond
+   ((member (org-export-snippet-backend export-snippet) '(hugo markdown md))
+    ;; ox-md.el does not support export snippets, so let's handle
+    ;; Markdown export snippets here as well.
+    (org-element-property :value export-snippet))
+   ;; Also include HTML export snippets.
+   (t
+    (org-export-with-backend 'html export-snippet nil nil))))
 
 ;;;; Export Block
-(defun org-hugo-export-block (export-block _contents info)
+(defun org-hugo-export-block (export-block _contents _info)
   "Transcode a EXPORT-BLOCK element from Org to Hugo-compatible Markdown.
 CONTENTS is nil.  INFO is a plist holding contextual information.
 
@@ -1016,9 +1026,17 @@ Example:
   #+END_EXPORT
 
 exports verbatim to \"foo\" only when exported using `hugo'
-backend."
-  (when (string= (org-element-property :type export-block) "HUGO")
-    (org-element-property :value export-block)))
+backend.
+
+If the backend tag is \"markdown\"/\"md\" or \"html\", exporting
+of those blocks falls back to the respective exporters."
+  (cond
+   ((string= (org-element-property :type export-block) "HUGO")
+    (org-remove-indentation (org-element-property :value export-block)))
+   ;; Also include Markdown and HTML export blocks.
+   ;; ox-md handles HTML export blocks too.
+   (t
+    (org-export-with-backend 'md export-block nil nil))))
 
 ;;;; Headline
 (defun org-hugo-headline (headline contents info)

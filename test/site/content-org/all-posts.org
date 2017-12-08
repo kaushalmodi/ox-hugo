@@ -2665,16 +2665,18 @@ The front-matter for this post contains a custom Creator string.
 :END:
 @@hugo:This will get exported **only for** Hugo exports, `verbatim`.@@
 
-@@newlines
-are not
-allowed@@
+@@hugo:Newlines in Org source
+between the `@​@` pairs are
+allowed too
+(but no blank lines).@@
 
-If you want newlines, use *Export Blocks* instead.
+Use *Export Blocks* if you need blank lines in-between.
 *** Export snippet Markdown                                        :markdown:
 :PROPERTIES:
 :EXPORT_FILE_NAME: export_snippet_markdown
 :END:
-@@md:This Markdown **Export Snippet** will also get exported for Hugo exports, `verbatim`.@@
+@@md:This Markdown **Export Snippet** will also get exported for Hugo
+exports, `verbatim`.@@
 
 @@markdown:_This one too_@@
 - NOTE :: =ox-md.el= does not support *Export Snippets* as of writing
@@ -2685,7 +2687,8 @@ If you want newlines, use *Export Blocks* instead.
 :PROPERTIES:
 :EXPORT_FILE_NAME: export_snippet_html
 :END:
-@@html:This HTML <b>Export Snippet</b> will also get exported for Hugo exports, <code>verbatim</code>.@@
+@@html:This HTML <b>Export Snippet</b> will also get exported for Hugo
+exports, <code>verbatim</code>.@@
 ** Export block                                                :export_block:
 *** Export block Hugo                                                  :hugo:
 :PROPERTIES:

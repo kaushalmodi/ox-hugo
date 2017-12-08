@@ -6,8 +6,9 @@ draft = false
 
 This will get exported **only for** Hugo exports, `verbatim`.
 
-@@newlines
-are not
-allowed@@
+Newlines in Org source
+between the `@​@` pairs are
+allowed too
+(but no blank lines).
 
-If you want newlines, use **Export Blocks** instead.
+Use **Export Blocks** if you need blank lines in-between.

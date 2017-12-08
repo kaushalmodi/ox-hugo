@@ -4,7 +4,8 @@ tags = ["export-snippet", "markdown"]
 draft = false
 +++
 
-This Markdown **Export Snippet** will also get exported for Hugo exports, `verbatim`.
+This Markdown **Export Snippet** will also get exported for Hugo
+exports, `verbatim`.
 
 _This one too_
 

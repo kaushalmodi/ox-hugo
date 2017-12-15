@@ -10,9 +10,6 @@ publishdir = "public"
 # Remove files from destination not found in static directories
 cleandestinationdir = true
 
-# Needed for relative references like in the below image link
-#   ![Example PNG image](/images/org-mode-unicorn-logo.png)
-canonifyURLs = true
 enableGitInfo = true
 
 # https://gohugo.io/extras/highlighting/

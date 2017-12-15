@@ -3,7 +3,6 @@ languageCode = "en-us"
 title = "ox-hugo Test Site"
 theme = "bare_min"
 
-canonifyURLs = true
 enableEmoji = true
 enableGitInfo = true
 

@@ -5,7 +5,7 @@
 ;; URL: https://ox-hugo.scripter.co
 ;; Package-Requires: ((emacs "24.4") (org "9.0"))
 ;; Keywords: Org, markdown, docs
-;; Version: 0.6
+;; Version: 0.7
 
 ;;; Commentary:
 

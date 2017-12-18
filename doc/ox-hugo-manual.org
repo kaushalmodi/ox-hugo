@@ -9,7 +9,7 @@
 #+MACRO: imageclick [[file:./static/images/$1][file:/images/$1]]
 #+MACRO: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
 #+MACRO: issue [[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]]
-#+MACRO: bfissue Blackfriday # [[https://github.com/russross/blackfriday/issues/$1][$1]]
+#+MACRO: bfissue Blackfriday #[[https://github.com/russross/blackfriday/issues/$1][$1]]
 #+MACRO: ox-hugo-test-file  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]]
 #+MACRO: doc [[/doc/$1][$2]]
 
@@ -17,11 +17,61 @@
 :PROPERTIES:
 :CUSTOM_ID: changelog
 :END:
+** COMMENT v
+*** Features
+*** Backward-incompatible changes
+*** Fixes
+*** Meta
+** v0.7 <2017-12-18 Mon>
+*** Features
+- *Now C-c C-e H H works for both per-subtree and per-file flows* --
+  {{{commit(b1b5d28b)}}}.
+- Support Org heading based internal links -- {{{issue(88)}}}.
+- Support list values for custom front-matter variables --
+  {{{issue(99)}}}.
+- Support specifying multiple [[https://gohugo.io/templates/output-formats/][hugo output formats]] .. Now the =outputs=
+  front-matter variable is a list.
+- Support the Org =#+AUTHOR= and =#+CREATOR= keywords and their
+  respective Org Export Options -- {{{issue(106)}}}.
+- Support Org Export Snippets and Export Blocks --
+  {{{commit(1149f20cd)}}}.
+- Now post titles can be set to =nil= i.e. be not be a part of the
+  front-matter .. /because you can/.
+- Improve the messages printed by =ox-hugo= on doing per-subtree or
+  per-file exports.. the progress of files exported using per-subtree
+  flow is now clearer, and the name of the file exported using
+  per-file flow is now explicit.. Helps when you batch export a dozen
+  files with a mix of these 2 flows.
+*** Backward-incompatible changes
+- Obsolete /org-hugo-export-subtree-\ast{}/ functions and replace them with
+  /org-hugo-export-wim-\ast{}/ (What I Mean) functions. See the doc string
+  of =org-hugo-export-wim-to-md= for details.
+
+  If you are using the [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto-export on saving]] flow, note the function
+  name change there too!
+*** Fixes
+- Fix number of backticks in code fence when code contains code fence
+  (/pathological corner case/).
+- Better document the =HUGO_CODE_FENCE= keyword -- {{{issue(102)}}}.
+- Don't render =(c)=, =(r)=, =(tm)= inside Latex equations --
+  {{{issue(104)}}} (/Upstream bug workaround/).
+- Better recognition of TOML-compatible integers and floats in meta
+  data for front-matter so that valid integers/floats don't get
+  unnecessarily double-quoted.
+*** Meta
+- Add a [[https://github.com/kaushalmodi/ox-hugo/blob/master/test/site/themes/bare_min/layouts/partials/debugprint.html][=debugprint.html=]] partial to help pretty-print various Hugo
+  objects like Page Params, File and SiteInfo for debug on the test
+  site.
+- The test site now has [[https://ox-hugo.scripter.co/test/tags/][tags]] and [[https://ox-hugo.scripter.co/test/categories/][categories]] pages.
+- Add few real world example posts containing complex Latex equations:
+  [[https://ox-hugo.scripter.co/test/real-examples/multifractals-in-ecology-using-r/][1]], [[https://ox-hugo.scripter.co/test/real-examples/nn-intro/][2]].
+- Turns out =ox-hugo= works on emacs 24.4 too (/but please upgrade
+  to the latest Emacs and Org stable versions!/).
 ** v0.6 <2017-11-09 Thu>
 *** Features
 - Support the =num= export option. Now you can prefix all post
   headings (or some not.. the ones with =UNNUMBERED= property set to
-  =t=) with their section numbers --- {{{issue(76)}}}.
+  =t=) with their section numbers -- {{{issue(76)}}}.
 - Org TOC's are now exported as unordered Markdown lists. This allows
   having TOC's with unnumbered headings too! This also enables
   prefixing the section headings with their full section numbers, and

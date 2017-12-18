@@ -3,6 +3,15 @@ languageCode = "en-us"
 title = "ox-hugo Test Site"
 theme = "bare_min"
 
+# Mon Dec 18 17:41:00 EST 2017 - kmodi
+# Need the canonifyURLs to be true as the test site is
+# served in a subdir of https://ox-hugo.scripter.co/ ->
+# https://ox-hugo.scripter.co/test/ So links like /images/foo.png
+# won't work.. as /images/foo.png would be tried to be searched
+# directly under https://ox-hugo.scripter.co/ instead of under
+# https://ox-hugo.scripter.co/test/
+canonifyURLs = true
+
 enableEmoji = true
 enableGitInfo = true
 

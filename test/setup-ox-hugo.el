@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-01 10:43:44 kmodi>
+;; Time-stamp: <2017-12-18 17:50:48 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version
 ;; of Org.
@@ -85,10 +85,11 @@ Emacs installation.  If Emacs is installed using
       ;; Below require will auto-create `package-user-dir' it doesn't exist.
       (require 'package)
 
-      (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                          (not (gnutls-available-p))))
-             (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
-        (add-to-list 'package-archives (cons "melpa" url) :append))
+      ;; (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+      ;;                     (not (gnutls-available-p))))
+      ;;        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
+      ;;   (add-to-list 'package-archives (cons "melpa" url) :append))
+      (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") :append)
       (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") :append) ;For latest `org'
       (add-to-list 'load-path ox-hugo-git-root) ;For ox-hugo.el, ox-blackfriday.el
       (add-to-list 'load-path (concat ox-hugo-git-root "doc/")) ;For ox-hugo-export-gh-doc.el

@@ -1183,10 +1183,54 @@ Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-capture-setup
 :END:
-If you do not want to manually type the =EXPORT_FILE_NAME= and
-=EXPORT_DATE= for each new post, here is an example =org-capture=
-setup can help:
+If you do not want to manually type the =EXPORT_FILE_NAME= for each
+new post, here is an example Org Capture template can help:
 #+BEGIN_SRC emacs-lisp
+;; Populates only the EXPORT_FILE_NAME property in the inserted headline.
+(with-eval-after-load 'org-capture
+  (defun org-hugo-new-subtree-post-capture-template ()
+    "Returns `org-capture' template string for new Hugo post.
+See `org-capture-templates' for more information."
+    (let* ((title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
+           (fname (org-hugo-slug title)))
+      (mapconcat #'identity
+                 `(
+                   ,(concat "* TODO " title)
+                   ":PROPERTIES:"
+                   ,(concat ":EXPORT_FILE_NAME: " fname)
+                   ":END:"
+                   "%?\n")          ;Place the cursor here finally
+                 "\n")))
+
+  (add-to-list 'org-capture-templates
+               '("h"                ;`org-capture' binding + h
+                 "Hugo post"
+                 entry
+                 ;; It is assumed that below file is present in `org-directory'
+                 ;; and that it has a "Blog Ideas" heading. It can even be a
+                 ;; symlink pointing to the actual location of all-posts.org!
+                 (file+olp "all-posts.org" "Blog Ideas")
+                 (function org-hugo-new-subtree-post-capture-template))))
+#+END_SRC
+
+Above capture will auto-insert a heading prefixed with =TODO=. With
+=org-log-done= set to ='time=, on changing the =TODO= state to the
+=DONE= state (=C-c C-t=), a /Special Property/ called =CLOSED= will be
+auto-inserted below the heading. Below is an example.
+#+BEGIN_EXAMPLE
+,*** DONE Narrowing the Author column in Magit                       :org:log:
+CLOSED: [2017-12-18 Mon 16:36]
+#+END_EXAMPLE
+=ox-hugo= auto-sets the =date= field in the front-matter to the time
+stamp in that =CLOSED= property.
+**** Alternative way to set the =date= field
+If you prefer to not insert time-stamps when switching to the =DONE=
+state (i.e. you have =org-log-done= at its default value of =nil=),
+you can explicitly insert the =EXPORT_DATE= property too using the
+below Org Capture template instead.
+#+BEGIN_SRC emacs-lisp
+;; Populates both EXPORT_FILE_NAME and EXPORT_DATE properties in the inserted
+;; headline.
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
     "Returns `org-capture' template string for new Hugo post.

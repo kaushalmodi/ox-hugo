@@ -189,7 +189,7 @@ extensions
 - Purpose: Enable one or more Blackfriday's Markdown extensions (if
            they aren't Hugo defaults).
 - Example: Include `hardLineBreak' in the list to enable Blackfriday's
-           EXTENSION_HARD_LINK_BREAK.
+           EXTENSION_HARD_LINE_BREAK.
 
 extensionsmask
 - default: []

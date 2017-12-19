@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-19 15:34:39 kmodi>
+;; Time-stamp: <2017-12-19 16:16:22 kmodi>
 
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
@@ -89,12 +89,10 @@ even if they are found as dependencies."
       ;; Below require will auto-create `package-user-dir' it doesn't exist.
       (require 'package)
 
-      ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25061#90
-      ;; (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-      ;;                     (not (gnutls-available-p))))
-      ;;        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
-      ;;   (add-to-list 'package-archives (cons "melpa" url) :append))
-      (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/")) ;For `toc-org'
+      (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                          (not (gnutls-available-p))))
+             (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
+        (add-to-list 'package-archives (cons "melpa" url))) ;For `toc-org'
 
       ;; Even if we don't need to install Org from Elpa, we need to
       ;; add Org Elpa in `package-archives' to prevent the "Package

@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-18 17:50:48 kmodi>
+;; Time-stamp: <2017-12-19 12:56:02 kmodi>
 
 ;; Setup to test ox-hugo using emacs -Q and the latest stable version
 ;; of Org.
@@ -91,8 +91,8 @@ Emacs installation.  If Emacs is installed using
       ;;   (add-to-list 'package-archives (cons "melpa" url) :append))
       (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") :append)
       (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") :append) ;For latest `org'
-      (add-to-list 'load-path ox-hugo-git-root) ;For ox-hugo.el, ox-blackfriday.el
       (add-to-list 'load-path (concat ox-hugo-git-root "doc/")) ;For ox-hugo-export-gh-doc.el
+      (add-to-list 'load-path ox-hugo-git-root :append) ;For ox-hugo.el, ox-blackfriday.el
 
       ;; Load emacs packages and activate them.
       ;; Don't delete this line.

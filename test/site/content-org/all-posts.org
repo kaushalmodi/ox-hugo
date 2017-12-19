@@ -4,6 +4,7 @@
 
 #+MACRO: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
 #+MACRO: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+#+MACRO: hugoissue =hugo= Issue #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
 
 #+AUTHOR:
 
@@ -316,6 +317,13 @@ get escaped.. =foo_bar= must not become =foo\_bar=.
 :END:
 This post will be exported without =title= in the front-matter because
 it is explicitly set to /empty/ using =:EXPORT_TITLE:=.
+** En dash --, Em dash ---, Horizontal ellipsis ... in titles          :@upstream:
+:PROPERTIES:
+:EXPORT_FILE_NAME: en-dash-em-dash-hellip-in-titles
+:END:
+This tests an =ox-hugo= feature that gets around an upstream
+limitation, where the Blackfriday /smartDashes/ rendering does not
+happen in post titles ({{{hugoissue(4175)}}}).
 * Description meta-data with "quoted text"
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-description-quotes
@@ -782,7 +790,7 @@ Test that indented source blocks export fine.
 (message "And now I am at level-0 indentation")
 #+END_SRC
 
-Reference -- [[https://github.com/gohugoio/hugo/issues/4006][hugo#4006]]
+Reference: {{{hugoissue(4006)}}}
 ** Markdown source block with Hugo shortcodes                     :shortcode:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-md-with-hugo-shortcodes

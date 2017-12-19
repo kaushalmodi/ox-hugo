@@ -1784,7 +1784,16 @@ INFO is a plist used as a communication channel."
            (title (replace-regexp-in-string "\\`__?\\|\\`\\*\\*?\\|__?\\'\\|\\*\\*?\\'" "" title))
            (title (replace-regexp-in-string " __?\\|__? \\| \\*\\*?\\|\\*\\*? " " " title))
            ;; Do not escape underscores in title
-           (title (replace-regexp-in-string "\\\\_" "_" title)))
+           (title (replace-regexp-in-string "\\\\_" "_" title))
+           ;; Hugo does not render Markdown in the titles and so the
+           ;; Blackfriday smartDashes conversion does not work there.
+           ;; So do that here instead.
+           ;; Convert "---" and "--" to EM DASH (—) and EN DASH (–) respectively.
+           ;; Convert "..." to HORIZONTAL ELLIPSIS (…).
+           ;; The order of below two replacements is important!
+           (title (replace-regexp-in-string "---\\([^-]\\)" "—" title)) ;EM DASH
+           (title (replace-regexp-in-string "--\\([^-]\\)" "–" title)) ;EN DASH
+           (title (replace-regexp-in-string "\\.\\.\\." "…" title))) ;HORIZONTAL ELLIPSIS
       title)))
 
 (defun org-hugo--transform-org-tags (tag-list info &optional no-prefer-hyphen)

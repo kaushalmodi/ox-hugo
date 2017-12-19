@@ -50,4 +50,4 @@ Test that indented source blocks export fine.
 (message "And now I am at level-0 indentation")
 ```
 
-Reference -- [hugo#4006](https://github.com/gohugoio/hugo/issues/4006)
+Reference: `hugo` Issue #[4006](https://github.com/gohugoio/hugo/issues/4006)

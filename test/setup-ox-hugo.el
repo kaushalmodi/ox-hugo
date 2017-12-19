@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-19 13:44:54 kmodi>
+;; Time-stamp: <2017-12-19 15:34:39 kmodi>
 
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
@@ -7,7 +7,8 @@
 (setq-default require-final-newline t)
 (setq-default indent-tabs-mode nil)
 
-(defvar ox-hugo-test-setup-verbose nil)
+(defvar ox-hugo-test-setup-verbose nil
+  "When non-nil, enable printing more messages from setup-ox-hugo.el.")
 
 (defvar ox-hugo-install-org-from-elpa (or (null (getenv "OX_HUGO_DEFAULT_ORG"))
                                           (version< emacs-version "26.0"))
@@ -48,7 +49,8 @@ or newer.")
 
 (defvar ox-hugo-site-git-root (progn
                                 (require 'vc-git)
-                                (file-truename (vc-git-root default-directory))))
+                                (file-truename (vc-git-root default-directory)))
+  "Absolute path of the git root of the current project.")
 (when ox-hugo-test-setup-verbose
   (message "ox-hugo-site-git-root: %S" ox-hugo-site-git-root))
 
@@ -205,7 +207,7 @@ Emacs installation.  If Emacs is installed using
     (org-babel-do-load-languages 'org-babel-load-languages ob-lang-alist))
 
   (with-eval-after-load 'ob-core
-    (defun ox-hugo/org-confirm-babel-evaluate-fn (lang body)
+    (defun ox-hugo-org-confirm-babel-evaluate-fn (lang body)
       "Mark `org' as a safe language for ox-hugo tests and docs."
       (let* ((ob-enabled-langs '("org"))
              (ob-enabled-langs-re (regexp-opt ob-enabled-langs 'words))
@@ -213,7 +215,7 @@ Emacs installation.  If Emacs is installed using
         (when (string-match-p ob-enabled-langs-re lang)
           (setq unsafe nil))
         unsafe))
-    (setq org-confirm-babel-evaluate #'ox-hugo/org-confirm-babel-evaluate-fn))
+    (setq org-confirm-babel-evaluate #'ox-hugo-org-confirm-babel-evaluate-fn))
 
   (with-eval-after-load 'ox
     (setq org-export-headline-levels 4) ;default is 3

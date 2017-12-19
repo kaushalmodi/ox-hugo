@@ -1,4 +1,4 @@
-# Time-stamp: <2017-12-07 14:47:14 kmodi>
+# Time-stamp: <2017-12-19 13:18:21 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -9,10 +9,10 @@ ifeq ("$(EMACS_exists)","")
 	EMACS := /tmp/emacs/bin/emacs
 endif
 
-# EMACS_BIN_SOURCE and EMACS_VERSION are used later in the vcheck rule
+# EMACS_BIN_SOURCE and EMACS_BIN_VERSION are used later in the vcheck rule
 # only if EMACS_exists has evaluated to "".
 EMACS_BIN_SOURCE ?= https://github.com/npostavs/emacs-travis/releases/download/bins
-EMACS_VERSION ?= 25.3
+EMACS_BIN_VERSION ?= 26
 
 HUGO ?= hugo
 HUGO_exists := $(shell command -v $(HUGO) 2> /dev/null)
@@ -120,8 +120,8 @@ md1:
 
 vcheck:
 ifeq ("$(EMACS_exists)","")
-	@curl -fsSkL --retry 9 --retry-delay 9 -O $(EMACS_BIN_SOURCE)/emacs-bin-$(EMACS_VERSION).tar.gz
-	@tar xf emacs-bin-$(EMACS_VERSION).tar.gz -C /
+	@curl -fsSkL --retry 9 --retry-delay 9 -O $(EMACS_BIN_SOURCE)/emacs-bin-$(EMACS_BIN_VERSION).tar.gz
+	@tar xf emacs-bin-$(EMACS_BIN_VERSION).tar.gz -C /
 endif
 	@echo "Emacs binary used: $(EMACS)"
 	@$(EMACS) --batch --eval "(progn\

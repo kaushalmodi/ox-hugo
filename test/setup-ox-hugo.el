@@ -1,13 +1,27 @@
-;; Time-stamp: <2017-12-19 12:56:02 kmodi>
+;; Time-stamp: <2017-12-19 13:27:31 kmodi>
 
-;; Setup to test ox-hugo using emacs -Q and the latest stable version
-;; of Org.
+;; Setup to export Org files to Hugo-compatible Markdown using
+;; `ox-hugo' in an "emacs -Q" environment.
 
 ;; Some sane settings
 (setq-default require-final-newline t)
 (setq-default indent-tabs-mode nil)
 
 (defvar ox-hugo-test-setup-verbose nil)
+
+(defvar ox-hugo-install-org-from-elpa (or (null (getenv "OX_HUGO_DEFAULT_ORG"))
+                                          (version< emacs-version "26.0"))
+  "When non-nil, install Org from Org Elpa.
+
+The default value of this variable is non-nil if emacs version is
+older than 26 AND the environment variable OX_HUGO_DEFAULT_ORG is
+unset, else it is nil.
+
+Emacs 26 onwards comes with at least Org 9.1.4.  So there is no
+need to install Org from Elpa as that Org version meets the
+minimum requirement for `ox-hugo'.  So set the environment
+variable OX_HUGO_DEFAULT_ORG to a value like 1 if using emacs 26
+or newer.")
 
 (defvar ox-hugo-elpa (let ((dir (getenv "OX_HUGO_ELPA")))
                        (unless dir
@@ -20,59 +34,47 @@
 (when ox-hugo-test-setup-verbose
   (message "ox-hugo-elpa: %s" ox-hugo-elpa))
 
-(let* ((bin-dir (when (and invocation-directory
-                           (file-exists-p invocation-directory))
-                  (file-truename invocation-directory)))
-       (prefix-dir (when bin-dir
-                     (replace-regexp-in-string "bin/\\'" "" bin-dir)))
-       (share-dir (when prefix-dir
-                    (concat prefix-dir "share/")))
-       (lisp-dir-1 (when share-dir ;Possibility where the lisp dir is something like ../emacs/26.0.50/lisp/
-                     (concat share-dir "emacs/"
-                             ;; If `emacs-version' is x.y.z.w, remove the ".w" portion
-                             ;; Though, this is not needed and also will do nothing in emacs 26+
-                             ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
-                             (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
-                             "/lisp/")))
-       (lisp-dir-2 (when share-dir ;Possibility where the lisp dir is something like ../emacs/25.2/lisp/
-                     (concat share-dir "emacs/"
-                             (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
-                             "/lisp/"))))
-  (when ox-hugo-test-setup-verbose
-    (message "emacs bin-dir: %s" bin-dir)
-    (message "emacs prefix-dir: %s" prefix-dir)
-    (message "emacs share-dir: %s" share-dir)
-    (message "emacs lisp-dir-1: %s" lisp-dir-1)
-    (message "emacs lisp-dir-2: %s" lisp-dir-2))
-  (defvar my/default-lisp-directory (cond
-                                     ((file-exists-p lisp-dir-1)
-                                      lisp-dir-1)
-                                     ((file-exists-p lisp-dir-2)
-                                      lisp-dir-2)
-                                     (t
-                                      nil))
-    "Directory containing lisp files for the Emacs installation.
+(defvar ox-hugo-packages '(toc-org))
+(when ox-hugo-install-org-from-elpa
+  ;; `org' will always be detected as installed, so use
+  ;; `org-plus-contrib'.
+  ;; Fri Sep 22 18:24:19 EDT 2017 - kmodi
+  ;; Install the packages in the specified order. We do not want
+  ;; `toc-org' to be installed first. If that happens, `org' will be
+  ;; required before the newer version of Org gets installed and we
+  ;; will end up with mixed Org version.  So put `org-plus-contrib' at
+  ;; the beginning of `ox-hugo-packages'.
+  (add-to-list 'ox-hugo-packages 'org-plus-contrib))
 
-This value must match the path to the lisp/ directory of the
-Emacs installation.  If Emacs is installed using
---prefix=\"${PREFIX_DIR}\" this value would typically be
-\"${PREFIX_DIR}/share/emacs/<VERSION>/lisp/\"."))
+(defvar ox-hugo-site-git-root (progn
+                                (require 'vc-git)
+                                (file-truename (vc-git-root default-directory))))
 (when ox-hugo-test-setup-verbose
-  (message "my/default-lisp-directory: %S" my/default-lisp-directory))
+  (message "ox-hugo-site-git-root: %S" ox-hugo-site-git-root))
 
-;; `org' will always be detected as installed, so use `org-plus-contrib'.
-;; Fri Sep 22 18:24:19 EDT 2017 - kmodi
-;; Install the packages in the specified order. We do not want
-;; `toc-org' to be installed first. If that happens, `org' will be
-;; required before the newer version of Org gets installed and we will
-;; end up with mixed Org version.
-(defvar my/packages '(org-plus-contrib toc-org))
+;; Below will prevent installation of `org' package as a dependency
+;; when installing `ox-hugo' from Melpa.
+(defun ox-hugo-package-dependency-check-ignore (orig-ret)
+  "Remove the `black listed packages' from ORIG-RET.
 
-(defvar ox-hugo-git-root (progn
-                           (require 'vc-git)
-                           (file-truename (vc-git-root "."))))
-(when ox-hugo-test-setup-verbose
-  (message "ox-hugo-git-root: %S" ox-hugo-git-root))
+Packages listed in the let-bound `pkg-black-list' will not be auto-installed
+even if they are found as dependencies."
+  (let ((pkg-black-list '(org))
+        new-ret
+        pkg-name)
+    (dolist (pkg-struct orig-ret)
+      (setq pkg-name (package-desc-name pkg-struct))
+      (if (member pkg-name pkg-black-list)
+          (message (concat "Package `%s' will not be installed. "
+                           "See `ox-hugo-package-dependency-check-ignore'.")
+                   pkg-name)
+        ;; (message "Package to be installed: %s" pkg-name)
+        (push pkg-struct new-ret)))
+    (setq new-ret (reverse new-ret))
+    ;; (message "after  %S" new-ret)
+    new-ret))
+(advice-add 'package-compute-transaction :filter-return #'ox-hugo-package-dependency-check-ignore)
+;; (advice-remove 'package-compute-transaction #'ox-hugo-package-dependency-check-ignore)
 
 (if (and (stringp ox-hugo-elpa)
          (file-exists-p ox-hugo-elpa))
@@ -85,14 +87,20 @@ Emacs installation.  If Emacs is installed using
       ;; Below require will auto-create `package-user-dir' it doesn't exist.
       (require 'package)
 
+      ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25061#90
       ;; (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
       ;;                     (not (gnutls-available-p))))
       ;;        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
       ;;   (add-to-list 'package-archives (cons "melpa" url) :append))
-      (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") :append)
-      (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") :append) ;For latest `org'
-      (add-to-list 'load-path (concat ox-hugo-git-root "doc/")) ;For ox-hugo-export-gh-doc.el
-      (add-to-list 'load-path ox-hugo-git-root :append) ;For ox-hugo.el, ox-blackfriday.el
+      (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") :append) ;For `toc-org'
+
+      ;; Even if we don't need to install Org from Elpa, we need to
+      ;; add Org Elpa in `package-archives' to prevent the "Package
+      ;; ‘org-9.0’ is unavailable" error.
+      (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") :append) ;For latest stable `org'
+
+      (add-to-list 'load-path (concat ox-hugo-site-git-root "doc/")) ;For ox-hugo-export-gh-doc.el
+      (add-to-list 'load-path ox-hugo-site-git-root :append) ;For ox-hugo.el, ox-blackfriday.el
 
       ;; Load emacs packages and activate them.
       ;; Don't delete this line.
@@ -100,35 +108,79 @@ Emacs installation.  If Emacs is installed using
       ;; `package-initialize' call is required before any of the below
       ;; can happen.
 
-      (defvar my/missing-packages '()
+      (defvar ox-hugo-missing-packages '()
         "List populated at each startup that contains the list of packages that need
 to be installed.")
 
-      (dolist (p my/packages)
+      (dolist (p ox-hugo-packages)
         ;; (message "Is %S installed? %s" p (package-installed-p p))
         (unless (package-installed-p p)
-          (add-to-list 'my/missing-packages p :append)))
+          (add-to-list 'ox-hugo-missing-packages p :append)))
 
-      (when my/missing-packages
+      (when ox-hugo-missing-packages
         (message "Emacs is now refreshing its package database...")
         (package-refresh-contents)
         ;; Install the missing packages
-        (dolist (p my/missing-packages)
+        (dolist (p ox-hugo-missing-packages)
           (message "Installing `%s' .." p)
           (package-install p))
-        (setq my/missing-packages '())))
+        (setq ox-hugo-missing-packages '())))
   (error "The environment variable OX_HUGO_ELPA needs to be set"))
 
-(with-eval-after-load 'package
-  ;; Remove Org that ships with Emacs from the `load-path'.
-  (when (stringp my/default-lisp-directory)
-    (dolist (path load-path)
-      (when (string-match-p (expand-file-name "org" my/default-lisp-directory) path)
-        (setq load-path (delete path load-path))))))
+;; Remove Org that ships with Emacs from the `load-path' if installing
+;; it from Elpa.
+(when ox-hugo-install-org-from-elpa
+  (let* ((bin-dir (when (and invocation-directory
+                             (file-exists-p invocation-directory))
+                    (file-truename invocation-directory)))
+         (prefix-dir (when bin-dir
+                       (replace-regexp-in-string "bin/\\'" "" bin-dir)))
+         (share-dir (when prefix-dir
+                      (concat prefix-dir "share/")))
+         (lisp-dir-1 (when share-dir ;Possibility where the lisp dir is something like ../emacs/26.0.50/lisp/
+                       (concat share-dir "emacs/"
+                               ;; If `emacs-version' is x.y.z.w, remove the ".w" portion
+                               ;; Though, this is not needed and also will do nothing in emacs 26+
+                               ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=22b2207471807bda86534b4faf1a29b3a6447536
+                               (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
+                               "/lisp/")))
+         (lisp-dir-2 (when share-dir ;Possibility where the lisp dir is something like ../emacs/25.2/lisp/
+                       (concat share-dir "emacs/"
+                               (replace-regexp-in-string "\\([0-9]+\\.[0-9]+\\).*" "\\1" emacs-version)
+                               "/lisp/"))))
+    (when ox-hugo-test-setup-verbose
+      (message "emacs bin-dir: %s" bin-dir)
+      (message "emacs prefix-dir: %s" prefix-dir)
+      (message "emacs share-dir: %s" share-dir)
+      (message "emacs lisp-dir-1: %s" lisp-dir-1)
+      (message "emacs lisp-dir-2: %s" lisp-dir-2))
+    (defvar ox-hugo-default-lisp-directory (cond
+                                            ((file-exists-p lisp-dir-1)
+                                             lisp-dir-1)
+                                            ((file-exists-p lisp-dir-2)
+                                             lisp-dir-2)
+                                            (t
+                                             nil))
+      "Directory containing lisp files for the Emacs installation.
 
-;; (message "`load-path': %S" load-path)
-;; (message "`load-path' Shadows:")
-;; (message (list-load-path-shadows :stringp))
+This value must match the path to the lisp/ directory of the
+Emacs installation.  If Emacs is installed using
+--prefix=\"${PREFIX_DIR}\" this value would typically be
+\"${PREFIX_DIR}/share/emacs/<VERSION>/lisp/\"."))
+  (when ox-hugo-test-setup-verbose
+    (message "ox-hugo-default-lisp-directory: %S" ox-hugo-default-lisp-directory))
+
+  (with-eval-after-load 'package
+    ;; Remove Org that ships with Emacs from the `load-path'.
+    (when (stringp ox-hugo-default-lisp-directory)
+      (dolist (path load-path)
+        (when (string-match-p (expand-file-name "org" ox-hugo-default-lisp-directory) path)
+          (setq load-path (delete path load-path))))))
+
+  ;; (message "`load-path': %S" load-path)
+  ;; (message "`load-path' Shadows:")
+  ;; (message (list-load-path-shadows :stringp))
+  )
 
 (require 'ox-hugo)
 (defun org-hugo-export-all-wim-to-md ()

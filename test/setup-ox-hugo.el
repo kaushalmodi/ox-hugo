@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-19 13:27:31 kmodi>
+;; Time-stamp: <2017-12-19 13:44:54 kmodi>
 
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
@@ -92,21 +92,20 @@ even if they are found as dependencies."
       ;;                     (not (gnutls-available-p))))
       ;;        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
       ;;   (add-to-list 'package-archives (cons "melpa" url) :append))
-      (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") :append) ;For `toc-org'
+      (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/")) ;For `toc-org'
 
       ;; Even if we don't need to install Org from Elpa, we need to
       ;; add Org Elpa in `package-archives' to prevent the "Package
       ;; ‘org-9.0’ is unavailable" error.
-      (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") :append) ;For latest stable `org'
-
-      (add-to-list 'load-path (concat ox-hugo-site-git-root "doc/")) ;For ox-hugo-export-gh-doc.el
-      (add-to-list 'load-path ox-hugo-site-git-root :append) ;For ox-hugo.el, ox-blackfriday.el
+      (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/")) ;For latest stable `org'
 
       ;; Load emacs packages and activate them.
       ;; Don't delete this line.
       (package-initialize)
       ;; `package-initialize' call is required before any of the below
       ;; can happen.
+      (add-to-list 'load-path (concat ox-hugo-site-git-root "doc/")) ;For ox-hugo-export-gh-doc.el
+      (add-to-list 'load-path ox-hugo-site-git-root) ;For ox-hugo.el, ox-blackfriday.el
 
       (defvar ox-hugo-missing-packages '()
         "List populated at each startup that contains the list of packages that need

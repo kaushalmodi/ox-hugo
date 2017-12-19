@@ -81,6 +81,7 @@ Note that this variable is *only* for internal use.")
                      (latex-environment . org-blackfriday-latex-environment)
                      (latex-fragment . org-blackfriday-latex-fragment)
                      (plain-list . org-blackfriday-plain-list)
+                     (plain-text . org-blackfriday-plain-text)
                      (quote-block . org-blackfriday-quote-block)
                      (src-block . org-blackfriday-src-block)
                      (strike-through . org-blackfriday-strike-through)
@@ -458,6 +459,35 @@ communication channel."
               ;; a comment.
               (when next-is-list
                 "\n<!--listend-->")))))
+
+;;;; Plain Text
+(defun org-blackfriday-plain-text (text info)
+  "Transcode TEXT element into Blackfriday Markdown format.
+TEXT is the string to transcode.  INFO is a plist used as a
+communication channel.
+
+This function is almost same as `org-md-plain-text' except it
+first escapes any existing \"\\\", and then escapes other string
+matches with \"\\\" as needed."
+  (when (plist-get info :with-smart-quotes)
+    (setq text (org-export-activate-smart-quotes text :html info)))
+  ;; The below series of replacements in `text' is order sensitive.
+  ;; Protect `, *, _, and \
+  (setq text (replace-regexp-in-string "[`*_\\]" "\\\\\\&" text))
+  ;; Protect ambiguous #.  This will protect # at the beginning of
+  ;; a line, but not at the beginning of a paragraph.  See
+  ;; `org-md-paragraph'.
+  (setq text (replace-regexp-in-string "\n#" "\n\\\\#" text))
+  ;; Protect ambiguous !
+  (setq text (replace-regexp-in-string "\\(!\\)\\[" "\\\\!" text nil nil 1))
+  ;; Handle special strings, if required.
+  (when (plist-get info :with-special-strings)
+    (setq text (org-html-convert-special-strings text)))
+  ;; Handle break preservation, if required.
+  (when (plist-get info :preserve-breaks)
+    (setq text (replace-regexp-in-string "[ \t]*\n" "  \n" text)))
+  ;; Return value.
+  text)
 
 ;;;; Quote Block
 (defun org-blackfriday-quote-block (quote-block contents info)

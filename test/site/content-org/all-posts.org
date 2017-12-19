@@ -1218,6 +1218,35 @@ matter of the post because HTML does not allow markup in the =<title>=
 section.
 
 So the title of this post should read as "ndash and mdash".
+** Escaping hashes and exclamations correctly in body
+:PROPERTIES:
+:EXPORT_FILE_NAME: escaping-hashes-and-exclamations-in-body
+:END:
+I intend to show these # characters verbatim; they should not render
+as Markdown headings. They also shouldn't show up with a leading =\=
+in the final rendered output.
+
+# This is an Org comment
+
+#This is not an Org comment. It has a hash char at beginning of a
+paragraph which must be escaped just once i.e. show up as =\#= in
+Markdown.
+
+blah # This isn't an Org comment either
+
+This * will be escaped just once i.e. show up as =\*= in Markdown.
+
+This _ will be escaped just once i.e. show up as =\_= in Markdown.
+
+This \ will be escaped just once i.e. show up as =\\= in Markdown.
+
+Hash char at beginning of a continued line
+#like this must be escaped just once i.e. show up as =\#= in Markdown.
+
+![this exclamation must be escaped just once i.e. show up as =\!= in
+Markdown]
+
+This ! does not need to be escaped as there is no ambiguity.
 * Footnotes Test                                                   :footnote:
 ** Footnotes 1
 :PROPERTIES:

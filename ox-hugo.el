@@ -1783,7 +1783,7 @@ INFO is a plist used as a communication channel."
            (title (replace-regexp-in-string "\\\\?`" "" title))
            (title (replace-regexp-in-string "\\`__?\\|\\`\\*\\*?\\|__?\\'\\|\\*\\*?\\'" "" title))
            (title (replace-regexp-in-string " __?\\|__? \\| \\*\\*?\\|\\*\\*? " " " title))
-           ;; Do not escape underscores in title
+           ;; Do not escape underscores in title; \_ -> _
            (title (replace-regexp-in-string "\\\\_" "_" title))
            ;; Hugo does not render Markdown in the titles and so the
            ;; Blackfriday smartDashes conversion does not work there.

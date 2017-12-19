@@ -167,38 +167,83 @@ The common =ox-hugo= export bindings are:
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
 * Changelog
+** v0.7 <2017-12-18 Mon>
+*** Features
+- *Now C-c C-e H H works for both per-subtree and per-file flows* --
+  commit [[https://github.com/kaushalmodi/ox-hugo/commit/b1b5d28b][b1b5d28b]].
+- Support Org heading based internal links -- #[[https://github.com/kaushalmodi/ox-hugo/issues/88][88]].
+- Support list values for custom front-matter variables --
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/99][99]].
+- Support specifying multiple [[https://gohugo.io/templates/output-formats/][hugo output formats]] .. Now the =outputs=
+  front-matter variable is a list.
+- Support the Org =#+AUTHOR= and =#+CREATOR= keywords and their
+  respective Org Export Options -- #[[https://github.com/kaushalmodi/ox-hugo/issues/106][106]].
+- Support Org Export Snippets and Export Blocks --
+  commit [[https://github.com/kaushalmodi/ox-hugo/commit/1149f20cd][1149f20cd]].
+- Now post titles can be set to =nil= i.e. be not be a part of the
+  front-matter .. /because you can/.
+- Improve the messages printed by =ox-hugo= on doing per-subtree or
+  per-file exports.. the progress of files exported using per-subtree
+  flow is now clearer, and the name of the file exported using
+  per-file flow is now explicit.. Helps when you batch export a dozen
+  files with a mix of these 2 flows.
+*** Backward-incompatible changes
+- Obsolete /org-hugo-export-subtree-\ast{}/ functions and replace them with
+  /org-hugo-export-wim-\ast{}/ (What I Mean) functions. See the doc string
+  of =org-hugo-export-wim-to-md= for details.
+
+  If you are using the [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto-export on saving]] flow, note the function
+  name change there too!
+*** Fixes
+- Fix number of backticks in code fence when code contains code fence
+  (/pathological corner case/).
+- Better document the =HUGO_CODE_FENCE= keyword -- #[[https://github.com/kaushalmodi/ox-hugo/issues/102][102]].
+- Don't render =(c)=, =(r)=, =(tm)= inside Latex equations --
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/104][104]] (/Upstream bug workaround/).
+- Better recognition of TOML-compatible integers and floats in meta
+  data for front-matter so that valid integers/floats don't get
+  unnecessarily double-quoted.
+*** Meta
+- Add a [[https://github.com/kaushalmodi/ox-hugo/blob/master/test/site/themes/bare_min/layouts/partials/debugprint.html][=debugprint.html=]] partial to help pretty-print various Hugo
+  objects like Page Params, File and SiteInfo for debug on the test
+  site.
+- The test site now has [[https://ox-hugo.scripter.co/test/tags/][tags]] and [[https://ox-hugo.scripter.co/test/categories/][categories]] pages.
+- Add few real world example posts containing complex Latex equations:
+  [[https://ox-hugo.scripter.co/test/real-examples/multifractals-in-ecology-using-r/][1]], [[https://ox-hugo.scripter.co/test/real-examples/nn-intro/][2]].
+- Turns out =ox-hugo= works on emacs 24.4 too (/but please upgrade
+  to the latest Emacs and Org stable versions!/).
 ** v0.6 <2017-11-09 Thu>
 *** Features
 - Support the =num= export option. Now you can prefix all post
   headings (or some not.. the ones with =UNNUMBERED= property set to
-  =t=) with their section numbers --- [[[https://github.com/kaushalmodi/ox-hugo/issues/76][76]]].
+  =t=) with their section numbers -- #[[https://github.com/kaushalmodi/ox-hugo/issues/76][76]].
 - Org TOC's are now exported as unordered Markdown lists. This allows
   having TOC's with unnumbered headings too! This also enables
   prefixing the section headings with their full section numbers, and
   also having only selected headings unnumbered (both in the post body
   and the TOC).
 - Add support for exporting internal links to source blocks, tables
-  and images by their block names! -- [[[https://github.com/kaushalmodi/ox-hugo/issues/29][29]]].
+  and images by their block names! -- #[[https://github.com/kaushalmodi/ox-hugo/issues/29][29]].
 - Org table column alignment markers (=<l>=, =<r>=, =<c>=) are now
   exported to equivalent Markdown tables.. so a center-aligned column
   in Org buffer will remain center-aligned in the final HTML too! --
-  [[[https://github.com/kaushalmodi/ox-hugo/issues/95][95]]].
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/95][95]].
 - Allow setting multiple Hugo aliases for a post. Also infer the
   section name from inherited =HUGO_SECTION= values (subtree-based
   exports) for those alias prefixes.
 - Prevent a footnote ref to appear by itself on a newline (based on
-  wrapping) in the browser -- [[[https://github.com/kaushalmodi/ox-hugo/issues/96][96]]].
+  wrapping) in the browser -- #[[https://github.com/kaushalmodi/ox-hugo/issues/96][96]].
 - If Hugo shortcodes are used specifically in Markdown (=md=) source
   blocks, they will be auto-escaped (useful when you want to
   document/talk about some Hugo shortcode in a blog post) --
-  [[[https://github.com/kaushalmodi/ox-hugo/issues/94][94]]].
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/94][94]].
 - If an Org table has just 1 row, don't make it render as a header row
   in the final HTML.
 - If you have a case where you need to have an Org source block
   instead a quote block, and then a source block after that quote
   block (/I know, a very common case../ :wink:), Blackfriday barfs
   (Blackfriday # [[https://github.com/russross/blackfriday/issues/407][407]]). But we now have a workaround, which /just
-  works/ -- [[[https://github.com/kaushalmodi/ox-hugo/issues/98][98]]].
+  works/ -- #[[https://github.com/kaushalmodi/ox-hugo/issues/98][98]].
 - Now =ATTR_HTML= above even hyper-linked images works (earlier it
   worked only above non-hyper-linked images).
 *** Backward-incompatible changes
@@ -215,7 +260,7 @@ available customization options for this package.
 *** Meta
 - Add documentation on how you can have
   [[https://ox-hugo.scripter.co/doc/images-in-content][Images live in the same directory as Org
-  source]] -- [[[https://github.com/kaushalmodi/ox-hugo/issues/91][91]]].
+  source]] -- #[[https://github.com/kaushalmodi/ox-hugo/issues/91][91]].
 - Now only Org files for the [[https://ox-hugo.scripter.co][documentation site]] need to be committed
   to git. =ox-hugo= then exports those to Markdown, and then Hugo
   publishes those to HTML (as before) --- all on Netlify.
@@ -226,7 +271,7 @@ available customization options for this package.
 ** v0.5 <2017-11-06 Mon>
 *** Features
 - Export TOC as a Markdown ordered list. See [[https://ox-hugo.scripter.co/doc/org-toc][Table of
-  Contents]] -- [[[https://github.com/kaushalmodi/ox-hugo/issues/88][88]]].
+  Contents]] -- #[[https://github.com/kaushalmodi/ox-hugo/issues/88][88]].
 - =#+ATTR_HTML= above http/https/ftp links is now supported (useful
   for specifying the =target=, =rel=, attributes, for example).
 ** v0.4.1 <2017-10-29 Sun>
@@ -237,12 +282,12 @@ available customization options for this package.
   feature requires building Hugo from its master branch with commit
   [[https://github.com/gohugoio/hugo/commit/488631fe0abc3667355345c7eb98ba7a2204deb5][488631fe]] (or Hugo v0.31+).
 *** Fixes
-- Fix =EXPORT_HUGO_SECTION= not getting inherited [[[https://github.com/kaushalmodi/ox-hugo/issues/90][90]]].
+- Fix =EXPORT_HUGO_SECTION= not getting inherited #[[https://github.com/kaushalmodi/ox-hugo/issues/90][90]].
 ** v0.4 <2017-10-28 Sat>
 *** Backward-incompatible changes
 - Restore the default Org behavior of =#+TAGS=. Now that keyword (and
   the =EXPORT_TAGS= property) is *not* used by =ox-hugo=. Fixes
-  [[[https://github.com/kaushalmodi/ox-hugo/issues/89][89]]].
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/89][89]].
 - File-based exports must now use =#+HUGO_TAGS= to set the post tags.
 - Subtree-based exports can use the =EXPORT_HUGO_TAGS= property to
   override Org-style tags on the same headline (and the ones inherited
@@ -269,7 +314,7 @@ See the new section added to documentation:
 - Fix issue with headline metadata parsing (ALLTAGS, CLOSED, TODO)
   when a post Org heading was immediately followed by that post's
   sub-heading.  This issue was seen in subtree-based exports
-  [[[https://github.com/kaushalmodi/ox-hugo/issues/87][87]]].
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/87][87]].
 ** v0.3.1 <2017-10-19 Thu>
 *** Fixes
 - Fix the source block line number annotation when the line numbers
@@ -298,22 +343,22 @@ See the new section added to documentation:
   file.
 ** v0.2.1 <2017-09-28 Thu>
 *** Fixes
-- Single column tables now export correctly [[[https://github.com/kaushalmodi/ox-hugo/issues/84][84]]].
+- Single column tables now export correctly #[[https://github.com/kaushalmodi/ox-hugo/issues/84][84]].
 - Ignore =HUGO_WEIGHT= set to =auto= for /per-file/ exports
-  [[[https://github.com/kaushalmodi/ox-hugo/issues/83][83]]].
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/83][83]].
 ** v0.2 <2017-09-27 Wed>
 *** Features
 - Add support for all Hugo =figure= shortcode parameters
-  [[[https://github.com/kaushalmodi/ox-hugo/issues/79][79]]].
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/79][79]].
 - New option =org-hugo-delete-trailing-ws= defaults to =t=; now Hugo
   deletes trailing white-spaces by default.
 - New options =org-hugo-default-static-subdirectory-for-externals= and
   =org-hugo-external-file-extensions-allowed-for-copying= (related to
-  [[[https://github.com/kaushalmodi/ox-hugo/issues/69][69]]]).
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/69][69]]).
 *** Fixes
 - Remove =HUGO_STATIC_IMAGE= option; fix attachment re-write
-  [[[https://github.com/kaushalmodi/ox-hugo/issues/69][69]]].
-- Fix incorrectly inserted hard line-breaks [[[https://github.com/kaushalmodi/ox-hugo/issues/72][72]]]. Added a
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/69][69]].
+- Fix incorrectly inserted hard line-breaks #[[https://github.com/kaushalmodi/ox-hugo/issues/72][72]]. Added a
   new option =HUGO_PRESERVE_FILLING=.
 - Fix error happening when a post title was set to an empty string
   [[[https://github.com/kaushalmodi/ox-hugo/commit/ba9e8365f6ee42f030ed806bf5ec42d6acce4c76][ba9e8365]]].
@@ -332,7 +377,7 @@ See the new section added to documentation:
   thus were unnecessarily quoted.
 ** v0.1.1 <2017-09-11 Mon>
 - Use CLOSED log drawer info if available to set the date in
-  front-matter [[[https://github.com/kaushalmodi/ox-hugo/issues/68][68]]].
+  front-matter #[[https://github.com/kaushalmodi/ox-hugo/issues/68][68]].
 - Code optimization: Use of =org-entry-get= at places instead of
   maintaining global variables.
 * Thanks

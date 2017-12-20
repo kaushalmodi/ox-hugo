@@ -324,6 +324,39 @@ it is explicitly set to /empty/ using =:EXPORT_TITLE:=.
 This tests an =ox-hugo= feature that gets around an upstream
 limitation, where the Blackfriday /smartDashes/ rendering does not
 happen in post titles ({{{hugoissue(4175)}}}).
+** *Title with **lots** and *lots* of * aste*risks**
+:PROPERTIES:
+:EXPORT_FILE_NAME: title_with_asterisks
+:END:
+- All asterisk characters meant for Org =*bold*= markup are removed.
+- The rest of the asterisk characters are retained.
+** Title with /lots/ and lots / / / of forward/slashes
+:PROPERTIES:
+:EXPORT_FILE_NAME: title_with_forward_slashes
+:END:
+- All forward slash characters meant for Org =/italic/= markup are
+  removed.
+- The rest of the forward slash characters are retained.
+** _Title_ with __lots and _lots_ _ _ of under_scores__
+:PROPERTIES:
+:EXPORT_FILE_NAME: title_with_under_scores
+:END:
+- All underscore characters meant for Org =_underline_= markup are
+  removed.
+- The rest of the underscore characters are retained.
+** =Title with lots= of ` ` ` backticks` `foo =bar= ~ ~zoomba~
+:PROPERTIES:
+:EXPORT_FILE_NAME: title_with_backticks_equals_tildes
+:END:
+- All equal/tilde characters meant for Org =~code~= or ~=verbatim=~
+  markup are removed.
+- The rest of the equal/tilde characters are retained.
+** =Title with lots= of ` ` ` backticks` * asterisks *bold*, /italics/ =retain*,_,` in monospace= underscores _ _ _*foo*_ =bar= **
+:PROPERTIES:
+:EXPORT_FILE_NAME: title_with_asterisks_underscores_backticks
+:END:
+- All the Org markup characters are removed.
+- The "markup characters" not doing actual markup are retained.
 * Description meta-data with "quoted text"
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-description-quotes

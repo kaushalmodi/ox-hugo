@@ -282,6 +282,12 @@ There is a plan to create a =hugo.el= that would do things like:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_MENU: :menu main
 :END:
+* Changelog
+:PROPERTIES:
+:EXPORT_FILE_NAME: changelog
+:EXPORT_HUGO_MENU: :menu main
+:END:
+#+INCLUDE: "./ox-hugo-manual.org::#changelog" :only-contents t
 * Reused Sections
 ** Introduction
 :PROPERTIES:
@@ -1377,11 +1383,6 @@ for writing your posts in Org, there are examples for both in the
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu meta
 :END:
-*** Changelog
-:PROPERTIES:
-:EXPORT_FILE_NAME: changelog
-:END:
-#+INCLUDE: "./ox-hugo-manual.org::#changelog" :only-contents t
 *** Meta Features
 :PROPERTIES:
 :EXPORT_FILE_NAME: meta-features

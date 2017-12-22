@@ -1769,7 +1769,7 @@ to ((name . \"foo\") (weight . 80))."
 (defun org-hugo--sanitize-title (info)
   "Return sanitized version of the title string parsed from INFO.
 
-The title string is returned in a markup-free form.
+The title string is returned in a markup-free \"raw\" form.
 
 If exporting title is disabled by setting `org-export-with-title'
 to nil or using the OPTIONS keyword e.g. \"title:nil\", return
@@ -1777,28 +1777,25 @@ nil.
 
 INFO is a plist used as a communication channel."
   (when (plist-get info :with-title)
-    (let* ((title (org-export-data-with-backend (plist-get info :title) 'html info))
-           ;; The `title' variable contains the htmlized version of
-           ;; the Org title string.  By using the HTML version, it
-           ;; will be easy to later strip off just the HTML tags.
-
+    ;; "Raw" backend that returns emphasis elements without any markup
+    ;; characters -- http://lists.gnu.org/r/emacs-orgmode/2017-12/msg00490.html
+    (let* ((raw-backend (let ((get-raw (lambda (object contents _)
+                                         (or contents
+                                             (org-element-property :value object)))))
+                          (org-export-create-backend
+                           :parent 'ascii
+                           :transcoders (mapcar (lambda (type)
+                                                  (cons type get-raw))
+                                                '(bold code italic strike-through underline verbatim)))))
+           (title (org-export-data-with-backend (plist-get info :title) raw-backend info))
            ;; Hugo does not render Markdown in the titles and so the
-           ;; Blackfriday smartDashes conversion does not work there.
-           ;; So do that here instead.
-           ;; Convert "---" and "--" to EM DASH (—) and EN DASH (–) respectively.
-           ;; Convert "..." to HORIZONTAL ELLIPSIS (…).
+           ;; Blackfriday smartDashes conversion does not work there.  So
+           ;; do that here instead.  Convert "---" to EM DASH, "--" to EN
+           ;; DASH, and "..." to HORIZONTAL ELLIPSIS.
            ;; Below two replacements are order sensitive!
            (title (replace-regexp-in-string "---\\([^-]\\)" "—" title)) ;EM DASH
            (title (replace-regexp-in-string "--\\([^-]\\)" "–" title)) ;EN DASH
            (title (replace-regexp-in-string "\\.\\.\\." "…" title))) ;HORIZONTAL ELLIPSIS
-
-      ;; Remove "<FOO>..</FOO>" HTML tags, but retain the string
-      ;; wrapped in those tags.
-      ;; (message "ox-hugo sanitize title [dbg] title 1: %s" title)
-      (while (string-match "<\\(?1:[a-z]+\\)[^>]*>\\(?2:[^<]+\\)</\\1>" title)
-        (setq title (replace-match "\\2" nil nil title))
-        ;; (message "ox-hugo sanitize title [dbg] title 2: %s" title)
-        )
       title)))
 
 (defun org-hugo--transform-org-tags (tag-list info &optional no-prefer-hyphen)

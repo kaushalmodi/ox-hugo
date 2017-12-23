@@ -1,6 +1,6 @@
 +++
 title = "Links to tables"
-tags = ["links", "internal-links"]
+tags = ["links", "internal-links", "table", "caption"]
 draft = false
 +++
 
@@ -31,13 +31,18 @@ Here's another table:
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="org40b5987"></a>
+<a id="org44317dc"></a>
+
+<caption class="table-caption">
+  <span class="table-number">Table 1:</span>
+  Simple table 1
+</caption>
 
 | a | b |
 |---|---|
 | c | d |
 
-**Here we refer to table [2](#org8a6806a).**
+**Here we refer to table [2](#org0622dcf).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -93,13 +98,18 @@ blandit in.
 
 Here's another table:
 
-<a id="org8a6806a"></a>
+<a id="org0622dcf"></a>
+
+<caption class="table-caption">
+  <span class="table-number">Table 2:</span>
+  Simple table 2
+</caption>
 
 | e | f |
 |---|---|
 | g | h |
 
-**Here we refer to table [1](#org40b5987).**
+**Here we refer to table [1](#org44317dc).**
 
 ---
 

@@ -523,6 +523,28 @@ sense. But hey, a test is a test./
 | <l> |   | <c> | <r> |
 
 You should see *no* table exported above.
+** Table caption                                                    :caption:
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-caption
+:END:
+#+CAPTION: Awesome table
+| h1  | h2  | h3  |
+|-----+-----+-----|
+| abc | def | ghi |
+
+Some text.
+
+#+CAPTION: Another awesome table
+| h1  | h2  | h3  |
+|-----+-----+-----|
+| jkl | mno | pqr |
+
+Some more text.
+
+#+CAPTION: Third table
+| h1  | h2  | h3 |
+|-----+-----+----|
+| stu | vwx | yz |
 * Source blocks                                                   :src_block:
 ** Code fence                                                    :code_fence:
 *** Code-fenced source blocks (default behavior)
@@ -1723,7 +1745,7 @@ that the link jump is evident):
 #+END_SRC
 
 *Here we refer to code snippet [[code__hello]].*
-*** Links to tables
+*** Links to tables                                           :table:caption:
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-tables
 :END:

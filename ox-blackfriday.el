@@ -675,6 +675,18 @@ contextual information."
                   (if lbl
                       (format "<a id=\"%s\"></a>\n\n" lbl)
                     "")))
+         (caption (org-export-get-caption table))
+         (caption-html (if (not caption)
+                           ""
+                         (let* ((table-num (org-export-get-ordinal
+                                            table info
+                                            nil #'org-html--has-caption-p))
+                                (caption-str (org-export-data caption info)))
+		           (format (concat "<caption class=\"table-caption\">\n"
+                                           "  <span class=\"table-number\">Table %d:</span>\n"
+                                           "  %s\n"
+                                           "</caption>\n\n")
+			           table-num caption-str))))
          (tbl (replace-regexp-in-string "\n\n" "\n" contents)))
     ;; If the table has only 1 row, do *not* make it a header row..
     ;; instead create an empty header row.
@@ -695,7 +707,7 @@ contextual information."
              (dummy-header (replace-regexp-in-string "[-:]" " " hrule)))
         (setq tbl (concat dummy-header "\n" hrule "\n" row-1))))
     ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
-    (concat label tbl)))
+    (concat label caption-html tbl)))
 
 ;;;; Verse Block
 (defun org-blackfriday-verse-block (_verse-block contents info)

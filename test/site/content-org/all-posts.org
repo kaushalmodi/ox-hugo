@@ -884,10 +884,15 @@ with =md= language).
 *It is necessary to set the Hugo site config variable
 =pygmentsCodeFences= to =true= for syntax highlighting to work for
 fenced code blocks.*
-** Org Source Block                                                :noexport:
+** Org Source Block via Pygments                          :pygments:noexport:
 :PROPERTIES:
-:EXPORT_FILE_NAME: org-source-block
+:EXPORT_FILE_NAME: org-source-block-pygments
 :END:
+/This test case is not important after Hugo 0.28 as this was a
+workaround for a limitation in the Pygments syntax highlighter. Hugo
+0.28 onwards, the default syntax highlighter is Chroma, which does not
+have that limitation, and thus no need for this workaround./
+-----
 Test case for the case where user has set
 =org-hugo-langs-no-descr-in-code-fences= to a list containing the
 element =org=.
@@ -895,13 +900,15 @@ element =org=.
 /As this variable is dependent on user's config, this post is not set
 to be exported by default./
 
-The [[https://discourse.gohugo.io/t/fenced-code-block-with-language-unsupported-by-pygments/7710][issue]] with Hugo will be seen if:
-- =pygmentsCodeFences = true= is set in the Hugo site =config.toml=,
-- a source block's language is set to one that's not supported by
+The [[https://discourse.gohugo.io/t/fenced-code-block-with-language-unsupported-by-pygments/7710][issue]] with Hugo will be seen if _all_ of the below are true:
+- =pygmentsCodeFences = true= *and* =pygmentsUseClassic = true= (Hugo
+  ≥ 0.28 -- default value is =false=) are set in the Hugo site
+  =config.toml=.
+- A source block's language is set to one that's not supported by
   Pygments (like [[https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org][org]], and thus the below example with source code
-  language set to =org=), and
+  language set to =org=).
 - =org-hugo-langs-no-descr-in-code-fences= is set to a value not
-  containing that lanaguage descriptor (=org= in this case).
+  containing that language descriptor (=org= in this case).
 #+BEGIN_SRC org
 # Org comment
 Export this post after setting

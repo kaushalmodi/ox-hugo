@@ -682,10 +682,10 @@ contextual information."
                                             table info
                                             nil #'org-html--has-caption-p))
                                 (caption-str (org-export-data caption info)))
-		           (format (concat "<caption class=\"table-caption\">\n"
+		           (format (concat "<div class=\"table-caption\">\n"
                                            "  <span class=\"table-number\">Table %d:</span>\n"
                                            "  %s\n"
-                                           "</caption>\n\n")
+                                           "</div>\n\n")
 			           table-num caption-str))))
          (tbl (replace-regexp-in-string "\n\n" "\n" contents)))
     ;; If the table has only 1 row, do *not* make it a header row..

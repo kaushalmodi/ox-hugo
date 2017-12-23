@@ -7,10 +7,10 @@ draft = false
 The caption can contain be emphasized using the usual markup
 characters too.
 
-<caption class="table-caption">
+<div class="table-caption">
   <span class="table-number">Table 1:</span>
   Awesome table
-</caption>
+</div>
 
 | h1  | h2  | h3  |
 |-----|-----|-----|
@@ -18,10 +18,10 @@ characters too.
 
 Some text.
 
-<caption class="table-caption">
+<div class="table-caption">
   <span class="table-number">Table 2:</span>
   _Another_ **awesome** table
-</caption>
+</div>
 
 | h1  | h2  | h3  |
 |-----|-----|-----|
@@ -29,10 +29,10 @@ Some text.
 
 Some more text.
 
-<caption class="table-caption">
+<div class="table-caption">
   <span class="table-number">Table 3:</span>
   <span class="underline">Third</span> table
-</caption>
+</div>
 
 | h1  | h2  | h3 |
 |-----|-----|----|

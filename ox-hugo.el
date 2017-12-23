@@ -885,11 +885,6 @@ contents according to the current headline."
               ;;     {{ end }}
               "<!--endtoc-->\n"))))
 
-(defalias 'org-hugo--has-caption-p 'org-html--has-caption-p
-  "Non-nil when ELEMENT has a caption affiliated keyword.
-This function is meant to be used as a predicate for
-`org-export-get-ordinal'.")
-
 (defun org-hugo--escape-hugo-shortcode (code lang)
   "Escape Hugo shortcodes if present in CODE string.
 
@@ -1283,7 +1278,7 @@ and rewrite link paths to make blogging more seamless."
                   (or (org-string-nw-p contents)
                       (let ((number (org-export-get-ordinal
                                      destination info
-                                     nil #'org-hugo--has-caption-p)))
+                                     nil #'org-html--has-caption-p)))
                         (cond
                          ((not number) nil)
                          ((atom number) (number-to-string number))

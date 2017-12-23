@@ -527,6 +527,9 @@ You should see *no* table exported above.
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-caption
 :END:
+The caption can contain be emphasized using the usual markup
+characters too.
+
 #+CAPTION: Awesome table
 | h1  | h2  | h3  |
 |-----+-----+-----|
@@ -534,14 +537,14 @@ You should see *no* table exported above.
 
 Some text.
 
-#+CAPTION: Another awesome table
+#+CAPTION: /Another/ *awesome* table
 | h1  | h2  | h3  |
 |-----+-----+-----|
 | jkl | mno | pqr |
 
 Some more text.
 
-#+CAPTION: Third table
+#+CAPTION: _Third_ table
 | h1  | h2  | h3 |
 |-----+-----+----|
 | stu | vwx | yz |

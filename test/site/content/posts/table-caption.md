@@ -4,6 +4,9 @@ tags = ["table", "caption"]
 draft = false
 +++
 
+The caption can contain be emphasized using the usual markup
+characters too.
+
 <caption class="table-caption">
   <span class="table-number">Table 1:</span>
   Awesome table
@@ -17,7 +20,7 @@ Some text.
 
 <caption class="table-caption">
   <span class="table-number">Table 2:</span>
-  Another awesome table
+  _Another_ **awesome** table
 </caption>
 
 | h1  | h2  | h3  |
@@ -28,7 +31,7 @@ Some more text.
 
 <caption class="table-caption">
   <span class="table-number">Table 3:</span>
-  Third table
+  <span class="underline">Third</span> table
 </caption>
 
 | h1  | h2  | h3 |

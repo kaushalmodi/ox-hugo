@@ -95,4 +95,4 @@ Here's the same image again, but with a different Org link ID:
 
 ---
 
-Reference: [(org) Images and tables](http://orgmode.org/manual/Images-and-tables.html).
+Reference: [(org) Images and tables](https://orgmode.org/manual/Images-and-tables.html).

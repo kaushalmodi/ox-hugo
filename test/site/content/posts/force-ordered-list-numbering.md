@@ -34,4 +34,4 @@ Another example:
 <li value="100">This will be 100!</li>
 </ol>
 
-See [(org) Plain lists](http://orgmode.org/manual/Plain-lists.html) to read more about plain lists in Org.
+See [(org) Plain lists](https://orgmode.org/manual/Plain-lists.html) to read more about plain lists in Org.

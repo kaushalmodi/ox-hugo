@@ -4,7 +4,7 @@ tags = ["links", "internal-links"]
 draft = false
 +++
 
-From [(org) Internal links](http://orgmode.org/manual/Internal-links.html),
+From [(org) Internal links](https://orgmode.org/manual/Internal-links.html),
 
 ```org
 - one item

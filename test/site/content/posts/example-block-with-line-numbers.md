@@ -4,7 +4,7 @@ tags = ["example"]
 draft = false
 +++
 
--   [Org reference](http://orgmode.org/manual/Literal-examples.html)
+-   [Org reference](https://orgmode.org/manual/Literal-examples.html)
 -   [Hugo `highlight` shortcode with line numbers](https://gohugo.io/content-management/syntax-highlighting/)
 
 

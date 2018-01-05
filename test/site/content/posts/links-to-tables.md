@@ -113,4 +113,4 @@ Here's another table:
 
 ---
 
-Reference: [(org) Images and tables](http://orgmode.org/manual/Images-and-tables.html).
+Reference: [(org) Images and tables](https://orgmode.org/manual/Images-and-tables.html).

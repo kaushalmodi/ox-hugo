@@ -925,7 +925,7 @@ Set the =HUGO_CODE_FENCE= property to =nil= if you want to *always*
 use the Hugo =highlight= shortcode.
 **** Line numbers
 Line numbers can be enabled/configured using the Org =-n= / =+n=
-syntax. See the Info node [[http://orgmode.org/manual/Literal-examples.html][=(org) Literal examples=]] for more
+syntax. See the Info node [[https://orgmode.org/manual/Literal-examples.html][=(org) Literal examples=]] for more
 information.
 
 Here are some examples fetched from the "Source blocks with line
@@ -998,9 +998,9 @@ Then in your batch export setup, add that special tag to the
 the special tag =dont_export_during_make_test= that is used to mark
 few Org files to not be exported during =make test=.
 ****** Why use =#+FILETAGS= and not =#+TAGS=?
-- About =#+FILETAGS= -- [[http://orgmode.org/manual/Tag-inheritance.html][Tag Inheritance]] or =C-h i g (org) Tag
+- About =#+FILETAGS= -- [[https://orgmode.org/manual/Tag-inheritance.html][Tag Inheritance]] or =C-h i g (org) Tag
   inheritance=
-- About =#+TAGS= -- [[http://orgmode.org/manual/Setting-tags.html][Setting Tags]] or =C-h i g (org) Setting tags=
+- About =#+TAGS= -- [[https://orgmode.org/manual/Setting-tags.html][Setting Tags]] or =C-h i g (org) Setting tags=
 ***** Categories
 For subtree-based exports, the Hugo front-matter =categories= values
 are derived from Org tags set for the post subtree headline, but only
@@ -1097,7 +1097,7 @@ Hugo-generated one, you can do it one of these many ways:
    anywhere else in the post, you can do it using the =#+TOC=
    keyword.. Example: =#+TOC: headlines 2=.
 
-See Org manual [[http://orgmode.org/manual/Table-of-contents.html][Table of Contents]] section for more info.
+See Org manual [[https://orgmode.org/manual/Table-of-contents.html][Table of Contents]] section for more info.
 
 /Note that =ox-hugo= does not support =#+TOC: listings= and =#+TOC:
 tables=./

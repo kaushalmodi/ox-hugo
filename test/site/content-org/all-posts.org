@@ -644,7 +644,7 @@ property needs to be left *empty* instead of setting to =nil=!
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-with-line-numbers
 :END:
-- [[http://orgmode.org/manual/Literal-examples.html][Org reference]]
+- [[https://orgmode.org/manual/Literal-examples.html][Org reference]]
 - [[https://gohugo.io/content-management/syntax-highlighting/][Hugo =highlight= shortcode with line numbers]]
 **** Cases
 :PROPERTIES:
@@ -862,22 +862,22 @@ should *not* be expanded.. they should be visible verbatim.
 - {&lbrace;% .. %}&rbrace; --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown][Shortcodes with Markdown]]
 **** Code block using code fences
 #+BEGIN_SRC md
-{{< figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" >}}
-{{% figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" %}}
+{{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
+{{% figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" %}}
 #+END_SRC
 **** Code block using =highlight= shortcode
 Here, the =-n= switch is added to the Org source block to
 auto-enable[fn:4] using the =highlight= shortcode.
 #+BEGIN_SRC md -n
-{{< figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" >}}
-{{% figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" %}}
+{{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
+{{% figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" %}}
 #+END_SRC
 *** Shortcodes *not* escaped
 The =figure= shortcodes in the below example block *should* be
 expanded.. you should be seeing little unicorns below.
 #+BEGIN_EXAMPLE
-{{< figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" >}}
-{{% figure src="http://orgmode.org/img/org-mode-unicorn-logo.png" %}}
+{{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
+{{% figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" %}}
 #+END_EXAMPLE
 Above a =#+BEGIN_EXAMPLE= .. =#+END_EXAMPLE= block is chosen
 arbitrarily. The Hugo shortcodes will remain unescaped in *any*
@@ -1025,7 +1025,7 @@ This is an example
 :PROPERTIES:
 :EXPORT_FILE_NAME: example-block-with-line-numbers
 :END:
-- [[http://orgmode.org/manual/Literal-examples.html][Org reference]]
+- [[https://orgmode.org/manual/Literal-examples.html][Org reference]]
 - [[https://gohugo.io/content-management/syntax-highlighting/][Hugo =highlight= shortcode with line numbers]]
 *** Default new line number start
 #+BEGIN_EXAMPLE -n
@@ -1148,7 +1148,7 @@ Here there is white space in menu name property.
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :beta "two words"
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :gamma 10
 :END:
-From [[http://orgmode.org/manual/Property-syntax.html][*(org) Property syntax*]]:
+From [[https://orgmode.org/manual/Property-syntax.html][*(org) Property syntax*]]:
 #+BEGIN_QUOTE
    It is also possible to add to the values of inherited properties.
 The following results in the 'genres' property having the value
@@ -1598,21 +1598,21 @@ not leak into the post's front-matter.
 :EXPORT_HUGO_BLACKFRIDAY: :hrefTargetBlank nil
 :END:
 #+ATTR_HTML: :target _blank :rel noopener
-[[http://orgmode.org/manual/Hyperlinks.html][This link (to Hyperlinks chapter in Org manual)]] will open in a new tab
+[[https://orgmode.org/manual/Hyperlinks.html][This link (to Hyperlinks chapter in Org manual)]] will open in a new tab
 as it is annotated with ~target="_blank"~.
 
 #+ATTR_HTML: :target _self
-[[http://orgmode.org/manual/Hyperlinks.html][Here's the same link]] but with ~target="_self"~ annotation. So
+[[https://orgmode.org/manual/Hyperlinks.html][Here's the same link]] but with ~target="_self"~ annotation. So
 clicking it will open that link in this same tab!
 
 #+ATTR_HTML: :width 10% :target _self
-[[http://orgmode.org/img/org-mode-unicorn-logo.png][http://orgmode.org/img/org-mode-unicorn-logo.png]]
+[[https://orgmode.org/img/org-mode-unicorn-logo.png][https://orgmode.org/img/org-mode-unicorn-logo.png]]
 
 Above is a link to an image. The =width= attribute of /10%/ though
 must apply *only* to the image, and not to the link, and the =target=
 attribute must apply *only* to the link, and not to the image.
 
-[[http://orgmode.org/manual/Hyperlinks.html][Here's the same link again]], but this time there is no =#+ATTR_HTML=
+[[https://orgmode.org/manual/Hyperlinks.html][Here's the same link again]], but this time there is no =#+ATTR_HTML=
 annotation. So the behavior will depend on the browser (typically an
 external link will open in a new tab automatically).
 ** Within the same post (Internal links)                     :internal_links:
@@ -1671,7 +1671,7 @@ external link will open in a new tab automatically).
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-org-targets
 :END:
-From [[http://orgmode.org/manual/Internal-links.html][(org) Internal links]],
+From [[https://orgmode.org/manual/Internal-links.html][(org) Internal links]],
 
 #+BEGIN_SRC org
 - one item
@@ -1695,7 +1695,7 @@ link./
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-source-blocks
 :END:
-From [[http://orgmode.org/manual/Internal-links.html][(org) Internal links]],
+From [[https://orgmode.org/manual/Internal-links.html][(org) Internal links]],
 
 #+BEGIN_QUOTE
    If no dedicated target exists, the link will then try to match the
@@ -1804,7 +1804,7 @@ Here's another table:
 
 *Here we refer to table [[tab__simple1]].*
 -----
-Reference: [[http://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
+Reference: [[https://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
 *** Links to images
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-images
@@ -1850,7 +1850,7 @@ Here's the same image again, but with a different Org link ID:
 
 *Here we refer to image [[img__org_logo1]].*
 -----
-Reference: [[http://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
+Reference: [[https://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
 * Equations                                                       :equations:
 ** Inline equations
 :PROPERTIES:
@@ -1882,7 +1882,7 @@ LaTeX formatted equation: \( E = -J \sum_{i=1}^N s_i s_{i+1 }\)
 (Don't see this in Markdown, see what it looks after Hugo has
 processed it.)
 
-Here's another example, taken from [[http://orgmode.org/manual/LaTeX-fragments.html][(org) LaTeX fragments]].
+Here's another example, taken from [[https://orgmode.org/manual/LaTeX-fragments.html][(org) LaTeX fragments]].
 
 Below in Org:
 #+BEGIN_EXAMPLE
@@ -2013,7 +2013,7 @@ Another example:
 1. [@7] This will be 7!
 1. [@100] This will be 100!
 
-See [[http://orgmode.org/manual/Plain-lists.html][(org) Plain lists]] to read more about plain lists in Org.
+See [[https://orgmode.org/manual/Plain-lists.html][(org) Plain lists]] to read more about plain lists in Org.
 ** Checklist
 :PROPERTIES:
 :EXPORT_FILE_NAME: checklist
@@ -2161,7 +2161,7 @@ Some other text.
 :END:
 To preserve the line breaks, indentation and blank lines in a region,
 but otherwise use normal formatting, you can use the /verse/
-construct, which can also be used to format poetry -- [[http://orgmode.org/manual/Paragraphs.html][Reference]].
+construct, which can also be used to format poetry -- [[https://orgmode.org/manual/Paragraphs.html][Reference]].
 #+BEGIN_VERSE
 Great clouds overhead
 Tiny black birds rise and fall
@@ -2479,7 +2479,7 @@ property is auto-inserted (default behavior).
 If such a property is non-nil, the value (time-stamp) of that is used
 to set the =date= field in the exported front-matter.
 
-- Reference :: [[http://orgmode.org/manual/Special-properties.html][(org) Special properties]] or =C-h i g (org) Special properties=
+- Reference :: [[https://orgmode.org/manual/Special-properties.html][(org) Special properties]] or =C-h i g (org) Special properties=
 * Date Formats                                                         :date:
 ** Just date
 :PROPERTIES:

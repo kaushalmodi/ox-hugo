@@ -31,7 +31,7 @@ LaTeX formatted equation: \\( E = -J \sum\_{i=1}^N s\_i s\_{i+1 }\\)
 (Don't see this in Markdown, see what it looks after Hugo has
 processed it.)
 
-Here's another example, taken from [(org) LaTeX fragments](http://orgmode.org/manual/LaTeX-fragments.html).
+Here's another example, taken from [(org) LaTeX fragments](https://orgmode.org/manual/LaTeX-fragments.html).
 
 Below in Org:
 

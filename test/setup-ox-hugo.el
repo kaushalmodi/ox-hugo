@@ -97,7 +97,7 @@ even if they are found as dependencies."
       ;; Even if we don't need to install Org from Elpa, we need to
       ;; add Org Elpa in `package-archives' to prevent the "Package
       ;; ‘org-9.0’ is unavailable" error.
-      (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/")) ;For latest stable `org'
+      (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/")) ;For latest stable `org'
 
       ;; Load emacs packages and activate them.
       ;; Don't delete this line.

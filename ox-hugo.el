@@ -1520,17 +1520,30 @@ channel."
                   (if lbl
                       (format "<a id=\"%s\"></a>\n" lbl)
                     "")))
+         (caption (org-export-get-caption src-block))
+         (caption-html (if (not caption)
+                           ""
+                         (let* ((src-block-num (org-export-get-ordinal
+                                                src-block info
+                                                nil #'org-html--has-caption-p))
+                                (caption-str (org-export-data-with-backend caption 'html info)))
+		           (format (concat "\n\n<div class=\"src-block-caption\">\n"
+                                           "  <span class=\"src-block-number\">Code Snippet %d:</span>\n"
+                                           "  %s\n"
+                                           "</div>")
+                                   src-block-num caption-str))))
+         content
          ret)
     ;; (message "ox-hugo src [dbg] number-lines: %S" number-lines)
     ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
-    (setq ret
+    (setq content
           (cond
            ;; If both number-lines and hl-lines are nil
            ;; , AND if :hugo-code-fence is non-nil (which is, by default).
            ((and (null number-lines)
                  (null hl-lines)
                  (org-hugo--plist-get-true-p info :hugo-code-fence))
-            (let ((ret1 (org-blackfriday-src-block src-block nil info)))
+            (let ((content1 (org-blackfriday-src-block src-block nil info)))
               (when (and org-hugo-langs-no-descr-in-code-fences
                          (member (intern lang) org-hugo-langs-no-descr-in-code-fences))
                 ;; When using Pygments, with the pygmentsCodeFences
@@ -1550,9 +1563,9 @@ channel."
                 ;; *Note* that this issue does NOT exist if using Chroma,
                 ;; which is the default syntax highlighter after Hugo
                 ;; v0.28.
-                (setq ret1 (replace-regexp-in-string (concat "\\`\\(```+\\)" lang) "\\1" ret1)))
-              (setq ret1 (org-hugo--escape-hugo-shortcode ret1 lang))
-              ret1))
+                (setq content1 (replace-regexp-in-string (concat "\\`\\(```+\\)" lang) "\\1" content1)))
+              (setq content1 (org-hugo--escape-hugo-shortcode content1 lang))
+              content1))
            ;; If number-lines is non-nil
            ;; , or if hl-lines is non-nil
            ;; , or if :hugo-code-fence is nil
@@ -1585,7 +1598,8 @@ channel."
                       lang
                       (format highlight-args-str linenos-str hllines-str)
                       code)))))
-    (concat label ret)))
+    (setq ret (concat label content caption-html))
+    ret))
 
 
 

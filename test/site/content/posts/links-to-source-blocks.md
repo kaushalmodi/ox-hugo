@@ -47,12 +47,17 @@ So the below code block:
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="orgb893397"></a>
+<a id="orga541d6a"></a>
 ````emacs-lisp
 (message "Hello")
 ````
 
-**Here we refer to code snippet [2](#orgd60f488).**
+<div class="src-block-caption">
+  <span class="src-block-number">Code Snippet 1:</span>
+  Hello
+</div>
+
+**Here we refer to code snippet [2](#orga712160).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -106,9 +111,14 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-<a id="orgd60f488"></a>
+<a id="orga712160"></a>
 ````emacs-lisp
 (message "Hello again")
 ````
 
-**Here we refer to code snippet [1](#orgb893397).**
+<div class="src-block-caption">
+  <span class="src-block-number">Code Snippet 2:</span>
+  Hello Again
+</div>
+
+**Here we refer to code snippet [1](#orga541d6a).**

@@ -742,10 +742,9 @@ in the =highlight= shortcode when line numbers are enabled).
 #+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
 <<src-block-hl-with-n>>
 #+END_SRC
-** Source block with caption                                       :noexport:
+** Source block with caption                                        :caption:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-caption
-:EXPORT_DATE: 2017-07-19
 :END:
 #+CAPTION: Prefix value in =local.mk=
 #+BEGIN_SRC makefile

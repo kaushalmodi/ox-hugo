@@ -20,7 +20,7 @@ Some text.
 
 <div class="table-caption">
   <span class="table-number">Table 2:</span>
-  _Another_ **awesome** table
+  <i>Another</i> <b>awesome</b> table
 </div>
 
 | h1  | h2  | h3  |

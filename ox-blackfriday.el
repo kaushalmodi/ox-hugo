@@ -681,7 +681,7 @@ contextual information."
                          (let* ((table-num (org-export-get-ordinal
                                             table info
                                             nil #'org-html--has-caption-p))
-                                (caption-str (org-export-data caption info)))
+                                (caption-str (org-export-data-with-backend caption 'html info)))
 		           (format (concat "<div class=\"table-caption\">\n"
                                            "  <span class=\"table-number\">Table %d:</span>\n"
                                            "  %s\n"

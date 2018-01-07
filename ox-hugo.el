@@ -1755,7 +1755,9 @@ to ((name . \"foo\") (weight . 80))."
   (let ((menu-alist (org-hugo--parse-property-arguments str))
         valid-menu-alist)
     ;; Hugo menu properties: https://gohugo.io/content-management/menus/
-    (dolist (prop '(menu name url identifier pre post weight parent)) ;children prop is probably read-only
+    ;; "title" property for menus was introduced in Hugo v0.32.
+    ;; https://github.com/gohugoio/hugo/commit/9df3736fec164c51d819797416dc263f2869be77
+    (dolist (prop '(menu name url identifier pre post weight parent title)) ;children prop is probably read-only
       (let ((cell (assoc prop menu-alist)))
         (when cell
           (push cell valid-menu-alist))))

@@ -404,7 +404,7 @@ _Let's-go-ballistic-with-CSS_ Edition :smile:
 
 <style>
 .blur-non-hovered body {
-  background: #fafafa url(https://jackrugile.com/images/misc/noise-diagonal.png);
+  background: #fafafa;
   color: #444;
   font: 100%/30px 'Helvetica Neue', helvetica, arial, sans-serif;
   text-shadow: 0 1px 0 #fff;
@@ -430,7 +430,7 @@ _Let's-go-ballistic-with-CSS_ Edition :smile:
 }
 
 .blur-non-hovered th {
-  background: url(https://jackrugile.com/images/misc/noise-diagonal.png), linear-gradient(#777, #444);
+  background: linear-gradient(#777, #444);
   border-left: 1px solid #555;
   border-right: 1px solid #777;
   border-top: 1px solid #555;
@@ -483,12 +483,8 @@ _Let's-go-ballistic-with-CSS_ Edition :smile:
   box-shadow: inset -1px 0 0 #fff;
 }
 
-.blur-non-hovered tr {
-  background: url(https://jackrugile.com/images/misc/noise-diagonal.png);
-}
-
 .blur-non-hovered tr:nth-child(odd) td {
-  background: #f1f1f1 url(https://jackrugile.com/images/misc/noise-diagonal.png);
+  background: #f1f1f1;
 }
 
 .blur-non-hovered tr:last-of-type td {

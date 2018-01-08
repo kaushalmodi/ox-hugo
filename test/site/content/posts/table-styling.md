@@ -305,7 +305,7 @@ block.
 
 <div class="table-caption">
   <span class="table-number">Table 9:</span>
-  Sane Table --- with minimal styling
+  Sane Table &#x2014; with minimal styling
 </div>
 
 | Name | ID    | Favorite Color |

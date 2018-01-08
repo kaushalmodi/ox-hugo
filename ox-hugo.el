@@ -1526,7 +1526,9 @@ channel."
                          (let* ((src-block-num (org-export-get-ordinal
                                                 src-block info
                                                 nil #'org-html--has-caption-p))
-                                (caption-str (org-export-data-with-backend caption 'html info)))
+                                (caption-str
+                                 (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
+                                  (org-export-data-with-backend caption 'html info))))
 		           (format (concat "\n\n<div class=\"src-block-caption\">\n"
                                            "  <span class=\"src-block-number\">Code Snippet %d:</span>\n"
                                            "  %s\n"

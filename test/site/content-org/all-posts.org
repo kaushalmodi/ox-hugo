@@ -544,7 +544,7 @@ Some text.
 
 Some more text.
 
-#+CAPTION: _Third_ table
+#+CAPTION: _Third_ table --- Caption with em-dash -- and -- en-dash
 | h1  | h2  | h3 |
 |-----+-----+----|
 | stu | vwx | yz |
@@ -1116,6 +1116,11 @@ in the =highlight= shortcode when line numbers are enabled).
 #+CAPTION: Prefix value in =local.mk=
 #+BEGIN_SRC makefile
 prefix = /dir/where/you/want/to/install/org # Default: /usr/share
+#+END_SRC
+
+#+CAPTION: Hello --- Caption with em-dash -- and -- en-dash
+#+BEGIN_SRC emacs-lisp
+(message "hello")
 #+END_SRC
 ** Source block with list syntax in a list                        :@upstream:
 :PROPERTIES:

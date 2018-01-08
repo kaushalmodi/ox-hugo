@@ -698,7 +698,9 @@ contextual information."
          table-num
          (caption-html (if (not caption)
                            ""
-                         (let ((caption-str (org-export-data-with-backend caption 'html info)))
+                         (let ((caption-str
+                                (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
+                                 (org-export-data-with-backend caption 'html info))))
                            (setq table-num (org-export-get-ordinal
                                             table info
                                             nil #'org-html--has-caption-p))

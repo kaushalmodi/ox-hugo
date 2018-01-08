@@ -31,7 +31,7 @@ Some more text.
 
 <div class="table-caption">
   <span class="table-number">Table 3:</span>
-  <span class="underline">Third</span> table
+  <span class="underline">Third</span> table &#x2014; Caption with em-dash &#x2013; and &#x2013; en-dash
 </div>
 
 | h1  | h2  | h3 |

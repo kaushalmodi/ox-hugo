@@ -548,6 +548,373 @@ Some more text.
 | h1  | h2  | h3 |
 |-----+-----+----|
 | stu | vwx | yz |
+** Table Styling with ATTR_HTML and ATTR_CSS     :attr___html:attr___css:css:
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-styling
+:END:
+HTML5 does not allow =align=, =width=, etc. attributes *within* the
+=table= tag [[[https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints][Ref]]]. So instead =ox-hugo= simply wraps the table with a
+=div= with a =class=. The table can then be customized using CSS,
+either via the =#+ATTR_CSS= attribute above the tables, or by putting
+verbatim CSS in =#+BEGIN_EXPORT html= blocks. See below examples.
+*** Table with only the class specified
+#+ATTR_HTML: :class my-table
+| h1  | h2  | h3  |
+|-----+-----+-----|
+| abc | def | ghi |
+
+Above table is wrapped in a =my-table= class. Just doing that won't
+bring any presentation changes to the table.. you'd need to add some
+CSS that customizes =.my-table table=.
+*** Table with only a CSS attribute specified
+#+ATTR_CSS: :width 50%
+| h1  | h2  | h3  |
+|-----+-----+-----|
+| abc | def | ghi |
+
+Above table get wrapped in the auto-generated class
+=table-nocaption=. The specified CSS attribute is auto-set for
+=.table-nocaption table=.
+*** Table with both class and CSS attribute specified
+#+ATTR_HTML: :class my-table-2
+#+ATTR_CSS: :width 80%
+| h1  | h2  | h3  |
+|-----+-----+-----|
+| abc | def | ghi |
+
+Above table get wrapped in the specified class =my-table-2=. The
+specified CSS attribute is auto-set for =.my-table-2 table=.
+*** Table with caption, and CSS attributes specified
+#+CAPTION: Table with caption, with left-aligned text
+#+ATTR_CSS: :text-align left
+| h1       | h2       | h3       |
+|----------+----------+----------|
+| abcdefgh | ijklmnop | qrstuvwx |
+
+Above table get wrapped in the auto-generated class =table-1= (/"1",
+because this is the first table with a caption on this page./). The
+specified CSS attribute is auto-set for =.table-1 table=.
+
+#+CAPTION: Table with caption, with right-aligned text
+#+ATTR_CSS: :text-align right
+| h1       | h2       | h3       |
+|----------+----------+----------|
+| abcdefgh | ijklmnop | qrstuvwx |
+
+#+CAPTION: Table with caption, with center-aligned text
+#+ATTR_CSS: :text-align center
+| h1       | h2       | h3       |
+|----------+----------+----------|
+| abcdefgh | ijklmnop | qrstuvwx |
+*** Table with caption, and both class and CSS attributes specified
+#+CAPTION: Table with caption, class and CSS attributes specified
+#+ATTR_HTML: :class my-red-bordered-table
+#+ATTR_CSS: :border 2px solid red
+| h1  | h2  | h3  |
+|-----+-----+-----|
+| abc | def | ghi |
+
+Above table get wrapped in the specified class
+=my-red-bordered-table=. The specified CSS attribute is auto-set for
+=.my-red-bordered-table table=.
+
+Here's another table with the exact same class as that of the above
+table. So the CSS properties do not need to be specified again.
+
+Below table will also show up with a red border.
+
+#+ATTR_HTML: :class my-red-bordered-table
+| h1  | h2  | h3  |
+|-----+-----+-----|
+| jkl | kmo | pqr |
+*** Table with verbatim CSS
+There could be times when the CSS couldn't be simply specified using
+the =#+ATTR_CSS= attribute. In those cases, simply set the table class
+using =#+ATTR_HTML=, and put the CSS in the =#+BEGIN_EXPORT html=
+block.
+#+BEGIN_EXPORT html
+<style>
+.tab4 th,
+.tab4 td {
+    padding: 20px;
+    text-align: left;
+}
+</style>
+#+END_EXPORT
+#+CAPTION: Table with verbatim CSS
+#+ATTR_HTML: :class tab4
+| h1  | h2  | h3  |
+|-----+-----+-----|
+| abc | def | ghi |
+*** More table styling examples
+[[https://css-tricks.com/complete-guide-table-element/][Source: /css-tricks.com/]]
+**** CSS-tricks Example Tables                                     :noexport:
+***** Example Table 1
+:PROPERTIES:
+:CUSTOM_ID: css-tricks-example-table-1
+:END:
+| Name |    ID | Favorite Color |
+|------+-------+----------------|
+| Jim  | 00001 | Blue           |
+| Sue  | 00002 | Red            |
+| Barb | 00003 | Green          |
+***** Example Table 2
+:PROPERTIES:
+:CUSTOM_ID: css-tricks-example-table-2
+:END:
+| 1 |  2 |  3 |  4 |  5 |
+|---+----+----+----+----|
+| 2 |  4 |  6 |  8 | 10 |
+| 3 |  6 |  9 | 12 | 15 |
+| 4 |  8 | 12 | 16 | 20 |
+| 5 | 10 | 15 | 20 | 25 |
+***** Example Table 3
+:PROPERTIES:
+:CUSTOM_ID: css-tricks-example-table-3
+:END:
+| Last Name | First Name | Email                 | Due     | Web Site                 |
+|-----------+------------+-----------------------+---------+--------------------------|
+| Smith     | John       | jsmith@gmail.com      | $50.00  | http://www.jsmith.com    |
+| Bach      | Frank      | fbach@yahoo.com       | $50.00  | http://www.frank.com     |
+| Doe       | Jason      | jdoe@hotmail.com      | $100.00 | http://www.jdoe.com      |
+| Conway    | Tim        | tconway@earthlink.net | $50.00  | http://www.timconway.com |
+**** Basic styling
+***** Uncollapsed borders
+#+BEGIN_EXPORT html
+<style>
+.basic-styling td,
+.basic-styling th {
+  border: 1px solid #999;
+  padding: 0.5rem;
+}
+</style>
+#+END_EXPORT
+#+ATTR_HTML: :class basic-styling
+#+CAPTION: Table with uncollapsed borders
+#+INCLUDE: "./all-posts.org::#css-tricks-example-table-1" :only-contents t
+***** Collapsed borders
+#+BEGIN_EXPORT html
+<style>
+.collapsed table {
+  border-collapse: collapse;
+}
+</style>
+#+END_EXPORT
+#+ATTR_HTML: :class collapsed basic-styling
+#+CAPTION: Table with collapsed borders
+#+INCLUDE: "./all-posts.org::#css-tricks-example-table-1" :only-contents t
+**** Two Axis Tables
+#+BEGIN_EXPORT html
+<style>
+.two-axis-table td,
+.two-axis-table th {
+  width: 4rem;
+  height: 2rem;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+.two-axis-table th,
+.two-axis-table td:nth-child(1) {
+  background: lightblue;
+  border-color: white;
+  font-weight: bold;
+}
+.two-axis-table body {
+  padding: 1rem;
+}
+</style>
+#+END_EXPORT
+#+ATTR_HTML: :class two-axis-table
+#+CAPTION: Table with 1st row and 1st column highlighted
+#+INCLUDE: "./all-posts.org::#css-tricks-example-table-2" :only-contents t
+**** Sane Table
+[[https://css-tricks.com/complete-guide-table-element/#article-header-id-17][Ref]]
+#+BEGIN_EXPORT html
+<style>
+.sane-table table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.sane-table th,
+.sane-table td {
+  padding: 0.25rem;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+</style>
+#+END_EXPORT
+#+ATTR_HTML: :class sane-table
+#+CAPTION: Sane Table --- with minimal styling
+#+INCLUDE: "./all-posts.org::#css-tricks-example-table-1" :only-contents t
+**** Zebra Striping
+#+BEGIN_EXPORT html
+<style>
+.zebra-striping tbody tr:nth-child(odd) {
+  background: #eee;
+}
+</style>
+#+END_EXPORT
+#+ATTR_HTML: :class zebra-striping sane-table
+#+CAPTION: Table with zebra striping
+#+INCLUDE: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
+**** Highlighting on Hover
+***** Highlight Cell
+#+BEGIN_EXPORT html
+<style>
+.hl-table-cell td:hover { /* th:hover also if you wish */
+  background: yellow;
+}
+</style>
+#+END_EXPORT
+#+ATTR_HTML: :class hl-table-cell sane-table
+#+CAPTION: Table where the hovered-upon cell highlights
+#+INCLUDE: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
+***** Highlight Row
+#+BEGIN_EXPORT html
+<style>
+.hl-table-row tbody tr:hover {
+  background: yellow;
+}
+</style>
+#+END_EXPORT
+#+ATTR_HTML: :class hl-table-row sane-table
+#+CAPTION: Table where the hovered-upon row highlights
+#+INCLUDE: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
+**** Blur non-hovered Rows
+/Let's-go-ballistic-with-CSS/ Edition :smile:
+#+BEGIN_EXPORT html
+<style>
+.blur-non-hovered body {
+  background: #fafafa url(https://jackrugile.com/images/misc/noise-diagonal.png);
+  color: #444;
+  font: 100%/30px 'Helvetica Neue', helvetica, arial, sans-serif;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.blur-non-hovered strong {
+  font-weight: bold;
+}
+
+.blur-non-hovered em {
+  font-style: italic;
+}
+
+.blur-non-hovered table {
+  background: #f5f5f5;
+  border-collapse: separate;
+  box-shadow: inset 0 1px 0 #fff;
+  font-size: 12px;
+  line-height: 24px;
+  margin: 30px auto;
+  text-align: left;
+  width: 800px;
+}
+
+.blur-non-hovered th {
+  background: url(https://jackrugile.com/images/misc/noise-diagonal.png), linear-gradient(#777, #444);
+  border-left: 1px solid #555;
+  border-right: 1px solid #777;
+  border-top: 1px solid #555;
+  border-bottom: 1px solid #333;
+  box-shadow: inset 0 1px 0 #999;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 15px;
+  position: relative;
+  text-shadow: 0 1px 0 #000;
+}
+
+.blur-non-hovered th:after {
+  background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,.08));
+  content: '';
+  display: block;
+  height: 25%;
+  left: 0;
+  margin: 1px 0 0 0;
+  position: absolute;
+  top: 25%;
+  width: 100%;
+}
+
+.blur-non-hovered th:first-child {
+  border-left: 1px solid #777;
+  box-shadow: inset 1px 1px 0 #999;
+}
+
+.blur-non-hovered th:last-child {
+  box-shadow: inset -1px 1px 0 #999;
+}
+
+.blur-non-hovered td {
+  border-right: 1px solid #fff;
+  border-left: 1px solid #e8e8e8;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 10px 15px;
+  position: relative;
+  transition: all 300ms;
+}
+
+.blur-non-hovered td:first-child {
+  box-shadow: inset 1px 0 0 #fff;
+}
+
+.blur-non-hovered td:last-child {
+  border-right: 1px solid #e8e8e8;
+  box-shadow: inset -1px 0 0 #fff;
+}
+
+.blur-non-hovered tr {
+  background: url(https://jackrugile.com/images/misc/noise-diagonal.png);
+}
+
+.blur-non-hovered tr:nth-child(odd) td {
+  background: #f1f1f1 url(https://jackrugile.com/images/misc/noise-diagonal.png);
+}
+
+.blur-non-hovered tr:last-of-type td {
+  box-shadow: inset 0 -1px 0 #fff;
+}
+
+.blur-non-hovered tr:last-of-type td:first-child {
+  box-shadow: inset 1px -1px 0 #fff;
+}
+
+.blur-non-hovered tr:last-of-type td:last-child {
+  box-shadow: inset -1px -1px 0 #fff;
+}
+
+.blur-non-hovered tbody:hover td {
+  color: transparent;
+  text-shadow: 0 0 3px #aaa;
+}
+
+.blur-non-hovered tbody:hover tr:hover td {
+  color: #444;
+  text-shadow: 0 1px 0 #fff;
+}
+</style>
+#+END_EXPORT
+#+ATTR_HTML: :class blur-non-hovered
+#+CAPTION: Table where rows except the hovered-upon get blurred
+#+INCLUDE: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
+** Table with Column Groups                 :wishlist:column_groups:noexport:
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-column-groups
+:END:
+https://orgmode.org/manual/Column-groups.html
+
+Looks like the only way to implement this is to export tables with
+column groups in raw HTML -- <2018-01-07 Sun>.
+
+| N | N^2 | N^3 | N^4 | ~sqrt(n)~ | ~sqrt[4](N)~ |
+|---+-----+-----+-----+-----------+--------------|
+| / |   < |     |   > |         < |            > |
+| 1 |   1 |   1 |   1 |         1 |            1 |
+| 2 |   4 |   8 |  16 |    1.4142 |       1.1892 |
+| 3 |   9 |  27 |  81 |    1.7321 |       1.3161 |
+|---+-----+-----+-----+-----------+--------------|
+#+TBLFM: $2=$1^2::$3=$1^3::$4=$1^4::$5=sqrt($1)::$6=sqrt(sqrt(($1)))
 * Source blocks                                                   :src_block:
 ** Code fence                                                    :code_fence:
 *** Code-fenced source blocks (default behavior)

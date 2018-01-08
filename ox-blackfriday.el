@@ -284,6 +284,25 @@ doesn't matter in equations.
   (setq org-blackfriday--code-block-num-backticks org-blackfriday--code-block-num-backticks-default))
 (add-hook 'org-export-before-processing-hook #'org-blackfriday--reset-org-blackfriday--code-block-num-backticks)
 
+;;;; Make CSS property string
+(defun org-hugo--make-css-property-string (props)
+  "Return a list of CSS properties, as a string.
+PROPS is a plist where values are either strings or nil.  A prop
+with a nil value will be omitted from the result.
+
+This function is adapted from `org-html--make-attribute-string'."
+  (let (ret)
+    (dolist (item props (mapconcat #'identity (nreverse ret) " "))
+      (cond ((null item)
+             (pop ret))
+            ((symbolp item)
+             (push (substring (symbol-name item) 1) ret))
+            (t
+             (let ((key (car ret))
+                   (value (replace-regexp-in-string
+                           "\"" "&quot;" (org-html-encode-plain-text item))))
+               (setcar ret (format "%s: %s; " key value))))))))
+
 
 
 ;;; Transcode Functions
@@ -676,18 +695,55 @@ contextual information."
                       (format "<a id=\"%s\"></a>\n\n" lbl)
                     "")))
          (caption (org-export-get-caption table))
+         table-num
          (caption-html (if (not caption)
                            ""
-                         (let* ((table-num (org-export-get-ordinal
+                         (let ((caption-str (org-export-data-with-backend caption 'html info)))
+                           (setq table-num (org-export-get-ordinal
                                             table info
                                             nil #'org-html--has-caption-p))
-                                (caption-str (org-export-data-with-backend caption 'html info)))
 		           (format (concat "<div class=\"table-caption\">\n"
                                            "  <span class=\"table-number\">Table %d:</span>\n"
                                            "  %s\n"
                                            "</div>\n\n")
 			           table-num caption-str))))
+         (attr (org-export-read-attribute :attr_html table))
+         ;; At the moment only the `class' attribute is supported in
+         ;; #+ATTR_HTML above tables.
+         (table-class-user (plist-get attr :class))
+         (table-class-auto (concat "table-"
+                                   (if table-num
+                                       (format "%d" table-num)
+                                     "nocaption")))
+         (table-class (or table-class-user
+                          table-class-auto))
+         ;; If user has specified multiple classes for the table
+         ;; (space-separated), use only the first class in that list
+         ;; to specifying the styling in the <style> tag.
+         (table-class-this (car (split-string table-class)))
+         ;; https://www.w3schools.com/css/css_table.asp
+         (css-props (org-export-read-attribute :attr_css table))
+         (css-props-str (org-hugo--make-css-property-string css-props))
+         (table-pre "")
+         (table-post "")
          (tbl (replace-regexp-in-string "\n\n" "\n" contents)))
+
+    ;; This is a nasty workaround till Hugo/Blackfriday support
+    ;; wrapping Markdown in HTML div's -
+    ;; https://github.com/kaushalmodi/ox-hugo/issues/93.
+    (when (org-string-nw-p css-props-str)
+      (setq table-pre (format "<style>.%s table { %s }</style>\n\n"
+                              table-class-this css-props-str)))
+    ;; Export user-specified table class explicitly.
+    (when (or (org-string-nw-p table-class-user)
+              (org-string-nw-p css-props-str))
+      (setq table-pre (concat table-pre
+                              (format "<div class=\"ox-hugo-table %s\">\n" table-class)
+                              "<div></div>\n\n")))
+    (when (org-string-nw-p table-pre)
+      (setq table-post (concat "\n"
+                               "</div>\n")))
+
     ;; If the table has only 1 row, do *not* make it a header row..
     ;; instead create an empty header row.
     ;; For 1-row, tbl would look like this at this point:
@@ -707,7 +763,7 @@ contextual information."
              (dummy-header (replace-regexp-in-string "[-:]" " " hrule)))
         (setq tbl (concat dummy-header "\n" hrule "\n" row-1))))
     ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
-    (concat label caption-html tbl)))
+    (concat table-pre label caption-html tbl table-post)))
 
 ;;;; Verse Block
 (defun org-blackfriday-verse-block (_verse-block contents info)

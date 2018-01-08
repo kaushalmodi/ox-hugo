@@ -1,8 +1,19 @@
 +++
 title = "Table Styling with ATTR_HTML and ATTR_CSS"
 tags = ["table", "attr_html", "attr_css", "css"]
+categories = ["upstream"]
 draft = false
 +++
+
+This _table styling_ feature overcomes a known <span class="underline">limitation</span> in
+Hugo/Blackfriday (_Blackfriday_ Issue #[404](https://github.com/russross/blackfriday/issues/404)) that doesn't allow wrapping
+Markdown elements with `<div>` tags (so that a user can assign
+classes, etc. to those `div` blocks).
+
+So this feature had to be implemented at the expense of a nasty hack
+demonstrated [here](https://github.com/kaushalmodi/ox-hugo/issues/93#issue-270108567).
+
+---
 
 HTML5 does not allow `align`, `width`, etc. attributes **within** the
 `table` tag [[Ref](https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints)]. So instead `ox-hugo` simply wraps the table with a

@@ -731,6 +731,7 @@ Below, where /subtree/ is mentioned, it implies a *valid Hugo-post
 subtree* i.e. an Org subtree that has the =EXPORT_FILE_NAME= property
 set.
 #+CAPTION: Hugo front-matter translation for subtree-based exports
+#+ATTR_HTML: :class sane-table
 |------------------------------------+------------------------------------+-------------------------------------------------------------------------|
 | Hugo front-matter (TOML)           | Org                                | Org description                                                         |
 |------------------------------------+------------------------------------+-------------------------------------------------------------------------|
@@ -751,6 +752,7 @@ set.
   =EXPORT_DATE= subtree property /more than/ =#+DATE:= keyword.
 **** For file-based exports
 #+CAPTION: Hugo front-matter translation for file-based exports
+#+ATTR_HTML: :class sane-table
 |----------------------------------+--------------------------------------|
 | Hugo front-matter (TOML)         | Org                                  |
 |----------------------------------+--------------------------------------|
@@ -779,6 +781,7 @@ the exported =.md= files.
 See the Org source in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]] under /Formatting/ -> /General/
 heading and how it exports to Markdown in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/general-formatting.md][=general-formatting.md=]].
 #+CAPTION: Org markup to Markdown markup
+#+ATTR_HTML: :class sane-table
 |--------------------+--------------------------------------------------------------------|
 | Org                | Markdown                                                           |
 |--------------------+--------------------------------------------------------------------|
@@ -862,6 +865,7 @@ Example translations between outside =static= directory paths to the
 copied location inside =static=:
 
 #+CAPTION: Where files get copied to if their path contains =static/=
+#+ATTR_HTML: :class sane-table
 |----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------|
 | File location outside =static=   | Copied-to location inside =static=        | Explanation                                                                                              |
 |----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------|
@@ -886,6 +890,7 @@ In this case, that file is copied directly to the
 structure generation happens in this case.
 
 #+CAPTION: Where files get copied to if their path *does not* contain =static/=
+#+ATTR_HTML: :class sane-table
 |--------------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|
 | File location outside =static= | Copied-to location inside =static=       | Explanation                                                                                                                 |
 |--------------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|
@@ -1107,6 +1112,103 @@ See Org manual [[https://orgmode.org/manual/Table-of-contents.html][Table of Con
 
 /Note that =ox-hugo= does not support =#+TOC: listings= and =#+TOC:
 tables=./
+*** Table Styling
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-styling
+:END:
+Classic =ox-html= allows setting table attributes directly using
+=#+ATTR_HTML=. But specifying the attributes directly in the =<table>=
+tag is [[https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints][admonished in HTML5]] .. /and so Hugo/Blackfriday do not allow
+any way to directly insert attributes *inside* the =<table>= tag./
+
+So a workaround is used by =ox-hugo=.. it wraps the tables with =<div>=
+tags with classes, which a user can then use to style the tables using
+CSS.. /just as recommended by HTML5/ :smile:.
+
+=ox-hugo= can style different tables in different ways on the same
+page, with the help of =#+ATTR_HTML= and =#+ATTR_CSS= (*introduced in
+=ox-hugo=*) attributes.
+
+1. =#+ATTR_HTML= is used to assign one or more classes to a table.
+   #+BEGIN_SRC org
+   ,#+ATTR_HTML: :class sane-table
+   #+END_SRC
+   - Wraps the table in =<div>= tags with =sane-table= class.
+   - Sets style from =#+ATTR_CSS=, if present, for =.sane-table table=
+     scope.
+
+   or
+
+   #+BEGIN_SRC org
+   ,#+ATTR_HTML: :class zebra-striping sane-table
+   #+END_SRC
+   - Wraps the table in =<div>= tags with =zebra-striping= *and*
+     =sane-table= classes.
+   - Sets style from =#+ATTR_CSS=, if present, *only* for the
+     =.zebra-striping table= scope i.e. only for the first class
+     listed in that attribute. Specifying multiple classes to a table
+     is useful if you want that table to inherit the styling from CSS
+     rules for multiple classes.
+2. =#+ATTR_CSS= is used to assign the specified styles to the
+   class of the table it precedes.
+
+   Examples:
+   #+BEGIN_SRC org
+   ,#+ATTR_CSS: :width 80%
+   #+END_SRC
+
+   #+BEGIN_SRC org
+   ,#+ATTR_CSS: :text-align left
+   #+END_SRC
+
+   - If =#+ATTR_HTML= is used to specify the table class, the style is
+     applied to the first of the list of classes (as explained above).
+   - If =#+ATTR_HTML= is *not* used to set a custom class name for the
+     table, the class name is auto-derived..
+     - If the table =#+CAPTION= is present, the class name is
+       =table-N= where "N" is the /Nth/ captioned table on that page.
+     - If the table is not captioned, the class name is always
+       =table-nocaption=. So.. if you want to have different styling
+       for different tables, make sure that you either set their
+       custom class name using =#+ATTR_HTML=, or caption them.
+
+
+- All tables exported with the =<div>= tags have the class
+  =ox-hugo-table=. This can be useful if you want to set a common
+  style for all those tables.
+- =#+ATTR_CSS= applies styling only to the =.CLASS table= scope. So if
+  you want more styling i.e. for other elements like =td=, =tr=, etc,
+  you would need to do that in an =#+EXPORT_BEGIN html= block.
+
+  Example:
+
+  #+BEGIN_SRC org
+  ,#+BEGIN_EXPORT html
+  <style>
+  .my-table th,
+  .my-table td {
+      padding: 20px;
+      text-align: left;
+  }
+  </style>
+  ,#+END_EXPORT
+  ,#+CAPTION: Table with verbatim CSS
+  ,#+ATTR_HTML: :class my-table
+  | h1  | h2  | h3  |
+  |-----+-----+-----|
+  | abc | def | ghi |
+  #+END_SRC
+
+You can find many examples of table styling here:
+#+CAPTION: Table Styling Examples
+#+ATTR_HTML: :class sane-table
+| Org Source                                                                                   | Exported Markdown | Hugo HTML   |
+|----------------------------------------------------------------------------------------------+-------------------+-------------|
+| {{{ox-hugo-test-file}}} -- search for =* Table Styling= or =:EXPORT_FILE_NAME: table-styling= | [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/table-styling.md][table-styling.md]]  | [[https://ox-hugo.scripter.co/test/posts/table-styling/][Hugo output]] |
+
+-----
+
+/Credit: [[https://css-tricks.com/complete-guide-table-element/][Guide to styling tables in HTML5-friendly manner]]/ --- /css-tricks.com/
 ** Enhancements
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu enhancements

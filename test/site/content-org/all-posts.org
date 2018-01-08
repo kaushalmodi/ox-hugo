@@ -5,6 +5,7 @@
 #+MACRO: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
 #+MACRO: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
 #+MACRO: hugoissue =hugo= Issue #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
+#+MACRO: bfissue /Blackfriday/ Issue #[[https://github.com/russross/blackfriday/issues/$1][$1]]
 
 #+AUTHOR:
 
@@ -548,10 +549,21 @@ Some more text.
 | h1  | h2  | h3 |
 |-----+-----+----|
 | stu | vwx | yz |
-** Table Styling with ATTR_HTML and ATTR_CSS     :attr___html:attr___css:css:
+** Table Styling with ATTR_HTML and ATTR_CSS :attr___html:attr___css:css:@upstream:
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-styling
 :END:
+
+This /table styling/ feature overcomes a known _limitation_ in
+Hugo/Blackfriday ({{{bfissue(404)}}}) that doesn't allow wrapping
+Markdown elements with =<div>= tags (so that a user can assign
+classes, etc. to those =div= blocks).
+
+So this feature had to be implemented at the expense of a nasty hack
+demonstrated [[https://github.com/kaushalmodi/ox-hugo/issues/93#issue-270108567][here]].
+
+-----
+
 HTML5 does not allow =align=, =width=, etc. attributes *within* the
 =table= tag [[[https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints][Ref]]]. So instead =ox-hugo= simply wraps the table with a
 =div= with a =class=. The table can then be customized using CSS,

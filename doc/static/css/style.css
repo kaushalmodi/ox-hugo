@@ -115,3 +115,16 @@ ul.task-list {
     font-style: italic;
     text-align: center;
 }
+
+/* Sane Table */
+/* https://css-tricks.com/complete-guide-table-element/#article-header-id-17 */
+.sane-table table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.sane-table th,
+.sane-table td {
+  padding: 0.25rem;
+  text-align: left;
+  border: 1px solid #ccc;
+}

@@ -722,7 +722,7 @@ exported Markdown files.
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-meta-data-to-hugo-front-matter
 :END:
-**** For subtree exports
+**** For subtree-based exports
 When organizing the posts as Org *subtrees*, many Hugo front-matter
 variables get set implicitly using the meta-data parsed from the posts
 in Org.
@@ -730,6 +730,7 @@ in Org.
 Below, where /subtree/ is mentioned, it implies a *valid Hugo-post
 subtree* i.e. an Org subtree that has the =EXPORT_FILE_NAME= property
 set.
+#+CAPTION: Hugo front-matter translation for subtree-based exports
 |------------------------------------+------------------------------------+-------------------------------------------------------------------------|
 | Hugo front-matter (TOML)           | Org                                | Org description                                                         |
 |------------------------------------+------------------------------------+-------------------------------------------------------------------------|
@@ -748,7 +749,8 @@ set.
 ***** Notes
 - Precedence for =date= parsing: =CLOSED= subtree property /more than/
   =EXPORT_DATE= subtree property /more than/ =#+DATE:= keyword.
-**** For complete-file exports
+**** For file-based exports
+#+CAPTION: Hugo front-matter translation for file-based exports
 |----------------------------------+--------------------------------------|
 | Hugo front-matter (TOML)         | Org                                  |
 |----------------------------------+--------------------------------------|
@@ -764,9 +766,9 @@ set.
 |----------------------------------+--------------------------------------|
 ***** Notes
 - The auto weight calculation for posts and menu items works *only*
-  for subtree exports. For the complete-file export flow, one needs to
+  for subtree exports. For the file-based export flow, one needs to
   specify the weights manually. The value of /weight/ set to ="auto"=
-  will be equivalent to /nil/ for the complete-file export flow.
+  will be equivalent to /nil/ for the file-based export flow.
 *** Formatting
 :PROPERTIES:
 :EXPORT_FILE_NAME: formatting
@@ -776,6 +778,7 @@ the exported =.md= files.
 
 See the Org source in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]] under /Formatting/ -> /General/
 heading and how it exports to Markdown in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/general-formatting.md][=general-formatting.md=]].
+#+CAPTION: Org markup to Markdown markup
 |--------------------+--------------------------------------------------------------------|
 | Org                | Markdown                                                           |
 |--------------------+--------------------------------------------------------------------|
@@ -857,14 +860,16 @@ created inside the /static/ directory to preserve the structure.
 
 Example translations between outside =static= directory paths to the
 copied location inside =static=:
-|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
-| File location outside =static=   | Copied-to location inside =static=        | Explanation                                                                                                          |
-|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
-| =~/temp/static/images/foo.png=   | =<HUGO_BASE_DIR>/static/images/foo.png=   | If the *outside* path has =/static/= in it, the directory structure after that is preserved when copied.             |
-| =~/temp/static/img/foo.png=      | =<HUGO_BASE_DIR>/static/img/foo.png=      | (same as above)                                                                                                      |
-| =~/temp/static/foo.png=          | =<HUGO_BASE_DIR>/static/foo.png=          | (same as above)                                                                                                      |
-| =~/temp/static/articles/zoo.pdf= | =<HUGO_BASE_DIR>/static/articles/zoo.pdf= | (same as above)                                                                                                      |
-|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
+
+#+CAPTION: Where files get copied to if their path contains =static/=
+|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------|
+| File location outside =static=   | Copied-to location inside =static=        | Explanation                                                                                              |
+|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------|
+| =~/temp/static/images/foo.png=   | =<HUGO_BASE_DIR>/static/images/foo.png=   | If the *outside* path has =/static/= in it, the directory structure after that is preserved when copied. |
+| =~/temp/static/img/foo.png=      | =<HUGO_BASE_DIR>/static/img/foo.png=      | (same as above)                                                                                          |
+| =~/temp/static/foo.png=          | =<HUGO_BASE_DIR>/static/foo.png=          | (same as above)                                                                                          |
+| =~/temp/static/articles/zoo.pdf= | =<HUGO_BASE_DIR>/static/articles/zoo.pdf= | (same as above)                                                                                          |
+|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------|
 
 See the {{{doc(usage#before-you-export,Usage → Before you export)}}}
 section to learn how to set the *HUGO_BASE_DIR*.
@@ -880,6 +885,7 @@ In this case, that file is copied directly to the
 (=ox-hugo/= by default) within the Hugo static directory. No directory
 structure generation happens in this case.
 
+#+CAPTION: Where files get copied to if their path *does not* contain =static/=
 |--------------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|
 | File location outside =static= | Copied-to location inside =static=       | Explanation                                                                                                                 |
 |--------------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|

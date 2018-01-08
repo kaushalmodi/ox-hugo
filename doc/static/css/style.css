@@ -108,3 +108,10 @@ ul.task-list {
         display: block;
     }
 }
+
+/* Captions */
+.src-block-caption,
+.table-caption {
+    font-style: italic;
+    text-align: center;
+}

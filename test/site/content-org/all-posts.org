@@ -2645,6 +2645,52 @@ Line 3 had no =>= char.
 > ← See that this =>= on line 4 is retained even at the beginning of the line.
 Line 5 has this > charcter in-between and is retained.
 #+END_VERSE
+* Special Blocks                                              :special_block:
+:PROPERTIES:
+:EXPORT_FILE_NAME: special-blocks
+:END:
+** HTML5 Element Blocks
+*** Block without NAME, class or id
+#+BEGIN_article
+This is /an article/.
+#+END_article
+*** Block with NAME
+#+NAME: Aside A
+#+BEGIN_aside
+/Some/ *text* --- 1
+
+| a | b | c |
+| d | e | f |
+#+END_aside
+*** Block with class and id
+#+ATTR_HTML: :class my-section :id section-a
+#+BEGIN_section
+/Some/ *text* --- 2
+
+| g | h | i |
+| j | k | l |
+#+END_section
+** DIV-wrapped Blocks
+*** DIV without NAME, class or id
+#+BEGIN_something
+This is /some text/ wrapped in a =div= block with class =something=.
+#+END_something
+*** DIV with NAME
+#+NAME: Foo A
+#+BEGIN_foo
+/Some/ *text* --- 3
+
+| m | n | o |
+| p | q | r |
+#+END_foo
+*** DIV with class and id
+#+ATTR_HTML: :class my-bar :id bar-a
+#+BEGIN_bar
+/Some/ *text* --- 4
+
+| s | t | u |
+| v | w | x |
+#+END_bar
 * Org TODO keywords                                                    :todo:
 ** Post with a TODO heading
 :PROPERTIES:

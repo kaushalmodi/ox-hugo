@@ -83,6 +83,7 @@ Note that this variable is *only* for internal use.")
                      (plain-list . org-blackfriday-plain-list)
                      (plain-text . org-blackfriday-plain-text)
                      (quote-block . org-blackfriday-quote-block)
+                     (special-block . org-blackfriday-special-block)
                      (src-block . org-blackfriday-src-block)
                      (strike-through . org-blackfriday-strike-through)
                      (table-cell . org-blackfriday-table-cell)
@@ -523,6 +524,41 @@ communication channel."
             ;; separated by a comment.
             (when next-is-quote
               "\n\n<!--quoteend-->"))))
+
+;;;; Special Block
+(defun org-blackfriday-special-block (special-block contents _info)
+  "Transcode a SPECIAL-BLOCK element from Org to HTML.
+CONTENTS holds the contents of the block.
+
+This function is adapted from `org-html-special-block'."
+  (let* ((block-type (org-element-property :type special-block))
+         (html5-fancy (member block-type org-html-html5-elements))
+         (attributes (org-export-read-attribute :attr_html special-block)))
+    (unless html5-fancy
+      (let ((class (plist-get attributes :class)))
+        (setq attributes (plist-put attributes :class
+                                    (if class
+                                        (concat class " " block-type)
+                                      block-type)))))
+    (let* ((contents (or contents ""))
+           ;; If #+NAME is specified, use that for the HTML element
+           ;; "id" attribute.
+	   (name (org-element-property :name special-block))
+	   (attr-str (org-html--make-attribute-string
+	              (if (or (not name) (plist-member attributes :id))
+		          attributes
+		        (plist-put attributes :id name))))
+	   (attr-str (if (org-string-nw-p attr-str)
+                         (concat " " attr-str)
+                       "")))
+      ;; The empty HTML element tags like "<div></div>" is a hack to
+      ;; get around a Blackfriday limitation.  Details:
+      ;; https://github.com/kaushalmodi/ox-hugo/issues/93.
+      (if html5-fancy
+	  (format "<%s%s>\n<%s></%s>\n\n%s\n</%s>"
+                  block-type attr-str block-type block-type contents block-type)
+	(format "<div%s>\n<div></div>\n\n%s\n</div>"
+                attr-str contents)))))
 
 ;;;; Src Block
 (defun org-blackfriday-src-block (src-block _contents info)

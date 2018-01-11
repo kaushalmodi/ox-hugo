@@ -286,7 +286,7 @@ doesn't matter in equations.
 (add-hook 'org-export-before-processing-hook #'org-blackfriday--reset-org-blackfriday--code-block-num-backticks)
 
 ;;;; Make CSS property string
-(defun org-hugo--make-css-property-string (props)
+(defun org-blackfriday--make-css-property-string (props)
   "Return a list of CSS properties, as a string.
 PROPS is a plist where values are either strings or nil.  A prop
 with a nil value will be omitted from the result.
@@ -761,7 +761,7 @@ contextual information."
          (table-class-this (car (split-string table-class)))
          ;; https://www.w3schools.com/css/css_table.asp
          (css-props (org-export-read-attribute :attr_css table))
-         (css-props-str (org-hugo--make-css-property-string css-props))
+         (css-props-str (org-blackfriday--make-css-property-string css-props))
          (table-pre "")
          (table-post "")
          (tbl (replace-regexp-in-string "\n\n" "\n" contents)))

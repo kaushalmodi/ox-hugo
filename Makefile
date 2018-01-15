@@ -1,4 +1,4 @@
-# Time-stamp: <2017-12-19 13:18:21 kmodi>
+# Time-stamp: <2018-01-15 10:33:39 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -66,11 +66,6 @@ ORG_FILE=
 FUNC=
 
 test_check=1
-
-# Cannot run tests on the following files, because:
-# - auto-set-lastmod.org - the lastmod field will always get updated.
-# - screenshot-subtree-export-example.org - sets the org-hugo-footer using Local Variables.
-# - writing-hugo-blog-in-org-file-export.org - sets the org-hugo-footer using Local Variables.
 
 .PHONY: help emacs-batch md1 vcheck hugo hugo_doc hugo_test serve server diff \
 	test md testmkgold \
@@ -167,7 +162,7 @@ testmkgold:
 	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/content-golden
 	@cp -rf $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
-# Run the md1 + diffgolden rules in loop on all of $(subtree_test_files)
+# Run the md1 + diffgolden rules in loop on all of $(test_org_files)
 # https://stackoverflow.com/a/37748952/1219634
 do_test: $(test_org_files)
 $(test_org_files):

@@ -333,7 +333,7 @@ get escaped.. =foo_bar= must not become =foo\_bar=.
 :END:
 This post will be exported without =title= in the front-matter because
 it is explicitly set to /empty/ using =:EXPORT_TITLE:=.
-** En dash --, Em dash ---, Horizontal ellipsis ... in titles          :@upstream:
+** En dash --, Em dash ---, Horizontal ellipsis ... in titles     :@upstream:
 :PROPERTIES:
 :EXPORT_FILE_NAME: en-dash-em-dash-hellip-in-titles
 :END:
@@ -1281,6 +1281,21 @@ with =md= language).
 *It is necessary to set the Hugo site config variable
 =pygmentsCodeFences= to =true= for syntax highlighting to work for
 fenced code blocks.*
+** Source blocks with ATTR_HTML                      :attr___html:attr___css:
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-blocks-with-attr-html
+:END:
+Some text.
+
+#+ATTR_HTML: :class indent-block
+#+ATTR_CSS: :padding-left 50px
+#+BEGIN_SRC emacs-lisp
+(message (mapconcat #'identity
+                    '("Hello," "how" "are" "you?")
+                    " "))
+#+END_SRC
+
+Some more text.
 ** Org Source Block via Pygments                          :pygments:noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-source-block-pygments
@@ -1441,7 +1456,21 @@ line 23
 line 33
 line 34
 #+END_EXAMPLE
+** Example blocks with ATTR_HTML                     :attr___html:attr___css:
+:PROPERTIES:
+:EXPORT_FILE_NAME: example-blocks-with-attr-html
+:END:
+Some text.
 
+#+ATTR_HTML: :class indent-block
+#+ATTR_CSS: :padding-left 50px
+#+BEGIN_EXAMPLE
+This is an example
+Line 2
+Line 3
+#+END_EXAMPLE
+
+Some more text.
 * Menu in front matter                                                 :menu:
 ** Menu Meta Data in TOML Front Matter
 :PROPERTIES:

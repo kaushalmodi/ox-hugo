@@ -969,11 +969,12 @@ created.
 
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
-  (let ((text (org-export-format-code-default example-block info))
-        ;; See `org-element-example-block-parser' for all EXAMPLE-BLOCK properties.
-        (number-lines (org-element-property :number-lines example-block))) ;Non-nil if -n or +n switch is used
+  (let (;; See `org-element-example-block-parser' for all EXAMPLE-BLOCK properties.
+        (number-lines (org-element-property :number-lines example-block)) ;Non-nil if -n or +n switch is used
+        ret)
     (if number-lines
-        (let* ((linenostart-str (progn
+        (let* ((text (org-export-format-code-default example-block info))
+               (linenostart-str (progn
                                   ;; Extract the start line number of the example block.
                                   (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" text)
                                   (match-string-no-properties 1 text)))
@@ -982,8 +983,10 @@ information."
           ;; line as the Hugo highlight shortcode will be used instead
           ;; of literally inserting the line numbers.
           (setq text (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" text))
-          (format "{{< highlight text %s>}}\n%s{{< /highlight >}}\n" linenos-str text))
-      (org-blackfriday-example-block example-block nil info))))
+          (setq text (format "{{< highlight text %s>}}\n%s{{< /highlight >}}\n" linenos-str text))
+          (setq ret (org-blackfriday--div-wrap-maybe example-block text)))
+      (setq ret (org-blackfriday-example-block example-block nil info)))
+    ret))
 
 ;;;; Export Snippet
 (defun org-hugo-export-snippet (export-snippet _contents _info)
@@ -1624,6 +1627,7 @@ channel."
                       (format highlight-args-str linenos-str hllines-str)
                       code)))))
     (setq ret (concat label content caption-html))
+    (setq ret (org-blackfriday--div-wrap-maybe src-block ret))
     ret))
 
 

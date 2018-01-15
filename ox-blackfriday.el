@@ -360,22 +360,23 @@ CONTENTS is nil.  INFO is a plist holding contextual
 information."
   (let* ((parent-element (org-export-get-parent example-block))
          (parent-type (car parent-element))
-         (backticks (make-string org-blackfriday--code-block-num-backticks ?`)))
+         (backticks (make-string org-blackfriday--code-block-num-backticks ?`))
+         ret)
     ;; (message "[ox-bf example-block DBG]")
     ;; (message "[ox-bf example-block DBG] parent type: %S" parent-type)
-    (prog1
-        (format "%stext\n%s%s"
-                backticks
-                (org-export-format-code-default example-block info)
-                backticks)
-      (when (equal 'quote-block parent-type)
-        ;; If the current example block is inside a quote block,
-        ;; future example/code blocks (especially the ones outside
-        ;; this quote block) will require higher number of backticks.
-        ;; Workaround for
-        ;; https://github.com/russross/blackfriday/issues/407.
-        (setq org-blackfriday--code-block-num-backticks
-              (1+ org-blackfriday--code-block-num-backticks))))))
+    (setq ret (format "%stext\n%s%s"
+                      backticks
+                      (org-export-format-code-default example-block info)
+                      backticks))
+    (setq ret (org-blackfriday--div-wrap-maybe example-block ret))
+    (when (equal 'quote-block parent-type)
+      ;; If the current example block is inside a quote block, future
+      ;; example/code blocks (especially the ones outside this quote
+      ;; block) will require higher number of backticks.  Workaround
+      ;; for https://github.com/russross/blackfriday/issues/407.
+      (setq org-blackfriday--code-block-num-backticks
+            (1+ org-blackfriday--code-block-num-backticks)))
+    ret))
 
 ;;;; Fixed Width
 (defun org-blackfriday-fixed-width (fixed-width _contents info)

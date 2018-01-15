@@ -563,13 +563,16 @@ communication channel."
   (let* ((next (org-export-get-next-element quote-block info))
          (next-type (org-element-type next))
          (next-is-quote (eq 'quote-block next-type))
-         (contents (org-md-quote-block quote-block contents info)))
+         (contents (org-md-quote-block quote-block contents info))
+         ret)
     ;; (message "[ox-bf quote-block DBG]")
-    (concat contents
-            ;; Two consecutive blockquotes in Markdown can be
-            ;; separated by a comment.
-            (when next-is-quote
-              "\n\n<!--quoteend-->"))))
+    (setq ret (org-blackfriday--div-wrap-maybe quote-block contents))
+    (setq ret (concat ret
+                      ;; Two consecutive blockquotes in Markdown can be
+                      ;; separated by a comment.
+                      (when next-is-quote
+                        "\n\n<!--quoteend-->")))
+    ret))
 
 ;;;; Special Block
 (defun org-blackfriday-special-block (special-block contents _info)

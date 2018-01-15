@@ -2583,6 +2583,19 @@ Some quoted text.
     #+END_EXAMPLE
 #+END_QUOTE
 Some other text.
+** Quote blocks with ATTR_HTML                       :attr___html:attr___css:
+:PROPERTIES:
+:EXPORT_FILE_NAME: quote-blocks-with-attr-html
+:END:
+Some text.
+
+#+ATTR_HTML: :class red-text
+#+ATTR_CSS: :color red
+#+BEGIN_QUOTE
+This is a red quote.
+#+END_QUOTE
+
+Some more text.
 * Verse                                                               :verse:
 ** One verse
 :PROPERTIES:

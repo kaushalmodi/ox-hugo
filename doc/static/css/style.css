@@ -110,10 +110,17 @@ ul.task-list {
 }
 
 /* Captions */
+figcaption,
 .src-block-caption,
 .table-caption {
     font-style: italic;
     text-align: center;
+}
+
+/* Don't underline captions in hyperlinked images */
+figure a,
+figure a:hover {
+    text-decoration: none;
 }
 
 /* Sane Table */

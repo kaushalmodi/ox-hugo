@@ -304,7 +304,7 @@ many other tweaks. =ox-hugo= backend extends from this.
 :PROPERTIES:
 :CUSTOM_ID: installation
 :END:
-This package requires emacs 24.5+ and Org 9.0+. It is available on
+This package requires emacs 24.4+ and Org 9.0+. It is available on
 Melpa ([[https://melpa.org/#/ox-hugo]]).
 ** COMMENT Usage
 :PROPERTIES:

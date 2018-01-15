@@ -81,7 +81,7 @@ presentation styles./
 - [[https://scripter.co]] -- My blog
 
 * Installation
-This package requires emacs 24.5+ and Org 9.0+. It is available on
+This package requires emacs 24.4+ and Org 9.0+. It is available on
 Melpa ([[https://melpa.org/#/ox-hugo]]).
 * Usage
 Once the package is installed, you will need to /require/ it so that

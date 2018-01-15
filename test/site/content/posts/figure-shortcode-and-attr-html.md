@@ -39,6 +39,7 @@ below image, caption is set using that:
 Some text before image.
 
 {{<figure src="/images/org-mode-unicorn-logo.png" caption="A unicorn!">}}
+
 Some more text, after image.
 
 Below, the same caption is set using the `#+ATTR_HTML` method instead:
@@ -46,7 +47,11 @@ Below, the same caption is set using the `#+ATTR_HTML` method instead:
 Some text before image.
 
 {{<figure src="/images/org-mode-unicorn-logo.png" caption="A unicorn!">}}
-Some more text, after image.
+
+_Enter a new line after the image link so that it's in an "Org
+paragraph" that contains just that image. That tells Org that that
+`#+ATTR_HTML` attribute is associated **only** with that image, and not
+to the text that follows that image too._
 
 
 ## Setting image size {#setting-image-size}

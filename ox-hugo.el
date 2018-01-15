@@ -1484,6 +1484,24 @@ communication channel."
     ;; (message "[org-hugo-paragraph DBG] para: %s" contents)
     (setq ret (concat label
                       (org-md-paragraph paragraph contents info)))
+
+    ;; Wrap the paragraph with HTML div tag with user-specified
+    ;; attributes, unless the paragraph is a standalone image (or few
+    ;; other conditions as shown below).  These conditions are taken
+    ;; from `org-html-paragraph'.
+    (let* ((parent (org-export-get-parent paragraph))
+	   (parent-type (org-element-type parent)))
+      (unless (or
+               ;; First paragraph in an item has no tag if it is alone
+               ;; or followed, at most, by a sub-list.
+               (and (eq parent-type 'item)
+	            (not (org-export-get-previous-element paragraph info))
+	            (let ((followers (org-export-get-next-element paragraph info 2)))
+	              (and (not (cdr followers))
+		           (memq (org-element-type (car followers)) '(nil plain-list)))))
+               ;; Standalone image.
+               (org-html-standalone-image-p paragraph info))
+        (setq ret (org-blackfriday--div-wrap-maybe paragraph ret))))
     ret))
 
 ;;;; Source Blocks

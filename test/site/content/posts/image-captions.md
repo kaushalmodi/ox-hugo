@@ -8,4 +8,5 @@ draft = false
 Some text before image.
 
 {{<figure src="/images/org-mode-unicorn-logo.png" caption="A unicorn!">}}
+
 Some more text, after image.

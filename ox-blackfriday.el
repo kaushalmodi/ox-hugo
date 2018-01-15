@@ -304,6 +304,44 @@ This function is adapted from `org-html--make-attribute-string'."
                            "\"" "&quot;" (org-html-encode-plain-text item))))
                (setcar ret (format "%s: %s; " key value))))))))
 
+;;;; Wrap with HTML attributes
+(defun org-blackfriday--div-wrap-maybe (elem contents)
+  "Wrap the CONTENTS with HTML div tags.
+
+The div wrapping is done only if HTML attributes are set for the
+ELEM Org element using #+ATTR_HTML.
+
+If #+ATTR_CSS is also used, and if a class is specified in
+#+ATTR_HTML, then an inline style is also inserted that applies
+the specified CSS to that class."
+  (let* ((elem-type (org-element-type elem))
+         (attr (let ((attr1 (org-export-read-attribute :attr_html elem)))
+                 (when (equal elem-type 'paragraph)
+                   ;; Remove "target" and "rel" attributes from the
+                   ;; list of a paragraph's HTML attributes as they
+                   ;; would be meant for links inside the paragraph
+                   ;; instead of the paragraph itself.
+                   (plist-put attr1 :target nil)
+                   (plist-put attr1 :rel nil))
+                 attr1))
+         (attr-str (org-html--make-attribute-string attr)))
+    (if (org-string-nw-p attr-str)
+        (let ((class (plist-get attr :class))
+              (style-str ""))
+          (when class
+            (let* ((css-props (org-export-read-attribute :attr_css elem))
+                   (css-props-str (org-blackfriday--make-css-property-string css-props)))
+              (when (org-string-nw-p css-props-str)
+                (setq style-str (format "<style>.%s { %s }</style>\n\n"
+                                        class css-props-str)))))
+
+          (concat style-str
+                  (format "<div %s>\n" attr-str)
+                  "  <div></div>\n\n"   ;See footnote 1
+                  contents
+                  "\n</div>"))
+      contents)))
+
 
 
 ;;; Transcode Functions
@@ -551,13 +589,10 @@ This function is adapted from `org-html-special-block'."
 	   (attr-str (if (org-string-nw-p attr-str)
                          (concat " " attr-str)
                        "")))
-      ;; The empty HTML element tags like "<div></div>" is a hack to
-      ;; get around a Blackfriday limitation.  Details:
-      ;; https://github.com/kaushalmodi/ox-hugo/issues/93.
       (if html5-fancy
-	  (format "<%s%s>\n<%s></%s>\n\n%s\n</%s>"
+	  (format "<%s%s>\n<%s></%s>\n\n%s\n</%s>" ;See footnote 1
                   block-type attr-str block-type block-type contents block-type)
-	(format "<div%s>\n<div></div>\n\n%s\n</div>"
+	(format "<div%s>\n<div></div>\n\n%s\n</div>" ;See footnote 1
                 attr-str contents)))))
 
 ;;;; Src Block
@@ -766,9 +801,6 @@ contextual information."
          (table-post "")
          (tbl (replace-regexp-in-string "\n\n" "\n" contents)))
 
-    ;; This is a nasty workaround till Hugo/Blackfriday support
-    ;; wrapping Markdown in HTML div's -
-    ;; https://github.com/kaushalmodi/ox-hugo/issues/93.
     (when (org-string-nw-p css-props-str)
       (setq table-pre (format "<style>.%s table { %s }</style>\n\n"
                               table-class-this css-props-str)))
@@ -777,7 +809,7 @@ contextual information."
               (org-string-nw-p css-props-str))
       (setq table-pre (concat table-pre
                               (format "<div class=\"ox-hugo-table %s\">\n" table-class)
-                              "<div></div>\n\n")))
+                              "<div></div>\n\n"))) ;See footnote 1
     (when (org-string-nw-p table-pre)
       (setq table-post (concat "\n"
                                "</div>\n")))
@@ -907,5 +939,14 @@ Return output file name."
 
 
 (provide 'ox-blackfriday)
+
+
+
+;;; Footnotes
+
+;;;; Footnote 1
+;; The empty HTML element tags like "<div></div>" is a hack to get
+;; around a Blackfriday limitation.  Details:
+;; https://github.com/kaushalmodi/ox-hugo/issues/93.
 
 ;;; ox-blackfriday.el ends here

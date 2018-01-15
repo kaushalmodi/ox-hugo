@@ -112,8 +112,10 @@ copied location inside =static=:
 :CUSTOM_ID: image-captions
 :END:
 Some text before image.
+
 #+CAPTION: A unicorn!
 [[/images/org-mode-unicorn-logo.png]]
+
 Some more text, after image.
 ** Image with Hugo =figure= shortcode parameters set using =ATTR_HTML=
 :PROPERTIES:
@@ -163,9 +165,14 @@ below image, caption is set using that:
 Below, the same caption is set using the =#+ATTR_HTML= method instead:
 
 Some text before image.
+
 #+ATTR_HTML: :caption A unicorn!
 [[/images/org-mode-unicorn-logo.png]]
-Some more text, after image.
+
+/Enter a new line after the image link so that it's in an "Org
+paragraph" that contains just that image. That tells Org that that
+=#+ATTR_HTML= attribute is associated *only* with that image, and not
+to the text that follows that image too./
 *** Setting image size
 **** Setting =:width= parameter
 The image [[https://www.w3schools.com/tags/att_img_width.asp][width]] can be specified in *pixels* using the =:width=
@@ -2699,6 +2706,24 @@ This is /some text/ wrapped in a =div= block with class =something=.
 | s | t | u |
 | v | w | x |
 #+END_bar
+* Paragraphs                                                      :paragraph:
+** Paragraphs with ATTR_HTML                         :attr___html:attr___css:
+:PROPERTIES:
+:EXPORT_FILE_NAME: paragraphs-with-attr-html
+:END:
+Regular text.
+
+#+ATTR_HTML: :class red-text
+#+ATTR_CSS: :color red
+Red text.
+
+Regular text.
+
+#+ATTR_HTML: :class green-text
+#+ATTR_CSS: :color green
+Green text.
+
+Regular text.
 * Org TODO keywords                                                    :todo:
 ** Post with a TODO heading
 :PROPERTIES:

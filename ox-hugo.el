@@ -1301,11 +1301,6 @@ and rewrite link paths to make blogging more seamless."
              (useful-parent (if grand-parent
                                 grand-parent
                               parent))
-             (label (let ((lbl (and (org-element-property :name useful-parent)
-                                    (org-export-get-reference useful-parent info))))
-                      (if lbl
-                          (format "<a id=\"%s\"></a>\n" lbl)
-                        "")))
              (attr (org-export-read-attribute :attr_html useful-parent))
              ;; Hugo `figure' shortcode named parameters
              ;; https://gohugo.io/content-management/shortcodes/#figure
@@ -1337,7 +1332,7 @@ and rewrite link paths to make blogging more seamless."
                                              (format "%s=\"%s\" "
                                                      name val))))))
         ;; (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
-        (format "%s{{<figure %s>}}" label (org-trim figure-param-str))))
+        (format "{{<figure %s>}}" (org-trim figure-param-str))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
         (format (org-export-get-coderef-format ref contents)
@@ -1467,19 +1462,29 @@ INFO is a plist used as a communication channel."
   "Transcode PARAGRAPH element into Hugo Markdown format.
 CONTENTS is the paragraph contents.  INFO is a plist used as a
 communication channel."
-  (unless (org-hugo--plist-get-true-p info :hugo-preserve-filling)
-    (setq contents (concat (mapconcat 'identity (split-string contents) " ") "\n")))
-  ;; Glue footnotes to the words before them using &nbsp; so that the
-  ;; footnote reference does not end up on a new line by itself.
-  (setq contents (replace-regexp-in-string
-                  ;; "something FN" -> "something&nbsp;FN"
-                  "[[:blank:]]+\\(\\[\\^[^]]+\\]\\)" "&nbsp;\\1"
-                  (replace-regexp-in-string
-                   ;; "FN ." -> "FN."
-                   "\\(\\[\\^[^]]+\\]\\)[[:blank:]]*\\([.]+\\)" "\\1\\2"
-                   contents)))
-  ;; (message "[org-hugo-paragraph DBG] para: %s" contents)
-  (org-md-paragraph paragraph contents info))
+  (let (;; The label is mainly for paragraphs that are standalone
+        ;; images with #+NAME keyword.
+        (label (let ((lbl (and (org-element-property :name paragraph)
+                               (org-export-get-reference paragraph info))))
+                 (if lbl
+                     (format "<a id=\"%s\"></a>\n" lbl)
+                   "")))
+        ret)
+    (unless (org-hugo--plist-get-true-p info :hugo-preserve-filling)
+      (setq contents (concat (mapconcat 'identity (split-string contents) " ") "\n")))
+    ;; Glue footnotes to the words before them using &nbsp; so that the
+    ;; footnote reference does not end up on a new line by itself.
+    (setq contents (replace-regexp-in-string
+                    ;; "something FN" -> "something&nbsp;FN"
+                    "[[:blank:]]+\\(\\[\\^[^]]+\\]\\)" "&nbsp;\\1"
+                    (replace-regexp-in-string
+                     ;; "FN ." -> "FN."
+                     "\\(\\[\\^[^]]+\\]\\)[[:blank:]]*\\([.]+\\)" "\\1\\2"
+                     contents)))
+    ;; (message "[org-hugo-paragraph DBG] para: %s" contents)
+    (setq ret (concat label
+                      (org-md-paragraph paragraph contents info)))
+    ret))
 
 ;;;; Source Blocks
 (defun org-hugo-src-block (src-block _contents info)

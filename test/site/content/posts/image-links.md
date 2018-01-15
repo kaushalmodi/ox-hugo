@@ -47,8 +47,16 @@ tag and look the same size.
 Click below image to jump to the unicorn image.
 [{{<figure src="/images/org-mode-unicorn-logo.png">}}](/images/org-mode-unicorn-logo.png)
 
--   **NOTE:** `file:` has to be used in both Link and Description components
-    of the Org link.
+-   **NOTE:** `file:` has to be used in the **Description component** of the
+    Org link.
+
+---
+
+Here's the same link with `#+NAME` specified.. which should also be
+clickable.
+
+<a id="orgf772560"></a>
+[{{<figure src="/images/org-mode-unicorn-logo.png">}}](/images/org-mode-unicorn-logo.png)
 
 
 ## Link to image outside of standard Hugo `static` directory {#link-to-image-outside-of-standard-hugo-static-directory}

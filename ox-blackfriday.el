@@ -320,7 +320,10 @@ ELEM Org element using #+ATTR_HTML.
 
 If #+ATTR_CSS is also used, and if a class is specified in
 #+ATTR_HTML, then an inline style is also inserted that applies
-the specified CSS to that class."
+the specified CSS to that class.
+
+If CONTENTS is nil, and #+ATTR_CSS is used, return only the HTML
+style tag."
   (let* ((elem-type (org-element-type elem))
          (attr (let ((attr1 (org-export-read-attribute :attr_html elem)))
                  (when (equal elem-type 'paragraph)
@@ -331,23 +334,24 @@ the specified CSS to that class."
                    (plist-put attr1 :target nil)
                    (plist-put attr1 :rel nil))
                  attr1))
-         (attr-str (org-html--make-attribute-string attr)))
-    (if (org-string-nw-p attr-str)
-        (let ((class (plist-get attr :class))
-              (style-str ""))
-          (when class
-            (let* ((css-props (org-export-read-attribute :attr_css elem))
-                   (css-props-str (org-blackfriday--make-css-property-string css-props)))
-              (when (org-string-nw-p css-props-str)
-                (setq style-str (format "<style>.%s { %s }</style>\n\n"
-                                        class css-props-str)))))
+         (attr-str (org-html--make-attribute-string attr))
+         (ret contents))
+    (when (org-string-nw-p attr-str)
+      (let ((class (plist-get attr :class))
+            (style-str ""))
+        (when class
+          (let* ((css-props (org-export-read-attribute :attr_css elem))
+                 (css-props-str (org-blackfriday--make-css-property-string css-props)))
+            (when (org-string-nw-p css-props-str)
+              (setq style-str (format "<style>.%s { %s }</style>\n\n"
+                                      class css-props-str)))))
 
-          (concat style-str
-                  (format "<div %s>\n" attr-str)
-                  "  <div></div>\n\n"   ;See footnote 1
-                  contents
-                  "\n</div>"))
-      contents)))
+        (setq ret (concat style-str
+                          (if contents
+                              (format "<div %s>\n  <div></div>\n\n%s\n</div>" ;See footnote 1
+                                      attr-str contents)
+                            "")))))
+    ret))
 
 
 
@@ -513,18 +517,23 @@ INFO is a plist holding contextual information."
   "Transcode PLAIN-LIST element into Blackfriday Markdown format.
 CONTENTS is the plain-list contents.  INFO is a plist used as a
 communication channel."
-  (if (org-blackfriday--ordered-list-with-custom-counter-p plain-list)
-      ;; If this is an ordered list and if any item in this list is
-      ;; using a custom counter, export this list in HTML.
-      (org-html-plain-list plain-list contents info)
-    (let* ((next (org-export-get-next-element plain-list info))
-           (next-type (org-element-type next))
-           (next-is-list (eq 'plain-list next-type)))
-      (concat contents
-              ;; Two consecutive lists in Markdown can be separated by
-              ;; a comment.
-              (when next-is-list
-                "\n<!--listend-->")))))
+  (let (ret)
+    (if (org-blackfriday--ordered-list-with-custom-counter-p plain-list)
+        ;; If this is an ordered list and if any item in this list is
+        ;; using a custom counter, export this list in HTML.
+        (setq ret (concat
+                   (org-blackfriday--div-wrap-maybe plain-list nil)
+                   (org-html-plain-list plain-list contents info)))
+      (let* ((next (org-export-get-next-element plain-list info))
+             (next-type (org-element-type next))
+             (next-is-list (eq 'plain-list next-type)))
+        (setq ret (org-blackfriday--div-wrap-maybe plain-list contents))
+        (setq ret (concat ret
+                          ;; Two consecutive lists in Markdown can be
+                          ;; separated by a comment.
+                          (when next-is-list
+                            "\n<!--listend-->")))))
+    ret))
 
 ;;;; Plain Text
 (defun org-blackfriday-plain-text (text info)

@@ -1,9 +1,11 @@
 +++
 title = "Force ordered list numbering"
 date = 2017-08-01
-tags = ["lists"]
+tags = ["lists", "custom-counter"]
 draft = false
 +++
+
+Ordered lists with custom counter.
 
 1.  This will be 1.
 2.  This will be 2.

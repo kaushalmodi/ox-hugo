@@ -2414,11 +2414,13 @@ element than the /bar*/ items.
       - zoo2
         1. numbered1
         2. numbered2
-** Force ordered list numbering
+** Force ordered list numbering                              :custom_counter:
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01
 :EXPORT_FILE_NAME: force-ordered-list-numbering
 :END:
+Ordered lists with custom counter.
+
 1. This will be 1.
 1. This will be 2.
 
@@ -2467,6 +2469,38 @@ Checklist showing progress in ratio.
 - [X] Task 3
 - [ ] Task 4
 - [X] Task 5
+** Plain lists with ATTR_HTML         :attr___html:attr___css:custom_counter:
+:PROPERTIES:
+:EXPORT_FILE_NAME: lists-with-attr-html
+:END:
+*** Unordered lists
+#+ATTR_HTML: :class red-text
+#+ATTR_CSS: :color red
+- Red list item 1
+- Red list item 2
+
+#+ATTR_HTML: :class green-text
+#+ATTR_CSS: :color green
+- Green list item 1
+- Green list item 2
+*** Ordered lists
+#+ATTR_HTML: :class green-text
+1. Green ordered list item 1
+2. Green ordered list item 2
+
+/The =green-text= style is defined in the list above this one./
+**** Ordered list with custom counter
+#+ATTR_HTML: :class blue-text
+#+ATTR_CSS: :color blue
+1. Blue list item 1
+2. Blue list item 2
+3. [@10]Blue list item 10
+*** Definition lists
+#+ATTR_HTML: :class red-text
+- Defn A :: Something A in red
+- Defn B :: Something B in red
+
+/The =red-text= style is defined in the first list above./
 * Quotes                                                             :quotes:
 ** Consecutive quotes
 :PROPERTIES:

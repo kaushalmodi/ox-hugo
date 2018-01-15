@@ -2685,6 +2685,12 @@ This is /an article/.
 | g | h | i |
 | j | k | l |
 #+END_section
+*** An inline HTML5 element
+Unmarked.
+#+BEGIN_mark
+/Some/ *marked* text --- 2.5.
+#+END_mark
+Unmarked again.
 ** DIV-wrapped Blocks
 *** DIV without NAME, class or id
 #+BEGIN_something

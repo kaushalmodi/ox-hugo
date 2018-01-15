@@ -30,6 +30,13 @@
 (defconst org-blackfriday-table-right-border " ")
 (defconst org-blackfriday-table-separator "| ")
 
+(defconst org-blackfriday-html5-inline-elements
+  '("audio" "details" "command" "datalist" "mark" "meter"
+    "nav" "source" "summary" "time")
+  "New inline elements in html5.
+
+http://itman.in/en/inline-elements-html5/.")
+
 (defvar org-blackfriday--hrule-inserted nil
   "State variable to track if the horizontal rule was inserted.
 This check is specifically track if that horizontal rule was
@@ -570,7 +577,9 @@ CONTENTS holds the contents of the block.
 
 This function is adapted from `org-html-special-block'."
   (let* ((block-type (org-element-property :type special-block))
-         (html5-fancy (member block-type org-html-html5-elements))
+         (html5-inline-fancy (member block-type org-blackfriday-html5-inline-elements))
+         (html5-block-fancy (member block-type org-html-html5-elements))
+         (html5-fancy (or html5-inline-fancy html5-block-fancy))
          (attributes (org-export-read-attribute :attr_html special-block)))
     (unless html5-fancy
       (let ((class (plist-get attributes :class)))
@@ -589,11 +598,16 @@ This function is adapted from `org-html-special-block'."
 	   (attr-str (if (org-string-nw-p attr-str)
                          (concat " " attr-str)
                        "")))
-      (if html5-fancy
-	  (format "<%s%s>\n<%s></%s>\n\n%s\n</%s>" ;See footnote 1
-                  block-type attr-str block-type block-type contents block-type)
+      (cond
+       (html5-inline-fancy
+	(format "<%s%s>%s</%s>"
+                block-type attr-str contents block-type))
+       (html5-block-fancy
+	(format "<%s%s>\n<%s></%s>\n\n%s\n</%s>" ;See footnote 1
+                block-type attr-str block-type block-type contents block-type))
+       (t
 	(format "<div%s>\n<div></div>\n\n%s\n</div>" ;See footnote 1
-                attr-str contents)))))
+                attr-str contents))))))
 
 ;;;; Src Block
 (defun org-blackfriday-src-block (src-block _contents info)

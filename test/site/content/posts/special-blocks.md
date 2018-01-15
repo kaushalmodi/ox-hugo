@@ -45,6 +45,16 @@ _Some_ **text** --- 2
 </section>
 
 
+### An inline HTML5 element {#an-inline-html5-element}
+
+Unmarked.
+
+<mark>_Some_ **marked** text --- 2.5.
+</mark>
+
+Unmarked again.
+
+
 ## DIV-wrapped Blocks {#div-wrapped-blocks}
 
 

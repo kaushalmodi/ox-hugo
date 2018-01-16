@@ -453,7 +453,20 @@ as a communication channel."
 (defun org-blackfriday-item (item contents info)
   "Transcode an ITEM element into Blackfriday Markdown format.
 CONTENTS holds the contents of the item.  INFO is a plist holding
-contextual information."
+contextual information.
+
+Special note about descriptive lists:
+
+Blackfriday style descriptive list syntax is used if that list is
+not nested in another list.
+
+    Term1
+    : Description of term 1
+
+If that list is nested, `ox-md' style descriptive list is
+exported instead:
+
+    -   **Term1:** Description of term 1."
   (let* ((parent-list (org-export-get-parent item)))
     ;; If this item is in an ordered list and if this or any other
     ;; item in this list is using a custom counter, export this list
@@ -476,13 +489,13 @@ contextual information."
              ;; when that list is nested).
              (ox-md-style-desc-list (and desc-list? list-is-nested))
              (bf-style-desc-list (and desc-list? (not list-is-nested)))
-	     (struct (org-element-property :structure item))
+             (struct (org-element-property :structure item))
              (item-num (car (last (org-list-get-item-number
-				   (org-element-property :begin item)
-				   struct
-				   (org-list-prevs-alist struct)
-				   (org-list-parents-alist struct)))))
-	     (bullet (cond
+                                   (org-element-property :begin item)
+                                   struct
+                                   (org-list-prevs-alist struct)
+                                   (org-list-parents-alist struct)))))
+             (bullet (cond
                       ((or (eq parent-list-type 'unordered)
                            ox-md-style-desc-list)
                        "-")
@@ -492,7 +505,7 @@ contextual information."
                        (when (> item-num 1)
                          "\n")))) ;Newline between each descriptive list item
              (padding (unless bf-style-desc-list
-	                (make-string (- 4 (length bullet)) ? )))
+                        (make-string (- 4 (length bullet)) ? )))
              (tag (when desc-list?
                     (let* ((tag1 (org-element-property :tag item))
                            (tag1-str (org-export-data tag1 info)))
@@ -502,13 +515,13 @@ contextual information."
                           (format "%s\n: " tag1-str)))))))
         (concat bullet
                 padding
-	        (pcase (org-element-property :checkbox item)
-	          (`on "[X] ")
-	          (`trans "[-] ")
-	          (`off "[ ] "))
+                (pcase (org-element-property :checkbox item)
+                  (`on "[X] ")
+                  (`trans "[-] ")
+                  (`off "[ ] "))
                 tag
-	     	(and contents
-		     (org-trim (replace-regexp-in-string "^" "    " contents))))))))
+                (and contents
+                     (org-trim (replace-regexp-in-string "^" "    " contents))))))))
 
 ;;;; Latex Environment
 (defun org-blackfriday-latex-environment (latex-environment _contents info)
@@ -650,23 +663,23 @@ This function is adapted from `org-html-special-block'."
     (let* ((contents (or contents ""))
            ;; If #+NAME is specified, use that for the HTML element
            ;; "id" attribute.
-	   (name (org-element-property :name special-block))
-	   (attr-str (org-html--make-attribute-string
-	              (if (or (not name) (plist-member attributes :id))
-		          attributes
-		        (plist-put attributes :id name))))
-	   (attr-str (if (org-string-nw-p attr-str)
+           (name (org-element-property :name special-block))
+           (attr-str (org-html--make-attribute-string
+                      (if (or (not name) (plist-member attributes :id))
+                          attributes
+                        (plist-put attributes :id name))))
+           (attr-str (if (org-string-nw-p attr-str)
                          (concat " " attr-str)
                        "")))
       (cond
        (html5-inline-fancy
-	(format "<%s%s>%s</%s>"
+        (format "<%s%s>%s</%s>"
                 block-type attr-str contents block-type))
        (html5-block-fancy
-	(format "<%s%s>\n<%s></%s>\n\n%s\n</%s>" ;See footnote 1
+        (format "<%s%s>\n<%s></%s>\n\n%s\n</%s>" ;See footnote 1
                 block-type attr-str block-type block-type contents block-type))
        (t
-	(format "<div%s>\n<div></div>\n\n%s\n</div>" ;See footnote 1
+        (format "<div%s>\n<div></div>\n\n%s\n</div>" ;See footnote 1
                 attr-str contents))))))
 
 ;;;; Src Block
@@ -849,11 +862,11 @@ contextual information."
                            (setq table-num (org-export-get-ordinal
                                             table info
                                             nil #'org-html--has-caption-p))
-		           (format (concat "<div class=\"table-caption\">\n"
+                           (format (concat "<div class=\"table-caption\">\n"
                                            "  <span class=\"table-number\">Table %d:</span>\n"
                                            "  %s\n"
                                            "</div>\n\n")
-			           table-num caption-str))))
+                                   table-num caption-str))))
          (attr (org-export-read-attribute :attr_html table))
          ;; At the moment only the `class' attribute is supported in
          ;; #+ATTR_HTML above tables.

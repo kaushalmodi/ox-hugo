@@ -71,6 +71,27 @@
              font-style: italic;
              text-align: center;
          }
+         /* Better Description Lists */
+         /* https://gist.github.com/dmyates/8f0c8ed354a10ea32ffbcf2a363a77dd#file-recommended-css */
+         dl {
+             width: 100%;
+             overflow: hidden;
+             padding: 0;
+             margin: 0
+         }
+         dt {
+             float: left;
+             width: 20%;
+             padding-right: 0.75em;
+             margin: 0.5em 0 0.5em 0;
+             font-weight: bold;
+         }
+         dd {
+             float: left;
+             width: 75%;
+             padding: 0;
+             margin: 0.5em 0 0.5em 0;
+         }
         </style>
         {{ block "head" . }}{{ end }}
     </head>

@@ -461,7 +461,21 @@ contextual information."
     (if (org-blackfriday--ordered-list-with-custom-counter-p parent-list)
         (org-html-format-list-item contents 'ordered nil info
                                    (org-element-property :counter item))
-      (let* ((type (org-element-property :type (org-export-get-parent item)))
+      (let* ((parent-list (org-export-get-parent item))
+             (parent-list-type (org-element-property :type parent-list))
+             (desc-list? (eq parent-list-type 'descriptive))
+             (grandparent (when desc-list?
+                            (org-export-get-parent parent-list)))
+             (grandparent-type (when desc-list?
+                                 (org-element-type grandparent)))
+             (list-is-nested (eq 'item grandparent-type))
+             ;; Export the descriptive list items like that in
+             ;; ox-md.el if this descriptive list is nested in some
+             ;; other list, because the Blackfriday style descriptive
+             ;; list syntax seems to work only at top level (i.e. not
+             ;; when that list is nested).
+             (ox-md-style-desc-list (and desc-list? list-is-nested))
+             (bf-style-desc-list (and desc-list? (not list-is-nested)))
 	     (struct (org-element-property :structure item))
              (item-num (car (last (org-list-get-item-number
 				   (org-element-property :begin item)
@@ -469,18 +483,23 @@ contextual information."
 				   (org-list-prevs-alist struct)
 				   (org-list-parents-alist struct)))))
 	     (bullet (cond
-                      ((eq type 'unordered)
+                      ((or (eq parent-list-type 'unordered)
+                           ox-md-style-desc-list)
                        "-")
-                      ((eq type 'ordered)
+                      ((eq parent-list-type 'ordered)
                        (format "%d." item-num))
-                      (t                ;Descriptive
+                      (t             ;Non-nested descriptive list item
                        (when (> item-num 1)
                          "\n")))) ;Newline between each descriptive list item
-             (padding (unless (eq type 'descriptive)
+             (padding (unless bf-style-desc-list
 	                (make-string (- 4 (length bullet)) ? )))
-             (tag (when (eq type 'descriptive)
-                    (let ((tag1 (org-element-property :tag item)))
-                      (and tag1 (format "%s\n: " (org-export-data tag1 info)))))))
+             (tag (when desc-list?
+                    (let* ((tag1 (org-element-property :tag item))
+                           (tag1-str (org-export-data tag1 info)))
+                      (when tag1
+                        (if ox-md-style-desc-list
+                            (format "**%s:** " tag1-str)
+                          (format "%s\n: " tag1-str)))))))
         (concat bullet
                 padding
 	        (pcase (org-element-property :checkbox item)

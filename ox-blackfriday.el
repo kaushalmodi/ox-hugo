@@ -527,35 +527,28 @@ exported instead:
 (defun org-blackfriday-latex-environment (latex-environment _contents info)
   "Transcode a LATEX-ENVIRONMENT object into Blackfriday Markdown format.
 INFO is a plist holding contextual information."
-  (let ((latex-env (org-element-property :value latex-environment))
-        (processing-type (plist-get info :with-latex)))
-    ;; (message "[ox-bf-latex-env DBG] latex-env: %s" latex-env)
+  (let ((processing-type (plist-get info :with-latex)))
     ;; (message "[ox-bf-processing-type DBG] processing-type: %s" processing-type)
     (cond
      ((memq processing-type '(t mathjax))
-      (let* ((env (org-html-format-latex latex-env 'mathjax info))
+      (let* ((latex-env (org-element-property :value latex-environment))
+             (env (org-html-format-latex latex-env 'mathjax info))
              (env (org-blackfriday-escape-chars-in-equation env)))
+        ;; (message "[ox-bf-latex-env DBG] latex-env: %s" latex-env)
         ;; (message "[ox-bf-latex-env DBG] env: %s" env)
         env))
-     ;; Rest of the below is copied from
-     ;; `org-blackfriday-latex-fragment'.
-     ((assq processing-type org-preview-latex-process-alist)
-      (let ((formula-link
-             (org-html-format-latex latex-env processing-type info)))
-        (when (and formula-link (string-match "file:\\([^]]*\\)" formula-link))
-          (org-html--format-image (match-string 1 formula-link) nil info))))
      (t
-      latex-env))))
+      (org-html-latex-environment latex-environment nil info)))))
 
 ;;;; Latex Fragment
 (defun org-blackfriday-latex-fragment (latex-fragment _contents info)
   "Transcode a LATEX-FRAGMENT object into Blackfriday Markdown format.
 INFO is a plist holding contextual information."
-  (let ((latex-frag (org-element-property :value latex-fragment))
-        (processing-type (plist-get info :with-latex)))
+  (let ((processing-type (plist-get info :with-latex)))
     (cond
      ((memq processing-type '(t mathjax))
-      (let* ((frag (org-html-format-latex latex-frag 'mathjax info))
+      (let* ((latex-frag (org-element-property :value latex-fragment))
+             (frag (org-html-format-latex latex-frag 'mathjax info))
              ;; https://gohugo.io/content-management/formats#solution
              ;; Need to escape the backslash in "\(", "\)", .. to
              ;; make Blackfriday happy.  So \( -> \\(, \) -> \\),
@@ -564,13 +557,8 @@ INFO is a plist holding contextual information."
              (frag (org-blackfriday-escape-chars-in-equation frag)))
         ;; (message "[ox-bf-latex-frag DBG] frag: %s" frag)
         frag))
-     ((assq processing-type org-preview-latex-process-alist)
-      (let ((formula-link
-             (org-html-format-latex latex-frag processing-type info)))
-        (when (and formula-link (string-match "file:\\([^]]*\\)" formula-link))
-          (org-html--format-image (match-string 1 formula-link) nil info))))
      (t
-      latex-frag))))
+      (org-html-latex-fragment latex-fragment nil info)))))
 
 ;;;; Plain List
 (defun org-blackfriday-plain-list (plain-list contents info)

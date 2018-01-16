@@ -13,4 +13,5 @@ property is auto-inserted (default behavior).
 If such a property is non-nil, the value (time-stamp) of that is used
 to set the `date` field in the exported front-matter.
 
--   **Reference:** [(org) Special properties](https://orgmode.org/manual/Special-properties.html) or `C-h i g (org) Special properties`
+Reference
+: [(org) Special properties](https://orgmode.org/manual/Special-properties.html) or `C-h i g (org) Special properties`

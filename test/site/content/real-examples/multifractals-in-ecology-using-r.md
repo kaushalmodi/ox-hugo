@@ -7,7 +7,8 @@ draft = false
 source = "https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md"
 +++
 
--   **Disclaimer:** This post is from the [link](https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md) posted by GitHub user
+Disclaimer
+: This post is from the [link](https://github.com/lsaravia/MultifractalsInR/blob/master/Curso3.md) posted by GitHub user
     [**lsaravia**](https://github.com/lsaravia) in [this comment](https://github.com/gohugoio/hugo/issues/234#issuecomment-347532166). All credit for this post
     goes to the original author.
 

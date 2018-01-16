@@ -13,8 +13,11 @@ blackfriday :
   angledQuotes : true
 ---
 
--   **Extensions enabled:** `tabSizeEight`, `hardLineBreak`
--   **Extensions disabled:** `fencedCode`, `strikethrough`
+Extensions enabled
+: `tabSizeEight`, `hardLineBreak`
+
+Extensions disabled
+: `fencedCode`, `strikethrough`
 
 
 ## Angled quotes enabled {#angled-quotes-enabled}

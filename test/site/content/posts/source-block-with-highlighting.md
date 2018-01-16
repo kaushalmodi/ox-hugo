@@ -45,9 +45,12 @@ With line numbers enabled, the highlighting is limited to the width of
 the HTML table rows (because `ox-hugo` sets the `linenos=table` option
 in the `highlight` shortcode when line numbers are enabled).
 
--   **Note 1:** When using both, switches (like `-n`), and header args
+Note 1
+: When using both, switches (like `-n`), and header args
     (like `:hl_lines`), the <span class="underline">switches have to come first</span>.
--   **Note 2:** The line numbers in the value for `:hl_lines` parameter is
+
+Note 2
+: The line numbers in the value for `:hl_lines` parameter is
     always with the starting line number reference of 1. That
     has no relation with the value of the line numbers
     displayed using the `-n` or `+n` switches!

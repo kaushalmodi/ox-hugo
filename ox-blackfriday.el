@@ -461,7 +461,35 @@ contextual information."
     (if (org-blackfriday--ordered-list-with-custom-counter-p parent-list)
         (org-html-format-list-item contents 'ordered nil info
                                    (org-element-property :counter item))
-      (org-md-item item contents info))))
+      (let* ((type (org-element-property :type (org-export-get-parent item)))
+	     (struct (org-element-property :structure item))
+             (item-num (car (last (org-list-get-item-number
+				   (org-element-property :begin item)
+				   struct
+				   (org-list-prevs-alist struct)
+				   (org-list-parents-alist struct)))))
+	     (bullet (cond
+                      ((eq type 'unordered)
+                       "-")
+                      ((eq type 'ordered)
+                       (format "%d." item-num))
+                      (t                ;Descriptive
+                       (when (> item-num 1)
+                         "\n")))) ;Newline between each descriptive list item
+             (padding (unless (eq type 'descriptive)
+	                (make-string (- 4 (length bullet)) ? )))
+             (tag (when (eq type 'descriptive)
+                    (let ((tag1 (org-element-property :tag item)))
+                      (and tag1 (format "%s\n: " (org-export-data tag1 info)))))))
+        (concat bullet
+                padding
+	        (pcase (org-element-property :checkbox item)
+	          (`on "[X] ")
+	          (`trans "[-] ")
+	          (`off "[ ] "))
+                tag
+	     	(and contents
+		     (org-trim (replace-regexp-in-string "^" "    " contents))))))))
 
 ;;;; Latex Environment
 (defun org-blackfriday-latex-environment (latex-environment _contents info)

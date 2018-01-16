@@ -58,5 +58,8 @@ element than the _bar\*_ items.
 
 <!--listend-->
 
--   **bar1:** description
--   **bar2:** description
+bar1
+: description
+
+bar2
+: description

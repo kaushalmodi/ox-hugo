@@ -47,7 +47,8 @@ tag and look the same size.
 Click below image to jump to the unicorn image.
 [{{<figure src="/images/org-mode-unicorn-logo.png">}}](/images/org-mode-unicorn-logo.png)
 
--   **NOTE:** `file:` has to be used in the **Description component** of the
+NOTE
+: `file:` has to be used in the **Description component** of the
     Org link.
 
 ---
@@ -55,7 +56,7 @@ Click below image to jump to the unicorn image.
 Here's the same link with `#+NAME` specified.. which should also be
 clickable.
 
-<a id="orgf772560"></a>
+<a id="orga7fe1df"></a>
 [{{<figure src="/images/org-mode-unicorn-logo.png">}}](/images/org-mode-unicorn-logo.png)
 
 
@@ -86,6 +87,7 @@ copied location inside `static`:
 |--------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
 | `~/temp/bar/baz/foo.png` | `<HUGO_BASE_DIR>/static/ox-hugo/foo.png` | Here, as the **outside** path does not have `/static/`, the file is copied to the `ox-hugo/` dir in Hugo `static/` dir. |
 
--   **Note:** The `ox-hugo` sub-directory name is because of the default
+Note
+: The `ox-hugo` sub-directory name is because of the default
     value of
     `org-hugo-default-static-subdirectory-for-externals`.

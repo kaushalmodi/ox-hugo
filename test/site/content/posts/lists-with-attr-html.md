@@ -52,13 +52,16 @@ _The `green-text` style is defined in the list above this one._
 </ol>
 
 
-## Definition lists {#definition-lists}
+## Definition/descriptive lists {#definition-descriptive-lists}
 
 <div class="red-text">
   <div></div>
 
--   **Defn A:** Something A in red
--   **Defn B:** Something B in red
+Defn A
+: Something A in red
+
+Defn B
+: Something B in red
 
 </div>
 

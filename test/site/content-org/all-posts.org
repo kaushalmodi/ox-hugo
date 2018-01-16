@@ -2495,7 +2495,7 @@ Checklist showing progress in ratio.
 1. Blue list item 1
 2. Blue list item 2
 3. [@10]Blue list item 10
-*** Definition lists
+*** Definition/descriptive lists
 #+ATTR_HTML: :class red-text
 - Defn A :: Something A in red
 - Defn B :: Something B in red

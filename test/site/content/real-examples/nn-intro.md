@@ -7,7 +7,8 @@ draft = false
 source = "https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md"
 +++
 
--   **Disclaimer:** This post is from the [link](https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md) posted by GitHub user
+Disclaimer
+: This post is from the [link](https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md) posted by GitHub user
     [**Vonng**](https://github.com/Vonng) in [this comment](https://github.com/gohugoio/hugo/issues/234#issuecomment-347725391). All credit for this post
     goes to the original author.
 

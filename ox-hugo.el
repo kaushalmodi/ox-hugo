@@ -604,6 +604,7 @@ newer."
         (?t "To temporary buffer"
             (lambda (a s v _b)
               (org-hugo-export-as-md a s v)))))
+;;;; translate-alist
   :translate-alist '((code . org-hugo-kbd-tags-maybe)
                      (example-block . org-hugo-example-block)
                      (export-block . org-hugo-export-block)
@@ -615,7 +616,7 @@ newer."
                      (paragraph . org-hugo-paragraph)
                      (src-block . org-hugo-src-block))
   :filters-alist '((:filter-body . org-hugo-body-filter))
-
+;;;; options-alist
   ;;                KEY                       KEYWORD                    OPTION  DEFAULT                     BEHAVIOR
   :options-alist '(;; Variables not setting the front-matter directly
                    (:with-toc nil "toc" org-hugo-export-with-toc)
@@ -689,7 +690,8 @@ newer."
                    ;; EXPORT_HUGO_CATEGORIES property can be used to
                    ;; override inherited categories and Org-style
                    ;; categories (Org-style tags with "@" prefix).
-
+                   ;; resources
+                   (:hugo-resources "HUGO_RESOURCES" nil nil)
                    ;; title
                    ;; "title" is parsed from the Org #+TITLE or the subtree heading.
                    ;; type
@@ -937,6 +939,97 @@ If hugo is not found, return nil."
           (setq short-ver-list (list major-ver minor-ver micro-ver))
           (setq short-ver (mapconcat #'number-to-string short-ver-list "."))))
       (cons long-ver short-ver))))
+
+(defun org-hugo--get-resources-alist (resources)
+  "Generate a merged RESOURCES alist.
+
+All parameters for the same \"src\" are merged together in the
+same lisp form.  Parameters that are none of \"src\", \"title\"
+or \"name\" are packed into an alist with `car' as \"params\"."
+  ;; (message "[resources IN DBG]: %S" resources)
+  (when resources
+    (let (src1 all-src src-cons src-already-exists)
+      (dolist (res resources)
+        ;; (message "res: %S" res)
+        (let ((key (car res)))
+          (cond
+           ((equal key 'src)
+            (unless (null src1)
+              (setq src1 (nreverse src1))
+              (if src-already-exists
+                  (setcdr src-already-exists (cdr src1))
+                (push src1 all-src)))
+            (setq src-cons res)
+            (setq src-already-exists (assoc src-cons all-src))
+            ;; (message "%S exists? %S" (cdr src-cons) src-already-exists)
+            (setq src1 (or (nreverse src-already-exists) (list res)))
+            ;; (message "src1 temp: %S" src1)
+            )
+           ((member key '(title name))
+            (push res src1))
+           (t                             ;Resource Params
+            (let* ((params-cons (assoc 'params src1))
+                   (params (cdr params-cons)))
+              (if params
+                  (progn
+                    ;; (message "params 1: %S" params)
+                    (push res params)
+                    (setq params (nreverse params))
+                    ;; (message "params 2: %S" params)
+                    (setcdr params-cons params))
+                (setq params (list res))
+                (push `(params . ,params) src1))
+              ;; (message "src1 temp 2: %S" src1)
+              (setcdr (assoc 'params src1) params))))))
+      (setq src1 (nreverse src1))
+      ;; (message "src1: %S" src1)
+      (if src-already-exists
+          (setcdr src-already-exists (cdr src1))
+        (push src1 all-src))
+      ;; Retain the order of src
+      (setq all-src (nreverse all-src))
+      ;; (message "all-src: %S" all-src)
+      all-src)))
+
+(defun org-hugo--get-yaml-toml-list-string (value)
+  "Return VALUE as a YAML/TOML list represented as a string.
+
+If VALUE is a string, each `org-hugo--internal-list-separator'
+separated string component will be interpreted as a string
+element.
+
+If VALUE is a list, it is first converted to a
+`org-hugo--internal-list-separator' separated string.
+
+Return a string representing a YAML/TOML list.
+
+Examples:
+
+  \"abc\ndef\"              -> \"[\\\"abc\\\", \\\"def\\\"]\"
+
+  \(\"abc\" \"def\")   -> \"[\\\"abc\\\", \\\"def\\\"]\"
+"
+  (when (listp value)
+    ;; Convert value to a string
+    (setq value (mapconcat
+                 (lambda (v)
+                   (cond
+                    ((symbolp v)
+                     (symbol-name v))
+                    ((numberp v)
+                     (number-to-string v))
+                    (t
+                     v)))
+                 value
+                 org-hugo--internal-list-separator)))
+  (concat "["
+          (mapconcat #'identity
+                     (mapcar #'org-hugo--quote-string
+                             (split-string
+                              value
+                              org-hugo--internal-list-separator))
+                     ", ")
+          "]"))
 
 
 
@@ -2106,6 +2199,8 @@ INFO is a plist used as a communication channel."
                              (push override-prop updated-menu-alist))))
                        updated-menu-alist))
          (custom-fm-data (org-hugo--parse-property-arguments (plist-get info :hugo-custom-front-matter)))
+         (resources (org-hugo--get-resources-alist
+                     (org-hugo--parse-property-arguments (plist-get info :hugo-resources))))
          (blackfriday (org-hugo--parse-blackfriday-prop-to-alist (plist-get info :hugo-blackfriday)))
          (data `(;; The order of the elements below will be the order in which the front matter
                  ;; variables will be ordered.
@@ -2132,7 +2227,8 @@ INFO is a plist used as a communication channel."
                  (draft . ,draft)
                  (creator . ,creator)
                  (blackfriday . ,blackfriday)
-                 (menu . ,menu-alist)))
+                 (menu . ,menu-alist)
+                 (resources . ,resources)))
          (data `,(append data custom-fm-data)))
     ;; (message "[get fm DBG] tags: %s" tags)
     ;; (message "dbg: todo-state: keyword=%S draft=%S" todo-keyword draft)
@@ -2142,6 +2238,7 @@ INFO is a plist used as a communication channel."
     ;; (message "[get fm menu DBG] %S" menu-alist)
     ;; (message "[get fm menu override DBG] %S" menu-alist-override)
     ;; (message "[custom fm data DBG] %S" custom-fm-data)
+    ;; (message "[fm resources OUT DBG] %S" resources)
     ;; (message "[fm data DBG] %S" data)
     (org-hugo--gen-front-matter data fm-format)))
 
@@ -2170,9 +2267,10 @@ are \"toml\" and \"yaml\"."
                     ((string= format "yaml") ":")
                     (t "")))
         (front-matter "")
-        (indent "  ")
+        (indent (make-string 2 ? ))
         (bf-string "")
-        (menu-string ""))
+        (menu-string "")
+        (res-string ""))
     ;; (message "hugo fm format: %s" format)
     (dolist (pair data)
       (let ((key (symbol-name (car pair)))
@@ -2274,6 +2372,67 @@ are \"toml\" and \"yaml\"."
                           (concat bf-value-str
                                   (format "%s%s %s %s\n" indent bf-key sign bf-value)))))
                 (setq bf-string (concat bf-entry-str bf-value-str)))))
+           ((string= key "resources")
+            (when value
+              (dolist (res-alist value)
+                (let ((res-entry-str "")
+                      (res-value-str "")
+                      res-src-present
+                      res-param-str)
+                  (setq res-entry-str (cond ((string= format "toml")
+                                             "[[resources]]\n")
+                                            ((string= format "yaml")
+                                             ;; For YAML, this string
+                                             ;; needs to be inserted
+                                             ;; only once.
+                                             (if (org-string-nw-p res-string)
+                                                 ""
+                                               (format "resources %s\n" sign)))
+                                            (t
+                                             "")))
+                  (dolist (res-pair res-alist)
+                    ;; (message "[resources DBG] res-pair: %S" res-pair)
+                    (let* ((res-key (symbol-name (car res-pair)))
+                           (res-value (cdr res-pair)))
+                      ;; (message "[resources DBG]: %S %S" res-key res-value)
+                      (cond ((string= res-key "params")
+                             (setq indent (make-string 4 ? ))
+                             (setq res-param-str (cond ((string= format "toml")
+                                                        (format "  [resources.%s]\n" res-key))
+                                                       ((string= format "yaml")
+                                                        (format "  %s %s\n" res-key sign))
+                                                       (t
+                                                        "")))
+                             (dolist (param-pair res-value) ;res-value would be an alist of params
+                               (let ((param-key (symbol-name (car param-pair)))
+                                     (param-value (cdr param-pair))
+                                     param-value-str)
+                                 ;; (message "[resources DBG] param-key: %S" param-key)
+                                 ;; (message "[resources DBG] param-value: %S" param-value)
+                                 (setq param-value-str (if (listp param-value)
+                                                           (org-hugo--get-yaml-toml-list-string param-value)
+                                                         (org-hugo--quote-string param-value)))
+                                 (setq res-param-str
+                                       (concat res-param-str
+                                               (format "%s%s %s %s\n"
+                                                       indent param-key sign param-value-str)))))
+                             ;; (message "[resources params DBG] %s" res-param-str)
+                             )
+                            (t
+                             (when (string= res-key "src")
+                               (setq res-src-present t))
+                             (if (and (string= res-key "src")
+                                      (string= format "yaml"))
+                                 (setq indent "- ")
+                               (setq indent "  "))
+                             (setq res-value (org-hugo--quote-string res-value))
+                             (setq res-value-str
+                                   (concat res-value-str
+                                           (format "%s%s %s %s\n"
+                                                   indent res-key sign res-value)))))))
+                  (unless res-src-present
+                    (user-error "`src' must be set for the `resources'"))
+                  (setq res-string (concat res-string res-entry-str res-value-str res-param-str))))))
            (t
             (setq front-matter
                   (concat front-matter
@@ -2282,31 +2441,10 @@ are \"toml\" and \"yaml\"."
                                   sign
                                   (cond ((or (member key '("aliases" "tags" "categories" "keywords"))
                                              (listp value)) ;Custom front matter which are lists
-                                         (when (listp value)
-                                           ;; Convert value to a string
-                                           (setq value (mapconcat
-                                                        (lambda (v)
-                                                          (cond
-                                                           ((symbolp v)
-                                                            (symbol-name v))
-                                                           ((numberp v)
-                                                            (number-to-string v))
-                                                           (t
-                                                            v)))
-                                                        value
-                                                        org-hugo--internal-list-separator)))
-                                         ;; "abc def" -> "[\"abc\", \"def\"]"
-                                         (concat "["
-                                                 (mapconcat #'identity
-                                                            (mapcar #'org-hugo--quote-string
-                                                                    (split-string
-                                                                     value
-                                                                     org-hugo--internal-list-separator))
-                                                            ", ")
-                                                 "]"))
+                                         (org-hugo--get-yaml-toml-list-string value))
                                         (t
                                          (org-hugo--quote-string value)))))))))))
-    (concat sep front-matter bf-string menu-string sep)))
+    (concat sep front-matter bf-string menu-string res-string sep)))
 
 (defun org-hugo--selective-property-inheritance ()
   "Return a list of properties that should be inherited."

@@ -1624,6 +1624,61 @@ The following results in the 'genres' property having the value
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :booleans '(true false)
 :END:
 [[https://github.com/kaushalmodi/ox-hugo/issues/99][Issue # 99]]
+* Resources                                                       :resources:
+** TOML                                                                :toml:
+*** Post with resources in front-matter
+:PROPERTIES:
+:EXPORT_FILE_NAME: resources-in-front-matter-toml
+:EXPORT_HUGO_RESOURCES: :src "image-4.png" :title "TOML: The Fourth Image"
+:EXPORT_HUGO_RESOURCES+: :src "*.png" :name "my-cool-image-:counter" :title "TOML: The Image #:counter"
+:EXPORT_HUGO_RESOURCES+: :src "*.png" :byline "bep"
+:EXPORT_HUGO_RESOURCES+: :src "*.jpg" :title "JPEG Image #:counter"
+:END:
+*** Only custom resource params
+:PROPERTIES:
+:EXPORT_FILE_NAME: resources-only-custom-params
+:EXPORT_HUGO_RESOURCES: :src "*.png" :foo "bar"
+:END:
+*** Custom resource params with list values
+:PROPERTIES:
+:EXPORT_FILE_NAME: resources-custom-params-list-values-toml
+:EXPORT_HUGO_RESOURCES: :src "*.png" :animals '(dog cat "penguin" "mountain gorilla")
+:EXPORT_HUGO_RESOURCES+: :strings-symbols '("abc" def "two words")
+:EXPORT_HUGO_RESOURCES+: :integers '(123 -5 17 1_234)
+:EXPORT_HUGO_RESOURCES+: :floats '(12.3 -5.0 -17E-6)
+:EXPORT_HUGO_RESOURCES+: :booleans '(true false)
+:EXPORT_HUGO_RESOURCES+: :foo bar
+:END:
+*** No "src" in resources front-matter         :dont_export_during_make_test:
+:PROPERTIES:
+:EXPORT_FILE_NAME: resources-no-src
+:EXPORT_HUGO_RESOURCES: :foo "bar"
+:END:
+This is illegal --- You'll get a user-error.
+
+The =src= field *must* be specified for the =resources= front-matter.
+** YAML                                                                :yaml:
+:PROPERTIES:
+:EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
+:END:
+*** Post with resources in front-matter
+:PROPERTIES:
+:EXPORT_FILE_NAME: resources-in-front-matter-yaml
+:EXPORT_HUGO_RESOURCES: :src "image-4.png" :title "The Fourth Image"
+:EXPORT_HUGO_RESOURCES+: :src "*.png" :name "my-cool-image-:counter" :title "The Image #:counter"
+:EXPORT_HUGO_RESOURCES+: :src "*.png" :byline "bep"
+:EXPORT_HUGO_RESOURCES+: :src "*.jpg" :title "JPEG Image #:counter"
+:END:
+*** Custom resource params with list values
+:PROPERTIES:
+:EXPORT_FILE_NAME: resources-custom-params-list-values-yaml
+:EXPORT_HUGO_RESOURCES: :src "*.png" :animals '(dog cat "penguin" "mountain gorilla")
+:EXPORT_HUGO_RESOURCES+: :strings-symbols '("abc" def "two words")
+:EXPORT_HUGO_RESOURCES+: :integers '(123 -5 17 1_234)
+:EXPORT_HUGO_RESOURCES+: :floats '(12.3 -5.0 -17E-6)
+:EXPORT_HUGO_RESOURCES+: :booleans '(true false)
+:EXPORT_HUGO_RESOURCES+: :foo bar
+:END:
 * Outputs                                                           :outputs:
 ** Output HTML and JSON                                                :json:
 :PROPERTIES:

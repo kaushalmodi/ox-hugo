@@ -6,6 +6,10 @@
     <h2>Posts with the {{ .Type | singularize }} ‘{{ .URL | replaceRE (printf "/%s/" .Type) "" | replaceRE "/" "" }}’</h2>
 {{ end }}
 
+{{ with .Content }}
+    {{ . }}
+{{ end }}
+
 <section>
     <ul class="post-list">
         {{ range .Pages }}

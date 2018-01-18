@@ -1801,6 +1801,11 @@ This ! does not need to be escaped as there is no ambiguity.
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: bundles
 :END:
+** Bundles Section
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+This is the content for the "bundles" section landing page.
 ** Page Bundle A
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: page-bundle-a

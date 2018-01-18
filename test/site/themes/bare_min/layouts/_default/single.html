@@ -88,10 +88,6 @@
     <a id="debug"></a>
     <h3 id="page-debug">Page Params (Debug)</h3>
     {{ partial "debugprint.html" .Params }}
-    {{ with .Resources }}
-        <h3 id="resources-debug">Resources (Debug)</h3>
-        {{ partial "debugprint.html" . }}
-    {{ end }}
     <h3 id="file-debug">File Object (Debug)</h3>
     {{ partial "debugprint.html" (slice "File" .) }}
 </div>

@@ -1847,6 +1847,12 @@ the copied location inside the bundle:
 :EXPORT_FILE_NAME: bar
 :END:
 "Bar" page in /Page Bundle A/.
+** Page Bundle B
+:PROPERTIES:
+:EXPORT_FILE_NAME: index
+:EXPORT_HUGO_BUNDLE: page-bundle-b
+:END:
+Index page of /Page Bundle B/.
 * Footnotes Test                                                   :footnote:
 ** Footnotes 1
 :PROPERTIES:

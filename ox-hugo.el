@@ -90,6 +90,16 @@ It holds the value returned by
   "Variable to count of number of subtrees getting exported.
 This variable is used when exporting all subtrees in a file.")
 
+(defvar org-hugo--bundle nil
+  "Variable to store the current valid Hugo subtree bundle name.
+If the EXPORT_HUGO_BUNDLE property is set in the same subtree as
+the post subtree, it somehow cannot be parsed from
+`org-hugo-export-to-md'.  But that property can be accessed
+within `org-hugo-export-wim-to-md' regardless.  This variable
+helps set the bundle path correctly for such cases (where
+EXPORT_HUGO_BUNDLE and EXPORT_FILE_NAME are set in the same
+subtree).")
+
 (defvar org-hugo-allow-export-after-save t
   "Enable flag for `org-hugo-export-wim-to-md-after-save'.
 When nil, the above function will not export the Org file to
@@ -945,7 +955,7 @@ If hugo is not found, return nil."
   "Generate a merged RESOURCES alist.
 
 All parameters for the same \"src\" are merged together in the
-same lisp form.  Parameters that are none of \"src\", \"title\"
+same Lisp form.  Parameters that are none of \"src\", \"title\"
 or \"name\" are packed into an alist with `car' as \"params\"."
   ;; (message "[resources IN DBG]: %S" resources)
   (when resources
@@ -1008,8 +1018,7 @@ Examples:
 
   \"abc\ndef\"              -> \"[\\\"abc\\\", \\\"def\\\"]\"
 
-  \(\"abc\" \"def\")   -> \"[\\\"abc\\\", \\\"def\\\"]\"
-"
+  \(\"abc\" \"def\")   -> \"[\\\"abc\\\", \\\"def\\\"]\"."
   (when (listp value)
     ;; Convert value to a string
     (setq value (mapconcat
@@ -1045,8 +1054,10 @@ INFO is a plist used as a communication channel."
          (section-dir (if (null (plist-get info :hugo-section))
                           (user-error "It is mandatory to set the HUGO_SECTION property")
                         (file-name-as-directory (plist-get info :hugo-section))))
-         (bundle-dir (if (plist-get info :hugo-bundle)
-                         (file-name-as-directory (plist-get info :hugo-bundle))
+         (bundle-name (or (plist-get info :hugo-bundle)
+                          org-hugo--bundle))
+         (bundle-dir (if bundle-name
+                         (file-name-as-directory bundle-name)
                        ""))
          (pub-dir (let ((dir (concat base-dir content-dir section-dir bundle-dir)))
                     (make-directory dir :parents) ;Create the directory if it does not exist
@@ -2677,6 +2688,7 @@ Return output file's name."
             (progn
               ;; Reset the variables that are used only for subtree exports.
               (setq org-hugo--subtree-coord nil)
+              (setq org-hugo--bundle nil)
               (message "[ox-hugo] Exporting `%s' (%s)" title fname))
           (message "[ox-hugo] %s was not exported as it is tagged with an exclude tag `%s'"
                    fname matched-exclude-tag))))
@@ -2831,6 +2843,8 @@ approach)."
                                   (re-search-forward "^#\\+HUGO_WEIGHT:[[:blank:]]*auto" nil :noerror))))
                           (setq org-hugo--subtree-coord
                                 (org-hugo--get-post-subtree-coordinates subtree)))
+                        ;; Get the current subtree bundle name if any.
+                        (setq org-hugo--bundle (org-entry-get nil "EXPORT_HUGO_BUNDLE" :inherit))
                         (setq do-export t)))))
                 ;; If not in a valid subtree, check if the Org file is
                 ;; supposed to be exported as a whole, in which case

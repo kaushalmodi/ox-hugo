@@ -1031,6 +1031,27 @@ Examples:
                      ", ")
           "]"))
 
+(defun org-hugo--get-pub-dir (info)
+  "Return the post publication directory path.
+
+The publication directory is created if it does not exist.
+
+INFO is a plist used as a communication channel."
+  (let* ((base-dir (if (null (plist-get info :hugo-base-dir))
+                       (user-error "It is mandatory to set the HUGO_BASE_DIR property")
+                     (file-name-as-directory (plist-get info :hugo-base-dir))))
+         (content-dir "content/")
+         (section-dir (if (null (plist-get info :hugo-section))
+                          (user-error "It is mandatory to set the HUGO_SECTION property")
+                        (file-name-as-directory (plist-get info :hugo-section))))
+         (bundle-dir (if (plist-get info :hugo-bundle)
+                         (file-name-as-directory (plist-get info :hugo-bundle))
+                       ""))
+         (pub-dir (let ((dir (concat base-dir content-dir section-dir bundle-dir)))
+                    (make-directory dir :parents) ;Create the directory if it does not exist
+                    dir)))
+    (file-truename pub-dir)))
+
 
 
 ;;; Transcode Functions
@@ -2615,16 +2636,7 @@ Return output file's name."
                  'hugo subtreep visible-only)
                 (org-export--get-buffer-attributes)
                 (org-export-get-environment 'hugo subtreep)))
-         (base-dir (if (null (plist-get info :hugo-base-dir))
-                       (user-error "It is mandatory to set the HUGO_BASE_DIR property")
-                     (file-name-as-directory (plist-get info :hugo-base-dir))))
-         (content-dir "content/")
-         (section-dir (if (null (plist-get info :hugo-section))
-                          (user-error "It is mandatory to set the HUGO_SECTION property")
-                        (file-name-as-directory (plist-get info :hugo-section))))
-         (pub-dir (let ((dir (concat base-dir content-dir section-dir)))
-                    (make-directory dir :parents) ;Create the directory if it does not exist
-                    dir))
+         (pub-dir (org-hugo--get-pub-dir info))
          (outfile (org-export-output-file-name ".md" subtreep pub-dir))
          (do-export t))
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)

@@ -61,10 +61,37 @@
     </p>
     {{ .Content }}
 
+    {{ with .Resources }}
+        <hr>
+        <h3>Resources</h3>
+        <ul>
+	    {{ range . }}
+	        {{ if .RelPermalink }}
+	            <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+	        {{ else }}
+	            <li>{{ .ResourceType | title }} (no link, only embedded in page)</li>
+	        {{ end }}
+	    {{ end }}
+        </ul>
+    {{ end }}
+
+    {{ with .Resources.ByType "page" }}
+        <hr>
+        <h3 id="sub-pages">Bundled Sub-pages</h3>
+        {{ range . }}
+            <h4>{{ .Title }}</h4>
+            {{ .Content }}
+        {{ end }}
+    {{ end }}
+
     <hr>
     <a id="debug"></a>
     <h3 id="page-debug">Page Params (Debug)</h3>
     {{ partial "debugprint.html" .Params }}
+    {{ with .Resources }}
+        <h3 id="resources-debug">Resources (Debug)</h3>
+        {{ partial "debugprint.html" . }}
+    {{ end }}
     <h3 id="file-debug">File Object (Debug)</h3>
     {{ partial "debugprint.html" (slice "File" .) }}
 </div>

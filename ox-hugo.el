@@ -630,6 +630,7 @@ newer."
                    (:hugo-preserve-filling "HUGO_PRESERVE_FILLING" nil org-hugo-preserve-filling) ;Preserve breaks so that text filling in Markdown matches that of Org
                    (:hugo-delete-trailing-ws "HUGO_DELETE_TRAILING_WS" nil org-hugo-delete-trailing-ws)
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
+                   (:hugo-bundle "HUGO_BUNDLE" nil nil)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil t) ;Prefer to generate triple-backquoted Markdown code blocks by default.
                    (:hugo-menu "HUGO_MENU" nil nil)
@@ -1531,48 +1532,64 @@ INFO is a plist used as a communication channel."
   ;; (message "[ox-hugo attachment DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir))
   (let* ((path-true (file-truename path))
          (exportables org-hugo-external-file-extensions-allowed-for-copying)
+         (bundle-dir (and (plist-get info :hugo-bundle)
+                          (org-hugo--get-pub-dir info)))
          (static-dir (file-truename
                       (concat
                        (file-name-as-directory (plist-get info :hugo-base-dir))
-                       "static/"))))
+                       "static/")))
+         (dest-dir (or bundle-dir static-dir))
+         ret)
     ;; (message "[ox-hugo DBG attch rewrite] Image export dir is: %s" static-dir)
     ;; (message "[ox-hugo DBG attch rewrite] path: %s" path)
     ;; (message "[ox-hugo DBG attch rewrite] path-true: %s" path-true)
+    ;; (message "[ox-hugo DBG attch rewrite] bundle-dir: %s" bundle-dir)
+    ;; (message "[ox-hugo DBG attch rewrite] dest-dir: %s" dest-dir)
     (if (and (file-exists-p path-true)
              (member (file-name-extension path) exportables)
-             (file-directory-p static-dir))
+             (file-directory-p dest-dir))
         (progn
-          ;; Check if `path-true' is already inside `static-dir'
-          (if (string-match (regexp-quote static-dir) path-true)
+          ;; Check if `path-true' is already inside `dest-dir'.
+          (if (string-match (regexp-quote dest-dir) path-true)
               (progn
                 ;; If so, return *only* the path considering the
-                ;; static directory as root.
-                (concat "/" (substring path-true (match-end 0))))
+                ;; destination directory as root.
+                (setq ret (concat "/" (substring path-true (match-end 0)))))
             (let* ((file-name-sans-static (if (string-match "/static/" path-true)
                                               (substring path-true (match-end 0))
                                             (concat
-                                             (file-name-as-directory org-hugo-default-static-subdirectory-for-externals)
+                                             (if bundle-dir
+                                                 ""
+                                               (file-name-as-directory org-hugo-default-static-subdirectory-for-externals))
                                              (file-name-nondirectory path))))
-                   (static-path (concat static-dir file-name-sans-static))
-                   (static-path-dir (file-name-directory static-path)))
-              ;; The `static-dir' would already exist.  But if
+                   (dest-path (concat dest-dir file-name-sans-static))
+                   (dest-path-dir (file-name-directory dest-path)))
+              ;; The `dest-dir' would already exist.  But if
               ;; `file-name-sans-static' is "images/image.png" or
-              ;; "foo/bar.txt", it's likely that "`static-dir'/images"
-              ;; or "`static-dir'/foo" might not exist.  So create
-              ;; those if needed below.
-              (unless (file-exists-p static-path-dir)
-                (mkdir static-path-dir :parents))
+              ;; "foo/bar.txt", it's likely that "`dest-dir'/images"
+              ;; or "`dest-dir'/foo" might not exist.  So create those
+              ;; if needed below.
+              (unless (file-exists-p dest-path-dir)
+                (mkdir dest-path-dir :parents))
               ;; (message "[ox-hugo DBG attch rewrite] file-name: %s" file-name-sans-static)
-              ;; (message "[ox-hugo DBG attch rewrite] static-path: %s" static-path)
-              ;; (message "[ox-hugo DBG attch rewrite] static-path-dir: %s" static-path-dir)
+              ;; (message "[ox-hugo DBG attch rewrite] dest-path: %s" dest-path)
+              ;; (message "[ox-hugo DBG attch rewrite] dest-path-dir: %s" dest-path-dir)
 
               ;; Do the copy only if the file to be copied is newer or
               ;; doesn't exist in the static dir.
-              (when (file-newer-than-file-p path-true static-path)
-                (message "[ox-hugo] Copied %S to %S" path-true static-path)
-                (copy-file path-true static-path :ok-if-already-exists))
-              (concat "/" file-name-sans-static))))
-      path)))
+              (when (file-newer-than-file-p path-true dest-path)
+                (message "[ox-hugo] Copied %S to %S" path-true dest-path)
+                (copy-file path-true dest-path :ok-if-already-exists))
+              (setq ret (if bundle-dir
+                            ;; If attachments are copied to the bundle
+                            ;; directory, don't prefix the path as "/"
+                            ;; as those paths won't exist at the site
+                            ;; base URL.
+                            file-name-sans-static
+                          (concat "/" file-name-sans-static))))))
+      (setq ret path))
+    ;; (message "[ox-hugo DBG attch rewrite] returned path: %s" ret)
+    ret))
 
 ;;;; Paragraph
 (defun org-hugo-paragraph (paragraph contents info)
@@ -2476,6 +2493,7 @@ are \"toml\" and \"yaml\"."
                      "HUGO_ALLOW_SPACES_IN_TAGS"
                      "HUGO_BLACKFRIDAY"
                      "HUGO_SECTION"
+                     "HUGO_BUNDLE"
                      "HUGO_BASE_DIR"
                      "HUGO_CODE_FENCE"
                      "HUGO_MENU"

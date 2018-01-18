@@ -1,6 +1,10 @@
 {{ define "main" }}             <!-- List of all posts -->
 
-<h2>Posts with the {{ .Type | singularize }} ‘{{ .URL | replaceRE (printf "/%s/" .Type) "" | replaceRE "/" "" }}’</h2>
+{{ if (eq .Kind "section") }}
+    <h2>Posts in ‘{{ .Type }}’ section</h2>
+{{ else if (eq .Kind "taxonomy") }}
+    <h2>Posts with the {{ .Type | singularize }} ‘{{ .URL | replaceRE (printf "/%s/" .Type) "" | replaceRE "/" "" }}’</h2>
+{{ end }}
 
 <section>
     <ul class="post-list">
@@ -9,5 +13,7 @@
         {{ end }}
     </ul>
 </section>
+
+{{/* partial "debugprint.html" . */}}
 
 {{ end }}

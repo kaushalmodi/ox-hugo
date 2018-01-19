@@ -17,7 +17,9 @@
 {{ $typeIsSiteInfo     := (eq "*hugolib.SiteInfo" $type) }}
 {{ $typeIsGitInfo      := (findRE "^.*gitmap\\.GitInfo" $type) }}
 {{ $typeIsOutputFormat := (eq "output.Format" $type) }}
-{{ $typeIsSpecial      := (or $typeIsSiteInfo $typeIsGitInfo $typeIsOutputFormat) }}
+{{ $typeIsResource     := (findRE "^\\*resource" $type) }}
+{{ $typeIsPage         := (findRE "^\\*hugolib\\.Page" $type) }}
+{{ $typeIsSpecial      := (or $typeIsSiteInfo $typeIsGitInfo $typeIsOutputFormat $typeIsResource $typeIsPage) }}
 
 {{ if $typeIsBool }}
     {{ printf "<span class=\"debugprint\"><span class=\"%#v\">%#v</span></span>" $value $value | safeHTML }}
@@ -105,12 +107,34 @@
                     {{ printf "</td></tr>" | safeHTML }}
                 {{ end }}
             </table>
+        {{ else if $typeIsResource }}
+            {{ $ResourceVarNames   := (slice "ResourceType" "Permalink" "RelPermalink" "AbsSourceFilename" "Name" "Title" "Params") }}
+            {{ $ResourceVarSymbols := (slice .ResourceType  .Permalink  .RelPermalink  .AbsSourceFilename  .Name  .Title  .Params ) }}
+            <table>
+                <tr><th class="key">Resource Variable</th><th class="value">Value</th></tr>
+                {{ range $idx, $elem := $ResourceVarNames }}
+                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"value\">" $elem | safeHTML }}
+                    {{ partial "debugprint.html" (index $ResourceVarSymbols $idx) }} <!-- Recursive call FTW! -->
+                    {{ printf "</td></tr>" | safeHTML }}
+                {{ end }}
+            </table>
+        {{ else if $typeIsPage }}
+            {{ $PageVarNames   := (slice "ResourceType" "Kind" "Draft" "Layout" "Permalink" "RelPermalink" "Name" "Title" "Params") }}
+            {{ $PageVarSymbols := (slice .ResourceType  .Kind  .Draft  .Layout  .Permalink  .RelPermalink  .Name  .Title  .Params ) }}
+            <table>
+                <tr><th class="key">Page Variable</th><th class="value">Value</th></tr>
+                {{ range $idx, $elem := $PageVarNames }}
+                    {{ printf "<tr><td class=\"key\">%s</td><td class=\"value\">" $elem | safeHTML }}
+                    {{ partial "debugprint.html" (index $PageVarSymbols $idx) }} <!-- Recursive call FTW! -->
+                    {{ printf "</td></tr>" | safeHTML }}
+                {{ end }}
+            </table>
         {{ else }}
             {{ printf "%#v" $value | safeHTML }}
         {{ end }}
     </div>
 {{ else }}
-    {{ printf "%#v (type:%s)" $value $type | safeHTML }}
+    {{ printf "%#v (<i>type:%s</i>)" $value $type | safeHTML }}
 {{ end }}
 
 <!-- Older, simpler version -->

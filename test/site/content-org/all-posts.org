@@ -1810,7 +1810,7 @@ This is the content for the "bundles" section landing page.
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: page-bundle-a
 :END:
-*** Page A
+*** Page Bundle A
 :PROPERTIES:
 :EXPORT_FILE_NAME: index
 :EXPORT_HUGO_RESOURCES: :src "images/copy-of-*.png" :title "First copy of Org mode logo"

@@ -1,5 +1,5 @@
 +++
-title = "Page A"
+title = "Page Bundle A"
 tags = ["page-bundles"]
 draft = false
 [[resources]]

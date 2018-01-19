@@ -1858,6 +1858,8 @@ the copied location inside the bundle:
 :EXPORT_HUGO_BUNDLE: page-bundle-b
 :END:
 Index page of /Page Bundle B/.
+
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
 * Footnotes Test                                                   :footnote:
 ** Footnotes 1
 :PROPERTIES:

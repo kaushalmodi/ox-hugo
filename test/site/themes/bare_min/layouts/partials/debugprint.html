@@ -8,10 +8,11 @@
 {{ $value              := . }}
 {{ $type               := (printf "%T" $value) }}
 {{ $typeIsBool         := (eq "bool" $type) }}
+{{ $typeIsNumber       := (or (eq "int" $type) (eq "int64" $type) (eq "float64" $type)) }}
 {{ $typeIsString       := (eq "string" $type) }}
 {{ $typeIsTime         := (eq "time.Time" $type) }}
 {{ $typeIsInterface    := (eq "interface" $type) }}
-{{ $typeIsSlice        := (findRE "^([[][]]|.*TaxonomyList|output\\.Formats)" $type) }} <!-- match ^[] -->
+{{ $typeIsSlice        := (findRE "^([[][]]|.*TaxonomyList|output\\.Formats|resource\\.Resources)" $type) }} <!-- match ^[] -->
 {{ $typeIsMap          := (findRE "^(map[[].+[]]|.*SiteSocial)" $type) }} <!-- match ^map[*] -->
 
 {{ $typeIsSiteInfo     := (eq "*hugolib.SiteInfo" $type) }}
@@ -23,7 +24,7 @@
 
 {{ if $typeIsBool }}
     {{ printf "<span class=\"debugprint\"><span class=\"%#v\">%#v</span></span>" $value $value | safeHTML }}
-{{ else if $typeIsString }}
+{{ else if (or $typeIsNumber $typeIsString) }}
     <!-- Use %#v for strings so that their values always get double-quoted.
          That is helpful to tell if a space char is within a string. -->
     {{ printf "%#v" $value | safeHTML }}
@@ -118,6 +119,7 @@
                     {{ printf "</td></tr>" | safeHTML }}
                 {{ end }}
             </table>
+            <hr>
         {{ else if $typeIsPage }}
             {{ $PageVarNames   := (slice "ResourceType" "Kind" "Draft" "Layout" "Permalink" "RelPermalink" "Name" "Title" "Params") }}
             {{ $PageVarSymbols := (slice .ResourceType  .Kind  .Draft  .Layout  .Permalink  .RelPermalink  .Name  .Title  .Params ) }}
@@ -129,6 +131,7 @@
                     {{ printf "</td></tr>" | safeHTML }}
                 {{ end }}
             </table>
+            <hr>
         {{ else }}
             {{ printf "%#v" $value | safeHTML }}
         {{ end }}

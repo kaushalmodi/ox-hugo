@@ -90,10 +90,7 @@
     {{ partial "debugprint.html" .Params }}
     {{ with .Resources }}
         <h3 id="resource-debug">Resources (Debug)</h3>
-        {{ range . }}
-            {{ partial "debugprint.html" . }}
-            <hr>
-        {{ end }}
+        {{ partial "debugprint.html" . }}
     {{ end }}
     <h3 id="file-debug">File Object (Debug)</h3>
     {{ partial "debugprint.html" (slice "File" .) }}

@@ -636,7 +636,7 @@ newer."
                    (:with-special-strings nil "-" nil) ;Don't use special strings for ndash, mdash; that is done automatically by Blackfriday
                    (:with-sub-superscript nil "^" '{}) ;Require curly braces to be wrapped around text to sub/super-scripted
                    (:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
-                   (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil 1)
+                   (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil "1")
                    (:hugo-preserve-filling "HUGO_PRESERVE_FILLING" nil org-hugo-preserve-filling) ;Preserve breaks so that text filling in Markdown matches that of Org
                    (:hugo-delete-trailing-ws "HUGO_DELETE_TRAILING_WS" nil org-hugo-delete-trailing-ws)
                    (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
@@ -830,7 +830,7 @@ contents according to the current headline."
   (let* ((toc-headline
           (unless local
             (let ((style (plist-get info :md-headline-style))
-                  (loffset (plist-get info :hugo-level-offset))
+                  (loffset (string-to-number (plist-get info :hugo-level-offset)))
                   (title "Table of Contents"))
               (org-hugo--headline-title style 1 loffset title))))
          (toc-items
@@ -1208,7 +1208,7 @@ a communication channel."
                                   (org-hugo-slug title)
                                   ;; (org-export-get-reference headline info)
                                   )))
-              (loffset (plist-get info :hugo-level-offset))
+              (loffset (string-to-number (plist-get info :hugo-level-offset)))
               (todo (when todo
                       (concat (org-html--todo todo info) " "))))
           (concat (org-hugo--headline-title style level loffset title todo anchor numbers)

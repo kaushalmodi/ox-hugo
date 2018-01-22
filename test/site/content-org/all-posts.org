@@ -2972,6 +2972,16 @@ Some text.
 *** Heading 1
 **** Heading 1.1
 *** Heading 2
+** Level offset unset
+:PROPERTIES:
+:EXPORT_FILE_NAME: level-offset-unset
+:EXPORT_HUGO_LEVEL_OFFSET:
+:END:
+Setting =:EXPORT_HUGO_LEVEL_OFFSET:= is same as setting
+=:EXPORT_HUGO_LEVEL_OFFSET: 0=.
+*** Heading 1
+**** Heading 1.1
+*** Heading 2
 ** Level offset of 0
 :PROPERTIES:
 :EXPORT_FILE_NAME: level-offset-0

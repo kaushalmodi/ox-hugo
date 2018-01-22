@@ -1208,7 +1208,7 @@ a communication channel."
                                   (org-hugo-slug title)
                                   ;; (org-export-get-reference headline info)
                                   )))
-              (loffset (string-to-number (plist-get info :hugo-level-offset)))
+              (loffset (string-to-number (plist-get info :hugo-level-offset))) ;"" -> 0, "0" -> 0, "1" -> 1, ..
               (todo (when todo
                       (concat (org-html--todo todo info) " "))))
           (concat (org-hugo--headline-title style level loffset title todo anchor numbers)

@@ -2,6 +2,8 @@
 #+SEQ_TODO: TODO DRAFT DONE
 #+PROPERTY: header-args :eval no
 
+#+STARTUP: indent
+
 #+MACRO: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
 #+MACRO: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
 #+MACRO: hugoissue =hugo= Issue #[[https://github.com/gohugoio/hugo/issues/$1][$1]]

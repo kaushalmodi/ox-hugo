@@ -2964,6 +2964,38 @@ Some text.
 *** DONE Heading 2
 CLOSED: [2017-08-09 Wed 16:15]
 Some text.
+* Level Offset                                                 :level_offset:
+** Default level offset
+:PROPERTIES:
+:EXPORT_FILE_NAME: level-offset-default
+:END:
+*** Heading 1
+**** Heading 1.1
+*** Heading 2
+** Level offset of 0
+:PROPERTIES:
+:EXPORT_FILE_NAME: level-offset-0
+:EXPORT_HUGO_LEVEL_OFFSET: 0
+:END:
+*** Heading 1
+**** Heading 1.1
+*** Heading 2
+** Level offset of 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: level-offset-1
+:EXPORT_HUGO_LEVEL_OFFSET: 1
+:END:
+*** Heading 1
+**** Heading 1.1
+*** Heading 2
+** Level offset of 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: level-offset-2
+:EXPORT_HUGO_LEVEL_OFFSET: 2
+:END:
+*** Heading 1
+**** Heading 1.1
+*** Heading 2
 * Blackfriday Options                                           :blackfriday:
 ** Fractions
 *** Fraction Table

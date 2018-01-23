@@ -1064,6 +1064,85 @@ INFO is a plist used as a communication channel."
                     dir)))
     (file-truename pub-dir)))
 
+(defun org-hugo--format-date (date-key info)
+  "Return a date string formatted in Hugo-compatible format.
+
+DATE-KEY is the key in INFO from which the date is to be
+retrieved.  INFO is a plist used as a communication channel.
+
+Possible values of DATE-KEY are `:date', `:hugo-lastmod',
+`:hugo-publishdate', and `:hugo-expirydate'.
+
+Return nil if the retrieved date from INFO is nil or if the date
+cannot be formatted in Hugo-compatible format."
+  (let* ((hugo-date-fmt "%Y-%m-%dT%T%z")
+         (date-raw (cond
+                    ((equal date-key :date)
+                     (or
+                      ;; Get the date from the "CLOSED" property;
+                      ;; generated automatically when switching a
+                      ;; headline to "DONE" state,
+                      (org-entry-get (point) "CLOSED")
+                      ;; Else get the date from the subtree property,
+                      ;; `EXPORT_DATE' if available
+                      (org-string-nw-p
+                       (org-export-data (plist-get info date-key) info))
+                      ;; Else try to get it from the #+DATE keyword in
+                      ;; the Org file.
+                      (org-string-nw-p
+                       (org-export-get-date info hugo-date-fmt))))
+                    (t ;:hugo-lastmod, :hugo-publishdate, :hugo-expirydate
+                     (org-string-nw-p
+                      (org-export-data (plist-get info date-key) info)))))
+         (date-nocolon (cond
+                        ;; If the date set for the DATE-KEY parameter
+                        ;; is already in Hugo-compatible format, use
+                        ;; it.
+                        ((and (stringp date-raw)
+                              (string-match-p org-hugo--date-time-regexp date-raw))
+                         date-raw)
+                        ;; Else if it's any other string (like
+                        ;; "<2018-01-23 Tue>"), try to parse that
+                        ;; date.
+                        ((stringp date-raw)
+                         (condition-case err
+                             (format-time-string
+                              hugo-date-fmt
+                              (apply #'encode-time (org-parse-time-string date-raw)))
+                           (error
+                            ;; Set date-nocolon to nil if error
+                            ;; happens.  An example: If #+DATE is set
+                            ;; to 2012-2017 to set the copyright
+                            ;; years, just set the date to nil instead
+                            ;; of throwing an error like:
+                            ;; org-parse-time-string: Not a standard
+                            ;; Org time string: 2012-2017
+                            (message
+                             (format "[ox-hugo] Date will not be set in the front-matter: %s"
+                                     (nth 1 err)))
+                            nil)))
+                        ;; Else (if nil) and user want to auto-set the
+                        ;; lastmod field.
+                        ((and (equal date-key :hugo-lastmod)
+                              (org-hugo--plist-get-true-p info :hugo-auto-set-lastmod))
+                         (format-time-string hugo-date-fmt (org-current-time)))
+                        ;; Else.. do nothing.
+                        (t
+                         nil)))
+         ;; Hugo expects the date stamp in this format (RFC3339 -- See
+         ;; `org-hugo--date-time-regexp'.) i.e. requires a colon to
+         ;; separate the hours and minutes in the time-zone section of
+         ;; the date.
+         ;;   2017-07-06T14:59:45-04:00
+         ;; But the "%Y-%m-%dT%T%z" format (`hugo-date-fmt') produces the date
+         ;; in this format:
+         ;;   2017-07-06T14:59:45-0400 (Note the missing colon)
+         ;; Below simply adds that colon.
+         (date-str (and (stringp date-nocolon)
+                        (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
+                                                  date-nocolon))))
+    date-str))
+
 
 
 ;;; Transcode Functions
@@ -2094,47 +2173,6 @@ INFO is a plist used as a communication channel."
                                  (mapcar #'org-trim author-list-1))))))
          (creator (and (plist-get info :with-creator)
                        (plist-get info :creator)))
-         (hugo-date-fmt "%Y-%m-%dT%T%z")
-         (date-raw (or
-                    ;; Get the date from the "CLOSED" property;
-                    ;; generated automatically when switching a
-                    ;; headline to "DONE" state,
-                    (org-entry-get (point) "CLOSED")
-                    ;; Else get the date from the subtree property,
-                    ;; `EXPORT_DATE' if available
-                    (org-string-nw-p (org-export-data (plist-get info :date) info))
-                    ;; Else try to get it from the #+DATE keyword in
-                    ;; the Org file.
-                    (org-string-nw-p (org-export-get-date info hugo-date-fmt))))
-         (date-nocolon (and (stringp date-raw)
-                            (if (string-match-p org-hugo--date-time-regexp date-raw)
-                                ;; If the set DATE is already in
-                                ;; Hugo-compatible date format, use it.
-                                date-raw
-                              ;; Else try to parse the date.
-                              (condition-case err
-                                  (format-time-string
-                                   hugo-date-fmt
-                                   (apply #'encode-time (org-parse-time-string date-raw)))
-                                (error
-                                 ;; Set date-nocolon to nil if error happens.
-                                 ;; An example: If #+DATE is set to
-                                 ;; 2012-2017 to set the copyright
-                                 ;; years, just set the date to nil
-                                 ;; instead of throwing an error like:
-                                 ;; org-parse-time-string: Not a standard Org time string: 2012-2017
-                                 (message
-                                  (format "[ox-hugo] Date will not be set in the front-matter: %s"
-                                          (nth 1 err)))
-                                 nil)))))
-         ;; Hugo expects the date stamp in this format:
-         ;;   2017-07-06T14:59:45-04:00
-         ;; But the "%Y-%m-%dT%T%z" format produces the date in this format:
-         ;;   2017-07-06T14:59:45-0400 (Note the missing colon)
-         ;; Below simply adds that colon.
-         (date (and (stringp date-nocolon)
-                    (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
-                                              date-nocolon)))
          (aliases-raw (let ((aliases-raw-1
                              (org-string-nw-p
                               (org-export-data (plist-get info :hugo-aliases) info))))
@@ -2155,27 +2193,6 @@ INFO is a plist used as a communication channel."
                        (org-export-data (plist-get info :hugo-outputs) info)))
          (outputs (when outputs-raw
                     (org-split-string outputs-raw " ")))
-         (lastmod-raw (org-string-nw-p (org-export-data (plist-get info :hugo-lastmod) info)))
-         (lastmod-nocolon (cond
-                           ;; If the set HUGO_LASTMOD is already in
-                           ;; Hugo-compatible lastmod format, use it.
-                           ((and (stringp lastmod-raw)
-                                 (string-match-p org-hugo--date-time-regexp lastmod-raw))
-                            lastmod-raw)
-                           ;; Else if it's a string, try to parse the lastmod.
-                           ((stringp lastmod-raw)
-                            (format-time-string
-                             hugo-date-fmt
-                             (apply #'encode-time (org-parse-time-string lastmod-raw))))
-                           ;; Else (if nil) and user want to auto-set the lastmod field.
-                           ((org-hugo--plist-get-true-p info :hugo-auto-set-lastmod)
-                            (format-time-string hugo-date-fmt (org-current-time)))
-                           ;; Else.. do nothing.
-                           (t
-                            nil)))
-         (lastmod (and (stringp lastmod-nocolon)
-                       (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
-                                                 lastmod-nocolon)))
          (todo-keyword (org-entry-get (point) "TODO"))
          (draft (cond
                  ((and todo-keyword
@@ -2256,14 +2273,14 @@ INFO is a plist used as a communication channel."
                  (title . ,(org-hugo--sanitize-title info))
                  (author . ,author-list)
                  (description . ,(org-export-data (plist-get info :description) info))
-                 (date . ,date)
-                 (publishDate . ,(org-export-data (plist-get info :hugo-publishdate) info))
-                 (expiryDate . ,(org-export-data (plist-get info :hugo-expirydate) info))
+                 (date . ,(org-hugo--format-date :date info))
+                 (publishDate . ,(org-hugo--format-date :hugo-publishdate info))
+                 (expiryDate . ,(org-hugo--format-date :hugo-expirydate info))
                  (aliases . ,aliases)
                  (isCJKLanguage . ,(org-hugo--plist-get-true-p info :hugo-iscjklanguage))
                  (keywords . ,(org-export-data (plist-get info :keywords) info))
                  (layout . ,(org-export-data (plist-get info :hugo-layout) info))
-                 (lastmod . ,lastmod)
+                 (lastmod . ,(org-hugo--format-date :hugo-lastmod info))
                  (linkTitle . ,(org-export-data (plist-get info :hugo-linktitle) info))
                  (markup . ,(org-export-data (plist-get info :hugo-markup) info))
                  (outputs . ,outputs)

@@ -32,3 +32,16 @@ pygmentsUseClasses = true       # This applies to Chroma too.
 
 [Params]
   description = "Test site for ox-hugo package for Emacs/Org-mode."
+  intro = """
+This is the test site for the <a href="https://github.com/kaushalmodi/ox-hugo">
+<code>ox-hugo</code></a> package for Emacs/Org-mode.
+"""
+  footer = """
+<center>
+  [<a href="/">Test Site home</a> | <a href="https://ox-hugo.scripter.co/"><code>ox-hugo</code> home</a>]
+</center>
+"""
+  [Params.source]
+    url = "https://github.com/kaushalmodi/ox-hugo" # Mandatory, used in bare_min single.html, baseof.html
+    org_dir = "test/site/content-org"
+    md_dir = "test/site/content"

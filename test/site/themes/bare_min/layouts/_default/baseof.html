@@ -10,6 +10,9 @@
                 {{ .Title }} ❚ {{ .Site.Title }}
             {{ end }}
         </title>
+        {{ with .Site.Params.favicon }}
+            {{- . | safeHTML -}}
+        {{ end }}
         <!-- view-source:http://bettermotherfuckingwebsite.com/ -->
         <style type="text/css">
          body {
@@ -84,15 +87,18 @@
     <body lang="en">
         <div class="masthead-title"><a href="/">{{ .Site.Title }}</a></div>
         <div class="masthead-body">
-            This is the test site for the <a href="https://github.com/kaushalmodi/ox-hugo">
-            <code>ox-hugo</code></a> package for Emacs/Org-mode. It is generated using <code>ox-hugo</code> itself
-            + Hugo {{ $.Hugo.Version }} {{ with .Hugo.CommitHash }}(commit {{ . | replaceRE "^[0-9a-f]{7,}" "<a href=\"https://github.com/gohugoio/hugo/commit/${0}\">${0}</a>" | replaceRE ":chroma-([0-9a-f]{7,})" ", using Chroma commit <a href=\"https://github.com/alecthomas/chroma/commit/${1}\">${1}</a>" | safeHTML }}){{ else }}{{ end }}.
-            <p>It is <b>updated automatically after each commit</b> to the <code>ox-hugo</code> repo linked above.
+            {{ with .Site.Params.intro }}
+                <p>
+                    {{- . | safeHTML -}}
+                </p>
+            {{ end }}
+            <p>It is <b>updated automatically after each commit</b> to the <a href="{{ .Site.Params.source.url }}">
+                <code>{{ .Site.Params.source.url | replaceRE "^.*/" "" }}</code> repo</a>.
                 It was last updated on <i>{{ now.Format "Jan 02, 2006 15:04 MST" }}</i>.
             </p>
             <ul>
-                <li>The <i>actual <b>source</b></i>.. <a href="https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org">Org source</a></li>
-                <li><a href="https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content">Markdown exported from Org by <code>ox-hugo</code></a></li>
+                <li>The <i>actual <b>source</b></i>.. <a href="{{ .Site.Params.source.url }}/tree/master/{{ .Site.Params.source.org_dir }}">Org source</a></li>
+                <li><a href="{{ .Site.Params.source.url }}/tree/master/{{ .Site.Params.source.md_dir }}">Markdown source</a> (exported from the above Org source by <code>ox-hugo</code>)</li>
             </ul>
             <hr>
         </div>
@@ -100,9 +106,19 @@
         {{ block "main" . }}{{ end }}
 
         <hr>
-        <center>
-            [<a href="/">Test Site home</a> | <a href="https://ox-hugo.scripter.co/"><code>ox-hugo</code> home</a>]
-        </center>
+        <small>This site is generated using the <a href="https://github.com/kaushalmodi/ox-hugo"><b>ox-hugo</b></a> package for
+            Emacs/Org-mode + Hugo <b>{{ .Hugo.Version }}</b>
+            {{ with .Hugo.CommitHash }}
+                (commit
+                {{ . | replaceRE "^[0-9a-f]{7,}" "<a href=\"https://github.com/gohugoio/hugo/commit/${0}\">${0}</a>" | replaceRE ":chroma-([0-9a-f]{7,})" ", using Chroma commit <a href=\"https://github.com/alecthomas/chroma/commit/${1}\">${1}</a>" | safeHTML -}}
+                )
+            {{ end }}.
+        </small>
+        <p>
+            {{ with .Site.Params.footer }}
+                {{- . | safeHTML -}}
+            {{ end }}
+        </p>
     </body>
 </html>
 

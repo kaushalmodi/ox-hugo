@@ -1,7 +1,7 @@
 +++
 title = "Lastmod date set using Hugo-compatible date string"
 lastmod = 2018-01-23
-tags = ["lastmod-date"]
+tags = ["dates", "lastmod"]
 draft = false
 +++
 

@@ -1,7 +1,7 @@
 +++
 title = "Publish date set using Hugo-compatible date string"
 publishDate = 2018-01-23
-tags = ["publish-date"]
+tags = ["dates", "publishdate"]
 draft = false
 +++
 

@@ -1,7 +1,7 @@
 +++
 title = "Expiry date set using Hugo-compatible date string"
 expiryDate = 2999-01-23
-tags = ["expiry-date"]
+tags = ["dates", "expirydate"]
 draft = false
 +++
 

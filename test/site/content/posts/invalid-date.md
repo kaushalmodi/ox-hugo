@@ -1,6 +1,6 @@
 +++
 title = "Invalid Date"
-tags = ["date", "invalid"]
+tags = ["dates", "date", "invalid"]
 draft = false
 +++
 

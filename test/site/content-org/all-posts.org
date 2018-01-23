@@ -3198,26 +3198,20 @@ Below, the code block language name will show up before the code.
 :EXPORT_HUGO_WEIGHT: 4567
 :EXPORT_FILE_NAME: hugo-post-weight-4567
 :END:
-* DONE Parsing date from CLOSED property :post_heading_followed_soon_with_subheading:
-CLOSED: [2017-09-11 Mon 14:32]
-:PROPERTIES:
-:EXPORT_FILE_NAME: parsing-date-from-closed-property
-:END:
-** The "CLOSED" state of this heading (which is nil) should be ignored
-When an Org TODO item is switched to the =DONE= state, a =CLOSED=
-property is auto-inserted (default behavior).
-
-If such a property is non-nil, the value (time-stamp) of that is used
-to set the =date= field in the exported front-matter.
-
-- Reference :: [[https://orgmode.org/manual/Special-properties.html][(org) Special properties]] or =C-h i g (org) Special properties=
-* Dates
+* Dates                                                               :dates:
 ** Date                                                                :date:
 *** Just date
 :PROPERTIES:
 :EXPORT_FILE_NAME: date-just-date
 :EXPORT_DATE: 2017-09-12
 :END:
+The =date= for this post is Hugo-compatible i.e. [[https://tools.ietf.org/html/rfc3339#section-5.8][RFC3339-compliant]].
+*** Date set using Org time stamp
+:PROPERTIES:
+:EXPORT_FILE_NAME: date-org-time-stamp
+:EXPORT_DATE: <2018-01-23 Tue>
+:END:
+The =date= for this post is set in Org using the ~C-c . RET~ binding.
 *** Date + Time
 :PROPERTIES:
 :EXPORT_FILE_NAME: date-plus-time
@@ -3238,6 +3232,25 @@ to set the =date= field in the exported front-matter.
 :EXPORT_FILE_NAME: date-plus-time-plus-utc
 :EXPORT_DATE: 2017-09-12T16:10:00+05:30
 :END:
+*** DONE Parsing date from CLOSED property                           :closed:
+CLOSED: [2018-01-23 Tue 14:10]
+:PROPERTIES:
+:EXPORT_FILE_NAME: parsing-date-from-closed-property
+:END:
+When an Org TODO item is switched to the =DONE= state, a =CLOSED=
+property is auto-inserted (default behavior).
+
+If such a property is non-nil, the value (time-stamp) of that is used
+to set the =date= field in the exported front-matter.
+
+- Reference :: [[https://orgmode.org/manual/Special-properties.html][(org) Special properties]] or =C-h i g (org) Special properties=
+*** DONE Parsing date for a post which begins with a subheading      :closed:
+CLOSED: [2017-09-11 Mon 14:32]
+:PROPERTIES:
+:EXPORT_FILE_NAME: parsing-date-for-a-post-which-begins-with-a-subheading
+:END:
+**** The "CLOSED" state of this heading (which is nil) should be ignored
+This is a test for {{{oxhugoissue(87)}}}.
 *** Invalid Date                                                    :invalid:
 :PROPERTIES:
 :EXPORT_FILE_NAME: invalid-date
@@ -3257,7 +3270,7 @@ front-matter.
 In this post the =:EXPORT_DATE:= property is set to =2012-2017=, but
 the export will still happen fine, with the =date= front-matter not
 set.
-** Lastmod Date                                                :lastmod_date:
+** Lastmod Date                                                     :lastmod:
 *** Lastmod date set using Org time stamp
 :PROPERTIES:
 :EXPORT_FILE_NAME: lastmod-date-org-time-stamp
@@ -3271,7 +3284,7 @@ binding.
 :EXPORT_HUGO_LASTMOD: 2018-01-23
 :END:
 The =lastmod= for this post is Hugo-compatible i.e. [[https://tools.ietf.org/html/rfc3339#section-5.8][RFC3339-compliant]].
-** Publish Date                                                :publish_date:
+** Publish Date                                                 :publishdate:
 *** Publish date set using Org time stamp
 :PROPERTIES:
 :EXPORT_FILE_NAME: publish-date-org-time-stamp
@@ -3286,7 +3299,7 @@ binding.
 :END:
 The =publishdate= for this post is Hugo-compatible
 i.e. [[https://tools.ietf.org/html/rfc3339#section-5.8][RFC3339-compliant]].
-** Expiry Date                                                  :expiry_date:
+** Expiry Date                                                   :expirydate:
 *** Expiry date set using Org time stamp
 :PROPERTIES:
 :EXPORT_FILE_NAME: expiry-date-org-time-stamp

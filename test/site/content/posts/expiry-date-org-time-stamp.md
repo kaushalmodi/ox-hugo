@@ -1,7 +1,7 @@
 +++
 title = "Expiry date set using Org time stamp"
 expiryDate = 2999-01-23T00:00:00+00:00
-tags = ["expiry-date"]
+tags = ["dates", "expirydate"]
 draft = false
 +++
 

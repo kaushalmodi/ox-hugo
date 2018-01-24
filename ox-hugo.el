@@ -372,7 +372,9 @@ joinLines
 
 (defvar org-hugo--internal-list-separator "\n"
   "String used to separate elements in list variables.
-Examples are variables holding Hugo tags, categories, aliases.
+
+Examples are variables holding Hugo tags and categories.
+
 This variable is for internal use only, and must not be
 modified.")
 
@@ -2194,15 +2196,12 @@ INFO is a plist used as a communication channel."
                           (org-split-string aliases-raw-1 " "))))
          (aliases (let (alias-list)
                     (dolist (alias aliases-raw)
-                      (if (string-match-p "/" alias)
-                          (setq alias-list (append alias-list `(,alias)))
-                        (let* ((section (org-export-data (plist-get info :hugo-section) info))
-                               ;; Suffix section with "/" if it isn't already.
-                               (section (replace-regexp-in-string "[^/]\\'" "\\&/" section)))
-                          (setq alias-list (append alias-list `(,(concat "/" section alias)))))))
-                    (org-string-nw-p (mapconcat #'identity
-                                                alias-list
-                                                org-hugo--internal-list-separator))))
+                      (unless (string-match-p "/" alias)
+                        (let ((section (file-name-as-directory ;Suffix section with "/" if it isn't already
+                                        (org-export-data (plist-get info :hugo-section) info))))
+                          (setq alias (concat "/" section alias))))
+                      (setq alias-list (append alias-list `(,alias))))
+                    alias-list))
          (outputs-raw (org-string-nw-p
                        (org-export-data (plist-get info :hugo-outputs) info)))
          (outputs (when outputs-raw
@@ -2522,7 +2521,7 @@ are \"toml\" and \"yaml\"."
                           (format "%s %s %s\n"
                                   key
                                   sign
-                                  (cond ((or (member key '("aliases" "tags" "categories" "keywords"))
+                                  (cond ((or (member key '("tags" "categories" "keywords"))
                                              (listp value)) ;Custom front matter which are lists
                                          (org-hugo--get-yaml-toml-list-string value))
                                         (t

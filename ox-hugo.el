@@ -2080,6 +2080,8 @@ INFO is a plist used as a communication channel."
 
 INFO is a plist used as a communication channel.
 
+Return the original or modified TAG-LIST.
+
 1. Prefer hyphens
 
 If NO-PREFER-HYPHEN is nil, and if using hyphens in tags is
@@ -2111,38 +2113,39 @@ Example: :some__tag:   -> \"some tag\"."
   (let* ((prefer-hyphen (unless no-prefer-hyphen
                           (org-hugo--plist-get-true-p info :hugo-prefer-hyphen-in-tags)))
          (allow-spaces (org-hugo--plist-get-true-p info :hugo-allow-spaces-in-tags))
-         new-tag-list)
-    (cond
-     ((or prefer-hyphen
-          allow-spaces)
-      (dolist (tag tag-list)
-        (when allow-spaces
-          ;; It is safe to assume that no one would want
-          ;; leading/trailing spaces in tags/categories.. so not
-          ;; checking for "__a" or "a__" cases.
-          (setq tag (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1 \\2" tag)))  ;"a__b"  -> "a b"
-        (when prefer-hyphen
-          (setq tag (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" tag))          ;"_a"    -> "-a"
-          (setq tag (replace-regexp-in-string "\\`___\\([^_]\\)" "_\\1" tag))        ;"___a"  -> "_a"
-          (setq tag (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" tag))          ;"a_"    -> "a-"
-          (setq tag (replace-regexp-in-string "\\([^_]\\)___\\'" "\\1_" tag))        ;"a___"  -> "a_"
-          (setq tag (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" tag))    ;"a_b"   -> "a-b"
-          (setq tag (replace-regexp-in-string "\\([^_]\\)___\\([^_]\\)" "\\1_\\2" tag))) ;"a___b" -> "a_b"
-        (push tag new-tag-list))
-      (nreverse new-tag-list))
-     (t
-      tag-list))))
+         new-tag-list
+         ret)
+    (setq ret (cond
+               ((or prefer-hyphen
+                    allow-spaces)
+                (dolist (tag tag-list)
+                  (when allow-spaces
+                    ;; It is safe to assume that no one would want
+                    ;; leading/trailing spaces in tags/categories.. so not
+                    ;; checking for "__a" or "a__" cases.
+                    (setq tag (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1 \\2" tag)))  ;"a__b"  -> "a b"
+                  (when prefer-hyphen
+                    (setq tag (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" tag))          ;"_a"    -> "-a"
+                    (setq tag (replace-regexp-in-string "\\`___\\([^_]\\)" "_\\1" tag))        ;"___a"  -> "_a"
+                    (setq tag (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" tag))          ;"a_"    -> "a-"
+                    (setq tag (replace-regexp-in-string "\\([^_]\\)___\\'" "\\1_" tag))        ;"a___"  -> "a_"
+                    (setq tag (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" tag))    ;"a_b"   -> "a-b"
+                    (setq tag (replace-regexp-in-string "\\([^_]\\)___\\([^_]\\)" "\\1_\\2" tag))) ;"a___b" -> "a_b"
+                  (push tag new-tag-list))
+                (nreverse new-tag-list))
+               (t
+                tag-list)))
+    (setq ret (cl-remove-if-not #'org-string-nw-p ret))
+    ret))
 
-(defun org-hugo--transform-org-tags-str (tag-str info &optional no-prefer-hyphen)
+(defun org-hugo--transform-org-tags-2 (tag-str info &optional no-prefer-hyphen)
   "Wrapper function for `org-hugo--transform-org-tags'.
 
-1. Convert the input TAG-STR string to a list,
-2. Pass that to `org-hugo--transform-org-tags', and
-3. Convert the returned list back to a string, with elements
-   separated by `org-hugo--internal-list-separator'.
-4. Return that string.
+1. Convert the input TAG-STR string to a list.
+2. Pass that to `org-hugo--transform-org-tags'.
+3. Return the returned list.
 
-Example: \"two__words hyphenated_word\" -> \"two words\nhyphenated-word\".
+Example: \"two__words hyphenated_word\" -> (\"two words\" \"hyphenated-word\").
 
 INFO is a plist used as a communication channel.
 NO-PREFER-HYPHEN when non-nil will prevent interpretation of
@@ -2161,7 +2164,7 @@ Return nil if TAG-STR is not a string."
                           tag-str-list
                           info
                           no-prefer-hyphen)))
-      (mapconcat #'identity tag-str-list org-hugo--internal-list-separator))))
+      tag-str-list)))
 
 (defun org-hugo--category-p (tag)
   "Return non-nil if TAG begins with \"@\".
@@ -2224,40 +2227,34 @@ INFO is a plist used as a communication channel."
          (all-t-and-c-str (org-entry-get (point) "ALLTAGS"))
          (all-t-and-c (when (stringp all-t-and-c-str)
                         (org-split-string all-t-and-c-str ":")))
-         (tags (org-string-nw-p ;Don't allow tags to be just whitespace.
-                (or
-                 ;; Look for tags set using #+HUGO_TAGS keyword, or
-                 ;; EXPORT_HUGO_TAGS property if available.
-                 (org-hugo--transform-org-tags-str
-                  (plist-get info :hugo-tags) info :no-prefer-hyphen)
-                 ;; Else use Org tags (the ones set in headlines
-                 ;; and/or inherited) if any.
-                 (let* ((tags-list (cl-remove-if #'org-hugo--category-p all-t-and-c))
-                        (tags-list (org-hugo--transform-org-tags tags-list info)))
-                   ;; (when tags-list
-                   ;;   (message "[get fm DBG] tags: tags-list = %s" tags-list))
-                   (org-string-nw-p (mapconcat #'identity
-                                               tags-list
-                                               org-hugo--internal-list-separator))))))
+         (tags (or
+                ;; Look for tags set using #+HUGO_TAGS keyword, or
+                ;; EXPORT_HUGO_TAGS property if available.
+                (org-hugo--transform-org-tags-2
+                 (plist-get info :hugo-tags) info :no-prefer-hyphen)
+                ;; Else use Org tags (the ones set in headlines
+                ;; and/or inherited) if any.
+                (let* ((tags-list (cl-remove-if #'org-hugo--category-p all-t-and-c))
+                       (tags-list (org-hugo--transform-org-tags tags-list info)))
+                  ;; (message "[get fm DBG] tags: tags-list = %S" tags-list)
+                  tags-list)))
          (categories (or
                       ;; Look for categories set using
                       ;; #+HUGO_CATEGORIES keyword, or
                       ;; EXPORT_HUGO_CATEGORIES property if available.
-                      (org-hugo--transform-org-tags-str
+                      (org-hugo--transform-org-tags-2
                        (plist-get info :hugo-categories) info :no-prefer-hyphen)
                       ;; Else use categories set using Org tags with
                       ;; "@" prefix (the ones set in headlines and/or
                       ;; inherited) if any.
                       (let* ((categories-list (cl-remove-if-not #'org-hugo--category-p all-t-and-c))
-                             (categories-list (org-hugo--transform-org-tags categories-list info)))
-                        ;; (when categories-list
-                        ;;   (message "dbg: categories: categories-list = %s" categories-list))
-                        (org-string-nw-p
-                         (mapconcat (lambda (str)
-                                      ;; Remove "@" from beg of categories.
-                                      (replace-regexp-in-string "\\`@" "" str))
-                                    categories-list
-                                    org-hugo--internal-list-separator)))))
+                             (categories-list (org-hugo--transform-org-tags categories-list info))
+                             (categories-list (mapcar (lambda (str)
+                                                        ;; Remove "@" from beg of categories.
+                                                        (replace-regexp-in-string "\\`@" "" str))
+                                                      categories-list)))
+                        ;; (message "dbg: categories: categories-list = %s" categories-list)
+                        categories-list)))
          (weight (let* ((wt (plist-get info :hugo-weight))
                         (auto-calc (and (stringp wt)
                                         (string= wt "auto")
@@ -2322,6 +2319,8 @@ INFO is a plist used as a communication channel."
     ;; (message "[custom fm data DBG] %S" custom-fm-data)
     ;; (message "[fm resources OUT DBG] %S" resources)
     ;; (message "[fm data DBG] %S" data)
+    ;; (message "[fm tags DBG] %S" tags)
+    ;; (message "[fm categories DBG] %S" categories)
     (org-hugo--gen-front-matter data fm-format)))
 
 (defun org-hugo--calc-weight ()
@@ -2521,7 +2520,7 @@ are \"toml\" and \"yaml\"."
                           (format "%s %s %s\n"
                                   key
                                   sign
-                                  (cond ((or (member key '("tags" "categories" "keywords"))
+                                  (cond ((or (member key '("keywords"))
                                              (listp value)) ;Custom front matter which are lists
                                          (org-hugo--get-yaml-toml-list-string value))
                                         (t

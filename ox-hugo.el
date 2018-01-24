@@ -663,6 +663,8 @@ newer."
                    (:hugo-auto-set-lastmod "HUGO_AUTO_SET_LASTMOD" nil org-hugo-auto-set-lastmod)
                    (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
                    (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil)
+                   (:hugo-front-matter-key-org-tags "HUGO_FRONT_MATTER_KEY_ORG_TAGS" nil "tags")
+                   (:hugo-front-matter-key-org-categories "HUGO_FRONT_MATTER_KEY_ORG_CATEGORIES" nil "categories")
 
                    ;; Front matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -2227,6 +2229,8 @@ INFO is a plist used as a communication channel."
          (all-t-and-c-str (org-entry-get (point) "ALLTAGS"))
          (all-t-and-c (when (stringp all-t-and-c-str)
                         (org-split-string all-t-and-c-str ":")))
+         (tags-key (intern
+                    (plist-get info :hugo-front-matter-key-org-tags)))
          (tags (or
                 ;; Look for tags set using #+HUGO_TAGS keyword, or
                 ;; EXPORT_HUGO_TAGS property if available.
@@ -2238,6 +2242,8 @@ INFO is a plist used as a communication channel."
                        (tags-list (org-hugo--transform-org-tags tags-list info)))
                   ;; (message "[get fm DBG] tags: tags-list = %S" tags-list)
                   tags-list)))
+         (categories-key (intern
+                          (plist-get info :hugo-front-matter-key-org-categories)))
          (categories (or
                       ;; Look for categories set using
                       ;; #+HUGO_CATEGORIES keyword, or
@@ -2297,8 +2303,8 @@ INFO is a plist used as a communication channel."
                  (markup . ,(org-export-data (plist-get info :hugo-markup) info))
                  (outputs . ,outputs)
                  (slug . ,(org-export-data (plist-get info :hugo-slug) info))
-                 (tags . ,tags)
-                 (categories . ,categories)
+                 (,tags-key . ,tags)
+                 (,categories-key . ,categories)
                  (type . ,(org-export-data (plist-get info :hugo-type) info))
                  (url . ,(org-export-data (plist-get info :hugo-url) info))
                  (weight . ,weight)
@@ -2319,6 +2325,8 @@ INFO is a plist used as a communication channel."
     ;; (message "[custom fm data DBG] %S" custom-fm-data)
     ;; (message "[fm resources OUT DBG] %S" resources)
     ;; (message "[fm data DBG] %S" data)
+    ;; (message "[fm tags key DBG] %s" tags-key)
+    ;; (message "[fm categories key DBG] %s" categories-key)
     ;; (message "[fm tags DBG] %S" tags)
     ;; (message "[fm categories DBG] %S" categories)
     (org-hugo--gen-front-matter data fm-format)))

@@ -3726,6 +3726,21 @@ This post has 1 author.
 :END:
 This post has multiple authors. In Org, multiple authors are added
 comma-separated.
+** Alternative front-matter keys                           :alternative:keys:
+*** Alternative "tags" key                                             :tags:
+:PROPERTIES:
+:EXPORT_FILE_NAME: alternative-tags-key
+:EXPORT_HUGO_FRONT_MATTER_KEY_ORG_TAGS: keywords
+:END:
+This post will have the =tags= key in front-matter renamed to
+=keywords=.
+*** Alternative "categories" key                     :categories:@test_cat_x:
+:PROPERTIES:
+:EXPORT_FILE_NAME: alternative-categories-key
+:EXPORT_HUGO_FRONT_MATTER_KEY_ORG_CATEGORIES: cats
+:END:
+This post will have the =categories= key in front-matter renamed to
+=cats=.
 * Real Examples                                               :real_examples:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: real-examples

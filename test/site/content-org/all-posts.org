@@ -3743,21 +3743,44 @@ comma-separated.
 :EXPORT_KEYWORDS: abc
 :EXPORT_KEYWORDS+: def
 :END:
-** Alternative front-matter keys                           :alternative:keys:
-*** Alternative "tags" key                                             :tags:
+** Replace front-matter keys                                   :keys:replace:
+*** Replace only "linkTitle" key                                  :linktitle:
 :PROPERTIES:
-:EXPORT_FILE_NAME: alternative-tags-key
-:EXPORT_HUGO_FRONT_MATTER_KEY_ORG_TAGS: keywords
+:EXPORT_FILE_NAME: replace-only-linktitle-key
+:EXPORT_HUGO_LINKTITLE: Replace only "linkTitle" key
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: linkTitle>linktitle
 :END:
-This post will have the =tags= key in front-matter renamed to
+This post will have the =linkTitle= key in front-matter replaced with
+=linktitle=.
+*** Replace only "tags" key                                            :tags:
+:PROPERTIES:
+:EXPORT_FILE_NAME: replace-only-tags-key
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: tags>keywords
+:END:
+This post will have the =tags= key in front-matter replaced with
 =keywords=.
-*** Alternative "categories" key                     :categories:@test_cat_x:
+*** Replace only "categories" key                    :categories:@test_cat_x:
 :PROPERTIES:
-:EXPORT_FILE_NAME: alternative-categories-key
-:EXPORT_HUGO_FRONT_MATTER_KEY_ORG_CATEGORIES: cats
+:EXPORT_FILE_NAME: replace-only-categories-key
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: categories>cats
 :END:
-This post will have the =categories= key in front-matter renamed to
+This post will have the =categories= key in front-matter replaced with
 =cats=.
+*** Replace both "tags" and "categories" keys   :tags:categories:@test_cat_x:
+:PROPERTIES:
+:EXPORT_FILE_NAME: replace-both-tags-and-categories-keys
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: tags>keywords categories>cats
+:END:
+This post will have the =tags= key in front-matter replaced with
+=keywords= and =categories= replaced with =cats=.
+*** Replace keys using multiple properties      :@test_cat_x:tags:categories:
+:PROPERTIES:
+:EXPORT_FILE_NAME: replace-keys-using-multiple-properties
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: tags>keywords
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE+: categories>cats
+:END:
+This post will have the =tags= key in front-matter replaced with
+=keywords= and =categories= replaced with =cats=.
 * Real Examples                                               :real_examples:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: real-examples

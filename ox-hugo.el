@@ -664,8 +664,7 @@ newer."
                    (:hugo-auto-set-lastmod "HUGO_AUTO_SET_LASTMOD" nil org-hugo-auto-set-lastmod)
                    (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
                    (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil)
-                   (:hugo-front-matter-key-org-tags "HUGO_FRONT_MATTER_KEY_ORG_TAGS" nil "tags")
-                   (:hugo-front-matter-key-org-categories "HUGO_FRONT_MATTER_KEY_ORG_CATEGORIES" nil "categories")
+                   (:hugo-front-matter-key-replace "HUGO_FRONT_MATTER_KEY_REPLACE" nil nil space)
 
                    ;; Front matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -1143,6 +1142,58 @@ cannot be formatted in Hugo-compatible format."
                         (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
                                                   date-nocolon))))
     date-str))
+
+(defun org-hugo--replace-keys-maybe (data info)
+  "Return DATA with its keys replaced, maybe.
+
+The keys in DATA are replaced if HUGO_FRONT_MATTER_KEY_REPLACE is
+set appropriately.
+
+The replacement syntax is:
+
+    #+HUGO_FRONT_MATTER_KEY_REPLACE: oldkey>newkey
+
+You can also do multiple key replacements:
+
+    #+HUGO_FRONT_MATTER_KEY_REPLACE: oldkey1>newkey1 oldkey2>newkey2
+
+Above examples are using the keyword
+HUGO_FRONT_MATTER_KEY_REPLACE, but the same also applies when
+using its subtree property form
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE:.
+
+Note that:
+
+1. There are no spaces around the special character \">\".
+2. Spaces are used to only separate multiple replacements are shown in
+   the second example above.
+3. The replacements are literal.. there are no regular expressions
+   involved."
+  (let* ((repl-str (plist-get info :hugo-front-matter-key-replace))
+         (repl-str (when (org-string-nw-p repl-str)
+                     (org-trim repl-str)))
+         (valid (and repl-str
+                     (string-match-p ">" repl-str))))
+    (when valid
+      (let* ((repl-list (split-string repl-str))
+             (repl-alist (let (alist)
+                           (dolist (repl repl-list)
+                             (when (and (stringp repl)
+                                        (string-match-p ">" repl))
+                               (let* ((pair (split-string repl ">"))
+                                      (repl-pair (mapcar #'intern pair)))
+                                 (push repl-pair alist))))
+                           alist)))
+        ;; (message "[ox-hugo replace-key str DBG] %S" repl-str)
+        ;; (message "[ox-hugo replace-key list DBG] %S" repl-list)
+        ;; (message "[ox-hugo replace-key alist DBG] %S" repl-alist)
+        (when repl-alist
+          (dolist (repl repl-alist)
+            (let ((key-orig (nth 0 repl))
+                  (key-repl (nth 1 repl)))
+              ;; https://emacs.stackexchange.com/a/3398/115
+              (setf (car (assoc key-orig data)) key-repl))))))
+    data))
 
 
 
@@ -2218,8 +2269,6 @@ INFO is a plist used as a communication channel."
          (all-t-and-c-str (org-entry-get (point) "ALLTAGS"))
          (all-t-and-c (when (stringp all-t-and-c-str)
                         (org-split-string all-t-and-c-str ":")))
-         (tags-key (intern
-                    (plist-get info :hugo-front-matter-key-org-tags)))
          (tags (or
                 ;; Look for tags set using #+HUGO_TAGS keyword, or
                 ;; EXPORT_HUGO_TAGS property if available.
@@ -2231,8 +2280,6 @@ INFO is a plist used as a communication channel."
                        (tags-list (org-hugo--transform-org-tags tags-list info)))
                   ;; (message "[get fm DBG] tags: tags-list = %S" tags-list)
                   tags-list)))
-         (categories-key (intern
-                          (plist-get info :hugo-front-matter-key-org-categories)))
          (categories (or
                       ;; Look for categories set using
                       ;; #+HUGO_CATEGORIES keyword, or
@@ -2294,8 +2341,8 @@ INFO is a plist used as a communication channel."
                  (markup . ,(org-export-data (plist-get info :hugo-markup) info))
                  (outputs . ,outputs)
                  (slug . ,(org-export-data (plist-get info :hugo-slug) info))
-                 (,tags-key . ,tags)
-                 (,categories-key . ,categories)
+                 (tags . ,tags)
+                 (categories . ,categories)
                  (type . ,(org-export-data (plist-get info :hugo-type) info))
                  (url . ,(org-export-data (plist-get info :hugo-url) info))
                  (weight . ,weight)
@@ -2316,11 +2363,10 @@ INFO is a plist used as a communication channel."
     ;; (message "[custom fm data DBG] %S" custom-fm-data)
     ;; (message "[fm resources OUT DBG] %S" resources)
     ;; (message "[fm data DBG] %S" data)
-    ;; (message "[fm tags key DBG] %s" tags-key)
-    ;; (message "[fm categories key DBG] %s" categories-key)
     ;; (message "[fm tags DBG] %S" tags)
     ;; (message "[fm categories DBG] %S" categories)
     ;; (message "[fm keywords DBG] %S" keywords)
+    (setq data (org-hugo--replace-keys-maybe data info))
     (org-hugo--gen-front-matter data fm-format)))
 
 (defun org-hugo--calc-weight ()

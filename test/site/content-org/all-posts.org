@@ -433,6 +433,12 @@ Here is the first post on Emacs.
 :EXPORT_DATE: 2017-07-12T17:31:56-04:00
 :END:
 Here is the second post on Emacs.
+** HUGO_SECTION set in post subtree
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: zoo
+:EXPORT_FILE_NAME: post-in-zoo-section
+:END:
+This post will be created in the =zoo= section.
 * Tables                                                              :table:
 ** Simple Table
 :PROPERTIES:

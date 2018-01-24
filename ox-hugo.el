@@ -90,6 +90,16 @@ It holds the value returned by
   "Variable to count of number of subtrees getting exported.
 This variable is used when exporting all subtrees in a file.")
 
+(defvar org-hugo--section nil
+  "Variable to store the current valid Hugo subtree section name.
+If the EXPORT_HUGO_SECTION property is set in the same subtree as
+the post subtree, it somehow cannot be parsed from
+`org-hugo-export-to-md'.  But that property can be accessed
+within `org-hugo-export-wim-to-md' regardless.  This variable
+helps set the section path correctly for such cases (where
+EXPORT_HUGO_SECTION and EXPORT_FILE_NAME are set in the same
+subtree).")
+
 (defvar org-hugo--bundle nil
   "Variable to store the current valid Hugo subtree bundle name.
 If the EXPORT_HUGO_BUNDLE property is set in the same subtree as
@@ -1047,15 +1057,17 @@ Examples:
 The publication directory is created if it does not exist.
 
 INFO is a plist used as a communication channel."
-  (let* ((base-dir (if (null (plist-get info :hugo-base-dir))
-                       (user-error "It is mandatory to set the HUGO_BASE_DIR property")
-                     (file-name-as-directory (plist-get info :hugo-base-dir))))
+  (let* ((base-dir (if (plist-get info :hugo-base-dir)
+                       (file-name-as-directory (plist-get info :hugo-base-dir))
+                     (user-error "It is mandatory to set the HUGO_BASE_DIR property")))
          (content-dir "content/")
-         (section-dir (if (null (plist-get info :hugo-section))
-                          (user-error "It is mandatory to set the HUGO_SECTION property")
-                        (file-name-as-directory (plist-get info :hugo-section))))
-         (bundle-name (or (plist-get info :hugo-bundle)
-                          org-hugo--bundle))
+         (section-name (or org-hugo--section ;Hugo section set in the post subtree gets higher precedence
+                           (plist-get info :hugo-section)))
+         (section-dir (if section-name
+                          (file-name-as-directory section-name)
+                        (user-error "It is mandatory to set the HUGO_SECTION property")))
+         (bundle-name (or org-hugo--bundle ;Hugo bundle set in the post subtree gets higher precedence
+                          (plist-get info :hugo-bundle)))
          (bundle-dir (if bundle-name
                          (file-name-as-directory bundle-name)
                        ""))
@@ -2705,6 +2717,7 @@ Return output file's name."
             (progn
               ;; Reset the variables that are used only for subtree exports.
               (setq org-hugo--subtree-coord nil)
+              (setq org-hugo--section nil)
               (setq org-hugo--bundle nil)
               (message "[ox-hugo] Exporting `%s' (%s)" title fname))
           (message "[ox-hugo] %s was not exported as it is tagged with an exclude tag `%s'"
@@ -2860,6 +2873,8 @@ approach)."
                                   (re-search-forward "^#\\+HUGO_WEIGHT:[[:blank:]]*auto" nil :noerror))))
                           (setq org-hugo--subtree-coord
                                 (org-hugo--get-post-subtree-coordinates subtree)))
+                        ;; Get the current subtree section name if any.
+                        (setq org-hugo--section (org-entry-get nil "EXPORT_HUGO_SECTION" :inherit))
                         ;; Get the current subtree bundle name if any.
                         (setq org-hugo--bundle (org-entry-get nil "EXPORT_HUGO_BUNDLE" :inherit))
                         (setq do-export t)))))

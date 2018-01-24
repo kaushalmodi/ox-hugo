@@ -373,7 +373,8 @@ joinLines
 (defvar org-hugo--internal-list-separator "\n"
   "String used to separate elements in list variables.
 
-Examples are variables holding Hugo tags and categories.
+Examples are internal variables holding Hugo tags, categories and
+keywords.
 
 This variable is for internal use only, and must not be
 modified.")
@@ -1018,42 +1019,24 @@ or \"name\" are packed into an alist with `car' as \"params\"."
       ;; (message "all-src: %S" all-src)
       all-src)))
 
-(defun org-hugo--get-yaml-toml-list-string (value)
-  "Return VALUE as a YAML/TOML list represented as a string.
-
-If VALUE is a string, each `org-hugo--internal-list-separator'
-separated string component will be interpreted as a string
-element.
-
-If VALUE is a list, it is first converted to a
-`org-hugo--internal-list-separator' separated string.
-
-Return a string representing a YAML/TOML list.
+(defun org-hugo--get-yaml-toml-list-string (list)
+  "Return LIST as a YAML/TOML list represented as a string.
 
 Examples:
 
-  \"abc\ndef\"              -> \"[\\\"abc\\\", \\\"def\\\"]\"
-
   \(\"abc\" \"def\")   -> \"[\\\"abc\\\", \\\"def\\\"]\"."
-  (when (listp value)
-    ;; Convert value to a string
-    (setq value (mapconcat
-                 (lambda (v)
-                   (cond
-                    ((symbolp v)
-                     (symbol-name v))
-                    ((numberp v)
-                     (number-to-string v))
-                    (t
-                     v)))
-                 value
-                 org-hugo--internal-list-separator)))
   (concat "["
           (mapconcat #'identity
-                     (mapcar #'org-hugo--quote-string
-                             (split-string
-                              value
-                              org-hugo--internal-list-separator))
+                     (mapcar (lambda (v)
+                               (org-hugo--quote-string
+                                (cond
+                                 ((symbolp v)
+                                  (symbol-name v))
+                                 ((numberp v)
+                                  (number-to-string v))
+                                 (t
+                                  v))))
+                             list)
                      ", ")
           "]"))
 
@@ -2140,33 +2123,39 @@ Example: :some__tag:   -> \"some tag\"."
     (setq ret (cl-remove-if-not #'org-string-nw-p ret))
     ret))
 
-(defun org-hugo--transform-org-tags-2 (tag-str info &optional no-prefer-hyphen)
-  "Wrapper function for `org-hugo--transform-org-tags'.
+(defun org-hugo--delim-str-to-list (delim-str info &optional no-prefer-hyphen)
+  "Function to transform DELIM-STR string to a list.
 
-1. Convert the input TAG-STR string to a list.
-2. Pass that to `org-hugo--transform-org-tags'.
-3. Return the returned list.
+1. Trim leading/trailing spaces from DELIM-STR, replace spaces
+   with `org-hugo--internal-list-separator'.
+2. Convert that string to a list using
+   `org-hugo--internal-list-separator' as the separator.
+3. Pass that to `org-hugo--transform-org-tags' that does some string
+   transformation.  See that function for more info.
+4. Return the transformed list.
 
 Example: \"two__words hyphenated_word\" -> (\"two words\" \"hyphenated-word\").
 
-INFO is a plist used as a communication channel.
-NO-PREFER-HYPHEN when non-nil will prevent interpretation of
-underscores in TAG-STR as hyphens.
+Note that when NO-PREFER-HYPHEN is non-nil, replacement of
+underscores in DELIM-STR with hyphens as shown in the above
+example will not happen.
 
-Return nil if TAG-STR is not a string."
-  (when (stringp tag-str)
-    (setq tag-str (org-trim tag-str))
-    (setq tag-str (replace-regexp-in-string
-                   " +" org-hugo--internal-list-separator
-                   tag-str))
-    (let* ((tag-str-list (split-string
-                          tag-str
-                          org-hugo--internal-list-separator))
-           (tag-str-list (org-hugo--transform-org-tags
-                          tag-str-list
-                          info
-                          no-prefer-hyphen)))
-      tag-str-list)))
+This function can be applied to any string that uses
+`org-hugo--internal-list-separator' as delimiter, for example,
+parsing the tags, categories and keywords meta-data.
+
+INFO is a plist used as a communication channel.
+
+Return nil if DELIM-STR is not a string."
+  (when (stringp delim-str)
+    (let* ((delim-str (org-trim delim-str))
+           (delim-str (replace-regexp-in-string
+                       " +" org-hugo--internal-list-separator
+                       delim-str))
+           (str-list (split-string delim-str org-hugo--internal-list-separator))
+           (str-list (org-hugo--transform-org-tags
+                      str-list info no-prefer-hyphen)))
+      str-list)))
 
 (defun org-hugo--category-p (tag)
   "Return non-nil if TAG begins with \"@\".
@@ -2234,7 +2223,7 @@ INFO is a plist used as a communication channel."
          (tags (or
                 ;; Look for tags set using #+HUGO_TAGS keyword, or
                 ;; EXPORT_HUGO_TAGS property if available.
-                (org-hugo--transform-org-tags-2
+                (org-hugo--delim-str-to-list
                  (plist-get info :hugo-tags) info :no-prefer-hyphen)
                 ;; Else use Org tags (the ones set in headlines
                 ;; and/or inherited) if any.
@@ -2248,7 +2237,7 @@ INFO is a plist used as a communication channel."
                       ;; Look for categories set using
                       ;; #+HUGO_CATEGORIES keyword, or
                       ;; EXPORT_HUGO_CATEGORIES property if available.
-                      (org-hugo--transform-org-tags-2
+                      (org-hugo--delim-str-to-list
                        (plist-get info :hugo-categories) info :no-prefer-hyphen)
                       ;; Else use categories set using Org tags with
                       ;; "@" prefix (the ones set in headlines and/or
@@ -2261,6 +2250,8 @@ INFO is a plist used as a communication channel."
                                                       categories-list)))
                         ;; (message "dbg: categories: categories-list = %s" categories-list)
                         categories-list)))
+         (keywords (org-hugo--delim-str-to-list
+                    (plist-get info :keywords) info :no-prefer-hyphen))
          (weight (let* ((wt (plist-get info :hugo-weight))
                         (auto-calc (and (stringp wt)
                                         (string= wt "auto")
@@ -2296,7 +2287,7 @@ INFO is a plist used as a communication channel."
                  (expiryDate . ,(org-hugo--format-date :hugo-expirydate info))
                  (aliases . ,aliases)
                  (isCJKLanguage . ,(org-hugo--plist-get-true-p info :hugo-iscjklanguage))
-                 (keywords . ,(org-export-data (plist-get info :keywords) info))
+                 (keywords . ,keywords)
                  (layout . ,(org-export-data (plist-get info :hugo-layout) info))
                  (lastmod . ,(org-hugo--format-date :hugo-lastmod info))
                  (linkTitle . ,(org-export-data (plist-get info :hugo-linktitle) info))
@@ -2329,6 +2320,7 @@ INFO is a plist used as a communication channel."
     ;; (message "[fm categories key DBG] %s" categories-key)
     ;; (message "[fm tags DBG] %S" tags)
     ;; (message "[fm categories DBG] %S" categories)
+    ;; (message "[fm keywords DBG] %S" keywords)
     (org-hugo--gen-front-matter data fm-format)))
 
 (defun org-hugo--calc-weight ()
@@ -2528,8 +2520,9 @@ are \"toml\" and \"yaml\"."
                           (format "%s %s %s\n"
                                   key
                                   sign
-                                  (cond ((or (member key '("keywords"))
-                                             (listp value)) ;Custom front matter which are lists
+                                  (cond (;; Tags, categories, keywords, aliases,
+                                         ;; custom front matter which are lists.
+                                         (listp value)
                                          (org-hugo--get-yaml-toml-list-string value))
                                         (t
                                          (org-hugo--quote-string value)))))))))))

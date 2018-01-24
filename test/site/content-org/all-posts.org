@@ -3726,6 +3726,23 @@ This post has 1 author.
 :END:
 This post has multiple authors. In Org, multiple authors are added
 comma-separated.
+** Keywords                                                        :keywords:
+*** Single keyword in front-matter
+:PROPERTIES:
+:EXPORT_FILE_NAME: single-keyword-in-front-matter
+:EXPORT_KEYWORDS: abc
+:END:
+*** Multiple keywords in front-matter
+:PROPERTIES:
+:EXPORT_FILE_NAME: multiple-keywords-in-front-matter
+:EXPORT_KEYWORDS: abc def hyphenated-keyword underscored_keyword two__words these__are__four__words
+:END:
+*** Keywords set using multiple properties
+:PROPERTIES:
+:EXPORT_FILE_NAME: keywords-set-using-multiple-properties
+:EXPORT_KEYWORDS: abc
+:EXPORT_KEYWORDS+: def
+:END:
 ** Alternative front-matter keys                           :alternative:keys:
 *** Alternative "tags" key                                             :tags:
 :PROPERTIES:

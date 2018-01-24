@@ -3781,6 +3781,13 @@ This post will have the =tags= key in front-matter replaced with
 :END:
 This post will have the =tags= key in front-matter replaced with
 =keywords= and =categories= replaced with =cats=.
+*** Swap tags and categories               :@test_cat_x:tags:categories:swap:
+:PROPERTIES:
+:EXPORT_FILE_NAME: swap-tags-and-categories
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: tags>categories categories>tags
+:END:
+This post will have the =tags= and =categories= keys in the
+front-matter swapped.
 * Real Examples                                               :real_examples:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: real-examples

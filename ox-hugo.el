@@ -1171,28 +1171,35 @@ Note that:
    involved."
   (let* ((repl-str (plist-get info :hugo-front-matter-key-replace))
          (repl-str (when (org-string-nw-p repl-str)
-                     (org-trim repl-str)))
-         (valid (and repl-str
-                     (string-match-p ">" repl-str))))
-    (when valid
-      (let* ((repl-list (split-string repl-str))
+                     (org-trim repl-str))))
+    (when repl-str
+      ;; (message "[ox-hugo replace-key str DBG] %S" repl-str)
+      (let* ((repl-list (split-string repl-str)) ;`repl-str' is space-separated
              (repl-alist (let (alist)
                            (dolist (repl repl-list)
-                             (when (and (stringp repl)
+                             (when (and (stringp repl) ;`repl' would look like "oldkey>newkey"
                                         (string-match-p ">" repl))
                                (let* ((pair (split-string repl ">"))
-                                      (repl-pair (mapcar #'intern pair)))
-                                 (push repl-pair alist))))
+                                      (key-orig-str (org-string-nw-p (nth 0 pair)))
+                                      (key-repl-str (org-string-nw-p (nth 1 pair)))
+                                      (repl-pair (when (and key-orig-str
+                                                            key-repl-str)
+                                                   (cons (intern key-orig-str)
+                                                         (intern key-repl-str)))))
+                                 (when repl-pair
+                                   ;; (message "[ox-hugo pair DBG] %S" pair)
+                                   ;; (message "[ox-hugo repl-pair DBG] %S" repl-pair)
+                                   ;; (message "[ox-hugo repl-pair car DBG] %S" (car repl-pair))
+                                   ;; (message "[ox-hugo repl-pair cdr DBG] %S" (cdr repl-pair))
+                                   (push repl-pair alist)))))
                            alist)))
-        ;; (message "[ox-hugo replace-key str DBG] %S" repl-str)
         ;; (message "[ox-hugo replace-key list DBG] %S" repl-list)
         ;; (message "[ox-hugo replace-key alist DBG] %S" repl-alist)
-        (when repl-alist
-          (dolist (repl repl-alist)
-            (let ((key-orig (nth 0 repl))
-                  (key-repl (nth 1 repl)))
-              ;; https://emacs.stackexchange.com/a/3398/115
-              (setf (car (assoc key-orig data)) key-repl))))))
+        (dolist (repl repl-alist)
+          (let ((key-orig (car repl))
+                (key-repl (cdr repl)))
+            ;; https://emacs.stackexchange.com/a/3398/115
+            (setf (car (assoc key-orig data)) key-repl)))))
     data))
 
 

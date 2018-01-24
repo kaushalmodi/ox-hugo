@@ -677,6 +677,8 @@ newer."
                    (:hugo-draft "HUGO_DRAFT" nil nil)
                    ;; expiryDate
                    (:hugo-expirydate "HUGO_EXPIRYDATE" nil nil)
+                   ;; headless (only for Page Bundles - Hugo v0.35+)
+                   (:hugo-headless "HUGO_HEADLESS" nil nil)
                    ;; isCJKLanguage
                    (:hugo-iscjklanguage "HUGO_ISCJKLANGUAGE" nil nil)
                    ;; keywords
@@ -2218,6 +2220,8 @@ INFO is a plist used as a communication channel."
                   (org-hugo--front-matter-value-booleanize (org-hugo--plist-get-true-p info :hugo-draft)))
                  (t
                   "false")))
+         (headless (when (org-hugo--plist-get-true-p info :hugo-headless)
+                     (org-hugo--front-matter-value-booleanize (org-hugo--plist-get-true-p info :hugo-headless))))
          (all-t-and-c-str (org-entry-get (point) "ALLTAGS"))
          (all-t-and-c (when (stringp all-t-and-c-str)
                         (org-split-string all-t-and-c-str ":")))
@@ -2303,6 +2307,7 @@ INFO is a plist used as a communication channel."
                  (url . ,(org-export-data (plist-get info :hugo-url) info))
                  (weight . ,weight)
                  (draft . ,draft)
+                 (headless . ,headless)
                  (creator . ,creator)
                  (blackfriday . ,blackfriday)
                  (menu . ,menu-alist)

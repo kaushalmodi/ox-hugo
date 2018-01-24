@@ -1,0 +1,84 @@
+{{ define "head" }}
+
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+     displayAlign: "center",
+     displayIndent: "0em",
+
+     "HTML-CSS": { scale: 100,
+                   linebreaks: { automatic: "false" },
+                   webFont: "TeX"
+     },
+     SVG: {scale: 100,
+           linebreaks: { automatic: "false" },
+           font: "TeX"},
+     NativeMML: {scale: 100},
+     TeX: { equationNumbers: {autoNumber: "AMS"},
+            MultLineWidth: "85%",
+            TagSide: "right",
+            TagIndent: ".8em"
+     }
+ });
+</script>
+<!-- https://gohugo.io/content-management/formats/#mathjax-with-hugo -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+<!-- Chroma Github theme CSS -->
+<link rel="stylesheet" href="{{ "css/github_chroma.css" | relURL }}" type="text/css" />
+{{ end }}
+
+{{ define "main" }}
+
+<div class="post">
+    <h1 class="post-title">{{ .Title }}</h1>
+    {{ with .GitInfo }} <!-- To enable this, put "enableGitInfo = true" in your site config.toml -->
+        This test was created/modified in commit <a href="{{ $.Site.Params.source.url }}/commit/{{- .Hash -}}">
+        {{- .AbbreviatedHash -}}</a> "{{ .Subject }}" on <b>{{ dateFormat "2006-01-02" .AuthorDate }}</b>.
+    {{ end }}
+    <p>
+        {{ if .Params.categories }}
+            Categories:
+            {{ range .Params.categories }}
+                <a href="/categories/{{ . | urlize }}">{{ . }}</a>
+            {{ end }}
+        {{ end }}
+    </p>
+    <p>
+        {{ if .Params.tags }}
+            Tags:
+            {{ range .Params.tags }}
+                <a href="/tags/{{ . | urlize }}">{{ . }}</a>
+            {{ end }}
+        {{ end }}
+    </p>
+    <p>
+        {{ if .Params.draft }}
+            <hr>
+            <center><h2>This is a Draft</h2></center>
+            <hr>
+        {{ end }}
+    </p>
+    {{ .Content }}
+    <hr>
+    <h2>Content from Headless Page Bundle</h2>
+    {{ $headless := .Site.GetPage "page" "headless-page-bundle-x" }}
+    {{ $reusablePages := $headless.Resources.Match "*" }}
+    {{ range $reusablePages }}
+        <h3>{{ .Title }}</h3>
+        {{ .Content }}
+        <hr>
+    {{ end }}
+    {{ with $headless.Resources }}
+        <h3 id="headless-resource-debug">Headless Page Bundle Resources (Debug)</h3>
+        {{ partial "debugprint.html" . }}
+    {{ end }}
+
+    <a id="debug"></a>
+    <h3 id="page-debug">Page Params (Debug)</h3>
+    {{ partial "debugprint.html" .Params }}
+    <h3 id="file-debug">File Object (Debug)</h3>
+    {{ partial "debugprint.html" .File }}
+</div>
+
+{{ end }}

@@ -3788,6 +3788,21 @@ This post will have the =tags= key in front-matter replaced with
 :END:
 This post will have the =tags= and =categories= keys in the
 front-matter swapped.
+*** Replace custom keys                                              :custom:
+:PROPERTIES:
+:EXPORT_FILE_NAME: replace-custom-keys
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :foo 1 :bar 2
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: foo>myfoo bar>mybar
+:END:
+This post will have the =foo= key in front-matter replaced with
+=myfoo= and =bar= replaced with =mybar=.
+*** Attempt to replace non-existing keys                       :non_existing:
+:PROPERTIES:
+:EXPORT_FILE_NAME: replace-non-existing-keys
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: toto>zulu
+:END:
+Here, attempt is made to replace a non-existing key =toto=, but still,
+there shouldn't be any error.
 * Real Examples                                               :real_examples:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: real-examples

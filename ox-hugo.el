@@ -1198,8 +1198,10 @@ Note that:
         (dolist (repl repl-alist)
           (let ((key-orig (car repl))
                 (key-repl (cdr repl)))
-            ;; https://emacs.stackexchange.com/a/3398/115
-            (setf (car (assoc key-orig data)) key-repl)))))
+            (let ((found-key-cell (assoc key-orig data)))
+              (when found-key-cell
+                ;; https://emacs.stackexchange.com/a/3398/115
+                (setf (car found-key-cell) key-repl)))))))
     data))
 
 

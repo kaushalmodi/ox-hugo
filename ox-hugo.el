@@ -644,7 +644,7 @@ newer."
   :options-alist '(;; Variables not setting the front-matter directly
                    (:with-toc nil "toc" org-hugo-export-with-toc)
                    (:section-numbers nil "num" org-hugo-export-with-section-numbers)
-                   (:author "AUTHOR" nil org-export-with-author newline)
+                   (:author "AUTHOR" nil user-full-name newline)
                    (:creator "CREATOR" nil org-hugo-export-creator-string)
                    (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
                    (:with-special-strings nil "-" nil) ;Don't use special strings for ndash, mdash; that is done automatically by Blackfriday

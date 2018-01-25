@@ -1,0 +1,90 @@
+#+TITLE: Keyword Collection
+
+#+HUGO_BASE_DIR: ../
+
+# Authors
+#+AUTHOR: firstname1 lastname1
+#+AUTHOR: firstname2 lastname2, firstname3 lastname3
+
+# Note that #+FILETAGS won't work in file-based exports (like this one).
+# https://ox-hugo.scripter.co/doc/tags-and-categories/#file-based-export
+
+# Tags
+#+HUGO_TAGS: mega__front-matter
+#+HUGO_TAGS: keys
+#+HUGO_TAGS: collection concatenation merging
+
+# Categories
+#+HUGO_CATEGORIES: cat1
+#+HUGO_CATEGORIES: cat2
+
+# Menu
+#+HUGO_MENU: :menu foo
+#+HUGO_MENU: :weight 10
+
+# # Menu Override
+# #+HUGO_MENU_OVERRIDE: :menu bar
+# #+HUGO_MENU_OVERRIDE: :weight 20
+
+# Custom front-matter
+#+HUGO_CUSTOM_FRONT_MATTER: :foo bar
+#+HUGO_CUSTOM_FRONT_MATTER: :baz zoo
+#+HUGO_CUSTOM_FRONT_MATTER: :alpha 1
+#+HUGO_CUSTOM_FRONT_MATTER: :beta "two words"
+#+HUGO_CUSTOM_FRONT_MATTER: :gamma 10
+#+HUGO_CUSTOM_FRONT_MATTER: :animals '(dog cat "penguin" "mountain gorilla")
+#+HUGO_CUSTOM_FRONT_MATTER: :strings-symbols '("abc" def "two words")
+#+HUGO_CUSTOM_FRONT_MATTER: :integers '(123 -5 17 1_234)
+#+HUGO_CUSTOM_FRONT_MATTER: :floats '(12.3 -5.0 -17E-6)
+#+HUGO_CUSTOM_FRONT_MATTER: :booleans '(true false)
+
+# Blackfriday
+#+HUGO_BLACKFRIDAY: :smartdashes :fractions nil :plainidanchors false
+#+HUGO_BLACKFRIDAY: :angledquotes t :hrefTargetBlank true
+#+HUGO_BLACKFRIDAY: :extensions tabsizeeight hardlinebreak
+#+HUGO_BLACKFRIDAY: :extensionsmask fencedcode strikethrough
+
+# Front-matter key replacement
+#+HUGO_FRONT_MATTER_KEY_REPLACE: foo>myfoo
+#+HUGO_FRONT_MATTER_KEY_REPLACE: baz>mybaz
+
+# Aliases
+#+HUGO_ALIASES: keyword-concatenation
+#+HUGO_ALIASES: keyword-merging
+
+# Keywords
+#+KEYWORDS: keyword1 keyword2
+#+KEYWORDS: three__word__keywords3
+
+# Outputs
+#+HUGO_OUTPUTS: html
+#+HUGO_OUTPUTS: json
+
+# Resources
+#+HUGO_RESOURCES: :src "*.png" :animals '(dog cat "penguin" "mountain gorilla")
+#+HUGO_RESOURCES: :strings-symbols '("abc" def "two words")
+#+HUGO_RESOURCES: :integers '(123 -5 17 1_234)
+#+HUGO_RESOURCES: :floats '(12.3 -5.0 -17E-6)
+#+HUGO_RESOURCES: :booleans '(true false)
+#+HUGO_RESOURCES: :foo bar
+#+HUGO_RESOURCES: :src "image-4.png" :title "The Fourth Image"
+#+HUGO_RESOURCES: :src "*.png" :name "my-cool-image-:counter" :title "The Image #:counter"
+#+HUGO_RESOURCES: :src "*.png" :byline "bep"
+#+HUGO_RESOURCES: :src "*.jpg" :title "JPEG Image #:counter"
+
+This is a test post that tests that keywords set across multiple Org
+keywords get collected.
+
+* Keyword Collection Tested to work [12/12]
+- [X] =#+AUTHOR=
+- [X] =#+HUGO_TAGS=
+- [X] =#+HUGO_CATEGORIES=
+- [X] =#+HUGO_MENU=
+- [X] =#+HUGO_MENU_OVERRIDE=
+- [X] =#+HUGO_CUSTOM_FRONT_MATTER=
+- [X] =#+HUGO_BLACKFRIDAY=
+- [X] =#+HUGO_FRONT_MATTER_KEY_REPLACE=
+- [X] =#+HUGO_ALIASES=
+- [X] =#+KEYWORDS=
+- [X] =#+HUGO_OUTPUTS=
+- [X] =#+HUGO_RESOURCES=

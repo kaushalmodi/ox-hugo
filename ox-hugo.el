@@ -644,6 +644,7 @@ newer."
   :options-alist '(;; Variables not setting the front-matter directly
                    (:with-toc nil "toc" org-hugo-export-with-toc)
                    (:section-numbers nil "num" org-hugo-export-with-section-numbers)
+                   (:author "AUTHOR" nil org-export-with-author newline)
                    (:creator "CREATOR" nil org-hugo-export-creator-string)
                    (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
                    (:with-special-strings nil "-" nil) ;Don't use special strings for ndash, mdash; that is done automatically by Blackfriday
@@ -656,14 +657,12 @@ newer."
                    (:hugo-bundle "HUGO_BUNDLE" nil nil)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil t) ;Prefer to generate triple-backquoted Markdown code blocks by default.
-                   (:hugo-menu "HUGO_MENU" nil nil)
-                   (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil)
                    (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
                    (:hugo-prefer-hyphen-in-tags "HUGO_PREFER_HYPHEN_IN_TAGS" nil org-hugo-prefer-hyphen-in-tags)
                    (:hugo-allow-spaces-in-tags "HUGO_ALLOW_SPACES_IN_TAGS" nil org-hugo-allow-spaces-in-tags)
                    (:hugo-auto-set-lastmod "HUGO_AUTO_SET_LASTMOD" nil org-hugo-auto-set-lastmod)
-                   (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil)
-                   (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil)
+                   (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil space)
+                   (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil space)
                    (:hugo-front-matter-key-replace "HUGO_FRONT_MATTER_KEY_REPLACE" nil nil space)
 
                    ;; Front matter variables
@@ -697,8 +696,11 @@ newer."
                    (:hugo-linktitle "HUGO_LINKTITLE" nil nil)
                    ;; markup
                    (:hugo-markup "HUGO_MARKUP" nil nil) ;default is "md"
+                   ;; menu
+                   (:hugo-menu "HUGO_MENU" nil nil space)
+                   (:hugo-menu-override "HUGO_MENU_OVERRIDE" nil nil space)
                    ;; outputs
-                   (:hugo-outputs "HUGO_OUTPUTS" nil nil)
+                   (:hugo-outputs "HUGO_OUTPUTS" nil nil space)
                    ;; publishDate
                    (:hugo-publishdate "HUGO_PUBLISHDATE" nil nil)
                    ;; slug
@@ -718,7 +720,7 @@ newer."
                    ;; override inherited categories and Org-style
                    ;; categories (Org-style tags with "@" prefix).
                    ;; resources
-                   (:hugo-resources "HUGO_RESOURCES" nil nil)
+                   (:hugo-resources "HUGO_RESOURCES" nil nil space)
                    ;; title
                    ;; "title" is parsed from the Org #+TITLE or the subtree heading.
                    ;; type
@@ -2237,8 +2239,9 @@ INFO is a plist used as a communication channel."
                                   (org-string-nw-p
                                    (org-export-data (plist-get info :author) info))))
                              (when author-raw
-                               ;; Comma-separated multiple authors
-                               (let ((author-list-1 (org-split-string author-raw ",")))
+                               ;; Multiple authors can be comma or
+                               ;; newline separated.
+                               (let ((author-list-1 (org-split-string author-raw "[,\n]")))
                                  ;; Don't allow spaces around author names.
                                  (mapcar #'org-trim author-list-1))))))
          (creator (and (plist-get info :with-creator)

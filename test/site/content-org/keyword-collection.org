@@ -10,7 +10,7 @@
 # https://ox-hugo.scripter.co/doc/tags-and-categories/#file-based-export
 
 # Tags
-#+HUGO_TAGS: mega__front-matter
+#+HUGO_TAGS: "mega front-matter"
 #+HUGO_TAGS: keys
 #+HUGO_TAGS: collection concatenation merging
 
@@ -54,7 +54,7 @@
 
 # Keywords
 #+KEYWORDS: keyword1 keyword2
-#+KEYWORDS: three__word__keywords3
+#+KEYWORDS: "three word keywords3"
 
 # Outputs
 #+HUGO_OUTPUTS: html

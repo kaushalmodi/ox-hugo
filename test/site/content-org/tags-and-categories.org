@@ -7,6 +7,7 @@
 
 #+FILETAGS: alpha beta
 #+FILETAGS: hyphened-tag
+#+FILETAGS: tag__with__lot__of__words
 
 # Categories
 #+FILETAGS: @cat1
@@ -37,7 +38,7 @@ added as Org tags to headlines as well as =#+FILETAGS=.
 :PROPERTIES:
 :EXPORT_HUGO_TAGS: overriding
 :EXPORT_HUGO_TAGS+: underscore_is_retained hyphenated-works
-:EXPORT_HUGO_CATEGORIES: cat3 3__word__cat
+:EXPORT_HUGO_CATEGORIES: cat3 "3 word cat"
 :EXPORT_FILE_NAME: overriding-tags
 :END:
 By using =EXPORT_HUGO_TAGS= in the property drawer, Org tags in the

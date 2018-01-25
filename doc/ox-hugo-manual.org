@@ -1038,35 +1038,37 @@ export flow. So =#+FILETAGS= will have no effect in this flow.
 
 - To set tags, use =#+HUGO_TAGS=.
 - To set categories, use =#+HUGO_CATEGORIES=.
-**** Hyphens in tags (and categories)
-Hyphens are not allowed in Org tags. So =ox-hugo= converts *single
-underscores* to hyphens if =org-hugo-prefer-hyphen-in-tags= is set to
-non-nil (default). So an Org tag *abc_def* will be exported as /tag/
-*"abc-def"*. Similarly an Org tag *@abc_def* will be exported as
-/category/ *"abc-def"*.
+**** Hyphens and Spaces in Org tags (and categories)
+Hyphens and spaces are not allowed in Org tags (=* Heading :TAG:=).
+
+So =ox-hugo= converts:
+- *single underscores* to hyphens if =org-hugo-prefer-hyphen-in-tags=
+  is set to non-nil (default).
+- *double underscores* to spaces if =org-hugo-allow-spaces-in-tags= is
+  set to non-nil (default).
+
+So an Org tag *abc_def* will be exported as /tag/ *"abc-def"*, and
+*abc__def* will be exported as /tag/ *"abc def"*.
+
+The same applies to Org tags with prefix =@= which will be exported as
+/categories/. So *@abc_def* will be exported as /category/
+*"abc-def"*, and *@abc__def* as /category/ *"abc def"*.
 
 To export a tag or category with an underscore, use 3 consecutive
 underscores. So an Org tag *abc___def* will be exported as /tag/
-*"abc_def"*. If you rather prefer to always export single underscores
-as underscores, set =org-hugo-prefer-hyphen-in-tags= to nil.
+*"abc_def"* (and the same for categories). If you rather prefer to
+always export /single underscores/ as underscores, set
+=org-hugo-prefer-hyphen-in-tags= to nil.
 
-This variable does not affect the tags set via =#+HUGO_TAGS= keyword
-or the =EXPORT_HUGO_TAGS= property, because Org keywords and
-properties allow using the hyphen character. So underscores and
-hyphens in tags (or categories in =#+HUGO_CATEGORIES= /
-=EXPORT_HUGO_CATEGORIES=) remain untransformed on export.
-**** Spaces in tags (and categories)
-Spaces are not allowed in Org tags. So =ox-hugo= converts *double
-underscores* to spaces if =org-hugo-allow-spaces-in-tags= is set to
-non-nil (default). So an Org tag *abc__def* will be exported as /tag/
-*"abc def"*. Similarly an Org tag *@abc__def* will be exported as
-/category/ *"abc def"*.
+- NOTE :: These two variables *also affect* the tags set via
+          =#+FILETAGS= keyword (which is used only in subtree-based
+          exported Org files).
 
-This variable *also affects* the tags set via =#+HUGO_TAGS= keyword or
-the =EXPORT_HUGO_TAGS= property, because it is not possible to
-distinguish in Org keywords and properties whether the space is part
-of the tag or used to separate two tags. The same applies to
-categories set via =#+HUGO_CATEGORIES= / =EXPORT_HUGO_CATEGORIES=.
+These variables do not affect the tags set via keywords =#+HUGO_TAGS=,
+=#+HUGO_CATEGORIES= or =#+KEYWORDS= (or their respective subtree
+property forms), because Org keywords and properties allow using the
+hyphen and space (/in "double-quoted strings"/) characters. So the
+underscores in these keywords remain untransformed on export.
 **** Examples
 - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/tags-and-categories.org][Org source]]
 - Exported Markdown -- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/inheriting-tags.md][=inheriting-tags.md=]], [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/overriding-tags.md][=overriding-tags.md=]]

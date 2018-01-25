@@ -2001,8 +2001,8 @@ string with just alphanumeric characters."
 (defun org-hugo--parse-property-arguments (str)
   "Return an alist converted from a string STR of Hugo property value.
 
-If STR is of type \":KEY VALUE\", the returned value is ((KEY
-. VALUE)).
+STR is of type \":KEY1 VALUE1 :KEY2 VALUE2 ..\".  Given that, the
+returned value is ((KEY1 . VALUE1) (KEY2 . VALUE2) ..).
 
 Example: Input STR \":foo bar :baz 1 :zoo \\\"two words\\\"\" would
 convert to ((foo . \"bar\") (baz . 1) (zoo . \"two words\"))."
@@ -2185,39 +2185,44 @@ Example: :some__tag:   -> \"some tag\"."
     (setq ret (cl-remove-if-not #'org-string-nw-p ret))
     ret))
 
-(defun org-hugo--delim-str-to-list (delim-str info &optional no-prefer-hyphen)
+(defun org-hugo--delim-str-to-list (delim-str)
   "Function to transform DELIM-STR string to a list.
 
 1. Trim leading/trailing spaces from DELIM-STR, replace spaces
    with `org-hugo--internal-list-separator'.
 2. Convert that string to a list using
    `org-hugo--internal-list-separator' as the separator.
-3. Pass that to `org-hugo--transform-org-tags' that does some string
-   transformation.  See that function for more info.
+3. Break up each element of that list into further string elements.
+   Space within quoted string is retained.  This is done using
+   `org-hugo--parse-quoted-string'.  If a string element if of
+   type \"VALUE1 \\\"QUOTED VALUE2\\\" ..\", that is converted to
+   \(\"VALUE1\" \"QUOTED VALUE2\" ..).
 4. Return the transformed list.
 
-Example: \"two__words hyphenated_word\" -> (\"two words\" \"hyphenated-word\").
-
-Note that when NO-PREFER-HYPHEN is non-nil, replacement of
-underscores in DELIM-STR with hyphens as shown in the above
-example will not happen.
+Example: \"one\n\\\"two words\\\" three\nfour\" -> (\"one\" \"two words\" \"three\" \"four\").
 
 This function can be applied to any string that uses
 `org-hugo--internal-list-separator' as delimiter, for example,
 parsing the tags, categories and keywords meta-data.
 
-INFO is a plist used as a communication channel.
-
 Return nil if DELIM-STR is not a string."
   (when (stringp delim-str)
     (let* ((delim-str (org-trim delim-str))
-           (delim-str (replace-regexp-in-string
-                       " +" org-hugo--internal-list-separator
-                       delim-str))
            (str-list (split-string delim-str org-hugo--internal-list-separator))
-           (str-list (org-hugo--transform-org-tags
-                      str-list info no-prefer-hyphen)))
-      str-list)))
+           ret)
+      (dolist (str str-list)
+        (let* ((format-str ":dummy '(%s)") ;The :dummy key is later discarded
+               (alist (org-babel-parse-header-arguments (format format-str str)))
+               (lst (cdr (car alist)))
+               (str-list2 (mapcar (lambda (elem)
+                                    (cond
+                                     ((symbolp elem)
+                                      (symbol-name elem))
+                                     (t
+                                      elem)))
+                                  lst)))
+          (setq ret (append ret str-list2))))
+      ret)))
 
 (defun org-hugo--category-p (tag)
   "Return non-nil if TAG begins with \"@\".
@@ -2284,8 +2289,7 @@ INFO is a plist used as a communication channel."
          (tags (or
                 ;; Look for tags set using #+HUGO_TAGS keyword, or
                 ;; EXPORT_HUGO_TAGS property if available.
-                (org-hugo--delim-str-to-list
-                 (plist-get info :hugo-tags) info :no-prefer-hyphen)
+                (org-hugo--delim-str-to-list (plist-get info :hugo-tags))
                 ;; Else use Org tags (the ones set in headlines
                 ;; and/or inherited) if any.
                 (let* ((tags-list (cl-remove-if #'org-hugo--category-p all-t-and-c))
@@ -2296,8 +2300,7 @@ INFO is a plist used as a communication channel."
                       ;; Look for categories set using
                       ;; #+HUGO_CATEGORIES keyword, or
                       ;; EXPORT_HUGO_CATEGORIES property if available.
-                      (org-hugo--delim-str-to-list
-                       (plist-get info :hugo-categories) info :no-prefer-hyphen)
+                      (org-hugo--delim-str-to-list (plist-get info :hugo-categories))
                       ;; Else use categories set using Org tags with
                       ;; "@" prefix (the ones set in headlines and/or
                       ;; inherited) if any.
@@ -2309,8 +2312,7 @@ INFO is a plist used as a communication channel."
                                                       categories-list)))
                         ;; (message "dbg: categories: categories-list = %s" categories-list)
                         categories-list)))
-         (keywords (org-hugo--delim-str-to-list
-                    (plist-get info :keywords) info :no-prefer-hyphen))
+         (keywords (org-hugo--delim-str-to-list (plist-get info :keywords)))
          (weight (let* ((wt (plist-get info :hugo-weight))
                         (auto-calc (and (stringp wt)
                                         (string= wt "auto")

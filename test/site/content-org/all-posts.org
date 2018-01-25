@@ -3735,7 +3735,7 @@ comma-separated.
 *** Multiple keywords in front-matter
 :PROPERTIES:
 :EXPORT_FILE_NAME: multiple-keywords-in-front-matter
-:EXPORT_KEYWORDS: abc def hyphenated-keyword underscored_keyword two__words these__are__four__words
+:EXPORT_KEYWORDS: abc def hyphenated-keyword underscored_keyword "two words" "these are four words"
 :END:
 *** Keywords set using multiple properties
 :PROPERTIES:

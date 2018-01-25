@@ -2862,17 +2862,16 @@ approach)."
                            ;; empty.
                            "EXPORT_FILE_NAME<>\"\""))
                 (if ret
-                    (progn
-                      (message "[ox-hugo] Exported %d subtree%s from %s"
-                               org-hugo--subtree-count
-                               (if (= 1 org-hugo--subtree-count) "" "s")
-                               f-or-b-name)
-                      (setq org-hugo--subtree-count nil)) ;Reset the variable
+                    (message "[ox-hugo] Exported %d subtree%s from %s"
+                             org-hugo--subtree-count
+                             (if (= 1 org-hugo--subtree-count) "" "s")
+                             f-or-b-name)
                   ;; If `ret' is nil, no valid Hugo subtree was found.
                   ;; So call `org-hugo-export-wim-to-md' directly.  In
                   ;; that function, it will be checked if the whole
                   ;; Org file can be exported.
                   (setq ret (org-hugo-export-wim-to-md nil async visible-only noerror)))
+                (setq org-hugo--subtree-count nil) ;Reset the variable
                 ret)
             ;; Publish only the current subtree
             (ignore-errors
@@ -2941,6 +2940,7 @@ approach)."
                 ;; supposed to be exported as a whole, in which case
                 ;; #+TITLE has to be defined *and* there shouldn't be
                 ;; any valid Hugo post subtree present.
+                (setq org-hugo--subtree-count nil) ;Also reset the subtree count
                 (let ((valid-subtree-found
                        (catch 'break
                          (org-map-entries

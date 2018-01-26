@@ -33,7 +33,7 @@
   {{{issue(115)}}}.
 - Support exporting =headless= front-matter (Hugo v0.35+).
 - Advanced table styling is now possible by specifying =#+ATTR_HTML=
-  and =#+ATTR_CSS= (this one is unique to =ox-html=) above Org
+  and =#+ATTR_CSS= (this one is unique to =ox-hugo=) above Org
   tables. See its [[https://ox-hugo.scripter.co/doc/table-styling/][documentation]] -- {{{issue(93)}}}.
   - Similarly, support =#+ATTR_HTML= and =#+ATTR_CSS= for paragraphs,
     example blocks, source blocks, plain lists and quote blocks too --

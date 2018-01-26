@@ -3363,6 +3363,16 @@ binding.
 :END:
 The =publishdate= for this post is Hugo-compatible
 i.e. [[https://tools.ietf.org/html/rfc3339#section-5.8][RFC3339-compliant]].
+*** Publish date set using SCHEDULED                              :scheduled:
+SCHEDULED: <2018-01-26 Fri>
+:PROPERTIES:
+:EXPORT_FILE_NAME: publish-date-scheduled
+:END:
+If a subtree has the =SCHEDULED= [[https://orgmode.org/manual/Special-properties.html][Special Property]] set, set the
+=publishdate= front-matter to the scheduled date.
+
+By default, =C-c C-s= in Org adds the =SCHEDULED= property to the
+current subtree.
 ** Expiry Date                                                   :expirydate:
 *** Expiry date set using Org time stamp
 :PROPERTIES:
@@ -3378,6 +3388,16 @@ binding.
 :END:
 The =expirydate= for this post is Hugo-compatible
 i.e. [[https://tools.ietf.org/html/rfc3339#section-5.8][RFC3339-compliant]].
+*** Expiry date set using DEADLINE                                 :deadline:
+DEADLINE: <2999-01-01 Tue>
+:PROPERTIES:
+:EXPORT_FILE_NAME: expiry-date-deadline
+:END:
+If a subtree has the =DEADLINE= [[https://orgmode.org/manual/Special-properties.html][Special Property]] set, set the
+=expirydate= front-matter to the deadline date.
+
+By default, =C-c C-d= in Org adds the =DEADLINE= property to the
+current subtree.
 * Preserve filling option                                           :filling:
 ** Filling is preserved
 :PROPERTIES:

@@ -1086,13 +1086,21 @@ cannot be formatted in Hugo-compatible format."
                       ;; headline to "DONE" state,
                       (org-entry-get (point) "CLOSED")
                       ;; Else get the date from the subtree property,
-                      ;; `EXPORT_DATE' if available
+                      ;; `EXPORT_DATE' if available,
                       (org-string-nw-p
                        (org-export-data (plist-get info date-key) info))
                       ;; Else try to get it from the #+DATE keyword in
                       ;; the Org file.
                       (org-string-nw-p
                        (org-export-get-date info hugo-date-fmt))))
+                    ((and (equal date-key :hugo-publishdate)
+                          ;; Get the date from the "SCHEDULED" property.
+                          (org-entry-get (point) "SCHEDULED"))
+                     (org-entry-get (point) "SCHEDULED"))
+                    ((and (equal date-key :hugo-expirydate)
+                          ;; Get the date from the "DEADLINE" property.
+                          (org-entry-get (point) "DEADLINE"))
+                     (org-entry-get (point) "DEADLINE"))
                     (t ;:hugo-lastmod, :hugo-publishdate, :hugo-expirydate
                      (org-string-nw-p
                       (org-export-data (plist-get info date-key) info)))))

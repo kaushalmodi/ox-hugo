@@ -167,6 +167,80 @@ The common =ox-hugo= export bindings are:
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
 * Changelog
+** v0.8 <2018-01-26 Fri>
+*** Features
+- Support exporting content files and attachments (images, documents)
+  to Page Bundles organization structure (Hugo v0.32+) --
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/111][111]].
+- Support exporting =resources= front-matter (Hugo v0.33+) --
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/115][115]].
+- Support exporting =headless= front-matter (Hugo v0.35+).
+- Advanced table styling is now possible by specifying =#+ATTR_HTML=
+  and =#+ATTR_CSS= (this one is unique to =ox-html=) above Org
+  tables. See its [[https://ox-hugo.scripter.co/doc/table-styling/][documentation]] -- #[[https://github.com/kaushalmodi/ox-hugo/issues/93][93]].
+  - Similarly, support =#+ATTR_HTML= and =#+ATTR_CSS= for paragraphs,
+    example blocks, source blocks, plain lists and quote blocks too --
+    #[[https://github.com/kaushalmodi/ox-hugo/issues/113][113]].
+- Now =publishdate= and =expirydate= front-matter properties get
+  auto-derived from =SCHEDULED= and =DEADLINE= special properties if
+  associated with the valid Hugo post subtree --
+  commit [[https://github.com/kaushalmodi/ox-hugo/commit/0807f42d][0807f42d]].
+  - Date values can now be easily set using the =C-c .= binding in the
+    =HUGO_PUBLISHDATE= and =HUGO_EXPIRYDATE= properties too.
+- Export source blocks and table captions -- #[[https://github.com/kaushalmodi/ox-hugo/issues/38][38]]. Here's a
+  suggested CSS for the captions:
+  #+BEGIN_SRC css
+    figcaption,
+    .src-block-caption,
+    .table-caption {
+        font-style: italic;
+        text-align: center;
+    }
+  #+END_SRC
+- Export descriptive or definition lists in Blackfriday-friendly
+  Markdown format -- #[[https://github.com/kaushalmodi/ox-hugo/issues/114][114]].
+- Support Org Special Blocks [[https://www.gnu.org/software/emacs/manual/html_node/org/Special-blocks.html][like in HTML and LaTeX exports]] --
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/105][105]]. Here's one little example:
+  #+BEGIN_SRC org
+    ,#+BEGIN_mark
+    /Some/ *marked* text
+    ,#+END_mark
+  #+END_SRC
+- Allow setting =:EXPORT_HUGO_SECTION:= in the valid Hugo post subtree
+  itself.
+- Enable replacing any key in the front-matter with anything; it's
+  even possible to swap the keys now (tags↔categories:
+  commit [[https://github.com/kaushalmodi/ox-hugo/commit/fb21e82c][fb21e82c]]). New keyword:
+  =HUGO_FRONT_MATTER_KEY_REPLACE= -- see commit [[https://github.com/kaushalmodi/ox-hugo/commit/b72a5fb0][b72a5fb0]].
+- Now all the Org keyword values that should get merged, get merged --
+  commit [[https://github.com/kaushalmodi/ox-hugo/commit/38eba6d5][38eba6d5]].
+- Add =title= as a valid property of =menu= front-matter (Hugo
+  v0.32+).
+*** Backward-incompatible changes
+- A "better user-experience" change.. now you do not need to use
+  /double-underscores/ as /space/ replacement in =#+HUGO_TAGS=,
+  =#+HUGO_CATEGORIES= and =#+KEYWORDS=. See this commit for details
+  and examples -- commit [[https://github.com/kaushalmodi/ox-hugo/commit/319435db][319435db]].
+*** Fixes
+- Fix =HUGO_LEVEL_OFFSET= not getting set -- #[[https://github.com/kaushalmodi/ox-hugo/issues/117][117]], thanks
+  @[[https://github.com/shimmy1996][*shimmy1996*]]!
+- Fix internal subtree counter not getting reset after a file-based
+  export.
+- Fix clickable image links with =#+NAME= -- commit [[https://github.com/kaushalmodi/ox-hugo/commit/fef0ec50][fef0ec50]].
+- Make title text rendering more robust.. now Markdown markup
+  characters like =*=, =_= and =`= show up fine, verbatim, in the
+  title.
+- Make em dash, en dash, horizontal ellipsis render in post titles
+  too -- Hugo #[[https://github.com/gohugoio/hugo/issues/4175][4175]] (/Upstream bug fix/), and in source
+  block captions and table captions too.
+- Fix double-escaping of =#= and =![= in Markdown export --
+  #[[https://github.com/kaushalmodi/ox-hugo/issues/110][110]] (/fix in upstream =ox-md.el=/).
+*** Meta
+- Re-write the logic for parsing meta-data for various kinds of dates,
+  and optimize the logic for parsing newline separated lists like tags
+  and categories.
+- The =bare_min= theme used for the test site is made more portable
+  (at some point, that theme might be moved to a separate repo).
 ** v0.7 <2017-12-18 Mon>
 *** Features
 - *Now C-c C-e H H works for both per-subtree and per-file flows* --

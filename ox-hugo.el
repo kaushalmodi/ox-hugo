@@ -2036,6 +2036,11 @@ Optional argument FORMAT can be \"toml\" or \"yaml\"."
     val)
    ((and (org-string-nw-p val)
          (string-match-p "\n" val))
+    ;; The indentation of the multi-line string is needed only for the
+    ;; YAML format.  But the same is done for TOML too just for better
+    ;; presentation.
+    (setq val (replace-regexp-in-string "^" "  " val))
+
     (if (and (stringp format)
              (string= format "yaml"))
         (progn
@@ -2047,13 +2052,12 @@ Optional argument FORMAT can be \"toml\" or \"yaml\"."
           ;;     |def          |
           ;;     |             |  def
           ;;
-          (setq val (replace-regexp-in-string "^" "  " val)) ;Indent by 2 spaces
           ;; In Org, a single blank line is used to start a new
           ;; paragraph. In the YAML multi-line string, that needs to
           ;; be 2 blank lines.
           (setq val (replace-regexp-in-string "\n  \n" "\n\n\n" val))
           (format ">\n%s" val))
-      (format "\"\"\"%s\"\"\"" val)))   ;Triple-quote
+      (format "\"\"\"\n%s\n  \"\"\"" val))) ;Triple-quote
    (t
     (concat "\"" (replace-regexp-in-string "\"" "\\\\\""  val) "\""))))
 

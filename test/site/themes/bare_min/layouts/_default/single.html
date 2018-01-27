@@ -42,6 +42,11 @@
             <hr>
         {{ end }}
     </p>
+    {{ with .Description }}
+        <hr>
+        {{ . | markdownify }}
+        <hr>
+    {{ end }}
     {{ .Content }}
 
     {{ with .Resources }}

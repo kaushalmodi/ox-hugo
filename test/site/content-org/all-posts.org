@@ -375,13 +375,6 @@ happen in post titles ({{{hugoissue(4175)}}}).
 :END:
 - All the Org markup characters are removed.
 - The "markup characters" not doing actual markup are retained.
-* Description meta-data with "quoted text"
-:PROPERTIES:
-:EXPORT_FILE_NAME: post-description-quotes
-:EXPORT_DESCRIPTION: Some description with "quoted text"
-:EXPORT_DATE: 2017-07-24
-:END:
-Testing a post with double quotes in the description.
 * Excluded post                                                    :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: excluded-post
@@ -3763,6 +3756,61 @@ comma-separated.
 :EXPORT_KEYWORDS: abc
 :EXPORT_KEYWORDS+: def
 :END:
+** Description                                                  :description:
+*** Description meta-data with "quoted text"
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-description-quotes
+:EXPORT_DESCRIPTION: Some description with "quoted text"
+:EXPORT_DATE: 2017-07-24
+:END:
+Testing a post with double quotes in the description.
+*** Description set using Org Special Block                   :special_block:
+**** TOML                                                              :toml:
+:PROPERTIES:
+:EXPORT_HUGO_FRONT_MATTER_FORMAT: toml
+:END:
+***** Single-line description set using Org Special Block (TOML) :single_line:
+:PROPERTIES:
+:EXPORT_FILE_NAME: description-single-line-org-special-block-toml
+:END:
+#+begin_description
+Short description
+#+end_description
+Post content.
+***** Multi-line description set using Org Special Block (TOML)  :multi_line:
+:PROPERTIES:
+:EXPORT_FILE_NAME: description-multi-line-org-special-block-toml
+:END:
+#+begin_description
+Short description
+of this post
+
+*line* -- /italics/ --- +strikethrough+
+#+end_description
+Post content.
+**** YAML                                                              :yaml:
+:PROPERTIES:
+:EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
+:END:
+***** Single-line description set using Org Special Block (YAML) :single_line:
+:PROPERTIES:
+:EXPORT_FILE_NAME: description-single-line-org-special-block-yaml
+:END:
+#+begin_description
+Short description
+#+end_description
+Post content.
+***** Multi-line description set using Org Special Block (YAML)  :multi_line:
+:PROPERTIES:
+:EXPORT_FILE_NAME: description-multi-line-org-special-block-yaml
+:END:
+#+begin_description
+Short description
+of this post
+
+*line* -- /italics/ --- +strikethrough+
+#+end_description
+Post content.
 ** Replace front-matter keys                                   :keys:replace:
 *** Replace only "linkTitle" key                                  :linktitle:
 :PROPERTIES:

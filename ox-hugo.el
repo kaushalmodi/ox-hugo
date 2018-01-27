@@ -110,6 +110,11 @@ helps set the bundle path correctly for such cases (where
 EXPORT_HUGO_BUNDLE and EXPORT_FILE_NAME are set in the same
 subtree).")
 
+(defvar org-hugo--description nil
+  "Variable to store the current post's description.
+This variable is updated by the `org-hugo-special-block'
+function.")
+
 (defvar org-hugo-allow-export-after-save t
   "Enable flag for `org-hugo-export-wim-to-md-after-save'.
 When nil, the above function will not export the Org file to
@@ -637,7 +642,8 @@ newer."
                      (keyword . org-hugo-keyword)
                      (link . org-hugo-link)
                      (paragraph . org-hugo-paragraph)
-                     (src-block . org-hugo-src-block))
+                     (src-block . org-hugo-src-block)
+                     (special-block . org-hugo-special-block))
   :filters-alist '((:filter-body . org-hugo-body-filter))
 ;;;; options-alist
   ;;                KEY                       KEYWORD                    OPTION  DEFAULT                     BEHAVIOR
@@ -811,7 +817,8 @@ This function is called in the very end of
 `org-hugo-publish-to-md'.
 
 This is an internal function."
-  (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code))
+  (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
+  (setq org-hugo--description nil))
 
 (defun org-hugo--get-headline-number (headline info &optional toc)
   "Return htmlized section number for the HEADLINE.
@@ -1924,6 +1931,24 @@ channel."
     (setq ret (org-blackfriday--div-wrap-maybe src-block ret))
     ret))
 
+;;;; Special Block
+(defun org-hugo-special-block (special-block contents _info)
+  "Transcode a SPECIAL-BLOCK element from Org to Hugo-compatible Markdown.
+CONTENTS holds the contents of the block.
+
+This function saves the content of \"description\" special block
+to the global variable `org-hugo--description'.
+
+For all other special blocks, processing is passed on to
+`org-blackfriday-special-block'."
+  (let ((block-type (org-element-property :type special-block)))
+    (cond
+     ((string= block-type "description")
+      (setq org-hugo--description (org-trim contents))
+      nil)
+     (t
+      (org-blackfriday-special-block special-block contents nil)))))
+
 
 
 ;;; Filter Functions
@@ -1973,8 +1998,11 @@ INFO is a plist holding export options."
     (format "%s%s%s" fm body org-hugo-footer)))
 
 ;;;;; Hugo Front Matter
-(defun org-hugo--quote-string (val &optional prefer-no-quotes)
-  "Wrap VAL with double quotes if it is a string.
+(defun org-hugo--quote-string (val &optional prefer-no-quotes format)
+  "Wrap VAL with appropriate quotes if it is a string.
+
+If VAL contains newlines, format it according to TOML or YAML
+FORMAT to preserve them.
 
 VAL is returned as-it-is under the following cases:
 - It is not a string (or nil).
@@ -1982,13 +2010,14 @@ VAL is returned as-it-is under the following cases:
 - It is a string and it's value is \"true\" or \"false\".
 - It is a string representing a date.
 
-If PREFER-NO-QUOTES is non-nil, return the VAL as-it-is if it's a
-string with just alphanumeric characters."
+If optional argument PREFER-NO-QUOTES is non-nil, return the VAL
+as-it-is if it's a string with just alphanumeric characters.
+
+Optional argument FORMAT can be \"toml\" or \"yaml\"."
   (cond
    ((or (null val)                ;nil
         (not (stringp val))       ;could be a number, like menu weight
-        (and (stringp val)
-             (> (safe-length val) 0)
+        (and (org-string-nw-p val)
              (string= (substring val 0 1) "\"") ;First char is literally a "
              (string= (substring val -1) "\"")) ;Last char is literally a "
         (string= "true" val)
@@ -2005,6 +2034,26 @@ string with just alphanumeric characters."
    ((and prefer-no-quotes
          (string-match-p "\\`[a-zA-Z0-9]+\\'" val))
     val)
+   ((and (org-string-nw-p val)
+         (string-match-p "\n" val))
+    (if (and (stringp format)
+             (string= format "yaml"))
+        (progn
+          ;; https://yaml-multiline.info/
+          ;;
+          ;;     |             |foo : >
+          ;;     |abc          |  abc
+          ;;     |       >>>   |
+          ;;     |def          |
+          ;;     |             |  def
+          ;;
+          (setq val (replace-regexp-in-string "^" "  " val)) ;Indent by 2 spaces
+          ;; In Org, a single blank line is used to start a new
+          ;; paragraph. In the YAML multi-line string, that needs to
+          ;; be 2 blank lines.
+          (setq val (replace-regexp-in-string "\n  \n" "\n\n\n" val))
+          (format ">\n%s" val))
+      (format "\"\"\"%s\"\"\"" val)))   ;Triple-quote
    (t
     (concat "\"" (replace-regexp-in-string "\"" "\\\\\""  val) "\""))))
 
@@ -2262,6 +2311,9 @@ INFO is a plist used as a communication channel."
                                  (mapcar #'org-trim author-list-1))))))
          (creator (and (plist-get info :with-creator)
                        (plist-get info :creator)))
+         (description (or org-hugo--description
+                          (org-string-nw-p
+                           (org-export-data (plist-get info :description) info))))
          (aliases-raw (let ((aliases-raw-1
                              (org-string-nw-p
                               (org-export-data (plist-get info :hugo-aliases) info))))
@@ -2353,7 +2405,7 @@ INFO is a plist used as a communication channel."
                  ;; variables will be ordered.
                  (title . ,(org-hugo--sanitize-title info))
                  (author . ,author-list)
-                 (description . ,(org-export-data (plist-get info :description) info))
+                 (description . ,description)
                  (date . ,(org-hugo--format-date :date info))
                  (publishDate . ,(org-hugo--format-date :hugo-publishdate info))
                  (expiryDate . ,(org-hugo--format-date :hugo-expirydate info))
@@ -2596,7 +2648,7 @@ are \"toml\" and \"yaml\"."
                                          (listp value)
                                          (org-hugo--get-yaml-toml-list-string value))
                                         (t
-                                         (org-hugo--quote-string value)))))))))))
+                                         (org-hugo--quote-string value nil format)))))))))))
     (concat sep front-matter bf-string menu-string res-string sep)))
 
 (defun org-hugo--selective-property-inheritance ()

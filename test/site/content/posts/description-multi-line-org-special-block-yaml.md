@@ -5,7 +5,7 @@ description : >
   of this post
 
 
-  **line** -- _italics_ --- ~~strikethrough~~
+  **bold** -- _italics_ --- ~~strikethrough~~
 tags : ["front-matter", "description", "special-block", "yaml", "multi-line"]
 draft : false
 ---

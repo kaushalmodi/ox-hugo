@@ -3785,7 +3785,7 @@ Post content.
 Short description
 of this post
 
-*line* -- /italics/ --- +strikethrough+
+*bold* -- /italics/ --- +strikethrough+
 #+end_description
 Post content.
 **** YAML                                                              :yaml:
@@ -3808,7 +3808,7 @@ Post content.
 Short description
 of this post
 
-*line* -- /italics/ --- +strikethrough+
+*bold* -- /italics/ --- +strikethrough+
 #+end_description
 Post content.
 ** Replace front-matter keys                                   :keys:replace:

@@ -1178,7 +1178,9 @@ Note that:
 2. Spaces are used to only separate multiple replacements are shown in
    the second example above.
 3. The replacements are literal.. there are no regular expressions
-   involved."
+   involved.
+
+INFO is a plist used as a communication channel."
   (let* ((repl-str (plist-get info :hugo-front-matter-key-replace))
          (repl-str (when (org-string-nw-p repl-str)
                      (org-trim repl-str))))
@@ -1801,7 +1803,7 @@ communication channel."
 
 ;;;; Source Blocks
 (defun org-hugo-src-block (src-block _contents info)
-  "Convert SRC-BLOCK element to Hugo-compatible element.
+  "Convert SRC-BLOCK element to Hugo-compatible Markdown.
 
 The Markdown style triple-backquoted code blocks are created if:
   - If the HUGO_CODE_FENCE property is set to a non-nil value
@@ -2207,7 +2209,8 @@ Example: :some__tag:   -> \"some tag\"."
    \(\"VALUE1\" \"QUOTED VALUE2\" ..).
 4. Return the transformed list.
 
-Example: \"one\n\\\"two words\\\" three\nfour\" -> (\"one\" \"two words\" \"three\" \"four\").
+Example: \"one\\n\\\"two words\\\" three\\nfour\"
+         -> (\"one\" \"two words\" \"three\" \"four\").
 
 This function can be applied to any string that uses
 `org-hugo--internal-list-separator' as delimiter, for example,

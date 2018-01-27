@@ -2055,8 +2055,10 @@ Optional argument FORMAT can be \"toml\" or \"yaml\"."
           ;; In Org, a single blank line is used to start a new
           ;; paragraph. In the YAML multi-line string, that needs to
           ;; be 2 blank lines.
-          (setq val (replace-regexp-in-string "\n  \n" "\n\n\n" val))
+          (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n\n" val))
           (format ">\n%s" val))
+      ;; Remove indentation/space from blank lines if any.
+      (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n" val))
       (format "\"\"\"\n%s\n  \"\"\"" val))) ;Triple-quote
    (t
     (concat "\"" (replace-regexp-in-string "\"" "\\\\\""  val) "\""))))

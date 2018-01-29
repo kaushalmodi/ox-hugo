@@ -2681,6 +2681,7 @@ are \"toml\" and \"yaml\"."
                      "HUGO_TYPE"
                      "HUGO_WEIGHT"
                      "HUGO_RESOURCES"
+                     "HUGO_FRONT_MATTER_KEY_REPLACE"
                      "HUGO_AUTO_SET_LASTMOD")))
     (mapcar (lambda (str)
               (concat "EXPORT_" str))

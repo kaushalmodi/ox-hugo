@@ -3829,6 +3829,19 @@ of this post
 *bold* -- /italics/ --- +strikethrough+
 #+end_description
 Post content.
+** Locale                                                            :locale:
+:PROPERTIES:
+:EXPORT_HUGO_WITH_LOCALE: t
+:END:
+*** Specified locale in front-matter
+:PROPERTIES:
+:EXPORT_FILE_NAME: locale-specified
+:EXPORT_HUGO_LOCALE: es_ES
+:END:
+*** Auto-detected locale in front-matter                        :auto_detect:
+:PROPERTIES:
+:EXPORT_FILE_NAME: locale-auto-detect
+:END:
 ** Replace front-matter keys                                   :keys:replace:
 *** Replace only "linkTitle" key                                  :linktitle:
 :PROPERTIES:

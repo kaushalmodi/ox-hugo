@@ -686,6 +686,7 @@ newer."
                    (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
                    (:with-special-strings nil "-" nil) ;Don't use special strings for ndash, mdash; that is done automatically by Blackfriday
                    (:with-sub-superscript nil "^" '{}) ;Require curly braces to be wrapped around text to sub/super-scripted
+                   (:hugo-with-locale "HUGO_WITH_LOCALE" nil nil)
                    (:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
                    (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil "1")
                    (:hugo-preserve-filling "HUGO_PRESERVE_FILLING" nil org-hugo-preserve-filling) ;Preserve breaks so that text filling in Markdown matches that of Org
@@ -732,6 +733,8 @@ newer."
                    (:hugo-lastmod "HUGO_LASTMOD" nil nil)
                    ;; linkTitle
                    (:hugo-linktitle "HUGO_LINKTITLE" nil nil)
+                   ;; locale (used in Hugo internal templates)
+                   (:hugo-locale "HUGO_LOCALE" nil nil)
                    ;; markup
                    (:hugo-markup "HUGO_MARKUP" nil nil) ;default is "md"
                    ;; menu
@@ -2349,6 +2352,15 @@ INFO is a plist used as a communication channel."
                                  (mapcar #'org-trim author-list-1))))))
          (creator (and (plist-get info :with-creator)
                        (plist-get info :creator)))
+         (locale (and (plist-get info :hugo-with-locale)
+                      (let* ((lang (or (plist-get info :hugo-locale)
+                                       ;; https://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html
+                                       (getenv "LANGUAGE")
+                                       (getenv "LC_ALL")
+                                       (getenv "LANG")))
+                             (lang (when (stringp lang)
+                                     (replace-regexp-in-string "\\`\\([a-z]+_[A-Z]+\\).*\\'" "\\1" lang))))
+                        lang)))
          (description (or org-hugo--description
                           (org-string-nw-p
                            (org-export-data (plist-get info :description) info))))
@@ -2464,6 +2476,7 @@ INFO is a plist used as a communication channel."
                  (draft . ,draft)
                  (headless . ,headless)
                  (creator . ,creator)
+                 (locale . ,locale)
                  (blackfriday . ,blackfriday)
                  (menu . ,menu-alist)
                  (resources . ,resources)))
@@ -2715,6 +2728,8 @@ are \"toml\" and \"yaml\"."
                      "HUGO_RESOURCES"
                      "HUGO_FRONT_MATTER_KEY_REPLACE"
                      "HUGO_DATE_FORMAT"
+                     "HUGO_WITH_LOCALE"
+                     "HUGO_LOCALE"
                      "HUGO_AUTO_SET_LASTMOD")))
     (mapcar (lambda (str)
               (concat "EXPORT_" str))

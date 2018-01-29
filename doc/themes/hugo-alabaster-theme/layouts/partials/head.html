@@ -8,6 +8,7 @@
 
     <title>{{ if not .IsHome }}{{ .Title }} &mdash;{{ end }} {{ .Site.Title }}</title>
 
+    <link rel="stylesheet" href="{{ "css/basic.css" | relURL }}" type="text/css" />
     <link rel="stylesheet" href="{{ "css/alabaster.css" | relURL }}" type="text/css" />
     {{ with .Site.Params.highlightjs -}}
         <link rel="stylesheet" href="{{ . | relURL }}" type="text/css" />

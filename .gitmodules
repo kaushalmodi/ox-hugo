@@ -1,0 +1,3 @@
+[submodule "test/site/themes/bare_min"]
+	path = test/site/themes/bare_min
+	url = https://github.com/kaushalmodi/hugo-bare-min-theme

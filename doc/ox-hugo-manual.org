@@ -649,9 +649,9 @@ translate to Hugo front-matter:
 - Images can be displayed inline in the Org buffer.
 - After save hooks can be set up in Emacs so that each time I save the
   file, only the current subtree in Org gets exported to
-  Markdown. With the Hugo server running with the new switch that auto
-  changes the preview to the last changed post (=--navigateToChanged=
-  introduced in Hugo 0.25), the flow is seamless -- Save the Org file
+  Markdown. With the Hugo server running with the
+  =--navigateToChanged= switch (this allows auto-changing the preview
+  to the last changed post), the flow is seamless -- Save the Org file
   and see the exact changed post in browser.
 - *All* posts can simply be subtrees in a single Org file. That way
   one can take advantage of Org subtree filtering and searching
@@ -702,7 +702,6 @@ have the exported Markdown files.
    #+BEGIN_EXAMPLE
    hugo server -D --navigateToChanged
    #+END_EXAMPLE
-   - =--navigateToChanged= requires Hugo 0.25+.
 3. Above command will mention the localhost where the site is
    served. Open that in your browser.
 4. Create a separate directory for Org content in the Hugo site base
@@ -758,27 +757,32 @@ Check out the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/tes
 Org->Hugo content and meta-data translation features. [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content/posts][Here]] are the
 exported Markdown files.
 **** How to try =ox-hugo= on that site?
-1. Clone this repo and do:
+1. Clone this repo:
+   #+BEGIN_EXAMPLE
+   git clone --recursive -j8 https://github.com/kaushalmodi/ox-hugo
+   #+END_EXAMPLE
+2. Start the =hugo= server:
    #+BEGIN_EXAMPLE
    make serve HUGO_BASE_DIR=test/site
    #+END_EXAMPLE
-   - *Requires Hugo 0.25+ for =--navigateToChanged= switch.*
-2. Open =http://localhost:1337= in your browser.
-3. In a different terminal, =cd= to the repo directory.
-4. Run:
+3. Open =http://localhost:1337= in your browser.
+4. In a different terminal, =cd= to the repo directory.
+5. Run:
    #+BEGIN_EXAMPLE
    make md
    #+END_EXAMPLE
-5. In few seconds, over a hundred test posts will get created, with
-   the =hugo server= aided preview in the browser zapping through each
-   new created post.
+6. In few seconds, hundreds of test posts will get created, with the
+   =hugo server= aided preview in the browser zapping through each new
+   created post.
 **** Alternative way
 1. Clone this repo.
+   #+BEGIN_EXAMPLE
+   git clone --recursive -j8 https://github.com/kaushalmodi/ox-hugo
+   #+END_EXAMPLE
 2. =cd= to the =test/site/= directory and do:
    #+BEGIN_EXAMPLE
    hugo server -D --navigateToChanged
    #+END_EXAMPLE
-   - =--navigateToChanged= requires Hugo 0.25+.
 3. Above command will mention the localhost where the site is
    served. Open that in your browser.
 4. In emacs, =(require  'ox-hugo)= or evaluate the =ox-hugo.el= from the
@@ -786,10 +790,9 @@ exported Markdown files.
 5. Open the {{{ox-hugo-test-file}}} file.
 6. =C-c C-e H A= -- That will export *all* subtrees in the file to
    Markdown files.
-7. In few seconds, over a hundred test posts will get created, with
-   the =hugo server= aided preview in the browser zapping through each
-   new created post (because of that new feature =--navigateToChanged=
-   introduced in Hugo 0.25).
+7. In few seconds, hundreds of test posts will get created, with the
+   =hugo server= aided preview in the browser zapping through each new
+   created post.
 ** Org to Hugo
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu org_to_hugo

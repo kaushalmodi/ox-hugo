@@ -578,6 +578,37 @@ This option can also be set on with the CREATOR keyword."
   :type '(string :tag "Creator string")
   :safe #'stringp)
 
+(defcustom org-hugo-date-format "%Y-%m-%dT%T%z"
+  "Date format used for exporting date in front-matter.
+
+Front-matter date parameters: `date', `publishDate',
+`expiryDate', `lastmod'.
+
+Note that the date format must match the date specification from
+RFC3339.  See `org-hugo--date-time-regexp' for reference and
+examples of compatible date strings.
+
+Examples of RFC3339-compatible values for this variable:
+
+  - %Y-%m-%dT%T%z (default) -> 2017-07-31T17:05:38-04:00
+  - %Y-%m-%dT%T             -> 2017-07-31T17:05:38
+  - %Y-%m-%d                -> 2017-07-31
+
+Note that \"%Y-%m-%dT%T%z\" actually produces a date string like
+\"2017-07-31T17:05:38-0400\"; notice the missing colon in the
+time-zone portion.
+
+A colon is needed to separate the hours and minutes in the
+time-zone as per RFC3339.  This gets fixed in the
+`org-hugo--format-date' function, so that \"%Y-%m-%dT%T%z\" now
+results in a date string like \"2017-07-31T17:05:38-04:00\".
+
+See `format-time-string' to learn about the date format string
+expression."
+  :group 'org-export-hugo
+  :type 'string
+  :safe #'stringp)
+
 (defcustom org-hugo-langs-no-descr-in-code-fences '()
   "List of languages whose descriptors should not be exported to Markdown.
 
@@ -670,6 +701,7 @@ newer."
                    (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil space)
                    (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil space)
                    (:hugo-front-matter-key-replace "HUGO_FRONT_MATTER_KEY_REPLACE" nil nil space)
+                   (:hugo-date-format "HUGO_DATE_FORMAT" nil org-hugo-date-format)
 
                    ;; Front matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -1084,7 +1116,7 @@ Possible values of DATE-KEY are `:date', `:hugo-lastmod',
 
 Return nil if the retrieved date from INFO is nil or if the date
 cannot be formatted in Hugo-compatible format."
-  (let* ((hugo-date-fmt "%Y-%m-%dT%T%z")
+  (let* ((date-fmt (plist-get info :hugo-date-format))
          (date-raw (cond
                     ((equal date-key :date)
                      (or
@@ -1099,7 +1131,7 @@ cannot be formatted in Hugo-compatible format."
                       ;; Else try to get it from the #+DATE keyword in
                       ;; the Org file.
                       (org-string-nw-p
-                       (org-export-get-date info hugo-date-fmt))))
+                       (org-export-get-date info date-fmt))))
                     ((and (equal date-key :hugo-publishdate)
                           (org-entry-get (point) "SCHEDULED"))
                      ;; Get the date from the "SCHEDULED" property.
@@ -1124,7 +1156,7 @@ cannot be formatted in Hugo-compatible format."
                         ((stringp date-raw)
                          (condition-case err
                              (format-time-string
-                              hugo-date-fmt
+                              date-fmt
                               (apply #'encode-time (org-parse-time-string date-raw)))
                            (error
                             ;; Set date-nocolon to nil if error
@@ -1142,19 +1174,19 @@ cannot be formatted in Hugo-compatible format."
                         ;; lastmod field.
                         ((and (equal date-key :hugo-lastmod)
                               (org-hugo--plist-get-true-p info :hugo-auto-set-lastmod))
-                         (format-time-string hugo-date-fmt (org-current-time)))
+                         (format-time-string date-fmt (org-current-time)))
                         ;; Else.. do nothing.
                         (t
                          nil)))
          ;; Hugo expects the date stamp in this format (RFC3339 -- See
-         ;; `org-hugo--date-time-regexp'.) i.e. requires a colon to
-         ;; separate the hours and minutes in the time-zone section of
-         ;; the date.
+         ;; `org-hugo--date-time-regexp'.) i.e. if the date contains
+         ;; the time-zone, a colon is required to separate the hours
+         ;; and minutes in the time-zone section.
          ;;   2017-07-06T14:59:45-04:00
-         ;; But the "%Y-%m-%dT%T%z" format (`hugo-date-fmt') produces the date
-         ;; in this format:
-         ;;   2017-07-06T14:59:45-0400 (Note the missing colon)
-         ;; Below simply adds that colon.
+         ;; But by default the "%z" placeholder for time-zone (see
+         ;; `format-time-string') produces the zone time-string as
+         ;; "-0400" (Note the missing colon).  Below simply adds a
+         ;; colon between "04" and "00" in that example.
          (date-str (and (stringp date-nocolon)
                         (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
                                                   date-nocolon))))
@@ -2682,6 +2714,7 @@ are \"toml\" and \"yaml\"."
                      "HUGO_WEIGHT"
                      "HUGO_RESOURCES"
                      "HUGO_FRONT_MATTER_KEY_REPLACE"
+                     "HUGO_DATE_FORMAT"
                      "HUGO_AUTO_SET_LASTMOD")))
     (mapcar (lambda (str)
               (concat "EXPORT_" str))
@@ -3120,6 +3153,7 @@ buffer and returned as a string in Org format."
                                 ,(format "|org-hugo-front-matter-format                          |%S|" org-hugo-front-matter-format)
                                 ,(format "|org-hugo-default-static-subdirectory-for-externals    |%S|" org-hugo-default-static-subdirectory-for-externals)
                                 ,(format "|org-hugo-external-file-extensions-allowed-for-copying |%S|" org-hugo-external-file-extensions-allowed-for-copying)
+                                ,(format "|org-hugo-date-format                                  |%S|" org-hugo-date-format)
                                 ,(format "|org-hugo-langs-no-descr-in-code-fences                |%S|" org-hugo-langs-no-descr-in-code-fences)
                                 ,(format "|org-hugo-front-matter-format                          |%S|" org-hugo-front-matter-format))
                               "\n"))

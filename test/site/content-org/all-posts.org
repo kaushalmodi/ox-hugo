@@ -3391,6 +3391,24 @@ If a subtree has the =DEADLINE= [[https://orgmode.org/manual/Special-properties.
 
 By default, =C-c C-d= in Org adds the =DEADLINE= property to the
 current subtree.
+** Customizing date format                                      :date_format:
+*** Date with time and time-zone (default)                   :time_zone:time:
+:PROPERTIES:
+:EXPORT_FILE_NAME: date-with-time-and-time-zone
+:EXPORT_DATE: <2018-01-29 Mon>
+:END:
+*** Date with time                                                     :time:
+:PROPERTIES:
+:EXPORT_FILE_NAME: date-with-time
+:EXPORT_DATE: <2018-01-29 Mon>
+:EXPORT_HUGO_DATE_FORMAT: %Y-%m-%dT%T
+:END:
+*** Date with only date                                           :only_date:
+:PROPERTIES:
+:EXPORT_FILE_NAME: date-with-only-date
+:EXPORT_DATE: <2018-01-29 Mon>
+:EXPORT_HUGO_DATE_FORMAT: %Y-%m-%d
+:END:
 * Preserve filling option                                           :filling:
 ** Filling is preserved
 :PROPERTIES:

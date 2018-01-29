@@ -1,16 +1,16 @@
 ---
-title : "Enabling/Disabling extensions (YAML)"
-date : 2017-08-02
-tags : ["blackfriday", "yaml"]
-draft : false
-blackfriday :
-  extensionsmask : ["fencedCode", "strikethrough"]
-  extensions : ["tabSizeEight", "hardLineBreak"]
-  plainIDAnchors : false
-  hrefTargetBlank : true
-  smartDashes : false
-  fractions : false
-  angledQuotes : true
+title: "Enabling/Disabling extensions (YAML)"
+date: 2017-08-02
+tags: ["blackfriday", "yaml"]
+draft: false
+blackfriday:
+  extensionsmask: ["fencedCode", "strikethrough"]
+  extensions: ["tabSizeEight", "hardLineBreak"]
+  plainIDAnchors: false
+  hrefTargetBlank: true
+  smartDashes: false
+  fractions: false
+  angledQuotes: true
 ---
 
 Extensions enabled

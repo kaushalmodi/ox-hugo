@@ -1,16 +1,16 @@
 ---
-title : "Single Post with YAML front matter"
-date : 2017-07-20
-publishDate : 2017-07-22
-expiryDate : 2017-07-23
-tags : ["single", "yaml"]
-categories : ["cat1", "cat2"]
-draft : false
-menu :
+title: "Single Post with YAML front matter"
+date: 2017-07-20
+publishDate: 2017-07-22
+expiryDate: 2017-07-23
+tags: ["single", "yaml"]
+categories: ["cat1", "cat2"]
+draft: false
+menu:
   foo:
-    parent : "main"
-    weight : 10
-    identifier : "single-yaml"
+    parent: "main"
+    weight: 10
+    identifier: "single-yaml"
 ---
 
 This is a single post. You do not need to set the `EXPORT_FILE_NAME`

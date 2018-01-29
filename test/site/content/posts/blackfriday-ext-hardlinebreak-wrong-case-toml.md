@@ -1,10 +1,10 @@
 ---
-title : "Hard line break (YAML)"
-date : 2017-08-02
-tags : ["blackfriday", "yaml"]
-draft : false
-blackfriday :
-  extensions : ["hardLineBreak"]
+title: "Hard line break (YAML)"
+date: 2017-08-02
+tags: ["blackfriday", "yaml"]
+draft: false
+blackfriday:
+  extensions: ["hardLineBreak"]
 ---
 
 a

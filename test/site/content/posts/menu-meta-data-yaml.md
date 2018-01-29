@@ -1,13 +1,13 @@
 ---
-title : "Menu Meta Data in YAML Front Matter"
-date : 2017-07-18
-tags : ["menu", "yaml"]
-draft : false
-menu :
+title: "Menu Meta Data in YAML Front Matter"
+date: 2017-07-18
+tags: ["menu", "yaml"]
+draft: false
+menu:
   main:
-    identifier : "yaml-menu-override"
-    weight : 25
-    parent : "posts"
+    identifier: "yaml-menu-override"
+    weight: 25
+    parent: "posts"
 ---
 
 Testing the addition of _menu_ meta data to the YAML front

@@ -2473,8 +2473,8 @@ are \"toml\" and \"yaml\"."
   (let ((sep (cond ((string= format "toml") "+++\n")
                    ((string= format "yaml") "---\n")
                    (t "")))
-        (sign (cond ((string= format "toml") "=")
-                    ((string= format "yaml") ":")
+        (sign (cond ((string= format "toml") " =") ;Conventional to have space on the left side of "=" in TOML
+                    ((string= format "yaml") ":")  ;Conventional to have no space on the left side of ":" in YAML
                     (t "")))
         (front-matter "")
         (indent (make-string 2 ? ))
@@ -2527,7 +2527,7 @@ are \"toml\" and \"yaml\"."
                                               (format "[menu.%s]\n" menu-entry))
                                              ((string= format "yaml")
                                               (prog1
-                                                  (format "menu %s\n%s%s%s\n"
+                                                  (format "menu%s\n%s%s%s\n"
                                                           sign indent menu-entry sign)
                                                 (setq indent (concat indent indent)))) ;Double the indent for next use
                                              (t
@@ -2550,7 +2550,7 @@ are \"toml\" and \"yaml\"."
                           (setq menu-value (org-hugo--quote-string menu-value))
                           (setq menu-value-str
                                 (concat menu-value-str
-                                        (format "%s%s %s %s\n"
+                                        (format "%s%s%s %s\n"
                                                 indent menu-key sign menu-value)))))))
                   (setq menu-string (concat menu-entry-str menu-value-str))))))
            ((string= key "blackfriday")
@@ -2561,7 +2561,7 @@ are \"toml\" and \"yaml\"."
                 (setq bf-entry-str (cond ((string= format "toml")
                                           "[blackfriday]\n")
                                          ((string= format "yaml")
-                                          (format "blackfriday %s\n" sign))
+                                          (format "blackfriday%s\n" sign))
                                          (t
                                           "")))
                 (dolist (bf-pair bf-alist)
@@ -2580,7 +2580,7 @@ are \"toml\" and \"yaml\"."
                     ;; (message "blackfriday DBG: %S %S" bf-key bf-value)
                     (setq bf-value-str
                           (concat bf-value-str
-                                  (format "%s%s %s %s\n" indent bf-key sign bf-value)))))
+                                  (format "%s%s%s %s\n" indent bf-key sign bf-value)))))
                 (setq bf-string (concat bf-entry-str bf-value-str)))))
            ((string= key "resources")
             (when value
@@ -2597,7 +2597,7 @@ are \"toml\" and \"yaml\"."
                                              ;; only once.
                                              (if (org-string-nw-p res-string)
                                                  ""
-                                               (format "resources %s\n" sign)))
+                                               (format "resources%s\n" sign)))
                                             (t
                                              "")))
                   (dolist (res-pair res-alist)
@@ -2610,7 +2610,7 @@ are \"toml\" and \"yaml\"."
                              (setq res-param-str (cond ((string= format "toml")
                                                         (format "  [resources.%s]\n" res-key))
                                                        ((string= format "yaml")
-                                                        (format "  %s %s\n" res-key sign))
+                                                        (format "  %s%s\n" res-key sign))
                                                        (t
                                                         "")))
                              (dolist (param-pair res-value) ;res-value would be an alist of params
@@ -2624,7 +2624,7 @@ are \"toml\" and \"yaml\"."
                                                          (org-hugo--quote-string param-value)))
                                  (setq res-param-str
                                        (concat res-param-str
-                                               (format "%s%s %s %s\n"
+                                               (format "%s%s%s %s\n"
                                                        indent param-key sign param-value-str)))))
                              ;; (message "[resources params DBG] %s" res-param-str)
                              )
@@ -2638,7 +2638,7 @@ are \"toml\" and \"yaml\"."
                              (setq res-value (org-hugo--quote-string res-value))
                              (setq res-value-str
                                    (concat res-value-str
-                                           (format "%s%s %s %s\n"
+                                           (format "%s%s%s %s\n"
                                                    indent res-key sign res-value)))))))
                   (unless res-src-present
                     (user-error "`src' must be set for the `resources'"))
@@ -2646,7 +2646,7 @@ are \"toml\" and \"yaml\"."
            (t
             (setq front-matter
                   (concat front-matter
-                          (format "%s %s %s\n"
+                          (format "%s%s %s\n"
                                   key
                                   sign
                                   (cond (;; Tags, categories, keywords, aliases,

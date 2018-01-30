@@ -72,14 +72,19 @@ Click below image to jump to the unicorn image.
 
 - NOTE :: =file:= has to be used in the *Description component* of the
           Org link.
-
------
-
+**** Same link with =#+NAME= specified
 Here's the same link with =#+NAME= specified.. which should also be
 clickable.
 
 #+NAME: fig__unicorn
 [[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+**** Same link with =file:= in "link" portion of the Org link too
+/Note that the =file:= is needed only in the "description" portion to
+create a hyperlinked image that links to an image. But having =file:=
+in the "link" portion of the Org link too shouldn't hurt./
+
+Click below image to jump to the unicorn image.
+[[file:/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
 *** Link to image outside of standard Hugo =static= directory
 [[../files-to-be-copied-to-static/static/images/copy-of-unicorn-logo.png]]
 
@@ -107,6 +112,8 @@ copied location inside =static=:
 - Note :: The =ox-hugo= sub-directory name is because of the default
           value of
           =org-hugo-default-static-subdirectory-for-externals=.
+***** Same image, but hyperlinked to itself
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
 ** Image captions
 :PROPERTIES:
 :EXPORT_DATE: 2017-07-19
@@ -1843,6 +1850,8 @@ the copied location inside the bundle:
 |--------------------------+------------------------------------------------------+------------------------------------------------------------------------------------------------------|
 | =~/temp/bar/baz/foo.png= | =<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/foo.png= | Here, as the *outside* path does not have =/static/=, the file is copied directly to the BUNDLE dir. |
 |--------------------------+------------------------------------------------------+------------------------------------------------------------------------------------------------------|
+****** Same image, but hyperlinked to itself
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
 *** Bundled page foo
 :PROPERTIES:
 :EXPORT_FILE_NAME: foo

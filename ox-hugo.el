@@ -1691,15 +1691,8 @@ and rewrite link paths to make blogging more seamless."
                        ;; (message "[ox-hugo-link DBG] link params: %s" link-param-str)
                        )
                      (concat type ":" raw-path))
-                    (;; Do not add the "file://" prefix if the raw-path
-                     ;; is in the Hugo "static" dir.
-                     (and (string= type "file")
-                          (let ((static-dir (file-truename
-                                             (concat
-                                              (file-name-as-directory (plist-get info :hugo-base-dir))
-                                              "static/")))
-                                (raw-path-true (file-truename raw-path)))
-                            (string-match-p (regexp-quote static-dir) raw-path-true)))
+                    (;; Remove the "file://" prefix.
+                     (string= type "file")
                      (let* ((path1 (org-export-file-uri (funcall link-org-files-as-md raw-path)))
                             (path1 (replace-regexp-in-string "\\`file://" "" path1)))
                        (org-hugo--attachment-rewrite-maybe path1 info)))

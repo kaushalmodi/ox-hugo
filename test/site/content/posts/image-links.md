@@ -51,12 +51,23 @@ NOTE
 : `file:` has to be used in the **Description component** of the
     Org link.
 
----
+
+### Same link with `#+NAME` specified {#same-link-with-name-specified}
 
 Here's the same link with `#+NAME` specified.. which should also be
 clickable.
 
-<a id="orga7fe1df"></a>
+<a id="orgc2b60dc"></a>
+[{{<figure src="/images/org-mode-unicorn-logo.png">}}](/images/org-mode-unicorn-logo.png)
+
+
+### Same link with `file:` in "link" portion of the Org link too {#same-link-with-file-in-link-portion-of-the-org-link-too}
+
+_Note that the `file:` is needed only in the "description" portion to
+create a hyperlinked image that links to an image. But having `file:`
+in the "link" portion of the Org link too shouldn't hurt._
+
+Click below image to jump to the unicorn image.
 [{{<figure src="/images/org-mode-unicorn-logo.png">}}](/images/org-mode-unicorn-logo.png)
 
 
@@ -91,3 +102,8 @@ Note
 : The `ox-hugo` sub-directory name is because of the default
     value of
     `org-hugo-default-static-subdirectory-for-externals`.
+
+
+#### Same image, but hyperlinked to itself {#same-image-but-hyperlinked-to-itself}
+
+[{{<figure src="/ox-hugo/copy-2-of-unicorn-logo.png">}}](/ox-hugo/copy-2-of-unicorn-logo.png)

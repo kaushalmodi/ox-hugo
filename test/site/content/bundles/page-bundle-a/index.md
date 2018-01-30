@@ -42,3 +42,8 @@ the copied location inside the bundle:
 | Outside `static`         | Copied-to location inside BUNDLE                     | Explanation                                                                                            |
 |--------------------------|------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
 | `~/temp/bar/baz/foo.png` | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/foo.png` | Here, as the **outside** path does not have `/static/`, the file is copied directly to the BUNDLE dir. |
+
+
+#### Same image, but hyperlinked to itself {#same-image-but-hyperlinked-to-itself}
+
+[{{<figure src="copy-2-of-unicorn-logo.png">}}](copy-2-of-unicorn-logo.png)

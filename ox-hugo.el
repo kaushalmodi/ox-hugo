@@ -1759,6 +1759,7 @@ INFO is a plist used as a communication channel."
                      ((string-match "/static/" path-true)
                       ;; `path-true' is "/foo/static/bar/baz.png",
                       ;; return "bar/baz.png".
+                      ;; (message "[ox-hugo DBG attch rewrite] path contains static")
                       (substring path-true (match-end 0)))
                      ((and bundle-dir
                            (string-match default-directory path-true))
@@ -1766,17 +1767,21 @@ INFO is a plist used as a communication channel."
                       ;; "<ORG_FILE_DIR>/", `path-true' is
                       ;; "<ORG_FILE_DIR>/bar/baz.png", return
                       ;; "bar/baz.png".
+                      ;; (message "[ox-hugo DBG attch rewrite BUNDLE] attch along with Org content: %s"
+                      ;;          (substring path-true (match-end 0)))
                       (substring path-true (match-end 0)))
                      (bundle-dir
                       ;; This is a page bundle.  `default-path' is
                       ;; "<ORG_FILE_DIR>/", `path-true' is
                       ;; "/foo/bar/baz.png", return "baz.png".
+                      ;; (message "[ox-hugo DBG attch rewrite BUNDLE] attch neither in static nor in Org file dir")
                       (file-name-nondirectory path))
                      (t
                       ;; Else, `path-true' is "/foo/bar/baz.png",
                       ;; return "ox-hugo/baz.png".  "ox-hugo" is the
                       ;; default value of
                       ;; `org-hugo-default-static-subdirectory-for-externals'.
+                      ;; (message "[ox-hugo DBG attch rewrite] neither BUNDLE nor contains static")
                       (concat
                        (file-name-as-directory org-hugo-default-static-subdirectory-for-externals)
                        (file-name-nondirectory path)))))
@@ -1789,7 +1794,7 @@ INFO is a plist used as a communication channel."
               ;; if needed below.
               (unless (file-exists-p dest-path-dir)
                 (mkdir dest-path-dir :parents))
-              ;; (message "[ox-hugo DBG attch rewrite] file-name: %s" file-name-relative-path)
+              ;; (message "[ox-hugo DBG attch rewrite] file-name-relative-path: %s" file-name-relative-path)
               ;; (message "[ox-hugo DBG attch rewrite] dest-path: %s" dest-path)
               ;; (message "[ox-hugo DBG attch rewrite] dest-path-dir: %s" dest-path-dir)
 

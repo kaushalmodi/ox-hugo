@@ -1,6 +1,6 @@
 #+HUGO_BASE_DIR: ../../
 #+HUGO_SECTION: images-in-content
-#+STARTUP: inlineimages
+# #+STARTUP: inlineimages
 
 #+AUTHOR:
 
@@ -56,6 +56,15 @@ source Org file of this post.
 #+END_EXAMPLE
 
 [[file:org.png]]
+* Page Bundle with images in the same dir
+:PROPERTIES:
+:EXPORT_FILE_NAME: index
+:EXPORT_HUGO_BUNDLE: page-bundle-images-in-same-dir
+:END:
+** Link to an image in the same dir as this Org file
+[[file:gnu.png][file:gnu.png]]
+** Link to an image in a subdir in the same dir as this Org file
+[[file:images/org-copy-1.png][file:images/org-copy-1.png]]
 * Footnotes
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:

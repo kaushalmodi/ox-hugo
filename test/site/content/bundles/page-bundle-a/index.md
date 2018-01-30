@@ -47,3 +47,12 @@ the copied location inside the bundle:
 #### Same image, but hyperlinked to itself {#same-image-but-hyperlinked-to-itself}
 
 [{{<figure src="copy-2-of-unicorn-logo.png">}}](copy-2-of-unicorn-logo.png)
+
+
+#### Page Bundles with images in the same dir as content Org file {#page-bundles-with-images-in-the-same-dir-as-content-org-file}
+
+| Inside `<ORG_FILE_DIR>`          | Copied-to location inside BUNDLE                             | Explanation                                                                                                                                      |
+|----------------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| `<ORG_FILE_DIR>/bar/baz/foo.png` | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/bar/baz/foo.png` | Even if the **outside** path does not have `/static/`, it is still inside the same dir as the Org file, so the directory structure is preserved. |
+
+See [this other test](/images-in-content/page-bundle-images-in-same-dir/) for an example.

@@ -1718,12 +1718,10 @@ and rewrite link paths to make blogging more seamless."
 
 ;;;;; Helpers
 (defun org-hugo--attachment-rewrite-maybe (path info)
-  "Copy local images and pdfs to the \"static/\" directory if needed.
-Also rewrite image links.
+  "Copy local images and pdfs to the static/bundle directory if needed.
+Also update the link paths to match those.
 
-PATH is the path to the image or pdf attachment.  If the PATH
-already exists in the Hugo \"static\" directory, just return the
-PATH.
+PATH is the path to the image or any other attachment.
 
 INFO is a plist used as a communication channel."
   ;; (message "[ox-hugo attachment DBG] The Hugo section is: %s" (plist-get info :hugo-section))
@@ -1742,6 +1740,7 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-hugo DBG attch rewrite] path: %s" path)
     ;; (message "[ox-hugo DBG attch rewrite] path-true: %s" path-true)
     ;; (message "[ox-hugo DBG attch rewrite] bundle-dir: %s" bundle-dir)
+    ;; (message "[ox-hugo DBG attch rewrite] default-dir: %s" default-directory)
     ;; (message "[ox-hugo DBG attch rewrite] dest-dir: %s" dest-dir)
     (if (and (file-exists-p path-true)
              (member (file-name-extension path) exportables)
@@ -1753,23 +1752,42 @@ INFO is a plist used as a communication channel."
                 ;; If so, return *only* the path considering the
                 ;; destination directory as root.
                 (setq ret (concat "/" (substring path-true (match-end 0)))))
-            (let* ((file-name-sans-static (if (string-match "/static/" path-true)
-                                              (substring path-true (match-end 0))
-                                            (concat
-                                             (if bundle-dir
-                                                 ""
-                                               (file-name-as-directory org-hugo-default-static-subdirectory-for-externals))
-                                             (file-name-nondirectory path))))
-                   (dest-path (concat dest-dir file-name-sans-static))
+            (let* ((file-name-relative-path
+                    (cond
+                     ((string-match "/static/" path-true)
+                      ;; `path-true' is "/foo/static/bar/baz.png",
+                      ;; return "bar/baz.png".
+                      (substring path-true (match-end 0)))
+                     ((and bundle-dir
+                           (string-match default-directory path-true))
+                      ;; This is a page bundle.  `default-path' is
+                      ;; "<ORG_FILE_DIR>/", `path-true' is
+                      ;; "<ORG_FILE_DIR>/bar/baz.png", return
+                      ;; "bar/baz.png".
+                      (substring path-true (match-end 0)))
+                     (bundle-dir
+                      ;; This is a page bundle.  `default-path' is
+                      ;; "<ORG_FILE_DIR>/", `path-true' is
+                      ;; "/foo/bar/baz.png", return "baz.png".
+                      (file-name-nondirectory path))
+                     (t
+                      ;; Else, `path-true' is "/foo/bar/baz.png",
+                      ;; return "ox-hugo/baz.png".  "ox-hugo" is the
+                      ;; default value of
+                      ;; `org-hugo-default-static-subdirectory-for-externals'.
+                      (concat
+                       (file-name-as-directory org-hugo-default-static-subdirectory-for-externals)
+                       (file-name-nondirectory path)))))
+                   (dest-path (concat dest-dir file-name-relative-path))
                    (dest-path-dir (file-name-directory dest-path)))
               ;; The `dest-dir' would already exist.  But if
-              ;; `file-name-sans-static' is "images/image.png" or
+              ;; `file-name-relative-path' is "images/image.png" or
               ;; "foo/bar.txt", it's likely that "`dest-dir'/images"
               ;; or "`dest-dir'/foo" might not exist.  So create those
               ;; if needed below.
               (unless (file-exists-p dest-path-dir)
                 (mkdir dest-path-dir :parents))
-              ;; (message "[ox-hugo DBG attch rewrite] file-name: %s" file-name-sans-static)
+              ;; (message "[ox-hugo DBG attch rewrite] file-name: %s" file-name-relative-path)
               ;; (message "[ox-hugo DBG attch rewrite] dest-path: %s" dest-path)
               ;; (message "[ox-hugo DBG attch rewrite] dest-path-dir: %s" dest-path-dir)
 
@@ -1783,8 +1801,8 @@ INFO is a plist used as a communication channel."
                             ;; directory, don't prefix the path as "/"
                             ;; as those paths won't exist at the site
                             ;; base URL.
-                            file-name-sans-static
-                          (concat "/" file-name-sans-static))))))
+                            file-name-relative-path
+                          (concat "/" file-name-relative-path))))))
       (setq ret path))
     ;; (message "[ox-hugo DBG attch rewrite] returned path: %s" ret)
     ret))

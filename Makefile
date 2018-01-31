@@ -1,4 +1,4 @@
-# Time-stamp: <2018-01-15 10:33:39 kmodi>
+# Time-stamp: <2018-01-31 12:21:36 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -25,10 +25,11 @@ endif
 HUGO_BIN_SOURCE ?= https://gitlab.com/kaushalmodi/unofficial-hugo-dev-builds.git
 HUGO_VERSION ?= DEV
 
+# baseURL value set via environment variable HUGO_BASEURL
+HUGO_BASEURL ?= http://localhost
+
 # Directory containing the Hugo site's config.toml
 HUGO_BASE_DIR=./
-# Value to be passed to hugo's --baseURL argument
-HUGO_BASE_URL=http://localhost
 # Other hugo arguments
 HUGO_ARGS=
 
@@ -135,17 +136,17 @@ endif
 	@$(HUGO) version
 
 hugo: vcheck
-	@cd $(HUGO_BASE_DIR) && $(HUGO) --baseURL=$(HUGO_BASE_URL) $(HUGO_ARGS)
+	@cd $(HUGO_BASE_DIR) && $(HUGO) $(HUGO_ARGS)
 
 hugo_doc:
-	@$(MAKE) hugo HUGO_BASE_DIR=./doc HUGO_BASE_URL=https://ox-hugo.scripter.co/
+	@$(MAKE) hugo HUGO_BASE_DIR=./doc HUGO_BASEURL=https://ox-hugo.scripter.co/
 
 hugo_test:
-	@$(MAKE) hugo HUGO=/tmp/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASE_URL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
+	@$(MAKE) hugo HUGO=/tmp/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASEURL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
 
 serve server: vcheck
-	@echo "Serving the site on $(HUGO_BASE_URL):$(PORT) .."
-	@cd $(HUGO_BASE_DIR) && $(HUGO) server --baseURL=$(HUGO_BASE_URL) --port $(PORT) --buildDrafts --buildFuture --navigateToChanged
+	@echo "Serving the site on $(HUGO_BASEURL):$(PORT) .."
+	@cd $(HUGO_BASE_DIR) && $(HUGO) server --port $(PORT) --buildDrafts --buildFuture --navigateToChanged
 
 diff:
 	@git diff

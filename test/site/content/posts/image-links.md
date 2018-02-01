@@ -10,7 +10,7 @@ This is some text before the first heading of this post.
 
 ## Unclickable image (works!) {#unclickable-image--works}
 
-{{<figure src="/images/org-mode-unicorn-logo.png">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" >}}
 
 ---
 
@@ -45,7 +45,7 @@ tag and look the same size.
 ## Clickable image that opens the image (works!) {#clickable-image-that-opens-the-image--works}
 
 Click below image to jump to the unicorn image.
-{{<figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 
 NOTE
 : `file:` has to be used in the **Description component** of the
@@ -57,8 +57,8 @@ NOTE
 Here's the same link with `#+NAME` specified.. which should also be
 clickable.
 
-<a id="org2697be1"></a>
-{{<figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png">}}
+<a id="org7cd8145"></a>
+{{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 
 
 ### Same link with `file:` in "link" portion of the Org link too {#same-link-with-file-in-link-portion-of-the-org-link-too}
@@ -68,12 +68,12 @@ create a hyperlinked image that links to an image. But having `file:`
 in the "link" portion of the Org link too shouldn't hurt._
 
 Click below image to jump to the unicorn image.
-{{<figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 
 
 ## Link to image outside of standard Hugo `static` directory {#link-to-image-outside-of-standard-hugo-static-directory}
 
-{{<figure src="/images/copy-of-unicorn-logo.png">}}
+{{< figure src="/images/copy-of-unicorn-logo.png" >}}
 
 If you link to files outside of the Hugo `static` directory, ensure
 that the path contains `/static/` if you would like to preserve the
@@ -92,7 +92,7 @@ copied location inside `static`:
 
 ### Source path does not contain `/static/` {#source-path-does-not-contain-static}
 
-{{<figure src="/ox-hugo/copy-2-of-unicorn-logo.png">}}
+{{< figure src="/ox-hugo/copy-2-of-unicorn-logo.png" >}}
 
 | Outside `static`         | Copied-to location inside `static`       | Explanation                                                                                                             |
 |--------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
@@ -106,4 +106,4 @@ Note
 
 #### Same image, but hyperlinked to itself {#same-image-but-hyperlinked-to-itself}
 
-{{<figure src="/ox-hugo/copy-2-of-unicorn-logo.png" link="/ox-hugo/copy-2-of-unicorn-logo.png">}}
+{{< figure src="/ox-hugo/copy-2-of-unicorn-logo.png" link="/ox-hugo/copy-2-of-unicorn-logo.png" >}}

@@ -9,7 +9,7 @@ draft = false
 
 ## Setting `class` parameter {#setting-class-parameter}
 
-{{<figure src="/images/org-mode-unicorn-logo.png" class="inset">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" class="inset" >}}
 
 [Discussion](https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728)
 
@@ -18,12 +18,12 @@ draft = false
 
 [Reference](https://www.reddit.com/r/emacs/comments/71wy6n/orgmode_as_a_markup_language_does_make_sense_even/dnhqudn/)
 
-{{<figure src="/images/org-mode-unicorn-logo.png" alt="Org-mode Unicorn Logo">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" alt="Org-mode Unicorn Logo" >}}
 
 
 ## Setting `title` parameter {#setting-title-parameter}
 
-{{<figure src="/images/org-mode-unicorn-logo.png" title="Logo">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" title="Logo" >}}
 
 
 ## Setting image caption {#setting-image-caption}
@@ -38,7 +38,7 @@ below image, caption is set using that:
 
 Some text before image.
 
-{{<figure src="/images/org-mode-unicorn-logo.png" caption="A unicorn!">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="A unicorn!" >}}
 
 Some more text, after image.
 
@@ -46,7 +46,7 @@ Below, the same caption is set using the `#+ATTR_HTML` method instead:
 
 Some text before image.
 
-{{<figure src="/images/org-mode-unicorn-logo.png" caption="A unicorn!">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="A unicorn!" >}}
 
 _Enter a new line after the image link so that it's in an "Org
 paragraph" that contains just that image. That tells Org that that
@@ -64,17 +64,17 @@ parameter. **The height of the image will be resized proportionally.**
 
 Below image is shown 50 pixels wide.
 
-{{<figure src="/images/org-mode-unicorn-logo.png" width="50">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" width="50" >}}
 
 Below image is shown 100 pixels wide.
 
-{{<figure src="/images/org-mode-unicorn-logo.png" width="100">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" width="100" >}}
 
 Below image is shown with a width of 1000 pixels! Now the size of this
 image is 200px × 200px. But the image will still show up in 1000px ×
 1000px size, but obviously heavily pixelated!
 
-{{<figure src="/images/org-mode-unicorn-logo.png" width="1000">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" width="1000" >}}
 
 
 ### Setting `:height` parameter {#setting-height-parameter}
@@ -90,17 +90,17 @@ parameter. **The weight of the image will be resized proportionally.**
 
 Below image is shown 50 pixels tall.
 
-{{<figure src="/images/org-mode-unicorn-logo.png" height="50">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" height="50" >}}
 
 Below image is shown 100 pixels tall.
 
-{{<figure src="/images/org-mode-unicorn-logo.png" height="100">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" height="100" >}}
 
 Below image is shown with a height of 1000 pixels! Now the size of
 this image is 200px × 200px. But the image will still show up in
 1000px × 1000px size, but obviously heavily pixelated!
 
-{{<figure src="/images/org-mode-unicorn-logo.png" height="1000">}}
+{{< figure src="/images/org-mode-unicorn-logo.png" height="1000" >}}
 
 
 ### Setting both `:width` and `:height` {#setting-both-width-and-height}
@@ -112,10 +112,10 @@ for testing.
 
 -   `:width 100 :height 200`
 
-    {{<figure src="/images/org-mode-unicorn-logo.png" width="100" height="200">}}
+    {{< figure src="/images/org-mode-unicorn-logo.png" width="100" height="200" >}}
 -   `:width 200 :height 100`
 
-    {{<figure src="/images/org-mode-unicorn-logo.png" width="200" height="100">}}
+    {{< figure src="/images/org-mode-unicorn-logo.png" width="200" height="100" >}}
 
 
 ## Multiple `ATTR_HTML` {#multiple-attr-html}
@@ -133,7 +133,7 @@ Rendered this:
 
 <style>.foo img { border:2px solid black; }</style>
 
-{{<figure src="https://golang.org/doc/gopher/pkg.png" class="foo" alt="Go is fine though." width="300">}}
+{{< figure src="https://golang.org/doc/gopher/pkg.png" class="foo" alt="Go is fine though." width="300" >}}
 
 **NOTE**: We cannot use `:style` in `#+ATTR_HTML` because Hugo does not
  _yet_ support a `style` argument in the `figure` shortcode

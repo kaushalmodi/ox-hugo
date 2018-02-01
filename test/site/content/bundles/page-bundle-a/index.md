@@ -18,7 +18,7 @@ Index page of _Page Bundle A_.
 
 ### Source path contains `/static/` {#source-path-contains-static}
 
-{{<figure src="images/copy-of-unicorn-logo.png">}}
+{{< figure src="images/copy-of-unicorn-logo.png" >}}
 
 If you link to files not in the **current directory**, ensure that the
 path contains `/static/` if you would like to preserve the directory
@@ -37,7 +37,7 @@ the copied location inside the bundle:
 
 ### Source path does not contain `/static/` {#source-path-does-not-contain-static}
 
-{{<figure src="copy-2-of-unicorn-logo.png">}}
+{{< figure src="copy-2-of-unicorn-logo.png" >}}
 
 | Outside `static`         | Copied-to location inside BUNDLE                     | Explanation                                                                                            |
 |--------------------------|------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
@@ -46,7 +46,7 @@ the copied location inside the bundle:
 
 #### Same image, but hyperlinked to itself {#same-image-but-hyperlinked-to-itself}
 
-{{<figure src="copy-2-of-unicorn-logo.png" link="copy-2-of-unicorn-logo.png">}}
+{{< figure src="copy-2-of-unicorn-logo.png" link="copy-2-of-unicorn-logo.png" >}}
 
 
 #### Page Bundles with images in the same dir as content Org file {#page-bundles-with-images-in-the-same-dir-as-content-org-file}

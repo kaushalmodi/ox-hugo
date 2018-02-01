@@ -23,7 +23,7 @@ draft = false
 
 #### Output {#output}
 
-{{< highlight emacs-lisp "hl_lines=1 3-5">}}
+{{< highlight emacs-lisp "hl_lines=1 3-5" >}}
 (message "This is line 1")
 (message "This is line 2")
 (message "This is line 3")
@@ -72,7 +72,7 @@ Note 2
 
 #### Output {#output}
 
-{{< highlight emacs-lisp "linenos=table, linenostart=7, hl_lines=1 3-5">}}
+{{< highlight emacs-lisp "linenos=table, linenostart=7, hl_lines=1 3-5" >}}
 (message "This is line 7 in code, but line 1 for highlighting reference")
 (message "This is line 8 in code, but line 2 for highlighting reference")
 (message "This is line 9 in code, but line 3 for highlighting reference")
@@ -101,7 +101,7 @@ Note 2
 
 #### Output {#output}
 
-{{< highlight emacs-lisp "linenos=table, linenostart=1, hl_lines=1 3-5">}}
+{{< highlight emacs-lisp "linenos=table, linenostart=1, hl_lines=1 3-5" >}}
 (message "This is line 1")
 (message "This is line 2")
 (message "This is line 3")

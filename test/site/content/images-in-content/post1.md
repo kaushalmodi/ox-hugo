@@ -24,4 +24,4 @@ source Org file of this post.
    └── org-copy.png              →  ./static/ox-hugo/org-copy.png
 ```
 
-{{<figure src="/ox-hugo/gnu.png">}}
+{{< figure src="/ox-hugo/gnu.png" >}}

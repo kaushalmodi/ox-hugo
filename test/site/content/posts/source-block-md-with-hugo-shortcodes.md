@@ -26,7 +26,7 @@ should **not** be expanded.. they should be visible verbatim.
 Here, the `-n` switch is added to the Org source block to
 auto-enable[^fn:1] using the `highlight` shortcode.
 
-{{< highlight md "linenos=table, linenostart=1">}}
+{{< highlight md "linenos=table, linenostart=1" >}}
 {{</* figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" */>}}
 {{%/* figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" */%}}
 {{< /highlight >}}

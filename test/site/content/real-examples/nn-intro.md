@@ -29,7 +29,7 @@ Disclaimer
 以万计的树突连接至其他神经元，并将本神经元的输出并作为其他神经元的输入。
 数学上，神经元可以用 **感知机** 的模型表示。
 
-{{<figure src="/images/Vonng/neuron.png">}}
+{{< figure src="/images/Vonng/neuron.png" >}}
 
 一个神经元的数学模型主要包括以下内容：
 
@@ -163,7 +163,7 @@ a
     出发，到达 \\(l\\) 层 \\(j\\) 神经元的连接权重
 -   如图， \\(w^3\_{24}\\) 表示从2层4号神经元到3层2号神经元的连接权值：
 
-{{<figure src="/images/Vonng/nn-weight.png">}}
+{{< figure src="/images/Vonng/nn-weight.png" >}}
 
 只要记住，权值矩阵 \\(W\\) 的 **行标表示本层神经元** 的标号， **列标表示上层
 神 经元** 的标号即可。
@@ -642,9 +642,9 @@ sigmoid又称为逻辑斯蒂曲线，其导数 \\(σ'\\) 是 一个钟形曲线�
 从小到大时，梯度的变化会经历一个"小，大，小"的过程。学习的速度也会被导数项拖累，
 存在一个"慢，快，慢"的过程。
 
-| MSE                                      | Cross Entropy                                      |
-|------------------------------------------|----------------------------------------------------|
-| {{<figure src="/images/Vonng/mse.png">}} | {{<figure src="/images/Vonng/cross-entropy.png">}} |
+| MSE                                        | Cross Entropy                                        |
+|--------------------------------------------|------------------------------------------------------|
+| {{< figure src="/images/Vonng/mse.png" >}} | {{< figure src="/images/Vonng/cross-entropy.png" >}} |
 
 若采用 **交叉熵（cross entropy）** 误差函数：
 
@@ -711,9 +711,9 @@ plt.plot(xs, np.polyval(p1, xs));plt.plot(x, y, 'ro');plt.plot(xs, np.sin(xs), '
 plt.plot(xs, np.polyval(p2, xs));plt.plot(x, y, 'ro');plt.plot(xs, np.sin(xs), 'r--')
 ```
 
-| 3阶多项式                                      | 10阶多项式                                      |
-|--------------------------------------------|---------------------------------------------|
-| {{<figure src="/images/Vonng/overfit-3.png">}} | {{<figure src="/images/Vonng/overfit-10.png">}} |
+| 3阶多项式                                        | 10阶多项式                                        |
+|----------------------------------------------|-----------------------------------------------|
+| {{< figure src="/images/Vonng/overfit-3.png" >}} | {{< figure src="/images/Vonng/overfit-10.png" >}} |
 
 一个模型真正的测验标准，是它对没有见过的场景的预测能力，称为 **泛化能力
 （generalize）** 。

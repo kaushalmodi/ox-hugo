@@ -1662,7 +1662,7 @@ and rewrite link paths to make blogging more seamless."
                                              (format "%s=\"%s\" "
                                                      name val))))))
         ;; (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
-        (format "{{<figure %s>}}" (org-trim figure-param-str))))
+        (format "{{< figure %s >}}" (org-trim figure-param-str))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
         (format (org-export-get-coderef-format ref contents)
@@ -1991,7 +1991,7 @@ channel."
                 (when number-lines
                   (setq hllines-str (concat ", " hllines-str))))
               (setq code (org-hugo--escape-hugo-shortcode code lang))
-              (format "{{< highlight %s%s>}}\n%s{{< /highlight >}}\n"
+              (format "{{< highlight %s%s >}}\n%s{{< /highlight >}}\n"
                       lang
                       (format highlight-args-str linenos-str hllines-str)
                       code)))))

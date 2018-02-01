@@ -14,7 +14,7 @@ Disclaimer
 
 ---
 
-{{<figure src="/images/MultifractalsInR/fractal-ice.jpg">}}
+{{< figure src="/images/MultifractalsInR/fractal-ice.jpg" >}}
 
 
 ## Multifractals {#multifractals}
@@ -22,7 +22,7 @@ Disclaimer
 -   Many natural systems cannot be characterized by a single number such
     as the fractal dimension. Instead an infinite spectrum of dimensions
     must be introduced.
-    {{<figure src="/images/MultifractalsInR/C3_Clouds.png">}}
+    {{< figure src="/images/MultifractalsInR/C3_Clouds.png" >}}
 
 
 ## Multifractal definition {#multifractal-definition}
@@ -43,7 +43,7 @@ Disclaimer
 
 ## Box counting {#box-counting}
 
-{{<figure src="/images/MultifractalsInR/C3_BoxCounting.png">}}
+{{< figure src="/images/MultifractalsInR/C3_BoxCounting.png" >}}
 
 
 ## The generalized dimensions {#the-generalized-dimensions}
@@ -86,7 +86,7 @@ Disclaimer
 
 -   Calculate the partition function for the center and lower images of
     the figure:
-    {{<figure src="/images/MultifractalsInR/C3_BoxCounting.png">}}
+    {{< figure src="/images/MultifractalsInR/C3_BoxCounting.png" >}}
 
 
 ## Two important dimensions {#two-important-dimensions}
@@ -110,7 +110,7 @@ Disclaimer
     experiments were conducted on individual males, and their successive
     displacements analyzed using the generalized dimension function \\(D\_q\\)
     and the mass exponent function \\(\tau\_q\\)
-    {{<figure src="/images/MultifractalsInR/C3_Cladoceran.png">}}
+    {{< figure src="/images/MultifractalsInR/C3_Cladoceran.png" >}}
     both functions indicate that the successive displacements of male D.
     australis have weaker multifractal properties. This is consistent with
     and generalizes previous results showing a decrease in the complexity

@@ -20,7 +20,7 @@ automatically).
 
 ## Image linked to image with `target` attribute {#image-linked-to-image-with-target-attribute}
 
-{{<figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" width="10%" link="https://orgmode.org/img/org-mode-unicorn-logo.png">}}
+{{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" width="10%" link="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
 
 Above is a link to an image. The `width` attribute of _10%_ though
 must apply **only** to the image, and not to the link.

@@ -46,7 +46,7 @@ the copied location inside the bundle:
 
 #### Same image, but hyperlinked to itself {#same-image-but-hyperlinked-to-itself}
 
-[{{<figure src="copy-2-of-unicorn-logo.png">}}](copy-2-of-unicorn-logo.png)
+{{<figure src="copy-2-of-unicorn-logo.png" link="copy-2-of-unicorn-logo.png">}}
 
 
 #### Page Bundles with images in the same dir as content Org file {#page-bundles-with-images-in-the-same-dir-as-content-org-file}

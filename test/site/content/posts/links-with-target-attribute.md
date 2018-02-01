@@ -12,12 +12,22 @@ as it is annotated with `target="_blank"`.
 <a href="https://orgmode.org/manual/Hyperlinks.html" target="_self">Here's the same link</a> but with `target="_self"` annotation. So
 clicking it will open that link in this same tab!
 
-<a href="https://orgmode.org/img/org-mode-unicorn-logo.png" target="_self">{{<figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" width="10%">}}</a>
+[Here's the same link again](https://orgmode.org/manual/Hyperlinks.html), but this time there is no `#+ATTR_HTML`
+annotation. So the behavior of clicking this link will depend on the
+browser (typically an external link will open in a new tab
+automatically).
+
+
+## Image linked to image with `target` attribute {#image-linked-to-image-with-target-attribute}
+
+{{<figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" width="10%" link="https://orgmode.org/img/org-mode-unicorn-logo.png">}}
 
 Above is a link to an image. The `width` attribute of _10%_ though
-must apply **only** to the image, and not to the link, and the `target`
-attribute must apply **only** to the link, and not to the image.
+must apply **only** to the image, and not to the link.
 
-[Here's the same link again](https://orgmode.org/manual/Hyperlinks.html), but this time there is no `#+ATTR_HTML`
-annotation. So the behavior will depend on the browser (typically an
-external link will open in a new tab automatically).
+Note
+: The `target` attribute is discarded though in this case
+    because of the Hugo `figure` shortcode limitation.. there is
+    no way to pass the `target` or any other attribute to the
+    `<a>` element inside the `<figure>` element that the
+    `figure` shortcode constructs.

@@ -1592,7 +1592,8 @@ and rewrite link paths to make blogging more seamless."
                      (mapconcat #'number-to-string
                                 (org-export-get-headline-number destination info)
                                 "."))
-                    (t title))
+                    (t
+                     title))
               ;; Reference
               (or (org-element-property :CUSTOM_ID destination)
                   (org-hugo-slug title)
@@ -1605,15 +1606,19 @@ and rewrite link paths to make blogging more seamless."
                                      destination info
                                      nil #'org-html--has-caption-p)))
                         (cond
-                         ((not number) nil)
-                         ((atom number) (number-to-string number))
-                         (t (mapconcat #'number-to-string number ".")))))))
+                         ((not number)
+                          nil)
+                         ((atom number)
+                          (number-to-string number))
+                         (t
+                          (mapconcat #'number-to-string number ".")))))))
              ;; (message "[ox-hugo-link DBG] link description: %s" description)
              (when description
                (format "[%s](#%s)"
                        description
                        (org-export-get-reference destination info))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
+      ;; (message "[ox-hugo-link DBG] Inline image: %s" raw-path)
       ;; (message "[org-hugo-link DBG] processing an image: %s" contents)
       (let* ((path (org-hugo--attachment-rewrite-maybe raw-path info))
              (parent (org-export-get-parent link))
@@ -1703,13 +1708,23 @@ and rewrite link paths to make blogging more seamless."
              (link-param-str (org-string-nw-p (org-trim link-param-str))))
         (if contents
             (progn
-              ;; (message "[ox-hugo DBG org-hugo-link: contents=%s path=%s" contents path)
-              (if link-param-str
-                  (format "<a href=\"%s\" %s>%s</a>"
-                          (org-html-encode-plain-text path)
-                          link-param-str
-                          (org-link-unescape contents))
-                (format "[%s](%s)" contents path)))
+              ;; (message "[ox-hugo-link DBG] contents=%s path=%s" contents path)
+              ;; (message "[ox-hugo-link DBG] link-param-str=%s" link-param-str)
+              (cond
+               (;; If `contents' is a `figure' shortcode but doesn't
+                ;; already have the `link' parameter set.
+                (and (string-match-p "\\`{{<\\s-*figure\\s-+" contents)
+                     (not (string-match-p "\\`{{<\\s-*figure\\s-+.*link=" contents)))
+                (replace-regexp-in-string "\\s-*>}}\\'"
+                                          (format " link=\"%s\"\\&" path)
+                                          contents))
+               (link-param-str
+                (format "<a href=\"%s\" %s>%s</a>"
+                        (org-html-encode-plain-text path)
+                        link-param-str
+                        (org-link-unescape contents)))
+               (t
+                (format "[%s](%s)" contents path))))
           (if link-param-str
               (let ((path (org-html-encode-plain-text path)))
                 (format "<a href=\"%s\" %s>%s</a>"

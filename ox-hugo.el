@@ -1667,6 +1667,10 @@ and rewrite link paths to make blogging more seamless."
          (;; Else if the image is inline (with non-alt-text
           ;; attributes), use HTML <img> tag syntax.
           inline-image
+          ;; The "target" and "rel" attributes would be meant for <a>
+          ;; tags. So do not pass them to the <img> tag.
+          (plist-put attr :target nil)
+          (plist-put attr :rel nil)
           (org-html--format-image source attr info))
          (t ;Else use the Hugo `figure' shortcode.
           ;; Hugo `figure' shortcode named parameters.
@@ -1680,7 +1684,16 @@ and rewrite link paths to make blogging more seamless."
                                  (attr . ,(plist-get attr :attr))
                                  (attrlink . ,(plist-get attr :attrlink))
                                  (width . ,(plist-get attr :width))
-                                 (height . ,(plist-get attr :height))))
+                                 (height . ,(plist-get attr :height))
+                                 ;; While the `target' and `rel'
+                                 ;; attributes are not supported by
+                                 ;; the inbuilt Hugo `figure'
+                                 ;; shortcode, they can be used as
+                                 ;; intended if a user has a custom
+                                 ;; `figure' shortcode with the
+                                 ;; support added for those.
+                                 (target . ,(plist-get attr :target))
+                                 (rel . ,(plist-get attr :rel))))
                 (figure-param-str ""))
             (dolist (param figure-params)
               (let ((name (car param))

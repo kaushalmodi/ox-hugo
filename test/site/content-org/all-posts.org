@@ -8,6 +8,7 @@
 #+MACRO: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
 #+MACRO: hugoissue =hugo= Issue #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
 #+MACRO: bfissue /Blackfriday/ Issue #[[https://github.com/russross/blackfriday/issues/$1][$1]]
+#+MACRO: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
 
 #+AUTHOR:
 
@@ -2277,11 +2278,23 @@ automatically).
 Above is a link to an image. The =width= attribute of /10%/ though
 must apply *only* to the image, and not to the link.
 
-- Note :: The =target= attribute is discarded though in this case
-          because of the Hugo =figure= shortcode limitation.. there is
-          no way to pass the =target= or any other attribute to the
-          =<a>= element inside the =<figure>= element that the
-          =figure= shortcode constructs.
+- Note 1 :: The =target= attribute is /ineffective/ in this case
+            because of the Hugo =figure= shortcode limitation.. there
+            is no way to pass the =target= or any other attribute to
+            the =<a>= element inside the =<figure>= element that the
+            =figure= shortcode constructs ({{{commit(e92fcf00)}}}).
+- Note 2 :: Though, the =target= (and =rel=) attributes, if present,
+            are still passed on to the =figure= shortcode. So if a
+            user has a custom =figure= shortcode that makes use of
+            those arguments, things will "just work" :smile:.
+
+-----
+
+#+ATTR_HTML: :width 10% :target _self
+Above limitation is not posed if the image is inlined:
+[[https://orgmode.org/img/org-mode-unicorn-logo.png][https://orgmode.org/img/org-mode-unicorn-logo.png]] i.e. the =target=
+attribute will be added to the =<a>= tag correctly, as the =figure=
+shortcode is not used for inline images.
 ** Within the same post (Internal links)                     :internal_links:
 *** Link to headings by name                     :toc:headings:export_option:
 :PROPERTIES:

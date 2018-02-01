@@ -1,7 +1,9 @@
-# Time-stamp: <2018-01-31 12:21:36 kmodi>
+# Time-stamp: <2018-02-01 00:29:00 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
+
+MAKE_ := $(MAKE) --no-print-directory
 
 EMACS ?= emacs
 EMACS_exists := $(shell command -v $(EMACS) 2> /dev/null)
@@ -112,7 +114,7 @@ emacs-batch:
 	--kill
 
 md1:
-	@$(MAKE) emacs-batch FUNC=org-hugo-export-all-wim-to-md
+	@$(MAKE_) emacs-batch FUNC=org-hugo-export-all-wim-to-md
 
 vcheck:
 ifeq ("$(EMACS_exists)","")
@@ -139,10 +141,10 @@ hugo: vcheck
 	@cd $(HUGO_BASE_DIR) && $(HUGO) $(HUGO_ARGS)
 
 hugo_doc:
-	@$(MAKE) hugo HUGO_BASE_DIR=./doc HUGO_BASEURL=https://ox-hugo.scripter.co/
+	@$(MAKE_) hugo HUGO_BASE_DIR=./doc HUGO_BASEURL=https://ox-hugo.scripter.co/
 
 hugo_test:
-	@$(MAKE) hugo HUGO=/tmp/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASEURL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
+	@$(MAKE_) hugo HUGO=/tmp/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASEURL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
 
 serve server: vcheck
 	@echo "Serving the site on $(HUGO_BASEURL):$(PORT) .."
@@ -154,7 +156,7 @@ diff:
 test: vcheck testmkgold do_test
 
 md:
-	@$(MAKE) do_test test_check=0
+	@$(MAKE_) do_test test_check=0
 
 # Get rid of all changes in $(OX_HUGO_TEST_SITE_DIR)/content.
 # https://stackoverflow.com/a/16589534/1219634
@@ -167,19 +169,19 @@ testmkgold:
 # https://stackoverflow.com/a/37748952/1219634
 do_test: $(test_org_files)
 $(test_org_files):
-	@$(MAKE) md1 ORG_FILE=$@ TIMEZONE=UTC # Use UTC/Universal time zone for tests
+	@$(MAKE_) md1 ORG_FILE=$@ TIMEZONE=UTC # Use UTC/Universal time zone for tests
 ifeq ($(test_check),1)
-	@$(MAKE) diffgolden
+	@$(MAKE_) diffgolden
 endif
 
 doc_md:
 	@echo "[Doc Site] Generating ox-hugo Documentation Site content .."
-	@$(MAKE) md1 ORG_FILE=./doc/ox-hugo-manual.org
+	@$(MAKE_) md1 ORG_FILE=./doc/ox-hugo-manual.org
 	@echo "[Doc Site] Done"
 
 doc_gh:
 	@echo "[GitHub Docs] Generating README.org and CONTRIBUTING.org for GitHub .."
-	@$(MAKE) emacs-batch FUNC=ox-hugo-export-gh-doc ORG_FILE=./doc/github-files.org
+	@$(MAKE_) emacs-batch FUNC=ox-hugo-export-gh-doc ORG_FILE=./doc/github-files.org
 	@echo "[GitHub Docs] Done"
 
 doc: doc_md hugo_doc doc_gh

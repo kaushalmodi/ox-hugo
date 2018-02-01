@@ -1631,38 +1631,66 @@ and rewrite link paths to make blogging more seamless."
              (useful-parent (if grand-parent
                                 grand-parent
                               parent))
+             (inline-image (not (org-html-standalone-image-p useful-parent info)))
+             (source (if (member type '("http" "https" "ftp"))
+                         (concat type ":" path)
+                       path))
              (attr (org-export-read-attribute :attr_html useful-parent))
-             ;; Hugo `figure' shortcode named parameters
-             ;; https://gohugo.io/content-management/shortcodes/#figure
-             (caption (org-string-nw-p
-                       (org-export-data  ;Look for caption set using #+CAPTION
-                        (org-export-get-caption (org-export-get-parent-element link))
-                        info)))
-             (figure-params `((src . ,(if (member type '("http" "https" "ftp"))
-                                          (concat type ":" path)
-                                        path))
-                              (link . ,(plist-get attr :link))
-                              (title . ,(plist-get attr :title))
-                              (caption . ,(if caption
-                                              caption ;Caption set using #+CAPTION takes higher precedence
-                                            (plist-get attr :caption)))
-                              (class . ,(plist-get attr :class))
-                              (attr . ,(plist-get attr :attr))
-                              (attrlink . ,(plist-get attr :attrlink))
-                              (alt . ,(plist-get attr :alt))
-                              (width . ,(plist-get attr :width))
-                              (height . ,(plist-get attr :height))))
-             (figure-param-str ""))
+             (num-attr (/ (length attr) 2)) ;(:alt foo) -> num-attr = 1
+             (alt-text (plist-get attr :alt))
+             (caption (or
+                       ;;Caption set using #+CAPTION takes higher precedence
+                       (org-string-nw-p
+                        (org-export-data  ;Look for caption set using #+CAPTION
+                         (org-export-get-caption (org-export-get-parent-element link))
+                         info))
+                       (plist-get attr :caption))))
+        ;; (message "[ox-hugo-link DBG] inline image? %s\npath: %s"
+        ;;          inline-image path)
+        ;; (message "[org-hugo-link DBG] attr: %s num of attr: %d"
+        ;;          attr (length attr))
         ;; (message "[org-hugo-link DBG] parent-type: %s" parent-type)
-        (dolist (param figure-params)
-          (let ((name (car param))
-                (val (cdr param)))
-            (when val
-              (setq figure-param-str (concat figure-param-str
-                                             (format "%s=\"%s\" "
-                                                     name val))))))
-        ;; (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
-        (format "{{< figure %s >}}" (org-trim figure-param-str))))
+        ;; (message "[org-hugo-link DBG] useful-parent-type: %s"
+        ;;          (org-element-type useful-parent))
+        (cond
+         (;; Use the Markdown image syntax if the image is inline and
+          ;; there are no HTML attributes for the image, or just one
+          ;; attribute, the `alt-text'.
+          (and inline-image
+               (or (= 0 num-attr)
+                   (and alt-text
+                        (= 1 num-attr))))
+          (let ((alt-text (if alt-text
+                              alt-text
+                            "")))
+            (format "![%s](%s)" alt-text source)))
+         (;; Else if the image is inline (with non-alt-text
+          ;; attributes), use HTML <img> tag syntax.
+          inline-image
+          (org-html--format-image source attr info))
+         (t ;Else use the Hugo `figure' shortcode.
+          ;; Hugo `figure' shortcode named parameters.
+          ;; https://gohugo.io/content-management/shortcodes/#figure
+          (let ((figure-params `((src . ,source)
+                                 (alt . ,alt-text)
+                                 (caption . ,caption)
+                                 (link . ,(plist-get attr :link))
+                                 (title . ,(plist-get attr :title))
+                                 (class . ,(plist-get attr :class))
+                                 (attr . ,(plist-get attr :attr))
+                                 (attrlink . ,(plist-get attr :attrlink))
+                                 (width . ,(plist-get attr :width))
+                                 (height . ,(plist-get attr :height))))
+                (figure-param-str ""))
+            (dolist (param figure-params)
+              (let ((name (car param))
+                    (val (cdr param)))
+                (when val
+                  (setq figure-param-str (concat figure-param-str
+                                                 (format "%s=\"%s\" "
+                                                         name val))))))
+            ;; (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
+            (format "{{< figure %s >}}" (org-trim figure-param-str)))))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
         (format (org-export-get-coderef-format ref contents)
@@ -1863,6 +1891,9 @@ communication channel."
     ;; from `org-html-paragraph'.
     (let* ((parent (org-export-get-parent paragraph))
 	   (parent-type (org-element-type parent)))
+      ;; (message "[ox-hugo-para DBG] standalone image? %s\ncontents: %s"
+      ;;          (org-html-standalone-image-p paragraph info)
+      ;;          contents)
       (unless (or
                ;; First paragraph in an item has no tag if it is alone
                ;; or followed, at most, by a sub-list.

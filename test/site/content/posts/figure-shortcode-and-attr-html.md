@@ -133,7 +133,7 @@ Rendered this:
 
 <style>.foo img { border:2px solid black; }</style>
 
-{{< figure src="https://golang.org/doc/gopher/pkg.png" class="foo" alt="Go is fine though." width="300" >}}
+{{< figure src="https://golang.org/doc/gopher/pkg.png" alt="Go is fine though." class="foo" width="300" >}}
 
 **NOTE**: We cannot use `:style` in `#+ATTR_HTML` because Hugo does not
  _yet_ support a `style` argument in the `figure` shortcode

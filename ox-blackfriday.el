@@ -332,7 +332,14 @@ style tag."
                    ;; would be meant for links inside the paragraph
                    ;; instead of the paragraph itself.
                    (plist-put attr1 :target nil)
-                   (plist-put attr1 :rel nil))
+                   (plist-put attr1 :rel nil)
+                   ;; Remove other attributes from the list of a
+                   ;; paragraph's HTML attributes which would be meant
+                   ;; for the inline images inside that paragraph.
+                   (plist-put attr1 :src nil)
+                   (plist-put attr1 :alt nil)
+                   (plist-put attr1 :height nil)
+                   (plist-put attr1 :width nil))
                  attr1))
          (attr-str (org-html--make-attribute-string attr))
          (ret contents))

@@ -45,6 +45,7 @@ tag and look the same size.
 ## Clickable image that opens the image (works!) {#clickable-image-that-opens-the-image--works}
 
 Click below image to jump to the unicorn image.
+
 {{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 
 NOTE
@@ -57,7 +58,7 @@ NOTE
 Here's the same link with `#+NAME` specified.. which should also be
 clickable.
 
-<a id="org7cd8145"></a>
+<a id="org2476ccd"></a>
 {{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 
 
@@ -68,6 +69,7 @@ create a hyperlinked image that links to an image. But having `file:`
 in the "link" portion of the Org link too shouldn't hurt._
 
 Click below image to jump to the unicorn image.
+
 {{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 
 

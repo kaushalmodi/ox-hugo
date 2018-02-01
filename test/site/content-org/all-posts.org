@@ -68,6 +68,7 @@ tag and look the same size.
 [[/images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
 *** Clickable image that opens the image (works!)
 Click below image to jump to the unicorn image.
+
 [[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
 
 - NOTE :: =file:= has to be used in the *Description component* of the
@@ -84,6 +85,7 @@ create a hyperlinked image that links to an image. But having =file:=
 in the "link" portion of the Org link too shouldn't hurt./
 
 Click below image to jump to the unicorn image.
+
 [[file:/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
 *** Link to image outside of standard Hugo =static= directory
 [[../files-to-be-copied-to-static/static/images/copy-of-unicorn-logo.png]]
@@ -114,6 +116,41 @@ copied location inside =static=:
           =org-hugo-default-static-subdirectory-for-externals=.
 ***** Same image, but hyperlinked to itself
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
+** Inline hyperlinked and non-hyperlinked images                     :inline:
+:PROPERTIES:
+:EXPORT_FILE_NAME: inline-images
+:END:
+This tests the feature added to support proper export syntax for
+inline images -- {{{oxhugoissue(125)}}}.
+*** Inline non-hyperlinked image
+**** No Alt text or any other attributes
+This is an inline non-hyperlinked image without alt text or other
+attributes: [[/images/org-mode-unicorn-logo.png]].
+**** With Alt text
+#+ATTR_HTML: :alt Inline Non-hyperlinked Image
+This is an inline non-hyperlinked image with alt text:
+[[/images/org-mode-unicorn-logo.png]].
+**** With other HTML attributes
+#+ATTR_HTML: :width 30
+This is an inline non-hyperlinked image with the width attribute:
+[[/images/org-mode-unicorn-logo.png]].
+*** Non-inline non-hyperlinked image
+[[/images/org-mode-unicorn-logo.png]]
+*** Inline hyperlinked image
+**** No Alt text or any other attributes
+This is an inline non-hyperlinked image without alt text or other
+attributes:
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
+**** With Alt text
+#+ATTR_HTML: :alt Inline Non-hyperlinked Image
+This is an inline non-hyperlinked image with alt text:
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
+**** With other HTML attributes
+#+ATTR_HTML: :width 30
+This is an inline non-hyperlinked image with the width attribute:
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
+*** Non-inline hyperlinked image
+ [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
 ** Image captions
 :PROPERTIES:
 :EXPORT_DATE: 2017-07-19
@@ -4096,6 +4133,7 @@ there shouldn't be any error.
 - Many natural systems cannot be characterized by a single number such
   as the fractal dimension. Instead an infinite spectrum of dimensions
   must be introduced.
+
   [[file:/images/MultifractalsInR/C3_Clouds.png]]
 *** Multifractal definition
 - Consider a given object $\Omega$, its multifractal nature is
@@ -4145,6 +4183,7 @@ there shouldn't be any error.
 *** Exercise
 - Calculate the partition function for the center and lower images of
   the figure:
+
   [[file:/images/MultifractalsInR/C3_BoxCounting.png]]
 *** Two important dimensions
 - Two particular cases are $q=1$ and $q=2$. The dimension for $q=1$ is
@@ -4163,7 +4202,9 @@ there shouldn't be any error.
   experiments were conducted on individual males, and their successive
   displacements analyzed using the generalized dimension function $D_q$
   and the mass exponent function $\tau_q$
+
   [[file:/images/MultifractalsInR/C3_Cladoceran.png]]
+
   both functions indicate that the successive displacements of male D.
   australis have weaker multifractal properties. This is consistent with
   and generalizes previous results showing a decrease in the complexity

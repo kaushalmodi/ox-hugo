@@ -22,6 +22,7 @@ Disclaimer
 -   Many natural systems cannot be characterized by a single number such
     as the fractal dimension. Instead an infinite spectrum of dimensions
     must be introduced.
+
     {{< figure src="/images/MultifractalsInR/C3_Clouds.png" >}}
 
 
@@ -86,6 +87,7 @@ Disclaimer
 
 -   Calculate the partition function for the center and lower images of
     the figure:
+
     {{< figure src="/images/MultifractalsInR/C3_BoxCounting.png" >}}
 
 
@@ -110,7 +112,9 @@ Disclaimer
     experiments were conducted on individual males, and their successive
     displacements analyzed using the generalized dimension function \\(D\_q\\)
     and the mass exponent function \\(\tau\_q\\)
+
     {{< figure src="/images/MultifractalsInR/C3_Cladoceran.png" >}}
+
     both functions indicate that the successive displacements of male D.
     australis have weaker multifractal properties. This is consistent with
     and generalizes previous results showing a decrease in the complexity

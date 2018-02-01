@@ -3211,6 +3211,48 @@ Here's a tip or note.
 
 #+ATTR_HTML: :class alert alert-warning
 Here's a warning!
+** Paired shortcodes using special blocks              :paired:special_block:
+:PROPERTIES:
+:EXPORT_FILE_NAME: paired-shortcodes-special-blocks
+:EXPORT_HUGO_PAIRED_SHORTCODES: %mdshortcode myshortcode
+:END:
+Test case for feature requested in {{{oxhugoissue(119)}}}.
+*** Paired markdown shortcode
+#+begin_mdshortcode
+Content *with* /emphasis/ characters is rendered.
+
+The HTML <b>markup</b> will also get rendered.
+#+end_mdshortcode
+
+This will export as:
+
+#+BEGIN_SRC md
+{{% mdshortcode %}} Content rendered as Markdown {{% /mdshortcode %}}
+#+END_SRC
+*** Paired non-markdown (default) shortcode
+#+begin_myshortcode
+Content is rendered <b>like HTML</b>. The Markdown /emphasis/
+characters are !! NOT !! rendered.
+
+So a blank line before this sentence in the Markdown source will
+<b>not</b> result in a new paragraph in HTML. <p>But this will be a
+new paragraph as it is wrapped in HTML <code>&lt;p&gt;</code>
+tags.</p>
+#+end_myshortcode
+
+This will export as:
+
+#+BEGIN_SRC md
+{{< myshortcode >}} Content NOT rendered as Markdown {{< /myshortcode >}}
+#+END_SRC
+*** Not a recognized paired shortcode
+#+begin_foo
+Content *with* Markdown /emphasis/ characters is rendered fine in the
+default Special Blocks.
+#+end_foo
+
+This will export as [[/posts/special-blocks][Special Blocks]] --- either wrapped with =<div>=
+tags or HTML5-recognized tags.
 * Paragraphs                                                      :paragraph:
 ** Paragraphs with ATTR_HTML                         :attr___html:attr___css:
 :PROPERTIES:

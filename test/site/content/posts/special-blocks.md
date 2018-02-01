@@ -13,7 +13,6 @@ draft = false
 <article></article>
 
 This is _an article_.
-
 </article>
 
 
@@ -27,7 +26,6 @@ _Some_ **text** --- 1
 | a | b | c |
 |---|---|---|
 | d | e | f |
-
 </aside>
 
 
@@ -41,7 +39,6 @@ _Some_ **text** --- 2
 | g | h | i |
 |---|---|---|
 | j | k | l |
-
 </section>
 
 
@@ -49,8 +46,7 @@ _Some_ **text** --- 2
 
 Unmarked.
 
-<mark>_Some_ **marked** text --- 2.5.
-</mark>
+<mark>_Some_ **marked** text --- 2.5.</mark>
 
 Unmarked again.
 
@@ -64,7 +60,6 @@ Unmarked again.
 <div></div>
 
 This is _some text_ wrapped in a `div` block with class `something`.
-
 </div>
 
 
@@ -78,7 +73,6 @@ _Some_ **text** --- 3
 | m | n | o |
 |---|---|---|
 | p | q | r |
-
 </div>
 
 
@@ -92,5 +86,4 @@ _Some_ **text** --- 4
 | s | t | u |
 |---|---|---|
 | v | w | x |
-
 </div>

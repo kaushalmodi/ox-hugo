@@ -398,6 +398,7 @@ Examples:
   2017-07-31T17:05:38+04:00
   2017-07-31T17:05:38-04:00.")
 
+
 
 ;;; User-Configurable Variables
 
@@ -611,6 +612,42 @@ expression."
   :type 'string
   :safe #'stringp)
 
+(defcustom org-hugo-paired-shortcodes ""
+  "Space-separated string of paired shortcode strings.
+
+Shortcode string convention:
+
+  - Begin the string with \"%\" for shortcodes whose content can
+    contain Markdown, and thus needs to be passed through the
+    Hugo Markdown processor.  The content can also contain HTML.
+
+    Example of a paired markdown shortcode:
+
+      {{% mdshortcode %}}Content **bold** <i>italics</i>{{% /mdshortcode %}}
+
+  - Absence of the \"%\" prefix would imply that the shortcode's
+    content should not be passed to the Markdown parser.  The
+    content can contain HTML though.
+
+    Example of a paired non-markdown (default) shortcode:
+
+      {{< myshortcode >}}Content <b>bold</b> <i>italics</i>{{< /myshortcode >}}
+
+For example these shortcode strings:
+
+  - %mdshortcode : Paired markdown shortcode
+  - myshortcode  : Paired default shortcode
+
+would be collectively added to this variable as:
+
+   \"%mdshortcode myshortcode\"
+
+Hugo shortcodes documentation:
+https://gohugo.io/content-management/shortcodes/."
+  :group 'org-export-hugo
+  :type 'string
+  :safe #'stringp)
+
 (defcustom org-hugo-langs-no-descr-in-code-fences '()
   "List of languages whose descriptors should not be exported to Markdown.
 
@@ -705,6 +742,7 @@ newer."
                    (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil space)
                    (:hugo-front-matter-key-replace "HUGO_FRONT_MATTER_KEY_REPLACE" nil nil space)
                    (:hugo-date-format "HUGO_DATE_FORMAT" nil org-hugo-date-format)
+                   (:hugo-paired-shortcodes "HUGO_PAIRED_SHORTCODES" nil org-hugo-paired-shortcodes space)
 
                    ;; Front matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -2044,20 +2082,57 @@ channel."
     ret))
 
 ;;;; Special Block
-(defun org-hugo-special-block (special-block contents _info)
+(defun org-hugo-special-block (special-block contents info)
   "Transcode a SPECIAL-BLOCK element from Org to Hugo-compatible Markdown.
 CONTENTS holds the contents of the block.
 
 This function saves the content of \"description\" special block
 to the global variable `org-hugo--description'.
 
+Else if the SPECIAL-BLOCK type matches one of the shortcodes set
+in HUGO_PAIRED_SHORTCODES property, export them as Markdown or
+non-Markdown shortcodes.  See `org-hugo-paired-shortcodes' for
+more information.
+
 For all other special blocks, processing is passed on to
-`org-blackfriday-special-block'."
-  (let ((block-type (org-element-property :type special-block)))
+`org-blackfriday-special-block'.
+
+INFO is a plist holding export options."
+  (let ((block-type (org-element-property :type special-block))
+        (paired-shortcodes (let* ((str (plist-get info :hugo-paired-shortcodes))
+                                  (str-list (when (org-string-nw-p str)
+                                              (split-string str " "))))
+                             str-list))
+        (contents (org-trim contents)))
     (cond
      ((string= block-type "description")
-      (setq org-hugo--description (org-trim contents))
+      (setq org-hugo--description contents)
       nil)
+     ;; https://emacs.stackexchange.com/a/28685/115
+     ((cl-member block-type paired-shortcodes
+                 ;; If `block-type' is "foo", check if any of the
+                 ;; elements in `paired-shortcodes' is "foo" or
+                 ;; "%foo".
+                 :test (lambda (item list-elem)
+                         (string-match-p (format "%%?%s" item)
+                                         list-elem)))
+      (let* ((matched-sc-str (car
+                              (cl-member block-type paired-shortcodes
+                                         :test (lambda (item list-item)
+                                                 (string-match-p (format "%%?%s" item)
+                                                                 list-item)))))
+             (sc-open-char (if (string-prefix-p "%" matched-sc-str)
+                               "%"
+                             "<"))
+             (sc-close-char (if (string-prefix-p "%" matched-sc-str)
+                                "%"
+                              ">"))
+             (sc-begin (format "{{%s %s %s}}"
+                               sc-open-char block-type sc-close-char))
+             (sc-end (format "{{%s /%s %s}}"
+                             sc-open-char block-type sc-close-char)))
+        (format "%s\n%s\n%s"
+                sc-begin contents sc-end)))
      (t
       (org-blackfriday-special-block special-block contents nil)))))
 
@@ -2807,6 +2882,7 @@ are \"toml\" and \"yaml\"."
                      "HUGO_DATE_FORMAT"
                      "HUGO_WITH_LOCALE"
                      "HUGO_LOCALE"
+                     "HUGO_PAIRED_SHORTCODES"
                      "HUGO_AUTO_SET_LASTMOD")))
     (mapcar (lambda (str)
               (concat "EXPORT_" str))
@@ -3246,6 +3322,7 @@ buffer and returned as a string in Org format."
                                 ,(format "|org-hugo-default-static-subdirectory-for-externals    |%S|" org-hugo-default-static-subdirectory-for-externals)
                                 ,(format "|org-hugo-external-file-extensions-allowed-for-copying |%S|" org-hugo-external-file-extensions-allowed-for-copying)
                                 ,(format "|org-hugo-date-format                                  |%S|" org-hugo-date-format)
+                                ,(format "|org-hugo-paired-shortcodes                            |%S|" org-hugo-paired-shortcodes)
                                 ,(format "|org-hugo-langs-no-descr-in-code-fences                |%S|" org-hugo-langs-no-descr-in-code-fences)
                                 ,(format "|org-hugo-front-matter-format                          |%S|" org-hugo-front-matter-format))
                               "\n"))

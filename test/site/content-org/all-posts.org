@@ -3061,6 +3061,114 @@ This is /some text/ wrapped in a =div= block with class =something=.
 | v | w | x |
 #+END_bar
 * Shortcodes                                                      :shortcode:
+** Alert CSS                                                       :noexport:
+*** Common CSS
+:PROPERTIES:
+:CUSTOM_ID: alert-common-css
+:END:
+#+BEGIN_EXPORT html
+<style>
+ .alert {
+     padding: 15px;
+     margin-bottom: 20px;
+     border: 1px solid transparent;
+     border-radius: 4px;
+ }
+ div.alert {
+     border-radius: 10px;
+     margin-bottom: 1rem;
+ }
+
+ div.alert p {
+     position: relative;
+     display: block;
+     font-size: 1rem;
+     margin-left: 2rem;
+     margin-top: 0;
+     margin-bottom: 0;
+ }
+
+ div.alert a {
+     color: rgba(255,255,255,0.9);
+     text-decoration: none;
+     border-bottom: solid 1px #e4e4e4;
+     transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+ }
+
+ div.alert a:hover {
+     border-bottom-color: transparent;
+     color: rgba(255,255,255,0.5) !important;
+ }
+
+ .alert-note {
+     color: #fff;
+     background-color: #03A9F4; /* Material LightBlue500 */
+     border-color: #bce8f1;
+ }
+
+ .alert-warning {
+     color: #fff;
+     background-color: #f44336; /* Material Red500 */
+     border-color: #ebccd1;
+ }
+</style>
+#+END_EXPORT
+*** Original icon prefixing code
+:PROPERTIES:
+:CUSTOM_ID: alert-original-icon-prefixing-css
+:END:
+#+BEGIN_EXPORT html
+<style>
+ div.alert p:first-child::before {
+     position: absolute;
+     top: -0.5rem;
+     left: -2rem;
+     font-family: 'FontAwesome';
+     font-size: 1.5rem;
+     color: #fff;
+     /* content: '\f05a'; */
+     content: '🛈';
+     width: 1.5rem;
+     text-align: center;
+ }
+
+ div.alert-warning p:first-child:before {
+     /* content: '\f071'; */
+     content: '⚠';
+ }
+</style>
+#+END_EXPORT
+*** Modified icon prefixing code
+:PROPERTIES:
+:CUSTOM_ID: alert-modified-icon-prefixing-css
+:END:
+#+BEGIN_EXPORT html
+<style>
+ /* Because of the empty div hack, the first paragraph will be the
+    second child in the div. So use "p:nth-child(2)" instead of the
+    original "p:first-child". */
+ div.alert p:nth-child(2)::before {
+     position: absolute;
+     top: -0.5rem;
+     left: -2rem;
+     font-family: 'FontAwesome';
+     font-size: 1.5rem;
+     color: #fff;
+     /* content: '\f05a'; */
+     content: '🛈';
+     width: 1.5rem;
+     text-align: center;
+ }
+
+ /* Because of the empty div hack, the first paragraph will be the
+    second child in the div. So use "p:nth-child(2)" instead of the
+    original "p:first-child". */
+ div.alert-warning p:nth-child(2):before {
+     /* content: '\f071'; */
+     content: '⚠';
+ }
+</style>
+#+END_EXPORT
 ** Alert Shortcode Lookalike                :alert:special_block:attr___html:
 :PROPERTIES:
 :EXPORT_FILE_NAME: alert-short-code-lookalike
@@ -3116,79 +3224,8 @@ div.alert-warning p:nth-child(2):before {
 }
 #+END_SRC
 
-:alert_css:
-#+BEGIN_EXPORT html
-<style>
- .alert {
-     padding: 15px;
-     margin-bottom: 20px;
-     border: 1px solid transparent;
-     border-radius: 4px;
- }
- div.alert {
-     border-radius: 10px;
-     margin-bottom: 1rem;
- }
-
- div.alert p {
-     position: relative;
-     display: block;
-     font-size: 1rem;
-     margin-left: 2rem;
-     margin-top: 0;
-     margin-bottom: 0;
- }
-
- /* Because of the empty div hack, the first paragraph will be the
-    second child in the div. So use "p:nth-child(2)" instead of the
-    original "p:first-child". */
- div.alert p:nth-child(2)::before {
-     position: absolute;
-     top: -0.5rem;
-     left: -2rem;
-     font-family: 'FontAwesome';
-     font-size: 1.5rem;
-     color: #fff;
-     /* content: '\f05a'; */
-     content: '🛈';
-     width: 1.5rem;
-     text-align: center;
- }
-
- /* Because of the empty div hack, the first paragraph will be the
-    second child in the div. So use "p:nth-child(2)" instead of the
-    original "p:first-child". */
- div.alert-warning p:nth-child(2):before {
-     /* content: '\f071'; */
-     content: '⚠';
- }
-
- div.alert a {
-     color: rgba(255,255,255,0.9);
-     text-decoration: none;
-     border-bottom: solid 1px #e4e4e4;
-     transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
- }
-
- div.alert a:hover {
-     border-bottom-color: transparent;
-     color: rgba(255,255,255,0.5) !important;
- }
-
- .alert-note {
-     color: #fff;
-     background-color: #03A9F4; /* Material LightBlue500 */
-     border-color: #bce8f1;
- }
-
- .alert-warning {
-     color: #fff;
-     background-color: #f44336; /* Material Red500 */
-     border-color: #ebccd1;
- }
-</style>
-#+END_EXPORT
-:end:
+#+INCLUDE: "./all-posts.org::#alert-common-css" :only-contents t
+#+INCLUDE: "./all-posts.org::#alert-modified-icon-prefixing-css" :only-contents t
 *** Alert using Special Block
 #+ATTR_HTML: :class alert-note
 #+begin_alert
@@ -3211,13 +3248,14 @@ Here's a tip or note.
 
 #+ATTR_HTML: :class alert alert-warning
 Here's a warning!
-** Paired shortcodes using special blocks              :paired:special_block:
+** Paired Shortcodes using special blocks              :paired:special_block:
+*** Paired Shortcodes using special blocks (No Arguments)      :no_arguments:
 :PROPERTIES:
-:EXPORT_FILE_NAME: paired-shortcodes-special-blocks
+:EXPORT_FILE_NAME: paired-shortcodes-special-blocks-no-arguments
 :EXPORT_HUGO_PAIRED_SHORTCODES: %mdshortcode myshortcode
 :END:
 Test case for feature requested in {{{oxhugoissue(119)}}}.
-*** Paired markdown shortcode
+**** Paired markdown shortcode
 #+begin_mdshortcode
 Content *with* /emphasis/ characters is rendered.
 
@@ -3229,7 +3267,7 @@ This will export as:
 #+BEGIN_SRC md
 {{% mdshortcode %}} Content rendered as Markdown {{% /mdshortcode %}}
 #+END_SRC
-*** Paired non-markdown (default) shortcode
+**** Paired non-markdown (default) shortcode
 #+begin_myshortcode
 Content is rendered <b>like HTML</b>. The Markdown /emphasis/
 characters are !! NOT !! rendered.
@@ -3245,7 +3283,7 @@ This will export as:
 #+BEGIN_SRC md
 {{< myshortcode >}} Content NOT rendered as Markdown {{< /myshortcode >}}
 #+END_SRC
-*** Not a recognized paired shortcode
+**** Not a recognized paired shortcode
 #+begin_foo
 Content *with* Markdown /emphasis/ characters is rendered fine in the
 default Special Blocks.
@@ -3253,6 +3291,61 @@ default Special Blocks.
 
 This will export as [[/posts/special-blocks][Special Blocks]] --- either wrapped with =<div>=
 tags or HTML5-recognized tags.
+*** Paired shortcodes using special blocks (Positional Arguments) :positional:arguments:
+:PROPERTIES:
+:EXPORT_FILE_NAME: paired-shortcodes-special-blocks-positional-arguments
+:EXPORT_HUGO_PAIRED_SHORTCODES: %alert myshortcode-pos
+:END:
+Test case for feature requested in {{{oxhugoissue(119)}}}.
+**** Paired markdown shortcode
+***** Arguments specified using =#+ATTR_HTML=
+The =alert= shortcode takes 1 positional argument.
+
+#+INCLUDE: "./all-posts.org::#alert-common-css" :only-contents t
+#+INCLUDE: "./all-posts.org::#alert-original-icon-prefixing-css" :only-contents t
+
+#+attr_html: :class note
+#+begin_alert
+Content *with* /emphasis/ characters is rendered.
+
+The HTML <b>markup</b> will also get rendered.
+#+end_alert
+
+-----
+
+Below is the about same as above, except that:
+- =#+attr_shortcode= with =:args= is used instead of =#+attr_html=
+  with =:class= (*This change has no functional difference*).
+- =warning= argument is used instead of =note=.
+
+#+attr_shortcode: :args warning
+#+begin_alert
+Content *with* /emphasis/ characters is rendered.
+
+The HTML <b>markup</b> will also get rendered.
+#+end_alert
+**** Paired non-markdown (default) shortcode
+***** Arguments specified using =#+ATTR_HTML=
+The =myshortcode-pos= takes 2 positional arguments. In the below
+example, the double-quoted ="foo bar"= will be the /first/ argument,
+and ="zoo"= will be the /second/.
+
+#+attr_html: :class "foo bar" zoo
+#+begin_myshortcode-pos
+Content is rendered <b>like HTML</b>. The Markdown /emphasis/
+characters are !! NOT !! rendered.
+#+end_myshortcode-pos
+
+-----
+
+Below is the same as above, but with using =#+attr_shortcode= instead
+of =#+attr_html=.
+
+#+attr_shortcode: :args "foo bar" zoo
+#+begin_myshortcode-pos
+Content is rendered <b>like HTML</b>. The Markdown /emphasis/
+characters are !! NOT !! rendered.
+#+end_myshortcode-pos
 * Paragraphs                                                      :paragraph:
 ** Paragraphs with ATTR_HTML                         :attr___html:attr___css:
 :PROPERTIES:

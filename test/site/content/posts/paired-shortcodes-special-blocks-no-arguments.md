@@ -1,6 +1,6 @@
 +++
-title = "Paired shortcodes using special blocks"
-tags = ["shortcode", "paired", "special-block"]
+title = "Paired Shortcodes using special blocks (No Arguments)"
+tags = ["shortcode", "paired", "special-block", "no-arguments"]
 draft = false
 +++
 

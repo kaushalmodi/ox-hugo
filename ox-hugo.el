@@ -2116,7 +2116,24 @@ INFO is a plist holding export options."
                  :test (lambda (item list-elem)
                          (string-match-p (format "%%?%s" item)
                                          list-elem)))
-      (let* ((matched-sc-str (car
+      (let* (;; Positional arguments
+             (pos-args (or (let* ((attr-sc (org-export-read-attribute :attr_shortcode special-block))
+                                  (args (plist-get attr-sc :args)))
+                             (org-string-nw-p args))
+                           ;; To allow Org document reuse for
+                           ;; different exporters (including HTML),
+                           ;; treat arguments to `:class' HTML
+                           ;; attribute as positional arguments for
+                           ;; the shortcode.
+                           (let* ((attr-html (org-export-read-attribute :attr_html special-block))
+                                  (class (plist-get attr-html :class)))
+                             (org-string-nw-p class))))
+             (named-args nil) ;TBD - https://github.com/kaushalmodi/ox-hugo/issues/119
+             (sc-args (or pos-args named-args))
+             (sc-args (if sc-args
+                          (concat " " sc-args " ")
+                        " "))
+             (matched-sc-str (car
                               (cl-member block-type paired-shortcodes
                                          :test (lambda (item list-item)
                                                  (string-match-p (format "%%?%s" item)
@@ -2127,10 +2144,12 @@ INFO is a plist holding export options."
              (sc-close-char (if (string-prefix-p "%" matched-sc-str)
                                 "%"
                               ">"))
-             (sc-begin (format "{{%s %s %s}}"
-                               sc-open-char block-type sc-close-char))
+             (sc-begin (format "{{%s %s%s%s}}"
+                               sc-open-char block-type sc-args sc-close-char))
              (sc-end (format "{{%s /%s %s}}"
                              sc-open-char block-type sc-close-char)))
+        ;; (message "[ox-hugo-spl-blk DBG] pos-args: %s" pos-args)
+        ;; (message "[ox-hugo-spl-blk DBG] named-args: %s" named-args)
         (format "%s\n%s\n%s"
                 sc-begin contents sc-end)))
      (t

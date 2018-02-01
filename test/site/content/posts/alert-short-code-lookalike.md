@@ -84,30 +84,6 @@ div.alert-warning p:nth-child(2):before {
      margin-bottom: 0;
  }
 
- /* Because of the empty div hack, the first paragraph will be the
-    second child in the div. So use "p:nth-child(2)" instead of the
-    original "p:first-child". */
- div.alert p:nth-child(2)::before {
-     position: absolute;
-     top: -0.5rem;
-     left: -2rem;
-     font-family: 'FontAwesome';
-     font-size: 1.5rem;
-     color: #fff;
-     /* content: '\f05a'; */
-     content: '🛈';
-     width: 1.5rem;
-     text-align: center;
- }
-
- /* Because of the empty div hack, the first paragraph will be the
-    second child in the div. So use "p:nth-child(2)" instead of the
-    original "p:first-child". */
- div.alert-warning p:nth-child(2):before {
-     /* content: '\f071'; */
-     content: '⚠';
- }
-
  div.alert a {
      color: rgba(255,255,255,0.9);
      text-decoration: none;
@@ -130,6 +106,32 @@ div.alert-warning p:nth-child(2):before {
      color: #fff;
      background-color: #f44336; /* Material Red500 */
      border-color: #ebccd1;
+ }
+</style>
+
+<style>
+ /* Because of the empty div hack, the first paragraph will be the
+    second child in the div. So use "p:nth-child(2)" instead of the
+    original "p:first-child". */
+ div.alert p:nth-child(2)::before {
+     position: absolute;
+     top: -0.5rem;
+     left: -2rem;
+     font-family: 'FontAwesome';
+     font-size: 1.5rem;
+     color: #fff;
+     /* content: '\f05a'; */
+     content: '🛈';
+     width: 1.5rem;
+     text-align: center;
+ }
+
+ /* Because of the empty div hack, the first paragraph will be the
+    second child in the div. So use "p:nth-child(2)" instead of the
+    original "p:first-child". */
+ div.alert-warning p:nth-child(2):before {
+     /* content: '\f071'; */
+     content: '⚠';
  }
 </style>
 

@@ -2116,18 +2116,14 @@ INFO is a plist holding export options."
                  :test (lambda (item list-elem)
                          (string-match-p (format "%%?%s" item)
                                          list-elem)))
-      (let* (;; Positional arguments
-             (pos-args (or (let* ((attr-sc (org-export-read-attribute :attr_shortcode special-block))
-                                  (args (plist-get attr-sc :args)))
-                             (org-string-nw-p args))
-                           ;; To allow Org document reuse for
-                           ;; different exporters (including HTML),
-                           ;; treat arguments to `:class' HTML
-                           ;; attribute as positional arguments for
-                           ;; the shortcode.
-                           (let* ((attr-html (org-export-read-attribute :attr_html special-block))
-                                  (class (plist-get attr-html :class)))
-                             (org-string-nw-p class))))
+      (let* ((attr-sc-raw (let* ((raw-list (org-element-property :attr_shortcode special-block))
+                                 (raw-str (mapconcat #'identity
+                                                     raw-list " ")))
+                            (org-string-nw-p raw-str)))
+             (attr-sc (org-export-read-attribute :attr_shortcode special-block))
+             ;; Positional arguments
+             (pos-args (and (null attr-sc) ;If the shortcode attr are not of the type ":foo bar"
+                            attr-sc-raw))  ;But it could be something like "foo bar".
              (named-args nil) ;TBD - https://github.com/kaushalmodi/ox-hugo/issues/119
              (sc-args (or pos-args named-args))
              (sc-args (if sc-args
@@ -2148,6 +2144,10 @@ INFO is a plist holding export options."
                                sc-open-char block-type sc-args sc-close-char))
              (sc-end (format "{{%s /%s %s}}"
                              sc-open-char block-type sc-close-char)))
+        ;; (message "[ox-hugo-spl-blk DBG] attr-sc1: %s"
+        ;;          (org-element-property :attr_shortcode special-block))
+        ;; (message "[ox-hugo-spl-blk DBG] attr-sc2: %s" attr-sc-raw)
+        ;; (message "[ox-hugo-spl-blk DBG] attr-sc: %s" attr-sc)
         ;; (message "[ox-hugo-spl-blk DBG] pos-args: %s" pos-args)
         ;; (message "[ox-hugo-spl-blk DBG] named-args: %s" named-args)
         (format "%s\n%s\n%s"

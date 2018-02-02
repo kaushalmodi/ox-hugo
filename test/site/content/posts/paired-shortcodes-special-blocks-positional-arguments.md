@@ -9,9 +9,6 @@ Test case for feature requested in `ox-hugo` Issue #[119](https://github.com/kau
 
 ## Paired markdown shortcode {#paired-markdown-shortcode}
 
-
-### Arguments specified using `#+ATTR_HTML` {#arguments-specified-using-attr-html}
-
 The `alert` shortcode takes 1 positional argument.
 
 <style>
@@ -88,11 +85,8 @@ The HTML <b>markup</b> will also get rendered.
 
 ---
 
-Below is the about same as above, except that:
-
--   `#+attr_shortcode` with `:args` is used instead of `#+attr_html`
-    with `:class` (**This change has no functional difference**).
--   `warning` argument is used instead of `note`.
+Below is the about same as above, except that `warning` attribute
+(argument to the exported shortcode) is used instead of `note`.
 
 {{% alert warning %}}
 Content **with** _emphasis_ characters is rendered.
@@ -103,22 +97,9 @@ The HTML <b>markup</b> will also get rendered.
 
 ## Paired non-markdown (default) shortcode {#paired-non-markdown--default--shortcode}
 
-
-### Arguments specified using `#+ATTR_HTML` {#arguments-specified-using-attr-html}
-
 The `myshortcode-pos` takes 2 positional arguments. In the below
 example, the double-quoted `"foo bar"` will be the _first_ argument,
 and `"zoo"` will be the _second_.
-
-{{< myshortcode-pos "foo bar" zoo >}}
-Content is rendered <b>like HTML</b>. The Markdown _emphasis_
-characters are !! NOT !! rendered.
-{{< /myshortcode-pos >}}
-
----
-
-Below is the same as above, but with using `#+attr_shortcode` instead
-of `#+attr_html`.
 
 {{< myshortcode-pos "foo bar" zoo >}}
 Content is rendered <b>like HTML</b>. The Markdown _emphasis_

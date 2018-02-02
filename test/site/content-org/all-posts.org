@@ -3298,13 +3298,12 @@ tags or HTML5-recognized tags.
 :END:
 Test case for feature requested in {{{oxhugoissue(119)}}}.
 **** Paired markdown shortcode
-***** Arguments specified using =#+ATTR_HTML=
 The =alert= shortcode takes 1 positional argument.
 
 #+INCLUDE: "./all-posts.org::#alert-common-css" :only-contents t
 #+INCLUDE: "./all-posts.org::#alert-original-icon-prefixing-css" :only-contents t
 
-#+attr_html: :class note
+#+attr_shortcode: note
 #+begin_alert
 Content *with* /emphasis/ characters is rendered.
 
@@ -3313,35 +3312,21 @@ The HTML <b>markup</b> will also get rendered.
 
 -----
 
-Below is the about same as above, except that:
-- =#+attr_shortcode= with =:args= is used instead of =#+attr_html=
-  with =:class= (*This change has no functional difference*).
-- =warning= argument is used instead of =note=.
+Below is the about same as above, except that =warning= attribute
+(argument to the exported shortcode) is used instead of =note=.
 
-#+attr_shortcode: :args warning
+#+attr_shortcode: warning
 #+begin_alert
 Content *with* /emphasis/ characters is rendered.
 
 The HTML <b>markup</b> will also get rendered.
 #+end_alert
 **** Paired non-markdown (default) shortcode
-***** Arguments specified using =#+ATTR_HTML=
 The =myshortcode-pos= takes 2 positional arguments. In the below
 example, the double-quoted ="foo bar"= will be the /first/ argument,
 and ="zoo"= will be the /second/.
 
-#+attr_html: :class "foo bar" zoo
-#+begin_myshortcode-pos
-Content is rendered <b>like HTML</b>. The Markdown /emphasis/
-characters are !! NOT !! rendered.
-#+end_myshortcode-pos
-
------
-
-Below is the same as above, but with using =#+attr_shortcode= instead
-of =#+attr_html=.
-
-#+attr_shortcode: :args "foo bar" zoo
+#+attr_shortcode: "foo bar" zoo
 #+begin_myshortcode-pos
 Content is rendered <b>like HTML</b>. The Markdown /emphasis/
 characters are !! NOT !! rendered.

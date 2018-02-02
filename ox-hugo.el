@@ -2105,6 +2105,7 @@ INFO is a plist holding export options."
                                   (str-list (when (org-string-nw-p str)
                                               (split-string str " "))))
                              str-list))
+        (sc-regexp "\\`%%?%s\\'") ;Regexp to match an element from `paired-shortcodes'
         (contents (org-trim contents)))
     (cond
      ((string= block-type "description")
@@ -2115,12 +2116,10 @@ INFO is a plist holding export options."
                  ;; If `block-type' is "foo", check if any of the
                  ;; elements in `paired-shortcodes' is "foo" or
                  ;; "%foo".
-                 :test (lambda (item list-elem)
-                         (string-match-p (format "%%?%s" item)
-                                         list-elem)))
+                 :test (lambda (b sc) ;`sc' would be an element from `paired-shortcodes'
+                         (string-match-p (format sc-regexp b) sc)))
       (let* ((attr-sc-raw (let* ((raw-list (org-element-property :attr_shortcode special-block))
-                                 (raw-str (mapconcat #'identity
-                                                     raw-list " ")))
+                                 (raw-str (mapconcat #'identity raw-list " ")))
                             (org-string-nw-p raw-str)))
              (attr-sc (org-export-read-attribute :attr_shortcode special-block))
              ;; Positional arguments
@@ -2133,9 +2132,8 @@ INFO is a plist holding export options."
                         " "))
              (matched-sc-str (car
                               (cl-member block-type paired-shortcodes
-                                         :test (lambda (item list-item)
-                                                 (string-match-p (format "%%?%s" item)
-                                                                 list-item)))))
+                                         :test (lambda (b sc) ;`sc' would be an element from `paired-shortcodes'
+                                                 (string-match-p (format sc-regexp b) sc)))))
              (sc-open-char (if (string-prefix-p "%" matched-sc-str)
                                "%"
                              "<"))

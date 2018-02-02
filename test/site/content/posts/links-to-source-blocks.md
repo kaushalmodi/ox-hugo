@@ -8,38 +8,38 @@ From [(org) Internal links](https://orgmode.org/manual/Internal-links.html),
 
 >    If no dedicated target exists, the link will then try to match the
 > exact name of an element within the buffer.  Naming is done with the
-> ‘#+NAME’ keyword, which has to be put in the line before the element it
+> ‘#+name’ keyword, which has to be put in the line before the element it
 > refers to, as in the following example
 >
 > ```text
-> #+NAME: My Target
+> #+name: My Target
 > | a  | table      |
 > |----+------------|
 > | of | four cells |
 > ```
 
-Also, when targeting a `#+NAME` keyword, **`#+CAPTION` keyword is
+Also, when targeting a `#+name` keyword, **`#+caption` keyword is
 mandatory in order to get proper numbering** for <span class="underline">source blocks</span>,
 <span class="underline">images</span> and <span class="underline">tables</span>.
 
 So the below code block:
 
 ````org
-#+CAPTION: Hello
-#+NAME: code__hello
-#+BEGIN_SRC emacs-lisp
+#+caption: Hello
+#+name: code__hello
+#+begin_src emacs-lisp
 (message "Hello")
-#+END_SRC
+#+end_src
 
 *Here we refer to code snippet [[code__helloagain]].*
 
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
 
-#+CAPTION: Hello Again
-#+NAME: code__helloagain
-#+BEGIN_SRC emacs-lisp
+#+caption: Hello Again
+#+name: code__helloagain
+#+begin_src emacs-lisp
 (message "Hello again")
-#+END_SRC
+#+end_src
 
 *Here we refer to code snippet [[code__hello]].*
 ````
@@ -47,7 +47,7 @@ So the below code block:
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="orga541d6a"></a>
+<a id="org75d6c1b"></a>
 ````emacs-lisp
 (message "Hello")
 ````
@@ -57,7 +57,7 @@ that the link jump is evident):
   Hello
 </div>
 
-**Here we refer to code snippet [2](#orga712160).**
+**Here we refer to code snippet [2](#org9a9f2e4).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -111,7 +111,7 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-<a id="orga712160"></a>
+<a id="org9a9f2e4"></a>
 ````emacs-lisp
 (message "Hello again")
 ````
@@ -121,4 +121,4 @@ blandit in.
   Hello Again
 </div>
 
-**Here we refer to code snippet [1](#orga541d6a).**
+**Here we refer to code snippet [1](#org75d6c1b).**

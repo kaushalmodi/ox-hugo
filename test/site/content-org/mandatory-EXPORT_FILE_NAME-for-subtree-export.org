@@ -1,9 +1,9 @@
-#+HUGO_BASE_DIR: ../
-#+SEQ_TODO: TODO DRAFT DONE
+#+hugo_base_dir: ../
+#+seq_todo: TODO DRAFT DONE
 
 * abc
 Running =org-hugo-export-current-subtree= here will throw this user
 error:
-#+BEGIN_EXAMPLE
+#+begin_example
 user-error: It is mandatory to have a subtree with EXPORT_FILE_NAME property
-#+END_EXAMPLE
+#+end_example

@@ -4,23 +4,23 @@ tags = ["links", "internal-links"]
 draft = false
 +++
 
-**Note**: When targeting a `#+NAME` keyword, **`#+CAPTION` keyword is
+**Note**: When targeting a `#+name` keyword, **`#+caption` keyword is
 mandatory in order to get proper numbering** for <span class="underline">source blocks</span>,
 <span class="underline">images</span> and <span class="underline">tables</span>.
 
 ```org
-#+CAPTION: Org Logo
-#+NAME: img__org_logo1
+#+caption: Org Logo
+#+name: img__org_logo1
 [[/images/org-mode-unicorn-logo.png]]
 
 *Here we refer to image [[img__org_logo2]].*
 
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
 
 Here's the same image again, but with a different Org link ID:
 
-#+CAPTION: Same Org Logo
-#+NAME: img__org_logo2
+#+caption: Same Org Logo
+#+name: img__org_logo2
 [[/images/org-mode-unicorn-logo.png]]
 
 *Here we refer to image [[img__org_logo1]].*
@@ -29,10 +29,10 @@ Here's the same image again, but with a different Org link ID:
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="org1c73131"></a>
+<a id="orgccda3d6"></a>
 {{< figure src="/images/org-mode-unicorn-logo.png" caption="Org Logo" >}}
 
-**Here we refer to image [2](#org112c172).**
+**Here we refer to image [2](#org7a92cf1).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -88,10 +88,10 @@ blandit in.
 
 Here's the same image again, but with a different Org link ID:
 
-<a id="org112c172"></a>
+<a id="org7a92cf1"></a>
 {{< figure src="/images/org-mode-unicorn-logo.png" caption="Same Org Logo" >}}
 
-**Here we refer to image [1](#org1c73131).**
+**Here we refer to image [1](#orgccda3d6).**
 
 ---
 

@@ -1,10 +1,10 @@
-#+HUGO_BASE_DIR: ../
-#+HUGO_SECTION: ./
+#+hugo_base_dir: ../
+#+hugo_section: ./
 
-#+HUGO_WEIGHT: auto
-#+HUGO_AUTO_SET_LASTMOD: t
+#+hugo_weight: auto
+#+hugo_auto_set_lastmod: t
 
-#+FILETAGS: dont_export_during_make_test
+#+filetags: dont_export_during_make_test
 
 * Emacs                                                              :@emacs:
 All posts in here will have the category set to /emacs/.

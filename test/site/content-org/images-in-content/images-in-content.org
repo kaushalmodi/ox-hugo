@@ -1,8 +1,8 @@
-#+HUGO_BASE_DIR: ../../
-#+HUGO_SECTION: images-in-content
-# #+STARTUP: inlineimages
+#+hugo_base_dir: ../../
+#+hugo_section: images-in-content
+# #+startup: inlineimages
 
-#+AUTHOR:
+#+author:
 
 * Post 1
 :PROPERTIES:
@@ -13,7 +13,7 @@ Post 1 contents
 I have the =gnu.png= file in the same directory that contains the
 source Org file of this post.
 
-#+BEGIN_EXAMPLE
+#+begin_example
 ./content-org
 ├── images-in-content/
 │  ├── images-in-content.org
@@ -27,7 +27,7 @@ source Org file of this post.
 └── post4/
    ├── post4.org                 →  ./content/images-in-content/post4.md
    └── org-copy.png              →  ./static/ox-hugo/org-copy.png
-#+END_EXAMPLE
+#+end_example
 
 [[file:gnu.png]]
 * Post 2
@@ -39,7 +39,7 @@ Post 2 contents
 I have the =org.png= file in the same directory that contains the
 source Org file of this post.
 
-#+BEGIN_EXAMPLE
+#+begin_example
 ./content-org
 ├── images-in-content/
 │  ├── images-in-content.org
@@ -53,7 +53,7 @@ source Org file of this post.
 └── post4/
    ├── post4.org                 →  ./content/images-in-content/post4.md
    └── org-copy.png              →  ./static/ox-hugo/org-copy.png
-#+END_EXAMPLE
+#+end_example
 
 [[file:org.png]]
 * Page Bundle with images in the same dir

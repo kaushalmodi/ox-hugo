@@ -17,10 +17,10 @@ draft = false
 #### Org source {#org-source}
 
 ```org
-#+BEGIN_SRC emacs-lisp -n
+#+begin_src emacs-lisp -n
 ;; this will export with line number 1 (default)
 (message "This is line 2")
-#+END_SRC
+#+end_src
 ```
 
 
@@ -38,10 +38,10 @@ draft = false
 #### Org source {#org-source}
 
 ```org
-#+BEGIN_SRC emacs-lisp -n 20
+#+begin_src emacs-lisp -n 20
 ;; this will export with line number 20
 (message "This is line 21")
-#+END_SRC
+#+end_src
 ```
 
 
@@ -59,10 +59,10 @@ draft = false
 #### Org source {#org-source}
 
 ```org
-#+BEGIN_SRC emacs-lisp +n
+#+begin_src emacs-lisp +n
 ;; This will be listed as line 22
 (message "This is line 23")
-#+END_SRC
+#+end_src
 ```
 
 
@@ -80,10 +80,10 @@ draft = false
 #### Org source {#org-source}
 
 ```org
-#+BEGIN_SRC emacs-lisp +n 10
+#+begin_src emacs-lisp +n 10
 ;; This will be listed as line 33
 (message "This is line 34")
-#+END_SRC
+#+end_src
 ```
 
 

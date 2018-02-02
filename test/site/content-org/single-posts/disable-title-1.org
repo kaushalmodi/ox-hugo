@@ -1,13 +1,13 @@
-#+HUGO_BASE_DIR: ../../
+#+hugo_base_dir: ../../
 
-#+TITLE: Disable exporting title
-#+AUTHOR:
-#+OPTIONS: title:nil
+#+title: Disable exporting title
+#+author:
+#+options: title:nil
 
-#+FILETAGS: disable title
+#+filetags: disable title
 
 This post will be exported without =title= in the front-matter because
-it is disabled using =#+OPTIONS: title:nil=.
+it is disabled using =#+options: title:nil=.
 
 * Footnotes
 * COMMENT Local Variables                                           :ARCHIVE:

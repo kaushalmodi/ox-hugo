@@ -316,13 +316,13 @@ This function is adapted from `org-html--make-attribute-string'."
   "Wrap the CONTENTS with HTML div tags.
 
 The div wrapping is done only if HTML attributes are set for the
-ELEM Org element using #+ATTR_HTML.
+ELEM Org element using #+attr_html.
 
-If #+ATTR_CSS is also used, and if a class is specified in
-#+ATTR_HTML, then an inline style is also inserted that applies
+If #+attr_css is also used, and if a class is specified in
+#+attr_html, then an inline style is also inserted that applies
 the specified CSS to that class.
 
-If CONTENTS is nil, and #+ATTR_CSS is used, return only the HTML
+If CONTENTS is nil, and #+attr_css is used, return only the HTML
 style tag."
   (let* ((elem-type (org-element-type elem))
          (attr (let ((attr1 (org-export-read-attribute :attr_html elem)))
@@ -656,7 +656,7 @@ This function is adapted from `org-html-special-block'."
                                         (concat class " " block-type)
                                       block-type)))))
     (let* ((contents (or contents ""))
-           ;; If #+NAME is specified, use that for the HTML element
+           ;; If #+name is specified, use that for the HTML element
            ;; "id" attribute.
            (name (org-element-property :name special-block))
            (attr-str (org-html--make-attribute-string
@@ -864,7 +864,7 @@ contextual information."
                                    table-num caption-str))))
          (attr (org-export-read-attribute :attr_html table))
          ;; At the moment only the `class' attribute is supported in
-         ;; #+ATTR_HTML above tables.
+         ;; #+attr_html above tables.
          (table-class-user (plist-get attr :class))
          (table-class-auto (concat "table-"
                                    (if table-num

@@ -54,15 +54,15 @@ keywords get collected.
 
 ## Keyword Collection Tested to work <code>[12/12]</code> {#keyword-collection-tested-to-work}
 
--   [X] `#+AUTHOR`
--   [X] `#+HUGO_TAGS`
--   [X] `#+HUGO_CATEGORIES`
--   [X] `#+HUGO_MENU`
--   [X] `#+HUGO_MENU_OVERRIDE`
--   [X] `#+HUGO_CUSTOM_FRONT_MATTER`
--   [X] `#+HUGO_BLACKFRIDAY`
--   [X] `#+HUGO_FRONT_MATTER_KEY_REPLACE`
--   [X] `#+HUGO_ALIASES`
--   [X] `#+KEYWORDS`
--   [X] `#+HUGO_OUTPUTS`
--   [X] `#+HUGO_RESOURCES`
+-   [X] `#+author`
+-   [X] `#+hugo_tags`
+-   [X] `#+hugo_categories`
+-   [X] `#+hugo_menu`
+-   [X] `#+hugo_menu_override`
+-   [X] `#+hugo_custom_front_matter`
+-   [X] `#+hugo_blackfriday`
+-   [X] `#+hugo_front_matter_key_replace`
+-   [X] `#+hugo_aliases`
+-   [X] `#+keywords`
+-   [X] `#+hugo_outputs`
+-   [X] `#+hugo_resources`

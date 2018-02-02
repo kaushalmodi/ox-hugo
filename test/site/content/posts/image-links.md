@@ -53,12 +53,12 @@ NOTE
     Org link.
 
 
-### Same link with `#+NAME` specified {#same-link-with-name-specified}
+### Same link with `#+name` specified {#same-link-with-name-specified}
 
-Here's the same link with `#+NAME` specified.. which should also be
+Here's the same link with `#+name` specified.. which should also be
 clickable.
 
-<a id="org2476ccd"></a>
+<a id="org43d74a3"></a>
 {{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 
 

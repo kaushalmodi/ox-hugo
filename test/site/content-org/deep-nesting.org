@@ -1,14 +1,14 @@
-#+HUGO_BASE_DIR: ../
+#+hugo_base_dir: ../
 
-#+AUTHOR:
+#+author:
 
 * Introduction
 See https://github.com/kaushalmodi/ox-hugo/issues/81
 
-#+BEGIN_QUOTE
+#+begin_quote
 I'd like to be able to write a book for the [[http://docdock.netlify.com/content-organisation/][docdock theme]]. It says to
 nest content like this:
-#+BEGIN_EXAMPLE
+#+begin_example
 content
 ├── level-one
 │   ├── level-two
@@ -18,8 +18,8 @@ content
 │   │   │   │   ├── page-4-a.md
 │   │   │   │   ├── page-4-b.md
 │   │   │   │   └── page-4-c.md
-#+END_EXAMPLE
-#+END_QUOTE
+#+end_example
+#+end_quote
 
 * Books
 ** book1
@@ -34,7 +34,7 @@ Book 1 index.
 
 This type of organization will generate this in the =content/=
 directory:
-#+BEGIN_EXAMPLE
+#+begin_example
 > tree book1
 book1
 ├── chapter1
@@ -46,7 +46,7 @@ book1
 │   ├── section1.md
 │   └── section2.md
 └── _index.md
-#+END_EXAMPLE
+#+end_example
 
 - [[/book1/chapter1][Chapter 1]]
   - [[/book1/chapter1/section1][Chapter 1 Section 1]]

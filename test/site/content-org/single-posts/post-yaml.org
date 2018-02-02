@@ -1,16 +1,16 @@
-#+TITLE: Single Post with YAML front matter
-#+AUTHOR:
-#+DATE: 2017-07-20
-#+HUGO_PUBLISHDATE: 2017-07-22
-#+HUGO_EXPIRYDATE: 2017-07-23
+#+title: Single Post with YAML front matter
+#+author:
+#+date: 2017-07-20
+#+hugo_publishdate: 2017-07-22
+#+hugo_expirydate: 2017-07-23
 
-#+HUGO_BASE_DIR: ../../
-#+HUGO_FRONT_MATTER_FORMAT: yaml
+#+hugo_base_dir: ../../
+#+hugo_front_matter_format: yaml
 
-#+HUGO_SECTION: singles
-#+HUGO_TAGS: single yaml
-#+HUGO_CATEGORIES: cat1 cat2
-#+HUGO_MENU: :menu "foo" :weight 10 :parent main :identifier single-yaml
+#+hugo_section: singles
+#+hugo_tags: single yaml
+#+hugo_categories: cat1 cat2
+#+hugo_menu: :menu "foo" :weight 10 :parent main :identifier single-yaml
 
 This is a single post. You do not need to set the =EXPORT_FILE_NAME=
 property in here. But then you also lose the tag and property

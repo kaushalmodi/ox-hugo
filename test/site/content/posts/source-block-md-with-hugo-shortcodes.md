@@ -42,7 +42,7 @@ expanded.. you should be seeing little unicorns below.
 {{% figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" %}}
 ```
 
-Above a `#+BEGIN_EXAMPLE` .. `#+END_EXAMPLE` block is chosen
+Above a `#+begin_example` .. `#+end_example` block is chosen
 arbitrarily. The Hugo shortcodes will remain unescaped in **any**
 source/example block except for <span class="underline">Markdown source blocks</span> (annotated
 with `md` language).

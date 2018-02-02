@@ -1,9 +1,9 @@
-#+HUGO_BASE_DIR: ../
-#+SEQ_TODO: TODO DRAFT DONE
-#+HUGO_WEIGHT: auto
-#+HUGO_TAGS: weight
+#+hugo_base_dir: ../
+#+seq_todo: TODO DRAFT DONE
+#+hugo_weight: auto
+#+hugo_tags: weight
 
-#+AUTHOR:
+#+author:
 
 * Post 1 with auto calculation of weight (HUGO_WEIGHT as keyword)
 :PROPERTIES:

@@ -2,7 +2,7 @@
 title = "Writing Hugo blog in Org (File Export)"
 author = ["Kaushal Modi"]
 date = 2017-09-10
-lastmod = 2017-12-01T16:23:22-05:00
+lastmod = 2018-02-02T12:04:47-05:00
 tags = ["hugo", "org"]
 categories = ["emacs"]
 weight = 2001
@@ -32,7 +32,7 @@ gamma = 10
 
 ### A sub-heading under that heading {#a-sub-heading-under-that-heading}
 
--   It's draft state will be marked as `true` because of `#+HUGO_DRAFT:
+-   It's draft state will be marked as `true` because of `#+hugo_draft:
       true`.
 
 With the point <span class="underline">anywhere</span>, do `C-c C-e H h` to export this whole file

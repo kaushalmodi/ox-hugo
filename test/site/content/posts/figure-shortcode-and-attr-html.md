@@ -30,10 +30,10 @@ draft = false
 
 The image caption can be set in two ways.
 
-1.  Using the Org `#+CAPTION` keyword
-2.  Using `#+ATTR_HTML: :caption my caption`
+1.  Using the Org `#+caption` keyword
+2.  Using `#+attr_html: :caption my caption`
 
-The `#+CAPTION` is available will get the higher precedence. In the
+The `#+caption` is available will get the higher precedence. In the
 below image, caption is set using that:
 
 Some text before image.
@@ -42,7 +42,7 @@ Some text before image.
 
 Some more text, after image.
 
-Below, the same caption is set using the `#+ATTR_HTML` method instead:
+Below, the same caption is set using the `#+attr_html` method instead:
 
 Some text before image.
 
@@ -50,7 +50,7 @@ Some text before image.
 
 _Enter a new line after the image link so that it's in an "Org
 paragraph" that contains just that image. That tells Org that that
-`#+ATTR_HTML` attribute is associated **only** with that image, and not
+`#+attr_html` attribute is associated **only** with that image, and not
 to the text that follows that image too._
 
 
@@ -123,9 +123,9 @@ for testing.
 Below in Org source:
 
 ```org
-#+HTML: <style>.foo img { border:2px solid black; }</style>
-#+ATTR_HTML: :alt Go is fine though.
-#+ATTR_HTML: :width 300 :class foo
+#+html: <style>.foo img { border:2px solid black; }</style>
+#+attr_html: :alt Go is fine though.
+#+attr_html: :width 300 :class foo
 [[file:https://golang.org/doc/gopher/pkg.png]]
 ```
 
@@ -135,16 +135,16 @@ Rendered this:
 
 {{< figure src="https://golang.org/doc/gopher/pkg.png" alt="Go is fine though." class="foo" width="300" >}}
 
-**NOTE**: We cannot use `:style` in `#+ATTR_HTML` because Hugo does not
+**NOTE**: We cannot use `:style` in `#+attr_html` because Hugo does not
  _yet_ support a `style` argument in the `figure` shortcode
  [[Source](https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template_embedded.go#L22-L37)].
 
-So using `#+HTML: <style>.foo img ... </style>` and `#+ATTR_HTML: :class
+So using `#+html: <style>.foo img ... </style>` and `#+attr_html: :class
  foo` as shown in the workaround above.
 
 
 ## Other {#other}
 
-Similarly, `:link`, `:attr`, `:attrlink` parameters in `#+ATTR_HTML`
+Similarly, `:link`, `:attr`, `:attrlink` parameters in `#+attr_html`
 are also supported to set the corresponding parameter in the Hugo
 `figure` shortcode.

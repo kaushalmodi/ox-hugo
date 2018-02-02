@@ -1,15 +1,15 @@
-#+HUGO_BASE_DIR: ../
-#+SEQ_TODO: TODO DRAFT DONE
-#+PROPERTY: header-args :eval no
+#+hugo_base_dir: ../
+#+seq_todo: TODO DRAFT DONE
+#+property: header-args :eval no
 
-#+STARTUP: indent
+#+startup: indent
 
-#+MACRO: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
-#+MACRO: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
-#+MACRO: hugoissue =hugo= Issue #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
-#+MACRO: bfissue /Blackfriday/ Issue #[[https://github.com/russross/blackfriday/issues/$1][$1]]
+#+macro: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
+#+macro: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+#+macro: hugoissue =hugo= Issue #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
+#+macro: bfissue /Blackfriday/ Issue #[[https://github.com/russross/blackfriday/issues/$1][$1]]
 
-#+AUTHOR:
+#+author:
 
 * Placeholder Post                                                 :noexport:
 :PROPERTIES:

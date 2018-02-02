@@ -1,10 +1,10 @@
-#+TITLE: Table with Org markup where the markup is ignored
-#+AUTHOR:
+#+title: Table with Org markup where the markup is ignored
+#+author:
 
 # Ignore the Org emphasis characters like * and /
-#+OPTIONS: *:nil
+#+options: *:nil
 
-#+HUGO_BASE_DIR: ../../
+#+hugo_base_dir: ../../
 
 
 | QueryID | SQL Text                                                                                                                                                                                  | Query Time (Seconds) | Query Time Hot (Seconds) |

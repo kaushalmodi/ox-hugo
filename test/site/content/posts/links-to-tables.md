@@ -4,24 +4,24 @@ tags = ["links", "internal-links", "table", "caption"]
 draft = false
 +++
 
-**Note**: When targeting a `#+NAME` keyword, **`#+CAPTION` keyword is
+**Note**: When targeting a `#+name` keyword, **`#+caption` keyword is
 mandatory in order to get proper numbering** for <span class="underline">source blocks</span>,
 <span class="underline">images</span> and <span class="underline">tables</span>.
 
 ```org
-#+CAPTION: Simple table 1
-#+NAME: tab__simple1
+#+caption: Simple table 1
+#+name: tab__simple1
 | a | b |
 | c | d |
 
 *Here we refer to table [[tab__simple2]].*
 
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
 
 Here's another table:
 
-#+CAPTION: Simple table 2
-#+NAME: tab__simple2
+#+caption: Simple table 2
+#+name: tab__simple2
 | e | f |
 | g | h |
 
@@ -31,7 +31,7 @@ Here's another table:
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="orgbae2c99"></a>
+<a id="orgc7b6804"></a>
 
 <div class="table-caption">
   <span class="table-number">Table 1:</span>
@@ -42,7 +42,7 @@ that the link jump is evident):
 |---|---|
 | c | d |
 
-**Here we refer to table [2](#orge7efcb1).**
+**Here we refer to table [2](#org8cdb51c).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -98,7 +98,7 @@ blandit in.
 
 Here's another table:
 
-<a id="orge7efcb1"></a>
+<a id="org8cdb51c"></a>
 
 <div class="table-caption">
   <span class="table-number">Table 2:</span>
@@ -109,7 +109,7 @@ Here's another table:
 |---|---|
 | g | h |
 
-**Here we refer to table [1](#orgbae2c99).**
+**Here we refer to table [1](#orgc7b6804).**
 
 ---
 

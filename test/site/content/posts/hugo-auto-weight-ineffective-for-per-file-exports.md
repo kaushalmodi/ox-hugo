@@ -4,7 +4,7 @@ tags = ["weight"]
 draft = false
 +++
 
-Even though we have `#+HUGO_WEIGHT: auto` in this file, the weight
+Even though we have `#+hugo_weight: auto` in this file, the weight
 will be treated as nil as this file is exported using the _per-file_
 or _complete-file_ export flow.
 

@@ -1,11 +1,11 @@
-#+HUGO_BASE_DIR: ../../
+#+hugo_base_dir: ../../
 
-#+TITLE:
-#+AUTHOR:
-#+FILETAGS: empty title
+#+title:
+#+author:
+#+filetags: empty title
 
 This post will be exported without =title= in the front-matter because
-it is explicitly set to /empty/ using =#+TITLE:=.
+it is explicitly set to /empty/ using =#+title:=.
 
 * Footnotes
 * COMMENT Local Variables                                           :ARCHIVE:

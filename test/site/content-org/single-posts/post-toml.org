@@ -1,14 +1,14 @@
-#+TITLE: Single Post with TOML front matter
-#+AUTHOR:
-#+DATE: 2017-07-20
-#+HUGO_PUBLISHDATE: 2017-07-22
-#+HUGO_EXPIRYDATE: 2017-07-23
+#+title: Single Post with TOML front matter
+#+author:
+#+date: 2017-07-20
+#+hugo_publishdate: 2017-07-22
+#+hugo_expirydate: 2017-07-23
 
-#+HUGO_BASE_DIR: ../../
-#+HUGO_SECTION: singles
-#+HUGO_TAGS: single toml
-#+HUGO_CATEGORIES: cat1 cat2
-#+HUGO_MENU: :menu "foo" :weight 10 :parent main :identifier single-toml
+#+hugo_base_dir: ../../
+#+hugo_section: singles
+#+hugo_tags: single toml
+#+hugo_categories: cat1 cat2
+#+hugo_menu: :menu "foo" :weight 10 :parent main :identifier single-toml
 
 This is a single post. You do not need to set the =EXPORT_FILE_NAME=
 property in here. But then you also lose the tag and property

@@ -1,11 +1,11 @@
-#+HUGO_BASE_DIR: ../
-#+SEQ_TODO: TODO DRAFT DONE
+#+hugo_base_dir: ../
+#+seq_todo: TODO DRAFT DONE
 # Auto-set lastmod field in the below posts.
-#+HUGO_AUTO_SET_LASTMOD: t
+#+hugo_auto_set_lastmod: t
 
-#+AUTHOR:
+#+author:
 
-#+FILETAGS: dont_export_during_make_test
+#+filetags: dont_export_during_make_test
 
 * Auto-set Lastmod
 :PROPERTIES:

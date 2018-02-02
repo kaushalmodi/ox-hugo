@@ -12,7 +12,7 @@ as it is annotated with `target="_blank"`.
 <a href="https://orgmode.org/manual/Hyperlinks.html" target="_self">Here's the same link</a> but with `target="_self"` annotation. So
 clicking it will open that link in this same tab!
 
-[Here's the same link again](https://orgmode.org/manual/Hyperlinks.html), but this time there is no `#+ATTR_HTML`
+[Here's the same link again](https://orgmode.org/manual/Hyperlinks.html), but this time there is no `#+attr_html`
 annotation. So the behavior of clicking this link will depend on the
 browser (typically an external link will open in a new tab
 automatically).

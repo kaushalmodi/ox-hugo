@@ -34,7 +34,7 @@
 ;; 2. one-post-per-file flow :: A single Org file exports to only
 ;;      *one* Hugo post.  An Org file intended to be exported by this
 ;;      flow must not have any 'valid Hugo post subtrees', and instead
-;;      must have the #+TITLE property set.
+;;      must have the #+title property set.
 ;;
 ;; # Commonly used export commands
 ;;
@@ -45,7 +45,7 @@
 ;;                        export that subtree to a Hugo post in
 ;;                        Markdown.
 ;;                      - If the file is intended to be exported as a
-;;                        whole (i.e. has the #+TITLE keyword),
+;;                        whole (i.e. has the #+title keyword),
 ;;                        export the whole Org file to a Hugo post in
 ;;                        Markdown.
 ;;
@@ -55,7 +55,7 @@
 ;;                        Markdown.
 ;;                      - If the file is intended to be exported as a
 ;;                        whole (i.e. no 'valid Hugo post subtrees'
-;;                        at all, and has the #+TITLE keyword),
+;;                        at all, and has the #+title keyword),
 ;;                        export the whole Org file to a Hugo post in
 ;;                        Markdown.
 ;;
@@ -749,7 +749,7 @@ newer."
                    ;; aliases
                    (:hugo-aliases "HUGO_ALIASES" nil nil space)
                    ;; date
-                   ;; "date" is parsed from the Org #+DATE or subtree property EXPORT_HUGO_DATE
+                   ;; "date" is parsed from the Org #+date or subtree property EXPORT_HUGO_DATE
                    (:date "DATE" nil nil)
                    ;; description
                    (:description "DESCRIPTION" nil nil)
@@ -764,7 +764,7 @@ newer."
                    ;; isCJKLanguage
                    (:hugo-iscjklanguage "HUGO_ISCJKLANGUAGE" nil nil)
                    ;; keywords
-                   ;; "keywords" is parsed from the Org #+KEYWORDS or
+                   ;; "keywords" is parsed from the Org #+keywords or
                    ;; subtree property EXPORT_KEYWORDS.
                    (:keywords "KEYWORDS" nil nil newline)
                    ;; layout
@@ -788,13 +788,13 @@ newer."
                    (:hugo-slug "HUGO_SLUG" nil nil)
                    ;; taxomonomies - tags, categories
                    (:hugo-tags "HUGO_TAGS" nil nil newline)
-                   ;; #+HUGO_TAGS are used to set the post tags in Org
+                   ;; #+hugo_tags are used to set the post tags in Org
                    ;; files written for file-based exports.  But for
                    ;; subtree-based exports, the EXPORT_HUGO_TAGS
                    ;; property can be used to override inherited tags
                    ;; and Org-style tags.
                    (:hugo-categories "HUGO_CATEGORIES" nil nil newline)
-                   ;; #+HUGO_CATEGORIES are used to set the post
+                   ;; #+hugo_categories are used to set the post
                    ;; categories in Org files written for file-based
                    ;; exports.  But for subtree-based exports, the
                    ;; EXPORT_HUGO_CATEGORIES property can be used to
@@ -803,7 +803,7 @@ newer."
                    ;; resources
                    (:hugo-resources "HUGO_RESOURCES" nil nil space)
                    ;; title
-                   ;; "title" is parsed from the Org #+TITLE or the subtree heading.
+                   ;; "title" is parsed from the Org #+title or the subtree heading.
                    ;; type
                    (:hugo-type "HUGO_TYPE" nil nil)
                    ;; url
@@ -870,7 +870,9 @@ is in progress.  See `org-hugo--before-export-function' and
     ;; (message "[ox-hugo ob-exp] ox-hugo-params-str: %S" ox-hugo-params-str)
     (setq ret (apply orig-fun args))
     (when ox-hugo-params-str
-      (setq ret (replace-regexp-in-string "\\`#\\+BEGIN_SRC .*" (format "\\& %s" ox-hugo-params-str) ret)))
+      (let ((case-fold-search t))
+        (setq ret (replace-regexp-in-string "\\`#\\+begin_src .*"
+                                            (format "\\& %s" ox-hugo-params-str) ret))))
     ;; (message "[ox-hugo ob-exp] ret: %S" ret)
     ret))
 
@@ -1171,7 +1173,7 @@ cannot be formatted in Hugo-compatible format."
                       ;; `EXPORT_DATE' if available,
                       (org-string-nw-p
                        (org-export-data (plist-get info date-key) info))
-                      ;; Else try to get it from the #+DATE keyword in
+                      ;; Else try to get it from the #+date keyword in
                       ;; the Org file.
                       (org-string-nw-p
                        (org-export-get-date info date-fmt))))
@@ -1203,7 +1205,7 @@ cannot be formatted in Hugo-compatible format."
                               (apply #'encode-time (org-parse-time-string date-raw)))
                            (error
                             ;; Set date-nocolon to nil if error
-                            ;; happens.  An example: If #+DATE is set
+                            ;; happens.  An example: If #+date is set
                             ;; to 2012-2017 to set the copyright
                             ;; years, just set the date to nil instead
                             ;; of throwing an error like:
@@ -1243,11 +1245,11 @@ set appropriately.
 
 The replacement syntax is:
 
-    #+HUGO_FRONT_MATTER_KEY_REPLACE: oldkey>newkey
+    #+hugo_front_matter_key_replace: oldkey>newkey
 
 You can also do multiple key replacements:
 
-    #+HUGO_FRONT_MATTER_KEY_REPLACE: oldkey1>newkey1 oldkey2>newkey2
+    #+hugo_front_matter_key_replace: oldkey1>newkey1 oldkey2>newkey2
 
 Above examples are using the keyword
 HUGO_FRONT_MATTER_KEY_REPLACE, but the same also applies when
@@ -1379,9 +1381,9 @@ CONTENTS is nil.  INFO is a plist holding contextual information.
 
 Example:
 
-  #+BEGIN_EXPORT hugo
+  #+begin_export hugo
   foo
-  #+END_EXPORT
+  #+end_export
 
 exports verbatim to \"foo\" only when exported using `hugo'
 backend.
@@ -1677,9 +1679,9 @@ and rewrite link paths to make blogging more seamless."
              (num-attr (/ (length attr) 2)) ;(:alt foo) -> num-attr = 1
              (alt-text (plist-get attr :alt))
              (caption (or
-                       ;;Caption set using #+CAPTION takes higher precedence
+                       ;;Caption set using #+caption takes higher precedence
                        (org-string-nw-p
-                        (org-export-data  ;Look for caption set using #+CAPTION
+                        (org-export-data  ;Look for caption set using #+caption
                          (org-export-get-caption (org-export-get-parent-element link))
                          info))
                        (plist-get attr :caption))))
@@ -1914,7 +1916,7 @@ INFO is a plist used as a communication channel."
 CONTENTS is the paragraph contents.  INFO is a plist used as a
 communication channel."
   (let (;; The label is mainly for paragraphs that are standalone
-        ;; images with #+NAME keyword.
+        ;; images with #+name keyword.
         (label (let ((lbl (and (org-element-property :name paragraph)
                                (org-export-get-reference paragraph info))))
                  (if lbl
@@ -2571,7 +2573,7 @@ INFO is a plist used as a communication channel."
          (all-t-and-c (when (stringp all-t-and-c-str)
                         (org-split-string all-t-and-c-str ":")))
          (tags (or
-                ;; Look for tags set using #+HUGO_TAGS keyword, or
+                ;; Look for tags set using HUGO_TAGS keyword, or
                 ;; EXPORT_HUGO_TAGS property if available.
                 (org-hugo--delim-str-to-list (plist-get info :hugo-tags))
                 ;; Else use Org tags (the ones set in headlines
@@ -2581,9 +2583,9 @@ INFO is a plist used as a communication channel."
                   ;; (message "[get fm DBG] tags: tags-list = %S" tags-list)
                   tags-list)))
          (categories (or
-                      ;; Look for categories set using
-                      ;; #+HUGO_CATEGORIES keyword, or
-                      ;; EXPORT_HUGO_CATEGORIES property if available.
+                      ;; Look for categories set using HUGO_CATEGORIES
+                      ;; keyword, or EXPORT_HUGO_CATEGORIES property
+                      ;; if available.
                       (org-hugo--delim-str-to-list (plist-get info :hugo-categories))
                       ;; Else use categories set using Org tags with
                       ;; "@" prefix (the ones set in headlines and/or
@@ -3109,7 +3111,7 @@ This is an Export \"What I Mean\" function:
 - If the current subtree doesn't have that property, but one of its
   parent subtrees has, then export from that subtree's scope.
 - If none of the subtrees have that property (or if there are no Org
-  subtrees at all), but the Org #+TITLE keyword is present,
+  subtrees at all), but the Org #+title keyword is present,
   export the whole Org file as a post with that title (calls
   `org-hugo-export-to-md' with its SUBTREEP argument set to nil).
 
@@ -3117,11 +3119,11 @@ This is an Export \"What I Mean\" function:
   \(that have the \"EXPORT_FILE_NAME\" property) in the current file
   to multiple Markdown posts.
 - If ALL-SUBTREES is non-nil, and again if none of the subtrees have
-  that property (or if there are no Org subtrees), but the Org #+TITLE
+  that property (or if there are no Org subtrees), but the Org #+title
   keyword is present, export the whole Org file.
 
 - If the file neither has valid Hugo post subtrees, nor has the
-  #+TITLE present, throw a user error.  If NOERROR is non-nil, use
+  #+title present, throw a user error.  If NOERROR is non-nil, use
   `message' to display the error message instead of signaling a user
   error.
 
@@ -3215,7 +3217,8 @@ approach)."
                                 (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
                                 (save-excursion
                                   (goto-char (point-min))
-                                  (re-search-forward "^#\\+HUGO_MENU:.*:menu" nil :noerror)))
+                                  (let ((case-fold-search t))
+                                    (re-search-forward "^#\\+hugo_menu:.*:menu" nil :noerror))))
                                ;; Check if the post needs auto-calculation of weight.
                                (or
                                 (let ((post-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
@@ -3223,7 +3226,8 @@ approach)."
                                        (string= post-weight "auto")))
                                 (save-excursion
                                   (goto-char (point-min))
-                                  (re-search-forward "^#\\+HUGO_WEIGHT:[[:blank:]]*auto" nil :noerror))))
+                                  (let ((case-fold-search t))
+                                    (re-search-forward "^#\\+hugo_weight:[[:blank:]]*auto" nil :noerror)))))
                           (setq org-hugo--subtree-coord
                                 (org-hugo--get-post-subtree-coordinates subtree)))
                         ;; Get the current subtree section name if any.
@@ -3233,7 +3237,7 @@ approach)."
                         (setq do-export t)))))
                 ;; If not in a valid subtree, check if the Org file is
                 ;; supposed to be exported as a whole, in which case
-                ;; #+TITLE has to be defined *and* there shouldn't be
+                ;; #+title has to be defined *and* there shouldn't be
                 ;; any valid Hugo post subtree present.
                 (setq org-hugo--subtree-count nil) ;Also reset the subtree count
                 (let ((valid-subtree-found
@@ -3250,12 +3254,13 @@ approach)."
                       (setq msg "Point is not in a valid Hugo post subtree; move to one and try again")
                     (let ((title (save-excursion
                                    (goto-char (point-min))
-                                   (re-search-forward "^#\\+TITLE:" nil :noerror))))
+                                   (let ((case-fold-search t))
+                                     (re-search-forward "^#\\+title:" nil :noerror)))))
                       (if title
                           (setq do-export t)
                         (setq err t)
                         (setq msg (concat "The file neither contains a valid Hugo post subtree, "
-                                          "nor has the #+TITLE keyword")))))
+                                          "nor has the #+title keyword")))))
                   (unless do-export
                     (let ((error-fn (if (or (not err)
                                             noerror)
@@ -3296,21 +3301,21 @@ buffer and returned as a string in Org format."
          (info-org (mapconcat #'identity
                               `("* Debug information for =ox-hugo="
                                 "** Emacs Version"
-                                "#+BEGIN_EXAMPLE" ;Prevent underscores from being interpreted as subscript markup
+                                "#+begin_example" ;Prevent underscores from being interpreted as subscript markup
                                 ,(format "%s%s"
                                          emacs-version
                                          (if emacs-repository-version
                                              (format " (commit %s)" emacs-repository-version)
                                            ""))
-                                "#+END_EXAMPLE"
+                                "#+end_example"
                                 "** Org Version"
-                                "#+BEGIN_EXAMPLE" ;Prevent the forward slashes in paths being interpreted as Org markup
+                                "#+begin_example" ;Prevent the forward slashes in paths being interpreted as Org markup
                                 ,org-version
-                                "#+END_EXAMPLE"
+                                "#+end_example"
                                 "** Hugo Version"
-                                "#+BEGIN_EXAMPLE" ;Prevent the forward slashes in paths being interpreted as Org markup
+                                "#+begin_example" ;Prevent the forward slashes in paths being interpreted as Org markup
                                 ,hugo-version
-                                "#+END_EXAMPLE"
+                                "#+end_example"
                                 "*** Org =load-path= shadows"
                                 ,(let* ((str (list-load-path-shadows :stringp))
                                         (str-list (split-string str "\n" :omit-nulls))
@@ -3321,9 +3326,9 @@ buffer and returned as a string in Org format."
                                    (if (org-string-nw-p org-shadow-str)
                                        (mapconcat #'identity
                                                   `("*Warning*: Possible mixed installation of Org"
-                                                    "#+BEGIN_EXAMPLE" ;Prevent the forward slashes in paths being interpreted as Org markup
+                                                    "#+begin_example" ;Prevent the forward slashes in paths being interpreted as Org markup
                                                     ,(org-trim org-shadow-str)
-                                                    "#+END_EXAMPLE"
+                                                    "#+end_example"
                                                     "Study the output of =M-x list-load-path-shadows=.")
                                                   "\n")
                                      "No Org mode shadows found in =load-path="))

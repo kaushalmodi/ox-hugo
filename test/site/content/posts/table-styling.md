@@ -18,8 +18,8 @@ demonstrated [here](https://github.com/kaushalmodi/ox-hugo/issues/93#issue-27010
 HTML5 does not allow `align`, `width`, etc. attributes **within** the
 `table` tag [[Ref](https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints)]. So instead `ox-hugo` simply wraps the table with a
 `div` with a `class`. The table can then be customized using CSS,
-either via the `#+ATTR_CSS` attribute above the tables, or by putting
-verbatim CSS in `#+BEGIN_EXPORT html` blocks. See below examples.
+either via the `#+attr_css` attribute above the tables, or by putting
+verbatim CSS in `#+begin_export html` blocks. See below examples.
 
 
 ## Table with only the class specified {#table-with-only-the-class-specified}
@@ -168,8 +168,8 @@ Below table will also show up with a red border.
 ## Table with verbatim CSS {#table-with-verbatim-css}
 
 There could be times when the CSS couldn't be simply specified using
-the `#+ATTR_CSS` attribute. In those cases, simply set the table class
-using `#+ATTR_HTML`, and put the CSS in the `#+BEGIN_EXPORT html`
+the `#+attr_css` attribute. In those cases, simply set the table class
+using `#+attr_html`, and put the CSS in the `#+begin_export html`
 block.
 
 <style>

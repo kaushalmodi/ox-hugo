@@ -1,4 +1,4 @@
-#+TITLE: ox-hugo Test Site
+#+title: ox-hugo Test Site
 
 This is the Hugo site source for the =ox-hugo= test site served at
 https://ox-hugo.scripter.co/test/.

@@ -29,11 +29,11 @@ will be shown in that summary too!
 HTML comment **`<!--endtoc-->`** after the TOC.
 
 It is important to insert a user-defined summary split by using
-`#+HUGO: more`. Otherwise it is very likely that the TOC is big enough
+`#+hugo: more`. Otherwise it is very likely that the TOC is big enough
 to exceed the Hugo-defined max-summary length and so the
 `<!--endtoc-->` that appears **after** the TOC never gets parsed.
 
-> **Always use `#+HUGO: more` when you enable Org generated TOC's.**
+> **Always use `#+hugo: more` when you enable Org generated TOC's.**
 
 In your site's Hugo template, you can then filter that out with
 something like:

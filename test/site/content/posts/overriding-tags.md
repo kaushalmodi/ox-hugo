@@ -9,5 +9,5 @@ By using `EXPORT_HUGO_TAGS` in the property drawer, Org tags in the
 current headline ("this\_tag\_wont\_apply") **and** the inherited one
 ("alpha", "beta", "hyphenated-tag", "super") will get overridden.
 
-When setting categories via the keyword `#+HUGO+CATEGORIES` or the
+When setting categories via the keyword `#+hugo_categories` or the
 subtree property `EXPORT_HUGO_CATEGORIES`, do **not** add the "@" prefix.

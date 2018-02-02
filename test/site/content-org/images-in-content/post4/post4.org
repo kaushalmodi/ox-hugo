@@ -1,16 +1,16 @@
-#+HUGO_BASE_DIR: ../../../
-#+HUGO_SECTION: images-in-content
-#+STARTUP: inlineimages
+#+hugo_base_dir: ../../../
+#+hugo_section: images-in-content
+#+startup: inlineimages
 
-#+TITLE: Post 4
-#+AUTHOR:
+#+title: Post 4
+#+author:
 
 Post 4 contents
 
 I have the =org-copy.png= file in the same directory that contains the
 source Org file of this post.
 
-#+BEGIN_EXAMPLE
+#+begin_example
 ./content-org
 ├── images-in-content/
 │  ├── images-in-content.org
@@ -24,6 +24,6 @@ source Org file of this post.
 └── post4/
    ├── post4.org                 →  ./content/images-in-content/post4.md  **THIS POST**
    └── org-copy.png              →  ./static/ox-hugo/org-copy.png         **BELOW IMAGE**
-#+END_EXAMPLE
+#+end_example
 
 [[file:org-copy.png]]

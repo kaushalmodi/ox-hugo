@@ -42,7 +42,7 @@ as it makes the meta-data management for Hugo front-matter pretty
 effortless.
 
 If you are a /one Org-file per post/ type of a person, that flow works
-too! Just note that in this flow many of those =#+HUGO_= properties
+too! Just note that in this flow many of those =#+hugo_= properties
 need to be managed manually.. just as one would manage the front-matter
 in Markdown files --- See the Org versions in the above screenshots for
 comparison.
@@ -153,13 +153,13 @@ The common =ox-hugo= export bindings are:
     A /valid Hugo post subtree/ is an Org subtree has the
     =EXPORT_FILE_NAME= property set.
   - If the file is intended to be exported as a whole (i.e. has the
-    =#+TITLE= keyword), export the whole Org file to a Hugo post in
+    =#+title= keyword), export the whole Org file to a Hugo post in
     Markdown.
 - =C-c C-e H A= :: Export *all* "What I Mean"
   - If the Org file has one or more 'valid Hugo post subtrees', export
     them to Hugo posts in Markdown.
   - If the file is intended to be exported as a whole (i.e. no 'valid
-    Hugo post subtrees' at all, and has the =#+TITLE= keyword), export
+    Hugo post subtrees' at all, and has the =#+title= keyword), export
     the whole Org file to a Hugo post in Markdown.
 *** For only the one-post-per-file flow
 - =C-c C-e H h= :: Export the Org file to a Hugo post in Markdown.
@@ -175,10 +175,10 @@ available customization options for this package.
 - Support exporting =resources= front-matter (Hugo v0.33+) --
   #[[https://github.com/kaushalmodi/ox-hugo/issues/115][115]].
 - Support exporting =headless= front-matter (Hugo v0.35+).
-- Advanced table styling is now possible by specifying =#+ATTR_HTML=
-  and =#+ATTR_CSS= (this one is unique to =ox-hugo=) above Org
+- Advanced table styling is now possible by specifying =#+attr_html=
+  and =#+attr_css= (this one is unique to =ox-hugo=) above Org
   tables. See its [[https://ox-hugo.scripter.co/doc/table-styling/][documentation]] -- #[[https://github.com/kaushalmodi/ox-hugo/issues/93][93]].
-  - Similarly, support =#+ATTR_HTML= and =#+ATTR_CSS= for paragraphs,
+  - Similarly, support =#+attr_html= and =#+attr_css= for paragraphs,
     example blocks, source blocks, plain lists and quote blocks too --
     #[[https://github.com/kaushalmodi/ox-hugo/issues/113][113]].
 - Now =publishdate= and =expirydate= front-matter properties get
@@ -202,9 +202,9 @@ available customization options for this package.
 - Support Org Special Blocks [[https://www.gnu.org/software/emacs/manual/html_node/org/Special-blocks.html][like in HTML and LaTeX exports]] --
   #[[https://github.com/kaushalmodi/ox-hugo/issues/105][105]]. Here's one little example:
   #+BEGIN_SRC org
-    ,#+BEGIN_mark
+    ,#+begin_mark
     /Some/ *marked* text
-    ,#+END_mark
+    ,#+end_mark
   #+END_SRC
 - Allow setting =:EXPORT_HUGO_SECTION:= in the valid Hugo post subtree
   itself.
@@ -218,15 +218,15 @@ available customization options for this package.
   v0.32+).
 *** Backward-incompatible changes
 - A "better user-experience" change.. now you do not need to use
-  /double-underscores/ as /space/ replacement in =#+HUGO_TAGS=,
-  =#+HUGO_CATEGORIES= and =#+KEYWORDS=. See this commit for details
+  /double-underscores/ as /space/ replacement in =#+hugo_tags=,
+  =#+hugo_categories= and =#+keywords=. See this commit for details
   and examples -- commit [[https://github.com/kaushalmodi/ox-hugo/commit/319435db][319435db]].
 *** Fixes
 - Fix =HUGO_LEVEL_OFFSET= not getting set -- #[[https://github.com/kaushalmodi/ox-hugo/issues/117][117]], thanks
   @[[https://github.com/shimmy1996][*shimmy1996*]]!
 - Fix internal subtree counter not getting reset after a file-based
   export.
-- Fix clickable image links with =#+NAME= -- commit [[https://github.com/kaushalmodi/ox-hugo/commit/fef0ec50][fef0ec50]].
+- Fix clickable image links with =#+name= -- commit [[https://github.com/kaushalmodi/ox-hugo/commit/fef0ec50][fef0ec50]].
 - Make title text rendering more robust.. now Markdown markup
   characters like =*=, =_= and =`= show up fine, verbatim, in the
   title.
@@ -250,7 +250,7 @@ available customization options for this package.
   #[[https://github.com/kaushalmodi/ox-hugo/issues/99][99]].
 - Support specifying multiple [[https://gohugo.io/templates/output-formats/][hugo output formats]] .. Now the =outputs=
   front-matter variable is a list.
-- Support the Org =#+AUTHOR= and =#+CREATOR= keywords and their
+- Support the Org =#+author= and =#+creator= keywords and their
   respective Org Export Options -- #[[https://github.com/kaushalmodi/ox-hugo/issues/106][106]].
 - Support Org Export Snippets and Export Blocks --
   commit [[https://github.com/kaushalmodi/ox-hugo/commit/1149f20cd][1149f20cd]].
@@ -346,11 +346,11 @@ available customization options for this package.
 *** Features
 - Export TOC as a Markdown ordered list. See [[https://ox-hugo.scripter.co/doc/org-toc][Table of
   Contents]] -- #[[https://github.com/kaushalmodi/ox-hugo/issues/88][88]].
-- =#+ATTR_HTML= above http/https/ftp links is now supported (useful
+- =#+attr_html= above http/https/ftp links is now supported (useful
   for specifying the =target=, =rel=, attributes, for example).
 ** v0.4.1 <2017-10-29 Sun>
 *** Features
-- Support specifying the =:height= parameter in the =#+ATTR_HTML=
+- Support specifying the =:height= parameter in the =#+attr_html=
   above image links. That eventually gets transformed to the =height=
   parameter in the =figure= tag in the HTML generated by Hugo. This
   feature requires building Hugo from its master branch with commit
@@ -359,28 +359,28 @@ available customization options for this package.
 - Fix =EXPORT_HUGO_SECTION= not getting inherited #[[https://github.com/kaushalmodi/ox-hugo/issues/90][90]].
 ** v0.4 <2017-10-28 Sat>
 *** Backward-incompatible changes
-- Restore the default Org behavior of =#+TAGS=. Now that keyword (and
+- Restore the default Org behavior of =#+tags=. Now that keyword (and
   the =EXPORT_TAGS= property) is *not* used by =ox-hugo=. Fixes
   #[[https://github.com/kaushalmodi/ox-hugo/issues/89][89]].
-- File-based exports must now use =#+HUGO_TAGS= to set the post tags.
+- File-based exports must now use =#+hugo_tags= to set the post tags.
 - Subtree-based exports can use the =EXPORT_HUGO_TAGS= property to
   override Org-style tags on the same headline (and the ones inherited
   from Org-style tags from any of the parent subtrees and
-  =#+FILETAGS=).
-  - Note that for subtree-based exports, =#+FILETAGS= can be used to
-    set tags globally in the file. Earlier =#+TAGS= was used for that
+  =#+filetags=).
+  - Note that for subtree-based exports, =#+filetags= can be used to
+    set tags globally in the file. Earlier =#+tags= was used for that
     purpose.
 - Subtree-based exports can use the =EXPORT_HUGO_CATEGORIES= property
   to override Org-style categories (tags with "@" prefix) on the same
   headline (and the ones inherited from Org-style categories from any
-  of the parent subtrees and =#+FILETAGS=).
-  - Note that for subtree-based exports, =#+FILETAGS= can be used to
+  of the parent subtrees and =#+filetags=).
+  - Note that for subtree-based exports, =#+filetags= can be used to
     set categories (tags with "@") globally in the file.
 
 See the new section added to documentation:
 [[https://ox-hugo.scripter.co/doc/tags-and-categories][*Tags and Categories*]]
 *** Features
-- Support specifying the =:width= parameter in the =#+ATTR_HTML= above
+- Support specifying the =:width= parameter in the =#+attr_html= above
   image links. That eventually gets transformed to the =width=
   parameter in the =figure= tag in the HTML generated by Hugo.
 ** v0.3.2 <2017-10-24 Tue>
@@ -413,7 +413,7 @@ See the new section added to documentation:
 - Now =ox-hugo= by default requires text, to be sub/super-scripted, to
   be wrapped in ={}=. So now =a_b= will be exported as =a_b=, but
   =a_{b}= will be exported as =a<sub>b</sub>=. To revert back to the
-  earlier behavior, user needs to add =#+OPTIONS: ^:t= to their Org
+  earlier behavior, user needs to add =#+options: ^:t= to their Org
   file.
 ** v0.2.1 <2017-09-28 Thu>
 *** Fixes
@@ -440,7 +440,7 @@ See the new section added to documentation:
 - Switch the default value of =org-hugo-use-code-for-kbd= option to
   =nil= [[[https://github.com/kaushalmodi/ox-hugo/commit/88ba15ae9bc809b0983315446c88fecfda3534e5][88ba15ae]]].
 ** v0.1.3 <2017-09-13 Wed>
-- Now a HUGO key value set to ="nil"=, like =#+HUGO_CODE_FENCE: nil=,
+- Now a HUGO key value set to ="nil"=, like =#+hugo_code_fence: nil=,
   will evaluate as /nil/ instead of /t/, as now
   =org-hugo--plist-get-true-p= is used to parse boolean keys instead
   of =plist-get=.

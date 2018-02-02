@@ -1,90 +1,90 @@
-#+TITLE: Keyword Collection
+#+title: Keyword Collection
 
-#+HUGO_BASE_DIR: ../
+#+hugo_base_dir: ../
 
 # Authors
-#+AUTHOR: firstname1 lastname1
-#+AUTHOR: firstname2 lastname2, firstname3 lastname3
+#+author: firstname1 lastname1
+#+author: firstname2 lastname2, firstname3 lastname3
 
-# Note that #+FILETAGS won't work in file-based exports (like this one).
+# Note that #+filetags won't work in file-based exports (like this one).
 # https://ox-hugo.scripter.co/doc/tags-and-categories/#file-based-export
 
 # Tags
-#+HUGO_TAGS: "mega front-matter"
-#+HUGO_TAGS: keys
-#+HUGO_TAGS: collection concatenation merging
+#+hugo_tags: "mega front-matter"
+#+hugo_tags: keys
+#+hugo_tags: collection concatenation merging
 
 # Categories
-#+HUGO_CATEGORIES: cat1
-#+HUGO_CATEGORIES: cat2
+#+hugo_categories: cat1
+#+hugo_categories: cat2
 
 # Menu
-#+HUGO_MENU: :menu foo
-#+HUGO_MENU: :weight 10
+#+hugo_menu: :menu foo
+#+hugo_menu: :weight 10
 
 # # Menu Override
-# #+HUGO_MENU_OVERRIDE: :menu bar
-# #+HUGO_MENU_OVERRIDE: :weight 20
+# #+hugo_menu_override: :menu bar
+# #+hugo_menu_override: :weight 20
 
 # Custom front-matter
-#+HUGO_CUSTOM_FRONT_MATTER: :foo bar
-#+HUGO_CUSTOM_FRONT_MATTER: :baz zoo
-#+HUGO_CUSTOM_FRONT_MATTER: :alpha 1
-#+HUGO_CUSTOM_FRONT_MATTER: :beta "two words"
-#+HUGO_CUSTOM_FRONT_MATTER: :gamma 10
-#+HUGO_CUSTOM_FRONT_MATTER: :animals '(dog cat "penguin" "mountain gorilla")
-#+HUGO_CUSTOM_FRONT_MATTER: :strings-symbols '("abc" def "two words")
-#+HUGO_CUSTOM_FRONT_MATTER: :integers '(123 -5 17 1_234)
-#+HUGO_CUSTOM_FRONT_MATTER: :floats '(12.3 -5.0 -17E-6)
-#+HUGO_CUSTOM_FRONT_MATTER: :booleans '(true false)
+#+hugo_custom_front_matter: :foo bar
+#+hugo_custom_front_matter: :baz zoo
+#+hugo_custom_front_matter: :alpha 1
+#+hugo_custom_front_matter: :beta "two words"
+#+hugo_custom_front_matter: :gamma 10
+#+hugo_custom_front_matter: :animals '(dog cat "penguin" "mountain gorilla")
+#+hugo_custom_front_matter: :strings-symbols '("abc" def "two words")
+#+hugo_custom_front_matter: :integers '(123 -5 17 1_234)
+#+hugo_custom_front_matter: :floats '(12.3 -5.0 -17E-6)
+#+hugo_custom_front_matter: :booleans '(true false)
 
 # Blackfriday
-#+HUGO_BLACKFRIDAY: :smartdashes :fractions nil :plainidanchors false
-#+HUGO_BLACKFRIDAY: :angledquotes t :hrefTargetBlank true
-#+HUGO_BLACKFRIDAY: :extensions tabsizeeight hardlinebreak
-#+HUGO_BLACKFRIDAY: :extensionsmask fencedcode strikethrough
+#+hugo_blackfriday: :smartdashes :fractions nil :plainidanchors false
+#+hugo_blackfriday: :angledquotes t :hrefTargetBlank true
+#+hugo_blackfriday: :extensions tabsizeeight hardlinebreak
+#+hugo_blackfriday: :extensionsmask fencedcode strikethrough
 
 # Front-matter key replacement
-#+HUGO_FRONT_MATTER_KEY_REPLACE: foo>myfoo
-#+HUGO_FRONT_MATTER_KEY_REPLACE: baz>mybaz
+#+hugo_front_matter_key_replace: foo>myfoo
+#+hugo_front_matter_key_replace: baz>mybaz
 
 # Aliases
-#+HUGO_ALIASES: keyword-concatenation
-#+HUGO_ALIASES: keyword-merging
+#+hugo_aliases: keyword-concatenation
+#+hugo_aliases: keyword-merging
 
 # Keywords
-#+KEYWORDS: keyword1 keyword2
-#+KEYWORDS: "three word keywords3"
+#+keywords: keyword1 keyword2
+#+keywords: "three word keywords3"
 
 # Outputs
-#+HUGO_OUTPUTS: html
-#+HUGO_OUTPUTS: json
+#+hugo_outputs: html
+#+hugo_outputs: json
 
 # Resources
-#+HUGO_RESOURCES: :src "*.png" :animals '(dog cat "penguin" "mountain gorilla")
-#+HUGO_RESOURCES: :strings-symbols '("abc" def "two words")
-#+HUGO_RESOURCES: :integers '(123 -5 17 1_234)
-#+HUGO_RESOURCES: :floats '(12.3 -5.0 -17E-6)
-#+HUGO_RESOURCES: :booleans '(true false)
-#+HUGO_RESOURCES: :foo bar
-#+HUGO_RESOURCES: :src "image-4.png" :title "The Fourth Image"
-#+HUGO_RESOURCES: :src "*.png" :name "my-cool-image-:counter" :title "The Image #:counter"
-#+HUGO_RESOURCES: :src "*.png" :byline "bep"
-#+HUGO_RESOURCES: :src "*.jpg" :title "JPEG Image #:counter"
+#+hugo_resources: :src "*.png" :animals '(dog cat "penguin" "mountain gorilla")
+#+hugo_resources: :strings-symbols '("abc" def "two words")
+#+hugo_resources: :integers '(123 -5 17 1_234)
+#+hugo_resources: :floats '(12.3 -5.0 -17E-6)
+#+hugo_resources: :booleans '(true false)
+#+hugo_resources: :foo bar
+#+hugo_resources: :src "image-4.png" :title "The Fourth Image"
+#+hugo_resources: :src "*.png" :name "my-cool-image-:counter" :title "The Image #:counter"
+#+hugo_resources: :src "*.png" :byline "bep"
+#+hugo_resources: :src "*.jpg" :title "JPEG Image #:counter"
 
 This is a test post that tests that keywords set across multiple Org
 keywords get collected.
 
 * Keyword Collection Tested to work [12/12]
-- [X] =#+AUTHOR=
-- [X] =#+HUGO_TAGS=
-- [X] =#+HUGO_CATEGORIES=
-- [X] =#+HUGO_MENU=
-- [X] =#+HUGO_MENU_OVERRIDE=
-- [X] =#+HUGO_CUSTOM_FRONT_MATTER=
-- [X] =#+HUGO_BLACKFRIDAY=
-- [X] =#+HUGO_FRONT_MATTER_KEY_REPLACE=
-- [X] =#+HUGO_ALIASES=
-- [X] =#+KEYWORDS=
-- [X] =#+HUGO_OUTPUTS=
-- [X] =#+HUGO_RESOURCES=
+- [X] =#+author=
+- [X] =#+hugo_tags=
+- [X] =#+hugo_categories=
+- [X] =#+hugo_menu=
+- [X] =#+hugo_menu_override=
+- [X] =#+hugo_custom_front_matter=
+- [X] =#+hugo_blackfriday=
+- [X] =#+hugo_front_matter_key_replace=
+- [X] =#+hugo_aliases=
+- [X] =#+keywords=
+- [X] =#+hugo_outputs=
+- [X] =#+hugo_resources=

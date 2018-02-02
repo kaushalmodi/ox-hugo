@@ -1,16 +1,16 @@
-#+HUGO_BASE_DIR: ../
-#+SEQ_TODO: TODO DRAFT DONE
-#+PROPERTY: header-args :eval no
+#+hugo_base_dir: ../
+#+seq_todo: TODO DRAFT DONE
+#+property: header-args :eval no
 
-#+STARTUP: indent
+#+startup: indent
 
-#+MACRO: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
-#+MACRO: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
-#+MACRO: hugoissue =hugo= Issue #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
-#+MACRO: bfissue /Blackfriday/ Issue #[[https://github.com/russross/blackfriday/issues/$1][$1]]
-#+MACRO: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
+#+macro: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
+#+macro: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+#+macro: hugoissue =hugo= Issue #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
+#+macro: bfissue /Blackfriday/ Issue #[[https://github.com/russross/blackfriday/issues/$1][$1]]
+#+macro: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
 
-#+AUTHOR:
+#+author:
 
 * Preparation
 :PROPERTIES:
@@ -20,9 +20,9 @@
 1. Be the root directory for this Hugo site (the directory containing
    =config.toml=).
 2. Run
-  #+BEGIN_EXAMPLE
+  #+begin_example
   hugo server --port 1111
-  #+END_EXAMPLE
+  #+end_example
 3. See the site served on "http://localhost:1111/".
 * Post 1
 :PROPERTIES:
@@ -52,13 +52,13 @@ This is some text before the first heading of this post.
  instead of /Heading 2/.
 
 For example, this sub-section's heading is exported as:
-#+BEGIN_EXAMPLE
+#+begin_example
 # Unclickable image
-#+END_EXAMPLE
+#+end_example
 instead of
-#+BEGIN_EXAMPLE
+#+begin_example
 ## Unclickable image
-#+END_EXAMPLE
+#+end_example
 
 -----
 *Solution*: Above is fixed by setting =HUGO_OFFSET_LEVEL= to 1.
@@ -74,11 +74,11 @@ Click below image to jump to the unicorn image.
 
 - NOTE :: =file:= has to be used in the *Description component* of the
           Org link.
-**** Same link with =#+NAME= specified
-Here's the same link with =#+NAME= specified.. which should also be
+**** Same link with =#+name= specified
+Here's the same link with =#+name= specified.. which should also be
 clickable.
 
-#+NAME: fig__unicorn
+#+name: fig__unicorn
 [[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
 **** Same link with =file:= in "link" portion of the Org link too
 /Note that the =file:= is needed only in the "description" portion to
@@ -128,11 +128,11 @@ inline images -- {{{oxhugoissue(125)}}}.
 This is an inline non-hyperlinked image without alt text or other
 attributes: [[/images/org-mode-unicorn-logo.png]].
 **** With Alt text
-#+ATTR_HTML: :alt Inline Non-hyperlinked Image
+#+attr_html: :alt Inline Non-hyperlinked Image
 This is an inline non-hyperlinked image with alt text:
 [[/images/org-mode-unicorn-logo.png]].
 **** With other HTML attributes
-#+ATTR_HTML: :width 30
+#+attr_html: :width 30
 This is an inline non-hyperlinked image with the width attribute:
 [[/images/org-mode-unicorn-logo.png]].
 *** Non-inline non-hyperlinked image
@@ -143,11 +143,11 @@ This is an inline non-hyperlinked image without alt text or other
 attributes:
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
 **** With Alt text
-#+ATTR_HTML: :alt Inline Non-hyperlinked Image
+#+attr_html: :alt Inline Non-hyperlinked Image
 This is an inline non-hyperlinked image with alt text:
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
 **** With other HTML attributes
-#+ATTR_HTML: :width 30
+#+attr_html: :width 30
 This is an inline non-hyperlinked image with the width attribute:
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
 *** Non-inline hyperlinked image
@@ -160,7 +160,7 @@ This is an inline non-hyperlinked image with the width attribute:
 :END:
 Some text before image.
 
-#+CAPTION: A unicorn!
+#+caption: A unicorn!
 [[/images/org-mode-unicorn-logo.png]]
 
 Some more text, after image.
@@ -170,7 +170,7 @@ Some more text, after image.
 :END:
 {{{oxhugoissue(17)}}}
 *** Setting =class= parameter
-#+ATTR_HTML: :class inset
+#+attr_html: :class inset
 [[/images/org-mode-unicorn-logo.png]]
 
 [[https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728][Discussion]]
@@ -178,47 +178,47 @@ Some more text, after image.
 You cannot wrap markdown code inside HTML.
 
 As /rdwatters/ says [[https://discourse.gohugo.io/t/is-it-possible-to-insert-html-code-in-markdown-content/4867/4?u=kaushalmodi][here]],
-#+BEGIN_QUOTE
+#+begin_quote
 HTML can be part of markdown because HTML-inside-markdown is part of
 the spec. That said, remember that the spec disallows markdown nested
 inside of HTML. So if you create a div, just make sure everything
 inside that div is valid HTML.
-#+END_QUOTE
+#+end_quote
 
-#+BEGIN_EXPORT md
+#+begin_export md
 <div class="inset">
-#+END_EXPORT
+#+end_export
 [[/images/org-mode-unicorn-logo.png]]
-#+BEGIN_EXPORT md
+#+begin_export md
 </div>
-#+END_EXPORT
+#+end_export
 *** Setting =alt= parameter
 [[https://www.reddit.com/r/emacs/comments/71wy6n/orgmode_as_a_markup_language_does_make_sense_even/dnhqudn/][Reference]]
-#+ATTR_HTML: :alt Org-mode Unicorn Logo
+#+attr_html: :alt Org-mode Unicorn Logo
 [[/images/org-mode-unicorn-logo.png]]
 *** Setting =title= parameter
-#+ATTR_HTML: :title Logo
+#+attr_html: :title Logo
 [[/images/org-mode-unicorn-logo.png]]
 *** Setting image caption
 The image caption can be set in two ways.
-1. Using the Org =#+CAPTION= keyword
-2. Using =#+ATTR_HTML: :caption my caption=
+1. Using the Org =#+caption= keyword
+2. Using =#+attr_html: :caption my caption=
 
-The =#+CAPTION= is available will get the higher precedence. In the
+The =#+caption= is available will get the higher precedence. In the
 below image, caption is set using that:
 
-#+INCLUDE: "./all-posts.org::#image-captions" :only-contents t
+#+include: "./all-posts.org::#image-captions" :only-contents t
 
-Below, the same caption is set using the =#+ATTR_HTML= method instead:
+Below, the same caption is set using the =#+attr_html= method instead:
 
 Some text before image.
 
-#+ATTR_HTML: :caption A unicorn!
+#+attr_html: :caption A unicorn!
 [[/images/org-mode-unicorn-logo.png]]
 
 /Enter a new line after the image link so that it's in an "Org
 paragraph" that contains just that image. That tells Org that that
-=#+ATTR_HTML= attribute is associated *only* with that image, and not
+=#+attr_html= attribute is associated *only* with that image, and not
 to the text that follows that image too./
 *** Setting image size
 **** Setting =:width= parameter
@@ -226,18 +226,18 @@ The image [[https://www.w3schools.com/tags/att_img_width.asp][width]] can be spe
 parameter. *The height of the image will be resized proportionally.*
 
 Below image is shown 50 pixels wide.
-#+ATTR_HTML: :width 50
+#+attr_html: :width 50
 [[/images/org-mode-unicorn-logo.png]]
 
 Below image is shown 100 pixels wide.
-#+ATTR_HTML: :width 100
+#+attr_html: :width 100
 [[/images/org-mode-unicorn-logo.png]]
 
 Below image is shown with a width of 1000 pixels! Now the size of this
 image is 200px × 200px. But the image will still show up in 1000px ×
 1000px size, but obviously heavily pixelated!
 
-#+ATTR_HTML: :width 1000
+#+attr_html: :width 1000
 [[/images/org-mode-unicorn-logo.png]]
 **** Setting =:height= parameter
 *NOTE*: Support for specifying =height= parameter to the Hugo =figure=
@@ -250,18 +250,18 @@ The image [[https://www.w3schools.com/tags/att_img_height.asp][height]] can be s
 parameter. *The weight of the image will be resized proportionally.*
 
 Below image is shown 50 pixels tall.
-#+ATTR_HTML: :height 50
+#+attr_html: :height 50
 [[/images/org-mode-unicorn-logo.png]]
 
 Below image is shown 100 pixels tall.
-#+ATTR_HTML: :height 100
+#+attr_html: :height 100
 [[/images/org-mode-unicorn-logo.png]]
 
 Below image is shown with a height of 1000 pixels! Now the size of
 this image is 200px × 200px. But the image will still show up in
 1000px × 1000px size, but obviously heavily pixelated!
 
-#+ATTR_HTML: :height 1000
+#+attr_html: :height 1000
 [[/images/org-mode-unicorn-logo.png]]
 **** Setting both =:width= and =:height=
 The *NOTE* above applies here too.. needs *hugo v0.31* or later.
@@ -269,35 +269,35 @@ The *NOTE* above applies here too.. needs *hugo v0.31* or later.
 The figure sizes below are intentionally set /mis-proportionally/ just
 for testing.
 - =:width 100 :height 200=
-  #+ATTR_HTML: :width 100 :height 200
+  #+attr_html: :width 100 :height 200
   [[/images/org-mode-unicorn-logo.png]]
 - =:width 200 :height 100=
-  #+ATTR_HTML: :width 200 :height 100
+  #+attr_html: :width 200 :height 100
   [[/images/org-mode-unicorn-logo.png]]
 *** Multiple =ATTR_HTML=
 Below in Org source:
-#+BEGIN_SRC org
-#+HTML: <style>.foo img { border:2px solid black; }</style>
-#+ATTR_HTML: :alt Go is fine though.
-#+ATTR_HTML: :width 300 :class foo
+#+begin_src org
+#+html: <style>.foo img { border:2px solid black; }</style>
+#+attr_html: :alt Go is fine though.
+#+attr_html: :width 300 :class foo
 [[file:https://golang.org/doc/gopher/pkg.png]]
-#+END_SRC
+#+end_src
 
 Rendered this:
 
-#+HTML: <style>.foo img { border:2px solid black; }</style>
-#+ATTR_HTML: :alt Go is fine though.
-#+ATTR_HTML: :width 300 :class foo
+#+html: <style>.foo img { border:2px solid black; }</style>
+#+attr_html: :alt Go is fine though.
+#+attr_html: :width 300 :class foo
 [[file:https://golang.org/doc/gopher/pkg.png]]
 
-*NOTE*: We cannot use =:style= in =#+ATTR_HTML= because Hugo does not
+*NOTE*: We cannot use =:style= in =#+attr_html= because Hugo does not
  /yet/ support a =style= argument in the =figure= shortcode
  [[[https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template_embedded.go#L22-L37][Source]]].
 
-So using =#+HTML: <style>.foo img ... </style>= and =#+ATTR_HTML: :class
+So using =#+html: <style>.foo img ... </style>= and =#+attr_html: :class
  foo= as shown in the workaround above.
 *** Other
-Similarly, =:link=, =:attr=, =:attrlink= parameters in =#+ATTR_HTML=
+Similarly, =:link=, =:attr=, =:attrlink= parameters in =#+attr_html=
 are also supported to set the corresponding parameter in the Hugo
 =figure= shortcode.
 * Setting heading anchors
@@ -592,21 +592,21 @@ You should see *no* table exported above.
 The caption can contain be emphasized using the usual markup
 characters too.
 
-#+CAPTION: Awesome table
+#+caption: Awesome table
 | h1  | h2  | h3  |
 |-----+-----+-----|
 | abc | def | ghi |
 
 Some text.
 
-#+CAPTION: /Another/ *awesome* table
+#+caption: /Another/ *awesome* table
 | h1  | h2  | h3  |
 |-----+-----+-----|
 | jkl | mno | pqr |
 
 Some more text.
 
-#+CAPTION: _Third_ table --- Caption with em-dash -- and -- en-dash
+#+caption: _Third_ table --- Caption with em-dash -- and -- en-dash
 | h1  | h2  | h3 |
 |-----+-----+----|
 | stu | vwx | yz |
@@ -628,10 +628,10 @@ demonstrated [[https://github.com/kaushalmodi/ox-hugo/issues/93#issue-270108567]
 HTML5 does not allow =align=, =width=, etc. attributes *within* the
 =table= tag [[[https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints][Ref]]]. So instead =ox-hugo= simply wraps the table with a
 =div= with a =class=. The table can then be customized using CSS,
-either via the =#+ATTR_CSS= attribute above the tables, or by putting
-verbatim CSS in =#+BEGIN_EXPORT html= blocks. See below examples.
+either via the =#+attr_css= attribute above the tables, or by putting
+verbatim CSS in =#+begin_export html= blocks. See below examples.
 *** Table with only the class specified
-#+ATTR_HTML: :class my-table
+#+attr_html: :class my-table
 | h1  | h2  | h3  |
 |-----+-----+-----|
 | abc | def | ghi |
@@ -640,7 +640,7 @@ Above table is wrapped in a =my-table= class. Just doing that won't
 bring any presentation changes to the table.. you'd need to add some
 CSS that customizes =.my-table table=.
 *** Table with only a CSS attribute specified
-#+ATTR_CSS: :width 50%
+#+attr_css: :width 50%
 | h1  | h2  | h3  |
 |-----+-----+-----|
 | abc | def | ghi |
@@ -649,8 +649,8 @@ Above table get wrapped in the auto-generated class
 =table-nocaption=. The specified CSS attribute is auto-set for
 =.table-nocaption table=.
 *** Table with both class and CSS attribute specified
-#+ATTR_HTML: :class my-table-2
-#+ATTR_CSS: :width 80%
+#+attr_html: :class my-table-2
+#+attr_css: :width 80%
 | h1  | h2  | h3  |
 |-----+-----+-----|
 | abc | def | ghi |
@@ -658,8 +658,8 @@ Above table get wrapped in the auto-generated class
 Above table get wrapped in the specified class =my-table-2=. The
 specified CSS attribute is auto-set for =.my-table-2 table=.
 *** Table with caption, and CSS attributes specified
-#+CAPTION: Table with caption, with left-aligned text
-#+ATTR_CSS: :text-align left
+#+caption: Table with caption, with left-aligned text
+#+attr_css: :text-align left
 | h1       | h2       | h3       |
 |----------+----------+----------|
 | abcdefgh | ijklmnop | qrstuvwx |
@@ -668,21 +668,21 @@ Above table get wrapped in the auto-generated class =table-1= (/"1",
 because this is the first table with a caption on this page./). The
 specified CSS attribute is auto-set for =.table-1 table=.
 
-#+CAPTION: Table with caption, with right-aligned text
-#+ATTR_CSS: :text-align right
+#+caption: Table with caption, with right-aligned text
+#+attr_css: :text-align right
 | h1       | h2       | h3       |
 |----------+----------+----------|
 | abcdefgh | ijklmnop | qrstuvwx |
 
-#+CAPTION: Table with caption, with center-aligned text
-#+ATTR_CSS: :text-align center
+#+caption: Table with caption, with center-aligned text
+#+attr_css: :text-align center
 | h1       | h2       | h3       |
 |----------+----------+----------|
 | abcdefgh | ijklmnop | qrstuvwx |
 *** Table with caption, and both class and CSS attributes specified
-#+CAPTION: Table with caption, class and CSS attributes specified
-#+ATTR_HTML: :class my-red-bordered-table
-#+ATTR_CSS: :border 2px solid red
+#+caption: Table with caption, class and CSS attributes specified
+#+attr_html: :class my-red-bordered-table
+#+attr_css: :border 2px solid red
 | h1  | h2  | h3  |
 |-----+-----+-----|
 | abc | def | ghi |
@@ -696,16 +696,16 @@ table. So the CSS properties do not need to be specified again.
 
 Below table will also show up with a red border.
 
-#+ATTR_HTML: :class my-red-bordered-table
+#+attr_html: :class my-red-bordered-table
 | h1  | h2  | h3  |
 |-----+-----+-----|
 | jkl | kmo | pqr |
 *** Table with verbatim CSS
 There could be times when the CSS couldn't be simply specified using
-the =#+ATTR_CSS= attribute. In those cases, simply set the table class
-using =#+ATTR_HTML=, and put the CSS in the =#+BEGIN_EXPORT html=
+the =#+attr_css= attribute. In those cases, simply set the table class
+using =#+attr_html=, and put the CSS in the =#+begin_export html=
 block.
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
 .tab4 th,
 .tab4 td {
@@ -713,9 +713,9 @@ block.
     text-align: left;
 }
 </style>
-#+END_EXPORT
-#+CAPTION: Table with verbatim CSS
-#+ATTR_HTML: :class tab4
+#+end_export
+#+caption: Table with verbatim CSS
+#+attr_html: :class tab4
 | h1  | h2  | h3  |
 |-----+-----+-----|
 | abc | def | ghi |
@@ -753,7 +753,7 @@ block.
 | Conway    | Tim        | tconway@earthlink.net | $50.00  | http://www.timconway.com |
 **** Basic styling
 ***** Uncollapsed borders
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
 .basic-styling td,
 .basic-styling th {
@@ -761,23 +761,23 @@ block.
   padding: 0.5rem;
 }
 </style>
-#+END_EXPORT
-#+ATTR_HTML: :class basic-styling
-#+CAPTION: Table with uncollapsed borders
-#+INCLUDE: "./all-posts.org::#css-tricks-example-table-1" :only-contents t
+#+end_export
+#+attr_html: :class basic-styling
+#+caption: Table with uncollapsed borders
+#+include: "./all-posts.org::#css-tricks-example-table-1" :only-contents t
 ***** Collapsed borders
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
 .collapsed table {
   border-collapse: collapse;
 }
 </style>
-#+END_EXPORT
-#+ATTR_HTML: :class collapsed basic-styling
-#+CAPTION: Table with collapsed borders
-#+INCLUDE: "./all-posts.org::#css-tricks-example-table-1" :only-contents t
+#+end_export
+#+attr_html: :class collapsed basic-styling
+#+caption: Table with collapsed borders
+#+include: "./all-posts.org::#css-tricks-example-table-1" :only-contents t
 **** Two Axis Tables
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
 .two-axis-table td,
 .two-axis-table th {
@@ -796,13 +796,13 @@ block.
   padding: 1rem;
 }
 </style>
-#+END_EXPORT
-#+ATTR_HTML: :class two-axis-table
-#+CAPTION: Table with 1st row and 1st column highlighted
-#+INCLUDE: "./all-posts.org::#css-tricks-example-table-2" :only-contents t
+#+end_export
+#+attr_html: :class two-axis-table
+#+caption: Table with 1st row and 1st column highlighted
+#+include: "./all-posts.org::#css-tricks-example-table-2" :only-contents t
 **** Sane Table
 [[https://css-tricks.com/complete-guide-table-element/#article-header-id-17][Ref]]
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
 .sane-table table {
   border-collapse: collapse;
@@ -815,47 +815,47 @@ block.
   border: 1px solid #ccc;
 }
 </style>
-#+END_EXPORT
-#+ATTR_HTML: :class sane-table
-#+CAPTION: Sane Table --- with minimal styling
-#+INCLUDE: "./all-posts.org::#css-tricks-example-table-1" :only-contents t
+#+end_export
+#+attr_html: :class sane-table
+#+caption: Sane Table --- with minimal styling
+#+include: "./all-posts.org::#css-tricks-example-table-1" :only-contents t
 **** Zebra Striping
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
 .zebra-striping tbody tr:nth-child(odd) {
   background: #eee;
 }
 </style>
-#+END_EXPORT
-#+ATTR_HTML: :class zebra-striping sane-table
-#+CAPTION: Table with zebra striping
-#+INCLUDE: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
+#+end_export
+#+attr_html: :class zebra-striping sane-table
+#+caption: Table with zebra striping
+#+include: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
 **** Highlighting on Hover
 ***** Highlight Cell
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
 .hl-table-cell td:hover { /* th:hover also if you wish */
   background: yellow;
 }
 </style>
-#+END_EXPORT
-#+ATTR_HTML: :class hl-table-cell sane-table
-#+CAPTION: Table where the hovered-upon cell highlights
-#+INCLUDE: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
+#+end_export
+#+attr_html: :class hl-table-cell sane-table
+#+caption: Table where the hovered-upon cell highlights
+#+include: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
 ***** Highlight Row
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
 .hl-table-row tbody tr:hover {
   background: yellow;
 }
 </style>
-#+END_EXPORT
-#+ATTR_HTML: :class hl-table-row sane-table
-#+CAPTION: Table where the hovered-upon row highlights
-#+INCLUDE: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
+#+end_export
+#+attr_html: :class hl-table-row sane-table
+#+caption: Table where the hovered-upon row highlights
+#+include: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
 **** Blur non-hovered Rows
 /Let's-go-ballistic-with-CSS/ Edition :smile:
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
 .blur-non-hovered body {
   background: #fafafa;
@@ -963,10 +963,10 @@ block.
   text-shadow: 0 1px 0 #fff;
 }
 </style>
-#+END_EXPORT
-#+ATTR_HTML: :class blur-non-hovered
-#+CAPTION: Table where rows except the hovered-upon get blurred
-#+INCLUDE: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
+#+end_export
+#+attr_html: :class blur-non-hovered
+#+caption: Table where rows except the hovered-upon get blurred
+#+include: "./all-posts.org::#css-tricks-example-table-3" :only-contents t
 ** Table with Column Groups                 :wishlist:column_groups:noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-column-groups
@@ -983,7 +983,7 @@ column groups in raw HTML -- <2018-01-07 Sun>.
 | 2 |   4 |   8 |  16 |    1.4142 |       1.1892 |
 | 3 |   9 |  27 |  81 |    1.7321 |       1.3161 |
 |---+-----+-----+-----+-----------+--------------|
-#+TBLFM: $2=$1^2::$3=$1^3::$4=$1^4::$5=sqrt($1)::$6=sqrt(sqrt(($1)))
+#+tblfm: $2=$1^2::$3=$1^3::$4=$1^4::$5=sqrt($1)::$6=sqrt(sqrt(($1)))
 * Source blocks                                                   :src_block:
 ** Code fence                                                    :code_fence:
 *** Code-fenced source blocks (default behavior)
@@ -993,7 +993,7 @@ column groups in raw HTML -- <2018-01-07 Sun>.
 :END:
 The source blocks are code-fenced by default.
 
-#+INCLUDE: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
+#+include: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
 -----
 *It is necessary to set the Hugo site config variable
 =pygmentsCodeFences= to =true= for syntax highlighting to work for
@@ -1007,7 +1007,7 @@ fenced code blocks.*
 Here the source blocks are explicitly set to be code-fenced by setting
 the =EXPORT_HUGO_CODE_FENCE= property to =t=.
 
-#+INCLUDE: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
+#+include: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
 -----
 *It is necessary to set the Hugo site config variable
 =pygmentsCodeFences= to =true= for syntax highlighting to work for
@@ -1018,49 +1018,49 @@ fenced code blocks.*
 :EXPORT_FILE_NAME: code-fenced-src-blocks-with-backticks
 :END:
 This code block contains a fenced code block with 4 backticks:
-#+BEGIN_SRC md
+#+begin_src md
 ````emacs-lisp
 (message "Hello")
 ````
-#+END_SRC
+#+end_src
 
 This code block contains a fenced code block with 3 backticks:
-#+BEGIN_SRC md
+#+begin_src md
 ```emacs-lisp
 (message "Hello again")
 ```
-#+END_SRC
+#+end_src
 
 This code block contains no backticks:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (message "Hello again x2")
-#+END_SRC
+#+end_src
 
 This code block again contains a fenced code block with 4 backticks:
-#+BEGIN_SRC md
+#+begin_src md
 ````emacs-lisp
 (message "Hello again x3")
 ````
-#+END_SRC
+#+end_src
 
 This code block contains a fenced code block with 6 backticks:
-#+BEGIN_SRC md
+#+begin_src md
 ``````emacs-lisp
 (message "Hello again x4")
 ``````
-#+END_SRC
+#+end_src
 
 This code block again contains a fenced code block with 3 backticks:
-#+BEGIN_SRC md
+#+begin_src md
 ```emacs-lisp
 (message "Hello again x5")
 ```
-#+END_SRC
+#+end_src
 
 This code block once again contains no backticks:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (message "Hello again x6")
-#+END_SRC
+#+end_src
 ** Highlight Shortcode                                  :highlight:shortcode:
 *** Source blocks with =highlight= shortcode
 :PROPERTIES:
@@ -1070,12 +1070,12 @@ This code block once again contains no backticks:
 :END:
 Note that to disable the code fence option, the value portion of the
 property needs to be left *empty* instead of setting to =nil=!
-#+BEGIN_EXAMPLE
+#+begin_example
 :PROPERTIES:
 :EXPORT_HUGO_CODE_FENCE:
 :END:
-#+END_EXAMPLE
-#+INCLUDE: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
+#+end_example
+#+include: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
 *** Source blocks with line number annotation
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-with-line-numbers
@@ -1088,40 +1088,40 @@ property needs to be left *empty* instead of setting to =nil=!
 :END:
 ***** Default new line number start
 ****** Org source
-#+BEGIN_SRC org :noweb yes
+#+begin_src org :noweb yes
 <<src-block-n-default-start>>
-#+END_SRC
+#+end_src
 ****** Output
-#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-n-default-start>>
-#+END_SRC
+#+end_src
 ***** Specify new line number start
 ****** Org source
-#+BEGIN_SRC org :noweb yes
+#+begin_src org :noweb yes
 <<src-block-n-custom-start>>
-#+END_SRC
+#+end_src
 ****** Output
-#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-n-custom-start>>
-#+END_SRC
+#+end_src
 ***** Default continued line numbers
 ****** Org source
-#+BEGIN_SRC org :noweb yes
+#+begin_src org :noweb yes
 <<src-block-n-default-continue>>
-#+END_SRC
+#+end_src
 ****** Output
-#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-n-default-continue>>
-#+END_SRC
+#+end_src
 ***** Specify continued line numbers jump
 ****** Org source
-#+BEGIN_SRC org :noweb yes
+#+begin_src org :noweb yes
 <<src-block-n-custom-continue>>
-#+END_SRC
+#+end_src
 ****** Output
-#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-n-custom-continue>>
-#+END_SRC
+#+end_src
 *** Source blocks with highlighting
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-with-highlighting
@@ -1132,13 +1132,13 @@ property needs to be left *empty* instead of setting to =nil=!
 :CUSTOM_ID: source-blocks-with-highlighting-no-linenums
 :END:
 ****** Org source
-#+BEGIN_SRC org :noweb yes
+#+begin_src org :noweb yes
 <<src-block-hl-without-n>>
-#+END_SRC
+#+end_src
 ****** Output
-#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-hl-without-n>>
-#+END_SRC
+#+end_src
 Above highlighting might look weird as the highlighting spans the full
 page/container width. This could be either called a bug in Hugo, or
 the HTML limitation.
@@ -1159,38 +1159,38 @@ in the =highlight= shortcode when line numbers are enabled).
             has no relation with the value of the line numbers
             displayed using the =-n= or =+n= switches!
 ****** Org source
-#+BEGIN_SRC org :noweb yes
+#+begin_src org :noweb yes
 <<src-block-hl-with-n-not-1>>
-#+END_SRC
+#+end_src
 ****** Output
-#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-hl-with-n-not-1>>
-#+END_SRC
+#+end_src
 **** With line numbers
 :PROPERTIES:
 :CUSTOM_ID: source-blocks-with-highlighting-with-linenums
 :END:
 ****** Org source
-#+BEGIN_SRC org :noweb yes
+#+begin_src org :noweb yes
 <<src-block-hl-with-n>>
-#+END_SRC
+#+end_src
 ****** Output
-#+BEGIN_SRC org :noweb yes :exports results :results output replace :eval yes
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-hl-with-n>>
-#+END_SRC
+#+end_src
 ** Source block with caption                                        :caption:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-caption
 :END:
-#+CAPTION: Prefix value in =local.mk=
-#+BEGIN_SRC makefile
+#+caption: Prefix value in =local.mk=
+#+begin_src makefile
 prefix = /dir/where/you/want/to/install/org # Default: /usr/share
-#+END_SRC
+#+end_src
 
-#+CAPTION: Hello --- Caption with em-dash -- and -- en-dash
-#+BEGIN_SRC emacs-lisp
+#+caption: Hello --- Caption with em-dash -- and -- en-dash
+#+begin_src emacs-lisp
 (message "hello")
-#+END_SRC
+#+end_src
 ** Source block with list syntax in a list                        :@upstream:
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01
@@ -1203,15 +1203,15 @@ syntax lists. =ox-hugo= provides a hack to get around that bug.
 Below is an example of such a case:
 
 - List item 1
-  #+BEGIN_SRC md
+  #+begin_src md
   - List item 1.1 in code block
   - List item 1.2 in code block
-  #+END_SRC
+  #+end_src
 - List item 2
-  #+BEGIN_SRC md
+  #+begin_src md
   + List item 2.1 in code block
   + List item 2.2 in code block
-  #+END_SRC
+  #+end_src
 - List item 3
 ** Source block without list syntax in a list
 :PROPERTIES:
@@ -1221,30 +1221,30 @@ Below is an example of such a case:
 This case is not affected by /Blackfriday/ [[https://github.com/russross/blackfriday/issues/239][Issue #239]] as the fenced
 code block does not have Markdown syntax lists.
 - List item 1
-  #+BEGIN_SRC md
+  #+begin_src md
 ,*abc*
 /def/
 =def=
-  #+END_SRC
+  #+end_src
 - List item 2
 ** Source block with list syntax but not in a list
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01
 :EXPORT_FILE_NAME: src-block-outside-list-with-list-syntax
 :END:
-#+BEGIN_SRC md
+#+begin_src md
 - list 1
-#+END_SRC
+#+end_src
 ** Org Babel Results
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-babel-results-preserve-indent
 :END:
-#+BEGIN_SRC python :exports both :results output
+#+begin_src python :exports both :results output
 str = 'a\tbc'
 print(str[1:])
-#+END_SRC
+#+end_src
 
-#+RESULTS:
+#+results:
 : 	bc
 
 The whitespace before "bc" in the results block above should be preserved.
@@ -1254,39 +1254,39 @@ The whitespace before "bc" in the results block above should be preserved.
 :END:
 Test that indented source blocks export fine.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
     (defun small-shell ()
 	(interactive)
 	(split-window-vertically)
 	(other-window 1)
 	(shrink-window (- (window-height) 12))
     (ansi-term))
-    #+END_SRC
+    #+end_src
 *** More tests!
 - List item 1
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
   (message "I am in list at level-1 indentation")
-  #+END_SRC
+  #+end_src
   - List item 1.1
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
     (message "I am in list at level-2 indentation")
-    #+END_SRC
+    #+end_src
     - List item 1.1.1
-      #+BEGIN_SRC emacs-lisp
+      #+begin_src emacs-lisp
       (message "I am in list at level-3 indentation")
-      #+END_SRC
+      #+end_src
   - List item 2.1
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
     (message "I am in list back at level-2 indentation")
-    #+END_SRC
+    #+end_src
 - List item 2
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
   (message "I am in list back at level-1 indentation")
-  #+END_SRC
+  #+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (message "And now I am at level-0 indentation")
-#+END_SRC
+#+end_src
 
 Reference: {{{hugoissue(4006)}}}
 ** Markdown source block with Hugo shortcodes                     :shortcode:
@@ -1301,25 +1301,25 @@ should *not* be expanded.. they should be visible verbatim.
 - {&lbrace;< .. >}&rbrace; --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown][Shortcodes without Markdown]]
 - {&lbrace;% .. %}&rbrace; --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown][Shortcodes with Markdown]]
 **** Code block using code fences
-#+BEGIN_SRC md
+#+begin_src md
 {{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
 {{% figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" %}}
-#+END_SRC
+#+end_src
 **** Code block using =highlight= shortcode
 Here, the =-n= switch is added to the Org source block to
 auto-enable[fn:4] using the =highlight= shortcode.
-#+BEGIN_SRC md -n
+#+begin_src md -n
 {{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
 {{% figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" %}}
-#+END_SRC
+#+end_src
 *** Shortcodes *not* escaped
 The =figure= shortcodes in the below example block *should* be
 expanded.. you should be seeing little unicorns below.
-#+BEGIN_EXAMPLE
+#+begin_example
 {{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
 {{% figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" %}}
-#+END_EXAMPLE
-Above a =#+BEGIN_EXAMPLE= .. =#+END_EXAMPLE= block is chosen
+#+end_example
+Above a =#+begin_example= .. =#+end_example= block is chosen
 arbitrarily. The Hugo shortcodes will remain unescaped in *any*
 source/example block except for _Markdown source blocks_ (annotated
 with =md= language).
@@ -1333,13 +1333,13 @@ fenced code blocks.*
 :END:
 Some text.
 
-#+ATTR_HTML: :class indent-block
-#+ATTR_CSS: :padding-left 50px
-#+BEGIN_SRC emacs-lisp
+#+attr_html: :class indent-block
+#+attr_css: :padding-left 50px
+#+begin_src emacs-lisp
 (message (mapconcat #'identity
                     '("Hello," "how" "are" "you?")
                     " "))
-#+END_SRC
+#+end_src
 
 Some more text.
 ** Org Source Block via Pygments                          :pygments:noexport:
@@ -1367,12 +1367,12 @@ The [[https://discourse.gohugo.io/t/fenced-code-block-with-language-unsupported-
   language set to =org=).
 - =org-hugo-langs-no-descr-in-code-fences= is set to a value not
   containing that language descriptor (=org= in this case).
-#+BEGIN_SRC org
+#+begin_src org
 # Org comment
 Export this post after setting
 =org-hugo-langs-no-descr-in-code-fences= to =(org)= and temporarily
 removing the =noexport= tag.
-#+END_SRC
+#+end_src
 * Formatting                                                     :formatting:
 ** General
 :PROPERTIES:
@@ -1427,11 +1427,11 @@ Example:
 :END:
 Note that to disable the "use code for kbd" option, the value portion
 of the property needs to be left *empty* instead of setting to =nil=!
-#+BEGIN_EXAMPLE
+#+begin_example
 :PROPERTIES:
 :EXPORT_HUGO_USE_CODE_FOR_KBD:
 :END:
-#+END_EXAMPLE
+#+end_example
 
 Here =~C-h f~= will show up as =`C-h f`= in Markdown and then
 =<code>C-h f</code>= in the final Hugo generated HTML.
@@ -1458,7 +1458,7 @@ Example:
 
 If you do not see the above paragraph completely in bold, have below
 in your emacs config to fix it:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (with-eval-after-load 'org
   ;; Allow multiple line Org emphasis markup.
   ;; http://emacs.stackexchange.com/a/13828/115
@@ -1466,16 +1466,16 @@ in your emacs config to fix it:
   ;; Below is needed to apply the modified `org-emphasis-regexp-components'
   ;; settings from above.
   (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components))
-#+END_SRC
+#+end_src
 * Example block                                                     :example:
 ** Simple
 :PROPERTIES:
 :EXPORT_DATE: 2017-07-19
 :EXPORT_FILE_NAME: example-simple
 :END:
-#+BEGIN_EXAMPLE
+#+begin_example
 This is an example
-#+END_EXAMPLE
+#+end_example
 ** Example blocks with line number annotation
 :PROPERTIES:
 :EXPORT_FILE_NAME: example-block-with-line-numbers
@@ -1483,38 +1483,38 @@ This is an example
 - [[https://orgmode.org/manual/Literal-examples.html][Org reference]]
 - [[https://gohugo.io/content-management/syntax-highlighting/][Hugo =highlight= shortcode with line numbers]]
 *** Default new line number start
-#+BEGIN_EXAMPLE -n
+#+begin_example -n
 line 1
  line 2
-#+END_EXAMPLE
+#+end_example
 *** Specify new line number start
-#+BEGIN_EXAMPLE -n 20
+#+begin_example -n 20
 line 20
 line 21
-#+END_EXAMPLE
+#+end_example
 *** Default continued line numbers
-#+BEGIN_EXAMPLE +n
+#+begin_example +n
  line 22
 line 23
-#+END_EXAMPLE
+#+end_example
 *** Specify continued line numbers jump
-#+BEGIN_EXAMPLE +n 10
+#+begin_example +n 10
 line 33
 line 34
-#+END_EXAMPLE
+#+end_example
 ** Example blocks with ATTR_HTML                     :attr___html:attr___css:
 :PROPERTIES:
 :EXPORT_FILE_NAME: example-blocks-with-attr-html
 :END:
 Some text.
 
-#+ATTR_HTML: :class indent-block
-#+ATTR_CSS: :padding-left 50px
-#+BEGIN_EXAMPLE
+#+attr_html: :class indent-block
+#+attr_css: :padding-left 50px
+#+begin_example
 This is an example
 Line 2
 Line 3
-#+END_EXAMPLE
+#+end_example
 
 Some more text.
 * Menu in front matter                                                 :menu:
@@ -1533,10 +1533,10 @@ properties get overridden.
 
 You need to set unique menu identifiers, else you get a Hugo error
 like this:
-#+BEGIN_EXAMPLE
+#+begin_example
 ERROR 2017/07/18 12:32:14 Two or more menu items have the same name/identifier in Menu "main": "menu-meta-data-in-yaml-front-matter".
 Rename or set an unique identifier.
-#+END_EXAMPLE
+#+end_example
 *** Overriding menu properties completely
 :PROPERTIES:
 :EXPORT_FILE_NAME: menu-alist-meta-data-toml-override-full
@@ -1625,13 +1625,13 @@ Here there is white space in menu name property.
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :gamma 10
 :END:
 From [[https://orgmode.org/manual/Property-syntax.html][*(org) Property syntax*]]:
-#+BEGIN_QUOTE
+#+begin_quote
    It is also possible to add to the values of inherited properties.
 The following results in the 'genres' property having the value
 "Classic Baroque" under the 'Goldberg Variations' subtree.
-#+END_QUOTE
+#+end_quote
 
-#+BEGIN_EXAMPLE
+#+begin_example
 ,* CD collection
 ,** Classic
 :PROPERTIES:
@@ -1646,7 +1646,7 @@ The following results in the 'genres' property having the value
 :NDisks:    1
 :GENRES+:   Baroque
 :END:
-#+END_EXAMPLE
+#+end_example
 ** Custom front matter with list values                         :list_values:
 *** Custom front matter with list values in TOML
 :PROPERTIES:
@@ -1750,7 +1750,7 @@ only the HTML output will be created (default).
 :EXPORT_DATE: 2017-07-21
 :END:
 Here is the summary.
-#+HUGO: more
+#+hugo: more
 Here is text after the [[https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting][summary splitter]].
 ** Dealing with underscores
 :PROPERTIES:
@@ -1789,7 +1789,7 @@ The strings in these two columns should look the exact same.
 | 4 | 'It's'                      | ‘It’s’                      |
 | 5 | "<http://localhost:1111/>"  | “<http://localhost:1111/>”  |
 | 6 | "<http://localhost:1111/>". | “<http://localhost:1111/>”. |
-#+TBLFM: $1=@#-1
+#+tblfm: $1=@#-1
 
 *Note:* There is a rendering issue is Row 5 above. That seems to be a
  corner case, because notice that Row 6 looks fine just because there
@@ -1806,7 +1806,7 @@ The strings in these two columns should look the exact same.
 | 2 | Ndash     | a -- b           | a – b              |
 | 3 | Mdash     | a --- b           | a — b              |
 | 4 | Ellipsis  | a ... b           | a … b              |
-#+TBLFM: $1=@#-1
+#+tblfm: $1=@#-1
 *** Title sanitization
 This post has italics, monospace and bold in the title. This is to
 test that those markup characters *do not* end up in the =title= front
@@ -1933,13 +1933,13 @@ page!) will not be published anywhere:
 - It will not be part of =.Site.RegularPages=, etc.
 
 But you can get it by =.Site.GetPage ...=. Here is an example ([[https://github.com/gohugoio/hugo/issues/4311#issuecomment-359461045][ref]]):
-#+BEGIN_EXAMPLE
+#+begin_example
 {{ $headless := .Site.GetPage "page" "some-headless-page" }}
 {{ $reusablePages := $headless.Resources.Match "sidebar-content*" }}
 {{ range $reusablePages }}
 {{ .Title }}
 {{ end }}
-#+END_EXAMPLE
+#+end_example
 
 There are many use cases of such headless page bundles:
 - Shared media galleries
@@ -2258,21 +2258,21 @@ not leak into the post's front-matter.
 :EXPORT_FILE_NAME: links-with-target-attribute
 :EXPORT_HUGO_BLACKFRIDAY: :hrefTargetBlank nil
 :END:
-#+ATTR_HTML: :target _blank :rel noopener
+#+attr_html: :target _blank :rel noopener
 [[https://orgmode.org/manual/Hyperlinks.html][This link (to Hyperlinks chapter in Org manual)]] will open in a new tab
 as it is annotated with ~target="_blank"~.
 
-#+ATTR_HTML: :target _self
+#+attr_html: :target _self
 [[https://orgmode.org/manual/Hyperlinks.html][Here's the same link]] but with ~target="_self"~ annotation. So
 clicking it will open that link in this same tab!
 
-[[https://orgmode.org/manual/Hyperlinks.html][Here's the same link again]], but this time there is no =#+ATTR_HTML=
+[[https://orgmode.org/manual/Hyperlinks.html][Here's the same link again]], but this time there is no =#+attr_html=
 annotation. So the behavior of clicking this link will depend on the
 browser (typically an external link will open in a new tab
 automatically).
 *** Image linked to image with =target= attribute
 
-#+ATTR_HTML: :width 10% :target _self
+#+attr_html: :width 10% :target _self
 [[https://orgmode.org/img/org-mode-unicorn-logo.png][https://orgmode.org/img/org-mode-unicorn-logo.png]]
 
 Above is a link to an image. The =width= attribute of /10%/ though
@@ -2290,7 +2290,7 @@ must apply *only* to the image, and not to the link.
 
 -----
 
-#+ATTR_HTML: :width 10% :target _self
+#+attr_html: :width 10% :target _self
 Above limitation is not posed if the image is inlined:
 [[https://orgmode.org/img/org-mode-unicorn-logo.png][https://orgmode.org/img/org-mode-unicorn-logo.png]] i.e. the =target=
 attribute will be added to the =<a>= tag correctly, as the =figure=
@@ -2338,10 +2338,10 @@ shortcode is not used for inline images.
 :CUSTOM_ID: link-heading-1
 :END:
 - Link to [[#link-heading-2][Heading 2]]
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
 **** Heading 2
 :PROPERTIES:
 :CUSTOM_ID: link-heading-2
@@ -2353,11 +2353,11 @@ shortcode is not used for inline images.
 :END:
 From [[https://orgmode.org/manual/Internal-links.html][(org) Internal links]],
 
-#+BEGIN_SRC org
+#+begin_src org
 - one item
 - <<target>>another item
 Here we refer to item [[target]].
-#+END_SRC
+#+end_src
 
 will output below (/lorem-ipsum/ added to increase page content so
 that the link jump is evident):
@@ -2368,7 +2368,7 @@ that the link jump is evident):
 /Scroll to the end of the below 'lorem-ipsum' block to find the test
 link./
 
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
 
 *Here we refer to item [[target]].*
 *** Links to source blocks
@@ -2377,108 +2377,108 @@ link./
 :END:
 From [[https://orgmode.org/manual/Internal-links.html][(org) Internal links]],
 
-#+BEGIN_QUOTE
+#+begin_quote
    If no dedicated target exists, the link will then try to match the
 exact name of an element within the buffer.  Naming is done with the
-‘#+NAME’ keyword, which has to be put in the line before the element it
+‘#+name’ keyword, which has to be put in the line before the element it
 refers to, as in the following example
-    #+BEGIN_EXAMPLE
-    ,#+NAME: My Target
+    #+begin_example
+    ,#+name: My Target
     | a  | table      |
     |----+------------|
     | of | four cells |
-    #+END_EXAMPLE
-#+END_QUOTE
+    #+end_example
+#+end_quote
 
-Also, when targeting a =#+NAME= keyword, *=#+CAPTION= keyword is
+Also, when targeting a =#+name= keyword, *=#+caption= keyword is
 mandatory in order to get proper numbering* for _source blocks_,
 _images_ and _tables_.
 
 So the below code block:
-#+BEGIN_SRC org
-,#+CAPTION: Hello
-,#+NAME: code__hello
-,#+BEGIN_SRC emacs-lisp
+#+begin_src org
+,#+caption: Hello
+,#+name: code__hello
+,#+begin_src emacs-lisp
 (message "Hello")
-,#+END_SRC
+,#+end_src
 
 ,*Here we refer to code snippet [[code__helloagain]].*
 
-,#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+,#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
 
-,#+CAPTION: Hello Again
-,#+NAME: code__helloagain
-,#+BEGIN_SRC emacs-lisp
+,#+caption: Hello Again
+,#+name: code__helloagain
+,#+begin_src emacs-lisp
 (message "Hello again")
-,#+END_SRC
+,#+end_src
 
 ,*Here we refer to code snippet [[code__hello]].*
-#+END_SRC
+#+end_src
 
 will output below (/lorem-ipsum/ added to increase page content so
 that the link jump is evident):
 
-#+CAPTION: Hello
-#+NAME: code__hello
-#+BEGIN_SRC emacs-lisp
+#+caption: Hello
+#+name: code__hello
+#+begin_src emacs-lisp
 (message "Hello")
-#+END_SRC
+#+end_src
 
 *Here we refer to code snippet [[code__helloagain]].*
 
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
 
-#+CAPTION: Hello Again
-#+NAME: code__helloagain
-#+BEGIN_SRC emacs-lisp
+#+caption: Hello Again
+#+name: code__helloagain
+#+begin_src emacs-lisp
 (message "Hello again")
-#+END_SRC
+#+end_src
 
 *Here we refer to code snippet [[code__hello]].*
 *** Links to tables                                           :table:caption:
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-tables
 :END:
-*Note*: When targeting a =#+NAME= keyword, *=#+CAPTION= keyword is
+*Note*: When targeting a =#+name= keyword, *=#+caption= keyword is
 mandatory in order to get proper numbering* for _source blocks_,
 _images_ and _tables_.
 
-#+BEGIN_SRC org
-,#+CAPTION: Simple table 1
-,#+NAME: tab__simple1
+#+begin_src org
+,#+caption: Simple table 1
+,#+name: tab__simple1
 | a | b |
 | c | d |
 
 ,*Here we refer to table [[tab__simple2]].*
 
-,#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+,#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
 
 Here's another table:
 
-,#+CAPTION: Simple table 2
-,#+NAME: tab__simple2
+,#+caption: Simple table 2
+,#+name: tab__simple2
 | e | f |
 | g | h |
 
 ,*Here we refer to table [[tab__simple1]].*
-#+END_SRC
+#+end_src
 
 will output below (/lorem-ipsum/ added to increase page content so
 that the link jump is evident):
 
-#+CAPTION: Simple table 1
-#+NAME: tab__simple1
+#+caption: Simple table 1
+#+name: tab__simple1
 | a | b |
 | c | d |
 
 *Here we refer to table [[tab__simple2]].*
 
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
 
 Here's another table:
 
-#+CAPTION: Simple table 2
-#+NAME: tab__simple2
+#+caption: Simple table 2
+#+name: tab__simple2
 | e | f |
 | g | h |
 
@@ -2489,43 +2489,43 @@ Reference: [[https://orgmode.org/manual/Images-and-tables.html][(org) Images and
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-images
 :END:
-*Note*: When targeting a =#+NAME= keyword, *=#+CAPTION= keyword is
+*Note*: When targeting a =#+name= keyword, *=#+caption= keyword is
 mandatory in order to get proper numbering* for _source blocks_,
 _images_ and _tables_.
 
-#+BEGIN_SRC org
-,#+CAPTION: Org Logo
-,#+NAME: img__org_logo1
+#+begin_src org
+,#+caption: Org Logo
+,#+name: img__org_logo1
 [[/images/org-mode-unicorn-logo.png]]
 
 ,*Here we refer to image [[img__org_logo2]].*
 
-,#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+,#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
 
 Here's the same image again, but with a different Org link ID:
 
-,#+CAPTION: Same Org Logo
-,#+NAME: img__org_logo2
+,#+caption: Same Org Logo
+,#+name: img__org_logo2
 [[/images/org-mode-unicorn-logo.png]]
 
 ,*Here we refer to image [[img__org_logo1]].*
-#+END_SRC
+#+end_src
 
 will output below (/lorem-ipsum/ added to increase page content so
 that the link jump is evident):
 
-#+CAPTION: Org Logo
-#+NAME: img__org_logo1
+#+caption: Org Logo
+#+name: img__org_logo1
 [[/images/org-mode-unicorn-logo.png]]
 
 *Here we refer to image [[img__org_logo2]].*
 
-#+INCLUDE: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
 
 Here's the same image again, but with a different Org link ID:
 
-#+CAPTION: Same Org Logo
-#+NAME: img__org_logo2
+#+caption: Same Org Logo
+#+name: img__org_logo2
 [[/images/org-mode-unicorn-logo.png]]
 
 *Here we refer to image [[img__org_logo1]].*
@@ -2551,9 +2551,9 @@ Reference: [[https://orgmode.org/manual/Images-and-tables.html][(org) Images and
   delimiters.
 
 For example, below in Org:
-#+BEGIN_SRC text
+#+begin_src text
 LaTeX formatted equation: \( E = -J \sum_{i=1}^N s_i s_{i+1} \)
-#+END_SRC
+#+end_src
 
 will look like this in Hugo rendered HTML:
 
@@ -2565,10 +2565,10 @@ processed it.)
 Here's another example, taken from [[https://orgmode.org/manual/LaTeX-fragments.html][(org) LaTeX fragments]].
 
 Below in Org:
-#+BEGIN_EXAMPLE
+#+begin_example
 If $a^2=b$ and \( b=2 \), then the solution must be either
 $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \]
-#+END_EXAMPLE
+#+end_example
 
 renders to:
 
@@ -2746,29 +2746,29 @@ Checklist showing progress in ratio.
 :EXPORT_FILE_NAME: lists-with-attr-html
 :END:
 *** Unordered lists
-#+ATTR_HTML: :class red-text
-#+ATTR_CSS: :color red
+#+attr_html: :class red-text
+#+attr_css: :color red
 - Red list item 1
 - Red list item 2
 
-#+ATTR_HTML: :class green-text
-#+ATTR_CSS: :color green
+#+attr_html: :class green-text
+#+attr_css: :color green
 - Green list item 1
 - Green list item 2
 *** Ordered lists
-#+ATTR_HTML: :class green-text
+#+attr_html: :class green-text
 1. Green ordered list item 1
 2. Green ordered list item 2
 
 /The =green-text= style is defined in the list above this one./
 **** Ordered list with custom counter
-#+ATTR_HTML: :class blue-text
-#+ATTR_CSS: :color blue
+#+attr_html: :class blue-text
+#+attr_css: :color blue
 1. Blue list item 1
 2. Blue list item 2
 3. [@10]Blue list item 10
 *** Definition/descriptive lists
-#+ATTR_HTML: :class red-text
+#+attr_html: :class red-text
 - Defn A :: Something A in red
 - Defn B :: Something B in red
 
@@ -2780,47 +2780,47 @@ Checklist showing progress in ratio.
 :EXPORT_DATE: 2017-08-01
 :END:
 Some text.
-#+BEGIN_QUOTE
+#+begin_quote
 Quote 1. This is a long quote that auto-fills into multiple lines in
 Org, but it will be a single paragraph in the exported format.
-#+END_QUOTE
-#+BEGIN_QUOTE
+#+end_quote
+#+begin_quote
 Quote 2. This is a short quote.
-#+END_QUOTE
-#+BEGIN_QUOTE
+#+end_quote
+#+begin_quote
 Quote 3. This is a multi-paragraph quote.
 
 This is the second paragraph.
-#+END_QUOTE
+#+end_quote
 Some other text.
 ** Example block inside quote block
 :PROPERTIES:
 :EXPORT_FILE_NAME: example-block-inside-quote-block
 :END:
 Some text.
-#+BEGIN_QUOTE
+#+begin_quote
 Some quoted text.
 
-    #+BEGIN_EXAMPLE
+    #+begin_example
     (some-example)
-    #+END_EXAMPLE
-#+END_QUOTE
+    #+end_example
+#+end_quote
 Some other text.
 ** Multiple example blocks inside quote block
 :PROPERTIES:
 :EXPORT_FILE_NAME: multiple-example-blocks-inside-quote-block
 :END:
 Some text.
-#+BEGIN_QUOTE
+#+begin_quote
 Some quoted text.
 
-    #+BEGIN_EXAMPLE
+    #+begin_example
     (some-example)
-    #+END_EXAMPLE
-    #+BEGIN_EXAMPLE
+    #+end_example
+    #+begin_example
     (some-other-example)
-    #+END_EXAMPLE
-#+END_QUOTE
+    #+end_example
+#+end_quote
 Some other text.
 ** Source block inside quote block, followed by another source block outside
 :PROPERTIES:
@@ -2829,15 +2829,15 @@ Some other text.
 [[https://github.com/russross/blackfriday/issues/407][Blackfriday Issue # 407]]
 
 Some text.
-#+BEGIN_QUOTE
+#+begin_quote
 Some quoted text.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
     (message "hello")
-    #+END_SRC
-#+END_QUOTE
-#+BEGIN_SRC emacs-lisp
+    #+end_src
+#+end_quote
+#+begin_src emacs-lisp
 (message "hello again")
-#+END_SRC
+#+end_src
 Some other text.
 ** Example blocks inside quote block, followed by another example block outside
 :PROPERTIES:
@@ -2846,48 +2846,48 @@ Some other text.
 [[https://github.com/russross/blackfriday/issues/407][Blackfriday Issue # 407]]
 
 Some text.
-#+BEGIN_QUOTE
+#+begin_quote
 Some quoted text.
-    #+BEGIN_EXAMPLE
+    #+begin_example
     (some-example)
-    #+END_EXAMPLE
-    #+BEGIN_EXAMPLE
+    #+end_example
+    #+begin_example
     (some-other-example)
-    #+END_EXAMPLE
-#+END_QUOTE
+    #+end_example
+#+end_quote
 
-#+BEGIN_EXAMPLE
+#+begin_example
 (yet-another-example)
-#+END_EXAMPLE
+#+end_example
 Some other text.
 ** Source block, followed by a quote block containing another source block
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-followed-by-a-quote-block-containing-another-source-block
 :END:
 Some text.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (message "hello")
-#+END_SRC
-#+BEGIN_QUOTE
+#+end_src
+#+begin_quote
 Some quoted text.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
     (message "hello again")
-    #+END_SRC
-#+END_QUOTE
+    #+end_src
+#+end_quote
 Some other text.
 ** Example block with escaped Org syntax inside quote block
 :PROPERTIES:
 :EXPORT_FILE_NAME: example-block-with-escaped-org-inside-quote-block
 :END:
 Some text.
-#+BEGIN_QUOTE
+#+begin_quote
 Some quoted text.
 
-    #+BEGIN_EXAMPLE
-    ,#+NAME: some_example
+    #+begin_example
+    ,#+name: some_example
     (some-example)
-    #+END_EXAMPLE
-#+END_QUOTE
+    #+end_example
+#+end_quote
 Some other text.
 ** Quote blocks with ATTR_HTML                       :attr___html:attr___css:
 :PROPERTIES:
@@ -2895,11 +2895,11 @@ Some other text.
 :END:
 Some text.
 
-#+ATTR_HTML: :class red-text
-#+ATTR_CSS: :color red
-#+BEGIN_QUOTE
+#+attr_html: :class red-text
+#+attr_css: :color red
+#+begin_quote
 This is a red quote.
-#+END_QUOTE
+#+end_quote
 
 Some more text.
 * Verse                                                               :verse:
@@ -2911,19 +2911,19 @@ Some more text.
 To preserve the line breaks, indentation and blank lines in a region,
 but otherwise use normal formatting, you can use the /verse/
 construct, which can also be used to format poetry -- [[https://orgmode.org/manual/Paragraphs.html][Reference]].
-#+BEGIN_VERSE
+#+begin_verse
 Great clouds overhead
 Tiny black birds rise and fall
 Snow covers Emacs
 
     -- AlexSchroeder
-#+END_VERSE
+#+end_verse
 ** Consecutive verses
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01
 :EXPORT_FILE_NAME: consecutive-verses
 :END:
-#+BEGIN_VERSE
+#+begin_verse
 Tyger Tyger, burning bright,
 In the forests of the night;
 What immortal hand or eye,
@@ -2935,13 +2935,13 @@ On what wings dare he aspire?
 What the hand, dare seize the fire?
 
    -- "The Tyger" /by/ William Blake
-#+END_VERSE
-#+BEGIN_VERSE
+#+end_verse
+#+begin_verse
 Some parts can be *bold*
   Some can be =monospace=
     Some can be /italic/ too.
-#+END_VERSE
-#+BEGIN_VERSE
+#+end_verse
+#+begin_verse
 What is this life if, full of care,
 We have no time to stand and stare.
 
@@ -2952,15 +2952,15 @@ No time to see, when woods we pass,
 Where squirrels hide their nuts in grass.
 
    -- "Leisure" /by/ William Henry Davis
-#+END_VERSE
+#+end_verse
 ** Verse for indentation
 :PROPERTIES:
 :EXPORT_FILE_NAME: verse-for-indentation
 :END:
 Some text before indented text.
-#+BEGIN_VERSE
+#+begin_verse
 >    Text indented by 4 spaces
-#+END_VERSE
+#+end_verse
 Org removes indentation from the first line of the text block even in
 a Verse block. To get around that, the trick is to use the =>=
 character before the required indentation spaces *only* on the first
@@ -2968,105 +2968,105 @@ non-blank line in a Verse block. Only that first =>= character is
 removed when translating to Markdown.
 *** More examples
 - More indentation than in the above example:
-  #+BEGIN_VERSE
+  #+begin_verse
 >        Text indented by 8 spaces
-#+END_VERSE
+#+end_verse
 - Leading blank line followed by indented text:
-  #+BEGIN_VERSE
+  #+begin_verse
 
 >    Text indented by 4 spaces
-#+END_VERSE
+#+end_verse
 - Indented text followed by a trailing blank line:
-  #+BEGIN_VERSE
+  #+begin_verse
 >    Text indented by 4 spaces
 
-#+END_VERSE
+#+end_verse
 - Using tab characters for indentation; each tab character still
   constitutes for one =&nbsp;= in HTML.
-  #+BEGIN_VERSE
+  #+begin_verse
 >				Text indented by 4 tab characters
-#+END_VERSE
+#+end_verse
 *** Corner cases
 Only the *first* =>= character immediately following spaces and empty
 lines will be removed:
-#+BEGIN_VERSE
+#+begin_verse
 
 >Line 1 above was empty. So the first =>= seen on this line is removed.
 Line 3 had no =>= char.
 > ← See that this =>= on line 4 is retained even at the beginning of the line.
 Line 5 has this > charcter in-between and is retained.
-#+END_VERSE
+#+end_verse
 
 If someone really wants to have =>= as the first non-blank character
 in the final output, they can use =>>= instead.. *only for that first
 instance*. The below Verse block is same as above except that the
 first =>= is retained in the final output.
-#+BEGIN_VERSE
+#+begin_verse
 
 >>Line 1 above was empty. So *only* the first =>= seen on this line is removed.
 Line 3 had no =>= char.
 > ← See that this =>= on line 4 is retained even at the beginning of the line.
 Line 5 has this > charcter in-between and is retained.
-#+END_VERSE
+#+end_verse
 * Special Blocks                                              :special_block:
 :PROPERTIES:
 :EXPORT_FILE_NAME: special-blocks
 :END:
 ** HTML5 Element Blocks
 *** Block without NAME, class or id
-#+BEGIN_article
+#+begin_article
 This is /an article/.
-#+END_article
+#+end_article
 *** Block with NAME
-#+NAME: Aside A
-#+BEGIN_aside
+#+name: Aside A
+#+begin_aside
 /Some/ *text* --- 1
 
 | a | b | c |
 | d | e | f |
-#+END_aside
+#+end_aside
 *** Block with class and id
-#+ATTR_HTML: :class my-section :id section-a
-#+BEGIN_section
+#+attr_html: :class my-section :id section-a
+#+begin_section
 /Some/ *text* --- 2
 
 | g | h | i |
 | j | k | l |
-#+END_section
+#+end_section
 *** An inline HTML5 element
 Unmarked.
-#+BEGIN_mark
+#+begin_mark
 /Some/ *marked* text --- 2.5.
-#+END_mark
+#+end_mark
 Unmarked again.
 ** DIV-wrapped Blocks
 *** DIV without NAME, class or id
-#+BEGIN_something
+#+begin_something
 This is /some text/ wrapped in a =div= block with class =something=.
-#+END_something
+#+end_something
 *** DIV with NAME
-#+NAME: Foo A
-#+BEGIN_foo
+#+name: Foo A
+#+begin_foo
 /Some/ *text* --- 3
 
 | m | n | o |
 | p | q | r |
-#+END_foo
+#+end_foo
 *** DIV with class and id
-#+ATTR_HTML: :class my-bar :id bar-a
-#+BEGIN_bar
+#+attr_html: :class my-bar :id bar-a
+#+begin_bar
 /Some/ *text* --- 4
 
 | s | t | u |
 | v | w | x |
-#+END_bar
+#+end_bar
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
 *** Common CSS
 :PROPERTIES:
 :CUSTOM_ID: alert-common-css
 :END:
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
  .alert {
      padding: 15px;
@@ -3112,12 +3112,12 @@ This is /some text/ wrapped in a =div= block with class =something=.
      border-color: #ebccd1;
  }
 </style>
-#+END_EXPORT
+#+end_export
 *** Original icon prefixing code
 :PROPERTIES:
 :CUSTOM_ID: alert-original-icon-prefixing-css
 :END:
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
  div.alert p:first-child::before {
      position: absolute;
@@ -3137,12 +3137,12 @@ This is /some text/ wrapped in a =div= block with class =something=.
      content: '⚠';
  }
 </style>
-#+END_EXPORT
+#+end_export
 *** Modified icon prefixing code
 :PROPERTIES:
 :CUSTOM_ID: alert-modified-icon-prefixing-css
 :END:
-#+BEGIN_EXPORT html
+#+begin_export html
 <style>
  /* Because of the empty div hack, the first paragraph will be the
     second child in the div. So use "p:nth-child(2)" instead of the
@@ -3168,7 +3168,7 @@ This is /some text/ wrapped in a =div= block with class =something=.
      content: '⚠';
  }
 </style>
-#+END_EXPORT
+#+end_export
 ** Alert Shortcode Lookalike                :alert:special_block:attr___html:
 :PROPERTIES:
 :EXPORT_FILE_NAME: alert-short-code-lookalike
@@ -3180,11 +3180,11 @@ Below doesn't export to an =alert= shortcode, but the exported
 Markdown contains HTML that resembles the [[https://github.com/gcushen/hugo-academic/blob/master/layouts/shortcodes/alert.html][shortcode code]] (Courtesy:
 [[https://github.com/gcushen/hugo-academic][=hugo-academic= theme]]):
 
-#+BEGIN_SRC html
+#+begin_src html
 <div class="alert alert-{{ .Get 0 }}">
   {{ .Inner }}
 </div>
-#+END_SRC
+#+end_src
 
 There are few days to mimic that.
 *** CSS
@@ -3199,7 +3199,7 @@ There are few days to mimic that.
 **** CSS Override for Academic theme
 In summary, these overrides over the theme CSS would suffice:
 
-#+BEGIN_SRC css
+#+begin_src css
 /* Because of the empty div hack, the first paragraph will be the
    second child in the div. So use "p:nth-child(2)" instead of the
    original "p:first-child". */
@@ -3222,31 +3222,31 @@ div.alert-warning p:nth-child(2):before {
     /* Use below if not using FontAwesome */
     /* content: '⚠'; */
 }
-#+END_SRC
+#+end_src
 
-#+INCLUDE: "./all-posts.org::#alert-common-css" :only-contents t
-#+INCLUDE: "./all-posts.org::#alert-modified-icon-prefixing-css" :only-contents t
+#+include: "./all-posts.org::#alert-common-css" :only-contents t
+#+include: "./all-posts.org::#alert-modified-icon-prefixing-css" :only-contents t
 *** Alert using Special Block
-#+ATTR_HTML: :class alert-note
+#+attr_html: :class alert-note
 #+begin_alert
 Here's a tip or note.
 
 This can be multi-paragraph too.
 #+end_alert
 
-#+ATTR_HTML: :class alert-warning
+#+attr_html: :class alert-warning
 #+begin_alert
 Here's a warning!
 
 This can be multi-paragraph too.
 #+end_alert
-*** Alert using only =#+ATTR_HTML=
+*** Alert using only =#+attr_html=
 This will work only if the message is a single paragraph.
 
-#+ATTR_HTML: :class alert alert-note
+#+attr_html: :class alert alert-note
 Here's a tip or note.
 
-#+ATTR_HTML: :class alert alert-warning
+#+attr_html: :class alert alert-warning
 Here's a warning!
 ** Paired Shortcodes using special blocks              :paired:special_block:
 *** Paired Shortcodes using special blocks (No Arguments)      :no_arguments:
@@ -3264,9 +3264,9 @@ The HTML <b>markup</b> will also get rendered.
 
 This will export as:
 
-#+BEGIN_SRC md
+#+begin_src md
 {{% mdshortcode %}} Content rendered as Markdown {{% /mdshortcode %}}
-#+END_SRC
+#+end_src
 **** Paired non-markdown (default) shortcode
 #+begin_myshortcode
 Content is rendered <b>like HTML</b>. The Markdown /emphasis/
@@ -3280,9 +3280,9 @@ tags.</p>
 
 This will export as:
 
-#+BEGIN_SRC md
+#+begin_src md
 {{< myshortcode >}} Content NOT rendered as Markdown {{< /myshortcode >}}
-#+END_SRC
+#+end_src
 **** Not a recognized paired shortcode
 #+begin_foo
 Content *with* Markdown /emphasis/ characters is rendered fine in the
@@ -3300,8 +3300,8 @@ Test case for feature requested in {{{oxhugoissue(119)}}}.
 **** Paired markdown shortcode
 The =alert= shortcode takes 1 positional argument.
 
-#+INCLUDE: "./all-posts.org::#alert-common-css" :only-contents t
-#+INCLUDE: "./all-posts.org::#alert-original-icon-prefixing-css" :only-contents t
+#+include: "./all-posts.org::#alert-common-css" :only-contents t
+#+include: "./all-posts.org::#alert-original-icon-prefixing-css" :only-contents t
 
 #+attr_shortcode: note
 #+begin_alert
@@ -3338,14 +3338,14 @@ characters are !! NOT !! rendered.
 :END:
 Regular text.
 
-#+ATTR_HTML: :class red-text
-#+ATTR_CSS: :color red
+#+attr_html: :class red-text
+#+attr_css: :color red
 Red text.
 
 Regular text.
 
-#+ATTR_HTML: :class green-text
-#+ATTR_CSS: :color green
+#+attr_html: :class green-text
+#+attr_css: :color green
 Green text.
 
 Regular text.
@@ -3442,7 +3442,7 @@ A Blackfriday option can be disabled by setting the option value to
 /nothing/, =nil= or =false=.
 
 These will not be rendered as fractions:
-#+INCLUDE: "./all-posts.org::#fraction-table" :only-contents t
+#+include: "./all-posts.org::#fraction-table" :only-contents t
 
 But these will always be rendered as fractions, even when the
 Blackfriday =fractions= option is set to =false= like in this post.
@@ -3457,7 +3457,7 @@ A Blackfriday option can be enabled by setting the option value to
 =t= or =true=.
 
 All of these will be rendered as fractions:
-#+INCLUDE: "./all-posts.org::#fraction-table" :only-contents t
+#+include: "./all-posts.org::#fraction-table" :only-contents t
 
 Below are special as they will *always* be rendered as fractions, even
 when the Blackfriday =fractions= option is set to =false= (though this
@@ -3472,13 +3472,13 @@ post has that option set to =true= -- which is also the default value).
 :END:
 The Blackfriday =hardLineBreak= extension is enabled here even where
 user used the wrong case in the extension name:
-#+BEGIN_EXAMPLE
+#+begin_example
 :EXPORT_HUGO_BLACKFRIDAY: :extensions hardlinebreak
-#+END_EXAMPLE
+#+end_example
 instead of:
-#+BEGIN_EXAMPLE
+#+begin_example
 :EXPORT_HUGO_BLACKFRIDAY: :extensions hardLineBreak
-#+END_EXAMPLE
+#+end_example
 
 The Blackfriday extension names are case-sensitive. So even though,
 the wrong case is used in the Org property drawer, =ox-hugo= ensures
@@ -3535,9 +3535,9 @@ c
 ***** Plain ID Anchors disabled
 Check the ID for all the headings in this post's HTML. The ID's will
 look something like:
-#+BEGIN_SRC html
+#+begin_src html
 <h2 id="plain-id-anchors-disabled:c94b2acd735ed6a466ef85be48bdea8c">Plain ID Anchors disabled</h2>
-#+END_SRC
+#+end_src
 where =:c94b2acd735ed6a466ef85be48bdea8c= is the document ID.
 ***** Fractions disabled
 2/5
@@ -3545,9 +3545,9 @@ where =:c94b2acd735ed6a466ef85be48bdea8c= is the document ID.
 a--b	c--d
 ***** Fenced code disabled
 Below, the code block language name will show up before the code.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (message "Hello")
-#+END_SRC
+#+end_src
 ***** Strikethrough disabled
 +not-canceled+
 **** Enabling/Disabling extensions (TOML)                              :toml:
@@ -3555,14 +3555,14 @@ Below, the code block language name will show up before the code.
 :EXPORT_FILE_NAME: blackfriday-ext-enabling-disabling-toml
 :EXPORT_DATE: 2017-08-02
 :END:
-#+INCLUDE: "./all-posts.org::#enabling-disabling-extensions-example" :only-contents t
+#+include: "./all-posts.org::#enabling-disabling-extensions-example" :only-contents t
 **** Enabling/Disabling extensions (YAML)                              :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
 :EXPORT_FILE_NAME: blackfriday-ext-enabling-disabling-yaml
 :EXPORT_DATE: 2017-08-02
 :END:
-#+INCLUDE: "./all-posts.org::#enabling-disabling-extensions-example" :only-contents t
+#+include: "./all-posts.org::#enabling-disabling-extensions-example" :only-contents t
 * Post Weight (Not the menu item weight)                             :weight:
 ** Auto post-weight calculation
 :PROPERTIES:
@@ -3792,20 +3792,20 @@ This post should also be created in =content/section-a/=.
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-toc-keyword-0
 :END:
-#+TOC: headlines 0
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+toc: headlines 0
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 *** Post with TOC using keyword set to 2
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-toc-keyword-2
 :END:
-#+TOC: headlines 2
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+toc: headlines 2
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 *** Post with TOC using keyword set to 6
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-toc-keyword-6
 :END:
-#+TOC: headlines 6
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+toc: headlines 6
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 * Export Options                                              :export_option:
 ** Table of Contents (TOC)                                              :toc:
 =ox-hugo= has the =with-toc= option disabled by default as Hugo has an
@@ -3818,31 +3818,31 @@ Still some people might prefer to use the Org generated TOC.
 :EXPORT_FILE_NAME: options-num-nil
 :EXPORT_OPTIONS: num:nil
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 **** Don't number headlines (but yes in TOC)
 :PROPERTIES:
 :EXPORT_FILE_NAME: options-num-onlytoc
 :EXPORT_OPTIONS: num:onlytoc
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 **** Number 0 levels
 :PROPERTIES:
 :EXPORT_FILE_NAME: options-num-0
 :EXPORT_OPTIONS: num:0
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 **** Number 2 levels
 :PROPERTIES:
 :EXPORT_FILE_NAME: options-num-2
 :EXPORT_OPTIONS: num:2
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 **** Number all levels
 :PROPERTIES:
 :EXPORT_FILE_NAME: options-num-all
 :EXPORT_OPTIONS: num:t
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 *** TOC
 **** =num= set to =nil=
 ***** TOC with all headings (unnumbered)
@@ -3850,51 +3850,51 @@ Still some people might prefer to use the Org generated TOC.
 :EXPORT_FILE_NAME: post-with-export-options-toc-t-num-nil
 :EXPORT_OPTIONS: num:nil toc:t
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 ***** TOC with headings (unnumbered) only till level 2
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-export-options-toc-2-num-nil
 :EXPORT_OPTIONS: num:nil toc:2
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 ***** No TOC as toc set to nil
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-export-options-toc-nil-num-nil
 :EXPORT_OPTIONS: num:nil toc:nil
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 **** =num= set to =t=
 ***** TOC with all headings (numbered, except for selected unnumbered)
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-export-options-toc-t-num-t
 :EXPORT_OPTIONS: num:t toc:t
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 ***** TOC with headings (numbered, except for selected unnumbered) only till level 2
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-export-options-toc-2-num-t
 :EXPORT_OPTIONS: num:t toc:2
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 ***** No TOC as toc set to 0
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-export-options-toc-0-num-t
 :EXPORT_OPTIONS: num:t toc:0
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 **** =num= set to =onlytoc=
 ***** TOC with all headings (post-unnumbered, TOC-numbered)
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-export-options-toc-t-num-onlytoc
 :EXPORT_OPTIONS: num:onlytoc toc:t
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 ***** TOC with headings (post-unnumbered, TOC-numbered) only till level 2
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-with-export-options-toc-1-num-onlytoc
 :EXPORT_OPTIONS: num:onlytoc toc:1
 :END:
-#+INCLUDE: "./all-posts.org::#nested-sections-example" :only-contents t
+#+include: "./all-posts.org::#nested-sections-example" :only-contents t
 **** No TOC in Summary
 :PROPERTIES:
 :EXPORT_FILE_NAME: no-toc-in-summary
@@ -3905,25 +3905,25 @@ its =.Summary= (See [[https://gohugo.io/content-management/summaries/][Hugo cont
 export option like =toc:t= is inserted at the beginning of a post, TOC
 will be shown in that summary too!
 
-#+HUGO: more
+#+hugo: more
 
 ***** =ox-hugo='s Solution
 =ox-hugo= helps prevent that with a workaround.. it inserts a special
 HTML comment *=<!--endtoc-->=* after the TOC.
 
 It is important to insert a user-defined summary split by using
-=#+HUGO: more=. Otherwise it is very likely that the TOC is big enough
+=#+hugo: more=. Otherwise it is very likely that the TOC is big enough
 to exceed the Hugo-defined max-summary length and so the
 =<!--endtoc-->= that appears *after* the TOC never gets parsed.
 
-#+BEGIN_QUOTE
-*Always use =#+HUGO: more= when you enable Org generated TOC's.*
-#+END_QUOTE
+#+begin_quote
+*Always use =#+hugo: more= when you enable Org generated TOC's.*
+#+end_quote
 
 In your site's Hugo template, you can then filter that out with
 something like:
 ***** Snippet
-#+BEGIN_SRC html
+#+begin_src html
 {{ $summary_splits := split .Summary "<!--endtoc-->" }}
 {{ if eq (len $summary_splits) 2 }}
     <!-- If that endtoc special comment is present, output only the part after that comment as Summary. -->
@@ -3932,7 +3932,7 @@ something like:
     <!-- Print the whole Summary if endtoc special comment is not found. -->
     {{ .Summary }}
 {{ end }}
-#+END_SRC
+#+end_src
 ***** Example
 See this test site's [[https://github.com/kaushalmodi/ox-hugo/blob/master/test/site/themes/bare_min/layouts/_default/summary.html][=summary.html=]] as an example.
 ** Sub/superscripts                                 :superscripts:subscripts:
@@ -4024,29 +4024,29 @@ exports, <code>verbatim</code>.@@
 :PROPERTIES:
 :EXPORT_FILE_NAME: export_block_hugo
 :END:
-#+BEGIN_EXPORT hugo
+#+begin_export hugo
 This will get exported **only for** Hugo exports, `verbatim`.
-#+END_EXPORT
+#+end_export
 *** Export block Markdown                                          :markdown:
 :PROPERTIES:
 :EXPORT_FILE_NAME: export_block_markdown
 :END:
-#+BEGIN_EXPORT markdown
+#+begin_export markdown
 This Markdown **Export Block** will also get exported for Hugo exports,
 `verbatim` ..
-#+END_EXPORT
+#+end_export
 
-#+BEGIN_EXPORT md
+#+begin_export md
 and **this too**.
-#+END_EXPORT
+#+end_export
 *** Export block HTML                                                  :html:
 :PROPERTIES:
 :EXPORT_FILE_NAME: export_block_html
 :END:
-#+BEGIN_EXPORT html
+#+begin_export html
 This HTML <b>Export Block</b>  will also get exported for Hugo exports,
 <code>verbatim</code>.
-#+END_EXPORT
+#+end_export
 * Miscellaneous Front Matter                                   :front_matter:
 ** Hugo Aliases                                                     :aliases:
 *** Alias without section portion 1
@@ -4824,7 +4824,7 @@ QED
 *** 神经网络的实现
 作为概念验证，这里给出了MNIST手写数字分类神经网络的Python实现。
 
-#+BEGIN_SRC python
+#+begin_src python
 # coding: utf-8
 # author: vonng(fengruohang@outlook.com)
 # ctime: 2017-05-10
@@ -4877,12 +4877,12 @@ if __name__ == '__main__':
     train_data, valid_data, test_data = mnist_loader.load_data_wrapper()
     net = Network([784, 100, 10])
     net.gradient_descent(train_data, test_data, epoches=100, m=10, eta=2.0)
-#+END_SRC
+#+end_src
 
 数据加载脚本： [[https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/mnist_loader.py][=mnist_loader.py=]]
 。输入数据为二元组列表： =(input(784,1), output(10,1))=
 
-#+BEGIN_SRC sh
+#+begin_src sh
 $ python net.py
 Round {0}: {9136}/{10000}
 Round {1}: {9265}/{10000}
@@ -4895,7 +4895,7 @@ Round {7}: {9484}/{10000}
 Round {8}: {9509}/{10000}
 Round {9}: {9539}/{10000}
 Round {10}: {9526}/{10000}
-#+END_SRC
+#+end_src
 
 一轮迭代后，网络在测试集上的分类准确率就达到90%，最终收敛至96%左右。
 
@@ -4995,13 +4995,13 @@ him wiggle his trunk"。神经网络这种动辄百万的参数的模型能拟�
 完美拟合了数据集中的所有点，但实际预测能力就很离谱了。它拟合的更多地是数据集中的
 噪声，而非数据集背后的潜在规律。
 
-#+BEGIN_SRC python
+#+begin_src python
 x, xs = np.linspace(0, 2 * np.pi, 10), np.arange(0, 2 * np.pi, 0.001)
 y = np.sin(x) + np.random.randn(10) * 0.4
 p1,p2 = np.polyfit(x, y, 10), np.polyfit(x, y, 3)
 plt.plot(xs, np.polyval(p1, xs));plt.plot(x, y, 'ro');plt.plot(xs, np.sin(xs), 'r--')
 plt.plot(xs, np.polyval(p2, xs));plt.plot(x, y, 'ro');plt.plot(xs, np.sin(xs), 'r--')
-#+END_SRC
+#+end_src
 
 | 3阶多项式                        | 10阶多项式                        |
 |----------------------------------+-----------------------------------|
@@ -5019,7 +5019,7 @@ plt.plot(xs, np.polyval(p2, xs));plt.plot(x, y, 'ro');plt.plot(xs, np.sin(xs), '
 总之，如果出现非常大的权重参数，通常就意味着过拟合。例如拟合所得十阶多项式系数就
 非常畸形：
 
-#+BEGIN_EXAMPLE
+#+begin_example
 -0.001278386964370502
 0.02826407452052734
 -0.20310716176300195
@@ -5031,7 +5031,7 @@ plt.plot(xs, np.polyval(p2, xs));plt.plot(x, y, 'ro');plt.plot(xs, np.sin(xs), '
 167.26204130954324
 -50.95259728945658
 0.4211227089756039
-#+END_EXAMPLE
+#+end_example
 
 通过添加权重衰减项，可以有效遏制过拟合。例如 $L2$ 规 范化为损失函数添
 加了一个 $\frac λ 2 w^2$ 的惩罚项：
@@ -5065,7 +5065,7 @@ $$
 注意这里的 $n$ 是 所有的训练样本数，而不是一个小批次使用的训练样本数。
 
 ***** 改进实现
-#+BEGIN_SRC python
+#+begin_src python
 # coding: utf-8
 # author: vonng(fengruohang@outlook.com)
 # ctime: 2017-05-10
@@ -5117,9 +5117,9 @@ if __name__ == '__main__':
     train_data, valid_data, test_data = mnist_loader.load_data_wrapper()
     net = Network([784, 100, 10])
     net.gradient_descent(train_data, test_data, epoches=50, m=10, eta=0.1, lmd=5.0)
-#+END_SRC
+#+end_src
 
-#+BEGIN_EXAMPLE
+#+begin_example
 Round {0}: {9348}/{10000}
 Round {1}: {9538}/{10000}
 Round {2}: {9589}/{10000}
@@ -5133,7 +5133,7 @@ Round {27}: {9806}/{10000}
 Round {28}: {9804}/{10000}
 Round {29}: {9804}/{10000}
 Round {30}: {9802}/{10000}
-#+END_EXAMPLE
+#+end_example
 
 可见只是简单的变更，就使准确率有了显著提高，最终收敛至98%。
 
@@ -5205,110 +5205,110 @@ heading will show up as unnumbered in both the post body and the TOC.
 :END:
 Here are few variables that you might like to change in the =local.mk=:
 - =prefix= :: Org installation directory
-  #+BEGIN_SRC makefile
+  #+begin_src makefile
   prefix = /dir/where/you/want/to/install/org # Default: /usr/share
-  #+END_SRC
+  #+end_src
   The =.el= files will go to =$(prefix)/emacs/site-lisp/org= by
               default. If you'd like to change that, you can tweak the
               =lispdir= variable.
 - =infodir= :: Org Info installation directory. I like to keep the
                    Info file for development version of Org in a separate
                    directory.
-  #+BEGIN_SRC makefile
+  #+begin_src makefile
   infodir = $(prefix)/org/info # Default: $(prefix)/info
-  #+END_SRC
+  #+end_src
 - =ORG_MAKE_DOC= :: Types of Org documentation you'd like to build by
                     default.
-  #+BEGIN_SRC makefile
+  #+begin_src makefile
   # Define below you only need info documentation, the default includes html and pdf
   ORG_MAKE_DOC = info pdf card # html
-  #+END_SRC
+  #+end_src
 - =ORG_ADD_CONTRIB= :: Packages from the =contrib/= directory that
      you'd like to build along with Org. Below are the ones on my
      /must-have/ list.
-  #+BEGIN_SRC makefile
+  #+begin_src makefile
   # Define if you want to include some (or all) files from contrib/lisp
   # just the filename please (no path prefix, no .el suffix), maybe with globbing
   #   org-eldoc - Headline breadcrumb trail in minibuffer
   #   ox-extra - Allow ignoring just the heading, but still export the body of those headings
   #   org-mime - Convert org buffer to htmlized format for email
   ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime
-  #+END_SRC
+  #+end_src
 
 Here's an example of an =emacs-lisp= block:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvar emacs-version-short (format "%s_%s"
                                     emacs-major-version emacs-minor-version)
   "A variable to store the current emacs versions as <MAJORVER>_<MINORVER>.
 So, for emacs version 25.0.50.1, this variable will be 25_0.")
-#+END_SRC
+#+end_src
 ** Source block with line numbers examples
 :PROPERTIES:
 :CUSTOM_ID: source-block-with-line-numbers-examples
 :END:
-#+BEGIN_SRC org :noweb-ref src-block-n-default-start
-,#+BEGIN_SRC emacs-lisp -n
+#+begin_src org :noweb-ref src-block-n-default-start
+,#+begin_src emacs-lisp -n
 ;; this will export with line number 1 (default)
 (message "This is line 2")
-,#+END_SRC
-#+END_SRC
+,#+end_src
+#+end_src
 
-#+BEGIN_SRC org :noweb-ref src-block-n-custom-start
-,#+BEGIN_SRC emacs-lisp -n 20
+#+begin_src org :noweb-ref src-block-n-custom-start
+,#+begin_src emacs-lisp -n 20
 ;; this will export with line number 20
 (message "This is line 21")
-,#+END_SRC
-#+END_SRC
+,#+end_src
+#+end_src
 
-#+BEGIN_SRC org :noweb-ref src-block-n-default-continue
-,#+BEGIN_SRC emacs-lisp +n
+#+begin_src org :noweb-ref src-block-n-default-continue
+,#+begin_src emacs-lisp +n
 ;; This will be listed as line 22
 (message "This is line 23")
-,#+END_SRC
-#+END_SRC
+,#+end_src
+#+end_src
 
-#+BEGIN_SRC org :noweb-ref src-block-n-custom-continue
-,#+BEGIN_SRC emacs-lisp +n 10
+#+begin_src org :noweb-ref src-block-n-custom-continue
+,#+begin_src emacs-lisp +n 10
 ;; This will be listed as line 33
 (message "This is line 34")
-,#+END_SRC
-#+END_SRC
+,#+end_src
+#+end_src
 ** Source block with line highlighting examples
 :PROPERTIES:
 :CUSTOM_ID: source-block-with-line-highlighting-examples
 :END:
-#+BEGIN_SRC org :noweb-ref src-block-hl-without-n
-,#+BEGIN_SRC emacs-lisp :hl_lines 1,3-5
+#+begin_src org :noweb-ref src-block-hl-without-n
+,#+begin_src emacs-lisp :hl_lines 1,3-5
 (message "This is line 1")
 (message "This is line 2")
 (message "This is line 3")
 (message "This is line 4")
 (message "This is line 5")
 (message "This is line 6")
-,#+END_SRC
-#+END_SRC
+,#+end_src
+#+end_src
 
-#+BEGIN_SRC org :noweb-ref src-block-hl-with-n-not-1
-,#+BEGIN_SRC emacs-lisp -n 7 :hl_lines 1,3-5
+#+begin_src org :noweb-ref src-block-hl-with-n-not-1
+,#+begin_src emacs-lisp -n 7 :hl_lines 1,3-5
 (message "This is line 7 in code, but line 1 for highlighting reference")
 (message "This is line 8 in code, but line 2 for highlighting reference")
 (message "This is line 9 in code, but line 3 for highlighting reference")
 (message "This is line 10 in code, but line 4 for highlighting reference")
 (message "This is line 11 in code, but line 5 for highlighting reference")
 (message "This is line 12 in code, but line 6 for highlighting reference")
-,#+END_SRC
-#+END_SRC
+,#+end_src
+#+end_src
 
-#+BEGIN_SRC org :noweb-ref src-block-hl-with-n
-,#+BEGIN_SRC emacs-lisp -n :hl_lines 1,3-5
+#+begin_src org :noweb-ref src-block-hl-with-n
+,#+begin_src emacs-lisp -n :hl_lines 1,3-5
 (message "This is line 1")
 (message "This is line 2")
 (message "This is line 3")
 (message "This is line 4")
 (message "This is line 5")
 (message "This is line 6")
-,#+END_SRC
-#+END_SRC
+,#+end_src
+#+end_src
 ** Lorem Ipsum
 :PROPERTIES:
 :CUSTOM_ID: lorem-ipsum

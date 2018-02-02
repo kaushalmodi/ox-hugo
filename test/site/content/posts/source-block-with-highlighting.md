@@ -10,14 +10,14 @@ draft = false
 #### Org source {#org-source}
 
 ```org
-#+BEGIN_SRC emacs-lisp :hl_lines 1,3-5
+#+begin_src emacs-lisp :hl_lines 1,3-5
 (message "This is line 1")
 (message "This is line 2")
 (message "This is line 3")
 (message "This is line 4")
 (message "This is line 5")
 (message "This is line 6")
-#+END_SRC
+#+end_src
 ```
 
 
@@ -59,14 +59,14 @@ Note 2
 #### Org source {#org-source}
 
 ```org
-#+BEGIN_SRC emacs-lisp -n 7 :hl_lines 1,3-5
+#+begin_src emacs-lisp -n 7 :hl_lines 1,3-5
 (message "This is line 7 in code, but line 1 for highlighting reference")
 (message "This is line 8 in code, but line 2 for highlighting reference")
 (message "This is line 9 in code, but line 3 for highlighting reference")
 (message "This is line 10 in code, but line 4 for highlighting reference")
 (message "This is line 11 in code, but line 5 for highlighting reference")
 (message "This is line 12 in code, but line 6 for highlighting reference")
-#+END_SRC
+#+end_src
 ```
 
 
@@ -88,14 +88,14 @@ Note 2
 #### Org source {#org-source}
 
 ```org
-#+BEGIN_SRC emacs-lisp -n :hl_lines 1,3-5
+#+begin_src emacs-lisp -n :hl_lines 1,3-5
 (message "This is line 1")
 (message "This is line 2")
 (message "This is line 3")
 (message "This is line 4")
 (message "This is line 5")
 (message "This is line 6")
-#+END_SRC
+#+end_src
 ```
 
 

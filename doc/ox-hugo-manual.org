@@ -1,19 +1,19 @@
-#+TITLE: Ox-Hugo Manual
-#+AUTHOR: Kaushal Modi
+#+title: Ox-Hugo Manual
+#+author: Kaushal Modi
 
-#+HUGO_BASE_DIR: .
-#+HUGO_SECTION: doc
+#+hugo_base_dir: .
+#+hugo_section: doc
 
-#+OPTIONS: creator:t
+#+options: creator:t
 
-#+MACRO: imageclick [[file:./static/images/$1][file:/images/$1]]
-#+MACRO: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
-#+MACRO: issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
-#+MACRO: bfissue Blackfriday #[[https://github.com/russross/blackfriday/issues/$1][$1]]
-#+MACRO: hugoissue Hugo #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
-#+MACRO: ox-hugo-test-file  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]]
-#+MACRO: doc [[/doc/$1][$2]]
-#+MACRO: user @[[https://github.com/$1][*$1*]]
+#+macro: imageclick [[file:./static/images/$1][file:/images/$1]]
+#+macro: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
+#+macro: issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+#+macro: bfissue Blackfriday #[[https://github.com/russross/blackfriday/issues/$1][$1]]
+#+macro: hugoissue Hugo #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
+#+macro: ox-hugo-test-file  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]]
+#+macro: doc [[/doc/$1][$2]]
+#+macro: user @[[https://github.com/$1][*$1*]]
 
 * Changelog
 :PROPERTIES:
@@ -32,10 +32,10 @@
 - Support exporting =resources= front-matter (Hugo v0.33+) --
   {{{issue(115)}}}.
 - Support exporting =headless= front-matter (Hugo v0.35+).
-- Advanced table styling is now possible by specifying =#+ATTR_HTML=
-  and =#+ATTR_CSS= (this one is unique to =ox-hugo=) above Org
+- Advanced table styling is now possible by specifying =#+attr_html=
+  and =#+attr_css= (this one is unique to =ox-hugo=) above Org
   tables. See its [[https://ox-hugo.scripter.co/doc/table-styling/][documentation]] -- {{{issue(93)}}}.
-  - Similarly, support =#+ATTR_HTML= and =#+ATTR_CSS= for paragraphs,
+  - Similarly, support =#+attr_html= and =#+attr_css= for paragraphs,
     example blocks, source blocks, plain lists and quote blocks too --
     {{{issue(113)}}}.
 - Now =publishdate= and =expirydate= front-matter properties get
@@ -46,23 +46,23 @@
     =HUGO_PUBLISHDATE= and =HUGO_EXPIRYDATE= properties too.
 - Export source blocks and table captions -- {{{issue(38)}}}. Here's a
   suggested CSS for the captions:
-  #+BEGIN_SRC css
+  #+begin_src css
   figcaption,
   .src-block-caption,
   .table-caption {
       font-style: italic;
       text-align: center;
   }
-  #+END_SRC
+  #+end_src
 - Export descriptive or definition lists in Blackfriday-friendly
   Markdown format -- {{{issue(114)}}}.
 - Support Org Special Blocks [[https://www.gnu.org/software/emacs/manual/html_node/org/Special-blocks.html][like in HTML and LaTeX exports]] --
   {{{issue(105)}}}. Here's one little example:
-  #+BEGIN_SRC org
-  ,#+BEGIN_mark
+  #+begin_src org
+  ,#+begin_mark
   /Some/ *marked* text
-  ,#+END_mark
-  #+END_SRC
+  ,#+end_mark
+  #+end_src
 - Allow setting =:EXPORT_HUGO_SECTION:= in the valid Hugo post subtree
   itself.
 - Enable replacing any key in the front-matter with anything; it's
@@ -75,15 +75,15 @@
   v0.32+).
 *** Backward-incompatible changes
 - A "better user-experience" change.. now you do not need to use
-  /double-underscores/ as /space/ replacement in =#+HUGO_TAGS=,
-  =#+HUGO_CATEGORIES= and =#+KEYWORDS=. See this commit for details
+  /double-underscores/ as /space/ replacement in =#+hugo_tags=,
+  =#+hugo_categories= and =#+keywords=. See this commit for details
   and examples -- {{{commit(319435db)}}}.
 *** Fixes
 - Fix =HUGO_LEVEL_OFFSET= not getting set -- {{{issue(117)}}}, thanks
   {{{user(shimmy1996)}}}!
 - Fix internal subtree counter not getting reset after a file-based
   export.
-- Fix clickable image links with =#+NAME= -- {{{commit(fef0ec50)}}}.
+- Fix clickable image links with =#+name= -- {{{commit(fef0ec50)}}}.
 - Make title text rendering more robust.. now Markdown markup
   characters like =*=, =_= and =`= show up fine, verbatim, in the
   title.
@@ -107,7 +107,7 @@
   {{{issue(99)}}}.
 - Support specifying multiple [[https://gohugo.io/templates/output-formats/][hugo output formats]] .. Now the =outputs=
   front-matter variable is a list.
-- Support the Org =#+AUTHOR= and =#+CREATOR= keywords and their
+- Support the Org =#+author= and =#+creator= keywords and their
   respective Org Export Options -- {{{issue(106)}}}.
 - Support Org Export Snippets and Export Blocks --
   {{{commit(1149f20cd)}}}.
@@ -203,11 +203,11 @@
 *** Features
 - Export TOC as a Markdown ordered list. See {{{doc(org-toc,Table of
   Contents)}}} -- {{{issue(88)}}}.
-- =#+ATTR_HTML= above http/https/ftp links is now supported (useful
+- =#+attr_html= above http/https/ftp links is now supported (useful
   for specifying the =target=, =rel=, attributes, for example).
 ** v0.4.1 <2017-10-29 Sun>
 *** Features
-- Support specifying the =:height= parameter in the =#+ATTR_HTML=
+- Support specifying the =:height= parameter in the =#+attr_html=
   above image links. That eventually gets transformed to the =height=
   parameter in the =figure= tag in the HTML generated by Hugo. This
   feature requires building Hugo from its master branch with commit
@@ -216,28 +216,28 @@
 - Fix =EXPORT_HUGO_SECTION= not getting inherited {{{issue(90)}}}.
 ** v0.4 <2017-10-28 Sat>
 *** Backward-incompatible changes
-- Restore the default Org behavior of =#+TAGS=. Now that keyword (and
+- Restore the default Org behavior of =#+tags=. Now that keyword (and
   the =EXPORT_TAGS= property) is *not* used by =ox-hugo=. Fixes
   {{{issue(89)}}}.
-- File-based exports must now use =#+HUGO_TAGS= to set the post tags.
+- File-based exports must now use =#+hugo_tags= to set the post tags.
 - Subtree-based exports can use the =EXPORT_HUGO_TAGS= property to
   override Org-style tags on the same headline (and the ones inherited
   from Org-style tags from any of the parent subtrees and
-  =#+FILETAGS=).
-  - Note that for subtree-based exports, =#+FILETAGS= can be used to
-    set tags globally in the file. Earlier =#+TAGS= was used for that
+  =#+filetags=).
+  - Note that for subtree-based exports, =#+filetags= can be used to
+    set tags globally in the file. Earlier =#+tags= was used for that
     purpose.
 - Subtree-based exports can use the =EXPORT_HUGO_CATEGORIES= property
   to override Org-style categories (tags with "@" prefix) on the same
   headline (and the ones inherited from Org-style categories from any
-  of the parent subtrees and =#+FILETAGS=).
-  - Note that for subtree-based exports, =#+FILETAGS= can be used to
+  of the parent subtrees and =#+filetags=).
+  - Note that for subtree-based exports, =#+filetags= can be used to
     set categories (tags with "@") globally in the file.
 
 See the new section added to documentation:
 {{{doc(tags-and-categories,*Tags and Categories*)}}}
 *** Features
-- Support specifying the =:width= parameter in the =#+ATTR_HTML= above
+- Support specifying the =:width= parameter in the =#+attr_html= above
   image links. That eventually gets transformed to the =width=
   parameter in the =figure= tag in the HTML generated by Hugo.
 ** v0.3.2 <2017-10-24 Tue>
@@ -270,7 +270,7 @@ See the new section added to documentation:
 - Now =ox-hugo= by default requires text, to be sub/super-scripted, to
   be wrapped in ={}=. So now =a_b= will be exported as =a_b=, but
   =a_{b}= will be exported as =a<sub>b</sub>=. To revert back to the
-  earlier behavior, user needs to add =#+OPTIONS: ^:t= to their Org
+  earlier behavior, user needs to add =#+options: ^:t= to their Org
   file.
 ** v0.2.1 <2017-09-28 Thu>
 *** Fixes
@@ -297,7 +297,7 @@ See the new section added to documentation:
 - Switch the default value of =org-hugo-use-code-for-kbd= option to
   =nil= [[[https://github.com/kaushalmodi/ox-hugo/commit/88ba15ae9bc809b0983315446c88fecfda3534e5][88ba15ae]]].
 ** v0.1.3 <2017-09-13 Wed>
-- Now a HUGO key value set to ="nil"=, like =#+HUGO_CODE_FENCE: nil=,
+- Now a HUGO key value set to ="nil"=, like =#+hugo_code_fence: nil=,
   will evaluate as /nil/ instead of /t/, as now
   =org-hugo--plist-get-true-p= is used to parse boolean keys instead
   of =plist-get=.
@@ -320,19 +320,19 @@ See the new section added to documentation:
 :EXPORT_HUGO_MENU: :menu main
 :CUSTOM_ID: main
 :END:
-#+INCLUDE: "./ox-hugo-manual.org::#introduction" :only-contents t
+#+include: "./ox-hugo-manual.org::#introduction" :only-contents t
 ** Screenshots
-#+INCLUDE: "./ox-hugo-manual.org::#screenshots_intro" :only-contents t
-#+INCLUDE: "./ox-hugo-manual.org::#screenshots" :only-contents t
+#+include: "./ox-hugo-manual.org::#screenshots_intro" :only-contents t
+#+include: "./ox-hugo-manual.org::#screenshots" :only-contents t
 
-#+INCLUDE: "./ox-hugo-manual.org::#demo" :minlevel 2
+#+include: "./ox-hugo-manual.org::#demo" :minlevel 2
 
 ** Installation
-#+INCLUDE: "./ox-hugo-manual.org::#installation" :only-contents t
+#+include: "./ox-hugo-manual.org::#installation" :only-contents t
 ** Usage
-#+INCLUDE: "./ox-hugo-manual.org::#usage" :only-contents t
+#+include: "./ox-hugo-manual.org::#usage" :only-contents t
 ** Thanks
-#+INCLUDE: "./ox-hugo-manual.org::#thanks" :only-contents t
+#+include: "./ox-hugo-manual.org::#thanks" :only-contents t
 ** Future Plans                                                    :noexport:
 There is a plan to create a =hugo.el= that would do things like:
 - New post creation using =org-capture= (port code from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]]).
@@ -363,7 +363,7 @@ There is a plan to create a =hugo.el= that would do things like:
 :EXPORT_FILE_NAME: changelog
 :EXPORT_HUGO_MENU: :menu main
 :END:
-#+INCLUDE: "./ox-hugo-manual.org::#changelog" :only-contents t
+#+include: "./ox-hugo-manual.org::#changelog" :only-contents t
 * Reused Sections
 ** Introduction
 :PROPERTIES:
@@ -392,22 +392,22 @@ Dispatcher/ menu (the one you see when you hit =C-c C-e= to initiate
 any export).
 
 You can do that by adding the below to your config:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (with-eval-after-load 'ox
   (require 'ox-hugo))
-#+END_SRC
+#+end_src
 If you use =use-package=, you can do the below instead:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ox-hugo
   :after ox)
-#+END_SRC
+#+end_src
 
 *Spacemacs*
 
 Spacemacs users can choose to add this snippet to their
 =dotspacemacs/user-config= function in =.spacemacs=:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun dotspacemacs/user-config ()
   ;; Other stuff
   ;; ..
@@ -416,7 +416,7 @@ Spacemacs users can choose to add this snippet to their
   (use-package ox-hugo
     :ensure t                           ;Auto-install the package from Melpa
     :after ox))
-#+END_SRC
+#+end_src
 
 If you do so, you *also need to* add =ox-hugo= to
 =dotspacemacs-additional-packages=.
@@ -441,9 +441,9 @@ Before you export check that these properties are set as you need:
                    under the =content/= directory in the site root
                    directory ([[http://gohugo.io/content/organization/][ref]]). If you try to export without
                    setting this property, you will get this error:
-  #+BEGIN_EXAMPLE
+  #+begin_example
   user-error: It is mandatory to set the HUGO_BASE_DIR property
-  #+END_EXAMPLE
+  #+end_example
 
 *Important*: If you choose to export an Org subtree as a post, you
  need to set the =EXPORT_FILE_NAME= subtree property. That property is
@@ -458,13 +458,13 @@ The common =ox-hugo= export bindings are:
     A /valid Hugo post subtree/ is an Org subtree has the
     =EXPORT_FILE_NAME= property set.
   - If the file is intended to be exported as a whole (i.e. has the
-    =#+TITLE= keyword), export the whole Org file to a Hugo post in
+    =#+title= keyword), export the whole Org file to a Hugo post in
     Markdown.
 - =C-c C-e H A= :: Export *all* "What I Mean"
   - If the Org file has one or more 'valid Hugo post subtrees', export
     them to Hugo posts in Markdown.
   - If the file is intended to be exported as a whole (i.e. no 'valid
-    Hugo post subtrees' at all, and has the =#+TITLE= keyword), export
+    Hugo post subtrees' at all, and has the =#+title= keyword), export
     the whole Org file to a Hugo post in Markdown.
 **** For only the one-post-per-file flow
 - =C-c C-e H h= :: Export the Org file to a Hugo post in Markdown.
@@ -504,7 +504,7 @@ as it makes the meta-data management for Hugo front-matter pretty
 effortless.
 
 If you are a /one Org-file per post/ type of a person, that flow works
-too! Just note that in this flow many of those =#+HUGO_= properties
+too! Just note that in this flow many of those =#+hugo_= properties
 need to be managed manually.. just as one would manage the front-matter
 in Markdown files --- See the Org versions in the above screenshots for
 comparison.
@@ -604,9 +604,9 @@ error backtrace,
 :PROPERTIES:
 :EXPORT_FILE_NAME: why-ox-hugo
 :END:
-#+BEGIN_VERSE
+#+begin_verse
 >    A picture is worth a thousand words.
-#+END_VERSE
+#+end_verse
 
 So let me show you this screenshot that took on my phone (running
 Emacs in Termux app on Android), showing the single Org file that
@@ -663,10 +663,10 @@ translate to Hugo front-matter:
 :END:
 If you are considering to try out =ox-hugo=, and if you have already
 been using Hugo, it is normal for this thought to cross your mind:
-#+BEGIN_QUOTE
+#+begin_quote
 I already have dozens or hundreds of posts written in Markdown. Do I
 need to convert them to Org if I want to start using =ox-hugo=?
-#+END_QUOTE
+#+end_quote
 
 The answer is *No*.
 
@@ -686,12 +686,12 @@ have the exported Markdown files.
 :PROPERTIES:
 :EXPORT_FILE_NAME: installation
 :END:
-#+INCLUDE: "./ox-hugo-manual.org::#installation" :only-contents t
+#+include: "./ox-hugo-manual.org::#installation" :only-contents t
 *** Usage
 :PROPERTIES:
 :EXPORT_FILE_NAME: usage
 :END:
-#+INCLUDE: "./ox-hugo-manual.org::#usage" :only-contents t
+#+include: "./ox-hugo-manual.org::#usage" :only-contents t
 *** How do I try =ox-hugo= on my site?
 :PROPERTIES:
 :EXPORT_FILE_NAME: how-do-I-try-it
@@ -699,9 +699,9 @@ have the exported Markdown files.
 1. =cd= to your Hugo site base directory -- the one that contains the
    =config.toml= (or =config.yaml= or =config.json=).
 2. Start the =hugo server= in that directory:
-   #+BEGIN_EXAMPLE
+   #+begin_example
    hugo server -D --navigateToChanged
-   #+END_EXAMPLE
+   #+end_example
 3. Above command will mention the localhost where the site is
    served. Open that in your browser.
 4. Create a separate directory for Org content in the Hugo site base
@@ -743,7 +743,7 @@ to set that up for either of the above two blogging flows.
 :PROPERTIES:
 :EXPORT_FILE_NAME: screenshots
 :END:
-#+INCLUDE: "./ox-hugo-manual.org::#screenshots" :only-contents t
+#+include: "./ox-hugo-manual.org::#screenshots" :only-contents t
 *** Hugo test site for this package
 :PROPERTIES:
 :EXPORT_FILE_NAME: tests-site
@@ -758,31 +758,31 @@ Org->Hugo content and meta-data translation features. [[https://github.com/kaush
 exported Markdown files.
 **** How to try =ox-hugo= on that site?
 1. Clone this repo:
-   #+BEGIN_EXAMPLE
+   #+begin_example
    git clone --recursive -j8 https://github.com/kaushalmodi/ox-hugo
-   #+END_EXAMPLE
+   #+end_example
 2. Start the =hugo= server:
-   #+BEGIN_EXAMPLE
+   #+begin_example
    make serve HUGO_BASE_DIR=test/site
-   #+END_EXAMPLE
+   #+end_example
 3. Open =http://localhost:1337= in your browser.
 4. In a different terminal, =cd= to the repo directory.
 5. Run:
-   #+BEGIN_EXAMPLE
+   #+begin_example
    make md
-   #+END_EXAMPLE
+   #+end_example
 6. In few seconds, hundreds of test posts will get created, with the
    =hugo server= aided preview in the browser zapping through each new
    created post.
 **** Alternative way
 1. Clone this repo.
-   #+BEGIN_EXAMPLE
+   #+begin_example
    git clone --recursive -j8 https://github.com/kaushalmodi/ox-hugo
-   #+END_EXAMPLE
+   #+end_example
 2. =cd= to the =test/site/= directory and do:
-   #+BEGIN_EXAMPLE
+   #+begin_example
    hugo server -D --navigateToChanged
-   #+END_EXAMPLE
+   #+end_example
 3. Above command will mention the localhost where the site is
    served. Open that in your browser.
 4. In emacs, =(require  'ox-hugo)= or evaluate the =ox-hugo.el= from the
@@ -809,8 +809,8 @@ in Org.
 Below, where /subtree/ is mentioned, it implies a *valid Hugo-post
 subtree* i.e. an Org subtree that has the =EXPORT_FILE_NAME= property
 set.
-#+CAPTION: Hugo front-matter translation for subtree-based exports
-#+ATTR_HTML: :class sane-table
+#+caption: Hugo front-matter translation for subtree-based exports
+#+attr_html: :class sane-table
 |-------------------------------------------+----------------------------------------+----------------------------------------------------------------------------|
 | Hugo front-matter (TOML)                  | Org                                    | Org description                                                            |
 |-------------------------------------------+----------------------------------------+----------------------------------------------------------------------------|
@@ -822,7 +822,7 @@ set.
 | =expirydate = 2999-01-01T00:00:00-05:00=  | =DEADLINE: <2999-01-01 Tue>=           | Auto-inserted =DEADLINE= subtree property using default =C-c C-d= binding  |
 | =expirydate = 2999-01-01T00:00:00-05:00=  | =:EXPORT_HUGO_EXPIRYDATE: 2999-01-01:=  | Subtree property                                                           |
 | =lastmod = <current date>=                | =:EXPORT_HUGO_AUTO_SET_LASTMOD: t=     | Subtree property                                                           |
-| =lastmod = <current date>=                | =#+HUGO_AUTO_SET_LASTMOD: t=           | Org keyword                                                                |
+| =lastmod = <current date>=                | =#+hugo_auto_set_lastmod: t=           | Org keyword                                                                |
 | =tags = ["toto", "zulu"]=                 | =* foo :toto:zulu:=                     | Subtree heading tags                                                       |
 | =categories = ["x", "y"]=                 | =* foo :@x:@y:=                         | Subtree heading tags with =@= prefix                                       |
 | =draft = true=                            | =* TODO foo=                           | Subtree heading Org Todo state set to =TODO= (or =DRAFT=)                  |
@@ -832,24 +832,24 @@ set.
 |-------------------------------------------+----------------------------------------+----------------------------------------------------------------------------|
 ***** Notes
 - Precedence for =date= parsing: =CLOSED= subtree property /more than/
-  =EXPORT_DATE= subtree property /more than/ =#+DATE:= keyword.
+  =EXPORT_DATE= subtree property /more than/ =#+date:= keyword.
 **** For file-based exports
-#+CAPTION: Hugo front-matter translation for file-based exports
-#+ATTR_HTML: :class sane-table
+#+caption: Hugo front-matter translation for file-based exports
+#+attr_html: :class sane-table
 |-------------------------------------------+--------------------------------------|
 | Hugo front-matter (TOML)                  | Org                                  |
 |-------------------------------------------+--------------------------------------|
-| =title = "foo"=                           | =#+TITLE: foo=                       |
-| =date = 2017-07-24=                       | =#+DATE: 2017-07-24=                 |
-| =publishdate = 2018-01-26T00:00:00-05:00= | =#+HUGO_PUBLISHDATE: 2018-01-26=     |
-| =expirydate = 2999-01-01T00:00:00-05:00=  | =#+HUGO_EXPIRYDATE: 2999-01-01=      |
-| =lastmod = <current date>=                | =#+HUGO_AUTO_SET_LASTMOD: t=         |
-| =tags = ["toto", "zulu"]=                 | =#+HUGO_TAGS: toto zulu=             |
-| =categories = ["x", "y"]=                 | =#+HUGO_CATEGORIES: x y=             |
-| =draft = true=                            | =#+HUGO_DRAFT: true=                 |
-| =draft = false=                           | =#+HUGO_DRAFT: false= (default)      |
-| =weight = 123=                            | =#+HUGO_WEIGHT: 123=                 |
-| =weight = 123= (in =[menu.foo]=)          | =#+HUGO_MENU: :menu foo :weight 123= |
+| =title = "foo"=                           | =#+title: foo=                       |
+| =date = 2017-07-24=                       | =#+date: 2017-07-24=                 |
+| =publishdate = 2018-01-26T00:00:00-05:00= | =#+hugo_publishdate: 2018-01-26=     |
+| =expirydate = 2999-01-01T00:00:00-05:00=  | =#+hugo_expirydate: 2999-01-01=      |
+| =lastmod = <current date>=                | =#+hugo_auto_set_lastmod: t=         |
+| =tags = ["toto", "zulu"]=                 | =#+hugo_tags: toto zulu=             |
+| =categories = ["x", "y"]=                 | =#+hugo_categories: x y=             |
+| =draft = true=                            | =#+hugo_draft: true=                 |
+| =draft = false=                           | =#+hugo_draft: false= (default)      |
+| =weight = 123=                            | =#+hugo_weight: 123=                 |
+| =weight = 123= (in =[menu.foo]=)          | =#+hugo_menu: :menu foo :weight 123= |
 |-------------------------------------------+--------------------------------------|
 ***** Notes
 - The auto weight calculation for posts and menu items works *only*
@@ -865,8 +865,8 @@ the exported =.md= files.
 
 See the Org source in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]] under /Formatting/ -> /General/
 heading and how it exports to Markdown in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/general-formatting.md][=general-formatting.md=]].
-#+CAPTION: Org markup to Markdown markup
-#+ATTR_HTML: :class sane-table
+#+caption: Org markup to Markdown markup
+#+attr_html: :class sane-table
 |--------------------+--------------------------------------------------------------------|
 | Org                | Markdown                                                           |
 |--------------------+--------------------------------------------------------------------|
@@ -910,19 +910,19 @@ site's /static/ directory.
 
 See the below examples on how to reference images in different ways:
 ***** Inline image (Unhyperlinked)
-#+BEGIN_SRC org
+#+begin_src org
 [[/images/foo.png]]
-#+END_SRC
+#+end_src
 ***** Inline image (Hyperlinked to the image itself)
-#+BEGIN_SRC org
+#+begin_src org
 [[file:/images/foo.png][file:/images/foo.png]]
-#+END_SRC
+#+end_src
 - NOTE :: The =file:= prefix *has to be used* in both Link and
           Description components of the Org link.
 ***** Link to an image (Image not inlined)
-#+BEGIN_SRC org
+#+begin_src org
 [[/images/foo.png][Click here to see foo.png]]
-#+END_SRC
+#+end_src
 This style of linking will work for references to non-image files in
 the /static/ directory too.
 **** References to files *outside* the /static/ directory
@@ -937,9 +937,9 @@ directory *and* (ii) if it has one of the extensions listed in
 file is copied by =ox-hugo= to the /static/ directory.
 
 Here is an example link:
-#+BEGIN_SRC org
+#+begin_src org
 [[~/some-dir/static/images/foo.png]]
-#+END_SRC
+#+end_src
 ***** Source path contains =/static/=
 If you link to files outside of the Hugo =static= directory, just
 ensure that the path contains the string =/static/= /if you like to
@@ -949,8 +949,8 @@ created inside the /static/ directory to preserve the structure.
 Example translations between outside =static= directory paths to the
 copied location inside =static=:
 
-#+CAPTION: Where files get copied to if their path contains =static/=
-#+ATTR_HTML: :class sane-table
+#+caption: Where files get copied to if their path contains =static/=
+#+attr_html: :class sane-table
 |----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------|
 | File location outside =static=   | Copied-to location inside =static=        | Explanation                                                                                              |
 |----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------|
@@ -965,17 +965,17 @@ section to learn how to set the *HUGO_BASE_DIR*.
 ***** Source path does not contain =/static/=
 Here is an example link where the source path does not contain
 =/static/=:
-#+BEGIN_SRC org
+#+begin_src org
 [[~/some-dir/bar/foo.png]]
-#+END_SRC
+#+end_src
 
 In this case, that file is copied directly to the
 =org-hugo-default-static-subdirectory-for-externals= sub-directory
 (=ox-hugo/= by default) within the Hugo static directory. No directory
 structure generation happens in this case.
 
-#+CAPTION: Where files get copied to if their path *does not* contain =static/=
-#+ATTR_HTML: :class sane-table
+#+caption: Where files get copied to if their path *does not* contain =static/=
+#+attr_html: :class sane-table
 |--------------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|
 | File location outside =static= | Copied-to location inside =static=       | Explanation                                                                                                                 |
 |--------------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------|
@@ -1000,11 +1000,11 @@ code-fencing with triple-backticks when possible.
 
 Example:
 
-#+BEGIN_SRC md
+#+begin_src md
 ```emacs-lisp
 (message "Hello")
 ```
-#+END_SRC
+#+end_src
 
 - Note :: It is necessary to set the Hugo site config variable
           =pygmentsCodeFences= to =true= for syntax highlighting to
@@ -1027,7 +1027,7 @@ information.
 Here are some examples fetched from the "Source blocks with line
 number annotation" test case in the {{{ox-hugo-test-file}}}.
 
-#+INCLUDE: "../test/site/content-org/all-posts.org::#source-block-line-number-cases" :only-contents t
+#+include: "../test/site/content-org/all-posts.org::#source-block-line-number-cases" :only-contents t
 **** Highlighting
 Implementing this feature was interesting, because while Org doesn't
 have a syntax to enable highlighting only specific lines, the Hugo
@@ -1049,15 +1049,15 @@ If a user wants to highlight lines 1, and then 3 to 5, they would add
 =:hl_lines 1,3-5= to the source block header.
 # Below 2 include statements fetch the noweb references used in the
 # code inserted by the following include statements.
-#+INCLUDE: "../test/site/content-org/all-posts.org::#source-block-with-line-numbers-examples"
-#+INCLUDE: "../test/site/content-org/all-posts.org::#source-block-with-line-highlighting-examples"
+#+include: "../test/site/content-org/all-posts.org::#source-block-with-line-numbers-examples"
+#+include: "../test/site/content-org/all-posts.org::#source-block-with-line-highlighting-examples"
 ***** Without line numbers
-#+INCLUDE: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-no-linenums" :only-contents t
+#+include: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-no-linenums" :only-contents t
 ***** With line numbers
 The Org source for the below is similar to the above, except that the
 =-n= switch is also added to enable the line numbers.
 
-#+INCLUDE: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-with-linenums-not-starting-from-1" :only-contents t
+#+include: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-with-linenums-not-starting-from-1" :only-contents t
 *** Tags and Categories
 :PROPERTIES:
 :EXPORT_FILE_NAME: tags-and-categories
@@ -1068,24 +1068,24 @@ For subtree-based exports, the Hugo front-matter =tags= values are
 derived from Org tags set for the post subtree headline.
 
 Example:
-#+BEGIN_SRC org
+#+begin_src org
 ,* My post                                                         :tag1:tag2:
-#+END_SRC
+#+end_src
 
 By default, Org tags from parent headlines, and the tags set in the
-=#+FILETAGS= keyword get inherited (as the default value of
+=#+filetags= keyword get inherited (as the default value of
 =org-use-tag-inheritance= is =t=). If the tag inheritance doesn't work
 as expected, check that the value of that variable is set as required.
 
 If the =EXPORT_HUGO_TAGS= property is set for a valid Hugo post
 subtree, the value of that property will *completely override* the Org
 tags set even on that subtree, the inherited values of Org-style tags
-from parent headlines and even =#+FILETAGS=.
+from parent headlines and even =#+filetags=.
 ****** Marking files to not be exported
 Note that if you want to prevent a file from getting exported, you can
 assign a special tag to the whole file (example: =no_no_dont_export=),
-but that tag *has to be set using the =#+FILETAGS= keyword*
-(=#+HUGO_TAGS= keyword is *only* for setting the tags in Hugo
+but that tag *has to be set using the =#+filetags= keyword*
+(=#+hugo_tags= keyword is *only* for setting the tags in Hugo
 front-matter). This applies to both, file-based and subtree-based[fn:2]
 export flows.
 
@@ -1093,22 +1093,22 @@ Then in your batch export setup, add that special tag to the
 =org-export-exclude-tags= variable. You can grep through this repo for
 the special tag =dont_export_during_make_test= that is used to mark
 few Org files to not be exported during =make test=.
-****** Why use =#+FILETAGS= and not =#+TAGS=?
-- About =#+FILETAGS= -- [[https://orgmode.org/manual/Tag-inheritance.html][Tag Inheritance]] or =C-h i g (org) Tag
+****** Why use =#+filetags= and not =#+tags=?
+- About =#+filetags= -- [[https://orgmode.org/manual/Tag-inheritance.html][Tag Inheritance]] or =C-h i g (org) Tag
   inheritance=
-- About =#+TAGS= -- [[https://orgmode.org/manual/Setting-tags.html][Setting Tags]] or =C-h i g (org) Setting tags=
+- About =#+tags= -- [[https://orgmode.org/manual/Setting-tags.html][Setting Tags]] or =C-h i g (org) Setting tags=
 ***** Categories
 For subtree-based exports, the Hugo front-matter =categories= values
 are derived from Org tags set for the post subtree headline, but only
 the ones prefixed with *@*.
 
 Example:
-#+BEGIN_SRC org
+#+begin_src org
 ,* My post                                                       :@cat1:@cat2:
-#+END_SRC
+#+end_src
 
 As with the tags, by default, the categories (Org tags with "@"
-prefix) from parent headlines, and the ones set in the =#+FILETAGS=
+prefix) from parent headlines, and the ones set in the =#+filetags=
 keyword too get inherited (as the default value of
 =org-use-tag-inheritance= is =t=). If the tag inheritance doesn't work
 as expected, check that the value of that variable is set as required.
@@ -1116,13 +1116,13 @@ as expected, check that the value of that variable is set as required.
 If the =EXPORT_HUGO_CATEGORIES= property is set for a valid Hugo post
 subtree, the value of that property will *completely override* the
 categories set even on that subtree, the inherited values of
-categories from parent headlines and even =#+FILETAGS=.
+categories from parent headlines and even =#+filetags=.
 **** File-based Export
 The tag (and category) inheritance does not apply to the file-based
-export flow. So =#+FILETAGS= will have no effect in this flow.
+export flow. So =#+filetags= will have no effect in this flow.
 
-- To set tags, use =#+HUGO_TAGS=.
-- To set categories, use =#+HUGO_CATEGORIES=.
+- To set tags, use =#+hugo_tags=.
+- To set categories, use =#+hugo_categories=.
 **** Hyphens and Spaces in Org tags (and categories)
 Hyphens and spaces are not allowed in Org tags (=* Heading :TAG:=).
 
@@ -1146,11 +1146,11 @@ always export /single underscores/ as underscores, set
 =org-hugo-prefer-hyphen-in-tags= to nil.
 
 - NOTE :: These two variables *also affect* the tags set via
-          =#+FILETAGS= keyword (which is used only in subtree-based
+          =#+filetags= keyword (which is used only in subtree-based
           exported Org files).
 
-These variables do not affect the tags set via keywords =#+HUGO_TAGS=,
-=#+HUGO_CATEGORIES= or =#+KEYWORDS= (or their respective subtree
+These variables do not affect the tags set via keywords =#+hugo_tags=,
+=#+hugo_categories= or =#+keywords= (or their respective subtree
 property forms), because Org keywords and properties allow using the
 hyphen and space (/in "double-quoted strings"/) characters. So the
 underscores in these keywords remain untransformed on export.
@@ -1171,9 +1171,9 @@ the Markdown source.
 
 Though, the advantage of Org-generated TOC is that you get finer
 control on:
-- Where to include the TOC --- Location of the =#+TOC= keyword in the
+- Where to include the TOC --- Location of the =#+toc= keyword in the
   Org content.
-- How many headlines to include in the TOC --- /Example: =#+TOC:
+- How many headlines to include in the TOC --- /Example: =#+toc:
   headlines 2=/ or =:EXPORT_OPTIONS: toc:2=.
 - Whether you want *all* the headlines in the TOC to be numbered or
   not --- See =org-hugo-export-with-section-numbers=.
@@ -1192,19 +1192,19 @@ Hugo-generated one, you can do it one of these many ways:
    like ~toc:t~ or ~toc:2~.
 3. Above two options will insert the TOC between the front-matter and
    the Markdown content. If you'd like to insert the Org-generated TOC
-   anywhere else in the post, you can do it using the =#+TOC=
-   keyword.. Example: =#+TOC: headlines 2=.
+   anywhere else in the post, you can do it using the =#+toc=
+   keyword.. Example: =#+toc: headlines 2=.
 
 See Org manual [[https://orgmode.org/manual/Table-of-contents.html][Table of Contents]] section for more info.
 
-/Note that =ox-hugo= does not support =#+TOC: listings= and =#+TOC:
+/Note that =ox-hugo= does not support =#+toc: listings= and =#+toc:
 tables=./
 *** Table Styling
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-styling
 :END:
 Classic =ox-html= allows setting table attributes directly using
-=#+ATTR_HTML=. But specifying the attributes directly in the =<table>=
+=#+attr_html=. But specifying the attributes directly in the =<table>=
 tag is [[https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints][admonished in HTML5]] .. /and so Hugo/Blackfriday do not allow
 any way to directly insert attributes *inside* the =<table>= tag./
 
@@ -1213,64 +1213,64 @@ tags with classes, which a user can then use to style the tables using
 CSS.. /just as recommended by HTML5/ :smile:.
 
 =ox-hugo= can style different tables in different ways on the same
-page, with the help of =#+ATTR_HTML= and =#+ATTR_CSS= (*introduced in
+page, with the help of =#+attr_html= and =#+attr_css= (*introduced in
 =ox-hugo=*) attributes.
 
-1. =#+ATTR_HTML= is used to assign one or more classes to a table.
-   #+BEGIN_SRC org
-   ,#+ATTR_HTML: :class sane-table
-   #+END_SRC
+1. =#+attr_html= is used to assign one or more classes to a table.
+   #+begin_src org
+   ,#+attr_html: :class sane-table
+   #+end_src
    - Wraps the table in =<div>= tags with =sane-table= class.
-   - Sets style from =#+ATTR_CSS=, if present, for =.sane-table table=
+   - Sets style from =#+attr_css=, if present, for =.sane-table table=
      scope.
 
    or
 
-   #+BEGIN_SRC org
-   ,#+ATTR_HTML: :class zebra-striping sane-table
-   #+END_SRC
+   #+begin_src org
+   ,#+attr_html: :class zebra-striping sane-table
+   #+end_src
    - Wraps the table in =<div>= tags with =zebra-striping= *and*
      =sane-table= classes.
-   - Sets style from =#+ATTR_CSS=, if present, *only* for the
+   - Sets style from =#+attr_css=, if present, *only* for the
      =.zebra-striping table= scope i.e. only for the first class
      listed in that attribute. Specifying multiple classes to a table
      is useful if you want that table to inherit the styling from CSS
      rules for multiple classes.
-2. =#+ATTR_CSS= is used to assign the specified styles to the
+2. =#+attr_css= is used to assign the specified styles to the
    class of the table it precedes.
 
    Examples:
-   #+BEGIN_SRC org
-   ,#+ATTR_CSS: :width 80%
-   #+END_SRC
+   #+begin_src org
+   ,#+attr_css: :width 80%
+   #+end_src
 
-   #+BEGIN_SRC org
-   ,#+ATTR_CSS: :text-align left
-   #+END_SRC
+   #+begin_src org
+   ,#+attr_css: :text-align left
+   #+end_src
 
-   - If =#+ATTR_HTML= is used to specify the table class, the style is
+   - If =#+attr_html= is used to specify the table class, the style is
      applied to the first of the list of classes (as explained above).
-   - If =#+ATTR_HTML= is *not* used to set a custom class name for the
+   - If =#+attr_html= is *not* used to set a custom class name for the
      table, the class name is auto-derived..
-     - If the table =#+CAPTION= is present, the class name is
+     - If the table =#+caption= is present, the class name is
        =table-N= where "N" is the /Nth/ captioned table on that page.
      - If the table is not captioned, the class name is always
        =table-nocaption=. So.. if you want to have different styling
        for different tables, make sure that you either set their
-       custom class name using =#+ATTR_HTML=, or caption them.
+       custom class name using =#+attr_html=, or caption them.
 
 
 - All tables exported with the =<div>= tags have the class
   =ox-hugo-table=. This can be useful if you want to set a common
   style for all those tables.
-- =#+ATTR_CSS= applies styling only to the =.CLASS table= scope. So if
+- =#+attr_css= applies styling only to the =.CLASS table= scope. So if
   you want more styling i.e. for other elements like =td=, =tr=, etc,
-  you would need to do that in an =#+EXPORT_BEGIN html= block.
+  you would need to do that in an =#+export_begin html= block.
 
   Example:
 
-  #+BEGIN_SRC org
-  ,#+BEGIN_EXPORT html
+  #+begin_src org
+  ,#+begin_export html
   <style>
   .my-table th,
   .my-table td {
@@ -1278,17 +1278,17 @@ page, with the help of =#+ATTR_HTML= and =#+ATTR_CSS= (*introduced in
       text-align: left;
   }
   </style>
-  ,#+END_EXPORT
-  ,#+CAPTION: Table with verbatim CSS
-  ,#+ATTR_HTML: :class my-table
+  ,#+end_export
+  ,#+caption: Table with verbatim CSS
+  ,#+attr_html: :class my-table
   | h1  | h2  | h3  |
   |-----+-----+-----|
   | abc | def | ghi |
-  #+END_SRC
+  #+end_src
 
 You can find many examples of table styling here:
-#+CAPTION: Table Styling Examples
-#+ATTR_HTML: :class sane-table
+#+caption: Table Styling Examples
+#+attr_html: :class sane-table
 | Org Source                                                                                   | Exported Markdown | Hugo HTML   |
 |----------------------------------------------------------------------------------------------+-------------------+-------------|
 | {{{ox-hugo-test-file}}} -- search for =* Table Styling= or =:EXPORT_FILE_NAME: table-styling= | [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/table-styling.md][table-styling.md]]  | [[https://ox-hugo.scripter.co/test/posts/table-styling/][Hugo output]] |
@@ -1314,13 +1314,13 @@ This step applies whether you intend to use the /per-subtree export
 flow/ or the /per-file/ export flow.
 ****** Step 1a: Set up the =after-save-hook=
 1. Add below to the very-end of your Org file:
-   #+BEGIN_SRC org
+   #+begin_src org
    ,* Footnotes
    ,* COMMENT Local Variables                          :ARCHIVE:
    # Local Variables:
    # eval: (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local)
    # End:
-   #+END_SRC
+   #+end_src
    *About Footnotes*: Here I recommend adding the =* Footnotes= header
    too so that in case you add any Org footnotes, they go directly to
    that section you created. Otherwise, Org will auto-create a new
@@ -1344,7 +1344,7 @@ Org Capture.
 
 /If you don't do the below, auto-exports would happen as soon as you
 =C-c C-c= on your initial capture.. which could get annoying./
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (with-eval-after-load 'org-capture
   ;; Do not cause auto Org->Hugo export to happen when saving captures
   (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
@@ -1359,14 +1359,14 @@ Enable `org-hugo-export-wim-to-md-after-save'."
 
   (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
   (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
-#+END_SRC
+#+end_src
 ***** Alternative =after-save-hook= setup only for /per-file/ flow
 This step applies *only* to the /per-file/ export flow.
 ****** Step 1: Set up the =after-save-hook= (only for /per-file/ flow)
 If you use a seperate Org file for each blog post, you can add the
 below to your config *instead* of doing the above. Skip /Step 1b/
 below altogether if you use this alternative.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ox-hugo
   :ensure t
   :after ox
@@ -1377,7 +1377,7 @@ below altogether if you use this alternative.
   (defun my/org-hugo-publish-current-buffer-as-post ()
     "Export the current Org file if a valid Hugo post.
 Current file is exported using `org-hugo-export-to-md' if it
-contains the #+TITLE keyword and is present in the
+contains the #+title keyword and is present in the
 `my/hugo-org-content-dir'."
     (let ((fname (buffer-file-name)))
       (when (and fname
@@ -1385,8 +1385,10 @@ contains the #+TITLE keyword and is present in the
                                  fname))
         (save-excursion
           (goto-char (point-min))
-          (if (< (how-many "^#\\+TITLE:") 1)
-              (message "Unable to export as the Org file is missing the #+TITLE keyword.")
+          (if (< (let ((case-fold-search t))
+                   (how-many "^#\\+title:"))
+                 1)
+              (message "Unable to export as the Org file is missing the #+title keyword.")
             (org-hugo-export-to-md))))))
 
   (defun my/org-mode-hook-fn ()
@@ -1394,7 +1396,7 @@ contains the #+TITLE keyword and is present in the
     (add-hook 'after-save-hook #'my/org-hugo-publish-current-buffer-as-post :append :local))
 
   (add-hook 'org-mode-hook #'my/org-mode-hook-fn))
-#+END_SRC
+#+end_src
 **** Steps that /might/ need to be taken every time
 Once the initial setup is done, the following steps apply to both
 blogging flows.
@@ -1407,16 +1409,16 @@ support for the awesome =--navigateToChanged= switch!
 
 Run below in your Hugo site root (the directory that contains the site
 =config.toml=) to start the server:
-#+BEGIN_EXAMPLE
+#+begin_example
 hugo server -D --navigateToChanged
-#+END_EXAMPLE
+#+end_example
 ***** Step 3: Open your browser
 By default the site is served locally on port /1313/ on
 /localhost/. So the above step would have printed something like below
 at the end:
-#+BEGIN_EXAMPLE
+#+begin_example
 Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
-#+END_EXAMPLE
+#+end_example
 
 So open your favorite browser pointing to that address.
 **** FINAL step that needs to be taken every time
@@ -1436,7 +1438,7 @@ Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
 :END:
 If you do not want to manually type the =EXPORT_FILE_NAME= for each
 new post, here is an example Org Capture template can help:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;; Populates only the EXPORT_FILE_NAME property in the inserted headline.
 (with-eval-after-load 'org-capture
   (defun org-hugo-new-subtree-post-capture-template ()
@@ -1462,16 +1464,16 @@ See `org-capture-templates' for more information."
                  ;; symlink pointing to the actual location of all-posts.org!
                  (file+olp "all-posts.org" "Blog Ideas")
                  (function org-hugo-new-subtree-post-capture-template))))
-#+END_SRC
+#+end_src
 
 Above capture will auto-insert a heading prefixed with =TODO=. With
 =org-log-done= set to ='time=, on changing the =TODO= state to the
 =DONE= state (=C-c C-t=), a [[https://orgmode.org/manual/Special-properties.html][/Special Property/]] called =CLOSED= will be
 auto-inserted below the heading. Below is an example.
-#+BEGIN_EXAMPLE
+#+begin_example
 ,*** DONE Narrowing the Author column in Magit                       :org:log:
 CLOSED: [2017-12-18 Mon 16:36]
-#+END_EXAMPLE
+#+end_example
 =ox-hugo= auto-sets the =date= field in the front-matter to the time
 stamp in that =CLOSED= property.
 **** Alternative way to set the =date= field
@@ -1479,7 +1481,7 @@ If you prefer to not insert time-stamps when switching to the =DONE=
 state (i.e. you have =org-log-done= at its default value of =nil=),
 you can explicitly insert the =EXPORT_DATE= property too using the
 below Org Capture template instead.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;; Populates both EXPORT_FILE_NAME and EXPORT_DATE properties in the inserted
 ;; headline.
 (with-eval-after-load 'org-capture
@@ -1509,7 +1511,7 @@ See `org-capture-templates' for more information."
                  ;; symlink pointing to the actual location of all-posts.org!
                  (file+olp "all-posts.org" "Blog Ideas")
                  (function org-hugo-new-subtree-post-capture-template))))
-#+END_SRC
+#+end_src
 *** Images in Content
 :PROPERTIES:
 :EXPORT_FILE_NAME: images-in-content
@@ -1536,7 +1538,7 @@ manually. And the right hand side shows the structure that =ox-hugo=
 will generate in the =content/= and =static/= (the /conventional/ way
 discussed above) directories.
 
-#+BEGIN_EXAMPLE
+#+begin_example
 ./content-org
 ├── images-in-content/
 │  ├── images-in-content.org
@@ -1550,7 +1552,7 @@ discussed above) directories.
 └── post4/
    ├── post4.org                 →  ./content/images-in-content/post4.md
    └── org-copy.png              →  ./static/ox-hugo/org-copy.png
-#+END_EXAMPLE
+#+end_example
 
 Have a look at the
 [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/images-in-content/images-in-content.org][=content-org/images-in-content/images-in-content.org=]] file for an
@@ -1598,17 +1600,17 @@ for writing your posts in Org, there are examples for both in the
 :PROPERTIES:
 :EXPORT_FILE_NAME: contributing-guide
 :END:
-#+INCLUDE: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
+#+include: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
 *** Debug
 :PROPERTIES:
 :EXPORT_FILE_NAME: debug
 :END:
-#+INCLUDE: "./ox-hugo-manual.org::#debug" :only-contents t
+#+include: "./ox-hugo-manual.org::#debug" :only-contents t
 *** Test
 :PROPERTIES:
 :EXPORT_FILE_NAME: test
 :END:
-#+INCLUDE: "./ox-hugo-manual.org::#test" :only-contents t
+#+include: "./ox-hugo-manual.org::#test" :only-contents t
 * Footnotes
 
 [fn:2] For only subtree-based exports, you can set that special tag as

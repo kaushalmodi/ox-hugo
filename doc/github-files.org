@@ -1,18 +1,18 @@
-#+TITLE: GitHub Ancillary Files
-#+AUTHOR: Kaushal Modi
+#+title: GitHub Ancillary Files
+#+author: Kaushal Modi
 
-#+MACRO: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
-#+MACRO: issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
-#+MACRO: bfissue Blackfriday # [[https://github.com/russross/blackfriday/issues/$1][$1]]
-#+MACRO: hugoissue Hugo #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
-#+MACRO: imageclick [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1]]
-#+MACRO: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
-#+MACRO: travis [[https://travis-ci.org/kaushalmodi/ox-hugo][https://travis-ci.org/kaushalmodi/ox-hugo.svg?branch=master]]
-#+MACRO: melpa [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]]
-#+MACRO: GPLv3 [[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPL%20v3-blue.svg]]
-#+MACRO: gitter [[https://gitter.im/KaushalModi/Lobby][https://badges.gitter.im/KaushalModi/Lobby.svg]]
-#+MACRO: saythanks [[https://saythanks.io/to/kaushalmodi][https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg]]
-#+MACRO: user @[[https://github.com/$1][*$1*]]
+#+macro: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
+#+macro: issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+#+macro: bfissue Blackfriday # [[https://github.com/russross/blackfriday/issues/$1][$1]]
+#+macro: hugoissue Hugo #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
+#+macro: imageclick [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1]]
+#+macro: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
+#+macro: travis [[https://travis-ci.org/kaushalmodi/ox-hugo][https://travis-ci.org/kaushalmodi/ox-hugo.svg?branch=master]]
+#+macro: melpa [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]]
+#+macro: GPLv3 [[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPL%20v3-blue.svg]]
+#+macro: gitter [[https://gitter.im/KaushalModi/Lobby][https://badges.gitter.im/KaushalModi/Lobby.svg]]
+#+macro: saythanks [[https://saythanks.io/to/kaushalmodi][https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg]]
+#+macro: user @[[https://github.com/$1][*$1*]]
 
 * Readme                                                             :readme:
 :PROPERTIES:
@@ -23,13 +23,13 @@
 
 {{{gitter}}} {{{saythanks}}}
 
-#+INCLUDE: "./ox-hugo-manual.org::#introduction" :only-contents t
+#+include: "./ox-hugo-manual.org::#introduction" :only-contents t
 ** Table of Contents                                                    :TOC:
 # TOC will be inserted here by `toc-org' package when running
 # `ox-hugo-export-gh-doc'.
 ** Screenshots                                                   :noexport_1:
-#+INCLUDE: "./ox-hugo-manual.org::#screenshots_intro" :only-contents t
-#+INCLUDE: "./ox-hugo-manual.org::#screenshots" :only-contents t
+#+include: "./ox-hugo-manual.org::#screenshots_intro" :only-contents t
+#+include: "./ox-hugo-manual.org::#screenshots" :only-contents t
 ** Documentation
 =ox-hugo= uses *itself* to generate its documentation!
 
@@ -49,23 +49,23 @@ doc_md=.
 The documentation site is published by first using =ox-hugo= to
 export from Org to Markdown, and then finally =hugo=.
 /So no Markdown files are committed in the =doc/content/= directory./
-#+INCLUDE: "./ox-hugo-manual.org::#demo" :minlevel 2
+#+include: "./ox-hugo-manual.org::#demo" :minlevel 2
 
 ** Installation
-#+INCLUDE: "./ox-hugo-manual.org::#installation" :only-contents t
+#+include: "./ox-hugo-manual.org::#installation" :only-contents t
 ** Usage
-#+INCLUDE: "./ox-hugo-manual.org::#usage" :only-contents t
+#+include: "./ox-hugo-manual.org::#usage" :only-contents t
 ** Changelog                                                     :noexport_1:
-#+INCLUDE: "./ox-hugo-manual.org::#changelog" :only-contents t
+#+include: "./ox-hugo-manual.org::#changelog" :only-contents t
 ** Thanks
-#+INCLUDE: "./ox-hugo-manual.org::#thanks" :only-contents t
+#+include: "./ox-hugo-manual.org::#thanks" :only-contents t
 * Contributing                                                 :contributing:
 :PROPERTIES:
 :EXPORT_TITLE: Contributing Guide
 :EXPORT_FILE_NAME: CONTRIBUTING
 :END:
-#+INCLUDE: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
+#+include: "./ox-hugo-manual.org::#note-to-future-contributors" :only-contents t
 ** Debug
-#+INCLUDE: "./ox-hugo-manual.org::#debug" :only-contents t
+#+include: "./ox-hugo-manual.org::#debug" :only-contents t
 ** Test
-#+INCLUDE: "./ox-hugo-manual.org::#test" :only-contents t
+#+include: "./ox-hugo-manual.org::#test" :only-contents t

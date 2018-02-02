@@ -9,7 +9,7 @@ Some text.
 > Some quoted text.
 >
 > ```text
-> #+NAME: some_example
+> #+name: some_example
 > (some-example)
 > ```
 

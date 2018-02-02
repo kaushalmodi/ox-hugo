@@ -1,8 +1,8 @@
-#+HUGO_BASE_DIR: ../
-#+SEQ_TODO: TODO DRAFT DONE
-#+HUGO_MENU: :menu "auto weight"
+#+hugo_base_dir: ../
+#+seq_todo: TODO DRAFT DONE
+#+hugo_menu: :menu "auto weight"
 
-#+AUTHOR:
+#+author:
 
 * Post with menu 1 (HUGO_MENU as keyword)
 :PROPERTIES:

@@ -2295,6 +2295,40 @@ Above limitation is not posed if the image is inlined:
 [[https://orgmode.org/img/org-mode-unicorn-logo.png][https://orgmode.org/img/org-mode-unicorn-logo.png]] i.e. the =target=
 attribute will be added to the =<a>= tag correctly, as the =figure=
 shortcode is not used for inline images.
+** External Links                                            :external_links:
+:PROPERTIES:
+:EXPORT_FILE_NAME: external-links
+:EXPORT_OPTIONS: broken-links:t
+:END:
+- [[ftp://ftp.gnu.org/gnu/emacs/][Emacs download (FTP)]]
+- [[https://orgmode.org][Org mode (HTTPS)]]
+- [[http://some.insecure.site][Dummy http link]]
+*** Gopher link support
+{{{oxhugoissue(132)}}}
+# - [[gopher://some.gopher.site][Dummy gopher link]]
+
+The /gopher/ link support requires user to add something like this to
+their user config:
+#+begin_src emacs-lisp
+(with-eval-after-load 'org
+  (defun org-link-gopher-export-link (link desc format)
+    "Create export version of LINK and DESC to FORMAT."
+    (let ((link (concat "gopher:" link)))
+      (cond
+       ((eq format 'html)
+        (format "<a href=\"%s\">%s</a>" link desc))
+       ((eq format 'latex)
+        (format "\\href{%s}{%s}" link desc))
+       (t                               ;`ascii', `md', `hugo', etc.
+        (format "[%s](%s)" desc link)))))
+  (org-link-set-parameters "gopher" :export #'org-link-gopher-export-link))
+#+end_src
+
+Once that is evaluated, links like these will export fine i.e. no
+"Unable to resolve link" errors:
+#+begin_src org
+[[gopher://some.gopher.site][Dummy gopher link]]
+#+end_src
 ** Within the same post (Internal links)                     :internal_links:
 *** Link to headings by name                     :toc:headings:export_option:
 :PROPERTIES:

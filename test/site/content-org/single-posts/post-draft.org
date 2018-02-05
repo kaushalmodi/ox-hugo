@@ -1,8 +1,6 @@
 #+title: Single Post, but draft
 #+author:
 #+date: 2017-07-20
-#+hugo_publishdate: 2017-07-22
-#+hugo_expirydate: 2017-07-23
 
 #+hugo_base_dir: ../../
 

@@ -1,8 +1,6 @@
 ---
 title: "Single Post with YAML front matter"
 date: 2017-07-20
-publishDate: 2017-07-22
-expiryDate: 2017-07-23
 tags: ["single", "yaml"]
 categories: ["cat1", "cat2"]
 draft: false

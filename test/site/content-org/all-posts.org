@@ -10,6 +10,9 @@
 #+macro: bfissue /Blackfriday/ Issue #[[https://github.com/russross/blackfriday/issues/$1][$1]]
 #+macro: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
 
+# https://scripter.co/latex-in-html/
+#+macro: latex @@html:<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>@@
+
 #+author:
 
 * Preparation
@@ -2638,6 +2641,31 @@ $$ (tm) (TM) $$
 \[ (r) (R) \]
 \[ (c) (C) \]
 \[ (tm) (TM) \]
+** Indented equations block                                        :indented:
+:PROPERTIES:
+:EXPORT_FILE_NAME: indented-equations
+:END:
+*** No indentation
+\begin{equation}
+\label{eq:1}
+C = W\log_{2} (1+\mathrm{SNR})
+\end{equation}
+*** With indentation
+{{{oxhugoissue(128)}}}
+
+    \begin{equation}
+    \label{eq:2}
+    C = W\log_{2} (1+\mathrm{SNR})
+    \end{equation}
+
+Above equation (/{{{latex}}} environment/) is the same as the first
+one, but:
+- It is indented in the Org source.
+
+  /This test verifies that the indentation is auto-removed in the
+  exported Markdown file./
+- It has a different label (=\label{eq:2}= instead of =\label{eq:1}=);
+  Mathjax *requires the equation labels to be unique*.
 * Lists                                                               :lists:
 ** List following a list
 :PROPERTIES:

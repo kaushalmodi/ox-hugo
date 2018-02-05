@@ -538,7 +538,8 @@ INFO is a plist holding contextual information."
     ;; (message "[ox-bf-processing-type DBG] processing-type: %s" processing-type)
     (cond
      ((memq processing-type '(t mathjax))
-      (let* ((latex-env (org-element-property :value latex-environment))
+      (let* ((latex-env (org-remove-indentation
+                         (org-element-property :value latex-environment)))
              (env (org-html-format-latex latex-env 'mathjax info))
              (env (org-blackfriday-escape-chars-in-equation env)))
         ;; (message "[ox-bf-latex-env DBG] latex-env: %s" latex-env)

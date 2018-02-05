@@ -4,14 +4,38 @@
 
 #+hugo_base_dir: ../../
 #+hugo_section: singles
-#+hugo_tags: single toml
+#+hugo_tags: single toml "cross-link"
 #+hugo_categories: cat1 cat2
 #+hugo_menu: :menu "foo" :weight 10 :parent main :identifier single-toml
 
 This is a single post. You do not need to set the =EXPORT_FILE_NAME=
 property in here. But then you also lose the tag and property
 inheritance Org awesomeness.
+
 * First heading in this post
 This is a under first heading.
 * Second heading in this post
 This is a under second heading.
+* Cross-linking
+All of the below linked Org files *have to have* exported posts using
+the /per-file/ flow, and they *cannot be* page bundles or have set a
+different =#+export_file_name= --- See =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/131][131]] for
+requirements for this basic cross-linking to work as expected.
+** Link to file in the same directory
+This file will export the front-matter in TOML (default). See
+[[file:post-yaml.org]] that exports that in YAML.
+** Link + Description
+Here's the same link with description: [[file:post-yaml.org][Post exported with YAML
+front-matter]].
+** Link to file in a different directory
+[[file:../images-in-content/post3/post3.org]].
+** Link to file that has a Hugo slug set
+This one is magic! You can link to the Org file, no matter what slug
+is set in the exported file.. Hugo will do the job of translating from
+the Markdown file name to the actual link/slug.
+
+[[file:post-with-slug.org]]
+* Local Variables :ARCHIVE:
+# Local Variables:
+# org-link-file-path-type: relative
+# End:

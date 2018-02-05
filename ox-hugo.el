@@ -1781,9 +1781,12 @@ and rewrite link paths to make blogging more seamless."
                      (concat type ":" raw-path))
                     (;; Remove the "file://" prefix.
                      (string= type "file")
-                     (let* ((path1 (org-export-file-uri (funcall link-org-files-as-md raw-path)))
-                            (path1 (replace-regexp-in-string "\\`file://" "" path1)))
-                       (org-hugo--attachment-rewrite-maybe path1 info)))
+                     (let ((path1 (replace-regexp-in-string "\\`file://" "" raw-path)))
+                       (if (string= ".org" (downcase (file-name-extension path1 ".")))
+                           (format "{{< relref \"%s\" >}}"
+                                   (file-name-sans-extension
+                                    (file-name-nondirectory path1)))
+                         (org-hugo--attachment-rewrite-maybe path1 info))))
                     (t
                      raw-path)))
              (link-param-str (org-string-nw-p (org-trim link-param-str))))
@@ -1817,7 +1820,9 @@ and rewrite link paths to make blogging more seamless."
                     (org-link-unescape path))))
          ;; Neither link description, nor link attributes.
          (t
-          (format "<%s>" path))))))))
+          (if (string-prefix-p "{{< relref " path)
+              (format "[%s](%s)" path path)
+            (format "<%s>" path)))))))))
 
 ;;;;; Helpers
 (defun org-hugo--attachment-rewrite-maybe (path info)

@@ -6,13 +6,33 @@
 #+hugo_front_matter_format: yaml
 
 #+hugo_section: singles
-#+hugo_tags: single yaml
+#+hugo_tags: single yaml "cross-link"
 #+hugo_categories: cat1 cat2
 #+hugo_menu: :menu "foo" :weight 10 :parent main :identifier single-yaml
 
 This is a single post. You do not need to set the =EXPORT_FILE_NAME=
 property in here. But then you also lose the tag and property
 inheritance, TODO state, etc. Org awesomeness.
+
+This file will export the front-matter in YAML (because
+=#+hugo_front_matter_format: yaml=). See [[file:post-toml.org]] that
+exports that in TOML.
+
+Here's the same link with description: [[file:post-toml.org][Post exported with TOML
+front-matter]].
+
+Here's an example with relative link to an Org file:
+[[file:../images-in-content/post4/post4.org]].
+
+-----
+
+All of the above linked Org files *have to* export posts using
+/per-file/ flow, and they *cannot be* page bundles or have slugs --- See
+=ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/131][131]] for requirements for this basic cross-linking to
+work as expected.
+
+-----
+
 * First heading in this post
 This is a under first heading.
 * Second heading in this post

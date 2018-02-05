@@ -1,0 +1,10 @@
+#+title: Post with slug
+#+author:
+
+#+hugo_base_dir: ../../
+#+hugo_section: singles
+#+hugo_tags: single slug
+#+hugo_slug: post-with-slug-xyz
+
+This post is exported to =post-with-slug.md=, but it has slug set to
+=post-with-slug-xyz=.

@@ -2285,7 +2285,7 @@ Above is a link to an image.
 - The =width= attribute of /10%/ though must apply *only* to the
   image, and not to the link.
 - Clicking that image will open the linked image in the same browser
-  tab because of the =target​="_self"= attribute (*because of the
+  tab because of the ~target="_self"~ attribute (*because of the
   custom shortcode* --- see below).
 
 

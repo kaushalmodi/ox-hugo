@@ -2588,6 +2588,32 @@ Here's the same image again, but with a different Org link ID:
 *Here we refer to image [[img__org_logo1]].*
 -----
 Reference: [[https://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
+*** Links to equations                                            :equations:
+:PROPERTIES:
+:EXPORT_FILE_NAME: links-to-equations
+:END:
+{{{oxhugoissue(130)}}}
+
+\begin{equation}
+\label{eq:1}
+C = W\log_{2} (1+\mathrm{SNR})
+\end{equation}
+
+*Here we refer to equation \ref{eq:2}.*
+
+Below, /lorem-ipsum/ is added to increase page content so that the
+link jump is evident:
+
+#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
+
+Here's the same equation again, but with a different label:
+
+\begin{equation}
+\label{eq:2}
+C = W\log_{2} (1+\mathrm{SNR})
+\end{equation}
+
+*Here we refer to equation \ref{eq:1}.*
 * Equations                                                       :equations:
 ** Inline equations
 :PROPERTIES:

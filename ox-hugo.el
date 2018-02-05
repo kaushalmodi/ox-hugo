@@ -1589,10 +1589,10 @@ channel."
       (org-md-keyword keyword contents info)))))
 
 ;;;; Links
-(defun org-hugo-link (link contents info)
+(defun org-hugo-link (link desc info)
   "Convert LINK to Markdown format.
 
-CONTENTS is the link's description.
+DESC is the link's description.
 INFO is a plist used as a communication channel.
 
 Unlike `org-md-link', this function will also copy local images
@@ -1610,7 +1610,7 @@ and rewrite link paths to make blogging more seamless."
     ;; (message "[ox-hugo-link DBG] link type: %s" type)
     (cond
      ;; Link type is handled by a special function.
-     ((org-export-custom-protocol-maybe link contents 'md))
+     ((org-export-custom-protocol-maybe link desc 'md))
      ((member type '("custom-id" "id" "fuzzy"))
       (let ((destination (if (string= type "fuzzy")
                              (org-export-resolve-fuzzy-link link info)
@@ -1618,8 +1618,8 @@ and rewrite link paths to make blogging more seamless."
         (pcase (org-element-type destination)
           (`plain-text                  ;External file
            (let ((path (funcall link-org-files-as-md destination)))
-             (if contents
-                 (format "[%s](%s)" contents path)
+             (if desc
+                 (format "[%s](%s)" desc path)
                (format "<%s>" path))))
           (`headline                 ;Links of type [[* Some heading]]
            (let ((title (org-export-data (org-element-property :title destination) info)))
@@ -1627,7 +1627,7 @@ and rewrite link paths to make blogging more seamless."
              (format
               "[%s](#%s)"
               ;; Description
-              (cond ((org-string-nw-p contents))
+              (cond ((org-string-nw-p desc))
                     ((org-export-numbered-headline-p destination info)
                      (mapconcat #'number-to-string
                                 (org-export-get-headline-number destination info)
@@ -1641,7 +1641,7 @@ and rewrite link paths to make blogging more seamless."
                   ))))
           (_
            (let ((description
-                  (or (org-string-nw-p contents)
+                  (or (org-string-nw-p desc)
                       (let ((number (org-export-get-ordinal
                                      destination info
                                      nil #'org-html--has-caption-p)))
@@ -1659,7 +1659,7 @@ and rewrite link paths to make blogging more seamless."
                        (org-export-get-reference destination info))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
       ;; (message "[ox-hugo-link DBG] Inline image: %s" raw-path)
-      ;; (message "[org-hugo-link DBG] processing an image: %s" contents)
+      ;; (message "[org-hugo-link DBG] processing an image: %s" desc)
       (let* ((path (org-hugo--attachment-rewrite-maybe raw-path info))
              (parent (org-export-get-parent link))
              (parent-type (org-element-type parent))
@@ -1746,10 +1746,10 @@ and rewrite link paths to make blogging more seamless."
             (format "{{< figure %s >}}" (org-trim figure-param-str)))))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
-        (format (org-export-get-coderef-format ref contents)
+        (format (org-export-get-coderef-format ref desc)
                 (org-export-resolve-coderef ref info))))
      ((equal type "radio")
-      contents)
+      desc)
      (t
       (let* ((link-param-str "")
              (path (cond
@@ -1787,32 +1787,37 @@ and rewrite link paths to make blogging more seamless."
                     (t
                      raw-path)))
              (link-param-str (org-string-nw-p (org-trim link-param-str))))
-        (if contents
-            (progn
-              ;; (message "[ox-hugo-link DBG] contents=%s path=%s" contents path)
-              ;; (message "[ox-hugo-link DBG] link-param-str=%s" link-param-str)
-              (cond
-               (;; If `contents' is a `figure' shortcode but doesn't
-                ;; already have the `link' parameter set.
-                (and (string-match-p "\\`{{<\\s-*figure\\s-+" contents)
-                     (not (string-match-p "\\`{{<\\s-*figure\\s-+.*link=" contents)))
-                (replace-regexp-in-string "\\s-*>}}\\'"
-                                          (format " link=\"%s\"\\&" path)
-                                          contents))
-               (link-param-str
-                (format "<a href=\"%s\" %s>%s</a>"
-                        (org-html-encode-plain-text path)
-                        link-param-str
-                        (org-link-unescape contents)))
-               (t
-                (format "[%s](%s)" contents path))))
-          (if link-param-str
-              (let ((path (org-html-encode-plain-text path)))
-                (format "<a href=\"%s\" %s>%s</a>"
-                        path
-                        link-param-str
-                        (org-link-unescape path)))
-            (format "<%s>" path))))))))
+        ;; (message "[ox-hugo-link DBG] desc=%s path=%s" desc path)
+        ;; (message "[ox-hugo-link DBG] link-param-str=%s" link-param-str)
+        (cond
+         ;; Link description is a `figure' shortcode but does not
+         ;; already have the `link' parameter set.
+         ((and desc
+               (string-match-p "\\`{{<\\s-*figure\\s-+" desc)
+               (not (string-match-p "\\`{{<\\s-*figure\\s-+.*link=" desc)))
+          (replace-regexp-in-string "\\s-*>}}\\'"
+                                    (format " link=\"%s\"\\&" path)
+                                    desc))
+         ;; Both link description and link attributes are present.
+         ((and desc
+               link-param-str)
+          (format "<a href=\"%s\" %s>%s</a>"
+                  (org-html-encode-plain-text path)
+                  link-param-str
+                  (org-link-unescape desc)))
+         ;; Only link description, but no link attributes.
+         (desc
+          (format "[%s](%s)" desc path))
+         ;; Only link attributes, but no link description.
+         (link-param-str
+          (let ((path (org-html-encode-plain-text path)))
+            (format "<a href=\"%s\" %s>%s</a>"
+                    path
+                    link-param-str
+                    (org-link-unescape path))))
+         ;; Neither link description, nor link attributes.
+         (t
+          (format "<%s>" path))))))))
 
 ;;;;; Helpers
 (defun org-hugo--attachment-rewrite-maybe (path info)

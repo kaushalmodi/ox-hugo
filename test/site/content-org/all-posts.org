@@ -3526,8 +3526,7 @@ c
 Above, /a/, /b/ and /c/ must appear on separate lines.
 *** Hard line break (TOML)                                             :toml:
 :PROPERTIES:
-:EXPORT_FILE_NAME: blackfriday-ext-hardlinebreak-wrong-case-toml
-:EXPORT_DATE: 2017-08-02
+:EXPORT_FILE_NAME: blackfriday-ext-hardlinebreak-toml
 :EXPORT_HUGO_BLACKFRIDAY: :extensions hardLineBreak
 :END:
 a
@@ -3537,8 +3536,7 @@ c
 Above, /a/, /b/ and /c/ must appear on separate lines.
 *** Hard line break (YAML)                                             :yaml:
 :PROPERTIES:
-:EXPORT_FILE_NAME: blackfriday-ext-hardlinebreak-wrong-case-toml
-:EXPORT_DATE: 2017-08-02
+:EXPORT_FILE_NAME: blackfriday-ext-hardlinebreak-yaml
 :EXPORT_HUGO_BLACKFRIDAY: :extensions hardLineBreak
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
 :END:

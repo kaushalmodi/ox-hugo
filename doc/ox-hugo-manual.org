@@ -321,7 +321,7 @@ See the new section added to documentation:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_TYPE: homepage
 :EXPORT_HUGO_SECTION: /
-:EXPORT_HUGO_MENU: :menu main
+:EXPORT_HUGO_MENU: :menu main :title "Homepage"
 :CUSTOM_ID: main
 :END:
 #+include: "./ox-hugo-manual.org::#introduction" :only-contents t
@@ -664,6 +664,7 @@ translate to Hugo front-matter:
 *** Do I need to re-write my whole blog in Org?
 :PROPERTIES:
 :EXPORT_FILE_NAME: do-I-need-to-re-write-my-whole-blog-in-org
+:EXPORT_HUGO_MENU_OVERRIDE: :title "Need to re-write my blog?"
 :END:
 If you are considering to try out =ox-hugo=, and if you have already
 been using Hugo, it is normal for this thought to cross your mind:
@@ -699,6 +700,7 @@ have the exported Markdown files.
 *** How do I try =ox-hugo= on my site?
 :PROPERTIES:
 :EXPORT_FILE_NAME: how-do-I-try-it
+:EXPORT_HUGO_MENU_OVERRIDE: :title "Try it on my site?"
 :END:
 1. =cd= to your Hugo site base directory -- the one that contains the
    =config.toml= (or =config.yaml= or =config.json=).
@@ -751,7 +753,7 @@ to set that up for either of the above two blogging flows.
 *** Hugo test site for this package
 :PROPERTIES:
 :EXPORT_FILE_NAME: tests-site
-:EXPORT_HUGO_SLUG: tests-site
+:EXPORT_HUGO_MENU_OVERRIDE: :title "Try the test site"
 :END:
 A [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][site]] with bare-bones Hugo "theme" is used to live-test the
 package --- you'll know why theme is double-quoted once you try out the
@@ -804,6 +806,7 @@ exported Markdown files.
 *** Org meta-data to Hugo front-matter
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-meta-data-to-hugo-front-matter
+:EXPORT_HUGO_MENU_OVERRIDE: :title "Org→Hugo front-matter"
 :END:
 **** For subtree-based exports
 When organizing the posts as Org *subtrees*, many Hugo front-matter

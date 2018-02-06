@@ -5,7 +5,7 @@
         <ul>
 	    {{ range .Site.Menus.main }}
 	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Name | replaceRE "Test Site" "<b>${0}</b>" | safeHTML }}</a>
+		    <a class="reference internal" href="{{ .URL }}">{{ .Title | replaceRE "Test Site" "<b>${0}</b>" | safeHTML }}</a>
 	        </li>
 	    {{ end }}
         </ul>
@@ -13,7 +13,7 @@
         <ul>
 	    {{ range .Site.Menus.early_questions }}
 	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Name }}</a>
+		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
 	        </li>
 	    {{ end }}
         </ul>
@@ -21,7 +21,7 @@
         <ul>
 	    {{ range .Site.Menus.getting_started }}
 	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Name }}</a>
+		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
 	        </li>
 	    {{ end }}
         </ul>
@@ -29,7 +29,7 @@
         <ul>
 	    {{ range .Site.Menus.example }}
 	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Name }}</a>
+		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
 	        </li>
 	    {{ end }}
         </ul>
@@ -37,7 +37,7 @@
         <ul>
 	    {{ range .Site.Menus.org_to_hugo }}
 	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Name }}</a>
+		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
 	        </li>
 	    {{ end }}
         </ul>
@@ -45,7 +45,7 @@
         <ul>
 	    {{ range .Site.Menus.enhancements }}
 	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Name }}</a>
+		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
 	        </li>
 	    {{ end }}
         </ul>
@@ -53,7 +53,7 @@
         <ul>
 	    {{ range .Site.Menus.meta }}
 	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Name }}</a>
+		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
 	        </li>
 	    {{ end }}
         </ul>

@@ -814,6 +814,7 @@ newer."
 
 ;;; Miscellaneous Helper Functions
 
+;;;; Check if a boolean plist value is non-nil
 (defun org-hugo--plist-get-true-p (info key)
   "Return non-nil if KEY in INFO is non-nil.
 Return nil if the value of KEY in INFO is nil, \"nil\" or \"\".
@@ -838,8 +839,7 @@ INFO is a plist used as a communication channel."
       ;; 123 -> nil
       (org-string-nw-p value)))))
 
-;; Workaround to retain the :hl_lines parameter in src-block headers
-;; post `org-babel-exp-code'.
+;;;; Workaround to retain the :hl_lines parameter in src-block headers post `org-babel-exp-code'
 ;; http://lists.gnu.org/archive/html/emacs-orgmode/2017-10/msg00300.html
 (defun org-hugo--org-babel-exp-code (orig-fun &rest args)
   "Return the original code block formatted for export.
@@ -897,6 +897,7 @@ This is an internal function."
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
   (setq org-hugo--description nil))
 
+;;;; HTMLized section number for headline
 (defun org-hugo--get-headline-number (headline info &optional toc)
   "Return htmlized section number for the HEADLINE.
 INFO is a plist used as a communication channel.
@@ -916,6 +917,7 @@ disabled."
                          (org-export-get-headline-number headline info) ".")))
         (format "<span class=\"section-num\">%s</span> " number-str)))))
 
+;;;; Build TOC
 (defun org-hugo--build-toc (info &optional n keyword local)
   "Return table of contents as a string.
 
@@ -1000,6 +1002,7 @@ contents according to the current headline."
               ;;     {{ end }}
               "<!--endtoc-->\n"))))
 
+;;;; Escape Hugo shortcode
 (defun org-hugo--escape-hugo-shortcode (code lang)
   "Escape Hugo shortcodes if present in CODE string.
 
@@ -1017,6 +1020,7 @@ Return the escaped/unescaped string."
         "\\({{%\\)\\([^}][^}]*\\)\\(%}}\\)" "\\1/*\\2*/\\3" code))
     code))
 
+;;;; Hugo Version
 (defun org-hugo--hugo-version ()
   "Return hugo version.
 
@@ -1053,6 +1057,7 @@ If hugo is not found, return nil."
           (setq short-ver (mapconcat #'number-to-string short-ver-list "."))))
       (cons long-ver short-ver))))
 
+;;;; Resources Alist Merging
 (defun org-hugo--get-resources-alist (resources)
   "Generate a merged RESOURCES alist.
 
@@ -1104,6 +1109,7 @@ or \"name\" are packed into an alist with `car' as \"params\"."
       ;; (message "all-src: %S" all-src)
       all-src)))
 
+;;;; List to YAML/TOML list string
 (defun org-hugo--get-yaml-toml-list-string (list)
   "Return LIST as a YAML/TOML list represented as a string.
 
@@ -1125,6 +1131,7 @@ Examples:
                      ", ")
           "]"))
 
+;;;; Publication Directory
 (defun org-hugo--get-pub-dir (info)
   "Return the post publication directory path.
 
@@ -1150,6 +1157,7 @@ INFO is a plist used as a communication channel."
                     dir)))
     (file-truename pub-dir)))
 
+;;;; Format Dates
 (defun org-hugo--format-date (date-key info)
   "Return a date string formatted in Hugo-compatible format.
 
@@ -1237,6 +1245,7 @@ cannot be formatted in Hugo-compatible format."
                                                   date-nocolon))))
     date-str))
 
+;;;; Replace Front-matter Keys
 (defun org-hugo--replace-keys-maybe (data info)
   "Return DATA with its keys replaced, maybe.
 
@@ -2132,7 +2141,7 @@ INFO is a plist holding export options."
                                  (raw-str (mapconcat #'identity raw-list " ")))
                             (org-string-nw-p raw-str)))
              (attr-sc (org-export-read-attribute :attr_shortcode special-block))
-             ;; Positional arguments
+             ;; Positional arguments.
              (pos-args (and (null attr-sc) ;If the shortcode attr are not of the type ":foo bar"
                             attr-sc-raw))  ;But it could be something like "foo bar".
              (named-args nil) ;TBD - https://github.com/kaushalmodi/ox-hugo/issues/119

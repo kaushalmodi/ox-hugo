@@ -321,7 +321,7 @@ See the new section added to documentation:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_TYPE: homepage
 :EXPORT_HUGO_SECTION: /
-:EXPORT_HUGO_MENU: :menu main :title "Homepage"
+:EXPORT_HUGO_MENU: :menu "1.main" :title "Homepage"
 :CUSTOM_ID: main
 :END:
 #+include: "./ox-hugo-manual.org::#introduction" :only-contents t
@@ -352,7 +352,7 @@ There is a plan to create a =hugo.el= that would do things like:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: test
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_MENU: :menu main
+:EXPORT_HUGO_MENU: :menu "1.main"
 :END:
 # Generate an empty _index.md in test/ for that subdirectory to get
 # generated.
@@ -360,12 +360,12 @@ There is a plan to create a =hugo.el= that would do things like:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: issues
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_MENU: :menu main
+:EXPORT_HUGO_MENU: :menu "1.main"
 :END:
 * Changelog
 :PROPERTIES:
 :EXPORT_FILE_NAME: changelog
-:EXPORT_HUGO_MENU: :menu main
+:EXPORT_HUGO_MENU: :menu "1.main"
 :END:
 #+include: "./ox-hugo-manual.org::#changelog" :only-contents t
 * Reused Sections
@@ -602,7 +602,7 @@ error backtrace,
 * Menus
 ** Early Questions
 :PROPERTIES:
-:EXPORT_HUGO_MENU: :menu early_questions
+:EXPORT_HUGO_MENU: :menu "2.early_questions"
 :END:
 *** Why =ox-hugo=?
 :PROPERTIES:
@@ -685,7 +685,7 @@ necessity if you want to start using =ox-hugo=.
 have the exported Markdown files.
 ** Getting Started
 :PROPERTIES:
-:EXPORT_HUGO_MENU: :menu getting_started
+:EXPORT_HUGO_MENU: :menu "3.getting_started"
 :END:
 *** Installation
 :PROPERTIES:
@@ -743,7 +743,7 @@ each time you do =C-x C-s= in the Org file. That section explains how
 to set that up for either of the above two blogging flows.
 ** Example
 :PROPERTIES:
-:EXPORT_HUGO_MENU: :menu example
+:EXPORT_HUGO_MENU: :menu "4.example"
 :END:
 *** Screenshots
 :PROPERTIES:
@@ -801,7 +801,7 @@ exported Markdown files.
    created post.
 ** Org to Hugo
 :PROPERTIES:
-:EXPORT_HUGO_MENU: :menu org_to_hugo
+:EXPORT_HUGO_MENU: :menu "5.org_to_hugo"
 :END:
 *** Org meta-data to Hugo front-matter
 :PROPERTIES:
@@ -1496,7 +1496,7 @@ You can find many examples of table styling here:
 /Credit: [[https://css-tricks.com/complete-guide-table-element/][Guide to styling tables in HTML5-friendly manner]]/ --- /css-tricks.com/
 ** Enhancements
 :PROPERTIES:
-:EXPORT_HUGO_MENU: :menu enhancements
+:EXPORT_HUGO_MENU: :menu "6.enhancements"
 :END:
 *** Auto-export on Saving
 :PROPERTIES:
@@ -1776,7 +1776,7 @@ for writing your posts in Org, there are examples for both in the
 - [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content/images-in-content][Exported Markdown]]
 ** Meta
 :PROPERTIES:
-:EXPORT_HUGO_MENU: :menu meta
+:EXPORT_HUGO_MENU: :menu "7.meta"
 :END:
 *** Meta Features
 :PROPERTIES:

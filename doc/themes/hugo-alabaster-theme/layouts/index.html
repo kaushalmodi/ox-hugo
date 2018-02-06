@@ -1,6 +1,11 @@
 {{ define "main" }}
-	{{ range where .Site.Pages "Type" "homepage" }}
-		<h1>{{ .Title }}</h1>
-		{{ .Content }}
-	{{ end }}
+    {{ range where .Site.Pages "Type" "homepage" }}
+        <h1>{{ .Title }}</h1>
+        {{ .Content }}
+    {{ end }}
+
+    <!-- <hr> -->
+    <!-- <h3 id="debug-menu">Menu (Debug)</h3> -->
+    {{/* partial "debugprint.html" $.Site.Menus */}}
+
 {{ end }}

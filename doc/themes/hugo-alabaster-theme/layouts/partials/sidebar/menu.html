@@ -1,61 +1,11 @@
-{{ if ne .Site.Menus.main nil }}
-    {{ if gt (len .Site.Menus.main) 0 }}
-        <!-- <h3>Navigation</h3> -->
-        <h3>Main</h3>
-        <ul>
-	    {{ range .Site.Menus.main }}
-	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Title | replaceRE "Test Site" "<b>${0}</b>" | safeHTML }}</a>
-	        </li>
-	    {{ end }}
-        </ul>
-        <h3>Early Questions</h3>
-        <ul>
-	    {{ range .Site.Menus.early_questions }}
-	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
-	        </li>
-	    {{ end }}
-        </ul>
-        <h3>Getting Started</h3>
-        <ul>
-	    {{ range .Site.Menus.getting_started }}
-	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
-	        </li>
-	    {{ end }}
-        </ul>
-        <h3>Example</h3>
-        <ul>
-	    {{ range .Site.Menus.example }}
-	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
-	        </li>
-	    {{ end }}
-        </ul>
-        <h3>Org to Hugo</h3>
-        <ul>
-	    {{ range .Site.Menus.org_to_hugo }}
-	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
-	        </li>
-	    {{ end }}
-        </ul>
-        <h3>Enhancements</h3>
-        <ul>
-	    {{ range .Site.Menus.enhancements }}
-	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
-	        </li>
-	    {{ end }}
-        </ul>
-        <h3>Meta</h3>
-        <ul>
-	    {{ range .Site.Menus.meta }}
-	        <li class="toctree-l1">
-		    <a class="reference internal" href="{{ .URL }}">{{ .Title }}</a>
-	        </li>
-	    {{ end }}
-        </ul>
-    {{ end }}
+{{ range $menu_name, $menu := .Site.Menus }}
+    <h3>{{ $menu_name | replaceRE "^[0-9]+\\." "" | humanize | title }}</h3>
+    <ul>
+        {{ range $menu }}
+            {{ $title := (.Title | replaceRE "Test Site" "<b>${0}</b>" | safeHTML) }}
+            <li class="toctree-l1">
+                <a class="reference internal" href="{{ .URL }}">{{ $title }}</a>
+            </li>
+        {{ end }}
+    </ul>
 {{ end }}

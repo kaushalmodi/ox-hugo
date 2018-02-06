@@ -1180,6 +1180,8 @@ cannot be formatted in Hugo-compatible format."
   (let* ((date-fmt (plist-get info :hugo-date-format))
          (date-raw (cond
                     ((equal date-key :date)
+                     ;; (message "[ox-hugo date DBG] 1 %s" (plist-get info date-key))
+                     ;; (message "[ox-hugo date DBG] 2 %s" (org-export-data (plist-get info date-key) info))
                      (or
                       ;; Get the date from the "CLOSED" property;
                       ;; generated automatically when switching a
@@ -1188,7 +1190,7 @@ cannot be formatted in Hugo-compatible format."
                       ;; Else get the date from the subtree property,
                       ;; `EXPORT_DATE' if available,
                       (org-string-nw-p
-                       (org-export-data (plist-get info date-key) info))
+                       (org-export-data (plist-get info date-key) info)) ;`org-export-data' required
                       ;; Else try to get it from the #+date keyword in
                       ;; the Org file.
                       (org-string-nw-p
@@ -1202,8 +1204,7 @@ cannot be formatted in Hugo-compatible format."
                      ;; Get the date from the "DEADLINE" property.
                      (org-entry-get (point) "DEADLINE"))
                     (t ;:hugo-lastmod, :hugo-publishdate, :hugo-expirydate
-                     (org-string-nw-p
-                      (org-export-data (plist-get info date-key) info)))))
+                     (org-string-nw-p (plist-get info date-key)))))
          (date-nocolon (cond
                         ;; If the date set for the DATE-KEY parameter
                         ;; is already in Hugo-compatible format, use
@@ -1423,11 +1424,11 @@ a communication channel."
   (unless (org-element-property :footnote-section-p headline)
     (let* ((numbers (org-hugo--get-headline-number headline info nil))
            (level (org-export-get-relative-level headline info))
-           (title (org-export-data (org-element-property :title headline) info))
-           (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
-                      (let ((todo (org-element-property :todo-keyword
-                                    headline)))
-                        (and todo (concat (org-export-data todo info) " ")))))
+           (title (org-export-data (org-element-property :title headline) info)) ;`org-export-data' required
+           (todo (let ((todo1 (and (org-hugo--plist-get-true-p info :with-todo-keywords)
+                                   (org-element-property :todo-keyword headline))))
+                   (when (stringp todo1)
+                     (format "%s " todo1))))
            (tags (and (org-hugo--plist-get-true-p info :with-tags)
                       (let ((tag-list (org-export-get-tags headline info)))
                         (and tag-list
@@ -2542,7 +2543,7 @@ INFO is a plist used as a communication channel."
          (author-list (and (plist-get info :with-author)
                            (let ((author-raw
                                   (org-string-nw-p
-                                   (org-export-data (plist-get info :author) info))))
+                                   (org-export-data (plist-get info :author) info)))) ;`org-export-data' required
                              (when author-raw
                                ;; Multiple authors can be comma or
                                ;; newline separated.
@@ -2561,11 +2562,8 @@ INFO is a plist used as a communication channel."
                                      (replace-regexp-in-string "\\`\\([a-z]+_[A-Z]+\\).*\\'" "\\1" lang))))
                         lang)))
          (description (or org-hugo--description
-                          (org-string-nw-p
-                           (org-export-data (plist-get info :description) info))))
-         (aliases-raw (let ((aliases-raw-1
-                             (org-string-nw-p
-                              (org-export-data (plist-get info :hugo-aliases) info))))
+                          (org-string-nw-p (plist-get info :description))))
+         (aliases-raw (let ((aliases-raw-1 (org-string-nw-p (plist-get info :hugo-aliases))))
                         (when aliases-raw-1
                           (org-split-string aliases-raw-1 " "))))
          (aliases (let (alias-list)
@@ -2576,8 +2574,7 @@ INFO is a plist used as a communication channel."
                           (setq alias (concat "/" section alias))))
                       (setq alias-list (append alias-list `(,alias))))
                     alias-list))
-         (outputs-raw (org-string-nw-p
-                       (org-export-data (plist-get info :hugo-outputs) info)))
+         (outputs-raw (org-string-nw-p (plist-get info :hugo-outputs)))
          (outputs (when outputs-raw
                     (org-split-string outputs-raw " ")))
          (todo-keyword (org-entry-get (point) "TODO"))
@@ -2663,17 +2660,17 @@ INFO is a plist used as a communication channel."
                  (images . ,(org-hugo--delim-str-to-list (plist-get info :hugo-images)))
                  (isCJKLanguage . ,(org-hugo--plist-get-true-p info :hugo-iscjklanguage))
                  (keywords . ,keywords)
-                 (layout . ,(org-export-data (plist-get info :hugo-layout) info))
+                 (layout . ,(plist-get info :hugo-layout))
                  (lastmod . ,(org-hugo--format-date :hugo-lastmod info))
-                 (linkTitle . ,(org-export-data (plist-get info :hugo-linktitle) info))
-                 (markup . ,(org-export-data (plist-get info :hugo-markup) info))
+                 (linkTitle . ,(plist-get info :hugo-linktitle))
+                 (markup . ,(plist-get info :hugo-markup))
                  (outputs . ,outputs)
                  (series . ,(org-hugo--delim-str-to-list (plist-get info :hugo-series)))
-                 (slug . ,(org-export-data (plist-get info :hugo-slug) info))
+                 (slug . ,(plist-get info :hugo-slug))
                  (tags . ,tags)
                  (categories . ,categories)
-                 (type . ,(org-export-data (plist-get info :hugo-type) info))
-                 (url . ,(org-export-data (plist-get info :hugo-url) info))
+                 (type . ,(plist-get info :hugo-type))
+                 (url . ,(plist-get info :hugo-url))
                  (videos . ,(org-hugo--delim-str-to-list (plist-get info :hugo-videos)))
                  (weight . ,weight)
                  (draft . ,draft)

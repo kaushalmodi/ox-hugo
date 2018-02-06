@@ -4373,6 +4373,70 @@ quotes.
 :END:
 If a series name has spaces in it, wrap the whole name in double
 quotes.
+** Type                                                                :type:
+*** Type Front-matter
+:PROPERTIES:
+:EXPORT_FILE_NAME: type-front-matter
+:EXPORT_HUGO_TYPE: type-test
+:END:
+The =type= front-matter is used to override the default *section* type
+(automatically derived from the directory of the content page).
+
+Here the type is overridden to be =type-test=.
+
+[[https://gohugo.io/content-management/front-matter/#predefined][Reference]]
+*** Type + Layout Front-matter                                       :layout:
+:PROPERTIES:
+:EXPORT_FILE_NAME: type-and-layout-front-matter
+:EXPORT_HUGO_TYPE: type-test
+:EXPORT_HUGO_LAYOUT: alternate-single
+:END:
+Here both =type= *and* =layout= are overridden.
+** Layout Front-matter                                               :layout:
+:PROPERTIES:
+:EXPORT_FILE_NAME: layout-front-matter
+:EXPORT_HUGO_LAYOUT: alternate-single
+:END:
+The =layout= front-matter is used to override the default *single*
+layout of a regular page. See [[https://gohugo.io/templates/lookup-order/][Template Lookup Order]] to learn more.
+
+Here the layout is overridden to be =alternate-single=.
+
+[[https://gohugo.io/content-management/front-matter/#predefined][Reference]]
+** URL Front-matter                                                     :url:
+:PROPERTIES:
+:EXPORT_FILE_NAME: url-front-matter
+:EXPORT_HUGO_URL: foo/bar/zoo/url-front-matter
+:END:
+The =url= front-matter is used to specify *the full path to the
+content from the web root*. It makes no assumptions about the path of
+the content file. It also ignores any language prefixes of the
+multilingual feature.
+
+[[https://gohugo.io/content-management/front-matter/#predefined][Reference]]
+** Linktitle Front-matter                                         :linktitle:
+:PROPERTIES:
+:EXPORT_FILE_NAME: linktitle-front-matter
+:EXPORT_HUGO_LINKTITLE: My link title
+:END:
+The =linktitle= front-matter is used for creating links to content. If
+set, Hugo defaults to using the =linktitle= before the =title=.
+** Slug Front-matter                                                   :slug:
+:PROPERTIES:
+:EXPORT_FILE_NAME: slug-front-matter
+:EXPORT_HUGO_SLUG: this-is-how-i-want-to-name-this-link
+:END:
+By default, a page's /slug/ is the name of the content file (sans
+extension). So in this case, it would have been
+=slug-front-matter=. But that slug is overridden using the specified
+=slug= in the front-matter: =this-is-how-i-want-to-name-this-link=.
+** Markup Front-matter                                               :markup:
+:PROPERTIES:
+:EXPORT_FILE_NAME: markup-front-matter
+:EXPORT_HUGO_MARKUP: org
+:END:
+The markup for this post is set to =org=. So the Markdown markup based
+emphasis *won't work* here.
 ** Replace front-matter keys                                   :keys:replace:
 *** Replace only "linkTitle" key                                  :linktitle:
 :PROPERTIES:

@@ -1,0 +1,13 @@
+{{ define "main" }}
+
+{{ "**This is `alternate-single` layout from `_default`.**" | markdownify }}
+
+<hr>
+{{ .Content }}
+
+<hr>
+<a id="debug"></a>
+<h3 id="page-debug">Page Params (Debug)</h3>
+{{ partial "debugprint.html" .Params }}
+
+{{ end }}

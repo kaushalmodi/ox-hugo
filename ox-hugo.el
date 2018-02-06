@@ -2478,35 +2478,33 @@ Example: :some__tag:   -> \"some tag\"."
     (setq ret (cl-remove-if-not #'org-string-nw-p ret))
     ret))
 
-(defun org-hugo--delim-str-to-list (delim-str)
-  "Function to transform DELIM-STR string to a list.
+(defun org-hugo--delim-str-to-list (str)
+  "Function to transform string STR to a list of strings.
 
-1. Trim leading/trailing spaces from DELIM-STR, replace spaces
-   with `org-hugo--internal-list-separator'.
+The function assumes STR to use
+`org-hugo--internal-list-separator' as delimiter.
+
+The function does the following in order:
+
+1. Trim leading/trailing spaces from STR.
 2. Convert that string to a list using
    `org-hugo--internal-list-separator' as the separator.
-3. Break up each element of that list into further string elements.
-   Space within quoted string is retained.  This is done using
-   `org-hugo--parse-quoted-string'.  If a string element if of
-   type \"VALUE1 \\\"QUOTED VALUE2\\\" ..\", that is converted to
-   \(\"VALUE1\" \"QUOTED VALUE2\" ..).
-4. Return the transformed list.
+3. Break up each element of that list into further string elements,
+   delimited by spaces.  Though, spaces within quoted string are
+   retained.  This is done using `org-babel-parse-header-arguments'.
+4. Return the transformed list of strings.
 
 Example: \"one\\n\\\"two words\\\" three\\nfour\"
          -> (\"one\" \"two words\" \"three\" \"four\").
 
-This function can be applied to any string that uses
-`org-hugo--internal-list-separator' as delimiter, for example,
-parsing the tags, categories and keywords meta-data.
-
-Return nil if DELIM-STR is not a string."
-  (when (stringp delim-str)
-    (let* ((delim-str (org-trim delim-str))
-           (str-list (split-string delim-str org-hugo--internal-list-separator))
+Return nil if STR is not a string."
+  (when (stringp str)
+    (let* ((str (org-trim str))
+           (str-list (split-string str org-hugo--internal-list-separator))
            ret)
-      (dolist (str str-list)
+      (dolist (str-elem str-list)
         (let* ((format-str ":dummy '(%s)") ;The :dummy key is later discarded
-               (alist (org-babel-parse-header-arguments (format format-str str)))
+               (alist (org-babel-parse-header-arguments (format format-str str-elem)))
                (lst (cdr (car alist)))
                (str-list2 (mapcar (lambda (elem)
                                     (cond

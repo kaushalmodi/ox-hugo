@@ -1,0 +1,10 @@
+<div class="{{ .Get "arg1" }}" style="{{ .Get "arg2" | safeCSS }}">
+    <!-- Interestingly if safeCSS is not used above, the style gets
+         assigned a "ZgotmplZ" value. -- https://stackoverflow.com/a/14796642/1219634
+    -->
+    <ul>
+        <li><b>arg1:</b> {{ .Get "arg1" }}</li>
+        <li><b>arg2:</b> {{ .Get "arg2" }}</li>
+    </ul>
+    {{ .Inner }}
+</div>

@@ -2137,14 +2137,18 @@ INFO is a plist holding export options."
                  ;; "%foo".
                  :test (lambda (b sc) ;`sc' would be an element from `paired-shortcodes'
                          (string-match-p (format sc-regexp b) sc)))
-      (let* ((attr-sc-raw (let* ((raw-list (org-element-property :attr_shortcode special-block))
-                                 (raw-str (mapconcat #'identity raw-list " ")))
-                            (org-string-nw-p raw-str)))
-             (attr-sc (org-export-read-attribute :attr_shortcode special-block))
+      (let* ((attr-sc (org-export-read-attribute :attr_shortcode special-block))
              ;; Positional arguments.
-             (pos-args (and (null attr-sc) ;If the shortcode attr are not of the type ":foo bar"
-                            attr-sc-raw))  ;But it could be something like "foo bar".
-             (named-args nil) ;TBD - https://github.com/kaushalmodi/ox-hugo/issues/119
+             (pos-args (and (null attr-sc)
+                            ;; If the shortcode attributes are not of
+                            ;; the type ":foo bar" but are something
+                            ;; like "foo bar".
+                            (let* ((raw-list (org-element-property :attr_shortcode special-block))
+                                   (raw-str (mapconcat #'identity raw-list " ")))
+                              (org-string-nw-p raw-str))))
+             ;; Named arguments.
+             (named-args (unless pos-args
+                           (org-string-nw-p (org-html--make-attribute-string attr-sc))))
              (sc-args (or pos-args named-args))
              (sc-args (if sc-args
                           (concat " " sc-args " ")
@@ -2165,7 +2169,6 @@ INFO is a plist holding export options."
                              sc-open-char block-type sc-close-char)))
         ;; (message "[ox-hugo-spl-blk DBG] attr-sc1: %s"
         ;;          (org-element-property :attr_shortcode special-block))
-        ;; (message "[ox-hugo-spl-blk DBG] attr-sc2: %s" attr-sc-raw)
         ;; (message "[ox-hugo-spl-blk DBG] attr-sc: %s" attr-sc)
         ;; (message "[ox-hugo-spl-blk DBG] pos-args: %s" pos-args)
         ;; (message "[ox-hugo-spl-blk DBG] named-args: %s" named-args)

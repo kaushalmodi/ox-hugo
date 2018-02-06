@@ -3439,6 +3439,31 @@ and ="zoo"= will be the /second/.
 Content is rendered <b>like HTML</b>. The Markdown /emphasis/
 characters are !! NOT !! rendered.
 #+end_myshortcode-pos
+*** Paired shortcodes using special blocks (Named Arguments) :arguments:named:
+:PROPERTIES:
+:EXPORT_FILE_NAME: paired-shortcodes-special-blocks-named-arguments
+:EXPORT_HUGO_PAIRED_SHORTCODES: %mdshortcode-named myshortcode-named
+:END:
+Test case for feature requested in {{{oxhugoissue(119)}}}.
+**** Paired markdown shortcode
+In the below example, ="foo bar"= will be the /arg1/ argument, and
+="color: red; text-align: center;"= will be the /arg2/ argument.
+
+#+attr_shortcode: :arg1 foo bar :arg2 color: red; text-align: center;
+#+begin_mdshortcode-named
+Content *with* /emphasis/ characters is rendered.
+
+The HTML <b>markup</b> will also get rendered.
+#+end_mdshortcode-named
+**** Paired non-markdown (default) shortcode
+In the below example, ="foo"= will be the /arg1/ argument, and
+="color:green;"= will be the /arg2/ argument.
+
+#+attr_shortcode: :arg1 foo :arg2 color:green;
+#+begin_myshortcode-named
+Content is rendered <b>like HTML</b>. The Markdown /emphasis/
+characters are !! NOT !! rendered.
+#+end_myshortcode-named
 * Paragraphs                                                      :paragraph:
 ** Paragraphs with ATTR_HTML                         :attr___html:attr___css:
 :PROPERTIES:

@@ -14,6 +14,10 @@
 #+macro: ox-hugo-test-file  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]]
 #+macro: doc [[/doc/$1][$2]]
 #+macro: user @[[https://github.com/$1][*$1*]]
+#+macro: testtag tests tagged [[https://ox-hugo.scripter.co/test/tags/$1][$1]]
+
+# https://scripter.co/latex-in-html/
+#+macro: latex @@html:<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>@@
 
 * Changelog
 :PROPERTIES:
@@ -1058,6 +1062,76 @@ The Org source for the below is similar to the above, except that the
 =-n= switch is also added to enable the line numbers.
 
 #+include: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-with-linenums-not-starting-from-1" :only-contents t
+*** Equations
+:PROPERTIES:
+:EXPORT_FILE_NAME: equations
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :mathjax true
+:END:
+**** Inline equations
+- Inline equations are wrapped between =\(= and =\)=.
+  - =$= wrapping also works, but it is not preferred as it comes with
+    restrictions like "there should be no whitespace between the
+    equation and the =$= delimiters".
+
+    So =$ a=b $= will not work (it will look like: $ a=b $), but
+    =$a=b$= will work (it will look like: $a=b$).
+
+    On the other hand, both =\(a=b\)= (it will look like: \(a=b\)) and
+    =\( a=b \)= (it will look like: \( a=b \)) will work.
+- One-per-line equations are wrapped between =\[= and =\]= or =$$=
+  delimiters.
+
+For example, below in Org:
+#+begin_src org
+LaTeX formatted equation: \( E = -J \sum_{i=1}^N s_i s_{i+1} \)
+#+end_src
+
+will look like this in Hugo rendered HTML:
+
+LaTeX formatted equation: \( E = -J \sum_{i=1}^N s_i s_{i+1 }\)
+
+*Don't see this in Markdown, see what it looks after Hugo has
+processed it.* --- =ox-hugo= does some heavy escaping to get around a
+Blackfriday issue with supporting MathJax syntax equations (that Org
+supports).
+
+Here's another example, taken from [[https://orgmode.org/manual/LaTeX-fragments.html][(org) LaTeX fragments]].
+
+Below in Org:
+#+begin_example
+If $a^2=b$ and \( b=2 \), then the solution must be either
+$$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \]
+#+end_example
+
+renders to:
+
+If $a^2=b$ and \( b=2 \), then the solution must be either
+$$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \]
+
+(Note that the last two equations show up on their own lines.)
+**** {{{latex}}} Environments
+=ox-hugo= support {{{latex}}} environments.
+
+So below in Org buffer:
+
+#+begin_src org
+\begin{equation}
+\label{eq:1}
+C = W\log_{2} (1+\mathrm{SNR})
+\end{equation}
+#+end_src
+
+will export as:
+
+\begin{equation}
+\label{eq:1}
+C = W\log_{2} (1+\mathrm{SNR})
+\end{equation}
+
+Equation referencing will also work[fn:3]. So =\ref{eq:1}= will render as
+\ref{eq:1}.
+**** Examples
+You can find many examples by looking at {{{testtag(equations)}}}.
 *** Tags and Categories
 :PROPERTIES:
 :EXPORT_FILE_NAME: tags-and-categories
@@ -1612,6 +1686,11 @@ for writing your posts in Org, there are examples for both in the
 :END:
 #+include: "./ox-hugo-manual.org::#test" :only-contents t
 * Footnotes
+
+[fn:3] This requires MathJax. [[https://github.com/kaushalmodi/hugo-bare-min-theme/blob/master/layouts/partials/mathjax.html][Here]] is a MathJax configuration that is
+tested to work for equation referencing (referencing =\label{}=
+labeled equations using =\ref{}=). The same is used on the =ox-hugo=
+test site too.
 
 [fn:2] For only subtree-based exports, you can set that special tag as
 Org style tags too. Example: ~* I don't want to export this post

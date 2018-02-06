@@ -126,14 +126,14 @@ figure a:hover {
 /* Sane Table */
 /* https://css-tricks.com/complete-guide-table-element/#article-header-id-17 */
 .sane-table table {
-  border-collapse: collapse;
-  width: 100%;
+    border-collapse: collapse;
+    width: 100%;
 }
 .sane-table th,
 .sane-table td {
-  padding: 0.25rem;
-  text-align: left;
-  border: 1px solid #ccc;
+    padding: 0.25rem;
+    text-align: left;
+    border: 1px solid #ccc;
 }
 
 /* TeX, LaTeX, XeTeX logo */
@@ -157,4 +157,17 @@ figure a:hover {
     vertical-align: 0.15em;
     margin-left: -0.36em;
     margin-right: -0.15em;
+}
+
+/* Description lists */
+dt {
+    font-weight: bold;
+}
+dd {
+    margin-bottom: .5rem;
+}
+
+/* No list bullets in task lists */
+ul.task-list {
+    list-style-type: none;
 }

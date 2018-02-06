@@ -2,10 +2,13 @@
 title = "Keyword Collection"
 author = ["firstname1 lastname1", "firstname2 lastname2", "firstname3 lastname3"]
 aliases = ["/posts/keyword-concatenation", "/posts/keyword-merging"]
+images = ["image 1", "image 2"]
 keywords = ["keyword1", "keyword2", "three word keywords3"]
 outputs = ["html", "json"]
+series = ["series 1", "series 2"]
 tags = ["mega front-matter", "keys", "collection", "concatenation", "merging"]
 categories = ["cat1", "cat2"]
+videos = ["video 1", "video 2"]
 draft = false
 myfoo = "bar"
 mybaz = "zoo"
@@ -52,7 +55,7 @@ This is a test post that tests that keywords set across multiple Org
 keywords get collected.
 
 
-## Keyword Collection Tested to work <code>[12/12]</code> {#keyword-collection-tested-to-work}
+## Keyword Collection Tested to work <code>[15/15]</code> {#keyword-collection-tested-to-work}
 
 -   [X] `#+author`
 -   [X] `#+hugo_tags`
@@ -66,3 +69,6 @@ keywords get collected.
 -   [X] `#+keywords`
 -   [X] `#+hugo_outputs`
 -   [X] `#+hugo_resources`
+-   [X] `#+hugo_images`
+-   [X] `#+hugo_videos`
+-   [X] `#+hugo_series`

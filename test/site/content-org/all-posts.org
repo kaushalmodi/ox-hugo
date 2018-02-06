@@ -4317,6 +4317,62 @@ Post content.
 :PROPERTIES:
 :EXPORT_FILE_NAME: locale-auto-detect
 :END:
+** Images                                                            :images:
+*** Single image                                                     :single:
+:PROPERTIES:
+:EXPORT_FILE_NAME: images-single
+:EXPORT_HUGO_IMAGES: "image path with space.png"
+:END:
+If an image path has spaces in it, wrap the whole path in double
+quotes.
+*** Multiple images                                                :multiple:
+:PROPERTIES:
+:EXPORT_FILE_NAME: images-multiple
+:EXPORT_HUGO_IMAGES: "image foo.svg"
+:EXPORT_HUGO_IMAGES+: images/bar.png
+:EXPORT_HUGO_IMAGES+: zoo.jpg
+:END:
+If an image path has spaces in it, wrap the whole path in double
+quotes.
+** Videos                                                            :videos:
+*** Single video                                                     :single:
+:PROPERTIES:
+:EXPORT_FILE_NAME: videos-single
+:EXPORT_HUGO_VIDEOS: "video path with space.mp4"
+:END:
+If a video path has spaces in it, wrap the whole path in double
+quotes.
+*** Multiple videos                                                :multiple:
+:PROPERTIES:
+:EXPORT_FILE_NAME: videos-multiple
+:EXPORT_HUGO_VIDEOS: "video foo.mp4"
+:EXPORT_HUGO_VIDEOS+: bar.mpeg
+:END:
+If a video path has spaces in it, wrap the whole path in double
+quotes.
+** Audio                                                              :audio:
+:PROPERTIES:
+:EXPORT_FILE_NAME: audio-front-matter
+:EXPORT_HUGO_AUDIO: "audio path with space.mp3"
+:END:
+If the audio path has spaces in it, wrap the whole path in double
+quotes.
+** Series                                                            :series:
+*** Single series                                                    :single:
+:PROPERTIES:
+:EXPORT_FILE_NAME: series-single
+:EXPORT_HUGO_SERIES: "Series A"
+:END:
+If a series name has spaces in it, wrap the whole name in double
+quotes.
+*** Multiple series                                                :multiple:
+:PROPERTIES:
+:EXPORT_FILE_NAME: series-multiple
+:EXPORT_HUGO_SERIES: "Series A"
+:EXPORT_HUGO_SERIES+: "Series B"
+:END:
+If a series name has spaces in it, wrap the whole name in double
+quotes.
 ** Replace front-matter keys                                   :keys:replace:
 *** Replace only "linkTitle" key                                  :linktitle:
 :PROPERTIES:

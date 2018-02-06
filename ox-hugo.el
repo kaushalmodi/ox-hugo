@@ -748,6 +748,8 @@ newer."
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
                    ;; aliases
                    (:hugo-aliases "HUGO_ALIASES" nil nil space)
+                   ;; audio
+                   (:hugo-audio "HUGO_AUDIO" nil nil)
                    ;; date
                    ;; "date" is parsed from the Org #+date or subtree property EXPORT_HUGO_DATE
                    (:date "DATE" nil nil)
@@ -761,6 +763,8 @@ newer."
                    (:hugo-expirydate "HUGO_EXPIRYDATE" nil nil)
                    ;; headless (only for Page Bundles - Hugo v0.35+)
                    (:hugo-headless "HUGO_HEADLESS" nil nil)
+                   ;; images
+                   (:hugo-images "HUGO_IMAGES" nil nil newline)
                    ;; isCJKLanguage
                    (:hugo-iscjklanguage "HUGO_ISCJKLANGUAGE" nil nil)
                    ;; keywords
@@ -784,6 +788,8 @@ newer."
                    (:hugo-outputs "HUGO_OUTPUTS" nil nil space)
                    ;; publishDate
                    (:hugo-publishdate "HUGO_PUBLISHDATE" nil nil)
+                   ;; series
+                   (:hugo-series "HUGO_SERIES" nil nil newline)
                    ;; slug
                    (:hugo-slug "HUGO_SLUG" nil nil)
                    ;; taxomonomies - tags, categories
@@ -808,6 +814,8 @@ newer."
                    (:hugo-type "HUGO_TYPE" nil nil)
                    ;; url
                    (:hugo-url "HUGO_URL" nil nil)
+                   ;; videos
+                   (:hugo-videos "HUGO_VIDEOS" nil nil newline)
                    ;; weight
                    (:hugo-weight "HUGO_WEIGHT" nil nil)))
 
@@ -2645,12 +2653,14 @@ INFO is a plist used as a communication channel."
          (data `(;; The order of the elements below will be the order in which the front matter
                  ;; variables will be ordered.
                  (title . ,(org-hugo--sanitize-title info))
+                 (audio . ,(plist-get info :hugo-audio))
                  (author . ,author-list)
                  (description . ,description)
                  (date . ,(org-hugo--format-date :date info))
                  (publishDate . ,(org-hugo--format-date :hugo-publishdate info))
                  (expiryDate . ,(org-hugo--format-date :hugo-expirydate info))
                  (aliases . ,aliases)
+                 (images . ,(org-hugo--delim-str-to-list (plist-get info :hugo-images)))
                  (isCJKLanguage . ,(org-hugo--plist-get-true-p info :hugo-iscjklanguage))
                  (keywords . ,keywords)
                  (layout . ,(org-export-data (plist-get info :hugo-layout) info))
@@ -2658,11 +2668,13 @@ INFO is a plist used as a communication channel."
                  (linkTitle . ,(org-export-data (plist-get info :hugo-linktitle) info))
                  (markup . ,(org-export-data (plist-get info :hugo-markup) info))
                  (outputs . ,outputs)
+                 (series . ,(org-hugo--delim-str-to-list (plist-get info :hugo-series)))
                  (slug . ,(org-export-data (plist-get info :hugo-slug) info))
                  (tags . ,tags)
                  (categories . ,categories)
                  (type . ,(org-export-data (plist-get info :hugo-type) info))
                  (url . ,(org-export-data (plist-get info :hugo-url) info))
+                 (videos . ,(org-hugo--delim-str-to-list (plist-get info :hugo-videos)))
                  (weight . ,weight)
                  (draft . ,draft)
                  (headless . ,headless)

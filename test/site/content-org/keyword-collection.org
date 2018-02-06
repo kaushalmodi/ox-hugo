@@ -72,10 +72,22 @@
 #+hugo_resources: :src "*.png" :byline "bep"
 #+hugo_resources: :src "*.jpg" :title "JPEG Image #:counter"
 
+# Images
+#+hugo_images: "image 1"
+#+hugo_images: "image 2"
+
+# Videos
+#+hugo_videos: "video 1"
+#+hugo_videos: "video 2"
+
+# Series
+#+hugo_series: "series 1"
+#+hugo_series: "series 2"
+
 This is a test post that tests that keywords set across multiple Org
 keywords get collected.
 
-* Keyword Collection Tested to work [12/12]
+* Keyword Collection Tested to work [15/15]
 - [X] =#+author=
 - [X] =#+hugo_tags=
 - [X] =#+hugo_categories=
@@ -88,3 +100,6 @@ keywords get collected.
 - [X] =#+keywords=
 - [X] =#+hugo_outputs=
 - [X] =#+hugo_resources=
+- [X] =#+hugo_images=
+- [X] =#+hugo_videos=
+- [X] =#+hugo_series=

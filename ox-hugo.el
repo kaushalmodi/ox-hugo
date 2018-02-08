@@ -868,9 +868,18 @@ is in progress.  See `org-hugo--before-export-function' and
                                (dolist (param parameters)
                                  (dolist (retain-key param-keys-to-be-retained)
                                    (when (equal retain-key (car param))
-                                     (setq str (concat str " "
-                                                       (symbol-name retain-key) " "
-                                                       (cdr param))))))
+                                     (let ((val (cdr param)))
+                                       (setq str
+                                             (concat str " "
+                                                     (symbol-name retain-key) " "
+                                                     (cond
+                                                      ((stringp val)
+                                                       val)
+                                                      ((numberp val)
+                                                       (number-to-string val))
+                                                      (t
+                                                       (user-error "Invalid value %S assigned to %S"
+                                                                   val retain-key)))))))))
                                (org-string-nw-p (org-trim str))))
          ret)
     ;; (message "[ox-hugo ob-exp] info: %S" info)
@@ -2020,8 +2029,11 @@ channel."
          (parameters-str (org-element-property :parameters src-block))
          (parameters (org-babel-parse-header-arguments parameters-str))
          (hl-lines (cdr (assoc :hl_lines parameters)))
-         (hl-lines (when hl-lines
-                     (replace-regexp-in-string "," " " hl-lines))) ;"1,3-4" -> "1 3-4"
+         (hl-lines (cond
+                    ((stringp hl-lines)
+                     (replace-regexp-in-string "," " " hl-lines)) ;"1,3-4" -> "1 3-4"
+                    ((numberp hl-lines)
+                     (number-to-string hl-lines))))
          (label (let ((lbl (and (org-element-property :name src-block)
                                 (org-export-get-reference src-block info))))
                   (if lbl

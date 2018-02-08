@@ -39,6 +39,29 @@ the HTML limitation.
 A workaround is below.. **use line numbers too!**.
 
 
+#### Highlighting only 1 line {#highlighting-only-1-line}
+
+
+##### Org source {#org-source}
+
+```org
+#+begin_src emacs-lisp :hl_lines 2
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+#+end_src
+```
+
+
+##### Output {#output}
+
+{{< highlight emacs-lisp "hl_lines=2" >}}
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+{{< /highlight >}}
+
+
 ## With line numbers **not** starting from 1 {#source-blocks-with-highlighting-with-linenums-not-starting-from-1}
 
 With line numbers enabled, the highlighting is limited to the width of

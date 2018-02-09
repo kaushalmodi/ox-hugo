@@ -7,7 +7,9 @@
 
 <hr>
 <a id="debug"></a>
-<h3 id="page-debug">Page Params (Debug)</h3>
+<h3 id="page-debug">Page (Debug)</h3>
+{{ partial "debugprint.html" . }}
+<h3 id="page-params-debug">Page Params (Debug)</h3>
 {{ partial "debugprint.html" .Params }}
 
 {{ end }}

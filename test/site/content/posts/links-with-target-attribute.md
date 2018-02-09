@@ -24,48 +24,19 @@ automatically).
 
 {{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" width="10%" target="_self" link="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
 
-Above is a link to an image.
+Above is an hyperlinked image with the HTML attributes set as
+`#+attr_html: :width 10% :target _self` in Org.
 
--   The `width` attribute of _10%_ though must apply **only** to the
-    image, and not to the link.
--   Clicking that image will open the linked image in the same browser
-    tab because of the `target="_self"` attribute (**because of the
-    custom shortcode** --- see below).
-
-<!--listend-->
-
-Note 1
-: **By default** (using the Hugo-inbuilt `figure` shortcode),
-    the `target` attribute is _ineffective_. There is no way
-    to pass the `target` or any other attribute to the `<a>`
-    element inside the `<figure>` element that the `figure`
-    shortcode constructs (commit [e92fcf00](https://github.com/kaushalmodi/ox-hugo/commit/e92fcf00)).
-
-Note 2
-: This test site uses a custom `figure` shortcode with
-    support added for specifying the `target` and `rel`
-    attributes. If you too like to retain hyperlinked figures'
-    `target` and `rel` attributes, get the custom shortcode
-    [from here](https://github.com/kaushalmodi/hugo-bare-min-theme/blob/fcb7098652ef386481b5c1f1a390f2d6ad329b6a/layouts/shortcodes/figure.html).
-
-
-### Custom `figure` shortcode {#custom-figure-shortcode}
-
-Here's a diff of the custom vs inbuilt shortcodes:
-
-```diff
---- Original figure shortcode
-+++ Custom figure shortcode
-@@ -1,6 +1,6 @@
- <figure {{ with .Get "class" }}class="{{.}}"{{ end }}>
--    {{ with .Get "link"}}<a href="{{.}}">{{ end }}
-+    {{ if .Get "link"}}<a href="{{ .Get "link" }}"{{ with .Get "target" }} target="{{ . }}"{{ end }}{{ with .Get "rel" }} rel="{{ . }}"{{ end }}>{{ end }}
-         <img src="{{ .Get "src" }}" {{ if or (.Get "alt") (.Get "caption") }}alt="{{ with .Get "alt"}}{{.}}{{else}}{{ .Get "caption" }}{{ end }}" {{ end }}{{ with .Get "width" }}width="{{.}}" {{ end }}{{ with .Get "height" }}height="{{.}}" {{ end }}/>
-```
+-   The `width` attribute of _10%_ must apply **only** to the image, and
+    not to the link.
+-   And the `target="_self"` attribute must apply **only** to the link,
+    and not the image. So, clicking that image will open the linked
+    image in the same browser tab because the `target` is set to
+    `"_self"` (**Hugo v0.37+** --- fixed in `hugo` PR #[4382](https://github.com/gohugoio/hugo/pull/4382)).
 
 ---
 
-Above limitation is not posed if the image is inlined:
-<a href="https://orgmode.org/img/org-mode-unicorn-logo.png" target="_self"><img src="https://orgmode.org/img/org-mode-unicorn-logo.png" alt="org-mode-unicorn-logo.png" width="10%" /></a> i.e. the `target`
-attribute will be added to the `<a>` tag correctly, as the `figure`
-shortcode is not used for inline images.
+Here's an inline hyperlinked image with the exact same HTML
+attributes: <a href="https://orgmode.org/img/org-mode-unicorn-logo.png" target="_self"><img src="https://orgmode.org/img/org-mode-unicorn-logo.png" alt="org-mode-unicorn-logo.png" width="10%" /></a>. So,
+clicking this image too should open the linked image in the same
+brower tab.

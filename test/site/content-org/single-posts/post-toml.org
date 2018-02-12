@@ -7,6 +7,7 @@
 #+hugo_tags: single toml "cross-link"
 #+hugo_categories: cat1 cat2
 #+hugo_menu: :menu "foo" :weight 10 :parent main :identifier single-toml
+#+description: Some description for this post.
 
 This is a single post. You do not need to set the =EXPORT_FILE_NAME=
 property in here. But then you also lose the tag and property

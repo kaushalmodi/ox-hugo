@@ -1,5 +1,6 @@
 +++
 title = "Single Post with TOML front matter"
+description = "Some description for this post."
 date = 2017-07-20
 tags = ["single", "toml", "cross-link"]
 categories = ["cat1", "cat2"]

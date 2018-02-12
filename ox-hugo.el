@@ -1859,6 +1859,9 @@ INFO is a plist used as a communication channel."
          (exportables org-hugo-external-file-extensions-allowed-for-copying)
          (bundle-dir (and (plist-get info :hugo-bundle)
                           (org-hugo--get-pub-dir info)))
+         (bundle-name (and bundle-dir ;`bundle-dir'="/foo/bar/" -> `bundle-name'="bar"
+                           (file-name-base
+                            (string-trim-right bundle-dir "/"))))
          (static-dir (file-truename
                       (concat
                        (file-name-as-directory (plist-get info :hugo-base-dir))
@@ -1888,21 +1891,31 @@ INFO is a plist used as a communication channel."
                       ;; return "bar/baz.png".
                       ;; (message "[ox-hugo DBG attch rewrite] path contains static")
                       (substring path-true (match-end 0)))
-                     ((and bundle-dir
-                           (string-match default-directory path-true))
-                      ;; This is a page bundle.  `default-path' is
-                      ;; "<ORG_FILE_DIR>/", `path-true' is
-                      ;; "<ORG_FILE_DIR>/bar/baz.png", return
-                      ;; "bar/baz.png".
-                      ;; (message "[ox-hugo DBG attch rewrite BUNDLE] attch along with Org content: %s"
-                      ;;          (substring path-true (match-end 0)))
-                      (substring path-true (match-end 0)))
                      (bundle-dir
-                      ;; This is a page bundle.  `default-path' is
-                      ;; "<ORG_FILE_DIR>/", `path-true' is
-                      ;; "/foo/bar/baz.png", return "baz.png".
-                      ;; (message "[ox-hugo DBG attch rewrite BUNDLE] attch neither in static nor in Org file dir")
-                      (file-name-nondirectory path))
+                      (cond
+                       ((string-match (concat "/" (regexp-quote bundle-name) "/") path-true)
+                        ;; This is a page bundle.  `bundle-name' is
+                        ;; "<BUNDLE_NAME>", `path-true' is
+                        ;; "<ORG_FILE_DIR>/bar/<BUNDLE_NAME>/zoo/baz.png",
+                        ;; return "zoo/baz.png".
+                        ;; (message "[ox-hugo DBG attch rewrite BUNDLE 1] bundle-name: %s" bundle-name)
+                        ;; (message "[ox-hugo DBG attch rewrite BUNDLE 1] attch along with Org content: %s"
+                        ;;          (substring path-true (match-end 0)))
+                        (substring path-true (match-end 0)))
+                       ((string-match (regexp-quote default-directory) path-true)
+                        ;; This is a page bundle.  `default-path' is
+                        ;; "<ORG_FILE_DIR>/", `path-true' is
+                        ;; "<ORG_FILE_DIR>/bar/baz.png", return
+                        ;; "bar/baz.png".
+                        ;; (message "[ox-hugo DBG attch rewrite BUNDLE 2] attch along with Org content: %s"
+                        ;;          (substring path-true (match-end 0)))
+                        (substring path-true (match-end 0)))
+                       (t
+                        ;; This is a page bundle.  `default-path' is
+                        ;; "<ORG_FILE_DIR>/", `path-true' is
+                        ;; "/foo/bar/baz.png", return "baz.png".
+                        ;; (message "[ox-hugo DBG attch rewrite BUNDLE 3] attch neither in static nor in Org file dir")
+                        (file-name-nondirectory path))))
                      (t
                       ;; Else, `path-true' is "/foo/bar/baz.png",
                       ;; return "ox-hugo/baz.png".  "ox-hugo" is the

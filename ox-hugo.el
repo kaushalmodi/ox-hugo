@@ -2939,6 +2939,9 @@ are \"toml\" and \"yaml\"."
                      "HUGO_LOCALE"
                      "HUGO_PAIRED_SHORTCODES"
                      "DATE" ;Useful for inheriting same date to same posts in different languages
+                     "HUGO_PUBLISHDATE"
+                     "HUGO_EXPIRYDATE"
+                     "HUGO_LASTMOD"
                      "HUGO_SLUG" ;Useful for inheriting same slug to same posts in different languages
                      "HUGO_AUTO_SET_LASTMOD")))
     (mapcar (lambda (str)

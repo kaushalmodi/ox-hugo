@@ -110,11 +110,6 @@ helps set the bundle path correctly for such cases (where
 EXPORT_HUGO_BUNDLE and EXPORT_FILE_NAME are set in the same
 subtree).")
 
-(defvar org-hugo--description nil
-  "Variable to store the current post's description.
-This variable is updated by the `org-hugo-special-block'
-function.")
-
 (defvar org-hugo-allow-export-after-save t
   "Enable flag for `org-hugo-export-wim-to-md-after-save'.
 When nil, the above function will not export the Org file to
@@ -911,8 +906,7 @@ This function is called in the very end of
 `org-hugo-publish-to-md'.
 
 This is an internal function."
-  (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
-  (setq org-hugo--description nil))
+  (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code))
 
 ;;;; HTMLized section number for headline
 (defun org-hugo--get-headline-number (headline info &optional toc)
@@ -2128,8 +2122,9 @@ channel."
   "Transcode a SPECIAL-BLOCK element from Org to Hugo-compatible Markdown.
 CONTENTS holds the contents of the block.
 
-This function saves the content of \"description\" special block
-to the global variable `org-hugo--description'.
+If the special block if of type \"description\", the value of
+`:description' key of the INFO plist gets overwritten by the
+contents of that block.
 
 Else if the SPECIAL-BLOCK type matches one of the shortcodes set
 in HUGO_PAIRED_SHORTCODES property, export them as Markdown or
@@ -2149,7 +2144,8 @@ INFO is a plist holding export options."
         (contents (org-trim contents)))
     (cond
      ((string= block-type "description")
-      (setq org-hugo--description contents)
+      ;; Overwrite the value of the `:description' key in `info'.
+      (plist-put info :description contents)
       nil)
      ;; https://emacs.stackexchange.com/a/28685/115
      ((cl-member block-type paired-shortcodes
@@ -2573,8 +2569,7 @@ INFO is a plist used as a communication channel."
                              (lang (when (stringp lang)
                                      (replace-regexp-in-string "\\`\\([a-z]+_[A-Z]+\\).*\\'" "\\1" lang))))
                         lang)))
-         (description (or org-hugo--description
-                          (org-string-nw-p (plist-get info :description))))
+         (description (org-string-nw-p (plist-get info :description)))
          (aliases-raw (let ((aliases-raw-1 (org-string-nw-p (plist-get info :hugo-aliases))))
                         (when aliases-raw-1
                           (org-split-string aliases-raw-1 " "))))

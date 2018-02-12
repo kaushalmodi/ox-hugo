@@ -4270,6 +4270,17 @@ of this post
 *bold* -- /italics/ --- +strikethrough+
 #+end_description
 Post content.
+***** Special block description overrides property-set description
+:PROPERTIES:
+:EXPORT_FILE_NAME: description-special-block-description
+:EXPORT_DESCRIPTION: Description set in subtree property
+:END:
+If the description is set via the subtree property
+=:EXPORT_DESCRIPTION= (or the =#+description= keyword), and via the
+"description" special block too, the latter will take precedence.
+#+begin_description
+Description set in special block
+#+end_description
 **** YAML                                                              :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml

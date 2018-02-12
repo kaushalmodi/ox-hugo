@@ -4497,6 +4497,29 @@ This post will have the =foo= key in front-matter replaced with
 :END:
 Here, attempt is made to replace a non-existing key =toto=, but still,
 there shouldn't be any error.
+* Date and slug inheritance                           :inheritance:date:slug:
+:PROPERTIES:
+:EXPORT_DATE: 2018-02-12
+:EXPORT_HUGO_SLUG: data-and-slug-inheritance
+:END:
+** Date and slug inheritance (English)
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: posts/en
+:EXPORT_FILE_NAME: date-and-slug-inheritance.en.md
+:END:
+Date and slug inheritance is useful when you want to use the same data
+and slug for multiple posts, but in different languages.
+
+[[/posts/es/data-and-slug-inheritance][Spanish version]]
+** Date and slug inheritance (Spanish)
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: posts/es
+:EXPORT_FILE_NAME: date-and-slug-inheritance.es.md
+:END:
+La herencia de fecha y slug es útil cuando desea usar los mismos datos
+y slug para múltiples publicaciones, pero en diferentes idiomas.
+
+[[/posts/en/data-and-slug-inheritance][English version]]
 * Real Examples                                               :real_examples:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: real-examples

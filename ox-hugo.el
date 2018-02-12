@@ -75,7 +75,6 @@
 (require 'ox-blackfriday)
 (require 'ffap)                         ;For `ffap-url-regexp'
 (require 'ob-core)                      ;For `org-babel-parse-header-arguments'
-(require 'subr-x)                       ;For `string-trim-right'
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
 
@@ -1862,7 +1861,9 @@ INFO is a plist used as a communication channel."
                           (org-hugo--get-pub-dir info)))
          (bundle-name (and bundle-dir ;`bundle-dir'="/foo/bar/" -> `bundle-name'="bar"
                            (file-name-base
-                            (string-trim-right bundle-dir "/"))))
+                            (if (string-match (concat "\\(?:/\\)\\'") bundle-dir)
+                                (replace-match "" nil nil bundle-dir)
+                              bundle-dir))))
          (static-dir (file-truename
                       (concat
                        (file-name-as-directory (plist-get info :hugo-base-dir))

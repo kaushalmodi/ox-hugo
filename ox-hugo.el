@@ -75,6 +75,7 @@
 (require 'ox-blackfriday)
 (require 'ffap)                         ;For `ffap-url-regexp'
 (require 'ob-core)                      ;For `org-babel-parse-header-arguments'
+(require 'subr-x)                       ;For `string-trim-right'
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
 

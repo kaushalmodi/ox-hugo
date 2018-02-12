@@ -950,7 +950,7 @@ This is interpreted from the Org [[https://orgmode.org/manual/Special-properties
 
 The =CLOSED= property is inserted once the post-subtree's =TODO= state
 is set to =DONE= (~C-c C-t~), *if* the =org-log-done= variable is set
-to ='time= (default is /nil/). This option can also be enable on a
+to ='time= (default is /nil/). This option can also be enabled on a
 per-file-basis with =#+startup: logdone=.
 
 Here's an example:

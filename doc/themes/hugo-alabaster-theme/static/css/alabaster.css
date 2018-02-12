@@ -166,11 +166,15 @@ div.sphinxsidebar hr {
 a {
     color: #3782BE;
     text-decoration: underline;
+    -webkit-text-decoration-color: #3782BE;
+    text-decoration-color: #3782BE;
+    -webkit-text-decoration-skip: ink;
+    text-decoration-skip: ink;
 }
 
 a:hover {
-    color: #3782BE;
-    text-decoration: underline;
+    -webkit-text-decoration-color: inherit;
+    text-decoration-color: inherit;
 }
 
 div.body h1,
@@ -566,4 +570,43 @@ table.docutils.citation, table.docutils.citation td, table.docutils.citation th 
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+
+/* Headline Hashes */
+.headline-hash,
+.headline-hash:hover {
+    text-decoration: none;
+    font-size: 0.8em;
+    vertical-align: top;
+}
+.headline-hash:hover {
+    opacity: 0.75;
+}
+
+/* Org-style Headline Level Prefix */
+.body h2::before,
+.body h3::before,
+.body h4::before,
+.body h5::before,
+.body h6::before {
+    color: #515151;
+    opacity: 0.6;
+    font-size: 1.3em;
+    font-weight: bold;
+    vertical-align: -25%;
+}
+.body h2::before {
+    content: "* ";
+}
+.body h3::before {
+    content: "** ";
+}
+.body h4::before {
+    content: "*** ";
+}
+.body h5::before {
+    content: "**** ";
+}
+.body h6::before {
+    content: "***** ";
 }

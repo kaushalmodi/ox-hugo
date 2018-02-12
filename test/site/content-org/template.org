@@ -2,7 +2,7 @@
 #+seq_todo: TODO DRAFT DONE
 #+property: header-args :eval no
 
-#+startup: indent
+#+startup: indent logdone
 
 #+macro: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
 #+macro: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]

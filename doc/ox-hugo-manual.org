@@ -946,9 +946,12 @@ The date meta-data can be set as Org properties in post subtrees,
 similar to the keywords set for [[#dates-file-based-exports][File-based exports]]. But subtree-based
 exports allow an even concise way to set those dates.
 ***** Date
-This is interpreted from the Org [[https://orgmode.org/manual/Special-properties.html][Special Property]] =CLOSED=. This is
-auto-set once the post-subtree's =TODO= state is set to =DONE= (~C-c
-C-t~).
+This is interpreted from the Org [[https://orgmode.org/manual/Special-properties.html][Special Property]] =CLOSED=.
+
+The =CLOSED= property is inserted once the post-subtree's =TODO= state
+is set to =DONE= (~C-c C-t~), *if* the =org-log-done= variable is set
+to ='time= (default is /nil/). This option can also be enable on a
+per-file-basis with =#+startup: logdone=.
 
 Here's an example:
 #+begin_src org
@@ -959,6 +962,10 @@ Post content.
 
 Above gets translated to =date = 2018-01-23T14:10:00-05:00= in
 front-matter (TOML).
+
+- NOTE :: Another variable =org-log-done-with-time= can be set to /nil/
+          (default to =t=) if you would like the =CLOSED= time stamp
+          to contain only the date, and not the time.
 
 /You do not then need to explicitly set the =:EXPORT_DATE:= property./
 ***** Publish Date

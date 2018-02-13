@@ -852,17 +852,19 @@ contextual information."
          table-num
          (caption-html (if (not caption)
                            ""
-                         (let ((caption-str
+                         (let ((caption-prefix-fmt-str (org-html--translate "Table %d:" info))
+                               (caption-str
                                 (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
                                  (org-export-data-with-backend caption 'html info))))
                            (setq table-num (org-export-get-ordinal
                                             table info
                                             nil #'org-html--has-caption-p))
                            (format (concat "<div class=\"table-caption\">\n"
-                                           "  <span class=\"table-number\">Table %d:</span>\n"
+                                           "  <span class=\"table-number\">%s</span>\n"
                                            "  %s\n"
                                            "</div>\n\n")
-                                   table-num caption-str))))
+                                   (format caption-prefix-fmt-str table-num)
+                                   caption-str))))
          (attr (org-export-read-attribute :attr_html table))
          ;; At the moment only the `class' attribute is supported in
          ;; #+attr_html above tables.

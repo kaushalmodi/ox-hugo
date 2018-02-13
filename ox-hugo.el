@@ -946,7 +946,7 @@ contents according to the current headline."
           (unless local
             (let ((style (plist-get info :md-headline-style))
                   (loffset (string-to-number (plist-get info :hugo-level-offset)))
-                  (title "Table of Contents"))
+                  (title (org-html--translate "Table of Contents" info)))
               (org-hugo--headline-title style 1 loffset title))))
          (toc-items
           (mapconcat
@@ -1713,11 +1713,11 @@ and rewrite link paths to make blogging more seamless."
                                 ;; https://github.com/gohugoio/hugo/issues/4406
                                 ;; gets resolved.
                                 "" ;"<span class=\\\"figure-number\\\">"
-                                (format (org-html--translate "Figure %d: " info)
+                                (format (org-html--translate "Figure %d:" info)
 				        (org-export-get-ordinal
                                          useful-parent info
                                          nil #'org-html--has-caption-p))
-			        ""      ;"</span>"
+			        " "     ;" </span>"
 			        caption))))
         ;; (message "[ox-hugo-link DBG] inline image? %s\npath: %s"
         ;;          inline-image path)
@@ -2067,14 +2067,20 @@ channel."
                          (let* ((src-block-num (org-export-get-ordinal
                                                 src-block info
                                                 nil #'org-html--has-caption-p))
+                                (caption-prefix (let* ((fmt-str (org-html--translate "Listing %d:" info))
+                                                       (fmt-str (or (and (string= fmt-str "Listing %d:")
+                                                                         "Code Snippet %d:")
+                                                                    fmt-str)))
+                                                  (format fmt-str src-block-num)))
                                 (caption-str
                                  (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
                                   (org-export-data-with-backend caption 'html info))))
+
 		           (format (concat "\n\n<div class=\"src-block-caption\">\n"
-                                           "  <span class=\"src-block-number\">Code Snippet %d:</span>\n"
+                                           "  <span class=\"src-block-number\">%s</span>\n"
                                            "  %s\n"
                                            "</div>")
-                                   src-block-num caption-str))))
+                                   caption-prefix caption-str))))
          content
          ret)
     ;; (message "ox-hugo src [dbg] number-lines: %S" number-lines)

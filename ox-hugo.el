@@ -1705,7 +1705,20 @@ and rewrite link paths to make blogging more seamless."
                         (org-export-data  ;Look for caption set using #+caption
                          (org-export-get-caption (org-export-get-parent-element link))
                          info))
-                       (plist-get attr :caption))))
+                       (plist-get attr :caption)))
+             (caption (when (org-string-nw-p caption)
+			(format "%s%s%s%s"
+                                ;; Tue Feb 13 11:32:45 EST 2018 - kmodi
+                                ;; Add the span tag once
+                                ;; https://github.com/gohugoio/hugo/issues/4406
+                                ;; gets resolved.
+                                "" ;"<span class=\\\"figure-number\\\">"
+                                (format (org-html--translate "Figure %d: " info)
+				        (org-export-get-ordinal
+                                         useful-parent info
+                                         nil #'org-html--has-caption-p))
+			        ""      ;"</span>"
+			        caption))))
         ;; (message "[ox-hugo-link DBG] inline image? %s\npath: %s"
         ;;          inline-image path)
         ;; (message "[org-hugo-link DBG] attr: %s num of attr: %d"

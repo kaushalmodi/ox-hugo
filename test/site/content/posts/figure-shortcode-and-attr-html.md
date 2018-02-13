@@ -38,7 +38,7 @@ below image, caption is set using that:
 
 Some text before image.
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="A unicorn!" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 1: A unicorn!" >}}
 
 Some more text, after image.
 
@@ -46,7 +46,7 @@ Below, the same caption is set using the `#+attr_html` method instead:
 
 Some text before image.
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="A unicorn!" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: A unicorn!" >}}
 
 _Enter a new line after the image link so that it's in an "Org
 paragraph" that contains just that image. That tells Org that that

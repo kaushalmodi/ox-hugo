@@ -18,24 +18,24 @@ Index page of _Page Bundle A_.
 
 ### Source path contains `/static/` {#source-path-contains-static}
 
-{{< figure src="images/copy-of-unicorn-logo.png" >}}
+When path contains `/static/`, the path translations are the exact
+same as those for non-bundle cases.
 
-If you link to files not in the **current directory**, ensure that the
-path contains `/static/` if you would like to preserve the directory
-structure.
+[More details](/posts/image-links/#path-containing-static)
 
-Example translations between the `static`-containing image paths to
-the copied location inside the bundle:
-
-| Outside `static`                 | Copied-to location inside BUNDLE                              | Explanation                                                                                                |
-|----------------------------------|---------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
-| `~/temp/static/images/foo.png`   | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/images/foo.png`   | If the **outside** path has `/static/` in it, the directory structure after that is preserved when copied. |
-| `~/temp/static/img/foo.png`      | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/img/foo.png`      | (same as above)                                                                                            |
-| `~/temp/static/foo.png`          | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/foo.png`          | (same as above)                                                                                            |
-| `~/temp/static/articles/zoo.pdf` | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/articles/zoo.pdf` | (same as above)                                                                                            |
+{{< figure src="/images/copy-of-unicorn-logo-page-bundle.png" >}}
 
 
-### Source path does not contain `/static/` {#source-path-does-not-contain-static}
+### Source path contains the **bundle name** {#source-path-contains-the-bundle-name}
+
+| Inside `<ORG_FILE_DIR>`                   | Copied-to location inside BUNDLE                         | Explanation                                                                                                             |
+|-------------------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| `<ORG_FILE_DIR>/bar/<BUNDLE>/baz/foo.png` | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/baz/foo.png` | If the file directory path contains `"/<BUNDLE>/"`, the directory structure following that `"/<BUNDLE>/"` is preserved. |
+
+See [this other test](/images-in-content/page-bundle-images-in-same-dir/) for an example.
+
+
+### Source path contains neither `/static/` nor the **bundle name** {#source-path-contains-neither-static-nor-the-bundle-name}
 
 {{< figure src="copy-2-of-unicorn-logo.png" >}}
 
@@ -44,16 +44,15 @@ the copied location inside the bundle:
 | `~/temp/bar/baz/foo.png` | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/foo.png` | Here, as the **outside** path does not have `/static/`, the file is copied directly to the BUNDLE dir. |
 
 
-#### Same image, but hyperlinked to itself {#same-image-but-hyperlinked-to-itself}
+#### Same image, but hyperlinked {#same-image-but-hyperlinked}
 
 {{< figure src="copy-2-of-unicorn-logo.png" link="copy-2-of-unicorn-logo.png" >}}
 
 
-#### Page Bundles with images in the same dir as content Org file {#page-bundles-with-images-in-the-same-dir-as-content-org-file}
+### Page Bundles with images in the same dir as content Org file {#page-bundles-with-images-in-the-same-dir-as-content-org-file}
 
-| Inside `<ORG_FILE_DIR>`                   | Copied-to location inside BUNDLE                             | Explanation                                                                                                                                      |
-|-------------------------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| `<ORG_FILE_DIR>/bar/baz/foo.png`          | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/bar/baz/foo.png` | Even if the **outside** path does not have `/static/`, it is still inside the same dir as the Org file, so the directory structure is preserved. |
-| `<ORG_FILE_DIR>/bar/<BUNDLE>/baz/foo.png` | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/baz/foo.png`     | If the file directory path contains `"/<BUNDLE>/"`, the directory structure following that `"/<BUNDLE>/"` is preserved.                          |
+| Inside `<ORG_FILE_DIR>`          | Copied-to location inside BUNDLE                             | Explanation                                                                                                                                      |
+|----------------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| `<ORG_FILE_DIR>/bar/baz/foo.png` | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/bar/baz/foo.png` | Even if the **outside** path does not have `/static/`, it is still inside the same dir as the Org file, so the directory structure is preserved. |
 
 See [this other test](/images-in-content/page-bundle-images-in-same-dir/) for an example.

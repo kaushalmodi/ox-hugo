@@ -58,7 +58,7 @@ NOTE
 Here's the same link with `#+name` specified.. which should also be
 clickable.
 
-<a id="org43d74a3"></a>
+<a id="org49ba17b"></a>
 {{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 
 
@@ -73,7 +73,7 @@ Click below image to jump to the unicorn image.
 {{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 
 
-## Link to image outside of standard Hugo `static` directory {#link-to-image-outside-of-standard-hugo-static-directory}
+## Link to image outside of standard Hugo `static` directory {#path-containing-static}
 
 {{< figure src="/images/copy-of-unicorn-logo.png" >}}
 
@@ -90,6 +90,9 @@ copied location inside `static`:
 | `~/temp/static/img/foo.png`      | `<HUGO_BASE_DIR>/static/img/foo.png`      | (same as above)                                                                                            |
 | `~/temp/static/foo.png`          | `<HUGO_BASE_DIR>/static/foo.png`          | (same as above)                                                                                            |
 | `~/temp/static/articles/zoo.pdf` | `<HUGO_BASE_DIR>/static/articles/zoo.pdf` | (same as above)                                                                                            |
+
+The above path translations (when path contains `static`) hold true
+even when inside page bundle pages.
 
 
 ### Source path does not contain `/static/` {#source-path-does-not-contain-static}

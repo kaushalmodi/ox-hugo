@@ -1883,6 +1883,8 @@ INFO is a plist used as a communication channel."
                        "static/")))
          (dest-dir (or bundle-dir static-dir))
          ret)
+    (unless (file-directory-p static-dir)
+      (user-error "Please create the %s directory" static-dir))
     ;; (message "[ox-hugo DBG attch rewrite] Image export dir is: %s" static-dir)
     ;; (message "[ox-hugo DBG attch rewrite] path: %s" path)
     ;; (message "[ox-hugo DBG attch rewrite] path-true: %s" path-true)
@@ -1905,6 +1907,10 @@ INFO is a plist used as a communication channel."
                       ;; `path-true' is "/foo/static/bar/baz.png",
                       ;; return "bar/baz.png".
                       ;; (message "[ox-hugo DBG attch rewrite] path contains static")
+                      ;; If path-true contains "/static/", set the
+                      ;; `dest-dir' to `static-dir' (even if this is a
+                      ;; page bundle).
+                      (setq dest-dir static-dir)
                       (substring path-true (match-end 0)))
                      (bundle-dir
                       (cond
@@ -1958,7 +1964,8 @@ INFO is a plist used as a communication channel."
               (when (file-newer-than-file-p path-true dest-path)
                 (message "[ox-hugo] Copied %S to %S" path-true dest-path)
                 (copy-file path-true dest-path :ok-if-already-exists))
-              (setq ret (if bundle-dir
+              (setq ret (if (and bundle-dir
+                                 (string= bundle-dir dest-dir))
                             ;; If attachments are copied to the bundle
                             ;; directory, don't prefix the path as "/"
                             ;; as those paths won't exist at the site

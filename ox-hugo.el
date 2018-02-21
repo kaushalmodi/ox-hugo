@@ -1986,7 +1986,7 @@ communication channel."
         (label (let ((lbl (and (org-element-property :name paragraph)
                                (org-export-get-reference paragraph info))))
                  (if lbl
-                     (format "<a id=\"%s\"></a>\n" lbl)
+                     (format "<a id=\"%s\"></a>\n\n" lbl)
                    "")))
         ret)
     (unless (org-hugo--plist-get-true-p info :hugo-preserve-filling)

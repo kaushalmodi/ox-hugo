@@ -58,7 +58,8 @@ NOTE
 Here's the same link with `#+name` specified.. which should also be
 clickable.
 
-<a id="org49ba17b"></a>
+<a id="org55ede7e"></a>
+
 {{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 
 

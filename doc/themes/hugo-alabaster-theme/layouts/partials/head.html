@@ -1,34 +1,41 @@
-<head {{ with .Site.LanguageCode }}lang="{{ . }}"{{ end }}>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-        {{- with .Site.Params.description -}}
-    <meta name="description" content="{{ . }}">
-    {{- end -}}
+<head>
+    <link href="http://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+    <!-- Above is a short hand for the below line. -->
+    <!-- http://htmldog.com/guides/html/intermediate/metatags/ -->
+    <!-- <meta http-equiv="content-type" content="text/html; charset=utf-8"> -->
+
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+    {{ with .Site.Params.description }}
+        <meta name="description" content="{{ . }}">
+    {{ end }}
+
     {{ .Hugo.Generator }}
 
     <title>{{ if not .IsHome }}{{ .Title }} &mdash;{{ end }} {{ .Site.Title }}</title>
 
     <link rel="stylesheet" href="{{ "css/basic.css" | relURL }}" type="text/css" />
     <link rel="stylesheet" href="{{ "css/alabaster.css" | relURL }}" type="text/css" />
-    {{ with .Site.Params.highlightjs -}}
+    {{ with .Site.Params.highlightjs }}
         <link rel="stylesheet" href="{{ . | relURL }}" type="text/css" />
-    {{- end }}
+    {{ end }}
 
-    {{ range .Site.Params.custom_css -}}
+    {{ range .Site.Params.custom_css }}
         <link rel="stylesheet" href="{{ . | relURL }}">
-    {{- end }}
+    {{ end }}
 
-    {{ range .Site.Params.custom_css_absolute -}}
+    {{ range .Site.Params.custom_css_absolute }}
         <link rel="stylesheet" href="{{ . }}">
-    {{- end }}
+    {{ end }}
 
-    {{ with .Site.Params.favicon -}}
+    {{ with .Site.Params.favicon }}
         <link rel="shortcut icon" href="{{ . | relURL }}" type="image/x-icon"/>
-    {{- else -}}
+    {{ else }}
         <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}" type="image/x-icon"/>
-    {{- end }}
+    {{ end }}
 
-    {{ with .Params.mathjax -}}
+    {{ with .Params.mathjax }}
         {{ partial "mathjax.html" }}
-    {{- end }}
+    {{ end }}
 </head>

@@ -84,15 +84,17 @@ div.sphinxsidebarwrapper p.logo {
     text-align: center;
 }
 
-div.sphinxsidebarwrapper h1.logo {
+div.sphinxsidebarwrapper span.logo {
     margin-top: -10px;
     text-align: center;
     margin-bottom: 5px;
     text-align: center;
 }
 
-div.sphinxsidebarwrapper h1.logo-name {
+div.sphinxsidebarwrapper span.logo-name {
     margin-top: 0px;
+    font-size: 2em;
+    font-weight: bold;
 }
 
 div.sphinxsidebarwrapper p.blurb {

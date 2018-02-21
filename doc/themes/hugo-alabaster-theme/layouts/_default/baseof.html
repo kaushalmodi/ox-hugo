@@ -1,18 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
     {{ partial "head" . }}
-
-    <body role="document">
+    <body>
 	<div class="document">
 	    <div class="documentwrapper">
 		<div class="bodywrapper">
-		    <div class="body" role="main">
+		    <div class="body">
 			{{ block "main" . }}{{ end }}
 
 			{{ if not .IsHome -}}
 			    {{ template "_internal/disqus.html" . }}
-			    {{- end }}
+			{{ end }}
 		    </div>
 		</div>
 	    </div>
@@ -22,14 +20,14 @@
 
 	    {{ range .Site.Params.custom_js -}}
 		<script src="{{ . | relURL }}"></script>
-		{{- end }}
+	    {{ end }}
 
-		{{ with .Site.Params.highlightjs -}}
-		    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
-		    <script>hljs.initHighlightingOnLoad();</script>
-		{{ end }}
+	    {{ with .Site.Params.highlightjs -}}
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+		<script>hljs.initHighlightingOnLoad();</script>
+	    {{ end }}
 
-		{{ template "_internal/google_analytics.html" . }}
+	    {{ template "_internal/google_analytics.html" . }}
 	</div>
     </body>
 </html>

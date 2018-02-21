@@ -37,9 +37,9 @@ This is the test site for the <a href="https://github.com/kaushalmodi/ox-hugo">
 <code>ox-hugo</code></a> package for Emacs/Org-mode.
 """
   footer = """
-<center>
+<div style="text-align: center;">
   [<a href="/">Test Site home</a> | <a href="https://ox-hugo.scripter.co/"><code>ox-hugo</code> home</a>]
-</center>
+</div>
 """
   custom_css = ["css/style.css"]
   [Params.source]

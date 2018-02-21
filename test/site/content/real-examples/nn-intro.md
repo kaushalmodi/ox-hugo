@@ -49,7 +49,7 @@ Disclaimer
 a
 = \sigma(
     \left[ \begin{matrix}
-        w\_{1} & ⋯  & w\_{n} \\
+        w\_{1} & ⋯  & w\_{n} \\\\\\
     \end{matrix}\right]  ·
     \left[ \begin{array}{x} x\_1 \\ ⋮ \\ ⋮ \\ x\_n \end{array}\right] +
     b
@@ -96,9 +96,9 @@ a
 \left[ \begin{array}{a} a\_1 \\ ⋮ \\ a\_s \end{array}\right]
 = \sigma(
     \left[ \begin{matrix}
-        w\_{1,1} & ⋯  & w\_{1,n} \\
-        ⋮ & ⋱  & ⋮  \\
-        w\_{s,1} & ⋯  & w\_{s,n} \\
+        w\_{1,1} & ⋯  & w\_{1,n} \\\\\\
+        ⋮ & ⋱  & ⋮  \\\\\\
+        w\_{s,1} & ⋯  & w\_{s,n} \\\\\\
     \end{matrix}\right]  ·
     \left[ \begin{array}{x} x\_1 \\ ⋮ \\ ⋮ \\ x\_n \end{array}\right] +
     \left[ \begin{array}{b} b\_1 \\ ⋮ \\ b\_s \end{array}\right]
@@ -138,9 +138,9 @@ a
 \left[ \begin{array}{a} a^l\_1 \\ ⋮ \\ a^l\_{d\_l} \end{array}\right]
 = \sigma(
     \left[ \begin{matrix}
-        w^l\_{1,1} & ⋯  & w^l\_{1,d\_{l-1}} \\
-        ⋮ & ⋱  & ⋮  \\
-        w^l\_{d\_l,1} & ⋯  & w^l\_{d\_l,d\_{l-1}} \\
+        w^l\_{1,1} & ⋯  & w^l\_{1,d\_{l-1}} \\\\\\
+        ⋮ & ⋱  & ⋮  \\\\\\
+        w^l\_{d\_l,1} & ⋯  & w^l\_{d\_l,d\_{l-1}} \\\\\\
     \end{matrix}\right]  ·
     \left[ \begin{array}{x} a^{l-1}\_1 \\ ⋮ \\ ⋮ \\ a^{l-1}\_{d\_{l-1}} \end{array}\right] +
     \left[ \begin{array}{b} b^l\_1 \\ ⋮ \\ b^l\_{d\_l} \end{array}\right])
@@ -177,12 +177,12 @@ a
 计算过程如下：
 
 \begin{align}
-a^1  &= x \\
-a^2  &=  σ(W^2a^1 + b^2) \\
-a^3  &=  σ(W^3a^2 + b^3) \\
-⋯ \\
-a^L  &= σ(W^La^{L-1} + b^L) \\
-y  &= a^L \\
+a^1  &= x \\\\\\
+a^2  &=  σ(W^2a^1 + b^2) \\\\\\
+a^3  &=  σ(W^3a^2 + b^3) \\\\\\
+⋯ \\\\\\
+a^L  &= σ(W^La^{L-1} + b^L) \\\\\\
+y  &= a^L \\\\\\
 \end{align}
 
 推断实际上就是一系列矩阵乘法与向量运算，一个训练好的神经网络可以高效地
@@ -213,7 +213,7 @@ y  &= a^L \\
 (MeanSquareError)**
 
 \\[
-C(w,b) = \frac{1}{2n} \sum\_x{{\|y(x)-a\|}^2}
+C(w,b) = \frac{1}{2n} \sum\_x{{\\|y(x)-a\\|}^2}
 \\]
 
 前面的系数 \\(\frac 1 2\\) 是为了求导后简洁的形式而添加的， \\(n\\) 是使用样本
@@ -286,7 +286,7 @@ MSE，而不是诸如"正确分类图像个数"的指标，是因为只有一个
  \\(w,b\\) 数目非常巨大
 
 \\[
-w →w' = w-η\frac{∂C}{∂w} \\
+w →w' = w-η\frac{∂C}{∂w} \\\\\\
 b → b' = b-η\frac{∂C}{∂b}
 \\]
 
@@ -343,7 +343,7 @@ b → b' = b-η\frac{∂C}{∂b}
 | \\(∇C\_{W^l} = δ^l × {(a^{{l-1})}}T\\)    | 权值梯度计算公式 | BP3 |
 | \\(∇C\_b = δ^l\\)                         | 偏置梯度计算公式 | BP4 |
 
-当误差函数取MSE： \\(C = \frac 1 2 \|\vec{y} -\vec{a}\|^2= \frac 1 2
+当误差函数取MSE： \\(C = \frac 1 2 \\|\vec{y} -\vec{a}\\|^2= \frac 1 2
 [(y\_1 - a\_1)^2 + \cdots + (y\_{d\_L} - a\_{d\_L})^2]\\) ，激活函数取sigmoid时：
 
 | 计算方程                                       | 说明                                                           | 编号 |
@@ -375,7 +375,7 @@ b → b' = b-η\frac{∂C}{∂b}
 \frac{∂C}{∂z^L} = \frac{∂C}{∂a^L} \frac{∂a^L}{∂z^L}  = ∇C\_a σ'(z^L)
 \\]
 
-而因为误差函数 \\(C = \frac 1 2 \|\vec{y} -\vec{a}\|^2= \frac 1 2
+而因为误差函数 \\(C = \frac 1 2 \\|\vec{y} -\vec{a}\\|^2= \frac 1 2
 [(y\_1 - a\_1)^2 + ⋯ + (y\_{d\_L} - a\_{d\_L})^2]\\) ，方程两侧对某个 \\(a\_j\\) 取偏导则
 有：
 
@@ -428,10 +428,10 @@ z^{l+1}\_k = W^{l+1}\_{k,\*} ·a^l + b^{l+1}\_{k}  =   W^{l+1}\_{k,\*} · σ(z^{
 回代则有：
 
 \begin{align}
-δ^l\_j & = \sum\_{k=1}^{d\_{l+1}}  (δ^{l+1}\_k  \frac{∂z^{l+1}\_k}{∂z^{l}\_j})  \\
-& = σ'(z^l)   \sum\_{k=1}^{d\_{l+1}}     (δ^{l+1}\_k  w^{l+1}\_{kj}) \\
-& = σ'(z^l) ⊙  [(δ^{l+1}) · W^{l+1}\_{\*.j}] \\
-& = σ'(z^l) ⊙ [(W^{l+1})^T\_{j,\*} ·  (δ^{l+1}) ]\\
+δ^l\_j & = \sum\_{k=1}^{d\_{l+1}}  (δ^{l+1}\_k  \frac{∂z^{l+1}\_k}{∂z^{l}\_j})  \\\\\\
+& = σ'(z^l)   \sum\_{k=1}^{d\_{l+1}}     (δ^{l+1}\_k  w^{l+1}\_{kj}) \\\\\\
+& = σ'(z^l) ⊙  [(δ^{l+1}) · W^{l+1}\_{\*.j}] \\\\\\
+& = σ'(z^l) ⊙ [(W^{l+1})^T\_{j,\*} ·  (δ^{l+1}) ]\\\\\\
 \end{align}
 
 这里，对后一层所有神经元的误差权值之积求和，可以改写为两个向量的点积：

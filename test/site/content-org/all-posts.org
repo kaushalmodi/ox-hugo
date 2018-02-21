@@ -2704,6 +2704,33 @@ one, but:
   exported Markdown file./
 - It has a different label (=\label{eq:2}= instead of =\label{eq:1}=);
   Mathjax *requires the equation labels to be unique*.
+** Blackfriday-specific escaping in equations :escaping:@upstream:blackfriday:
+:PROPERTIES:
+:EXPORT_FILE_NAME: equations-bf-escaping
+:END:
+{{{oxhugoissue(138)}}}
+*** =\|= → =\\|=
+$$
+C(w,b) = \frac{1}{2n} \sum_x{{\|y(x)-a\|}^2}
+$$
+*** =\\= at EOL → =\\\\\\=
+\begin{align}
+a^1  &= x \\
+a^2  &=  σ(W^2a^1 + b^2) \\
+a^3  &=  σ(W^3a^2 + b^3) \\
+⋯ \\
+a^L  &= σ(W^La^{L-1} + b^L) \\
+y  &= a^L \\
+\end{align}
+**** Same as above, but without space before the =\\= at EOL
+\begin{align}
+a^1  &= x\\
+a^2  &=  σ(W^2a^1 + b^2)\\
+a^3  &=  σ(W^3a^2 + b^3)\\
+⋯\\
+a^L  &= σ(W^La^{L-1} + b^L)\\
+y  &= a^L\\
+\end{align}
 * Lists                                                               :lists:
 ** List following a list
 :PROPERTIES:

@@ -279,11 +279,33 @@ doesn't matter in equations.
 
   \"(c)\" -> \"( c)\"
   \"(r)\" -> \"( r)\"
-  \"(tm)\" -> \"( tm)\"."
+  \"(tm)\" -> \"( tm)\"
+
+https://gohugo.io/content-management/formats#solution
+https://github.com/kaushalmodi/ox-hugo/issues/138
+
+Need to escape the backslash in \"\\(\", \"\\)\", .. to make
+Blackfriday happy.  So:
+
+  \"\\(\" -> \"\\\\(\"
+  \"\\)\" -> \"\\\\)\"
+  \"\\\\=[\" -> \"\\\\\\=[\"
+  \"\\\\=]\" -> \"\\\\\\=]\"
+  \"\\|\" -> \"\\\\|\"
+
+and finally:
+
+  \"\\\\\" -> \"\\\\\\\\\\\\\"."
   (let* (;; _ -> \_, * -> \*
          (escaped-str (replace-regexp-in-string "[_*]" "\\\\\\&" str))
          ;; (c) -> ( c), (r) -> ( r), (tm) -> ( tm)
-         (escaped-str (replace-regexp-in-string "(\\(c\\|r\\|tm\\))" "( \\1)" escaped-str)))
+         (escaped-str (replace-regexp-in-string "(\\(c\\|r\\|tm\\))" "( \\1)" escaped-str))
+         ;; \( -> \\(, \) -> \\), \[ -> \\[, \] -> \\], \| -> \\|
+         (escaped-str (replace-regexp-in-string "\\(\\\\[]()[|]\\)" "\\\\\\1" escaped-str))
+         (escaped-str (replace-regexp-in-string
+                       "\\([^\\]\\)\\\\\\{2\\}[[:blank:]]*$" ;Replace "\\" at EOL with:
+                       "\\1\\\\\\\\\\\\\\\\\\\\\\\\"             ;"\\\\\\"
+                       escaped-str)))
     escaped-str))
 
 ;;;; Reset org-blackfriday--code-block-num-backticks
@@ -557,11 +579,6 @@ INFO is a plist holding contextual information."
      ((memq processing-type '(t mathjax))
       (let* ((latex-frag (org-element-property :value latex-fragment))
              (frag (org-html-format-latex latex-frag 'mathjax info))
-             ;; https://gohugo.io/content-management/formats#solution
-             ;; Need to escape the backslash in "\(", "\)", .. to
-             ;; make Blackfriday happy.  So \( -> \\(, \) -> \\),
-             ;; \[ -> \\[ and \] -> \\].
-             (frag (replace-regexp-in-string "\\(\\\\[]()[]\\)" "\\\\\\1" frag))
              (frag (org-blackfriday-escape-chars-in-equation frag)))
         ;; (message "[ox-bf-latex-frag DBG] frag: %s" frag)
         frag))

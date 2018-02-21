@@ -8,9 +8,14 @@
 [[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]) and also generates the
 front-matter (in TOML or YAML format).
 
-This project consists of =ox-blackfriday.el= too. It is a derivation
-of [[https://github.com/larstvei/ox-gfm][=ox-gfm=]] with support added for Blackfriday Markdown tables and
-many other tweaks. =ox-hugo= backend extends from this.
+The =ox-hugo= backend extends from a /parent/ backend
+=ox-blackfriday.el=. The latter is the one that primarily does the
+Blackfriday-friendly Markdown content generation. The main job of
+=ox-hugo= is to generate the front-matter for each exported content
+file, and then append that generated Markdown to it.
+
+There are, though, few functions that =ox-hugo.el= overrides over
+those by =ox-blackfriday.el=.
 * Table of Contents
 - [[#screenshots][Screenshots]]
 - [[#documentation][Documentation]]
@@ -68,11 +73,9 @@ export from Org to Markdown, and then finally =hugo=.
 * Demo
 [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content][=ox-hugo= Exported Markdown]] → https://ox-hugo.scripter.co/test
 
-Now, the test site looks very simple, because:
-- It is designed to verify if all the content translates from Org to
-  Markdown as expected.
-- It uses a [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/themes/bare_min/][*bare_min*]] /theme/ written just for the debug purpose (not
-  extra aesthetics).
+The test site uses a [[https://github.com/kaushalmodi/hugo-bare-min-theme][minimal]] theme written just for debug purposes
+(not extra aesthetics). The test site is designed to verify if all the
+content translates from Org to Markdown as expected.
 
 /See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
 presentation styles./
@@ -181,7 +184,7 @@ available customization options for this package.
   - Similarly, support =#+attr_html= and =#+attr_css= for paragraphs,
     example blocks, source blocks, plain lists and quote blocks too --
     #[[https://github.com/kaushalmodi/ox-hugo/issues/113][113]].
-- Now =publishdate= and =expirydate= front-matter properties get
+- Now =publishDate= and =expiryDate= front-matter properties get
   auto-derived from =SCHEDULED= and =DEADLINE= special properties if
   associated with the valid Hugo post subtree --
   commit [[https://github.com/kaushalmodi/ox-hugo/commit/0807f42d][0807f42d]].

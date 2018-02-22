@@ -888,14 +888,19 @@ is in progress.  See `org-hugo--before-export-function' and
     ;; (message "[ox-hugo ob-exp] ret: %S" ret)
     ret))
 
-(defun org-hugo--before-export-function ()
+(defun org-hugo--before-export-function (subtreep)
   "Function to be run before an ox-hugo export.
 
 This function is called in the very beginning of
 `org-hugo-export-to-md', `org-hugo-export-as-md' and
 `org-hugo-publish-to-md'.
 
+SUBTREEP is non-nil for subtree-based exports.
+
 This is an internal function."
+  (unless subtreep
+    ;; Reset the variables that are used only for subtree exports.
+    (setq org-hugo--subtree-coord nil))
   (advice-add 'org-babel-exp-code :around #'org-hugo--org-babel-exp-code))
 
 (defun org-hugo--after-export-function ()
@@ -906,6 +911,8 @@ This function is called in the very end of
 `org-hugo-publish-to-md'.
 
 This is an internal function."
+  (setq org-hugo--section nil)
+  (setq org-hugo--bundle nil)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code))
 
 ;;;; HTMLized section number for headline
@@ -3086,10 +3093,7 @@ is non-nil.
 
 Return the buffer the export happened to."
   (interactive)
-  (org-hugo--before-export-function)
-  (unless subtreep
-    ;; Reset the variables that are used only for subtree exports.
-    (setq org-hugo--subtree-coord nil))
+  (org-hugo--before-export-function subtreep)
   ;; Allow certain `ox-hugo' properties to be inherited.
   (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
     (prog1
@@ -3119,7 +3123,7 @@ contents of hidden elements.
 
 Return output file's name."
   (interactive)
-  (org-hugo--before-export-function)
+  (org-hugo--before-export-function subtreep)
   ;; Allow certain `ox-hugo' properties to be inherited.  It is
   ;; important to set the `org-use-property-inheritance' before
   ;; setting the `info' var so that properties like
@@ -3150,12 +3154,7 @@ Return output file's name."
               (setq matched-exclude-tag exclude-tag)
               (setq do-export nil))))
         (if do-export
-            (progn
-              ;; Reset the variables that are used only for subtree exports.
-              (setq org-hugo--subtree-coord nil)
-              (setq org-hugo--section nil)
-              (setq org-hugo--bundle nil)
-              (message "[ox-hugo] Exporting `%s' (%s)" title fname))
+            (message "[ox-hugo] Exporting `%s' (%s)" title fname)
           (message "[ox-hugo] %s was not exported as it is tagged with an exclude tag `%s'"
                    fname matched-exclude-tag))))
     (when do-export
@@ -3173,7 +3172,7 @@ Return output file's name."
 ;; publishing directory.
 
 ;; Return output file name."
-;;   (org-hugo--before-export-function)
+;;   (org-hugo--before-export-function subtreep)
 ;;   ;; Allow certain `ox-hugo' properties to be inherited.
 ;;   (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
 ;;     (prog1

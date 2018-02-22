@@ -1,4 +1,4 @@
-;; Time-stamp: <2017-12-19 16:16:22 kmodi>
+;; Time-stamp: <2018-02-22 14:58:32 kmodi>
 
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
@@ -26,9 +26,10 @@ or newer.")
 
 (defvar ox-hugo-elpa (let ((dir (getenv "OX_HUGO_ELPA")))
                        (unless dir
-                         (setq dir (concat (file-name-as-directory
-                                            (concat temporary-file-directory (getenv "USER")))
-                                           "ox-hugo-dev/")))
+                         (setq dir
+                               (let* ((dir-1 (file-name-as-directory (expand-file-name user-login-name temporary-file-directory)))
+                                      (dir-2 (file-name-as-directory (expand-file-name "ox-hugo-dev" dir-1))))
+                                 dir-2)))
                        (setq dir (file-name-as-directory dir))
                        (make-directory dir :parents)
                        dir))

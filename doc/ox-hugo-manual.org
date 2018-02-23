@@ -1407,6 +1407,39 @@ See Org manual [[https://orgmode.org/manual/Table-of-contents.html][Table of Con
 
 /Note that =ox-hugo= does not support =#+toc: listings= and =#+toc:
 tables=./
+**** Excluding Org-generated TOC from Hugo summaries
+As mentioned above, if you use Hugo-generated TOC, the advantage is
+that the TOC is not inserted physically in the content Markdown
+file.
+
+But with the Org-generated TOC, it *will* be. The disadvantage of that
+is that the =.Summary= in Hugo will consider the TOC! So your TOC will
+show up in places you don't expect.. like summaries in post lists, in
+twitter cards, etc.
+
+But.. there's a way to fix that, because =ox-hugo= inserts a special
+comment ~<!--endtoc-->~ at the end of the inserted TOC.
+
+Using that and, the Go Template function [[https://gohugo.io/functions/split/][=split=]], you can remove the
+TOC from the summaries. [[https://github.com/kaushalmodi/hugo-bare-min-theme/blob/2c7a2ef3c0c72e83036b9d029d1e7fb1604f278c/layouts/_default/summary.html#L26-L33][Here's an example]] of how I remove the TOC in
+the =summary.html= layout for the =ox-hugo= test site. I have pasted
+the same below:
+#+begin_src html
+{{ $summary_splits := split .Summary "<!--endtoc-->" }}
+{{ if eq (len $summary_splits) 2 }}
+    <!-- If that endtoc special comment is present, output only
+         the part *after* that comment as Summary. -->
+    {{ index $summary_splits 1 | safeHTML }}
+{{ else }}
+    <!-- Print the whole Summary if endtoc special comment is not found. -->
+    {{ .Summary }}
+{{ end }}
+#+end_src
+
+/Note that you would need this snippet in all the layout files where
+you do not intend to have TOC included in the summary. It might even
+be worthwhile saving this snippet as a Hugo [[https://gohugo.io/templates/partials/][=partial=]], and using that
+everywhere./
 *** Table Styling
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-styling

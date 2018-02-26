@@ -1420,26 +1420,16 @@ twitter cards, etc.
 But.. there's a way to fix that, because =ox-hugo= inserts a special
 comment ~<!--endtoc-->~ at the end of the inserted TOC.
 
-Using that and, the Go Template function [[https://gohugo.io/functions/split/][=split=]], you can remove the
-TOC from the summaries. [[https://github.com/kaushalmodi/hugo-bare-min-theme/blob/2c7a2ef3c0c72e83036b9d029d1e7fb1604f278c/layouts/_default/summary.html#L26-L33][Here's an example]] of how I remove the TOC in
-the =summary.html= layout for the =ox-hugo= test site. I have pasted
-the same below:
-#+begin_src html
-{{ $summary_splits := split .Summary "<!--endtoc-->" }}
-{{ if eq (len $summary_splits) 2 }}
-    <!-- If that endtoc special comment is present, output only
-         the part *after* that comment as Summary. -->
-    {{ index $summary_splits 1 | safeHTML }}
-{{ else }}
-    <!-- Print the whole Summary if endtoc special comment is not found. -->
-    {{ .Summary }}
-{{ end }}
-#+end_src
+Using that special comment, this [[https://github.com/kaushalmodi/hugo-bare-min-theme/blob/master/layouts/partials/summary_minus_toc.html][=summary_minus_toc.html=]] partial
+tries to get the "summary you mean". This partial is used by the
+=ox-hugo= test site.
+- You can find examples of where this partial can be used in
+  [[https://github.com/kaushalmodi/hugo-bare-min-theme/blob/master/layouts/partials/opengraph.html][=opengraph.html=]] and  [[https://github.com/kaushalmodi/hugo-bare-min-theme/blob/master/layouts/partials/twitter_cards.html][=twitter_cards.html=]] partials, also used in
+  the test site.
 
-/Note that you would need this snippet in all the layout files where
-you do not intend to have TOC included in the summary. It might even
-be worthwhile saving this snippet as a Hugo [[https://gohugo.io/templates/partials/][=partial=]], and using that
-everywhere./
+/Note that you would need to use the =summary_minus_toc.html= partial
+wherever you do not intend to have TOC included in the summary (for
+example, in the Opengraph =og:description= meta tag)./
 *** Table Styling
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-styling

@@ -4045,9 +4045,10 @@ Still some people might prefer to use the Org generated TOC.
 :EXPORT_OPTIONS: num:onlytoc toc:1
 :END:
 #+include: "./all-posts.org::#nested-sections-example" :only-contents t
-**** No TOC in Summary
+**** No TOC in Summary                                       :summary:endtoc:
+***** No TOC in Summary (with more comment marker)                     :more:
 :PROPERTIES:
-:EXPORT_FILE_NAME: no-toc-in-summary
+:EXPORT_FILE_NAME: no-toc-in-summary--with-more
 :EXPORT_OPTIONS: toc:t
 :END:
 By default, Hugo will dump everything at the beginning of a post into
@@ -4055,36 +4056,42 @@ its =.Summary= (See [[https://gohugo.io/content-management/summaries/][Hugo cont
 export option like =toc:t= is inserted at the beginning of a post, TOC
 will be shown in that summary too!
 
+In this example, the special comment =more= *is used*.
+
 #+hugo: more
 
-***** =ox-hugo='s Solution
+****** =ox-hugo='s Solution
 =ox-hugo= helps prevent that with a workaround.. it inserts a special
 HTML comment *=<!--endtoc-->=* after the TOC.
+****** Snippet
+As the =more= comment is present, the [[https://github.com/kaushalmodi/hugo-bare-min-theme/blob/master/layouts/partials/summary_minus_toc.html][=summary_minus_toc.html=]] partial
+used for this test site ensures that only the content between
+~<!--endtoc-->~ and ~<!--more-->~ is considered as summary.
 
-It is important to insert a user-defined summary split by using
-=#+hugo: more=. Otherwise it is very likely that the TOC is big enough
-to exceed the Hugo-defined max-summary length and so the
-=<!--endtoc-->= that appears *after* the TOC never gets parsed.
+This partial needs to be used wherever the summary text is needed
+(example: the Opengraph =og:description= meta tag).
+***** No TOC in Summary (without more comment marker)
+:PROPERTIES:
+:EXPORT_FILE_NAME: no-toc-in-summary--without-more
+:EXPORT_OPTIONS: toc:t
+:END:
+By default, Hugo will dump everything at the beginning of a post into
+its =.Summary= (See [[https://gohugo.io/content-management/summaries/][Hugo content summaries]]). As TOC enabled using the
+export option like =toc:t= is inserted at the beginning of a post, TOC
+will be shown in that summary too!
 
-#+begin_quote
-*Always use =#+hugo: more= when you enable Org generated TOC's.*
-#+end_quote
+In this example, the special comment =more= is *not* used.
 
-In your site's Hugo template, you can then filter that out with
-something like:
-***** Snippet
-#+begin_src html
-{{ $summary_splits := split .Summary "<!--endtoc-->" }}
-{{ if eq (len $summary_splits) 2 }}
-    <!-- If that endtoc special comment is present, output only the part after that comment as Summary. -->
-    {{ index $summary_splits 1 | safeHTML }}
-{{ else }}
-    <!-- Print the whole Summary if endtoc special comment is not found. -->
-    {{ .Summary }}
-{{ end }}
-#+end_src
-***** Example
-See this test site's [[https://github.com/kaushalmodi/ox-hugo/blob/master/test/site/themes/bare_min/layouts/_default/summary.html][=summary.html=]] as an example.
+****** =ox-hugo='s Solution
+=ox-hugo= helps prevent that with a workaround.. it inserts a special
+HTML comment *=<!--endtoc-->=* after the TOC.
+****** Snippet
+As the =more= comment is not present, the [[https://github.com/kaushalmodi/hugo-bare-min-theme/blob/master/layouts/partials/summary_minus_toc.html][=summary_minus_toc.html=]]
+partial used for this test site ensures that only the first 300 (or
+so) characters after ~<!--endtoc-->~ is considered as summary.
+
+This partial needs to be used wherever the summary text is needed
+(example: the Opengraph =og:description= meta tag).
 ** Sub/superscripts                                 :superscripts:subscripts:
 *** Sub/superscripts require braces
 :PROPERTIES:

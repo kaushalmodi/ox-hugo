@@ -1005,7 +1005,7 @@ contents according to the current headline."
               "<div></div>\n"        ;till Hugo/Blackfriday support
               toc-headline           ;wrapping Markdown in HTML div's.
               toc-items ;https://github.com/kaushalmodi/ox-hugo/issues/93
-              "\n"
+              "\n\n"
               "</div>\n"
               ;; Special comment that can be use to filter out the TOC
               ;; from .Summary in Hugo templates.

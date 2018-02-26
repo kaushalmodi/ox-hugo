@@ -12,6 +12,7 @@ draft = false
 - [`ox-hugo`'s Solution](#ox-hugo-s-solution)
 - [Snippet](#snippet)
 - [Example](#example)
+
 </div>
 <!--endtoc-->
 

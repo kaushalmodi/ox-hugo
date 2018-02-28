@@ -38,6 +38,12 @@
 #+hugo_custom_front_matter: :floats '(12.3 -5.0 -17E-6)
 #+hugo_custom_front_matter: :booleans '(true false)
 
+# Custom front-matter with nested maps
+#+hugo_custom_front_matter: :dog{} '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
+#+hugo_custom_front_matter: :header{} '((image . "projects/Readingabook.jpg") (caption . "stay hungry, stay foolish"))
+#+hugo_custom_front_matter: :collection{} '((nothing) (nonnil . t) (animals . (dog cat "penguin" "mountain gorilla")) (strings-symbols . ("abc" def "two words")) (integers . (123 -5 17 1_234)) (floats . (12.3 -5.0 -17E-6)) (booleans . (true false)))
+#+hugo_custom_front_matter: :empty_parent_key{}
+
 # Blackfriday
 #+hugo_blackfriday: :smartdashes :fractions nil :plainidanchors false
 #+hugo_blackfriday: :angledquotes t :hrefTargetBlank true
@@ -86,6 +92,8 @@
 
 This is a test post that tests that keywords set across multiple Org
 keywords get collected.
+
+#+hugo: more
 
 * Keyword Collection Tested to work [15/15]
 - [X] =#+author=

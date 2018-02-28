@@ -2779,6 +2779,7 @@ are \"toml\" and \"yaml\"."
         (front-matter "")
         (indent (make-string 2 ? ))
         (bf-string "")
+        (custom-nested-string "")
         (menu-string "")
         (res-string ""))
     ;; (message "hugo fm format: %s" format)
@@ -2802,6 +2803,55 @@ are \"toml\" and \"yaml\"."
           ;; and then append it to `front-matter' at the end.  Do the
           ;; same for blackfriday param values.
           (cond
+           ;; :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :dog{} '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
+           ((string-suffix-p "{}" key) ;custom front-matter with nested map value
+            (let* ((custom-nested-alist value)
+                   ;; Menu entry string might need to be quoted if
+                   ;; it contains spaces, for example.
+                   (custom-nested-parent-key (org-string-nw-p (replace-regexp-in-string "{}\\'" "" key)))
+                   (custom-nested-parent-key-str "")
+                   (custom-nested-keyval-str ""))
+              ;; (message "[nested entry DBG] = %s" custom-nested-parent-key)
+              ;; (message "[nested alist DBG] = %S" custom-nested-alist)
+              (when custom-nested-parent-key
+                (setq custom-nested-parent-key-str (cond ((string= format "toml")
+                                                          (format "[%s]\n" custom-nested-parent-key))
+                                                         ((string= format "yaml")
+                                                          (format "%s%s\n" custom-nested-parent-key sign))
+                                                         (t
+                                                          "")))
+                (dolist (custom-nested-pair custom-nested-alist)
+                  (unless (consp custom-nested-pair)
+                    (user-error "ox-hugo: Custom front-matter values with nested maps need to be an alist of conses"))
+                  ;; (message "[nested pair DBG] = %S" custom-nested-pair)
+                  (let* ((custom-nested-key (car custom-nested-pair))
+                         (custom-nested-key (cond
+                                             ((symbolp custom-nested-key)
+                                              (symbol-name custom-nested-key))
+                                             (t
+                                              custom-nested-key)))
+                         (custom-nested-value (cdr custom-nested-pair))
+                         (custom-nested-value (cond
+                                               ((and custom-nested-value
+                                                     (listp custom-nested-value))
+                                                (org-hugo--get-yaml-toml-list-string custom-nested-value))
+                                               ((null custom-nested-value)
+                                                "false")
+                                               ((equal custom-nested-value 't)
+                                                "true")
+                                               (t
+                                                (org-hugo--quote-string custom-nested-value)))))
+                    ;; (message "nested DBG: %S KEY %S->%S VALUE %S->%S" custom-nested-parent-key
+                    ;;          (car custom-nested-pair) custom-nested-key
+                    ;;          (cdr custom-nested-pair) custom-nested-value)
+                    (when custom-nested-value
+                      (setq custom-nested-keyval-str
+                            (concat custom-nested-keyval-str
+                                    (format "%s%s%s %s\n"
+                                            indent custom-nested-key sign custom-nested-value))))))
+                (when (org-string-nw-p custom-nested-keyval-str)
+                  (setq custom-nested-string (concat custom-nested-string custom-nested-parent-key-str
+                                                     custom-nested-keyval-str))))))
            ((string= key "menu")
             ;; Menu name needs to be non-nil to insert menu info in front matter.
             (when (assoc 'menu value)
@@ -2955,7 +3005,7 @@ are \"toml\" and \"yaml\"."
                                          (org-hugo--get-yaml-toml-list-string value))
                                         (t
                                          (org-hugo--quote-string value nil format)))))))))))
-    (concat sep front-matter bf-string menu-string res-string sep)))
+    (concat sep front-matter bf-string custom-nested-string menu-string res-string sep)))
 
 (defun org-hugo--selective-property-inheritance ()
   "Return a list of properties that should be inherited."

@@ -9,4 +9,4 @@ floats: [12.3, -5.0, -1.7e-05]
 booleans: [true, false]
 ---
 
-[Issue # 99](https://github.com/kaushalmodi/ox-hugo/issues/99)
+`ox-hugo` Issue #[99](https://github.com/kaushalmodi/ox-hugo/issues/99)

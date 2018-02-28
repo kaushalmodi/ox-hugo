@@ -1,5 +1,5 @@
 +++
-title = "Post with resources in front-matter"
+title = "Post with resources in front-matter (TOML)"
 tags = ["resources", "toml"]
 draft = false
 [[resources]]

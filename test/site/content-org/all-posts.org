@@ -1691,7 +1691,7 @@ The following results in the 'genres' property having the value
 [[https://github.com/kaushalmodi/ox-hugo/issues/99][Issue # 99]]
 * Resources                                                       :resources:
 ** TOML                                                                :toml:
-*** Post with resources in front-matter
+*** Post with resources in front-matter (TOML)
 :PROPERTIES:
 :EXPORT_FILE_NAME: resources-in-front-matter-toml
 :EXPORT_HUGO_RESOURCES: :src "image-4.png" :title "TOML: The Fourth Image"
@@ -1722,11 +1722,61 @@ The following results in the 'genres' property having the value
 This is illegal --- You'll get a user-error.
 
 The =src= field *must* be specified for the =resources= front-matter.
+*** Header image using Resources                               :header:image:
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: header-image-using-resources
+:EXPORT_FILE_NAME: index
+:EXPORT_AUTHOR: Eastern Zhang
+:EXPORT_DATE: 2018-03-01T00:10:00+08:00
+:EXPORT_HUGO_RESOURCES: :src "stay_hungry*.jpg" :title "Stay Hungry Stay Foolish"
+:EXPORT_HUGO_RESOURCES+: :caption "Stay Hungry Stay Foolish"
+:EXPORT_HUGO_RESOURCES+: :credit "quotefancy.com"
+:EXPORT_HUGO_RESOURCES+: :url "https://quotefancy.com/quote/13609/Steve-Jobs-Stay-hungry-Stay-foolish"
+:END:
+#+begin_description
+Using the Hugo Resources feature for post header images.
+#+end_description
+
+This test suggests an alternative way to do what the OP wants in
+{{{oxhugoissue(139)}}}.
+
+Instead of having a TOML front-matter like:
+#+begin_src conf-toml
++++
+title = "fourth test"
+author = ["Eason Zhang"]
+date = 2018-03-01T00:10:00+08:00
+lastmod = 2018-03-01T00:18:00+08:00
+tags = ["project"]
+draft = true
+summary = "summary"
+image_preview = "projects/bubbles.jpg"
+[header]
+  image = "projects/Readingabook.jpg"
+  caption = "stay hungry, stay foolish"
++++
+#+end_src
+
+this post shows an example of doing something similar by exporting the
+post as a *Page Bundle* and using the *Resources* feature. Here's how
+the resource config and other front-matter is set in Org:
+#+begin_src org
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: header-image-using-resources
+:EXPORT_FILE_NAME: index
+:EXPORT_AUTHOR: Eastern Zhang
+:EXPORT_DATE: 2018-03-01T00:10:00+08:00
+:EXPORT_HUGO_RESOURCES: :src "stay_hungry*.jpg" :title "Stay Hungry Stay Foolish"
+:EXPORT_HUGO_RESOURCES+: :caption "Stay Hungry Stay Foolish"
+:EXPORT_HUGO_RESOURCES+: :credit "quotefancy.com"
+:EXPORT_HUGO_RESOURCES+: :url "https://quotefancy.com/quote/13609/Steve-Jobs-Stay-hungry-Stay-foolish"
+:END:
+#+end_src
 ** YAML                                                                :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
 :END:
-*** Post with resources in front-matter
+*** Post with resources in front-matter (YAML)
 :PROPERTIES:
 :EXPORT_FILE_NAME: resources-in-front-matter-yaml
 :EXPORT_HUGO_RESOURCES: :src "image-4.png" :title "The Fourth Image"

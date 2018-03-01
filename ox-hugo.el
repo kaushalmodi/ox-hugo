@@ -2947,9 +2947,10 @@ are \"toml\" and \"yaml\"."
            (;; Custom front-matter with nested map value.
             ;; Only 1 level of nesting is supported.
             (and (listp value) ;Example value: '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
-                 (consp (car value)) ;Check if (car value) is a dotted pair: '(foo . bar),
-                 (or (not (listp (cdr (car value)))) ;and not '(foo bar).
-                     (null (cdr (car value))))) ;'(foo) will be counted as a valid consp too.
+                 (or (consp (car value)) ;Check if value is an alist of conses or lists
+                     (eq 0 (cl-count-if (lambda (el)
+                                          (not (listp el)))
+                                        (car value)))))
             (let ((custom-nested-parent-key key)
                   (custom-nested-alist value)
                   (custom-nested-parent-key-str "")

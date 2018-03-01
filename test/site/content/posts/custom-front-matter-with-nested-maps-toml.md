@@ -11,9 +11,9 @@ draft = false
   image = "projects/Readingabook.jpg"
   caption = "stay hungry, stay foolish"
 [collection]
+  animals = ["dog", "cat", "penguin", "mountain gorilla"]
   nothing = false
   nonnil = true
-  animals = ["dog", "cat", "penguin", "mountain gorilla"]
   strings-symbols = ["abc", "def", "two words"]
   integers = [123, -5, 17, 1_234]
   floats = [12.3, -5.0, -1.7e-05]

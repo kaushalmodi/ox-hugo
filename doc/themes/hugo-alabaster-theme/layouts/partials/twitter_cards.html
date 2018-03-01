@@ -18,8 +18,8 @@
         <meta name="twitter:card" content="summary_large_image"/>
         <meta name="twitter:image" content="{{ $featured.Permalink }}"/>
     {{- else -}}
+        <meta name="twitter:card" content="summary"/>
         {{- with $.Site.Params.images -}}
-            <meta name="twitter:card" content="summary_large_image"/>
             {{- $image := (index . 0) -}}
             {{- $image_link_absolute := (findRE "^/" $image) -}}
             {{- if $image_link_absolute -}}
@@ -27,8 +27,6 @@
             {{- else -}}
                 <meta name="twitter:image" content="{{- (printf "%s%s" $permalink $image) -}}"/>
             {{- end -}}
-        {{ else -}}
-            <meta name="twitter:card" content="summary"/>
         {{- end -}}
     {{- end -}}
 {{- end }}

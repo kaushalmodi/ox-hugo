@@ -59,6 +59,8 @@ disableFastRender = true        # Hugo 0.30
   github_repo = "ox-hugo"
   github_banner = true
 
+  images = ["/favicon-196x196.png"] # Used in twitter_cards.html partial
+
   custom_css = [ # Pygments Trac theme
                  # "css/trac_pygments.css" # Needs pygmentsUseClasses to be true
                  # Chroma Trac theme

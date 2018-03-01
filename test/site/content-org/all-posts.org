@@ -1694,10 +1694,9 @@ The following results in the 'genres' property having the value
 :PROPERTIES:
 :EXPORT_FILE_NAME: custom-front-matter-with-nested-maps-toml
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: toml
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :dog{} '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :header{} '((image . "projects/Readingabook.jpg") (caption . "stay hungry, stay foolish"))
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :collection{} '((nothing) (nonnil . t) (animals . (dog cat "penguin" "mountain gorilla")) (strings-symbols . ("abc" def "two words")) (integers . (123 -5 17 1_234)) (floats . (12.3 -5.0 -17E-6)) (booleans . (true false)))
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :empty_parent_key{}
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :dog '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :header '((image . "projects/Readingabook.jpg") (caption . "stay hungry, stay foolish"))
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :collection '((nothing) (nonnil . t) (animals . (dog cat "penguin" "mountain gorilla")) (strings-symbols . ("abc" def "two words")) (integers . (123 -5 17 1_234)) (floats . (12.3 -5.0 -17E-6)) (booleans . (true false)))
 :END:
 #+begin_description
 Custom TOML front-matter with TOML tables.
@@ -1707,10 +1706,9 @@ Custom TOML front-matter with TOML tables.
 :PROPERTIES:
 :EXPORT_FILE_NAME: custom-front-matter-with-nested-maps-yaml
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :dog{} '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :header{} '((image . "projects/Readingabook.jpg") (caption . "stay hungry, stay foolish"))
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :collection{} '((nothing) (nonnil . t) (animals . (dog cat "penguin" "mountain gorilla")) (strings-symbols . ("abc" def "two words")) (integers . (123 -5 17 1_234)) (floats . (12.3 -5.0 -17E-6)) (booleans . (true false)))
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :empty_parent_key{}
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :dog '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :header '((image . "projects/Readingabook.jpg") (caption . "stay hungry, stay foolish"))
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :collection '((nothing) (nonnil . t) (animals . (dog cat "penguin" "mountain gorilla")) (strings-symbols . ("abc" def "two words")) (integers . (123 -5 17 1_234)) (floats . (12.3 -5.0 -17E-6)) (booleans . (true false)))
 :END:
 #+begin_description
 Custom YAML front-matter with nested maps.

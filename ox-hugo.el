@@ -1714,18 +1714,18 @@ and rewrite link paths to make blogging more seamless."
                          info))
                        (plist-get attr :caption)))
              (caption (when (org-string-nw-p caption)
-			(format "%s%s%s%s"
+                        (format "%s%s%s%s"
                                 ;; Tue Feb 13 11:32:45 EST 2018 - kmodi
                                 ;; Add the span tag once
                                 ;; https://github.com/gohugoio/hugo/issues/4406
                                 ;; gets resolved.
                                 "" ;"<span class=\\\"figure-number\\\">"
                                 (format (org-html--translate "Figure %d:" info)
-				        (org-export-get-ordinal
+                                        (org-export-get-ordinal
                                          useful-parent info
                                          nil #'org-html--has-caption-p))
-			        " "     ;" </span>"
-			        caption))))
+                                " "     ;" </span>"
+                                caption))))
         ;; (message "[ox-hugo-link DBG] inline image? %s\npath: %s"
         ;;          inline-image path)
         ;; (message "[org-hugo-link DBG] attr: %s num of attr: %d"
@@ -2016,7 +2016,7 @@ communication channel."
     ;; other conditions as shown below).  These conditions are taken
     ;; from `org-html-paragraph'.
     (let* ((parent (org-export-get-parent paragraph))
-	   (parent-type (org-element-type parent)))
+           (parent-type (org-element-type parent)))
       ;; (message "[ox-hugo-para DBG] standalone image? %s\ncontents: %s"
       ;;          (org-html-standalone-image-p paragraph info)
       ;;          contents)
@@ -2024,10 +2024,10 @@ communication channel."
                ;; First paragraph in an item has no tag if it is alone
                ;; or followed, at most, by a sub-list.
                (and (eq parent-type 'item)
-	            (not (org-export-get-previous-element paragraph info))
-	            (let ((followers (org-export-get-next-element paragraph info 2)))
-	              (and (not (cdr followers))
-		           (memq (org-element-type (car followers)) '(nil plain-list)))))
+                    (not (org-export-get-previous-element paragraph info))
+                    (let ((followers (org-export-get-next-element paragraph info 2)))
+                      (and (not (cdr followers))
+                           (memq (org-element-type (car followers)) '(nil plain-list)))))
                ;; Standalone image.
                (org-html-standalone-image-p paragraph info))
         (setq ret (org-blackfriday--div-wrap-maybe paragraph ret))))
@@ -2090,7 +2090,7 @@ channel."
                                  (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
                                   (org-export-data-with-backend caption 'html info))))
 
-		           (format (concat "\n\n<div class=\"src-block-caption\">\n"
+                           (format (concat "\n\n<div class=\"src-block-caption\">\n"
                                            "  <span class=\"src-block-number\">%s</span>\n"
                                            "  %s\n"
                                            "</div>")
@@ -2803,55 +2803,6 @@ are \"toml\" and \"yaml\"."
           ;; and then append it to `front-matter' at the end.  Do the
           ;; same for blackfriday param values.
           (cond
-           ;; :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :dog{} '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
-           ((string-suffix-p "{}" key) ;custom front-matter with nested map value
-            (let* ((custom-nested-alist value)
-                   ;; Menu entry string might need to be quoted if
-                   ;; it contains spaces, for example.
-                   (custom-nested-parent-key (org-string-nw-p (replace-regexp-in-string "{}\\'" "" key)))
-                   (custom-nested-parent-key-str "")
-                   (custom-nested-keyval-str ""))
-              ;; (message "[nested entry DBG] = %s" custom-nested-parent-key)
-              ;; (message "[nested alist DBG] = %S" custom-nested-alist)
-              (when custom-nested-parent-key
-                (setq custom-nested-parent-key-str (cond ((string= format "toml")
-                                                          (format "[%s]\n" custom-nested-parent-key))
-                                                         ((string= format "yaml")
-                                                          (format "%s%s\n" custom-nested-parent-key sign))
-                                                         (t
-                                                          "")))
-                (dolist (custom-nested-pair custom-nested-alist)
-                  (unless (consp custom-nested-pair)
-                    (user-error "ox-hugo: Custom front-matter values with nested maps need to be an alist of conses"))
-                  ;; (message "[nested pair DBG] = %S" custom-nested-pair)
-                  (let* ((custom-nested-key (car custom-nested-pair))
-                         (custom-nested-key (cond
-                                             ((symbolp custom-nested-key)
-                                              (symbol-name custom-nested-key))
-                                             (t
-                                              custom-nested-key)))
-                         (custom-nested-value (cdr custom-nested-pair))
-                         (custom-nested-value (cond
-                                               ((and custom-nested-value
-                                                     (listp custom-nested-value))
-                                                (org-hugo--get-yaml-toml-list-string custom-nested-value))
-                                               ((null custom-nested-value)
-                                                "false")
-                                               ((equal custom-nested-value 't)
-                                                "true")
-                                               (t
-                                                (org-hugo--quote-string custom-nested-value)))))
-                    ;; (message "nested DBG: %S KEY %S->%S VALUE %S->%S" custom-nested-parent-key
-                    ;;          (car custom-nested-pair) custom-nested-key
-                    ;;          (cdr custom-nested-pair) custom-nested-value)
-                    (when custom-nested-value
-                      (setq custom-nested-keyval-str
-                            (concat custom-nested-keyval-str
-                                    (format "%s%s%s %s\n"
-                                            indent custom-nested-key sign custom-nested-value))))))
-                (when (org-string-nw-p custom-nested-keyval-str)
-                  (setq custom-nested-string (concat custom-nested-string custom-nested-parent-key-str
-                                                     custom-nested-keyval-str))))))
            ((string= key "menu")
             ;; Menu name needs to be non-nil to insert menu info in front matter.
             (when (assoc 'menu value)
@@ -2993,6 +2944,56 @@ are \"toml\" and \"yaml\"."
                   (unless res-src-present
                     (user-error "`src' must be set for the `resources'"))
                   (setq res-string (concat res-string res-entry-str res-value-str res-param-str))))))
+           (;; Custom front-matter with nested map value.
+            ;; Only 1 level of nesting is supported.
+            (and (listp value) ;Example value: '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
+                 (consp (car value)) ;Check if (car value) is a dotted pair: '(foo . bar),
+                 (or (not (listp (cdr (car value)))) ;and not '(foo bar).
+                     (null (cdr (car value))))) ;'(foo) will be counted as a valid consp too.
+            (let ((custom-nested-parent-key key)
+                  (custom-nested-alist value)
+                  (custom-nested-parent-key-str "")
+                  (custom-nested-keyval-str ""))
+              ;; (message "[nested entry DBG] = %s" custom-nested-parent-key)
+              ;; (message "[nested alist DBG] = %S" custom-nested-alist)
+              (setq custom-nested-parent-key-str (cond ((string= format "toml")
+                                                        (format "[%s]\n" custom-nested-parent-key))
+                                                       ((string= format "yaml")
+                                                        (format "%s%s\n" custom-nested-parent-key sign))
+                                                       (t
+                                                        "")))
+              (dolist (custom-nested-pair custom-nested-alist)
+                (unless (consp custom-nested-pair)
+                  (user-error "ox-hugo: Custom front-matter values with nested maps need to be an alist of conses"))
+                ;; (message "[nested pair DBG] = %S" custom-nested-pair)
+                (let* ((custom-nested-key (car custom-nested-pair))
+                       (custom-nested-key (cond
+                                           ((symbolp custom-nested-key)
+                                            (symbol-name custom-nested-key))
+                                           (t
+                                            custom-nested-key)))
+                       (custom-nested-value (cdr custom-nested-pair))
+                       (custom-nested-value (cond
+                                             ((and custom-nested-value
+                                                   (listp custom-nested-value))
+                                              (org-hugo--get-yaml-toml-list-string custom-nested-value))
+                                             ((null custom-nested-value)
+                                              "false")
+                                             ((equal custom-nested-value 't)
+                                              "true")
+                                             (t
+                                              (org-hugo--quote-string custom-nested-value)))))
+                  ;; (message "nested DBG: %S KEY %S->%S VALUE %S->%S" custom-nested-parent-key
+                  ;;          (car custom-nested-pair) custom-nested-key
+                  ;;          (cdr custom-nested-pair) custom-nested-value)
+                  (when custom-nested-value
+                    (setq custom-nested-keyval-str
+                          (concat custom-nested-keyval-str
+                                  (format "%s%s%s %s\n"
+                                          indent custom-nested-key sign custom-nested-value))))))
+              (when (org-string-nw-p custom-nested-keyval-str)
+                (setq custom-nested-string (concat custom-nested-string custom-nested-parent-key-str
+                                                   custom-nested-keyval-str)))))
            (t
             (setq front-matter
                   (concat front-matter

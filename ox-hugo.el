@@ -812,7 +812,7 @@ newer."
                    ;; videos
                    (:hugo-videos "HUGO_VIDEOS" nil nil newline)
                    ;; weight
-                   (:hugo-weight "HUGO_WEIGHT" nil nil)))
+                   (:hugo-weight "HUGO_WEIGHT" nil nil space)))
 
 
 ;;; Miscellaneous Helper Functions
@@ -2677,15 +2677,45 @@ INFO is a plist used as a communication channel."
                         ;; (message "dbg: categories: categories-list = %s" categories-list)
                         categories-list)))
          (keywords (org-hugo--delim-str-to-list (plist-get info :keywords)))
-         (weight (let* ((wt (plist-get info :hugo-weight))
-                        (auto-calc (and (stringp wt)
-                                        (string= wt "auto")
-                                        org-hugo--subtree-coord)))
-                   (if auto-calc
-                       (org-hugo--calc-weight)
-                     (unless (and (stringp wt) ;Don't allow weight to be "auto" if auto-calc is nil.
-                                  (string= wt "auto"))
-                       wt))))
+         (weight-data (let ((wt-raw-list (org-hugo--parse-property-arguments (plist-get info :hugo-weight)))
+                            weight-data-1)
+                        (dolist (wt-raw wt-raw-list)
+                          (let (key value)
+                            ;; (message "weight DBG wt-raw: %S" wt-raw)
+                            ;; (message "weight DBG cdr wt-raw: %S" (cdr wt-raw))
+                            ;; (message "weight DBG org-hugo--subtree-coord: %S" org-hugo--subtree-coord)
+                            (cond
+                             ((null (cdr wt-raw)) ;`wt-raw' is not of the type (TAXONOMY . WEIGHT)
+                              (setq key 'weight)
+                              (setq value (cond
+                                           ((and org-hugo--subtree-coord
+                                                 (equal (car wt-raw) 'auto)) ;(auto)
+                                            (org-hugo--calc-weight))
+                                           ((and (equal (car wt-raw) 'auto) ;Auto weight ineffective for file-based exports
+                                                 (null org-hugo--subtree-coord))
+                                            nil)
+                                           (t
+                                            (string-to-number (symbol-name (car wt-raw)))))))
+                             (t
+                              (setq key (if (equal (car wt-raw) 'page) ;`wt-raw' is of the type (page . WEIGHT)
+                                            'weight
+                                          (intern (format "%s_weight" (symbol-name (car wt-raw))))))
+                              (setq value (cond
+                                           ((and org-hugo--subtree-coord
+                                                 (equal (cdr wt-raw) "auto")) ;(TAXONOMY . "auto") or (page . "auto")
+                                            (org-hugo--calc-weight))
+                                           ((numberp (cdr wt-raw))
+                                            (cdr wt-raw))
+                                           ((and (equal (cdr wt-raw) "auto") ;Auto weight ineffective for file-based exports
+                                                 (null org-hugo--subtree-coord))
+                                            nil)
+                                           (t
+                                            (user-error "ox-hugo: Invalid weight %S" (cdr wt-raw)))))))
+                            ;; (message "weight DBG key: %S" key)
+                            ;; (message "weight DBG value: %S" value)
+                            (push (cons key value) weight-data-1)))
+                        ;; (message "weight DBG weight-data: %S" weight-data-1)
+                        weight-data-1))
          (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
          (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
          ;; If menu-alist-override is non-nil, update menu-alist with values from that.
@@ -2727,7 +2757,6 @@ INFO is a plist used as a communication channel."
                  (type . ,(plist-get info :hugo-type))
                  (url . ,(plist-get info :hugo-url))
                  (videos . ,(org-hugo--delim-str-to-list (plist-get info :hugo-videos)))
-                 (weight . ,weight)
                  (draft . ,draft)
                  (headless . ,headless)
                  (creator . ,creator)
@@ -2735,7 +2764,7 @@ INFO is a plist used as a communication channel."
                  (blackfriday . ,blackfriday)
                  (menu . ,menu-alist)
                  (resources . ,resources)))
-         (data `,(append data custom-fm-data)))
+         (data `,(append data weight-data custom-fm-data)))
     ;; (message "[get fm DBG] tags: %s" tags)
     ;; (message "dbg: todo-state: keyword=%S draft=%S" todo-keyword draft)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
@@ -3315,8 +3344,8 @@ approach)."
                               (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))
                           (message "[ox-hugo] Exporting `%s' .." title))
                         ;; Get the current subtree coordinates for
-                        ;; auto-calculation of menu item weight or post
-                        ;; weight.
+                        ;; auto-calculation of menu item weight, page
+                        ;; or taxonomy weights.
                         (when (or
                                ;; Check if the menu front-matter is specified.
                                (or
@@ -3325,15 +3354,16 @@ approach)."
                                   (goto-char (point-min))
                                   (let ((case-fold-search t))
                                     (re-search-forward "^#\\+hugo_menu:.*:menu" nil :noerror))))
-                               ;; Check if the post needs auto-calculation of weight.
+                               ;; Check if auto-calculation is needed
+                               ;; for page or taxonomy weights.
                                (or
-                                (let ((post-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
-                                  (and (stringp post-weight)
-                                       (string= post-weight "auto")))
+                                (let ((page-or-taxonomy-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
+                                  (and (stringp page-or-taxonomy-weight)
+                                       (string-match-p "auto" page-or-taxonomy-weight)))
                                 (save-excursion
                                   (goto-char (point-min))
                                   (let ((case-fold-search t))
-                                    (re-search-forward "^#\\+hugo_weight:[[:blank:]]*auto" nil :noerror)))))
+                                    (re-search-forward "^#\\+hugo_weight:.*auto" nil :noerror)))))
                           (setq org-hugo--subtree-coord
                                 (org-hugo--get-post-subtree-coordinates subtree)))
                         ;; Get the current subtree section name if any.

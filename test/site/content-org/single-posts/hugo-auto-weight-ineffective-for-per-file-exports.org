@@ -3,10 +3,10 @@
 
 #+hugo_base_dir: ../../
 #+hugo_weight: auto
-#+hugo_tags: weight
+#+hugo_tags: weight ineffective
 
 Even though we have =#+hugo_weight: auto= in this file, the weight
-will be treated as nil as this file is exported using the /per-file/
-or /complete-file/ export flow.
+will be treated as nil as this file is exported using the /file-based/
+export.
 
 The auto-weight calculation works *only* for /per-subtree/ flow.

@@ -89,12 +89,17 @@
 #+hugo_series: "series 1"
 #+hugo_series: "series 2"
 
+# Weight
+#+hugo_weight: 7
+#+hugo_weight: :tags 88
+#+hugo_weight: :categories 999
+
 This is a test post that tests that keywords set across multiple Org
 keywords get collected.
 
 #+hugo: more
 
-* Keyword Collection Tested to work [15/15]
+* Keyword Collection Tested to work [16/16]
 - [X] =#+author=
 - [X] =#+hugo_tags=
 - [X] =#+hugo_categories=
@@ -110,3 +115,4 @@ keywords get collected.
 - [X] =#+hugo_images=
 - [X] =#+hugo_videos=
 - [X] =#+hugo_series=
+- [X] =#+hugo_weight=

@@ -10,6 +10,9 @@ tags = ["mega front-matter", "keys", "collection", "concatenation", "merging"]
 categories = ["cat1", "cat2"]
 videos = ["video 1", "video 2"]
 draft = false
+categories_weight = 999
+tags_weight = 88
+weight = 7
 myfoo = "bar"
 mybaz = "zoo"
 alpha = 1
@@ -72,7 +75,7 @@ keywords get collected.
 <!--more-->
 
 
-## Keyword Collection Tested to work <code>[15/15]</code> {#keyword-collection-tested-to-work}
+## Keyword Collection Tested to work <code>[16/16]</code> {#keyword-collection-tested-to-work}
 
 -   [X] `#+author`
 -   [X] `#+hugo_tags`
@@ -89,3 +92,4 @@ keywords get collected.
 -   [X] `#+hugo_images`
 -   [X] `#+hugo_videos`
 -   [X] `#+hugo_series`
+-   [X] `#+hugo_weight`

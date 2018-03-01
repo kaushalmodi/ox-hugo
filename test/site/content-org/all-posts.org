@@ -3825,6 +3825,100 @@ Below, the code block language name will show up before the code.
 :PROPERTIES:
 :EXPORT_FILE_NAME: hugo-post-weight-5
 :END:
+** Taxonomy Weight (Not the post or menu item weight)       :taxonomy_weight:
+*** Manually specified taxonomy weights                              :manual:
+**** Taxonomy (tags) weight set 111                                    :tags:
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: :tags 111
+:EXPORT_FILE_NAME: taxonomy-tags-weight-111
+:END:
+**** Taxonomy (categories) weight set 222                        :categories:
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: :categories 222
+:EXPORT_FILE_NAME: taxonomy-categories-weight-222
+:END:
+**** Taxonomy weights and page weight           :tags:page_weight:categories:
+***** Taxonomy weights and page weight 1
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: 77 :tags 111 :categories 999
+:EXPORT_FILE_NAME: taxonomy-and-page-weights-1
+:END:
+If you want to specify page weight along with taxonomy weights, *and*
+if you do not use the =:page= keyword before the weight value, the
+page weight *must* be specified as the very first weight.
+***** Taxonomy weights and page weight 2
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: :tags 111 :categories 999 :page 77
+:EXPORT_FILE_NAME: taxonomy-and-page-weights-2
+:END:
+The page weight does not have to be specified as the very first weight
+if using the =:page= keyword before the weight value.
+***** Taxonomy weights and page weight 3
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: 77
+:EXPORT_HUGO_WEIGHT+: :tags 111
+:EXPORT_HUGO_WEIGHT+: :categories 999
+:EXPORT_FILE_NAME: taxonomy-and-page-weights-3
+:END:
+If you want to specify page weight along with taxonomy weights, *and*
+if you do not use the =:page= keyword before the weight value, the
+page weight *must* be specified as the very first weight, even when
+you specify the weights separately on each line.
+***** Taxonomy weights and page weight 4
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: :tags 111
+:EXPORT_HUGO_WEIGHT+: :page 77
+:EXPORT_HUGO_WEIGHT+: :categories 999
+:EXPORT_FILE_NAME: taxonomy-and-page-weights-4
+:END:
+The page weight does not have to be specified as the very first weight
+if using the =:page= keyword before the weight value.
+*** Auto taxonomy weight calculation                                   :auto:
+**** Tags                                                              :tags:
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: :tags auto
+:END:
+***** Post with auto taxonomy (tags) weight calc 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: taxonomy-tags-weight-auto-1
+:END:
+***** Post with auto taxonomy (tags) weight calc 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: taxonomy-tags-weight-auto-2
+:END:
+**** Categories                                                  :categories:
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: :categories auto
+:END:
+***** Post with auto taxonomy (categories) weight calc 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: taxonomy-categories-weight-auto-1
+:END:
+***** Post with auto taxonomy (categories) weight calc 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: taxonomy-categories-weight-auto-2
+:END:
+**** Taxonomy weights and page weight           :page_weight:tags:categories:
+***** Taxonomy weights and page weight (auto) 1
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: auto
+:EXPORT_HUGO_WEIGHT+: :tags auto
+:EXPORT_HUGO_WEIGHT+: :categories auto
+:EXPORT_FILE_NAME: taxonomy-and-page-weights-auto-1
+:END:
+If you want to specify page weight along with taxonomy weights, *and*
+if you do not use the =:page= keyword before the weight value, the
+page weight *must* be specified as the very first weight, even when
+you specify the weights separately on each line.
+***** Taxonomy weights and page weight (auto) 2
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: :tags auto
+:EXPORT_HUGO_WEIGHT+: :page auto
+:EXPORT_HUGO_WEIGHT+: :categories auto
+:EXPORT_FILE_NAME: taxonomy-and-page-weights-auto-2
+:END:
+The page weight does not have to be specified as the very first weight
+if using the =:page= keyword before the weight value.
 * Dates                                                               :dates:
 ** Date                                                                :date:
 *** Just date

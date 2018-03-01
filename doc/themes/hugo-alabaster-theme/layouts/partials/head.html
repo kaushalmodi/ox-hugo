@@ -38,4 +38,8 @@
     {{ with .Params.mathjax }}
         {{ partial "mathjax.html" }}
     {{ end }}
+
+    <!-- Opengraph and Twitter -->
+    {{ partial "opengraph.html" . }}
+    {{ partial "twitter_cards.html" . }}
 </head>

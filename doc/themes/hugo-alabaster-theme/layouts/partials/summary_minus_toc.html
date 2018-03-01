@@ -1,0 +1,20 @@
+{{- $summary_has_org_toc := substr .Content 0 30 | findRE "[\".]ox-hugo-toc" -}}
+{{- if $summary_has_org_toc -}}
+    {{- $content_splits := split .RawContent "<!--endtoc-->" -}} <!-- Need to use .RawContent as we will be parsing for 'more' comment later. -->
+    <!-- If Org TOC is present, the special comment endtoc would also be present.
+         In that case, output only the part *after* that comment as Summary. -->
+    {{- $summary_raw := index $content_splits 1 -}}
+    {{- $summary_splits := split $summary_raw "<!--more-->" -}}
+    {{- if eq (len $summary_splits) 2 -}}
+        {{- index $summary_splits 0 | markdownify -}}
+    {{- else -}}
+        {{- $summary_raw | markdownify | truncate 300 -}}
+    {{- end -}}
+    <!-- Print the whole Description/Summary if endtoc special comment is not found. -->
+{{- else -}}
+    {{- with .Description -}}
+        {{- . | markdownify | printf "<p>%s</p>" | safeHTML -}}
+    {{- else -}}
+        {{- .Summary |  printf "<p>%s</p>" | safeHTML -}}
+    {{- end -}}
+{{- end -}}

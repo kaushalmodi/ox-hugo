@@ -1811,9 +1811,10 @@ for writing your posts in Org, there are examples for both in the
 :PROPERTIES:
 :EXPORT_FILE_NAME: replace-front-matter-keys
 :END:
-This is a =ox-hugo=-unique feature that allows you to
-replace/substitute any front-matter key name to accommodate for your
-favorite Hugo theme.
+This is a =ox-hugo=-unique feature that allows you to replace any
+front-matter key name to accommodate for your favorite Hugo theme.
+
+#+hugo: more
 
 The syntax is:
 

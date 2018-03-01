@@ -3788,41 +3788,42 @@ Below, the code block language name will show up before the code.
 :EXPORT_DATE: 2017-08-02
 :END:
 #+include: "./all-posts.org::#enabling-disabling-extensions-example" :only-contents t
-* Post Weight (Not the menu item weight)                             :weight:
-** Auto post-weight calculation
-:PROPERTIES:
-:EXPORT_HUGO_WEIGHT: auto
-:END:
-*** Post with auto weight calc 1 (EXPORT_HUGO_WEIGHT as subtree property)
-:PROPERTIES:
-:EXPORT_FILE_NAME: hugo-post-weight-1
-:END:
-*** Post with auto weight calc 2 (EXPORT_HUGO_WEIGHT as subtree property)
-:PROPERTIES:
-:EXPORT_FILE_NAME: hugo-post-weight-2
-:END:
-*** Post with auto weight calc 3 (EXPORT_HUGO_WEIGHT as subtree property)
-:PROPERTIES:
-:EXPORT_FILE_NAME: hugo-post-weight-3
-:END:
-*** Post with auto weight calc 4 (EXPORT_HUGO_WEIGHT as subtree property)
-:PROPERTIES:
-:EXPORT_FILE_NAME: hugo-post-weight-4
-:END:
-*** Post with auto weight calc 5 (EXPORT_HUGO_WEIGHT as subtree property)
-:PROPERTIES:
-:EXPORT_FILE_NAME: hugo-post-weight-5
-:END:
-** Manually specified post weights
-*** Post with weight 123
+* Weights                                                            :weight:
+** Post Weight (Not the menu item weight)                       :page_weight:
+*** Manually specified post weights                                  :manual:
+**** Post with weight 123
 :PROPERTIES:
 :EXPORT_HUGO_WEIGHT: 123
 :EXPORT_FILE_NAME: hugo-post-weight-123
 :END:
-*** Post with weight 4567
+**** Post with weight 4567
 :PROPERTIES:
 :EXPORT_HUGO_WEIGHT: 4567
 :EXPORT_FILE_NAME: hugo-post-weight-4567
+:END:
+*** Auto post-weight calculation                                       :auto:
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: auto
+:END:
+**** Post with auto weight calc 1 (EXPORT_HUGO_WEIGHT as subtree property)
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-post-weight-1
+:END:
+**** Post with auto weight calc 2 (EXPORT_HUGO_WEIGHT as subtree property)
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-post-weight-2
+:END:
+**** Post with auto weight calc 3 (EXPORT_HUGO_WEIGHT as subtree property)
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-post-weight-3
+:END:
+**** Post with auto weight calc 4 (EXPORT_HUGO_WEIGHT as subtree property)
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-post-weight-4
+:END:
+**** Post with auto weight calc 5 (EXPORT_HUGO_WEIGHT as subtree property)
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-post-weight-5
 :END:
 * Dates                                                               :dates:
 ** Date                                                                :date:

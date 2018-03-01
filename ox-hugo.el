@@ -2794,7 +2794,7 @@ are \"toml\" and \"yaml\"."
           ;; TOML example:
           ;;     title = "My Post"
           ;; YAML example:
-          ;;     title : "My Post"
+          ;;     title: "My Post"
 
           ;; In TOML, the menu information in the front matter is as a
           ;; table. So it needs to be always added to the end of the
@@ -2917,7 +2917,7 @@ are \"toml\" and \"yaml\"."
            (;; Front-matter with nested map values: blackfriday, custom front-matter.
             ;; Only 1 level of nesting is supported.
             (and (listp value) ;Example value: '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
-                 (eq 0 (cl-count-if (lambda (el) ;Check if value is an alist
+                 (eq 0 (cl-count-if (lambda (el) ;Check if value is a list of lists (or conses)
                                       (not (listp el)))
                                     value)))
             (let ((nested-parent-key key)

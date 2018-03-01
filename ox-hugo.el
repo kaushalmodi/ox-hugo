@@ -2411,7 +2411,7 @@ The \"true\" and \"false\" strings in the return value are due to
                  (value (cdr user-prop))
                  (value (if (or (equal key 'extensions)
                                 (equal key 'extensionsmask))
-                            value
+                            (org-hugo--delim-str-to-list value)
                           (org-hugo--front-matter-value-booleanize value))))
             (push (cons key value)
                   valid-blackfriday-alist)))))
@@ -2778,8 +2778,7 @@ are \"toml\" and \"yaml\"."
                     (t "")))
         (front-matter "")
         (indent (make-string 2 ? ))
-        (bf-string "")
-        (custom-nested-string "")
+        (nested-string "")
         (menu-string "")
         (res-string ""))
     ;; (message "hugo fm format: %s" format)
@@ -2854,35 +2853,6 @@ are \"toml\" and \"yaml\"."
                                         (format "%s%s%s %s\n"
                                                 indent menu-key sign menu-value)))))))
                   (setq menu-string (concat menu-entry-str menu-value-str))))))
-           ((string= key "blackfriday")
-            (when value
-              (let ((bf-alist value)
-                    (bf-entry-str "")
-                    (bf-value-str ""))
-                (setq bf-entry-str (cond ((string= format "toml")
-                                          "[blackfriday]\n")
-                                         ((string= format "yaml")
-                                          (format "blackfriday%s\n" sign))
-                                         (t
-                                          "")))
-                (dolist (bf-pair bf-alist)
-                  (let* ((bf-key (symbol-name (car bf-pair)))
-                         (bf-value (cdr bf-pair))
-                         (bf-value (cond ((or (string= bf-key "extensions")
-                                              (string= bf-key "extensionsmask"))
-                                          ;; "abc def" -> "[\"abc\", \"def\"]"
-                                          (concat "["
-                                                  (mapconcat #'identity
-                                                             (mapcar #'org-hugo--return-valid-blackfriday-extension
-                                                                     (split-string bf-value)) ", ")
-                                                  "]"))
-                                         (t
-                                          (org-hugo--quote-string bf-value)))))
-                    ;; (message "blackfriday DBG: %S %S" bf-key bf-value)
-                    (setq bf-value-str
-                          (concat bf-value-str
-                                  (format "%s%s%s %s\n" indent bf-key sign bf-value)))))
-                (setq bf-string (concat bf-entry-str bf-value-str)))))
            ((string= key "resources")
             (when value
               (dolist (res-alist value)
@@ -2944,57 +2914,62 @@ are \"toml\" and \"yaml\"."
                   (unless res-src-present
                     (user-error "`src' must be set for the `resources'"))
                   (setq res-string (concat res-string res-entry-str res-value-str res-param-str))))))
-           (;; Custom front-matter with nested map value.
+           (;; Front-matter with nested map values: blackfriday, custom front-matter.
             ;; Only 1 level of nesting is supported.
             (and (listp value) ;Example value: '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
-                 (or (consp (car value)) ;Check if value is an alist of conses or lists
-                     (eq 0 (cl-count-if (lambda (el)
-                                          (not (listp el)))
-                                        (car value)))))
-            (let ((custom-nested-parent-key key)
-                  (custom-nested-alist value)
-                  (custom-nested-parent-key-str "")
-                  (custom-nested-keyval-str ""))
-              ;; (message "[nested entry DBG] = %s" custom-nested-parent-key)
-              ;; (message "[nested alist DBG] = %S" custom-nested-alist)
-              (setq custom-nested-parent-key-str (cond ((string= format "toml")
-                                                        (format "[%s]\n" custom-nested-parent-key))
-                                                       ((string= format "yaml")
-                                                        (format "%s%s\n" custom-nested-parent-key sign))
-                                                       (t
-                                                        "")))
-              (dolist (custom-nested-pair custom-nested-alist)
-                (unless (consp custom-nested-pair)
+                 (eq 0 (cl-count-if (lambda (el) ;Check if value is an alist
+                                      (not (listp el)))
+                                    value)))
+            (let ((nested-parent-key key)
+                  (nested-alist value)
+                  (nested-parent-key-str "")
+                  (nested-keyval-str ""))
+              ;; (message "[nested entry DBG] = %s" nested-parent-key)
+              ;; (message "[nested alist DBG] = %S" nested-alist)
+              (setq nested-parent-key-str (cond ((string= format "toml")
+                                                 (format "[%s]\n" nested-parent-key))
+                                                ((string= format "yaml")
+                                                 (format "%s%s\n" nested-parent-key sign))
+                                                (t
+                                                 "")))
+              (dolist (nested-pair nested-alist)
+                (unless (consp nested-pair)
                   (user-error "ox-hugo: Custom front-matter values with nested maps need to be an alist of conses"))
-                ;; (message "[nested pair DBG] = %S" custom-nested-pair)
-                (let* ((custom-nested-key (car custom-nested-pair))
-                       (custom-nested-key (cond
-                                           ((symbolp custom-nested-key)
-                                            (symbol-name custom-nested-key))
-                                           (t
-                                            custom-nested-key)))
-                       (custom-nested-value (cdr custom-nested-pair))
-                       (custom-nested-value (cond
-                                             ((and custom-nested-value
-                                                   (listp custom-nested-value))
-                                              (org-hugo--get-yaml-toml-list-string custom-nested-value))
-                                             ((null custom-nested-value)
-                                              "false")
-                                             ((equal custom-nested-value 't)
-                                              "true")
-                                             (t
-                                              (org-hugo--quote-string custom-nested-value)))))
-                  ;; (message "nested DBG: %S KEY %S->%S VALUE %S->%S" custom-nested-parent-key
-                  ;;          (car custom-nested-pair) custom-nested-key
-                  ;;          (cdr custom-nested-pair) custom-nested-value)
-                  (when custom-nested-value
-                    (setq custom-nested-keyval-str
-                          (concat custom-nested-keyval-str
+                ;; (message "[nested pair DBG] = %S" nested-pair)
+                (let* ((nested-key (car nested-pair))
+                       (nested-key (cond
+                                    ((symbolp nested-key)
+                                     (symbol-name nested-key))
+                                    (t
+                                     nested-key)))
+                       (nested-value (cdr nested-pair))
+                       (nested-value (cond
+                                      ((and nested-value
+                                            (listp nested-value))
+                                       (if (and (string= nested-parent-key "blackfriday")
+                                                (or (string= nested-key "extensions")
+                                                    (string= nested-key "extensionsmask")))
+                                           (org-hugo--get-yaml-toml-list-string
+                                            (mapcar #'org-hugo--return-valid-blackfriday-extension
+                                                    nested-value))
+                                         (org-hugo--get-yaml-toml-list-string nested-value)))
+                                      ((null nested-value)
+                                       "false")
+                                      ((equal nested-value 't)
+                                       "true")
+                                      (t
+                                       (org-hugo--quote-string nested-value)))))
+                  ;; (message "nested DBG: %S KEY %S->%S VALUE %S->%S" nested-parent-key
+                  ;;          (car nested-pair) nested-key
+                  ;;          (cdr nested-pair) nested-value)
+                  (when nested-value
+                    (setq nested-keyval-str
+                          (concat nested-keyval-str
                                   (format "%s%s%s %s\n"
-                                          indent custom-nested-key sign custom-nested-value))))))
-              (when (org-string-nw-p custom-nested-keyval-str)
-                (setq custom-nested-string (concat custom-nested-string custom-nested-parent-key-str
-                                                   custom-nested-keyval-str)))))
+                                          indent nested-key sign nested-value))))))
+              (when (org-string-nw-p nested-keyval-str)
+                (setq nested-string (concat nested-string nested-parent-key-str
+                                            nested-keyval-str)))))
            (t
             (setq front-matter
                   (concat front-matter
@@ -3007,7 +2982,7 @@ are \"toml\" and \"yaml\"."
                                          (org-hugo--get-yaml-toml-list-string value))
                                         (t
                                          (org-hugo--quote-string value nil format)))))))))))
-    (concat sep front-matter bf-string custom-nested-string menu-string res-string sep)))
+    (concat sep front-matter nested-string menu-string res-string sep)))
 
 (defun org-hugo--selective-property-inheritance ()
   "Return a list of properties that should be inherited."

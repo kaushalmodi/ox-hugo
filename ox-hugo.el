@@ -2515,33 +2515,30 @@ Below shows the example of how the Org tags would translate to
 the tag strings in Hugo front matter if spaces were allowed:
 
 Example: :some__tag:   -> \"some tag\"."
-  (let* ((prefer-hyphen (unless no-prefer-hyphen
-                          (org-hugo--plist-get-true-p info :hugo-prefer-hyphen-in-tags)))
-         (allow-spaces (org-hugo--plist-get-true-p info :hugo-allow-spaces-in-tags))
-         new-tag-list
-         ret)
-    (setq ret (cond
-               ((or prefer-hyphen
-                    allow-spaces)
-                (dolist (tag tag-list)
-                  (when allow-spaces
-                    ;; It is safe to assume that no one would want
-                    ;; leading/trailing spaces in tags/categories.. so not
-                    ;; checking for "__a" or "a__" cases.
-                    (setq tag (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1 \\2" tag)))  ;"a__b"  -> "a b"
-                  (when prefer-hyphen
-                    (setq tag (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" tag))          ;"_a"    -> "-a"
-                    (setq tag (replace-regexp-in-string "\\`___\\([^_]\\)" "_\\1" tag))        ;"___a"  -> "_a"
-                    (setq tag (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" tag))          ;"a_"    -> "a-"
-                    (setq tag (replace-regexp-in-string "\\([^_]\\)___\\'" "\\1_" tag))        ;"a___"  -> "a_"
-                    (setq tag (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" tag))    ;"a_b"   -> "a-b"
-                    (setq tag (replace-regexp-in-string "\\([^_]\\)___\\([^_]\\)" "\\1_\\2" tag))) ;"a___b" -> "a_b"
-                  (push tag new-tag-list))
-                (nreverse new-tag-list))
-               (t
-                tag-list)))
-    (setq ret (cl-remove-if-not #'org-string-nw-p ret))
-    ret))
+  (let ((prefer-hyphen (unless no-prefer-hyphen
+                         (org-hugo--plist-get-true-p info :hugo-prefer-hyphen-in-tags)))
+        (allow-spaces (org-hugo--plist-get-true-p info :hugo-allow-spaces-in-tags)))
+    (when (or prefer-hyphen
+              allow-spaces)
+      (setq tag-list
+            (mapcar
+             (lambda (tag)
+               (when allow-spaces
+                 ;; It is safe to assume that no one would want
+                 ;; leading/trailing spaces in tags/categories.. so
+                 ;; not checking for "__a" or "a__" cases.
+                 (setq tag (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1 \\2" tag)))  ;"a__b"  -> "a b"
+               (when prefer-hyphen
+                 (setq tag (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" tag))          ;"_a"    -> "-a"
+                 (setq tag (replace-regexp-in-string "\\`___\\([^_]\\)" "_\\1" tag))        ;"___a"  -> "_a"
+                 (setq tag (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" tag))          ;"a_"    -> "a-"
+                 (setq tag (replace-regexp-in-string "\\([^_]\\)___\\'" "\\1_" tag))        ;"a___"  -> "a_"
+                 (setq tag (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" tag))    ;"a_b"   -> "a-b"
+                 (setq tag (replace-regexp-in-string "\\([^_]\\)___\\([^_]\\)" "\\1_\\2" tag))) ;"a___b" -> "a_b"
+               tag)
+             tag-list))
+      (setq tag-list (cl-remove-if-not #'org-string-nw-p tag-list))) ;Remove empty string elements from the list
+    tag-list))
 
 (defun org-hugo--delim-str-to-list (str)
   "Function to transform string STR to a list of strings.

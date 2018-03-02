@@ -3496,6 +3496,7 @@ buffer and returned as a string in Org format."
                                 ,(format "|org-hugo-delete-trailing-ws                           |%S|" org-hugo-delete-trailing-ws)
                                 ,(format "|org-hugo-prefer-hyphen-in-tags                        |%S|" org-hugo-prefer-hyphen-in-tags)
                                 ,(format "|org-hugo-allow-spaces-in-tags                         |%S|" org-hugo-allow-spaces-in-tags)
+                                ,(format "|org-hugo-tag-processing-functions                     |%S|" org-hugo-tag-processing-functions)
                                 ,(format "|org-hugo-auto-set-lastmod                             |%S|" org-hugo-auto-set-lastmod)
                                 ,(format "|org-hugo-export-with-toc                              |%S|" org-hugo-export-with-toc)
                                 ,(format "|org-hugo-export-with-section-numbers                  |%S|" org-hugo-export-with-section-numbers)

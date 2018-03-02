@@ -465,27 +465,55 @@ Org Verse block or Blackfriday hardLineBreak extension."
   :type 'boolean
   :safe #'booleanp)
 
-(defcustom org-hugo-prefer-hyphen-in-tags t
-  "When non-nil, replace single underscores in Org tags with hyphens.
-
-See `org-hugo--transform-org-tags' for more information.
-
-This variable affects the Hugo tags and categories set via Org tags
-using the \"@\" prefix."
-  :group 'org-export-hugo
-  :type 'boolean
-  :safe #'booleanp)
-
 (defcustom org-hugo-allow-spaces-in-tags t
   "When non-nil, replace double underscores in Org tags with spaces.
 
-See `org-hugo--transform-org-tags' for more information.
+See `org-hugo--tag-processing-fn-replace-with-spaces-maybe' for
+more information.
 
-This variable affects the Hugo tags and categories set via Org tags
-using the \"@\" prefix."
+This variable affects the Hugo tags and categories (set via Org
+tags using the \"@\" prefix)."
   :group 'org-export-hugo
   :type 'boolean
   :safe #'booleanp)
+
+(defcustom org-hugo-prefer-hyphen-in-tags t
+  "When non-nil, replace single underscores in Org tags with hyphens.
+
+See `org-hugo--tag-processing-fn-replace-with-hyphens-maybe' for
+more information.
+
+This variable affects the Hugo tags and categories (set via Org
+tags using the \"@\" prefix)."
+  :group 'org-export-hugo
+  :type 'boolean
+  :safe #'booleanp)
+
+(defcustom org-hugo-tag-processing-functions '(org-hugo--tag-processing-fn-replace-with-spaces-maybe
+                                               org-hugo--tag-processing-fn-replace-with-hyphens-maybe)
+  "List of functions that are called in order to process the Org tags.
+Each function has to accept two arguments:
+
+Arg 1: TAG-LIST which is a list of Org tags of the type
+       \(\"TAG1\" \"TAG2\" ..).
+Arg 2: INFO which is a plist holding contextual information.
+
+Each function should then return a list of strings, which would
+be processed form of TAG-LIST.
+
+All the functions are called in order, and the output of one
+function is fed as the TAG-LIST input of the next called
+function.
+
+The `org-hugo--tag-processing-fn-replace-with-spaces-maybe'
+function skips any processing and returns its input TAG-LIST as
+it is if `org-hugo-allow-spaces-in-tags' is nil.
+
+The `org-hugo--tag-processing-fn-replace-with-hyphens-maybe'
+function skips any processing and returns its input TAG-LIST as
+it is if `org-hugo-prefer-hyphen-in-tags' is nil."
+  :group 'org-export-hugo
+  :type '(repeat (function)))
 
 (defcustom org-hugo-auto-set-lastmod nil
   "When non-nil, set the lastmod field in front-matter to current time."
@@ -2480,65 +2508,59 @@ INFO is a plist used as a communication channel."
            (title (replace-regexp-in-string "\\.\\.\\." "…" title))) ;HORIZONTAL ELLIPSIS
       title)))
 
-(defun org-hugo--transform-org-tags (tag-list info &optional no-prefer-hyphen)
-  "Transform Org TAG-LIST for use in Hugo tags and categories.
+(defun org-hugo--tag-processing-fn-replace-with-spaces-maybe (tag-list info)
+  "Replace double underscores in TAG-LIST elements with single spaces.
 
-INFO is a plist used as a communication channel.
+For example, an element \"some__tag\" would get converted to
+\"some tag\".
 
-Return the original or modified TAG-LIST.
+This replacement is enabled if `org-hugo-allow-spaces-in-tags' or
+HUGO_ALLOW_SPACES_IN_TAGS property is set to a non-nil value.
 
-1. Prefer hyphens
+TAG-LIST which is a list of Org tags of the type \(\"TAG1\"
+\"TAG2\" ..).  INFO is a plist used as a communication channel.
 
-If NO-PREFER-HYPHEN is nil, and if using hyphens in tags is
-preferred to underscores (set via
-`org-hugo-prefer-hyphen-in-tags' or HUGO_PREFER_HYPHEN_IN_TAGS
-property),
+This is one of the processing functions in
+`org-hugo-tag-processing-functions'."
+  (let ((allow-spaces (org-hugo--plist-get-true-p info :hugo-allow-spaces-in-tags)))
+    (if allow-spaces
+        (mapcar
+         (lambda (tag)
+           ;; It is safe to assume that no one would want
+           ;; leading/trailing spaces in tags/categories.. so not
+           ;; checking for "__a" or "a__" cases.
+           (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1 \\2" tag)) ;"a__b"  -> "a b"
+         tag-list)
+      tag-list)))
 
-- Single underscores will be replaced with hyphens.
-- Triple underscores will be replaced with single underscores.
+(defun org-hugo--tag-processing-fn-replace-with-hyphens-maybe (tag-list info)
+  "Replace single underscores in TAG-LIST elements with single hyphens.
+And triple underscores will be replaced with single underscores.
 
-Below shows the example of how the Org tags would translate to
-the tag strings in Hugo front matter if hyphens were preferred:
+For example, an element \"some_tag\" would get converted to
+\"some-tag\", and \"some___tag\" to \"some_tag\".
 
-Example: :some_tag:   -> \"some-tag\"
-         :some___tag: -> \"some_tag\"
+This replacement is enabled if `org-hugo-prefer-hyphen-in-tags'
+or HUGO_PREFER_HYPHEN_IN_TAGS property is set to a non-nil value.
 
-2. Allow spaces
+TAG-LIST which is a list of Org tags of the type \(\"TAG1\"
+\"TAG2\" ..).  INFO is a plist used as a communication channel.
 
-If using spaces in tags is allowed (set via
-`org-hugo-allow-spaces-in-tags' or HUGO_ALLOW_SPACES_IN_TAGS
-property),
-
-- Double underscores will be replaced with single spaces.
-
-Below shows the example of how the Org tags would translate to
-the tag strings in Hugo front matter if spaces were allowed:
-
-Example: :some__tag:   -> \"some tag\"."
-  (let ((prefer-hyphen (unless no-prefer-hyphen
-                         (org-hugo--plist-get-true-p info :hugo-prefer-hyphen-in-tags)))
-        (allow-spaces (org-hugo--plist-get-true-p info :hugo-allow-spaces-in-tags)))
-    (when (or prefer-hyphen
-              allow-spaces)
-      (setq tag-list
-            (mapcar
-             (lambda (tag)
-               (when allow-spaces
-                 ;; It is safe to assume that no one would want
-                 ;; leading/trailing spaces in tags/categories.. so
-                 ;; not checking for "__a" or "a__" cases.
-                 (setq tag (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1 \\2" tag)))  ;"a__b"  -> "a b"
-               (when prefer-hyphen
-                 (setq tag (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" tag))          ;"_a"    -> "-a"
-                 (setq tag (replace-regexp-in-string "\\`___\\([^_]\\)" "_\\1" tag))        ;"___a"  -> "_a"
-                 (setq tag (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" tag))          ;"a_"    -> "a-"
-                 (setq tag (replace-regexp-in-string "\\([^_]\\)___\\'" "\\1_" tag))        ;"a___"  -> "a_"
-                 (setq tag (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" tag))    ;"a_b"   -> "a-b"
-                 (setq tag (replace-regexp-in-string "\\([^_]\\)___\\([^_]\\)" "\\1_\\2" tag))) ;"a___b" -> "a_b"
-               tag)
-             tag-list))
-      (setq tag-list (cl-remove-if-not #'org-string-nw-p tag-list))) ;Remove empty string elements from the list
-    tag-list))
+This is one of the processing functions in
+`org-hugo-tag-processing-functions'."
+  (let ((prefer-hyphens (org-hugo--plist-get-true-p info :hugo-prefer-hyphen-in-tags)))
+    (if prefer-hyphens
+        (mapcar
+         (lambda (tag)
+           (setq tag (replace-regexp-in-string "\\`_\\([^_]\\)" "-\\1" tag))         ;"_a"    -> "-a"
+           (setq tag (replace-regexp-in-string "\\`___\\([^_]\\)" "_\\1" tag))       ;"___a"  -> "_a"
+           (setq tag (replace-regexp-in-string "\\([^_]\\)_\\'" "\\1-" tag))         ;"a_"    -> "a-"
+           (setq tag (replace-regexp-in-string "\\([^_]\\)___\\'" "\\1_" tag))       ;"a___"  -> "a_"
+           (setq tag (replace-regexp-in-string "\\([^_]\\)_\\([^_]\\)" "\\1-\\2" tag))   ;"a_b"   -> "a-b"
+           (setq tag (replace-regexp-in-string "\\([^_]\\)___\\([^_]\\)" "\\1_\\2" tag)) ;"a___b" -> "a_b"
+           tag)
+         tag-list)
+      tag-list)))
 
 (defun org-hugo--delim-str-to-list (str)
   "Function to transform string STR to a list of strings.
@@ -2654,7 +2676,8 @@ INFO is a plist used as a communication channel."
                 ;; Else use Org tags (the ones set in headlines
                 ;; and/or inherited) if any.
                 (let* ((tags-list (cl-remove-if #'org-hugo--category-p all-t-and-c))
-                       (tags-list (org-hugo--transform-org-tags tags-list info)))
+                       (tags-list (dolist (fn org-hugo-tag-processing-functions tags-list)
+                                    (setq tags-list (funcall fn tags-list info)))))
                   ;; (message "[get fm DBG] tags: tags-list = %S" tags-list)
                   tags-list)))
          (categories (or
@@ -2666,7 +2689,8 @@ INFO is a plist used as a communication channel."
                       ;; "@" prefix (the ones set in headlines and/or
                       ;; inherited) if any.
                       (let* ((categories-list (cl-remove-if-not #'org-hugo--category-p all-t-and-c))
-                             (categories-list (org-hugo--transform-org-tags categories-list info))
+                             (categories-list (dolist (fn org-hugo-tag-processing-functions categories-list)
+                                                (setq categories-list (funcall fn categories-list info))))
                              (categories-list (mapcar (lambda (str)
                                                         ;; Remove "@" from beg of categories.
                                                         (replace-regexp-in-string "\\`@" "" str))
@@ -2707,7 +2731,7 @@ INFO is a plist used as a communication channel."
                                                  (null org-hugo--subtree-coord))
                                             nil)
                                            (t
-                                            (user-error "ox-hugo: Invalid weight %S" (cdr wt-raw)))))))
+                                            (user-error "Ox-hugo: Invalid weight %S" (cdr wt-raw)))))))
                             ;; (message "weight DBG key: %S" key)
                             ;; (message "weight DBG value: %S" value)
                             (push (cons key value) weight-data-1)))
@@ -2960,7 +2984,7 @@ are \"toml\" and \"yaml\"."
                                                  "")))
               (dolist (nested-pair nested-alist)
                 (unless (consp nested-pair)
-                  (user-error "ox-hugo: Custom front-matter values with nested maps need to be an alist of conses"))
+                  (user-error "Ox-hugo: Custom front-matter values with nested maps need to be an alist of conses"))
                 ;; (message "[nested pair DBG] = %S" nested-pair)
                 (let* ((nested-key (car nested-pair))
                        (nested-key (cond

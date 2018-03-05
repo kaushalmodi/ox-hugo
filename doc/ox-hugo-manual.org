@@ -4,7 +4,7 @@
 #+hugo_base_dir: .
 #+hugo_section: doc
 
-#+options: creator:t
+#+options: creator:t author:nil
 
 #+macro: imageclick [[file:./static/images/$1][file:/images/$1]]
 #+macro: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]

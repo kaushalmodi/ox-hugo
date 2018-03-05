@@ -10,7 +10,11 @@ publishdir = "public"
 # Remove files from destination not found in static directories
 cleandestinationdir = true
 
-enableGitInfo = true
+# Mon Mar 05 17:17:44 EST 2018 - kmodi
+# Do not enable GitInfo. As I am not committing the Markdown files to
+# git repo, enabling GitInfo would cause the Lastmod dates for those
+# files to be the date when I deleted them from this repo.. sigh.
+# enableGitInfo = true
 
 # https://gohugo.io/extras/highlighting/
 

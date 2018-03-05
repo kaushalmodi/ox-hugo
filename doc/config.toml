@@ -1,7 +1,7 @@
 baseURL = "http://example.org/"
 
 Title = "ox-hugo - Org to Hugo exporter"
-theme = "hugo-alabaster-theme"
+theme = "hugo-onyx-theme"
 
 contentdir = "content"
 layoutdir = "layouts"
@@ -48,7 +48,7 @@ disableFastRender = true        # Hugo 0.30
   doc = "/doc/:filename/"
   test = "/test/:slug/"
 
-[params]
+[Params]
   name = "ox-hugo"
   description = "Org mode to Hugo exporter<br />Write your Hugo posts in native Org mode."
 
@@ -74,26 +74,25 @@ disableFastRender = true        # Hugo 0.30
                         ]
   custom_js  = []
 
-  # highlightjs = "css/highlight.css"
   # favicon = "favicon.ico"
 
-[params.sidebar]
-  logo = "favicon.ico"
+  [Params.source]
+    url = "https://github.com/kaushalmodi/ox-hugo"
+    org_dir = "doc"
+    org_file = "doc/ox-hugo-manual.org"
 
-  github_button  = true
-  travis_button  = true
-  codecov_button = false
-  gratipay = ""
+  [Params.sidebar]
+    logo = "favicon.ico"
 
-  # Mon Sep 04 23:55:36 EDT 2017 - kmodi
-  # Disable this option for now.. but seems to be useful in future
-  show_relations = false
+    github_button  = true
+    travis_button  = true
+    codecov_button = false
+    gratipay = ""
 
-[params.footer]
-  copyright = ""
-  show_powered_by = true
+    # Mon Sep 04 23:55:36 EDT 2017 - kmodi
+    # Disable this option for now.. but seems to be useful in future
+    show_relations = false
 
-# Blackfriday is Hugo's markdown engine.
-# https://gohugo.io/overview/configuration/#configure-blackfriday-rendering
-[blackfriday]
-  hrefTargetBlank = true # open external links in a new window or tab
+  [Params.footer]
+    copyright = ""
+    show_powered_by = true

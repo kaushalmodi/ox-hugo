@@ -1,3 +1,6 @@
+[submodule "doc/themes/hugo-onyx-theme"]
+	path = doc/themes/hugo-onyx-theme
+	url = https://github.com/kaushalmodi/hugo-onyx-theme
 [submodule "test/site/themes/bare_min"]
 	path = test/site/themes/bare_min
 	url = https://github.com/kaushalmodi/hugo-bare-min-theme

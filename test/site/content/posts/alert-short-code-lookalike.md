@@ -144,7 +144,6 @@ div.alert-warning p:nth-child(2):before {
 Here's a tip or note.
 
 This can be multi-paragraph too.
-
 </div>
 
 <div class="alert-warning alert">
@@ -153,7 +152,6 @@ This can be multi-paragraph too.
 Here's a warning!
 
 This can be multi-paragraph too.
-
 </div>
 
 

@@ -18,7 +18,7 @@ This is _an article_.
 
 ### Block with NAME {#block-with-name}
 
-<aside id="Aside A">
+<aside id="Aside-A">
 <aside></aside>
 
 _Some_ **text** --- 1
@@ -65,7 +65,7 @@ This is _some text_ wrapped in a `div` block with class `something`.
 
 ### DIV with NAME {#div-with-name}
 
-<div class="foo" id="Foo A">
+<div class="foo" id="Foo-A">
 <div></div>
 
 _Some_ **text** --- 3

@@ -3220,7 +3220,7 @@ Line 5 has this > charcter in-between and is retained.
 This is /an article/.
 #+end_article
 *** Block with NAME
-#+name: Aside A
+#+name: Aside-A
 #+begin_aside
 /Some/ *text* --- 1
 
@@ -3247,7 +3247,7 @@ Unmarked again.
 This is /some text/ wrapped in a =div= block with class =something=.
 #+end_something
 *** DIV with NAME
-#+name: Foo A
+#+name: Foo-A
 #+begin_foo
 /Some/ *text* --- 3
 

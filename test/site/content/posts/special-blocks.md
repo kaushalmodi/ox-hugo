@@ -9,16 +9,17 @@ draft = false
 
 ### Block without NAME, class or id {#block-without-name-class-or-id}
 
-<article>
-<article></article>
+<div class="main">
+<div></div>
 
-This is _an article_.
-</article>
+This is in the _main_ [HTML5 semantic element](https://www.w3schools.com/html/html5_semantic_elements.asp).
+
+</div>
 
 
 ### Block with NAME {#block-with-name}
 
-<aside id="Aside A">
+<aside id="Aside-A">
 <aside></aside>
 
 _Some_ **text** --- 1
@@ -31,15 +32,15 @@ _Some_ **text** --- 1
 
 ### Block with class and id {#block-with-class-and-id}
 
-<section class="my-section" id="section-a">
-<section></section>
+<footer class="my-section" id="section-a">
+<footer></footer>
 
 _Some_ **text** --- 2
 
 | g | h | i |
 |---|---|---|
 | j | k | l |
-</section>
+</footer>
 
 
 ### An inline HTML5 element {#an-inline-html5-element}
@@ -60,12 +61,13 @@ Unmarked again.
 <div></div>
 
 This is _some text_ wrapped in a `div` block with class `something`.
+
 </div>
 
 
 ### DIV with NAME {#div-with-name}
 
-<div class="foo" id="Foo A">
+<div class="foo" id="Foo-A">
 <div></div>
 
 _Some_ **text** --- 3
@@ -73,6 +75,7 @@ _Some_ **text** --- 3
 | m | n | o |
 |---|---|---|
 | p | q | r |
+
 </div>
 
 
@@ -86,4 +89,5 @@ _Some_ **text** --- 4
 | s | t | u |
 |---|---|---|
 | v | w | x |
+
 </div>

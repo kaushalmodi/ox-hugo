@@ -3216,11 +3216,11 @@ Line 5 has this > charcter in-between and is retained.
 :END:
 ** HTML5 Element Blocks
 *** Block without NAME, class or id
-#+begin_article
-This is /an article/.
-#+end_article
+#+begin_main
+This is in the /main/ [[https://www.w3schools.com/html/html5_semantic_elements.asp][HTML5 semantic element]].
+#+end_main
 *** Block with NAME
-#+name: Aside A
+#+name: Aside-A
 #+begin_aside
 /Some/ *text* --- 1
 
@@ -3229,12 +3229,12 @@ This is /an article/.
 #+end_aside
 *** Block with class and id
 #+attr_html: :class my-section :id section-a
-#+begin_section
+#+begin_footer
 /Some/ *text* --- 2
 
 | g | h | i |
 | j | k | l |
-#+end_section
+#+end_footer
 *** An inline HTML5 element
 Unmarked.
 #+begin_mark
@@ -3247,7 +3247,7 @@ Unmarked again.
 This is /some text/ wrapped in a =div= block with class =something=.
 #+end_something
 *** DIV with NAME
-#+name: Foo A
+#+name: Foo-A
 #+begin_foo
 /Some/ *text* --- 3
 

@@ -48,6 +48,7 @@ This will export as:
 
 Content **with** Markdown _emphasis_ characters is rendered fine in the
 default Special Blocks.
+
 </div>
 
 This will export as [Special Blocks](/posts/special-blocks) --- either wrapped with `<div>`

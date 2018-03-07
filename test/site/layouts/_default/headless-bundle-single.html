@@ -41,7 +41,7 @@
     <hr>
     <h2>Content from Headless Page Bundle</h2>
     {{ $headless := .Site.GetPage "page" "headless-page-bundle-x" }}
-    {{ $reusablePages := $headless.Resources.Match "*" }}
+    {{ $reusablePages := $headless.Resources }}
     {{ range $reusablePages }}
         <h3>{{ .Title }}</h3>
         {{ .Content }}

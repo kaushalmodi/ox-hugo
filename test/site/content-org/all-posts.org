@@ -5854,6 +5854,17 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 # a comment forces paragraph break in Org
+* Meta
+** Search
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: /
+:EXPORT_FILE_NAME: search
+:EXPORT_HUGO_LAYOUT: search
+:EXPORT_HUGO_MENU: :menu "0.search" :title "Click to Search"
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :sitemap '((priority . 0.1))
+:END:
+Results from static site search implemented using /Fusejs/, /jquery/
+and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1cb41ae][Source]]
 * Footnotes
 [fn:4] Even if the user has set the =HUGO_CODE_FENCE= value to =t=
 (via variable, keyword or subtree property), the Hugo =highlight=

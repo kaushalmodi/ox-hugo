@@ -24,6 +24,9 @@ pygmentsUseClasses = true       # This applies to Chroma too.
   category = "categories" # SINGULAR = "PLURAL"
   tag = "tags"
 
+[Outputs] # https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1cb41ae
+  home = ["HTML", "JSON"]
+
 [Author]
   name = "Kaushal Modi"
 

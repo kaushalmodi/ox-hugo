@@ -1908,6 +1908,16 @@ front-matter keys"/ in {{{ox-hugo-test-file}}}.
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"
 :END:
+*** Search
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: /
+:EXPORT_FILE_NAME: search
+:EXPORT_HUGO_LAYOUT: search
+:EXPORT_HUGO_MENU: :menu "0.search" :title "Click to Search"
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :sitemap '((priority . 0.1))
+:END:
+Results from static site search implemented using /Fusejs/, /jquery/
+and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1cb41ae][Source]]
 *** Meta Features
 :PROPERTIES:
 :EXPORT_FILE_NAME: meta-features

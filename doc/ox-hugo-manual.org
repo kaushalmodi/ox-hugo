@@ -350,17 +350,19 @@ There is a plan to create a =hugo.el= that would do things like:
   /futureness/.
 * Test Site
 :PROPERTIES:
-:EXPORT_HUGO_SECTION: test
+:EXPORT_HUGO_SECTION: /
+:EXPORT_HUGO_BUNDLE: test
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_MENU: :menu "1.main"
+:EXPORT_HUGO_MENU: :menu "1.main" :pre "<span style=\"font-variant: small-caps;\">" :post "</span>&nbsp;↗"
 :END:
 # Generate an empty _index.md in test/ for that subdirectory to get
 # generated.
 * Issues/Requests
 :PROPERTIES:
-:EXPORT_HUGO_SECTION: issues
+:EXPORT_HUGO_SECTION: /
+:EXPORT_HUGO_BUNDLE: issues
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_MENU: :menu "1.main"
+:EXPORT_HUGO_MENU: :menu "1.main" :post "&nbsp;↗"
 :END:
 * Changelog
 :PROPERTIES:

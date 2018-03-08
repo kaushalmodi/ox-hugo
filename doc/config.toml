@@ -52,8 +52,12 @@ disableFastRender = true        # Hugo 0.30
   doc = "/doc/:filename/"
   test = "/test/:slug/"
 
+# https://discourse.gohugo.io/t/need-to-redefine-the-whole-outputs-map-when-needing-to-set-just-one-kind/10953
 [Outputs] # https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1cb41ae
-  home = ["HTML", "JSON"]
+  home = ["HTML", "RSS", "JSON"] # default: home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+  taxonomyTerm = ["HTML", "RSS"]
 
 [Params]
   name = "ox-hugo"

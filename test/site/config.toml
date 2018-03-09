@@ -24,13 +24,6 @@ pygmentsUseClasses = true       # This applies to Chroma too.
   category = "categories" # SINGULAR = "PLURAL"
   tag = "tags"
 
-# https://discourse.gohugo.io/t/need-to-redefine-the-whole-outputs-map-when-needing-to-set-just-one-kind/10953
-[Outputs] # https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1cb41ae
-  home = ["HTML", "RSS", "JSON"] # default: home = ["HTML", "RSS"]
-  section = ["HTML", "RSS"]
-  taxonomy = ["HTML", "RSS"]
-  taxonomyTerm = ["HTML", "RSS"]
-
 [Author]
   name = "Kaushal Modi"
 

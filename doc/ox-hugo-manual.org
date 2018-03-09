@@ -1917,6 +1917,7 @@ front-matter keys"/ in {{{ox-hugo-test-file}}}.
 :EXPORT_HUGO_LAYOUT: search
 :EXPORT_HUGO_MENU: :menu "0.search" :title "Click to Search"
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :sitemap '((priority . 0.1))
+:EXPORT_HUGO_OUTPUTS: html json
 :END:
 Results from static site search implemented using /Fusejs/, /jquery/
 and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1cb41ae][Source]]

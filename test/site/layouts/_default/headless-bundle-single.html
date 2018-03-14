@@ -10,45 +10,60 @@
 
 <div class="post">
     <h1 class="post-title">{{ .Title }}</h1>
-    {{ with .GitInfo }} <!-- To enable this, put "enableGitInfo = true" in your site config.toml -->
-        This test was created/modified in commit <a href="{{ $.Site.Params.source.url }}/commit/{{- .Hash -}}">
-        {{- .AbbreviatedHash -}}</a> "{{ .Subject }}" on <b>{{ dateFormat "2006-01-02" .AuthorDate }}</b>.
+
+    <!-- Taxonomy debug -->
+    {{ $page := . }}
+    {{ with .Site.Taxonomies }}
+        {{ range $key,$_ := . }}
+            {{ with $page.Param $key }}
+                {{ $val := . }}
+                <p>
+                    {{ printf "<span style=\"font-variant: small-caps;\">%s</span>:" $key | safeHTML }}
+                    {{ with $.Site.GetPage "taxonomyTerm" $key }}
+                        {{ $taxonomy_page := . }}
+                        {{ range $val }}
+                            <a href="{{ printf "%s%s" $taxonomy_page.URL (. | urlize) }}">{{ . }}</a>
+                        {{ end }}
+                    {{ end }}
+                </p>
+            {{ end }}
+        {{ end }}
     {{ end }}
-    <p>
-        {{ if .Params.categories }}
-            Categories:
-            {{ range .Params.categories }}
-                <a href="/categories/{{ . | urlize }}">{{ . }}</a>
-            {{ end }}
-        {{ end }}
-    </p>
-    <p>
-        {{ if .Params.tags }}
-            Tags:
-            {{ range .Params.tags }}
-                <a href="/tags/{{ . | urlize }}">{{ . }}</a>
-            {{ end }}
-        {{ end }}
-    </p>
+
     <p>
         {{ if .Params.draft }}
-            <hr>
+            <hr />
             <center><h2>This is a Draft</h2></center>
-            <hr>
+            <hr />
         {{ end }}
     </p>
+
+    {{ $layout_file := "headless-bundle-single.html" }}
+    Layout file:
+    <a href="{{ .Site.Params.source.url }}/tree/master/test/site/layouts/_default/{{ $layout_file }}">
+        <code>{{ $layout_file }}</code>
+    </a>
+
     {{ .Content }}
-    <hr>
-    <h2>Content from Headless Page Bundle</h2>
+    <hr />
+
     {{ $headless := .Site.GetPage "page" "headless-page-bundle-x" }}
-    {{ $reusablePages := $headless.Resources }}
-    {{ range $reusablePages }}
-        <h3>{{ .Title }}</h3>
-        {{ .Content }}
-        <hr>
-    {{ end }}
+
+    <h2>Content from Headless Bundle Index page</h2>
+    <h3>{{ $headless.Title }}</h3>
+    {{ $headless.Content }}
+    <h3 id="headless-bundle-params-debug">Headless Bundle Index Page Params (Debug)</h3>
+    {{ partial "debugprint.html" $headless.Params }}
+
     {{ with $headless.Resources }}
-        <h3 id="headless-resource-debug">Headless Page Bundle Resources (Debug)</h3>
+        <h2>Content from Headless Bundle page Resources</h2>
+        {{ range . }}
+            <h3>{{ .Title }}</h3>
+            {{ .Content }}
+            <hr />
+        {{ end }}
+
+        <h3 id="headless-bundle-resource-debug">Headless Bundle Resources (Debug)</h3>
         {{ partial "debugprint.html" . }}
     {{ end }}
 

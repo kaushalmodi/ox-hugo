@@ -20,7 +20,7 @@ But you can get it by `.Site.GetPage ...`. Here is an example ([ref](https://git
 {{ $headless := .Site.GetPage "page" "some-headless-page" }}
 {{ $reusablePages := $headless.Resources.Match "sidebar-content*" }}
 {{ range $reusablePages }}
-{{ .Title }}
+    {{ .Title }}
 {{ end }}
 ```
 
@@ -28,8 +28,3 @@ There are many use cases of such headless page bundles:
 
 -   Shared media galleries
 -   Reusable page content "snippets"
-
----
-
-The content of **index** pages of headless page bundles will not be
-available through any means.

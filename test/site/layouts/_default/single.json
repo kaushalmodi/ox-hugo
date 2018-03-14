@@ -1,0 +1,7 @@
+{
+    "uri": "{{ .Permalink }}",
+    "title": "{{ .Title | htmlEscape }}",
+    "tags": [{{ range $tindex, $tag := .Params.tags }}{{ if $tindex }}, {{ end }}"{{ $tag| htmlEscape }}"{{ end }}],
+    "description": "{{ .Description | htmlEscape  }}",
+    "content": "{{ range $i, $words := .PlainWords }}{{ $words | htmlEscape  }} {{ end }}"
+}

@@ -1822,7 +1822,7 @@ and rewrite link paths to make blogging more seamless."
      (t
       (let* ((link-param-str "")
              (path (cond
-                    ((member type '("http" "https" "ftp"))
+                    ((member type '("http" "https" "ftp" "mailto"))
                      ;; Taken from ox-html.el -- Extract attributes
                      ;; from parent's paragraph.  HACK: Only do this
                      ;; for the first link in parent (inner image link

@@ -37,3 +37,10 @@ Once that is evaluated, links like these will export fine i.e. no
 ```org
 [[gopher://some.gopher.site][Dummy gopher link]]
 ```
+
+
+## Mailto link support {#mailto-link-support}
+
+`ox-hugo` Issue #[149](https://github.com/kaushalmodi/ox-hugo/issues/149)
+
+[My email](mailto:abc@xyz.com)

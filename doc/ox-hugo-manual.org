@@ -1677,6 +1677,7 @@ Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-capture-setup
 :END:
+**** An Org Capture template
 If you do not want to manually type the =EXPORT_FILE_NAME= for each
 new post, here is an example Org Capture template can help:
 #+begin_src emacs-lisp
@@ -1717,41 +1718,58 @@ CLOSED: [2017-12-18 Mon 16:36]
 #+end_example
 =ox-hugo= auto-sets the =date= field in the front-matter to the time
 stamp in that =CLOSED= property.
-**** Alternative way to set the =date= field
-If you prefer to not insert time-stamps when switching to the =DONE=
-state (i.e. you have =org-log-done= at its default value of =nil=),
-you can explicitly insert the =EXPORT_DATE= property too using the
-below Org Capture template instead.
-#+begin_src emacs-lisp
-;; Populates both EXPORT_FILE_NAME and EXPORT_DATE properties in the inserted
-;; headline.
-(with-eval-after-load 'org-capture
-  (defun org-hugo-new-subtree-post-capture-template ()
-    "Returns `org-capture' template string for new Hugo post.
-See `org-capture-templates' for more information."
-    (let* (;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
-           (date (format-time-string (org-time-stamp-format :long :inactive) (org-current-time)))
-           (title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
-           (fname (org-hugo-slug title)))
-      (mapconcat #'identity
-                 `(
-                   ,(concat "* TODO " title)
-                   ":PROPERTIES:"
-                   ,(concat ":EXPORT_FILE_NAME: " fname)
-                   ,(concat ":EXPORT_DATE: " date) ;Enter current date and time
-                   ":END:"
-                   "%?\n")          ;Place the cursor here finally
-                 "\n")))
+**** Alternative way: Export Hugo posts to a /Page Bundle/ organization
+:PROPERTIES:
+:CUSTOM_ID: org-capture-template-page-bundle
+:END:
+=ox-hugo= has /first-class/ support for the [[https://scripter.co/hugo-leaf-and-branch-bundles/][Page Bundles]] style of
+content organization, introduced in Hugo v0.32.
 
-  (add-to-list 'org-capture-templates
-               '("h"                ;`org-capture' binding + h
-                 "Hugo post"
-                 entry
-                 ;; It is assumed that below file is present in `org-directory'
-                 ;; and that it has a "Blog Ideas" heading. It can even be a
-                 ;; symlink pointing to the actual location of all-posts.org!
-                 (file+olp "all-posts.org" "Blog Ideas")
-                 (function org-hugo-new-subtree-post-capture-template))))
+If you prefer to have the exported posts to use the Page Bundles style
+of content organization, define the same
+=org-hugo-new-subtree-post-capture-template= as below:
+#+begin_src emacs-lisp
+(defun org-hugo-new-subtree-post-capture-template ()
+  "Returns `org-capture' template string for new Hugo post.
+See `org-capture-templates' for more information."
+  (let* ((title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
+         (fname (org-hugo-slug title)))
+    (mapconcat #'identity
+               `(
+                 ,(concat "* TODO " title)
+                 ":PROPERTIES:"
+                 ,(concat ":EXPORT_HUGO_BUNDLE: " fname)
+                 ":EXPORT_FILE_NAME: index"
+                 ":END:"
+                 "%?\n")                ;Place the cursor here finally
+               "\n")))
+#+end_src
+**** Alternative way to set the =date= field
+:PROPERTIES:
+:CUSTOM_ID: org-capture-template-export-date
+:END:
+If you prefer to not insert time-stamps using the =DONE=-state
+switching (i.e. you have =org-log-done= at its default value of
+=nil=), you can explicitly insert the =EXPORT_DATE= property too using
+the below definition of =org-hugo-new-subtree-post-capture-template=
+instead.
+#+begin_src emacs-lisp
+(defun org-hugo-new-subtree-post-capture-template ()
+  "Returns `org-capture' template string for new Hugo post.
+See `org-capture-templates' for more information."
+  (let* (;; http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/
+         (date (format-time-string (org-time-stamp-format :long :inactive) (org-current-time)))
+         (title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
+         (fname (org-hugo-slug title)))
+    (mapconcat #'identity
+               `(
+                 ,(concat "* TODO " title)
+                 ":PROPERTIES:"
+                 ,(concat ":EXPORT_FILE_NAME: " fname)
+                 ,(concat ":EXPORT_DATE: " date) ;Enter current date and time
+                 ":END:"
+                 "%?\n")                ;Place the cursor here finally
+               "\n")))
 #+end_src
 *** Images in Content
 :PROPERTIES:

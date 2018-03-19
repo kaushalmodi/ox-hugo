@@ -1,0 +1,15 @@
+#+title: Page Bundle (File-based Flow)
+#+author:
+
+#+hugo_base_dir: ../../
+#+hugo_section: singles
+#+hugo_tags: file-based page-bundles
+
+#+hugo_bundle: page-bundle-file-based-flow
+#+export_file_name: index
+
+#+begin_description
+Post organized as a /Page Bundle/  exported using /file-based flow/.
+#+end_description
+
+This post is exported to a [[https://scripter.co/hugo-leaf-and-branch-bundles/#leaf-bundle][Page/Leaf Bundle structure]].

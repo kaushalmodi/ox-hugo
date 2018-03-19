@@ -699,10 +699,10 @@ This function is adapted from `org-html-special-block'."
         (format "<%s%s>%s</%s>"
                 block-type attr-str contents block-type))
        (html5-block-fancy
-        (format "<%s%s>\n<%s></%s>\n\n%s\n</%s>" ;See footnote 1
+        (format "<%s%s>\n  <%s></%s>\n\n%s\n\n</%s>" ;See footnote 1
                 block-type attr-str block-type block-type contents block-type))
        (t
-        (format "<div%s>\n<div></div>\n\n%s\n</div>" ;See footnote 1
+        (format "<div%s>\n  <div></div>\n\n%s\n\n</div>" ;See footnote 1
                 attr-str contents))))))
 
 ;;;; Src Block

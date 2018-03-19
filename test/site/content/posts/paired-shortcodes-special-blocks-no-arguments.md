@@ -44,10 +44,11 @@ This will export as:
 ## Not a recognized paired shortcode {#not-a-recognized-paired-shortcode}
 
 <div class="foo">
-<div></div>
+  <div></div>
 
 Content **with** Markdown _emphasis_ characters is rendered fine in the
 default Special Blocks.
+
 </div>
 
 This will export as [Special Blocks](/posts/special-blocks) --- either wrapped with `<div>`

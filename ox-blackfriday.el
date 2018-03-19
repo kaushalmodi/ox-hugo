@@ -79,7 +79,8 @@ Note that this variable is *only* for internal use.")
   ;;           (lambda (a s v b)
   ;;             (if a (org-blackfriday-export-to-markdown t s v)
   ;;               (org-open-file (org-blackfriday-export-to-markdown nil s v)))))))
-  :translate-alist '((example-block . org-blackfriday-example-block)
+  :translate-alist '((center-block . org-blackfriday-center-block)
+                     (example-block . org-blackfriday-example-block)
                      (fixed-width . org-blackfriday-fixed-width) ;Org Babel Results
                      (footnote-reference . org-blackfriday-footnote-reference)
                      (inner-template . org-blackfriday-inner-template)
@@ -386,6 +387,14 @@ style tag."
 
 
 ;;; Transcode Functions
+
+;;;; Center Block
+(defun org-blackfriday-center-block (_center-block contents _info)
+  "Center-align the text in CONTENTS using CSS."
+  (let* ((class "org-center")
+         (style (format ".%s { margin-left: auto; margin-right: auto; text-align: center; }" class)))
+    (format "<style>%s</style>\n\n<div class=\"%s\">\n  <div></div>\n\n%s\n</div>" ;See footnote 1
+            style class contents)))
 
 ;;;; Example Block
 (defun org-blackfriday-example-block (example-block _contents info)

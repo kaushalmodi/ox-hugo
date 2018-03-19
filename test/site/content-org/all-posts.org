@@ -1937,6 +1937,19 @@ Hash char at beginning of a continued line
 Markdown]
 
 This ! does not need to be escaped as there is no ambiguity.
+** Force line break                                        :force:line_break:
+:PROPERTIES:
+:EXPORT_FILE_NAME: force-line-break
+:END:
+From [[https://orgmode.org/manual/Paragraphs.html][=C-h i g (org) Paragraphs=]]:
+
+#+begin_quote
+Paragraphs are separated by at least one empty line.  If you need to
+enforce a line break within a paragraph, use ‘\\’ at the end of a line.
+#+end_quote
+
+Line 1 \\
+Line 2
 * Page Bundles                                                 :page_bundles:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: bundles

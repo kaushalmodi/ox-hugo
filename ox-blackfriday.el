@@ -87,6 +87,7 @@ Note that this variable is *only* for internal use.")
                      (item . org-blackfriday-item)
                      (latex-environment . org-blackfriday-latex-environment)
                      (latex-fragment . org-blackfriday-latex-fragment)
+                     (line-break . org-html-line-break) ;"\\" at EOL forces a line break
                      (plain-list . org-blackfriday-plain-list)
                      (plain-text . org-blackfriday-plain-text)
                      (quote-block . org-blackfriday-quote-block)

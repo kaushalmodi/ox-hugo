@@ -1210,14 +1210,14 @@ prefix = /dir/where/you/want/to/install/org # Default: /usr/share
 #+begin_src emacs-lisp
 (message "hello")
 #+end_src
-** Source block with list syntax in a list                        :@upstream:
+** Source block with list syntax in a list            :@upstream:blackfriday:
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01
 :EXPORT_FILE_NAME: list-has-src-block-with-list-syntax
 :END:
-An upstream bug in /Blackfriday/ ([[https://github.com/russross/blackfriday/issues/239][Issue #239]]) caused fenced code
-blocks in lists to not render correctly if they contain Markdown
-syntax lists. =ox-hugo= provides a hack to get around that bug.
+An upstream bug in {{{bfissue(239)}}} caused fenced code blocks in
+lists to not render correctly if they contain Markdown syntax
+lists. =ox-hugo= provides a hack to get around that bug.
 
 Below is an example of such a case:
 
@@ -1232,6 +1232,20 @@ Below is an example of such a case:
   + List item 2.2 in code block
   #+end_src
 - List item 3
+
+Another such example:
+
+1. First item
+   #+begin_src yaml
+   ports:
+     foo: bar
+   #+end_src
+2. Second item
+   #+begin_src yaml
+   ports:
+   - port: 80
+   #+end_src
+3. Third item
 ** Source block without list syntax in a list
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01

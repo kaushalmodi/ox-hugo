@@ -1645,7 +1645,7 @@ Here there is white space in menu name property.
 :PROPERTIES:
 :EXPORT_FILE_NAME: custom-front-matter-one-line
 :EXPORT_DATE: 2017-07-24
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :foo bar :baz zoo :alpha 1 :beta "two words" :gamma 10
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :foo bar :baz zoo :alpha 1 :beta "two words" :gamma 10 :version "6.17.00"
 :END:
 ** Custom front matter in multiple lines
 :PROPERTIES:

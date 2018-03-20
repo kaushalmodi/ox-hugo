@@ -2348,9 +2348,17 @@ Optional argument FORMAT can be \"toml\" or \"yaml\"."
         ;; or if it is any number (integer or float)
         ;; https://github.com/toml-lang/toml#integer
         ;; Integer examples: 7, +7, -7, 7_000
+        (string-match-p "\\`[+-]?[[:digit:]_]+\\'" val)
         ;; https://github.com/toml-lang/toml#float
-        ;; Float examples: 7.8, +7.8, -7.8, 7e-8, -7E+8
-        (string-match-p "\\`[+-]?[[:digit:]_]+\\(\\(\\.\\|[eE][+-]?\\)[[:digit:]]+\\)*\\'" val))
+        ;; Float examples (decimals): 7.8, +7.8, -7.8
+        (string-match-p "\\`[+-]?[[:digit:]_]+\\.[[:digit:]_]+\\'" val)
+        ;; Float examples (exponentials): 7e-8, -7E+8, 1.7e-05
+        (string-match-p "\\`[+-]?[[:digit:]_]+\\(\\.[[:digit:]_]+\\)*[eE][+-]?[[:digit:]_]+\\'" val)
+        ;; Special float values (infinity/NaN)
+        ;; Looks like Hugo is not supporting these.. Tue Mar 20 18:05:40 EDT 2018 - kmodi
+        ;; (let ((case-fold-search nil))
+        ;;   (string-match-p "\\`[+-]?\\(inf\\|nan\\)\\'" val))
+        )
     val)
    ((and prefer-no-quotes
          (string-match-p "\\`[a-zA-Z0-9]+\\'" val))

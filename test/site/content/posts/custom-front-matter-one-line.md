@@ -8,4 +8,5 @@ baz = "zoo"
 alpha = 1
 beta = "two words"
 gamma = 10
+version = "6.17.00"
 +++

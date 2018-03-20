@@ -1705,6 +1705,7 @@ The following results in the 'genres' property having the value
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :dog '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :header '((image . "projects/Readingabook.jpg") (caption . "stay hungry, stay foolish"))
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :collection '((animals . (dog cat "penguin" "mountain gorilla")) (nothing) (nonnil . t) (strings-symbols . ("abc" def "two words")) (integers . (123 -5 17 1_234)) (floats . (12.3 -5.0 -17E-6)) (booleans . (true false)))
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :random '((foo . bar))
 :END:
 *** Custom front matter with nested maps in TOML
 :PROPERTIES:

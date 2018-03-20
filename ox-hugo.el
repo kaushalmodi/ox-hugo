@@ -2326,19 +2326,24 @@ If VAL contains newlines, format it according to TOML or YAML
 FORMAT to preserve them.
 
 VAL is returned as-it-is under the following cases:
-- It is not a string (or nil).
+- It is a number or nil.
 - It is a string and is already wrapped with double quotes.
 - It is a string and it's value is \"true\" or \"false\".
 - It is a string representing a date.
+- It is a string representing an integer or float.
 
 If optional argument PREFER-NO-QUOTES is non-nil, return the VAL
 as-it-is if it's a string with just alphanumeric characters.
 
 Optional argument FORMAT can be \"toml\" or \"yaml\"."
   (cond
-   ((or (null val)                ;nil
-        (not (stringp val))       ;could be a number, like menu weight
-        (and (org-string-nw-p val)
+   ((null val)                          ;nil
+    val)
+   ((numberp val)
+    val)
+   ((symbolp val)
+    (format "\"%s\"" (symbol-name val)))
+   ((or (and (org-string-nw-p val)
              (string= (substring val 0 1) "\"") ;First char is literally a "
              (string= (substring val -1) "\"")) ;Last char is literally a "
         (string= "true" val)

@@ -2732,12 +2732,15 @@ C = W\log_{2} (1+\mathrm{SNR})
 \end{equation}
 
 *Here we refer to equation \ref{eq:1}.*
-* Equations                                                       :equations:
+* Equations                                               :equations:mathjax:
 ** Inline equations
 :PROPERTIES:
 :EXPORT_FILE_NAME: equation-latex-frag
 :EXPORT_DATE: 2017-07-31
 :END:
+#+begin_description
+Inline and /one-per-line/ equations
+#+end_description
 - Inline equations are wrapped between =\(= and =\)=.
   - =$= wrapping also works, but it is not preferred as it comes with
     restrictions like "there should be no whitespace between the
@@ -2781,6 +2784,10 @@ $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \]
 :PROPERTIES:
 :EXPORT_FILE_NAME: equations-with-r-c
 :END:
+#+begin_description
+Test to check that &reg;, &copy; and &trade; don't get interpreted
+within equations.
+#+end_description
 {{{oxhugoissue(104)}}}
 
 Below, =(r)= or =(R)= should not get converted to &reg;, =(c)= or
@@ -2809,6 +2816,9 @@ $$ (tm) (TM) $$
 :PROPERTIES:
 :EXPORT_FILE_NAME: indented-equations
 :END:
+#+begin_description
+Testing equations with mathjax --- indented or not.
+#+end_description
 *** No indentation
 \begin{equation}
 \label{eq:1}
@@ -2834,6 +2844,9 @@ one, but:
 :PROPERTIES:
 :EXPORT_FILE_NAME: equations-bf-escaping
 :END:
+#+begin_description
+Test to check that the backslashes are correctly escaped.
+#+end_description
 {{{oxhugoissue(138)}}}
 *** =\|= → =\\|=
 $$

@@ -1,7 +1,8 @@
 +++
 title = "Inline equations"
+description = "Inline and _one-per-line_ equations"
 date = 2017-07-31
-tags = ["equations"]
+tags = ["equations", "mathjax"]
 draft = false
 +++
 

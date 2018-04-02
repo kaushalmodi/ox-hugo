@@ -1,6 +1,10 @@
 +++
 title = "Equations with (r), (c), .."
-tags = ["equations"]
+description = """
+  Test to check that &reg;, &copy; and &trade; don't get interpreted
+  within equations.
+  """
+tags = ["equations", "mathjax"]
 categories = ["upstream"]
 draft = false
 +++

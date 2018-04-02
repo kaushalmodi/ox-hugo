@@ -1,6 +1,7 @@
 +++
 title = "Blackfriday-specific escaping in equations"
-tags = ["equations", "escaping", "blackfriday"]
+description = "Test to check that the backslashes are correctly escaped."
+tags = ["equations", "mathjax", "escaping", "blackfriday"]
 categories = ["upstream"]
 draft = false
 +++

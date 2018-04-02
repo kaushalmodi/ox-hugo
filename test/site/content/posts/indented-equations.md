@@ -1,6 +1,7 @@
 +++
 title = "Indented equations block"
-tags = ["equations", "indented"]
+description = "Testing equations with mathjax --- indented or not."
+tags = ["equations", "mathjax", "indented"]
 draft = false
 +++
 

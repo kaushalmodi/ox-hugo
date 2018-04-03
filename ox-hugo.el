@@ -2320,7 +2320,9 @@ INFO is a plist holding export options."
 
 ;;;;; Hugo Front Matter
 (defun org-hugo--quote-string (val &optional prefer-no-quotes format)
-  "Wrap VAL with appropriate quotes if it is a string.
+  "Wrap VAL with quotes as appropriate.
+
+VAL can be a string, symbol, number or nil.
 
 If VAL contains newlines, format it according to TOML or YAML
 FORMAT to preserve them.
@@ -2343,71 +2345,73 @@ Optional argument FORMAT can be \"toml\" or \"yaml\"."
     val)
    ((symbolp val)
     (format "\"%s\"" (symbol-name val)))
-   ((or (and (org-string-nw-p val)
-             (string= (substring val 0 1) "\"") ;First char is literally a "
-             (string= (substring val -1) "\"")) ;Last char is literally a "
-        (string= "true" val)
-        (string= "false" val)
-        ;; or if it is a date (date, publishDate, expiryDate, lastmod)
-        (string-match-p org-hugo--date-time-regexp val)
-        ;; or if it is any number (integer or float)
-        ;; https://github.com/toml-lang/toml#integer
-        ;; Integer examples: 7, +7, -7, 7_000
-        (string-match-p "\\`[+-]?[[:digit:]_]+\\'" val)
-        ;; https://github.com/toml-lang/toml#float
-        ;; Float examples (decimals): 7.8, +7.8, -7.8
-        (string-match-p "\\`[+-]?[[:digit:]_]+\\.[[:digit:]_]+\\'" val)
-        ;; Float examples (exponentials): 7e-8, -7E+8, 1.7e-05
-        (string-match-p "\\`[+-]?[[:digit:]_]+\\(\\.[[:digit:]_]+\\)*[eE][+-]?[[:digit:]_]+\\'" val)
-        ;; Special float values (infinity/NaN)
-        ;; Looks like Hugo is not supporting these.. Tue Mar 20 18:05:40 EDT 2018 - kmodi
-        ;; (let ((case-fold-search nil))
-        ;;   (string-match-p "\\`[+-]?\\(inf\\|nan\\)\\'" val))
-        )
-    val)
-   ((and prefer-no-quotes
-         (string-match-p "\\`[a-zA-Z0-9]+\\'" val))
-    val)
-   ((org-string-nw-p val)      ;If `val' is any other non-empty string
+   ((stringp val)
     (cond
-     ((string-match-p "\n" val)       ;Multi-line string
-      ;; The indentation of the multi-line string is needed only for the
-      ;; YAML format.  But the same is done for TOML too just for better
-      ;; presentation.
-      (setq val (replace-regexp-in-string "^" "  " val))
+     ((org-string-nw-p val)            ;If `val' is a non-empty string
+      (cond
+       ((or (and (string= (substring val 0 1) "\"") ;First char is literally a "
+                 (string= (substring val -1) "\"")) ;Last char is literally a "
+            (and prefer-no-quotes ;If quotes are not preferred and `val' is only alpha-numeric
+                 (string-match-p "\\`[a-zA-Z0-9]+\\'" val))
+            (string= "true" val)
+            (string= "false" val)
+            ;; or if it is a date (date, publishDate, expiryDate, lastmod)
+            (string-match-p org-hugo--date-time-regexp val)
+            ;; or if it is any number (integer or float)
+            ;; https://github.com/toml-lang/toml#integer
+            ;; Integer examples: 7, +7, -7, 7_000
+            (string-match-p "\\`[+-]?[[:digit:]_]+\\'" val)
+            ;; https://github.com/toml-lang/toml#float
+            ;; Float examples (decimals): 7.8, +7.8, -7.8
+            (string-match-p "\\`[+-]?[[:digit:]_]+\\.[[:digit:]_]+\\'" val)
+            ;; Float examples (exponentials): 7e-8, -7E+8, 1.7e-05
+            (string-match-p "\\`[+-]?[[:digit:]_]+\\(\\.[[:digit:]_]+\\)*[eE][+-]?[[:digit:]_]+\\'" val)
+            ;; Special float values (infinity/NaN)
+            ;; Looks like Hugo is not supporting these.. Tue Mar 20 18:05:40 EDT 2018 - kmodi
+            ;; (let ((case-fold-search nil))
+            ;;   (string-match-p "\\`[+-]?\\(inf\\|nan\\)\\'" val))
+            )
+        val)
+       ((string-match-p "\n" val)       ;Multi-line string
+        ;; The indentation of the multi-line string is needed only for the
+        ;; YAML format.  But the same is done for TOML too just for better
+        ;; presentation.
+        (setq val (replace-regexp-in-string "^" "  " val))
 
-      (if (and (stringp format)
-               (string= format "yaml"))
-          (progn
-            ;; https://yaml-multiline.info/
-            ;;
-            ;;     |             |foo : >
-            ;;     |abc          |  abc
-            ;;     |       >>>   |
-            ;;     |def          |
-            ;;     |             |  def
-            ;;
-            ;; In Org, a single blank line is used to start a new
-            ;; paragraph. In the YAML multi-line string, that needs to
-            ;; be 2 blank lines.
-            (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n\n" val))
-            (format ">\n%s" val))
-        ;; Escape the backslashes (only for multi-line TOML).
+        (if (and (stringp format)
+                 (string= format "yaml"))
+            (progn
+              ;; https://yaml-multiline.info/
+              ;;
+              ;;     |             |foo : >
+              ;;     |abc          |  abc
+              ;;     |       >>>   |
+              ;;     |def          |
+              ;;     |             |  def
+              ;;
+              ;; In Org, a single blank line is used to start a new
+              ;; paragraph. In the YAML multi-line string, that needs to
+              ;; be 2 blank lines.
+              (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n\n" val))
+              (format ">\n%s" val))
+          ;; Escape the backslashes (only for multi-line TOML).
+          (setq val (replace-regexp-in-string "\\\\" "\\\\\\\\" val))
+
+          ;; Remove indentation/space from blank lines if any.
+          (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n" val))
+          (format "\"\"\"\n%s\n  \"\"\"" val))) ;Triple-quote
+       (t                                       ;Single-line string
+        ;; Below 2 replacements are order-dependent.. first escape the
+        ;; backslashes, then escape the quotes with backslashes.
+
+        ;; Escape the backslashes (for both TOML and YAML).
         (setq val (replace-regexp-in-string "\\\\" "\\\\\\\\" val))
-
-        ;; Remove indentation/space from blank lines if any.
-        (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n" val))
-        (format "\"\"\"\n%s\n  \"\"\"" val))) ;Triple-quote
-     (t                                       ;Single-line string
-      ;; Below 2 replacements are order-dependent.. first escape the
-      ;; backslashes, then escape the quotes with backslashes.
-
-      ;; Escape the backslashes (for both TOML and YAML).
-      (setq val (replace-regexp-in-string "\\\\" "\\\\\\\\" val))
-      ;; Escape the double-quotes.
-      (setq val (replace-regexp-in-string "\"" "\\\\\""  val))
-      (concat "\"" val "\""))))
-   (t
+        ;; Escape the double-quotes.
+        (setq val (replace-regexp-in-string "\"" "\\\\\""  val))
+        (concat "\"" val "\""))))
+     (t                                 ;If `val' is any empty string
+      "")))
+   (t                            ;Return empty string if anything else
     "")))
 
 (defun org-hugo--parse-property-arguments (str)

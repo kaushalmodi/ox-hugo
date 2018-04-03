@@ -2368,34 +2368,47 @@ Optional argument FORMAT can be \"toml\" or \"yaml\"."
    ((and prefer-no-quotes
          (string-match-p "\\`[a-zA-Z0-9]+\\'" val))
     val)
-   ((and (org-string-nw-p val)
-         (string-match-p "\n" val))
-    ;; The indentation of the multi-line string is needed only for the
-    ;; YAML format.  But the same is done for TOML too just for better
-    ;; presentation.
-    (setq val (replace-regexp-in-string "^" "  " val))
+   ((org-string-nw-p val)      ;If `val' is any other non-empty string
+    (cond
+     ((string-match-p "\n" val)       ;Multi-line string
+      ;; The indentation of the multi-line string is needed only for the
+      ;; YAML format.  But the same is done for TOML too just for better
+      ;; presentation.
+      (setq val (replace-regexp-in-string "^" "  " val))
 
-    (if (and (stringp format)
-             (string= format "yaml"))
-        (progn
-          ;; https://yaml-multiline.info/
-          ;;
-          ;;     |             |foo : >
-          ;;     |abc          |  abc
-          ;;     |       >>>   |
-          ;;     |def          |
-          ;;     |             |  def
-          ;;
-          ;; In Org, a single blank line is used to start a new
-          ;; paragraph. In the YAML multi-line string, that needs to
-          ;; be 2 blank lines.
-          (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n\n" val))
-          (format ">\n%s" val))
-      ;; Remove indentation/space from blank lines if any.
-      (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n" val))
-      (format "\"\"\"\n%s\n  \"\"\"" val))) ;Triple-quote
+      (if (and (stringp format)
+               (string= format "yaml"))
+          (progn
+            ;; https://yaml-multiline.info/
+            ;;
+            ;;     |             |foo : >
+            ;;     |abc          |  abc
+            ;;     |       >>>   |
+            ;;     |def          |
+            ;;     |             |  def
+            ;;
+            ;; In Org, a single blank line is used to start a new
+            ;; paragraph. In the YAML multi-line string, that needs to
+            ;; be 2 blank lines.
+            (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n\n" val))
+            (format ">\n%s" val))
+        ;; Escape the backslashes (only for multi-line TOML).
+        (setq val (replace-regexp-in-string "\\\\" "\\\\\\\\" val))
+
+        ;; Remove indentation/space from blank lines if any.
+        (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n" val))
+        (format "\"\"\"\n%s\n  \"\"\"" val))) ;Triple-quote
+     (t                                       ;Single-line string
+      ;; Below 2 replacements are order-dependent.. first escape the
+      ;; backslashes, then escape the quotes with backslashes.
+
+      ;; Escape the backslashes (for both TOML and YAML).
+      (setq val (replace-regexp-in-string "\\\\" "\\\\\\\\" val))
+      ;; Escape the double-quotes.
+      (setq val (replace-regexp-in-string "\"" "\\\\\""  val))
+      (concat "\"" val "\""))))
    (t
-    (concat "\"" (replace-regexp-in-string "\"" "\\\\\""  val) "\""))))
+    "")))
 
 (defun org-hugo--parse-property-arguments (str)
   "Return an alist converted from a string STR of Hugo property value.

@@ -4552,6 +4552,23 @@ If the description is set via the subtree property
 #+begin_description
 Description set in special block
 #+end_description
+***** Single-line description with backslashes (TOML) :escaping:backslashes:front_matter:single_line:
+:PROPERTIES:
+:EXPORT_FILE_NAME: description-single-line-escaping-backslashes-org-special-block-toml
+:END:
+#+begin_description
+Test to check that backslashes in =\|= and =\\= are correctly escaped.
+#+end_description
+Post content.
+***** Multi-line description with backslashes (TOML) :escaping:backslashes:front_matter:multi_line:
+:PROPERTIES:
+:EXPORT_FILE_NAME: description-multi-line-escaping-backslashes-org-special-block-toml
+:END:
+#+begin_description
+Test to check that backslashes in =\|= and =\\= are correctly escaped
+in the front-matter.
+#+end_description
+Post content.
 **** YAML                                                              :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
@@ -4573,6 +4590,23 @@ Short description
 of this post
 
 *bold* -- /italics/ --- +strikethrough+ =monospace=
+#+end_description
+Post content.
+***** Single-line description with backslashes (YAML) :escaping:backslashes:front_matter:single_line:
+:PROPERTIES:
+:EXPORT_FILE_NAME: description-single-line-escaping-backslashes-org-special-block-yaml
+:END:
+#+begin_description
+Test to check that backslashes in =\|= and =\\= are correctly escaped.
+#+end_description
+Post content.
+***** Multi-line description with backslashes (YAML) :escaping:backslashes:front_matter:multi_line:
+:PROPERTIES:
+:EXPORT_FILE_NAME: description-multi-line-escaping-backslashes-org-special-block-yaml
+:END:
+#+begin_description
+Test to check that backslashes in =\|= and =\\= are correctly escaped
+in the front-matter.
 #+end_description
 Post content.
 ** Locale                                                            :locale:

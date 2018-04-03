@@ -4,7 +4,7 @@ description = """
   Short description
   of this post
 
-  **bold** -- _italics_ --- ~~strikethrough~~
+  **bold** -- _italics_ --- ~~strikethrough~~ `monospace`
   """
 tags = ["front-matter", "description", "special-block", "toml", "multi-line"]
 draft = false

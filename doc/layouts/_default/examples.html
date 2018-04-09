@@ -10,7 +10,7 @@
             <tr><th>Author</th><th>Site</th><th>Org Source</th></tr>
             {{ range $key, $val := . }}
                 {{ $org_dir := $val.org_dir | default "" | replaceRE "/$" "" }}
-                {{ $org_src := (printf "%stree/%s/%s" $val.source ($val.branch | default "master") $org_dir) }}
+                {{ $org_src := (printf "%s/tree/%s/%s" ($val.source | replaceRE "/$" "") ($val.branch | default "master") $org_dir) }}
                 <tr>
                     <td>{{ $val.author }}</td>
                     <td>{{ printf "<a href=\"%s\">%s</a>" $val.site ($val.site | replaceRE "^https?://" "" | replaceRE "/$" "") | safeHTML }}</td>

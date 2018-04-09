@@ -6,38 +6,54 @@
     {{ partial "headline-hash.html" .Content }}
 
     {{ with .Site.Data.users }}
-        <table class="examples">
-            <tr><th>Author</th><th>Site</th><th>Org Source</th><th>Last Updated*</th></tr>
-            {{ range $key, $val := . }}
-                {{ $branch := $val.branch | default "master" }}
-                {{ $.Scratch.Set "__repo_updated_time" "" }}
-                {{ if (findRE "github\\.com" $val.source) }}
-                    {{ $repo := replaceRE "^.*github\\.com/([^/]+/[^/]+).*" "${1}" $val.source }}
-                    {{ $repo_json := getJSON (printf "https://api.github.com/repos/%s/branches/%s" $repo $branch) }}
-                    {{ $.Scratch.Set "__repo_updated_time" (index (index (index (index $repo_json "commit") "commit") "committer") "date") }}
-                {{ else if (findRE "gitlab\\.com" $val.source) }}
-                    {{ $repo := replaceRE "^.*gitlab\\.com/([^/]+/[^/]+).*" "${1}" $val.source }}
-                    {{ $repo_json := getJSON (printf "https://gitlab.com/api/v4/projects/%s/repository/branches/%s" ($repo | replaceRE "/" "%2F") $branch) }}
-                    {{ $.Scratch.Set "__repo_updated_time" (index (index $repo_json "commit") "committed_date") }}
-                    {{/* partial "debugprint.html" $repo_json */}}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript">
+         $(document).ready(function() {
+             $('.ox-hugo-examples').DataTable({
+                 "order": [[ 3, 'desc' ]],
+                 "paging": false,
+                 "info": true // Default is true, prints "Showing x of y entries"
+             }); } );
+        </script>
+
+        <table class="ox-hugo-examples">
+            <thead>
+                <tr><th>Author</th><th>Site</th><th>Org Source</th><th>Last Updated*</th></tr>
+            </thead>
+            <tbody>
+                {{ range $key, $val := . }}
+                    {{ $branch := $val.branch | default "master" }}
+                    {{ $.Scratch.Set "__repo_updated_time" "" }}
+                    {{ if (findRE "github\\.com" $val.source) }}
+                        {{ $repo := replaceRE "^.*github\\.com/([^/]+/[^/]+).*" "${1}" $val.source }}
+                        {{ $repo_json := getJSON (printf "https://api.github.com/repos/%s/branches/%s" $repo $branch) }}
+                        {{ $.Scratch.Set "__repo_updated_time" (index (index (index (index $repo_json "commit") "commit") "committer") "date") }}
+                    {{ else if (findRE "gitlab\\.com" $val.source) }}
+                        {{ $repo := replaceRE "^.*gitlab\\.com/([^/]+/[^/]+).*" "${1}" $val.source }}
+                        {{ $repo_json := getJSON (printf "https://gitlab.com/api/v4/projects/%s/repository/branches/%s" ($repo | replaceRE "/" "%2F") $branch) }}
+                        {{ $.Scratch.Set "__repo_updated_time" (index (index $repo_json "commit") "committed_date") }}
+                        {{/* partial "debugprint.html" $repo_json */}}
+                    {{ end }}
+                    {{ $org_dir := $val.org_dir | default "" | replaceRE "/$" "" }}
+                    {{ if (findRE "\\.org$" $val.source) }} <!-- If the "source" is direct link to an Org file -->
+                        {{ $.Scratch.Set "__org_src" $val.source }}
+                    {{ else }}
+                        {{ $.Scratch.Set "__org_src" (printf "%s/tree/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
+                    {{ end }}
+                    <tr>
+                        <td>{{ $val.author }}</td>
+                        <td>{{ printf "<a href=\"%s\">%s</a>" $val.site ($val.site | replaceRE "^https?://" "" | replaceRE "/$" "") | safeHTML }}</td>
+                        <td>{{ printf "<a href=\"%s\">%s</a>" ($.Scratch.Get "__org_src") ($org_dir | default (or $val.org_src_desc "<em>repo root</em>") | replaceRE "[^<]*/" "") | safeHTML }}</td>
+                        <td>
+                            {{ with $.Scratch.Get "__repo_updated_time" }}
+                                {{ . | dateFormat "2006/01/02" }}
+                            {{ end }}
+                        </td>
+                    </tr>
                 {{ end }}
-                {{ $org_dir := $val.org_dir | default "" | replaceRE "/$" "" }}
-                {{ if (findRE "\\.org$" $val.source) }} <!-- If the "source" is direct link to an Org file -->
-                    {{ $.Scratch.Set "__org_src" $val.source }}
-                {{ else }}
-                    {{ $.Scratch.Set "__org_src" (printf "%s/tree/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
-                {{ end }}
-                <tr>
-                    <td>{{ $val.author }}</td>
-                    <td>{{ printf "<a href=\"%s\">%s</a>" $val.site ($val.site | replaceRE "^https?://" "" | replaceRE "/$" "") | safeHTML }}</td>
-                    <td>{{ printf "<a href=\"%s\">%s</a>" ($.Scratch.Get "__org_src") ($org_dir | default (or $val.org_src_desc "<em>repo root</em>") | replaceRE "[^<]*/" "") | safeHTML }}</td>
-                    <td>
-                        {{ with $.Scratch.Get "__repo_updated_time" }}
-                            {{ . | dateFormat "Jan 2, 2006" }}
-                        {{ end }}
-                    </td>
-                </tr>
-            {{ end }}
+            </tbody>
         </table>
     {{ end }}
 

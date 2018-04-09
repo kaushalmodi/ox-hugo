@@ -1,6 +1,6 @@
 # Courtesy: https://github.com/magit/magit/blob/master/.travis.yml
 dist: trusty
-sudo: false
+sudo: true
 language: generic
 env:
   global:

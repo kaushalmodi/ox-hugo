@@ -148,6 +148,12 @@
   branch = "master"
   site = "http://nicehiro.org/"
 
+[aaronbaugher]
+  author = "Aaron Baugher"
+  source = "https://aaron.baugher.biz/text/blog.org" # Site source not in a repo
+  org_src_desc = "Org file"
+  site = "https://aaron.baugher.biz/"
+
 # []
 #   author = ""
 #   source = ""

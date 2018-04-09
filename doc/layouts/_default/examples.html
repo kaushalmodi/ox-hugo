@@ -22,11 +22,15 @@
                     {{/* partial "debugprint.html" $repo_json */}}
                 {{ end }}
                 {{ $org_dir := $val.org_dir | default "" | replaceRE "/$" "" }}
-                {{ $org_src := (printf "%s/tree/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
+                {{ if (findRE "\\.org$" $val.source) }} <!-- If the "source" is direct link to an Org file -->
+                    {{ $.Scratch.Set "__org_src" $val.source }}
+                {{ else }}
+                    {{ $.Scratch.Set "__org_src" (printf "%s/tree/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
+                {{ end }}
                 <tr>
                     <td>{{ $val.author }}</td>
                     <td>{{ printf "<a href=\"%s\">%s</a>" $val.site ($val.site | replaceRE "^https?://" "" | replaceRE "/$" "") | safeHTML }}</td>
-                    <td>{{ printf "<a href=\"%s\">%s</a>" $org_src ($org_dir | default "<em>repo root</em>" | replaceRE "[^<]*/" "") | safeHTML }}</td>
+                    <td>{{ printf "<a href=\"%s\">%s</a>" ($.Scratch.Get "__org_src") ($org_dir | default (or $val.org_src_desc "<em>repo root</em>") | replaceRE "[^<]*/" "") | safeHTML }}</td>
                     <td>
                         {{ with $.Scratch.Get "__repo_updated_time" }}
                             {{ . | dateFormat "Jan 2, 2006" }}

@@ -83,6 +83,8 @@ presentation styles./
 - https://ox-hugo.scripter.co -- =ox-hugo= Documentation Site
 - [[https://scripter.co]] -- My blog
 
+See the [[https://ox-hugo.scripter.co/doc/examples/][Real World Examples]] section for a *lot more* examples.
+
 * Installation
 This package requires emacs 24.4+ and Org 9.0+. It is available on
 Melpa ([[https://melpa.org/#/ox-hugo]]).

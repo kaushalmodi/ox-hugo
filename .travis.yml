@@ -21,7 +21,9 @@ install:
   - export EMACS=/tmp/emacs/bin/emacs
   - $EMACS --version
 script:
-  - make --no-print-directory doc EMACS=${EMACS} # Just ensure that "make doc" doesn't fail for any reason.. this is *not* used to do Org->Markdown doc conversion using Travis.
+  # Don't run "make doc" on travis; it's finicky
+  # and fails on running the getJSON command in hugo.
+  # - make --no-print-directory doc EMACS=${EMACS} # Just ensure that "make doc" doesn't fail for any reason.. this is *not* used to do Org->Markdown doc conversion using Travis.
   - make --no-print-directory test EMACS=${EMACS}
   - make --no-print-directory vcheck EMACS=${EMACS}
 notifications:

@@ -1,7 +1,7 @@
 +++
 title = "Summary Splitter"
 date = 2017-07-21
-tags = ["body"]
+tags = ["body", "summary-splitter", "more"]
 draft = false
 +++
 

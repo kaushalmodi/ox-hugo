@@ -1849,7 +1849,8 @@ If the =EXPORT_HUGO_OUTPUTS= property is left empty/unset, =ox-hugo=
 will not set the =outputs= variable in the front-matter at all. So
 only the HTML output will be created (default).
 * Post body                                                            :body:
-** Summary Splitter
+** Summary Splitter                                   :summary_splitter:more:
+*** Summary Splitter
 :PROPERTIES:
 :EXPORT_FILE_NAME: summary-splitter
 :EXPORT_DATE: 2017-07-21
@@ -1857,6 +1858,20 @@ only the HTML output will be created (default).
 Here is the summary.
 #+hugo: more
 Here is text after the [[https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting][summary splitter]].
+*** COMMENT Summary Splitter at EOF                                             :eof:
+:PROPERTIES:
+:EXPORT_FILE_NAME: summary-splitter-at-eof
+:END:
+#+begin_description
+Summary splitter at the end of post
+#+end_description
+{{{oxhugoissue(152)}}}
+
+/Uncomment this test after the upstream bug reported in
+=markdown-mode= # [[https://github.com/jrblevin/markdown-mode/issues/327][327]] gets resolved./
+
+Here more summary.
+#+hugo: more
 ** Dealing with underscores
 :PROPERTIES:
 :EXPORT_FILE_NAME: dealing-with-underscores

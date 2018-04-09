@@ -7,7 +7,7 @@
 
     {{ with .Site.Data.users }}
         <table class="examples">
-            <tr><th>Author</th><th>Site</th><th>Org Source</th><th>Last Updated</th></tr>
+            <tr><th>Author</th><th>Site</th><th>Org Source</th><th>Last Updated*</th></tr>
             {{ range $key, $val := . }}
                 {{ $branch := $val.branch | default "master" }}
                 {{ $.Scratch.Set "__repo_updated_time" "" }}
@@ -42,6 +42,11 @@
             {{ . | markdownify }}
         </p>
     {{ end }}
+
+    <hr />
+    <small>
+        <sup>*</sup> The "Last Updated" dates were retrieved when this page was last updated.. on {{ now | dateFormat "Jan 2, 2006" }}.
+    </small>
 </div>
 
 {{ end }}

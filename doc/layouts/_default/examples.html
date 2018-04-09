@@ -1,0 +1,30 @@
+{{ define "main" }}
+
+<h1>{{ .Title }}</h1>
+
+<div class="post">
+    {{ partial "headline-hash.html" .Content }}
+
+    {{ with .Site.Data.users }}
+        <table class="examples">
+            <tr><th>Author</th><th>Site</th><th>Org Source</th></tr>
+            {{ range $key, $val := . }}
+                {{ $org_dir := $val.org_dir | default "" | replaceRE "/$" "" }}
+                {{ $org_src := (printf "%stree/%s/%s" $val.source ($val.branch | default "master") $org_dir) }}
+                <tr>
+                    <td>{{ $val.author }}</td>
+                    <td>{{ printf "<a href=\"%s\">%s</a>" $val.site ($val.site | replaceRE "^https?://" "" | replaceRE "/$" "") | safeHTML }}</td>
+                    <td>{{ printf "<a href=\"%s\">%s</a>" $org_src ($org_dir | default "<em>repo root</em>" | replaceRE "[^<]*/" "") | safeHTML }}</td>
+                </tr>
+            {{ end }}
+        </table>
+    {{ end }}
+
+    {{ with .Params.after_content }}
+        <p>
+            {{ . | markdownify }}
+        </p>
+    {{ end }}
+</div>
+
+{{ end }}

@@ -534,6 +534,8 @@ presentation styles./
 *** Actual usage examples
 - https://ox-hugo.scripter.co -- =ox-hugo= Documentation Site
 - [[https://scripter.co]] -- My blog
+
+See the [[https://ox-hugo.scripter.co/doc/examples/][Real World Examples]] section for a *lot more* examples.
 ** Note to Future Contributors
 :PROPERTIES:
 :CUSTOM_ID: note-to-future-contributors
@@ -805,6 +807,17 @@ exported Markdown files.
 7. In few seconds, hundreds of test posts will get created, with the
    =hugo server= aided preview in the browser zapping through each new
    created post.
+*** Real World Examples
+:PROPERTIES:
+:EXPORT_FILE_NAME: examples
+:EXPORT_HUGO_LAYOUT: examples
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :after_content "_PS: You can also open an issue/PR if you need to get yourself removed from this list._"
+:END:
+Here are some examples of sites generated using *=ox-hugo= + Hugo*.
+
+If you too have a site generated using this package, and have the Org
+source of your site public, feel free to open a PR (updating just
+[[https://github.com/kaushalmodi/ox-hugo/blob/master/doc/data/users.toml][=users.toml=]]) to add yourself here, or open an issue.
 ** Org to Hugo
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "5.org_to_hugo"

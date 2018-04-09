@@ -1,0 +1,150 @@
+# [unique_key] # This can be any unique string, would suffice to set this to your GitHub/Gitlab/etc. username
+#   author = "Foo Bar"
+#   source = "Git repo of your site; needs to have the Org source" # End this with forward-slash
+#   branch = "git branch containing Org source; defaults to master if not set"
+#   org_dir = "Dir in the repo containing Org source" # Don't set this if Org file is in your repo root.
+#   site = "https://your.site/"
+
+[00-ox-hugo-doc]
+  author = "Kaushal Modi"
+  source = "https://github.com/kaushalmodi/ox-hugo/"
+  branch = "master"
+  org_dir = "doc"
+  site = "https://ox-hugo.scripter.co/"
+
+[01-ox-hugo-test]
+  author = "Kaushal Modi"
+  source = "https://github.com/kaushalmodi/ox-hugo/"
+  branch = "master"
+  org_dir = "test/site/content-org"
+  site = "https://ox-hugo.scripter.co/test/"
+
+[02-scripter-co]
+  author = "Kaushal Modi"
+  source = "https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io/"
+  branch = "master"
+  org_dir = "content-org"
+  site = "https://scripter.co/"
+
+[oscarnajera]
+  author = "Óscar Nájera"
+  source = "https://gitlab.com/Titan-C/titan-c.gitlab.io/"
+  branch = "master"
+  site = "https://blog.oscarnajera.com/"
+
+[punchagan]
+  author = "Puneeth Chaganti"
+  source = "https://github.com/punchagan/punchagan.muse-amuse.in/"
+  branch = "master"
+  org_dir = "content-org"
+  site = "https://punchagan.muse-amuse.in/"
+
+[lambdaloop]
+  author = "Pierre Karashchuk"
+  source = "https://github.com/lambdaloop/blog/"
+  branch = "master"
+  org_dir = "blog-org"
+  site = "http://lambdaloop.com/"
+
+[shimmy]
+  author = "Shimmy Xu"
+  source = "https://github.com/shimmy1996/blog/"
+  branch = "master"
+  org_dir = "org"
+  site = "https://www.shimmy1996.com/"
+
+[isaaczhou]
+  author = "Isaac Zhou"
+  source = "https://github.com/isaaczhou/isaaczhou.github.io/"
+  branch = "dev"
+  org_dir = "org"
+  site = "http://www.isaaczhou.com/"
+
+[zzamboni]
+  author = "Diego Zamboni"
+  source = "https://github.com/zzamboni/zzamboni.org/"
+  branch = "master"
+  org_dir = "content-org"
+  site = "http://zzamboni.org/"
+
+[primerpy]
+  author = "Isaac Zhou"
+  source = "https://github.com/primerpy/primerpy.github.io/"
+  branch = "dev"
+  org_dir = "org"
+  site = "http://www.primerpy.com/"
+
+[dmolina]
+  author = "Daniel Molina"
+  source = "https://github.com/dmolina/my-blog/"
+  branch = "master"
+  org_dir = "content_org"
+  site = "https://dmolina.github.io/"
+
+[shanesveller]
+  author = "Shane Sveller"
+  source = "https://github.com/shanesveller/shanesveller-dot-com/"
+  branch = "master"
+  site = "https://www.shanesveller.com/"
+
+[aradhana]
+  author = "Puneeth Chaganti"
+  source = "https://github.com/punchagan/aradhana.org/"
+  branch = "master"
+  org_dir = "content-org"
+  site = "http://aradhana.org/"
+
+[edkolev]
+  author = "Evgeni Kolev"
+  source = "https://github.com/edkolev/edkolev.github.io/"
+  branch = "source"
+  org_dir = "content-org"
+  site = "http://evgeni.io/"
+
+[vinurs]
+  author = "vinurs"
+  source = "https://github.com/vinurs/vinurs.github.io/"
+  branch = "source"
+  org_dir = "content-org"
+  site = "https://vinurs.me/"
+
+[cf-learn]
+  author = "Diego Zamboni"
+  source = "https://github.com/zzamboni/cf-learn.info/"
+  branch = "master"
+  org_dir = "content-org"
+  site = "http://cf-learn.info/"
+
+[xianmin]
+  author = "Xianmin Chen"
+  source = "https://coding.net/u/xianmin/p/xianmin/git/"
+  branch = "master"
+  org_dir = "orgpost"
+  site = "https://xianmin.org/"
+
+[xianmin-en]
+  author = "Xianmin Chen"
+  source = "https://coding.net/u/xianmin/p/en.xianmin.org/git/"
+  branch = "master"
+  org_dir = "orgpost"
+  site = "http://en.xianmin.org/"
+
+[use-package]
+  author = "John Wiegley"
+  source = "https://github.com/jwiegley/use-package/"
+  branch = "master"
+  site = "https://jwiegley.github.io/use-package/"
+
+# []
+#   author = ""
+#   source = ""
+#   branch = "master"
+#   org_dir = "content-org"
+#   site = ""
+
+# []
+#   author = ""
+#   source = ""
+#   branch = "master"
+#   org_dir = "content-org"
+#   site = ""

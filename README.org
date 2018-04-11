@@ -16,12 +16,16 @@ file, and then append that generated Markdown to it.
 
 There are, though, few functions that =ox-hugo.el= overrides over
 those by =ox-blackfriday.el=.
+
+#+BEGIN_note
+See the [[https://ox-hugo.scripter.co/doc/examples/][Real World Examples]] section to quickly jump to sites generated
+using =ox-hugo= and their Org sources.
+#+END_note
 * Table of Contents
 - [[#screenshots][Screenshots]]
 - [[#documentation][Documentation]]
   - [[#source-of-the-documentation-site][Source of the Documentation site]]
 - [[#demo][Demo]]
-  - [[#actual-usage-examples][Actual usage examples]]
 - [[#installation][Installation]]
 - [[#usage][Usage]]
   - [[#before-you-export][Before you export]]
@@ -79,11 +83,6 @@ content translates from Org to Markdown as expected.
 
 /See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
 presentation styles./
-** Actual usage examples
-- https://ox-hugo.scripter.co -- =ox-hugo= Documentation Site
-- [[https://scripter.co]] -- My blog
-
-See the [[https://ox-hugo.scripter.co/doc/examples/][Real World Examples]] section for a *lot more* examples.
 
 * Installation
 This package requires emacs 24.4+ and Org 9.0+. It is available on

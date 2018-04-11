@@ -387,6 +387,11 @@ file, and then append that generated Markdown to it.
 
 There are, though, few functions that =ox-hugo.el= overrides over
 those by =ox-blackfriday.el=.
+
+#+begin_note
+See the [[https://ox-hugo.scripter.co/doc/examples/][Real World Examples]] section to quickly jump to sites generated
+using =ox-hugo= and their Org sources.
+#+end_note
 ** Installation
 :PROPERTIES:
 :CUSTOM_ID: installation
@@ -531,11 +536,6 @@ content translates from Org to Markdown as expected.
 
 /See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
 presentation styles./
-*** Actual usage examples
-- https://ox-hugo.scripter.co -- =ox-hugo= Documentation Site
-- [[https://scripter.co]] -- My blog
-
-See the [[https://ox-hugo.scripter.co/doc/examples/][Real World Examples]] section for a *lot more* examples.
 ** Note to Future Contributors
 :PROPERTIES:
 :CUSTOM_ID: note-to-future-contributors

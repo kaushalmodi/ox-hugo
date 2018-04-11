@@ -24,6 +24,10 @@
 {{{gitter}}} {{{saythanks}}}
 
 #+include: "./ox-hugo-manual.org::#introduction" :only-contents t
+
+-----
+See the [[https://ox-hugo.scripter.co/doc/examples/][Real World Examples]] section to quickly jump to sites generated
+using =ox-hugo= and their Org sources.
 ** Table of Contents                                                    :TOC:
 # TOC will be inserted here by `toc-org' package when running
 # `ox-hugo-export-gh-doc'.

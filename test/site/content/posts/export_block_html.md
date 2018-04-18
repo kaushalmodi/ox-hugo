@@ -9,7 +9,7 @@ This HTML <b>Export Block</b>  will also get exported for Hugo exports,
 
 And Markdown emphasis characters like *, `  and _ will not escaped in here.
 
-From `ox-hugo` Issue #[154](https://github.com/kaushalmodi/ox-hugo/issues/154), we see an actual case of where that \`\*\`
+From `ox-hugo` Issue #[154](https://github.com/kaushalmodi/ox-hugo/issues/154), we see an actual case of where that `*`
 will need to remain unescaped:
 
 ```html

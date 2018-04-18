@@ -4456,7 +4456,7 @@ This HTML <b>Export Block</b>  will also get exported for Hugo exports,
 And Markdown emphasis characters like *, `  and _ will not escaped in here.
 #+end_export
 
-From {{{oxhugoissue(154)}}}, we see an actual case of where that `*`
+From {{{oxhugoissue(154)}}}, we see an actual case of where that =*=
 will need to remain unescaped:
 
 #+begin_src html

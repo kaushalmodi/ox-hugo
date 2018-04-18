@@ -4452,7 +4452,32 @@ and **this too**.
 #+begin_export html
 This HTML <b>Export Block</b>  will also get exported for Hugo exports,
 <code>verbatim</code>.
+
+And Markdown emphasis characters like *, `  and _ will not escaped in here.
 #+end_export
+
+From {{{oxhugoissue(154)}}}, we see an actual case of where that `*`
+will need to remain unescaped:
+
+#+begin_src html
+<div>
+  <script type="text/javascript">
+    var a = 3;
+    var b = 2*a;
+  </script>
+</div>
+#+end_src
+
+#+begin_export html
+<div>
+  <script type="text/javascript">
+    var a = 3;
+    var b = 2*a;
+  </script>
+</div>
+#+end_export
+
+/See the Markdown source of this page./
 * Miscellaneous Front Matter                                   :front_matter:
 ** Hugo Aliases                                                     :aliases:
 *** Alias without section portion 1

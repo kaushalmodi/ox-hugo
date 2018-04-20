@@ -167,6 +167,12 @@
   org_dir = "content-org"
   site = "https://numbersandshapes.net/blog/"
 
+[kengrimes]
+  author = "Ken Grimes"
+  source = "https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git"
+  branch = "master"
+  site = "https://www.kengrimes.com/"
+
 # []
 #   author = ""
 #   source = ""

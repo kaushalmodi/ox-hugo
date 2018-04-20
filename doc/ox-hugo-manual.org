@@ -1897,7 +1897,9 @@ or even this in the Org body:
 
 #+begin_src org
 ,#+begin_description
-Here is my post summary.
+Here is my *post summary*.
+
+And this can be over /multiple lines/ too!
 ,#+end_description
 #+end_src
 

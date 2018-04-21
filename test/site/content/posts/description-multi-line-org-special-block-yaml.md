@@ -6,6 +6,11 @@ description: >
 
 
   **bold** -- _italics_ --- ~~strikethrough~~ `monospace`
+
+
+  These lines <br />
+  show up with line breaks <br />
+  but within the same paragraph.
 tags: ["front-matter", "description", "special-block", "yaml", "multi-line"]
 draft: false
 ---

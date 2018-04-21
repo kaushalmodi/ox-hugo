@@ -4579,6 +4579,10 @@ Short description
 of this post
 
 *bold* -- /italics/ --- +strikethrough+ =monospace=
+
+These lines \\
+show up with line breaks \\
+but within the same paragraph.
 #+end_description
 Post content.
 ***** Special block description overrides property-set description
@@ -4630,6 +4634,10 @@ Short description
 of this post
 
 *bold* -- /italics/ --- +strikethrough+ =monospace=
+
+These lines \\
+show up with line breaks \\
+but within the same paragraph.
 #+end_description
 Post content.
 ***** Single-line description with backslashes (YAML) :escaping:backslashes:front_matter:single_line:

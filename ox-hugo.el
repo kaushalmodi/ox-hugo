@@ -81,6 +81,21 @@
 (define-obsolete-function-alias 'org-hugo-export-subtree-to-md 'org-hugo-export-wim-to-md "2017-11-30")
 (define-obsolete-function-alias 'org-hugo-export-subtree-to-md-after-save 'org-hugo-export-wim-to-md-after-save "2017-11-30")
 
+;; Using the correct function for getting inherited Org tags.
+(defmacro org-hugo--get-tags-alias ()
+  "Generate alias to point to the correct fn for getting inherited Org tags."
+  ;; Starting Org 9.2, `org-get-tags' returns all the inherited tags
+  ;; instead of returning only the local tags i.e. only the current
+  ;; headline tags.
+  ;; https://code.orgmode.org/bzg/org-mode/commit/fbe56f89f75a8979e0ba48001a822518df2c66fe
+  ;; For Org <= 9.1, `org-get-tags' returned a list of tags *only* at
+  ;; the current heading, while `org-get-tags-at' returned inherited
+  ;; tags too.
+  (if (fboundp #'org--get-local-tags)   ;If using Org 9.2+
+      `(defalias 'org-hugo--get-tags 'org-get-tags)
+    `(defalias 'org-hugo--get-tags 'org-get-tags-at)))
+(org-hugo--get-tags-alias)
+
 (defvar org-hugo--subtree-coord nil
   "Variable to store the current valid Hugo subtree coordinates.
 It holds the value returned by
@@ -3259,11 +3274,8 @@ Return output file's name."
       ;; Below stuff applies only to per-file export flow.
       (let ((fname (file-name-nondirectory (buffer-file-name)))
             (title (format "%s" (or (car (plist-get info :title)) "<EMPTY TITLE>")))
-            (org-use-tag-inheritance t)
-            ;; `org-get-tags' returns a list of tags *only*
-            ;; at the current heading; `org-get-tags-at'
-            ;; returns inherited tags too.
-            (all-tags (org-get-tags-at))
+            (all-tags (let ((org-use-tag-inheritance t))
+                        (org-hugo--get-tags)))
             matched-exclude-tag)
         (when all-tags
           (dolist (exclude-tag org-export-exclude-tags)
@@ -3376,11 +3388,8 @@ approach)."
                     ;; If subtree is a valid Hugo post subtree, proceed ..
                     (setq is-commented (org-element-property :commentedp subtree))
 
-                    (let ((org-use-tag-inheritance t)
-                          ;; `org-get-tags' returns a list of tags *only*
-                          ;; at the current heading; `org-get-tags-at'
-                          ;; returns inherited tags too.
-                          (all-tags (org-get-tags-at)))
+                    (let ((all-tags (let ((org-use-tag-inheritance t))
+                                      (org-hugo--get-tags))))
                       (when all-tags
                         (dolist (exclude-tag org-export-exclude-tags)
                           (when (member exclude-tag all-tags)

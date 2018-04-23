@@ -28,11 +28,26 @@ same as those for non-bundle cases.
 
 ### Source path contains the **bundle name** {#source-path-contains-the-bundle-name}
 
+See [this other test](/images-in-content/page-bundle-images-in-same-dir/) for examples.
+
 | Inside `<ORG_FILE_DIR>`                   | Copied-to location inside BUNDLE                         | Explanation                                                                                                             |
 |-------------------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
 | `<ORG_FILE_DIR>/bar/<BUNDLE>/baz/foo.png` | `<HUGO_BASE_DIR>/content/<SECTION>/<BUNDLE>/baz/foo.png` | If the file directory path contains `"/<BUNDLE>/"`, the directory structure following that `"/<BUNDLE>/"` is preserved. |
 
-See [this other test](/images-in-content/page-bundle-images-in-same-dir/) for an example.
+
+#### Special case: Home page branch bundle {#special-case-home-page-branch-bundle}
+
+In this case, both `HUGO_SECTION` and `HUGO_BUNDLE` values will be
+`/`.
+
+So the images to be copied to the **home page branch bundle** i.e. the
+`content/` dir must be placed in a special `_home/` directory. Here
+are some examples:
+
+| Inside `<ORG_FILE_DIR>`                | Copied-to location inside BUNDLE      | Explanation                                                                                                                                                    |
+|----------------------------------------|---------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `<ORG_FILE_DIR>/bar/_home/baz/foo.png` | `<HUGO_BASE_DIR>/content/baz/foo.png` | If the page is the home page branch bundle, and the file directory path contains `"/_home/"`, the directory structure following that `"/_home/"` is preserved. |
+| `<ORG_FILE_DIR>/bar/_home/foo.png`     | `<HUGO_BASE_DIR>/content/foo.png`     |                                                                                                                                                                |
 
 
 ### Source path contains neither `/static/` nor the **bundle name** {#source-path-contains-neither-static-nor-the-bundle-name}

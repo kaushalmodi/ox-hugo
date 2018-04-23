@@ -67,6 +67,15 @@ source Org file of this post.
 [[file:images/page-bundle-images-in-same-dir/org-copy-2.png][file:images/page-bundle-images-in-same-dir/org-copy-2.png]]
 ** Link to an image in a subdir in the same dir as this Org file
 [[file:images/org-copy-1.png][file:images/org-copy-1.png]]
+* Home page Branch Bundle with image           :homepage:branch:image:bundle:
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: /
+:EXPORT_HUGO_BUNDLE: /
+:EXPORT_FILE_NAME: _index
+:END:
+Image in homepage branch bundle:
+
+[[file:images/_home/org-copy-3.png][file:images/_home/org-copy-3.png]]
 * Footnotes
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:

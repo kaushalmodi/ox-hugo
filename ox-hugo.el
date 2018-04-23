@@ -1907,11 +1907,18 @@ INFO is a plist used as a communication channel."
          (exportables org-hugo-external-file-extensions-allowed-for-copying)
          (bundle-dir (and (plist-get info :hugo-bundle)
                           (org-hugo--get-pub-dir info)))
-         (bundle-name (and bundle-dir ;`bundle-dir'="/foo/bar/" -> `bundle-name'="bar"
-                           (file-name-base
-                            (if (string-match (concat "\\(?:/\\)\\'") bundle-dir)
-                                (replace-match "" nil nil bundle-dir)
-                              bundle-dir))))
+         (bundle-name (when bundle-dir
+                        (let* ((content-dir (file-truename
+                                             (file-name-as-directory (expand-file-name
+                                                                      "content"
+                                                                      (file-name-as-directory
+                                                                       (plist-get info :hugo-base-dir))))))
+                               (is-home-branch-bundle (string= bundle-dir content-dir)))
+                          (cond
+                           (is-home-branch-bundle
+                            "_home")
+                           (t ;`bundle-dir'="/foo/bar/" -> `bundle-name'="bar"
+                            (file-name-base (directory-file-name bundle-dir)))))))
          (static-dir (file-truename
                       (concat
                        (file-name-as-directory (plist-get info :hugo-base-dir))
@@ -1924,6 +1931,7 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-hugo DBG attch rewrite] path: %s" path)
     ;; (message "[ox-hugo DBG attch rewrite] path-true: %s" path-true)
     ;; (message "[ox-hugo DBG attch rewrite] bundle-dir: %s" bundle-dir)
+    ;; (message "[ox-hugo DBG attch rewrite] bundle-name: %s" bundle-name)
     ;; (message "[ox-hugo DBG attch rewrite] default-dir: %s" default-directory)
     ;; (message "[ox-hugo DBG attch rewrite] dest-dir: %s" dest-dir)
     (if (and (file-exists-p path-true)

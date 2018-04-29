@@ -6,9 +6,17 @@
     {{ partial "headline-hash.html" .Content }}
 
     {{ with .Site.Data.users }}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+        <script src="{{ "js/libs/jquery/3.3.1/jquery.min.js" | absURL }}" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css" integrity="sha384-Y5cgvAigcTOTaObjiReosnMvQCzeJTHVQ3ezBmzGzM1g0Armw98SOB73bclZHywS" crossorigin="anonymous">
+        <script src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js" integrity="sha384-lGO1Q1P+mA8tLRu41NDOmOxG62K3Z3ATFdolbbX3dWFkRXuJBz0Sl8qYa6b9C9wv" crossorigin="anonymous"></script>
+        <!-- SHA256 of the below script:
+             https://report-uri.com/home/hash/
+             'sha256-YiWMVJIplziLxmHOI6iqs51JQS9W2hg1wDsKBD3u09g='
+
+             NOTE that the hash has to be recalculated and updated
+             in the CSP in the headers each time there's even any
+             whitespace/indentation change in the below script.
+        -->
         <script type="text/javascript">
          $(document).ready(function() {
              $('.ox-hugo-examples').DataTable({

@@ -127,7 +127,7 @@ distribution, =emacs= editing style./
 ** Before you export
 Before you export check that these properties are set as you need:
 - HUGO_SECTION :: The default Hugo section name for all the posts.  See
-  [[http://gohugo.io/content/sections/][here]] for more information on Hugo sections.  It is
+  [[https://gohugo.io/content/sections/][here]] for more information on Hugo sections.  It is
   common for this property to be set to =posts= or
   =blog=.  The default value is set using
   =org-hugo-default-section-directory=.
@@ -137,7 +137,7 @@ Before you export check that these properties are set as you need:
   =~/hugo/content/<HUGO_SECTION>/= directory.  By
   default, the Markdown files reside in a hierarchy
   under the =content/= directory in the site root
-  directory ([[http://gohugo.io/content/organization/][ref]]). If you try to export without
+  directory ([[https://gohugo.io/content/organization/][ref]]). If you try to export without
   setting this property, you will get this error:
   #+BEGIN_EXAMPLE
     user-error: It is mandatory to set the HUGO_BASE_DIR property
@@ -460,6 +460,10 @@ See the new section added to documentation:
 * Thanks
 - Matt Price ([[https://github.com/titaniumbones][@titaniumbones]])
 - Puneeth Chaganti ([[https://github.com/punchagan][@punchagan]])
-- Also thanks to [[http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/][holgerschurig.de]], [[http://whyarethingsthewaytheyare.com/setting-up-the-blog/][whyarethingsthewaytheyare.com]] and
-  the [[https://github.com/chaseadamsio/goorgeous][=goorgeous=]] project by Chase Adams ([[https://github.com/chaseadamsio][@chaseadamsio]]) for
-  inspiration to start this project.
+- Also thanks to
+  ~http://whyarethingsthewaytheyare.com/setting-up-the-blog/~ (/not
+  hyperlinking the link as it is insecure --- not https/),
+  ~http://www.holgerschurig.de/en/emacs-blog-from-org-to-hugo/~ (/not
+  hyperlinking the link as it is insecure --- not https/) and the
+  [[https://github.com/chaseadamsio/goorgeous][=goorgeous=]] project by Chase Adams ([[https://github.com/chaseadamsio][@chaseadamsio]]) for inspiration
+  to start this project.

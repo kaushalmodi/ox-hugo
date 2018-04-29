@@ -74,7 +74,7 @@ disableFastRender = true        # Hugo 0.30
                  , "css/style.css"
                ]
   custom_css_absolute = [ # Iosevka fonts
-                          "https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/v1.13.2/iosevka.css"
+                          "https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/v1.14.1/iosevka.css"
                         ]
   custom_js  = []
 

@@ -173,6 +173,13 @@
   branch = "master"
   site = "https://www.kengrimes.com/"
 
+[emacsun]
+  author = "emacsun"
+  source = "https://github.com/emacsun/ZHugo"
+  branch = "master"
+  org_dir = "content_org"
+  site = "https://www.zcl.space/"
+
 # []
 #   author = ""
 #   source = ""

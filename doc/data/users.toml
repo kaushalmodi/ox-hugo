@@ -180,6 +180,12 @@
   org_dir = "content_org"
   site = "https://www.zcl.space/"
 
+[cadadr]
+  author = "Göktuğ Kayaalp"
+  source = "https://github.com/cadadr/elisp"
+  branch = "master"
+  site = "https://cadadr.github.io/elisp/index.html"
+
 # []
 #   author = ""
 #   source = ""

@@ -46,6 +46,11 @@
 /*
   X-Content-Type-Options: nosniff
 
+## Enable CORS
+# https://enable-cors.org/server.html
+/*
+  Access-Control-Allow-Origin: *
+
 # Content Security Policy
 ## Hashes for Privacy Badger injected scripts: https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io/blob/29fc983ac72fa886ac39bff6b46dc7e426cb993b/netlify.toml#L174-199
 /*

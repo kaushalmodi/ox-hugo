@@ -124,16 +124,16 @@ Below in Org source:
 
 ```org
 #+html: <style>.foo img { border:2px solid black; }</style>
-#+attr_html: :alt Go is fine though.
+#+attr_html: :alt Org mode logo
 #+attr_html: :width 300 :class foo
-[[file:https://golang.org/doc/gopher/pkg.png]]
+[[file:https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
 ```
 
 Rendered this:
 
 <style>.foo img { border:2px solid black; }</style>
 
-{{< figure src="https://golang.org/doc/gopher/pkg.png" alt="Go is fine though." class="foo" width="300" >}}
+{{< figure src="https:/ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" alt="Org mode logo" class="foo" width="300" >}}
 
 **NOTE**: We cannot use `:style` in `#+attr_html` because Hugo does not
  _yet_ support a `style` argument in the `figure` shortcode

@@ -16,8 +16,8 @@ should **not** be expanded.. they should be visible verbatim.
 ### Code block using code fences {#code-block-using-code-fences}
 
 ```md
-{{</* figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" */>}}
-{{%/* figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" */%}}
+{{</* figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" */>}}
+{{%/* figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" */%}}
 ```
 
 
@@ -27,8 +27,8 @@ Here, the `-n` switch is added to the Org source block to
 auto-enable[^fn:1] using the `highlight` shortcode.
 
 {{< highlight md "linenos=table, linenostart=1" >}}
-{{</* figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" */>}}
-{{%/* figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" */%}}
+{{</* figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" */>}}
+{{%/* figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" */%}}
 {{< /highlight >}}
 
 
@@ -38,8 +38,8 @@ The `figure` shortcodes in the below example block **should** be
 expanded.. you should be seeing little unicorns below.
 
 ```text
-{{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
-{{% figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" %}}
+{{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
+{{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
 ```
 
 Above a `#+begin_example` .. `#+end_example` block is chosen

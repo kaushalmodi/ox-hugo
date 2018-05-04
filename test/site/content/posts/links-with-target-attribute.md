@@ -22,7 +22,7 @@ automatically).
 
 `ox-hugo` Issue #[133](https://github.com/kaushalmodi/ox-hugo/issues/133)
 
-{{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" width="10%" target="_self" link="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
+{{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" width="10%" target="_self" link="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
 
 Above is an hyperlinked image with the HTML attributes set as
 `#+attr_html: :width 10% :target _self` in Org.
@@ -37,6 +37,6 @@ Above is an hyperlinked image with the HTML attributes set as
 ---
 
 Here's an inline hyperlinked image with the exact same HTML
-attributes: <a href="https://orgmode.org/img/org-mode-unicorn-logo.png" target="_self"><img src="https://orgmode.org/img/org-mode-unicorn-logo.png" alt="org-mode-unicorn-logo.png" width="10%" /></a>. So,
+attributes: <a href="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" target="_self"><img src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" alt="org-mode-unicorn-logo.png" width="10%" /></a>. So,
 clicking this image too should open the linked image in the same
 brower tab.

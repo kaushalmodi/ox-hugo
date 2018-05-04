@@ -288,17 +288,17 @@ for testing.
 Below in Org source:
 #+begin_src org
 #+html: <style>.foo img { border:2px solid black; }</style>
-#+attr_html: :alt Go is fine though.
+#+attr_html: :alt Org mode logo
 #+attr_html: :width 300 :class foo
-[[file:https://golang.org/doc/gopher/pkg.png]]
+[[file:https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
 #+end_src
 
 Rendered this:
 
 #+html: <style>.foo img { border:2px solid black; }</style>
-#+attr_html: :alt Go is fine though.
+#+attr_html: :alt Org mode logo
 #+attr_html: :width 300 :class foo
-[[file:https://golang.org/doc/gopher/pkg.png]]
+[[file:https:/ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
 
 *NOTE*: We cannot use =:style= in =#+attr_html= because Hugo does not
  /yet/ support a =style= argument in the =figure= shortcode
@@ -1335,22 +1335,22 @@ should *not* be expanded.. they should be visible verbatim.
 - {&lbrace;% .. %}&rbrace; --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown][Shortcodes with Markdown]]
 **** Code block using code fences
 #+begin_src md
-{{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
-{{% figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" %}}
+{{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
+{{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
 #+end_src
 **** Code block using =highlight= shortcode
 Here, the =-n= switch is added to the Org source block to
 auto-enable[fn:4] using the =highlight= shortcode.
 #+begin_src md -n
-{{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
-{{% figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" %}}
+{{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
+{{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
 #+end_src
 *** Shortcodes *not* escaped
 The =figure= shortcodes in the below example block *should* be
 expanded.. you should be seeing little unicorns below.
 #+begin_example
-{{< figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" >}}
-{{% figure src="https://orgmode.org/img/org-mode-unicorn-logo.png" %}}
+{{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
+{{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
 #+end_example
 Above a =#+begin_example= .. =#+end_example= block is chosen
 arbitrarily. The Hugo shortcodes will remain unescaped in *any*
@@ -2441,7 +2441,7 @@ automatically).
 {{{oxhugoissue(133)}}}
 
 #+attr_html: :width 10% :target _self
-[[https://orgmode.org/img/org-mode-unicorn-logo.png][https://orgmode.org/img/org-mode-unicorn-logo.png]]
+[[https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png][https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
 
 Above is an hyperlinked image with the HTML attributes set as
 =#+attr_html: :width 10% :target _self= in Org.
@@ -2457,7 +2457,7 @@ Above is an hyperlinked image with the HTML attributes set as
 
 #+attr_html: :width 10% :target _self
 Here's an inline hyperlinked image with the exact same HTML
-attributes: [[https://orgmode.org/img/org-mode-unicorn-logo.png][https://orgmode.org/img/org-mode-unicorn-logo.png]]. So,
+attributes: [[https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png][https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]. So,
 clicking this image too should open the linked image in the same
 brower tab.
 ** External Links                                            :external_links:

@@ -67,12 +67,12 @@
   org_dir = "org"
   site = "https://www.shimmy1996.com/"
 
-[isaaczhou]
-  author = "Isaac Zhou"
-  source = "https://github.com/isaaczhou/isaaczhou.github.io"
-  branch = "dev"
-  org_dir = "org"
-  site = "http://www.isaaczhou.com/"
+# [isaaczhou]
+#  author = "Isaac Zhou"
+#  source = "https://github.com/isaaczhou/isaaczhou.github.io"
+#  branch = "dev"
+#  org_dir = "org"
+#  site = "http://www.isaaczhou.com/"
 
 [zzamboni]
   author = "Diego Zamboni"

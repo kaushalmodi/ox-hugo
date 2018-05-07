@@ -290,7 +290,7 @@ Below in Org source:
 #+html: <style>.foo img { border:2px solid black; }</style>
 #+attr_html: :alt Org mode logo
 #+attr_html: :width 300 :class foo
-[[file:https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
+[[https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
 #+end_src
 
 Rendered this:
@@ -298,7 +298,7 @@ Rendered this:
 #+html: <style>.foo img { border:2px solid black; }</style>
 #+attr_html: :alt Org mode logo
 #+attr_html: :width 300 :class foo
-[[file:https:/ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
+[[https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
 
 *NOTE*: We cannot use =:style= in =#+attr_html= because Hugo does not
  /yet/ support a =style= argument in the =figure= shortcode

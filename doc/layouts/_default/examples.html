@@ -36,6 +36,7 @@
                     {{ $.Scratch.Set "__repo_updated_time" "" }}
                     {{ $github_source := findRE "github\\.com" $val.source }}
                     {{ $gitlab_source := findRE "gitlab\\.com" $val.source }}
+                    {{ $codingnet_source := findRE "coding\\.net" $val.source }}
                     {{ if $github_source }}
                         {{ $repo := replaceRE "^.*github\\.com/([^/]+/[^/]+).*" "${1}" $val.source }}
                         {{ $repo_json := getJSON (printf "https://api.github.com/repos/%s/branches/%s" $repo $branch) }}
@@ -49,7 +50,7 @@
                     {{ $org_dir := $val.org_dir | default "" | replaceRE "/$" "" }}
                     {{ if (findRE "\\.org$" $val.source) }} <!-- If the "source" is direct link to an Org file -->
                         {{ $.Scratch.Set "__org_src" $val.source }}
-                    {{ else if (or $github_source $gitlab_source) }}
+                    {{ else if (or $github_source $gitlab_source $codingnet_source) }}
                         {{ $.Scratch.Set "__org_src" (printf "%s/tree/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
                     {{ else }}
                         <!-- Example: https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git;a=tree;f=content;hb=refs/heads/master

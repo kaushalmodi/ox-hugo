@@ -2004,6 +2004,53 @@ but not any simpler
 /italics/ \\
 +strikethrough+
 #+end_center
+** Wrapping Org headings in HTML tags   :wrapping:headings:section:tags:HTML:
+:PROPERTIES:
+:EXPORT_FILE_NAME: wrapping-org-headings-in-html-tags
+:END:
+#+begin_description
+Test the workaround for wrapping Org headings in HTML tags like
+~section~ and ~div~.
+#+end_description
+{{{oxhugoissue(160)}}}
+*** Org Source
+#+begin_src org
+,#+html: <style>.left { float: left; width: 45%;} .right { float: right; width: 45%;}</style>
+
+,#+html: <section class="left">
+# Hack to get around Blackfriday limitation: https://github.com/kaushalmodi/ox-hugo/issues/93
+,#+html: <section></section>
+,**** This section will show up on the left side
+Content in the left side section
+,#+html: </section>
+
+,#+html: <section class="right">
+,#+html: <section></section>
+,**** This section will show up on the right side
+Content in the right side section
+,#+html: </section>
+
+# Clear the floats
+,#+html: <div style="clear: both;"></div>
+#+end_src
+*** Output
+#+html: <style>.left { float: left; width: 45%;} .right { float: right; width: 45%;}</style>
+
+#+html: <section class="left">
+# Hack to get around Blackfriday limitation: https://github.com/kaushalmodi/ox-hugo/issues/93
+#+html: <section></section>
+**** This section will show up on the left side
+Content in the left side section
+#+html: </section>
+
+#+html: <section class="right">
+#+html: <section></section>
+**** This section will show up on the right side
+Content in the right side section
+#+html: </section>
+
+# Clear the floats
+#+html: <div style="clear: both;"></div>
 * Page Bundles                                                 :page_bundles:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: bundles

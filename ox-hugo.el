@@ -593,7 +593,7 @@ copied to this sub-directory inside the Hugo static directory."
   :safe #'stringp)
 
 (defcustom org-hugo-external-file-extensions-allowed-for-copying
-  '("jpg" "jpeg" "tiff" "png" "svg"
+  '("jpg" "jpeg" "tiff" "png" "svg" "gif"
     "pdf" "odt"
     "doc" "ppt" "xls"
     "docx" "pptx" "xlsx")

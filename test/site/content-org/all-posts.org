@@ -1281,11 +1281,16 @@ print(str[1:])
 : 	bc
 
 The whitespace before "bc" in the results block above should be preserved.
-** Indented source block
+** Indented source block :indented:lists:code_fence:highlight:code_block:@upstream:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-indented
 :END:
-Test that indented source blocks export fine.
+#+begin_description
+Test that indented source blocks, and also the ones in lists export
+fine.
+#+end_description
+
+Some content.
 
     #+begin_src emacs-lisp
     (defun small-shell ()
@@ -1295,7 +1300,9 @@ Test that indented source blocks export fine.
 	(shrink-window (- (window-height) 12))
     (ansi-term))
     #+end_src
-*** More tests!
+*** Code blocks in list using code fences
+Reference: {{{hugoissue(4006)}}}
+
 - List item 1
   #+begin_src emacs-lisp
   (message "I am in list at level-1 indentation")
@@ -1320,8 +1327,47 @@ Test that indented source blocks export fine.
 #+begin_src emacs-lisp
 (message "And now I am at level-0 indentation")
 #+end_src
+*** Code blocks in list using ~highlight~ shortcode
+Reference: {{{hugoissue(4717)}}}, {{{oxhugoissue(161)}}}
 
-Reference: {{{hugoissue(4006)}}}
+This is an *upstream* bug in ~hugo~ as of 2018-05-12. The issues is
+that when the code blocks in ~highlight~ shortcodes are inserted at
+the required indentation levels in lists.. so that they get rendered
+*in* the list at *that* indentation level, those indentations are not
+removed by ~hugo~, and thus become part of those code blocks.
+
+Also, related to this issue, it can be seen that all such indented
+code blocks have an empty second line too, probably just due to the
+unremoved indentation on the last line of those code blocks.
+
+In the above section, the same code blocks are code-fenced instead of
+using ~highlight~ shortcode, and the extra indentation is not seen
+there.
+
+- List item 1
+  #+begin_src emacs-lisp -n
+  (message "I am in list at level-1 indentation")
+  #+end_src
+  - List item 1.1
+    #+begin_src emacs-lisp -n
+    (message "I am in list at level-2 indentation")
+    #+end_src
+    - List item 1.1.1
+      #+begin_src emacs-lisp -n
+      (message "I am in list at level-3 indentation")
+      #+end_src
+  - List item 2.1
+    #+begin_src emacs-lisp -n
+    (message "I am in list back at level-2 indentation")
+    #+end_src
+- List item 2
+  #+begin_src emacs-lisp -n
+  (message "I am in list back at level-1 indentation")
+  #+end_src
+
+#+begin_src emacs-lisp -n
+(message "And now I am at level-0 indentation")
+#+end_src
 ** Markdown source block with Hugo shortcodes                     :shortcode:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-md-with-hugo-shortcodes

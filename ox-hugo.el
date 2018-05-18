@@ -1480,10 +1480,8 @@ a communication channel."
     (let* ((numbers (org-hugo--get-headline-number headline info nil))
            (level (org-export-get-relative-level headline info))
            (title (org-export-data (org-element-property :title headline) info)) ;`org-export-data' required
-           (todo (let ((todo1 (and (org-hugo--plist-get-true-p info :with-todo-keywords)
-                                   (org-element-property :todo-keyword headline))))
-                   (when (stringp todo1)
-                     (format "%s " todo1))))
+           (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
+                      (org-element-property :todo-keyword headline)))
            (tags (and (org-hugo--plist-get-true-p info :with-tags)
                       (let ((tag-list (org-export-get-tags headline info)))
                         (and tag-list
@@ -1493,8 +1491,6 @@ a communication channel."
             (and (org-hugo--plist-get-true-p info :with-priority)
                  (let ((char (org-element-property :priority headline)))
                    (and char (format "[#%c] " char)))))
-           ;; Headline text without tags.
-           (heading (concat todo priority title))
            (style (plist-get info :md-headline-style)))
       ;; (message "[ox-hugo-headline DBG] num: %s" numbers)
       (cond
@@ -1508,7 +1504,8 @@ a communication channel."
                  (concat (number-to-string
                           (car (last (org-export-get-headline-number
                                       headline info))))
-                         "."))))
+                         ".")))
+              (heading (concat todo " " priority title))) ;Headline text without tags
           (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t

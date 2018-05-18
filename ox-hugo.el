@@ -1373,6 +1373,20 @@ INFO is a plist used as a communication channel."
                 (setf (car found-key-cell) key-repl)))))))
     data))
 
+;;;; TODO keywords
+(defun org-hugo--todo (todo info)
+  "Format TODO keywords into HTML."
+  (when todo
+    ;; (message "[DBG todo] todo: %S" todo)
+    ;; (message "[DBG todo] org-done-keywords: %S" org-done-keywords)
+    ;; (message "[DBG todo] is a done keyword? %S" (member todo org-done-keywords))
+    ;; (message "[DBG todo] html-todo-kwd-class-prefix: %S" (plist-get info :html-todo-kwd-class-prefix))
+    (format "<span class=\"org-todo %s %s%s\">%s</span>"
+            (if (member todo org-done-keywords) "done" "todo")
+            (or (org-string-nw-p (plist-get info :html-todo-kwd-class-prefix)) "")
+            (org-html-fix-class-name todo)
+            (org-hugo--replace-underscores-with-spaces todo))))
+
 
 
 ;;; Transcode Functions
@@ -1516,7 +1530,7 @@ a communication channel."
                                   )))
               (loffset (string-to-number (plist-get info :hugo-level-offset))) ;"" -> 0, "0" -> 0, "1" -> 1, ..
               (todo (when todo
-                      (concat (org-html--todo todo info) " "))))
+                      (concat (org-hugo--todo todo info) " "))))
           (concat (org-hugo--headline-title style level loffset title todo anchor numbers)
                   contents)))))))
 

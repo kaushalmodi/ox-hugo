@@ -2560,6 +2560,15 @@ INFO is a plist used as a communication channel."
            (title (replace-regexp-in-string "\\.\\.\\." "…" title))) ;HORIZONTAL ELLIPSIS
       title)))
 
+(defun org-hugo--replace-underscores-with-spaces (str)
+  "Replace double underscores in STR with single spaces.
+
+For example, \"some__thing\" would get converted to \"some
+thing\". "
+  ;; It is safe to assume that no one would want leading/trailing
+  ;; spaces in `str'.. so not checking for "__a" or "a__" cases.
+  (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1 \\2" str)) ;"a__b"  -> "a b"
+
 (defun org-hugo--tag-processing-fn-replace-with-spaces-maybe (tag-list info)
   "Replace double underscores in TAG-LIST elements with single spaces.
 
@@ -2576,13 +2585,7 @@ This is one of the processing functions in
 `org-hugo-tag-processing-functions'."
   (let ((allow-spaces (org-hugo--plist-get-true-p info :hugo-allow-spaces-in-tags)))
     (if allow-spaces
-        (mapcar
-         (lambda (tag)
-           ;; It is safe to assume that no one would want
-           ;; leading/trailing spaces in tags/categories.. so not
-           ;; checking for "__a" or "a__" cases.
-           (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1 \\2" tag)) ;"a__b"  -> "a b"
-         tag-list)
+        (mapcar #'org-hugo--replace-underscores-with-spaces tag-list)
       tag-list)))
 
 (defun org-hugo--tag-processing-fn-replace-with-hyphens-maybe (tag-list info)

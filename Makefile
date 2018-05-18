@@ -1,4 +1,4 @@
-# Time-stamp: <2018-02-01 00:29:00 kmodi>
+# Time-stamp: <2018-05-18 10:27:19 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -105,6 +105,8 @@ emacs-batch:
 	@echo ""
 	@echo "$(ORG_FILE) ::"
 	@$(EMACS) --batch --eval "(progn\
+        (setq debug-ignored-errors (remq 'user-error debug-ignored-errors))\
+        (toggle-debug-on-error)\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
 	(when (> (length \"$(TIMEZONE)\") 0) (setenv \"TZ\" \"$(TIMEZONE)\"))\
 	(setq-default make-backup-files nil)\

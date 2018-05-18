@@ -51,6 +51,17 @@ element than the _bar\*_ items.
 2.  bar6
 
 
+## Ordered list following an ordered list {#ordered-list-following-an-ordered-list}
+
+1.  foo1
+2.  foo2
+
+<!--listend-->
+
+1.  bar1
+2.  bar2
+
+
 ## Description list following an ordered list {#description-list-following-an-ordered-list}
 
 -   foo1

@@ -6,16 +6,24 @@ categories = ["upstream"]
 draft = false
 +++
 
--   foo1
--   foo2
-    -   bar1
-    -   bar2
-        -   baz1
-        -   baz2
-            -   zoo1
-            -   zoo2
-                1.  numbered1
-                2.  numbered2
+-   L1 -- foo1
+-   L1 -- foo2
+    -   L2 -- bar1
+    -   L2 -- bar2
+        -   L3 -- baz1
+        -   L3 -- baz2
+            -   L4 -- zoo1
+            -   L4 -- zoo2
+                1.  L5 -- numbered1
+                2.  L5 -- numbered2
+            -   L4 -- zoo1
+            -   L4 -- zoo2
+        -   L3 -- baz1
+        -   L3 -- baz2
+    -   L2 -- bar1
+    -   L2 -- bar2
+-   L1 -- foo1
+-   L1 -- foo2
 
 
 ## Unordered list inside descriptive list {#unordered-list-inside-descriptive-list}

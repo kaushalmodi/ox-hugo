@@ -1,5 +1,8 @@
 #+hugo_base_dir: ../
+
 #+seq_todo: TODO DRAFT DONE
+#+seq_todo: TEST__TODO | TEST__DONE
+
 #+property: header-args :eval no
 
 #+startup: indent
@@ -3780,6 +3783,16 @@ Some text.
 *** DONE Heading 2
 CLOSED: [2017-08-09 Wed 16:15]
 Some text.
+** Org TODO keywords with double-underscores       :double_underscores:space:
+:PROPERTIES:
+:EXPORT_FILE_NAME: org-todo-kwd-with-double-underscores
+:END:
+#+begin_description
+This feature that replaces double-underscores in Org TODO keywords
+with spaces was added in {{{commit(7691f0453b)}}}.
+#+end_description
+*** TEST__TODO This heading's TODO kwd should read as "TEST TODO"
+*** TEST__DONE This heading's TODO kwd should read as "TEST DONE"
 * Level Offset                                                 :level_offset:
 ** Default level offset
 :PROPERTIES:

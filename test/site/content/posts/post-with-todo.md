@@ -9,6 +9,6 @@ draft = false
 Some text.
 
 
-## <span class="todo TODO_">TODO </span> Heading 2 {#heading-2}
+## <span class="org-todo todo TODO">TODO</span> Heading 2 {#heading-2}
 
 Some text.

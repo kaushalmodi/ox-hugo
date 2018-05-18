@@ -9,6 +9,6 @@ draft = false
 Some text.
 
 
-## <span class="todo DONE_">DONE </span> Heading 2 {#heading-2}
+## <span class="org-todo done DONE">DONE</span> Heading 2 {#heading-2}
 
 Some text.

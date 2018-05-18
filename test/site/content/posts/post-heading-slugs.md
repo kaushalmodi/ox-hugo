@@ -49,19 +49,19 @@ Above title would render to `Checklist <code>[1/3]</code>` in
 Markdown.
 
 
-#### <span class="todo DONE_">DONE </span> Item 1 {#item-1}
+#### <span class="org-todo done DONE">DONE</span> Item 1 {#item-1}
 
 Above would render to `<span class="todo DONE_">DONE </span> Item 1`
 in Markdown.
 
 
-#### <span class="todo TODO_">TODO </span> Item 2 {#item-2}
+#### <span class="org-todo todo TODO">TODO</span> Item 2 {#item-2}
 
 Above would render to `<span class="todo TODO_">TODO </span> Item 2`
 in Markdown.
 
 
-#### <span class="todo TODO_">TODO </span> Item 3 {#item-3}
+#### <span class="org-todo todo TODO">TODO</span> Item 3 {#item-3}
 
 Above would render to `<span class="todo TODO_">TODO </span> Item 3`
 in Markdown.

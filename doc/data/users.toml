@@ -186,6 +186,13 @@
   branch = "master"
   site = "https://cadadr.github.io/elisp/index.html"
 
+[jackbaty]
+  author = "Jack Baty"
+  source = "https://github.com/jackbaty/baty.net-hugo"
+  branch = "master"
+  org_dir = "content-org"
+  site = "https://www.baty.net/"
+
 # []
 #   author = ""
 #   source = ""

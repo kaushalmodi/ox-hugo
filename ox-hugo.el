@@ -1374,7 +1374,14 @@ INFO is a plist used as a communication channel."
 
 ;;;; TODO keywords
 (defun org-hugo--todo (todo info)
-  "Format TODO keywords into HTML."
+  "Format TODO keywords into HTML.
+
+This function is almost like `org-html--todo' except that:
+- An \"org-todo\" class is always added to the span element.
+- `org-hugo--replace-underscores-with-spaces' is used to replace
+  double-underscores in TODO with spaces.
+
+INFO is a plist used as a communication channel."
   (when todo
     ;; (message "[DBG todo] todo: %S" todo)
     ;; (message "[DBG todo] org-done-keywords: %S" org-done-keywords)
@@ -2577,7 +2584,7 @@ INFO is a plist used as a communication channel."
   "Replace double underscores in STR with single spaces.
 
 For example, \"some__thing\" would get converted to \"some
-thing\". "
+thing\"."
   ;; It is safe to assume that no one would want leading/trailing
   ;; spaces in `str'.. so not checking for "__a" or "a__" cases.
   (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1 \\2" str)) ;"a__b"  -> "a b"

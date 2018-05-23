@@ -1553,6 +1553,111 @@ You can find many examples of table styling here:
 -----
 
 /Credit: [[https://css-tricks.com/complete-guide-table-element/][Guide to styling tables in HTML5-friendly manner]]/ --- /css-tricks.com/
+*** Details and summary
+:PROPERTIES:
+:EXPORT_FILE_NAME: details-and-summary
+:END:
+The "details" Org Special Blocks (~#+begin_details~ .. ~#+end_details~)
+are used for generating the Details disclosure elements [[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details][~<details>~]]
+and ~<summary>~.
+
+/This is a *special* case of Org Special Blocks implemented only in
+~ox-hugo~./
+
+To separate the summary from the details:
+- Use the summary-divider string ~---~ at the *beginning of a new
+  line*.
+**** Regular details disclosure
+#+begin_src org
+#+begin_details
+Why is this in *green*?
+---
+You will learn that later below in [[#details-css][CSS]] section.
+#+end_details
+#+end_src
+will render like below:
+#+begin_details
+Why is this in *green*?
+---
+You will learn that later below in [[#details-css][CSS]] section.
+#+end_details
+**** Details disclosure without details or without summary
+- If the ~details~ Special Block does not contain the summary divider
+  ~---~, it will be considered that the /summary/ part is not
+  provided.
+  #+begin_src org
+  #+begin_details
+  Here are the /details/.
+  #+end_details
+  #+end_src
+  will render like below:
+  #+begin_details
+  Here are the /details/.
+  #+end_details
+  #+begin_note
+  In the absence of summary, most browsers will use a default string
+  "Details" for the summary.
+  #+end_note
+- If the last line in a ~details~ Special Block is *only the summary
+  divider ~---~*, it will be considered that the /details/ part is not
+  provided.
+  #+begin_src org
+  #+begin_details
+  Some *Summary*
+  ---
+  #+end_details
+  #+end_src
+  will render like below:
+  #+begin_details
+  Some *Summary*
+  ---
+  #+end_details
+  #+begin_note
+  Even if the details part is absent, the collapsing triangle will
+  still be rendered. But nothing will show up when that triangle is
+  uncollapsed.. /as the details portion is not there/.
+  #+end_note
+**** Open by default disclosure widget
+The ~<details>~ disclosure widget is initially closed by default. But
+it can be made to show up opened by default by adding the ~open~
+attribute like this:
+#+begin_src org
+#+attr_html: open
+#+begin_details
+Some *Summary*
+---
+Here are the /details/.
+#+end_details
+#+end_src
+will render like below:
+#+attr_html: open
+#+begin_details
+Some *Summary*
+---
+Here are the /details/.
+#+end_details
+**** CSS rules for these widgets
+:PROPERTIES:
+:CUSTOM_ID: details-css
+:END:
+- ~details summary~ will apply to the /summary/ portion of the
+  disclosure widget.
+- ~details .details~ will apply to the /details/ portion of the
+  disclosure widget.
+
+#+html: <style>.green { color: green; }</style>
+#+html: <style>.blue { color: blue; }</style>
+
+For instance, the CSS rules set using below caused all the disclosure
+/summaries/ to show in <span class="green">green</span>, and all the
+disclosure /details/ to show in <span class=blue>blue</span>.
+#+begin_src org
+#+html: <style>details summary { color: green; }</style>
+#+html: <style>details .details { color: blue; }</style>
+#+end_src
+
+#+html: <style>details summary { color: green; }</style>
+#+html: <style>details .details { color: blue; }</style>
 ** Enhancements
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "6.enhancements"

@@ -2265,6 +2265,49 @@ INFO is a plist holding export options."
       ;; Overwrite the value of the `:description' key in `info'.
       (plist-put info :description contents)
       nil)
+     ((string= block-type "details")
+      ;; Recognize Org Special blocks like:
+      ;;   #+begin_details
+      ;;   summary. This will be wrapped in <summary> and </summary>
+      ;;   ---
+      ;;   details
+      ;;   #+end_details
+      (let* ((is-open (member "open" (org-element-property :attr_html special-block)))
+             (str1 (org-blackfriday-special-block special-block contents nil))
+             ;; Insert a new-line before the closing </details> tag
+             ;; for correct Markdown parsing for cases when the
+             ;; Special Block content ends a code block. Without this
+             ;; inserted newline, the Markdown converted content will
+             ;; look like below, and Blackfriday won't parse it
+             ;; correctly.
+             ;;   ```emacs-lisp
+             ;;   (message "a code block")
+             ;;   ```</details>
+             ;; A closing </p> tag is also added.. the opening <p>
+             ;; tag is later added in the `str2' var if summary is
+             ;; present, else in `str3' var.
+             (str1 (replace-regexp-in-string "</details>\\'" "\n</p>\\&" str1))
+             ;; Detect the summary divider special string "---".  It
+             ;; must begin at the beginning of a line.  Also ensure to
+             ;; replace only the first match, if any.
+             ;; Also add the opening <p> tag with "details" class
+             ;; so that just as CSS rules can be set for summary
+             ;; ("details summary"), they can be set for the details
+             ;; portion following the <summary> too, using "details
+             ;; .details".
+             (str2 (replace-regexp-in-string
+                    "^\\(---\\)\n\\(.\\|\n\\)*\\'"
+                    "</summary><p class=\"details\">"
+                    str1 nil nil 1))
+             (has-summary (not (string= str1 str2)))
+             str3)
+        ;; (message "[DBG details/summary]: is-open:%S `%s' `%s'" is-open str1 str2)
+        (setq str3 (if has-summary
+                       (replace-regexp-in-string "\\`<details>" "\\&<summary>" str2)
+                     (replace-regexp-in-string "\\`<details>" "\\&<p class=\"details\">" str2)))
+        (if is-open
+            (replace-regexp-in-string "\\`\\(<details\\)>" "\\1 open>" str3)
+          str3)))
      ;; https://emacs.stackexchange.com/a/28685/115
      ((cl-member block-type paired-shortcodes
                  ;; If `block-type' is "foo", check if any of the

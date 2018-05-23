@@ -3433,16 +3433,17 @@ Line 3 had no =>= char.
 > ← See that this =>= on line 4 is retained even at the beginning of the line.
 Line 5 has this > charcter in-between and is retained.
 #+end_verse
-* Special Blocks                                              :special_block:
+* Org Special Blocks                                          :special_block:
+** Special Blocks
 :PROPERTIES:
 :EXPORT_FILE_NAME: special-blocks
 :END:
-** HTML5 Element Blocks
-*** Block without NAME, class or id
+*** HTML5 Element Blocks
+**** Block without NAME, class or id
 #+begin_article
 This is /an article/.
 #+end_article
-*** Block with NAME
+**** Block with NAME
 #+name: Aside-A
 #+begin_aside
 /Some/ *text* --- 1
@@ -3450,7 +3451,7 @@ This is /an article/.
 | a | b | c |
 | d | e | f |
 #+end_aside
-*** Block with class and id
+**** Block with class and id
 #+attr_html: :class my-section :id section-a
 #+begin_section
 /Some/ *text* --- 2
@@ -3458,18 +3459,18 @@ This is /an article/.
 | g | h | i |
 | j | k | l |
 #+end_section
-*** An inline HTML5 element
+**** An inline HTML5 element
 Unmarked.
 #+begin_mark
 /Some/ *marked* text --- 2.5.
 #+end_mark
 Unmarked again.
-** DIV-wrapped Blocks
-*** DIV without NAME, class or id
+*** DIV-wrapped Blocks
+**** DIV without NAME, class or id
 #+begin_something
 This is /some text/ wrapped in a =div= block with class =something=.
 #+end_something
-*** DIV with NAME
+**** DIV with NAME
 #+name: Foo-A
 #+begin_foo
 /Some/ *text* --- 3
@@ -3477,7 +3478,7 @@ This is /some text/ wrapped in a =div= block with class =something=.
 | m | n | o |
 | p | q | r |
 #+end_foo
-*** DIV with class and id
+**** DIV with class and id
 #+attr_html: :class my-bar :id bar-a
 #+begin_bar
 /Some/ *text* --- 4
@@ -3485,6 +3486,65 @@ This is /some text/ wrapped in a =div= block with class =something=.
 | s | t | u |
 | v | w | x |
 #+end_bar
+** Details and summary                           :details:summary:disclosure:
+:PROPERTIES:
+:EXPORT_FILE_NAME: details-and-summary
+:END:
+#+begin_description
+Details disclosure elements [[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details][~<details>~]] and ~<summary>~.
+#+end_description
+
+These can be conveniently created using the Org Special Block
+~#+begin_details~ .. ~#+end_details~.
+
+To separate the summary from the details, use the summary-divider
+string ~---~ at the *beginning of a new line*.
+*** Closed details disclosure (default)
+**** Summary + Details
+#+begin_details
+Some *Summary*
+---
+#+include: "./all-posts.org::#details-disclosure-details" :only-contents t
+#+end_details
+**** No summary, only details
+In the situation where the summary divider is absent i.e. when user
+hasn't provided a summary, the browser will use a default summary
+string (usually "Details").
+#+begin_details
+#+include: "./all-posts.org::#details-disclosure-details" :only-contents t
+#+end_details
+**** Only summary, no details
+If the summary divider is the last string in this special block, it
+will mean that this ~<details>~ element has only the /summary/ and no
+/details/. In that case too, the browser will still render the
+collapsing triangle. But nothing will show up when you uncollapse
+it.. /as there no details/.
+#+begin_details
+Some *Summary*
+---
+#+end_details
+*** Open by default disclosure widget
+The details disclosures are closed by default, add ~#+attr_html: open~
+right below the details special block to have the disclosures open by
+default.
+**** Summary + Details (Open)
+#+attr_html: open
+#+begin_details
+Some *Summary*
+---
+#+include: "./all-posts.org::#details-disclosure-details" :only-contents t
+#+end_details
+**** No summary, only details (Open)
+#+attr_html: open
+#+begin_details
+#+include: "./all-posts.org::#details-disclosure-details" :only-contents t
+#+end_details
+**** Only summary, no details (Open)
+#+attr_html: open
+#+begin_details
+Some *Summary*
+---
+#+end_details
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
 *** Common CSS
@@ -5958,6 +6018,22 @@ If a post has the =DRAFT= state set, the =draft= front matter variable
 should be set to =true=, even if the post has a sub-heading
 immediately after the post heading.
 * Reusable sections                                        :noexport:ARCHIVE:
+** Details portion in <details> element
+:PROPERTIES:
+:CUSTOM_ID: details-disclosure-details
+:END:
+Here are some /details/.
+
+- list element 1
+- list element 2
+
+Here's a paragraph.
+
+And another paragraph.
+
+#+begin_src emacs-lisp
+(message "a code block")
+#+end_src
 ** Nested sections example
 :PROPERTIES:
 :CUSTOM_ID: nested-sections-example

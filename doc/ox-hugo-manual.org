@@ -1557,34 +1557,32 @@ You can find many examples of table styling here:
 :PROPERTIES:
 :EXPORT_FILE_NAME: details-and-summary
 :END:
-The "details" Org Special Blocks (~#+begin_details~ .. ~#+end_details~)
-are used for generating the Details disclosure elements [[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details][~<details>~]]
+The "details" Org Special Block (~#+begin_details~ .. ~#+end_details~)
+is used for generating the Details disclosure elements [[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details][~<details>~]]
 and ~<summary>~.
 
-/This is a *special* case of Org Special Blocks implemented only in
-~ox-hugo~./
-
-To separate the summary from the details:
-- Use the summary-divider string ~---~ at the *beginning of a new
-  line*.
+The summaries nested in these "details" Org Special blocks are created
+using the "summary" Org Special block ~#+begin_summary~
+.. ~#+end_summary~.
 **** Regular details disclosure
 #+begin_src org
 #+begin_details
+#+begin_summary
 Why is this in *green*?
----
+#+end_summary
 You will learn that later below in [[#details-css][CSS]] section.
 #+end_details
 #+end_src
 will render like below:
 #+begin_details
+#+begin_summary
 Why is this in *green*?
----
+#+end_summary
 You will learn that later below in [[#details-css][CSS]] section.
 #+end_details
 **** Details disclosure without details or without summary
-- If the ~details~ Special Block does not contain the summary divider
-  ~---~, it will be considered that the /summary/ part is not
-  provided.
+- If the ~details~ Special Block does not contain the ~summary~
+  Special Block, a details-only disclosure will be created.
   #+begin_src org
   #+begin_details
   Here are the /details/.
@@ -1598,19 +1596,20 @@ You will learn that later below in [[#details-css][CSS]] section.
   In the absence of summary, most browsers will use a default string
   "Details" for the summary.
   #+end_note
-- If the last line in a ~details~ Special Block is *only the summary
-  divider ~---~*, it will be considered that the /details/ part is not
-  provided.
+- If the ~details~ Special Block contains *only* the ~summary~ Special
+  Block, a summary-only disclosure will be created.
   #+begin_src org
   #+begin_details
+  #+begin_summary
   Some *Summary*
-  ---
+  #+end_summary
   #+end_details
   #+end_src
   will render like below:
   #+begin_details
+  #+begin_summary
   Some *Summary*
-  ---
+  #+end_summary
   #+end_details
   #+begin_note
   Even if the details part is absent, the collapsing triangle will
@@ -1624,16 +1623,18 @@ attribute like this:
 #+begin_src org
 #+attr_html: open
 #+begin_details
+#+begin_summary
 Some *Summary*
----
+#+end_summary
 Here are the /details/.
 #+end_details
 #+end_src
 will render like below:
 #+attr_html: open
 #+begin_details
+#+begin_summary
 Some *Summary*
----
+#+end_summary
 Here are the /details/.
 #+end_details
 **** CSS rules for these widgets

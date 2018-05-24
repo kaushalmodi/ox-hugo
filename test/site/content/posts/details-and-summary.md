@@ -8,8 +8,8 @@ draft = false
 These can be conveniently created using the Org Special Block
 `#+begin_details` .. `#+end_details`.
 
-To separate the summary from the details, use the summary-divider
-string `---` at the **beginning of a new line**.
+The summaries in these "details" Org Special blocks should be wrapped
+in a "summary" Org Special block `#+begin_summary` .. `#+end_summary`.
 
 
 ## Closed details disclosure (default) {#closed-details-disclosure--default}
@@ -27,8 +27,8 @@ are testing it that way as HTML supports that.
  (concat "This is part of the summary too.. "
          "just click anywhere in the summary to expand it."))
 ```
-</summary><p class="details">
-
+</summary>
+<p class="details">
 Here are some _details_.
 
 -   list element 1
@@ -67,11 +67,9 @@ And another paragraph.
 
 ### Only summary, no details {#only-summary-no-details}
 
-If the summary divider is the last string in this special block, it
-will mean that this `<details>` element has only the _summary_ and no
-_details_. In that case too, the browser will still render the
-collapsing triangle. But nothing will show up when you uncollapse
-it.. _as there no details_.
+In this case where only the "summary" exists, the browser will still
+render the collapsing triangle. But nothing will show up when you
+uncollapse it.. _as there are no details_.
 
 <details><summary>Here is the **summary**.
 
@@ -83,8 +81,8 @@ are testing it that way as HTML supports that.
  (concat "This is part of the summary too.. "
          "just click anywhere in the summary to expand it."))
 ```
-</summary><p class="details">
-</p></details>
+</summary>
+<p class="details"></p></details>
 
 
 ## Open by default disclosure widget {#open-by-default-disclosure-widget}
@@ -106,8 +104,8 @@ are testing it that way as HTML supports that.
  (concat "This is part of the summary too.. "
          "just click anywhere in the summary to expand it."))
 ```
-</summary><p class="details">
-
+</summary>
+<p class="details">
 Here are some _details_.
 
 -   list element 1
@@ -152,5 +150,5 @@ are testing it that way as HTML supports that.
  (concat "This is part of the summary too.. "
          "just click anywhere in the summary to expand it."))
 ```
-</summary><p class="details">
-</p></details>
+</summary>
+<p class="details"></p></details>

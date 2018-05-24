@@ -17,7 +17,17 @@ string `---` at the **beginning of a new line**.
 
 ### Summary + Details {#summary-details}
 
-<details><summary>Some **Summary**
+<details><summary>Here is the **summary**.
+
+While normally summaries wouldn't be across multiple paragraphs, we
+are testing it that way as HTML supports that.
+
+```emacs-lisp
+(message
+ (concat "This is part of the summary too.. "
+         "just click anywhere in the summary to expand it."))
+```
+
 </summary><p class="details">
 Here are some _details_.
 
@@ -63,7 +73,17 @@ _details_. In that case too, the browser will still render the
 collapsing triangle. But nothing will show up when you uncollapse
 it.. _as there no details_.
 
-<details><summary>Some **Summary**
+<details><summary>Here is the **summary**.
+
+While normally summaries wouldn't be across multiple paragraphs, we
+are testing it that way as HTML supports that.
+
+```emacs-lisp
+(message
+ (concat "This is part of the summary too.. "
+         "just click anywhere in the summary to expand it."))
+```
+
 </summary><p class="details">
 </p></details>
 
@@ -77,7 +97,17 @@ default.
 
 ### Summary + Details (Open) {#summary-details--open}
 
-<details open><summary>Some **Summary**
+<details open><summary>Here is the **summary**.
+
+While normally summaries wouldn't be across multiple paragraphs, we
+are testing it that way as HTML supports that.
+
+```emacs-lisp
+(message
+ (concat "This is part of the summary too.. "
+         "just click anywhere in the summary to expand it."))
+```
+
 </summary><p class="details">
 Here are some _details_.
 
@@ -113,6 +143,16 @@ And another paragraph.
 
 ### Only summary, no details (Open) {#only-summary-no-details--open}
 
-<details open><summary>Some **Summary**
+<details open><summary>Here is the **summary**.
+
+While normally summaries wouldn't be across multiple paragraphs, we
+are testing it that way as HTML supports that.
+
+```emacs-lisp
+(message
+ (concat "This is part of the summary too.. "
+         "just click anywhere in the summary to expand it."))
+```
+
 </summary><p class="details">
 </p></details>

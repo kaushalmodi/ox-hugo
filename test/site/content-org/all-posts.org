@@ -3502,7 +3502,7 @@ string ~---~ at the *beginning of a new line*.
 *** Closed details disclosure (default)
 **** Summary + Details
 #+begin_details
-Some *Summary*
+#+include: "./all-posts.org::#details-disclosure-summary" :only-contents t
 ---
 #+include: "./all-posts.org::#details-disclosure-details" :only-contents t
 #+end_details
@@ -3520,7 +3520,7 @@ will mean that this ~<details>~ element has only the /summary/ and no
 collapsing triangle. But nothing will show up when you uncollapse
 it.. /as there no details/.
 #+begin_details
-Some *Summary*
+#+include: "./all-posts.org::#details-disclosure-summary" :only-contents t
 ---
 #+end_details
 *** Open by default disclosure widget
@@ -3530,7 +3530,7 @@ default.
 **** Summary + Details (Open)
 #+attr_html: open
 #+begin_details
-Some *Summary*
+#+include: "./all-posts.org::#details-disclosure-summary" :only-contents t
 ---
 #+include: "./all-posts.org::#details-disclosure-details" :only-contents t
 #+end_details
@@ -3542,7 +3542,7 @@ Some *Summary*
 **** Only summary, no details (Open)
 #+attr_html: open
 #+begin_details
-Some *Summary*
+#+include: "./all-posts.org::#details-disclosure-summary" :only-contents t
 ---
 #+end_details
 * Shortcodes                                                      :shortcode:
@@ -6018,6 +6018,20 @@ If a post has the =DRAFT= state set, the =draft= front matter variable
 should be set to =true=, even if the post has a sub-heading
 immediately after the post heading.
 * Reusable sections                                        :noexport:ARCHIVE:
+** Summary portion in <details> element
+:PROPERTIES:
+:CUSTOM_ID: details-disclosure-summary
+:END:
+Here is the *summary*.
+
+While normally summaries wouldn't be across multiple paragraphs, we
+are testing it that way as HTML supports that.
+
+#+begin_src emacs-lisp
+(message
+ (concat "This is part of the summary too.. "
+         "just click anywhere in the summary to expand it."))
+#+end_src
 ** Details portion in <details> element
 :PROPERTIES:
 :CUSTOM_ID: details-disclosure-details

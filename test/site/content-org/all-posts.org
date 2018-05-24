@@ -3503,7 +3503,6 @@ string ~---~ at the *beginning of a new line*.
 **** Summary + Details
 #+begin_details
 #+include: "./all-posts.org::#details-disclosure-summary" :only-contents t
----
 #+include: "./all-posts.org::#details-disclosure-details" :only-contents t
 #+end_details
 **** No summary, only details
@@ -3521,7 +3520,6 @@ collapsing triangle. But nothing will show up when you uncollapse
 it.. /as there no details/.
 #+begin_details
 #+include: "./all-posts.org::#details-disclosure-summary" :only-contents t
----
 #+end_details
 *** Open by default disclosure widget
 The details disclosures are closed by default, add ~#+attr_html: open~
@@ -3531,7 +3529,6 @@ default.
 #+attr_html: open
 #+begin_details
 #+include: "./all-posts.org::#details-disclosure-summary" :only-contents t
----
 #+include: "./all-posts.org::#details-disclosure-details" :only-contents t
 #+end_details
 **** No summary, only details (Open)
@@ -3543,7 +3540,6 @@ default.
 #+attr_html: open
 #+begin_details
 #+include: "./all-posts.org::#details-disclosure-summary" :only-contents t
----
 #+end_details
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
@@ -6022,6 +6018,7 @@ immediately after the post heading.
 :PROPERTIES:
 :CUSTOM_ID: details-disclosure-summary
 :END:
+#+begin_summary
 Here is the *summary*.
 
 While normally summaries wouldn't be across multiple paragraphs, we
@@ -6032,6 +6029,7 @@ are testing it that way as HTML supports that.
  (concat "This is part of the summary too.. "
          "just click anywhere in the summary to expand it."))
 #+end_src
+#+end_summary
 ** Details portion in <details> element
 :PROPERTIES:
 :CUSTOM_ID: details-disclosure-details

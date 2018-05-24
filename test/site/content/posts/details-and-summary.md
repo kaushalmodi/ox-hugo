@@ -27,8 +27,8 @@ are testing it that way as HTML supports that.
  (concat "This is part of the summary too.. "
          "just click anywhere in the summary to expand it."))
 ```
-
 </summary><p class="details">
+
 Here are some _details_.
 
 -   list element 1
@@ -83,7 +83,6 @@ are testing it that way as HTML supports that.
  (concat "This is part of the summary too.. "
          "just click anywhere in the summary to expand it."))
 ```
-
 </summary><p class="details">
 </p></details>
 
@@ -107,8 +106,8 @@ are testing it that way as HTML supports that.
  (concat "This is part of the summary too.. "
          "just click anywhere in the summary to expand it."))
 ```
-
 </summary><p class="details">
+
 Here are some _details_.
 
 -   list element 1
@@ -153,6 +152,5 @@ are testing it that way as HTML supports that.
  (concat "This is part of the summary too.. "
          "just click anywhere in the summary to expand it."))
 ```
-
 </summary><p class="details">
 </p></details>

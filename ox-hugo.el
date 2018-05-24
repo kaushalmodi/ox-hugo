@@ -2275,9 +2275,10 @@ INFO is a plist holding export options."
      ((string= block-type "details")
       ;; Recognize Org Special blocks like:
       ;;   #+begin_details
-      ;;   summary. This will be wrapped in <summary> and </summary>
-      ;;   ---
-      ;;   details
+      ;;   #+begin_summary
+      ;;   This is summary.
+      ;;   #+end_summary
+      ;;   Here are the details.
       ;;   #+end_details
       (let* ((is-open (member "open" (org-element-property :attr_html special-block)))
              (str1 (org-blackfriday-special-block special-block contents nil))
@@ -2291,30 +2292,28 @@ INFO is a plist holding export options."
              ;;   (message "a code block")
              ;;   ```</details>
              ;; A closing </p> tag is also added.. the opening <p>
-             ;; tag is later added in the `str2' var if summary is
-             ;; present, else in `str3' var.
-             (str1 (replace-regexp-in-string "</details>\\'" "\n</p>\\&" str1))
-             ;; Detect the summary divider special string "---".  It
-             ;; must begin at the beginning of a line.  Also ensure to
-             ;; replace only the first match, if any.
-             ;; Also add the opening <p> tag with "details" class
-             ;; so that just as CSS rules can be set for summary
-             ;; ("details summary"), they can be set for the details
-             ;; portion following the <summary> too, using "details
-             ;; .details".
+             ;; tag is later added in the `str2' var.
+             (str1 (replace-regexp-in-string
+                    "</details>\\'"
+                    "\n</p>\\&" ;That \n is the newline before </details>
+                    str1))
+             ;; Detect the summary closing tag "</summary>".  Also
+             ;; insert a newline before the closing </summary> tag for
+             ;; the same reason as above for </details>.  Add the
+             ;; opening <p> tag with "details" class so that CSS rules
+             ;; can be set for the details portion following the
+             ;; <summary> element, using "details .details".
              (str2 (replace-regexp-in-string
-                    "^\\(---\\)\n\\(.\\|\n\\)*\\'"
-                    "</summary><p class=\"details\">"
-                    str1 nil nil 1))
-             (has-summary (not (string= str1 str2)))
-             str3)
+                    "\\(<summary>\\(?:.\\|\n\\)*\\)\\(</summary>\\)"
+                    "\\1\n\\2<p class=\"details\">" ;That \n is the newline before </summary>
+                    str1))
+             (has-summary (not (string= str1 str2))))
         ;; (message "[DBG details/summary]: is-open:%S `%s' `%s'" is-open str1 str2)
-        (setq str3 (if has-summary
-                       (replace-regexp-in-string "\\`<details>" "\\&<summary>" str2)
-                     (replace-regexp-in-string "\\`<details>" "\\&<p class=\"details\">" str2)))
+        (unless has-summary
+          (setq str2 (replace-regexp-in-string "\\`<details>" "\\&<p class=\"details\">" str2)))
         (if is-open
-            (replace-regexp-in-string "\\`\\(<details\\)>" "\\1 open>" str3)
-          str3)))
+            (replace-regexp-in-string "\\`\\(<details\\)>" "\\1 open>" str2)
+          str2)))
      ;; https://emacs.stackexchange.com/a/28685/115
      ((cl-member block-type paired-shortcodes
                  ;; If `block-type' is "foo", check if any of the

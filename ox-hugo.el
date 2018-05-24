@@ -2304,7 +2304,7 @@ INFO is a plist holding export options."
              ;; can be set for the details portion following the
              ;; <summary> element, using "details .details".
              (str2 (replace-regexp-in-string
-                    "\\(<summary>\\(?:.\\|\n\\)*\\)\\(</summary>\\)"
+                    "\\(<summary>\\(?:.\\|\n\\)*\\)\\(</summary>\n\\)"
                     "\\1\n\\2<p class=\"details\">" ;That \n is the newline before </summary>
                     str1))
              (has-summary (not (string= str1 str2))))

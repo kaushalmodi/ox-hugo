@@ -2240,9 +2240,16 @@ channel."
   "Transcode a SPECIAL-BLOCK element from Org to Hugo-compatible Markdown.
 CONTENTS holds the contents of the block.
 
-If the special block if of type \"description\", the value of
+If the special block is of type \"description\", the value of
 `:description' key of the INFO plist gets overwritten by the
 contents of that block.
+
+Else if the special block is of type \"details\", an HTML
+`<details>' element with an optional `<summary>' element is
+created.  The \"summary\" portion if present comes first, and is
+separated from the following \"details\" portion using a solo
+\"---\" string on a newline.  See
+https://ox-hugo.scripter.co/doc/details-and-summary/ for more.
 
 Else if the SPECIAL-BLOCK type matches one of the shortcodes set
 in HUGO_PAIRED_SHORTCODES property, export them as Markdown or

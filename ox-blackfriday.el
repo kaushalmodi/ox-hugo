@@ -696,7 +696,58 @@ This function is adapted from `org-html-special-block'."
                        "")))
       (cond
        (html5-inline-fancy
-        (format "<%s%s>%s</%s>"
+        (cond
+         ((string= block-type "details")
+          ;; Recognize Org Special blocks like:
+          ;;   #+begin_details
+          ;;   #+begin_summary
+          ;;   This is summary.
+          ;;   #+end_summary
+          ;;   Here are the details.
+          ;;   #+end_details
+          (setq contents
+                (let* (;; A closing </p> tag is added at the end.. the
+                       ;; opening <p> tag for that is later added in
+                       ;; the `str2' var.  Insert a newline before
+                       ;; that tag for the reason explained below
+                       ;; using the emacs-lisp Markdown code block.
+                       (str1 (concat contents "\n</p>"))
+                       ;; Detect the summary closing tag "</summary>".
+                       ;; If found, add the opening <p> tag with
+                       ;; "details" class after that, so that CSS
+                       ;; rules can be set specific to the details
+                       ;; portion using "details .details".
+                       (str2 (replace-regexp-in-string
+                              "<summary>\\(?:.\\|\n\\)*</summary>"
+                              "\\&\n<p class=\"details\">"
+                              str1))
+                       (has-summary (not (string= str1 str2))))
+                  ;; (message "[DBG details/summary]: is-open:%S `%s' `%s'" is-open str1 str2)
+                  (unless has-summary
+                    (setq str2 (concat "<p class=\"details\">" str1)))
+                  str2))
+          ;; Insert the "open" attribute only if user has ":open t" in
+          ;; "#+attr_html".
+          (when (org-string-nw-p attr-str)
+            (when (string-match "\\(?1:open\\(?2:=\"\\(?3:t\\)\"\\)\\)" attr-str)
+              (if (match-string 3 attr-str) ;if attr-str contains `open="t"'
+                  (setq attr-str (replace-match "" nil nil attr-str 2))
+                (setq attr-str (replace-match "" nil nil attr-str 1)))))))
+        ;; Insert a newline before and after the `contents' to handle
+        ;; the cases where that could begin or end with a Markdown
+        ;; blocks like:
+        ;;   ```emacs-lisp
+        ;;   (message "foo")
+        ;;   ```
+        ;; An example scenario would be where such content could be
+        ;; present in the "inline" <details> or <summary> Special
+        ;; Blocks.
+        ;; Without those newlines, the Markdown converted content will
+        ;; look like below, and Blackfriday won't parse it correctly.
+        ;;   <details>```emacs-lisp
+        ;;   (message "foo")
+        ;;   ```</details>
+        (format "<%s%s>\n%s\n</%s>"
                 block-type attr-str contents block-type))
        (html5-block-fancy
         (format "<%s%s>\n  <%s></%s>\n\n%s\n\n</%s>" ;See footnote 1

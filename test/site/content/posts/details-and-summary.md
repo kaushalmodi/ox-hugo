@@ -17,7 +17,9 @@ in a "summary" Org Special block `#+begin_summary` .. `#+end_summary`.
 
 ### Summary + Details {#summary-details}
 
-<details><summary>Here is the **summary**.
+<details>
+<summary>
+Here is the **summary**.
 
 While normally summaries wouldn't be across multiple paragraphs, we
 are testing it that way as HTML supports that.
@@ -29,6 +31,7 @@ are testing it that way as HTML supports that.
 ```
 </summary>
 <p class="details">
+
 Here are some _details_.
 
 -   list element 1
@@ -41,7 +44,8 @@ And another paragraph.
 ```emacs-lisp
 (message "a code block")
 ```
-</p></details>
+</p>
+</details>
 
 
 ### No summary, only details {#no-summary-only-details}
@@ -50,7 +54,8 @@ In the situation where the summary divider is absent i.e. when user
 hasn't provided a summary, the browser will use a default summary
 string (usually "Details").
 
-<details><p class="details">Here are some _details_.
+<details>
+<p class="details">Here are some _details_.
 
 -   list element 1
 -   list element 2
@@ -62,7 +67,8 @@ And another paragraph.
 ```emacs-lisp
 (message "a code block")
 ```
-</p></details>
+</p>
+</details>
 
 
 ### Only summary, no details {#only-summary-no-details}
@@ -71,30 +77,9 @@ In this case where only the "summary" exists, the browser will still
 render the collapsing triangle. But nothing will show up when you
 uncollapse it.. _as there are no details_.
 
-<details><summary>Here is the **summary**.
-
-While normally summaries wouldn't be across multiple paragraphs, we
-are testing it that way as HTML supports that.
-
-```emacs-lisp
-(message
- (concat "This is part of the summary too.. "
-         "just click anywhere in the summary to expand it."))
-```
-</summary>
-<p class="details"></p></details>
-
-
-## Open by default disclosure widget {#open-by-default-disclosure-widget}
-
-The details disclosures are closed by default, add `#+attr_html: open`
-right below the details special block to have the disclosures open by
-default.
-
-
-### Summary + Details (Open) {#summary-details--open}
-
-<details open><summary>Here is the **summary**.
+<details>
+<summary>
+Here is the **summary**.
 
 While normally summaries wouldn't be across multiple paragraphs, we
 are testing it that way as HTML supports that.
@@ -106,6 +91,34 @@ are testing it that way as HTML supports that.
 ```
 </summary>
 <p class="details">
+</p>
+</details>
+
+
+## Open by default disclosure widget {#open-by-default-disclosure-widget}
+
+The details disclosures are closed by default, add `#+attr_html: :open
+t` right below the details special block to have the disclosures open
+by default.
+
+
+### Summary + Details (Open) {#summary-details--open}
+
+<details open>
+<summary>
+Here is the **summary**.
+
+While normally summaries wouldn't be across multiple paragraphs, we
+are testing it that way as HTML supports that.
+
+```emacs-lisp
+(message
+ (concat "This is part of the summary too.. "
+         "just click anywhere in the summary to expand it."))
+```
+</summary>
+<p class="details">
+
 Here are some _details_.
 
 -   list element 1
@@ -118,12 +131,14 @@ And another paragraph.
 ```emacs-lisp
 (message "a code block")
 ```
-</p></details>
+</p>
+</details>
 
 
 ### No summary, only details (Open) {#no-summary-only-details--open}
 
-<details open><p class="details">Here are some _details_.
+<details open>
+<p class="details">Here are some _details_.
 
 -   list element 1
 -   list element 2
@@ -135,12 +150,15 @@ And another paragraph.
 ```emacs-lisp
 (message "a code block")
 ```
-</p></details>
+</p>
+</details>
 
 
 ### Only summary, no details (Open) {#only-summary-no-details--open}
 
-<details open><summary>Here is the **summary**.
+<details open>
+<summary>
+Here is the **summary**.
 
 While normally summaries wouldn't be across multiple paragraphs, we
 are testing it that way as HTML supports that.
@@ -151,4 +169,37 @@ are testing it that way as HTML supports that.
          "just click anywhere in the summary to expand it."))
 ```
 </summary>
-<p class="details"></p></details>
+<p class="details">
+</p>
+</details>
+
+
+## Other attributes along with `open` attribute set to `t` {#other-attributes-along-with-open-attribute-set-to-t}
+
+Test that other attributes, if present along with `:open t`, are also retained.
+
+<details open class="foo">
+<summary>
+This is **summary**.
+</summary>
+<p class="details">
+
+Here are the _details_.
+</p>
+</details>
+
+
+## Value of `open` attribute other than `t` {#value-of-open-attribute-other-than-t}
+
+If the `open` attribute is set to any other value than `t`, it won't
+be inserted in the `details` element.
+
+<details class="foo">
+<summary>
+This is **summary**.
+</summary>
+<p class="details">
+
+Here are the _details_.
+</p>
+</details>

@@ -1618,10 +1618,10 @@ You will learn that later below in [[#details-css][CSS]] section.
   #+end_note
 **** Open by default disclosure widget
 The ~<details>~ disclosure widget is initially closed by default. But
-it can be made to show up opened by default by adding the ~open~
+it can be made to show up opened by default by adding the ~:open t~
 attribute like this:
 #+begin_src org
-#+attr_html: open
+#+attr_html: :open t
 #+begin_details
 #+begin_summary
 Some *Summary*
@@ -1630,13 +1630,17 @@ Here are the /details/.
 #+end_details
 #+end_src
 will render like below:
-#+attr_html: open
+#+attr_html: :open t
 #+begin_details
 #+begin_summary
 Some *Summary*
 #+end_summary
 Here are the /details/.
 #+end_details
+#+begin_note
+For open-by-default disclosure widgets, the ~#+attr_html~ keyword
+specifically needs to contain ~:open t~.
+#+end_note
 **** CSS rules for these widgets
 :PROPERTIES:
 :CUSTOM_ID: details-css

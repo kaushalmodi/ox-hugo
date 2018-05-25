@@ -3524,11 +3524,11 @@ uncollapse it.. /as there are no details/.
 #+end_summary
 #+end_details
 *** Open by default disclosure widget
-The details disclosures are closed by default, add ~#+attr_html: open~
-right below the details special block to have the disclosures open by
-default.
+The details disclosures are closed by default, add ~#+attr_html: :open
+t~ right below the details special block to have the disclosures open
+by default.
 **** Summary + Details (Open)
-#+attr_html: open
+#+attr_html: :open t
 #+begin_details
 #+begin_summary
 #+include: "./all-posts.org::#details-disclosure-summary" :only-contents t
@@ -3536,16 +3536,35 @@ default.
 #+include: "./all-posts.org::#details-disclosure-details" :only-contents t
 #+end_details
 **** No summary, only details (Open)
-#+attr_html: open
+#+attr_html: :open t
 #+begin_details
 #+include: "./all-posts.org::#details-disclosure-details" :only-contents t
 #+end_details
 **** Only summary, no details (Open)
-#+attr_html: open
+#+attr_html: :open t
 #+begin_details
 #+begin_summary
 #+include: "./all-posts.org::#details-disclosure-summary" :only-contents t
 #+end_summary
+#+end_details
+*** Other attributes along with ~open~ attribute set to ~t~
+Test that other attributes, if present along with ~:open t~, are also retained.
+#+attr_html: :open t :class foo
+#+begin_details
+#+begin_summary
+This is *summary*.
+#+end_summary
+Here are the /details/.
+#+end_details
+*** Value of ~open~ attribute other than ~t~
+If the ~open~ attribute is set to any other value than ~t~, it won't
+be inserted in the ~details~ element.
+#+attr_html: :open nil :class foo
+#+begin_details
+#+begin_summary
+This is *summary*.
+#+end_summary
+Here are the /details/.
 #+end_details
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:

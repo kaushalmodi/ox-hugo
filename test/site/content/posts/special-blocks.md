@@ -49,7 +49,9 @@ _Some_ **text** --- 2
 
 Unmarked.
 
-<mark>_Some_ **marked** text --- 2.5.</mark>
+<mark>
+_Some_ **marked** text --- 2.5.
+</mark>
 
 Unmarked again.
 

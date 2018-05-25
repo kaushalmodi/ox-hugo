@@ -3523,6 +3523,24 @@ uncollapse it.. /as there are no details/.
 #+include: "./all-posts.org::#details-disclosure-summary" :only-contents t
 #+end_summary
 #+end_details
+**** Details containing only code block
+#+begin_details
+#+begin_summary
+This is *Summary*.
+#+end_summary
+#+begin_src emacs-lisp
+(message "This is in details")
+#+end_src
+#+end_details
+**** Summary containing only code block
+#+begin_details
+#+begin_summary
+#+begin_src emacs-lisp
+(message "This is in summary")
+#+end_src
+#+end_summary
+Here are the /details/. This is obviously a pathological test case.
+#+end_details
 *** Open by default disclosure widget
 The details disclosures are closed by default, add ~#+attr_html: :open
 t~ right below the details special block to have the disclosures open

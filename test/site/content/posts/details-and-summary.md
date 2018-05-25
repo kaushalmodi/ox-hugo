@@ -95,6 +95,36 @@ are testing it that way as HTML supports that.
 </details>
 
 
+### Details containing only code block {#details-containing-only-code-block}
+
+<details>
+<summary>
+This is **Summary**.
+</summary>
+<p class="details">
+
+```emacs-lisp
+(message "This is in details")
+```
+</p>
+</details>
+
+
+### Summary containing only code block {#summary-containing-only-code-block}
+
+<details>
+<summary>
+```emacs-lisp
+(message "This is in summary")
+```
+</summary>
+<p class="details">
+
+Here are the _details_. This is obviously a pathological test case.
+</p>
+</details>
+
+
 ## Open by default disclosure widget {#open-by-default-disclosure-widget}
 
 The details disclosures are closed by default, add `#+attr_html: :open

@@ -35,7 +35,7 @@ work as expected.
 ---
 
 
-## First heading in this post {#first-heading-in-this-post}
+## First heading in this post {#first-heading}
 
 This is a under first heading.
 

@@ -1687,14 +1687,10 @@ INFO is a plist used as a communication channel.
 
 Unlike `org-md-link', this function will also copy local images
 and rewrite link paths to make blogging more seamless."
-  (let ((link-org-files-as-md
-         (lambda (raw-path)
-           ;; Treat links to `file.org' as links to `file.md'.
-           (if (string= ".org" (downcase (file-name-extension raw-path ".")))
-               (concat (file-name-sans-extension raw-path) ".md")
-             raw-path)))
+  (let ((raw-link (org-element-property :raw-link link))
         (raw-path (org-element-property :path link))
         (type (org-element-property :type link)))
+    ;; (message "[ox-hugo-link DBG] link: %S" link)
     ;; (message "[ox-hugo-link DBG] link path: %s" (org-element-property :path link))
     ;; (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
     ;; (message "[ox-hugo-link DBG] link type: %s" type)
@@ -1707,7 +1703,11 @@ and rewrite link paths to make blogging more seamless."
                            (org-export-resolve-id-link link info))))
         (pcase (org-element-type destination)
           (`plain-text                  ;External file
-           (let ((path (funcall link-org-files-as-md destination)))
+           (let ((path (progn
+                         ;; Treat links to `file.org' as links to `file.md'.
+                         (if (string= ".org" (downcase (file-name-extension destination ".")))
+                             (concat (file-name-sans-extension destination) ".md")
+                           destination))))
              (if desc
                  (format "[%s](%s)" desc path)
                (format "<%s>" path))))
@@ -1884,11 +1884,20 @@ and rewrite link paths to make blogging more seamless."
                      (concat type ":" raw-path))
                     (;; Remove the "file://" prefix.
                      (string= type "file")
+                     ;; (message "[ox-hugo-link DBG] raw-path: %s" raw-path)
                      (let ((path1 (replace-regexp-in-string "\\`file://" "" raw-path)))
                        (if (string= ".org" (downcase (file-name-extension path1 ".")))
-                           (format "{{< relref \"%s\" >}}"
-                                   (file-name-sans-extension
-                                    (file-name-nondirectory path1)))
+                           (let ((raw-link-minus-org-file
+                                  ;; If raw-link is "./foo.org::#bar",
+                                  ;; set `raw-link-minus-org-file' to
+                                  ;; "#bar".
+                                  (if (string-match ".*\\.org::\\(#.*\\)" raw-link)
+                                      (match-string-no-properties 1 raw-link)
+                                    "")))
+                             (format "{{< relref \"%s%s\" >}}"
+                                     (file-name-sans-extension
+                                      (file-name-nondirectory path1))
+                                     raw-link-minus-org-file))
                          (org-hugo--attachment-rewrite-maybe path1 info))))
                     (t
                      raw-path)))

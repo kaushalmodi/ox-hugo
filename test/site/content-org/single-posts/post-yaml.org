@@ -34,6 +34,9 @@ work as expected.
 -----
 
 * First heading in this post
+:PROPERTIES:
+:CUSTOM_ID: first-heading
+:END:
 This is a under first heading.
 * Second heading in this post
 This is a under second heading.

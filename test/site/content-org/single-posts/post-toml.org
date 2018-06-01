@@ -36,6 +36,8 @@ is set in the exported file.. Hugo will do the job of translating from
 the Markdown file name to the actual link/slug.
 
 [[file:post-with-slug.org]]
+** Link to the CUSTOM_ID of a different file
+[[./post-yaml.org::#first-heading]]
 * Local Variables :ARCHIVE:
 # Local Variables:
 # org-link-file-path-type: relative

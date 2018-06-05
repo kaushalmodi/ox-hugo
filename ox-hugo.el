@@ -2411,14 +2411,21 @@ Optional argument FORMAT can be \"toml\" or \"yaml\"."
                  (string= (substring val -1) "\"")) ;Last char is literally a "
             (and prefer-no-quotes ;If quotes are not preferred and `val' is only alpha-numeric
                  (string-match-p "\\`[a-zA-Z0-9]+\\'" val))
+            ;; or if it an integer that can be stored in the system as
+            ;; a fixnum.  For example, if `val' is
+            ;; "10040216507682529280" that needs more than 64 bits to
+            ;; be stored as a signed integer, it will be automatically
+            ;; stored as a float.  So (integerp (string-to-number
+            ;; val)) will return nil.
+            ;; https://github.com/toml-lang/toml#integer Integer
+            ;; examples: 7, +7, -7, 7_000
+            (and (string-match-p "\\`[+-]?[[:digit:]_]+\\'" val)
+                 (integerp (string-to-number val)))
             (string= "true" val)
             (string= "false" val)
             ;; or if it is a date (date, publishDate, expiryDate, lastmod)
             (string-match-p org-hugo--date-time-regexp val)
-            ;; or if it is any number (integer or float)
-            ;; https://github.com/toml-lang/toml#integer
-            ;; Integer examples: 7, +7, -7, 7_000
-            (string-match-p "\\`[+-]?[[:digit:]_]+\\'" val)
+            ;; or if it is a float
             ;; https://github.com/toml-lang/toml#float
             ;; Float examples (decimals): 7.8, +7.8, -7.8
             (string-match-p "\\`[+-]?[[:digit:]_]+\\.[[:digit:]_]+\\'" val)

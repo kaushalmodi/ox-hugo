@@ -1774,6 +1774,24 @@ Custom TOML front-matter with TOML tables.
 Custom YAML front-matter with nested maps.
 #+end_description
 {{{oxhugoissue(139)}}}
+** Front-matter values with BigInts                             :bigint:toml:
+:PROPERTIES:
+:EXPORT_FILE_NAME: front-matter-bigint-value
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :small_int "234" :big_int "10040216507682529280"
+:END:
+#+begin_description
+Test that front-matter values that are integers represented as
+strings, but cannot be stored as 64-bit signed integers are
+left as strings.
+#+end_description
+
+In this test, the small integer "234" (i.e. the one that can be
+represented as a 64-bit signed integer) is saved as an integer in the
+TOML front-matter.
+
+But the big integer "10040216507682529280" which would need more than
+64-bits to be stored as a signed integer is left as a string in the
+TOML front-matter.
 * Resources                                                       :resources:
 ** TOML                                                                :toml:
 *** Post with resources in front-matter (TOML)

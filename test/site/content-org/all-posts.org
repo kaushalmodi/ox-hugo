@@ -5121,6 +5121,14 @@ This post will have the =foo= key in front-matter replaced with
 :END:
 Here, attempt is made to replace a non-existing key =toto=, but still,
 there shouldn't be any error.
+*** Make the author front-matter plural                              :author:
+:PROPERTIES:
+:EXPORT_FILE_NAME: plural-author-front-matter
+:EXPORT_AUTHOR: Mark Twain, Arthur Conan Doyle
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: author>authors
+:END:
+Some themes might expect the front-matter list variable for authors to
+be ~authors~ instead of the default ~author~ created by ~ox-hugo~.
 * Date and slug inheritance                           :inheritance:date:slug:
 :PROPERTIES:
 :EXPORT_DATE: 2018-02-12

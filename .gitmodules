@@ -7,3 +7,6 @@
 [submodule "test/site/themes/hugo-debugprint"]
 	path = test/site/themes/hugo-debugprint
 	url = https://github.com/kaushalmodi/hugo-debugprint
+[submodule "test/site/themes/hugo-search-fuse-js"]
+	path = test/site/themes/hugo-search-fuse-js
+	url = https://github.com/kaushalmodi/hugo-search-fuse-js

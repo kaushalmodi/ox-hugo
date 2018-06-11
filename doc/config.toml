@@ -1,7 +1,7 @@
-baseURL = "http://example.org/"
+baseURL = "https://example.org/"
 
 Title = "ox-hugo - Org to Hugo exporter"
-theme = "hugo-onyx-theme"
+theme = ["hugo-debugprint", "hugo-onyx-theme"]
 
 contentdir = "content"
 layoutdir = "layouts"

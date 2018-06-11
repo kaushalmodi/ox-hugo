@@ -1,7 +1,7 @@
 baseURL = "http://example.org/"
 languageCode = "en-us"
 title = "ox-hugo Test Site"
-theme = "bare_min"
+theme = "hugo-bare-min-theme"
 
 # Mon Dec 18 17:41:00 EST 2017 - kmodi
 # Need the canonifyURLs to be true as the test site is
@@ -43,6 +43,6 @@ This is the test site for the <a href="https://github.com/kaushalmodi/ox-hugo">
 """
   custom_css = ["css/style.css"]
   [Params.source]
-    url = "https://github.com/kaushalmodi/ox-hugo" # Mandatory, used in bare_min single.html, baseof.html
+    url = "https://github.com/kaushalmodi/ox-hugo" # Mandatory, used in hugo-bare-min-theme single.html, baseof.html
     org_dir = "test/site/content-org"
     md_dir = "test/site/content"

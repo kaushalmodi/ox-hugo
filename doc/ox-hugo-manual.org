@@ -100,8 +100,9 @@
 - Re-write the logic for parsing meta-data for various kinds of dates,
   and optimize the logic for parsing newline separated lists like tags
   and categories.
-- The =bare_min= theme used for the test site is made more portable
-  (at some point, that theme might be moved to a separate repo).
+- The =hugo-bare-min-theme= used for the test site is made more
+  portable (at some point, that theme might be moved to a separate
+  repo).
 ** v0.7 <2017-12-18 Mon>
 *** Features
 - *Now C-c C-e H H works for both per-subtree and per-file flows* --
@@ -139,7 +140,7 @@
   data for front-matter so that valid integers/floats don't get
   unnecessarily double-quoted.
 *** Meta
-- Add a [[https://github.com/kaushalmodi/ox-hugo/blob/master/test/site/themes/bare_min/layouts/partials/debugprint.html][=debugprint.html=]] partial to help pretty-print various Hugo
+- Add a [[https://github.com/kaushalmodi/hugo-debugprint/blob/master/layouts/partials/debugprint.html][=debugprint.html=]] partial to help pretty-print various Hugo
   objects like Page Params, File and SiteInfo for debug on the test
   site.
 - The test site now has [[https://ox-hugo.scripter.co/test/tags/][tags]] and [[https://ox-hugo.scripter.co/test/categories/][categories]] pages.

@@ -2141,6 +2141,50 @@ channel."
       (org-md-keyword keyword contents info)))))
 
 ;;;; Links
+(defun org-hugo-link--resolve-coderef (ref info)
+  "Resolve a code reference REF.
+
+This function is heavily derived from
+`org-export-resolve-coderef'.
+
+INFO is a plist used as a communication channel.
+
+Returns a plist with these elements:
+
+- `:line-num' :: REF associated line number
+
+- `:ref' :: REF associated line number in source code (if the Org
+  element's `:use-labels' property is unset.  This happens when
+  the `-r' switch is used) , or REF itself.
+
+- `:anchor-prefix' :: String prefix for REF's anchor.
+
+Throw an error if no block contains REF."
+  (or (org-element-map (plist-get info :parse-tree) '(example-block src-block)
+	    (lambda (el)
+	      (with-temp-buffer
+	        (insert (org-trim (org-element-property :value el)))
+	        (let* ((ref-info ())
+                   (label-fmt (or (org-element-property :label-fmt el)
+				                  org-coderef-label-format))
+		           (ref-re (org-src-coderef-regexp label-fmt ref)))
+	          ;; Element containing REF is found.  Resolve it to
+	          ;; either a label or a line number, as needed.
+	          (when (re-search-backward ref-re nil :noerror)
+                (let* ((line-num (+ (or (org-export-get-loc el info) 0)
+		                            (line-number-at-pos)))
+                       (ref-str (format "%s" (if (org-element-property :use-labels el)
+                                                 ref
+                                               line-num))))
+		          (setq ref-info (plist-put ref-info :line-num line-num))
+                  (setq ref-info (plist-put ref-info :ref ref-str))
+                  ;; The `:anchor-prefix' property key is set in
+                  ;; `org-hugo-src-block'.
+                  (setq ref-info (plist-put ref-info :anchor-prefix (org-element-property :anchor-prefix el))))
+                ref-info))))
+	    info 'first-match)
+      (signal 'org-link-broken (list ref))))
+
 (defun org-hugo-link (link desc info)
   "Convert LINK to Markdown format.
 
@@ -2397,9 +2441,19 @@ and rewrite link paths to make blogging more seamless."
                 ;; (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
                 (format "{{< figure %s >}}" (org-trim figure-param-str)))))))))
      ((string= type "coderef")
-      (let ((ref (org-element-property :path link)))
-        (format (org-export-get-coderef-format ref desc)
-                (org-export-resolve-coderef ref info))))
+      (let* ((ref-label (org-element-property :path link))
+             (ref-info (org-hugo-link--resolve-coderef ref-label info))
+             (desc (format (org-export-get-coderef-format ref-label desc)
+                           (plist-get ref-info :ref))))
+        ;; (message "[org-hugo-link DBG] coderef ref label: %s" ref-label)
+        ;; (message "[org-hugo-link DBG] coderef ref str: %s" (plist-get ref-info :ref))
+        ;; (message "[org-hugo-link DBG] coderef anchor prefix: %s" (plist-get ref-info :anchor-prefix))
+        ;; (message "[org-hugo-link DBG] coderef line num: %s" (plist-get ref-info :line-num))
+        ;; (message "[org-hugo-link DBG] coderef desc: %s" desc)
+        (format "[%s](#%s-%s)"
+                desc
+                (plist-get ref-info :anchor-prefix)
+                (plist-get ref-info :line-num))))
      ((string= type "radio")
       (let ((destination (org-export-resolve-radio-link link info)))
         (format "[%s](#%s%s)"
@@ -2845,7 +2899,7 @@ nil and,
      ;; Regular src block.
      (t
       (let* (;; See `org-element-src-block-parser' for all SRC-BLOCK properties.
-             (number-lines (org-element-property :number-lines src-block)) ;Non-nil if -n or +n switch is used
+             (line-num-p (org-element-property :number-lines src-block)) ;Non-nil if -n or +n switch is used
              (linenos-style (cdr (assoc :linenos parameters)))
              ;; Convert `hl-lines' to string.  If it's not a number,
              ;; it's already a string, or nil.
@@ -2854,12 +2908,20 @@ nil and,
                          (if (numberp hl-lines-param)
                              (number-to-string hl-lines-param)
                            hl-lines-param)))
+             (code-refs (let ((code-refs1 (cdr (org-export-unravel-code src-block))))
+                          (when code-refs1
+                            (setq line-num-p t))
+                          code-refs1))
              ;; Use the `highlight' shortcode only if ..
              (use-highlight-sc (or ;; HUGO_CODE_FENCE is nil, or ..
                                 (null (org-hugo--plist-get-true-p info :hugo-code-fence))
+                                ;; code refs are used (code fences format
+                                ;; does not support code line
+                                ;; anchors!), or ..
+                                code-refs
                                 ;; "Blackfriday mode" is enabled and line numbering
                                 ;; or highlighting is needed.
-                                (and (or number-lines hl-lines linenos-style)
+                                (and (or line-num-p hl-lines linenos-style)
                                      (not (org-hugo--plist-get-true-p info :hugo-goldmark)))))
              (hl-lines (when (stringp hl-lines)
                          (if use-highlight-sc
@@ -2904,10 +2966,11 @@ nil and,
              code-attr-str
              src-code-wrap
              ret)
-        ;; (message "ox-hugo src [dbg] number-lines: %S" number-lines)
+        ;; (message "ox-hugo src [dbg] line-num-p: %S" line-num-p)
         ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
+        ;; (message "ox-hugo src [dbg] code refs: %S" code-refs)
 
-        (when (or linenos-style number-lines)
+        (when (or linenos-style line-num-p)
           ;; Default "linenos" style set to "table" if linenos-style
           ;; is nil.
           (setq linenos-style (or linenos-style "table"))
@@ -2918,7 +2981,7 @@ nil and,
             (when linenostart-str
               (setq code-attr-str (format "%s, linenostart=%s" code-attr-str linenostart-str))))
 
-          (when number-lines
+          (when line-num-p
             ;; Remove Org-inserted numbers from the beginning of each line
             ;; as the Hugo highlight shortcode will be used instead of
             ;; literally inserting the line numbers.
@@ -2929,6 +2992,13 @@ nil and,
           (if (org-string-nw-p code-attr-str)
               (setq code-attr-str (format "%s, hl_lines=%s" code-attr-str hl-lines))
             (setq code-attr-str (format "hl_lines=%s" hl-lines))))
+
+        (when code-refs
+          (let* ((unique-id (substring (md5 (format "%s" code-refs)) 0 6))
+                 (anchor-prefix (format "org-coderef--%s" unique-id))
+                 (anchor-str (format "anchorlinenos=true, lineanchors=%s" anchor-prefix)))
+            (org-element-put-property src-block :anchor-prefix anchor-prefix)
+            (setq code-attr-str (format "%s, %s" code-attr-str anchor-str))))
 
         (unless use-highlight-sc
           (plist-put info :md-code src-code)

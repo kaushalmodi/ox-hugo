@@ -2386,11 +2386,14 @@ If VAL contains newlines, format it according to TOML or YAML
 FORMAT to preserve them.
 
 VAL is returned as-it-is under the following cases:
-- It is a number or nil.
+- It is a number.
 - It is a string and is already wrapped with double quotes.
 - It is a string and it's value is \"true\" or \"false\".
 - It is a string representing a date.
 - It is a string representing an integer or float.
+
+If VAL is nil or an empty string, a quoted empty string \"\" is
+returned.
 
 If optional argument PREFER-NO-QUOTES is non-nil, return the VAL
 as-it-is if it's a string with just alphanumeric characters.
@@ -2475,9 +2478,9 @@ Optional argument FORMAT can be \"toml\" or \"yaml\"."
         (setq val (replace-regexp-in-string "\"" "\\\\\""  val))
         (concat "\"" val "\""))))
      (t                                 ;If `val' is any empty string
-      "")))
+      "\"\"")))
    (t                            ;Return empty string if anything else
-    "")))
+    "\"\"")))
 
 (defun org-hugo--parse-property-arguments (str)
   "Return an alist converted from a string STR of Hugo property value.

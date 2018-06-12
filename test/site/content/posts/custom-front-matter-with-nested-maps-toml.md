@@ -20,6 +20,8 @@ draft = false
   booleans = [true, false]
 [random]
   foo = "bar"
+[empty_string_value]
+  empty = ""
 +++
 
 `ox-hugo` Issue #[139](https://github.com/kaushalmodi/ox-hugo/issues/139)

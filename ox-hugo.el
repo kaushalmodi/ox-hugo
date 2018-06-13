@@ -1004,6 +1004,11 @@ contents according to the current headline."
            (lambda (headline)
              (let* ((level (org-export-get-relative-level headline info))
                     (indentation (make-string (* 4 (1- level)) ?\s))
+                    (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
+                               (org-element-property :todo-keyword headline)))
+                    (todo-str (if todo
+                                  (concat (org-hugo--todo todo info) " ")
+                                ""))
                     (headline-num-list (org-export-get-headline-number headline info))
                     (number (if headline-num-list
                                 ;; (message "[ox-hugo TOC DBG] headline-num-list: %S" headline-num-list)
@@ -1011,7 +1016,8 @@ contents according to the current headline."
                               ""))
                     (title (org-export-data (org-element-property :title headline) info))
                     (toc-entry
-                     (format "[%s](#%s)"
+                     (format "[%s%s](#%s)"
+                             todo-str
                              (org-export-data-with-backend
                               (org-export-get-alt-title headline info)
                               (org-export-toc-entry-backend 'hugo)
@@ -1027,6 +1033,7 @@ contents according to the current headline."
                                       (format ":%s:"
                                               (mapconcat #'identity tags ":")))))))
                ;; (message "[ox-hugo build-toc DBG] level:%d, number:%s" level number)
+               ;; (message "[ox-hugo build-toc DBG] todo: %s | %s" todo todo-str)
                (concat indentation "- " number toc-entry tags)))
            (org-export-collect-headlines info n (and local keyword))
            "\n"))                       ;Newline between TOC items

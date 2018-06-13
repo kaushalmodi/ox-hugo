@@ -4614,6 +4614,55 @@ so) characters after ~<!--endtoc-->~ is considered as summary.
 
 This partial needs to be used wherever the summary text is needed
 (example: the Opengraph =og:description= meta tag).
+**** TOC with TODO headlines
+***** CSS for TODO                                                 :noexport:
+:PROPERTIES:
+:CUSTOM_ID: todo-css
+:END:
+#+begin_export html
+<style>
+.org-todo {
+    font-size: 0.8em;
+    font-weight: 700;
+}
+/* *** Org TODO set to TODO state */
+.org-todo.todo {
+    color: #e60000;
+}
+/* *** Org TODO set to DONE state */
+.org-todo.done {
+    color: green;
+}
+</style>
+#+end_export
+***** TOC with TODO enabled (default)
+:PROPERTIES:
+:EXPORT_FILE_NAME: toc-with-todo-enabled
+:EXPORT_OPTIONS: toc:t todo:t
+:END:
+#+begin_description
+TODO states if present are prefixed to the headings -- both in the body
+and TOC.
+#+end_description
+#+include: "./all-posts.org::#todo-css" :only-contents t
+****** No TODO state
+****** TODO Something to do
+****** DONE Something done
+CLOSED: [2018-06-12 Tue 22:12]
+***** TOC with TODO disabled
+:PROPERTIES:
+:EXPORT_FILE_NAME: toc-with-todo-disabled
+:EXPORT_OPTIONS: toc:t todo:nil
+:END:
+#+begin_description
+No TODO states are prefixed to the headings -- neither in the body, nor
+in the TOC.
+#+end_description
+#+include: "./all-posts.org::#todo-css" :only-contents t
+****** No TODO state
+****** TODO Something to do
+****** DONE Something done
+CLOSED: [2018-06-12 Tue 22:12]
 ** Sub/superscripts                                 :superscripts:subscripts:
 *** Sub/superscripts require braces
 :PROPERTIES:

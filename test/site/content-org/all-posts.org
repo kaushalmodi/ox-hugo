@@ -443,7 +443,7 @@ This post must not be exported as it is tagged =noexport=.
 :EXPORT_FILE_NAME: commented-post
 :END:
 This post must not be exported as it is commented.
-* Section
+* Section                                                           :section:
 ** Articles
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: articles
@@ -489,7 +489,37 @@ Here is the second post on Emacs.
 :EXPORT_HUGO_SECTION: zoo
 :EXPORT_FILE_NAME: post-in-zoo-section
 :END:
+#+begin_description
+Test where ~EXPORT_HUGO_SECTION~ is set in the post subtree itself.
+#+end_description
 This post will be created in the =zoo= section.
+** Null HUGO_SECTION                                             :root_level:
+*** Using empty EXPORT_HUGO_SECTION
+:PROPERTIES:
+:EXPORT_HUGO_SECTION:
+:EXPORT_FILE_NAME: root-level-content-empty-section
+:END:
+#+begin_description
+Case where ~EXPORT_HUGO_SECTION~ is set to nothing.
+#+end_description
+
+{{{oxhugoissue(164)}}}
+
+This post is created at the site root.
+*** Setting EXPORT_HUGO_SECTION to "/"
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: /
+:EXPORT_FILE_NAME: root-level-content-section-set-to-slash
+:END:
+#+begin_description
+Case where ~EXPORT_HUGO_SECTION~ is set to ~/~.
+#+end_description
+
+{{{oxhugoissue(164)}}}
+
+This behaves the same as *not setting* ~EXPORT_HUGO_SECTION~ at all.
+
+This post is created at the site root.
 * Tables                                                              :table:
 ** Simple Table
 :PROPERTIES:

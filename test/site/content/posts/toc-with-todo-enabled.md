@@ -4,7 +4,7 @@ description = """
   TODO states if present are prefixed to the headings -- both in the body
   and TOC.
   """
-tags = ["export-option", "toc"]
+tags = ["export-option", "toc", "todo", "enable"]
 draft = false
 +++
 

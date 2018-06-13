@@ -4614,7 +4614,7 @@ so) characters after ~<!--endtoc-->~ is considered as summary.
 
 This partial needs to be used wherever the summary text is needed
 (example: the Opengraph =og:description= meta tag).
-**** TOC with TODO headlines
+**** TOC with TODO headlines                                           :todo:
 ***** CSS for TODO                                                 :noexport:
 :PROPERTIES:
 :CUSTOM_ID: todo-css
@@ -4635,7 +4635,7 @@ This partial needs to be used wherever the summary text is needed
 }
 </style>
 #+end_export
-***** TOC with TODO enabled (default)
+***** TOC with TODO enabled (default)                                :enable:
 :PROPERTIES:
 :EXPORT_FILE_NAME: toc-with-todo-enabled
 :EXPORT_OPTIONS: toc:t todo:t
@@ -4649,7 +4649,7 @@ and TOC.
 ****** TODO Something to do
 ****** DONE Something done
 CLOSED: [2018-06-12 Tue 22:12]
-***** TOC with TODO disabled
+***** TOC with TODO disabled                                        :disable:
 :PROPERTIES:
 :EXPORT_FILE_NAME: toc-with-todo-disabled
 :EXPORT_OPTIONS: toc:t todo:nil

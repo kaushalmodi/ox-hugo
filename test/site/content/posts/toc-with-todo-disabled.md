@@ -4,7 +4,7 @@ description = """
   No TODO states are prefixed to the headings -- neither in the body, nor
   in the TOC.
   """
-tags = ["export-option", "toc"]
+tags = ["export-option", "toc", "todo", "disable"]
 draft = false
 +++
 

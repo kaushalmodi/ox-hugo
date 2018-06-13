@@ -12,7 +12,7 @@ draft = false
 <div class="ox-hugo-toc toc">
 <div></div>
 
-## Table of Contents
+<div class="heading">Table of Contents</div>
 
 - [Alpha 101](#alpha-101)
 - <span class="section-num">1</span> [Beta 102](#beta-102)

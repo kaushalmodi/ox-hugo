@@ -1434,6 +1434,19 @@ See Org manual [[https://orgmode.org/manual/Table-of-contents.html][Table of Con
 
 /Note that =ox-hugo= does not support =#+toc: listings= and =#+toc:
 tables=./
+**** "Table of Contents" heading
+The "Table of Contents" heading is inserted as a plain HTML ~div~
+element. Users can customize the looks of that ~div~ by setting CSS
+rules for ~.ox-hugo-toc .heading~.
+
+Here is an example CSS rule for that:
+#+begin_src css
+.ox-hugo-toc .heading {
+    font-size: 1.8em;
+    font-weight: bold;
+    text-align: center;
+}
+#+end_src
 **** Excluding Org-generated TOC from Hugo summaries
 As mentioned above, if you use Hugo-generated TOC, the advantage is
 that the TOC is not inserted physically in the content Markdown

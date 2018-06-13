@@ -7,7 +7,7 @@ draft = false
 <div class="ox-hugo-toc toc">
 <div></div>
 
-## Table of Contents
+<div class="heading">Table of Contents</div>
 
 - [Post sub-heading 1](#post-sub-heading-1)
     - [Post sub-heading 1.1](#post-sub-heading-1-dot-1)

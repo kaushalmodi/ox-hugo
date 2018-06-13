@@ -995,10 +995,8 @@ When optional argument LOCAL is non-nil, build a table of
 contents according to the current headline."
   (let* ((toc-headline
           (unless local
-            (let ((style (plist-get info :md-headline-style))
-                  (loffset (string-to-number (plist-get info :hugo-level-offset)))
-                  (title (org-html--translate "Table of Contents" info)))
-              (org-hugo--headline-title style 1 loffset title))))
+            (format "\n<div class=\"heading\">%s</div>\n\n"
+                    (org-html--translate "Table of Contents" info))))
          (toc-items
           (mapconcat
            (lambda (headline)

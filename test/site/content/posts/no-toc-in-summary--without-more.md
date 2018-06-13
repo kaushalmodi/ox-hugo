@@ -7,7 +7,7 @@ draft = false
 <div class="ox-hugo-toc toc">
 <div></div>
 
-## Table of Contents
+<div class="heading">Table of Contents</div>
 
 - [`ox-hugo`'s Solution](#ox-hugo-s-solution)
 - [Snippet](#snippet)

@@ -11,7 +11,7 @@ draft = false
 <div class="ox-hugo-toc toc">
 <div></div>
 
-## Table of Contents
+<div class="heading">Table of Contents</div>
 
 - [No TODO state](#no-todo-state)
 - [Something to do](#something-to-do)

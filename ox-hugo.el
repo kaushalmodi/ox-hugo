@@ -2959,6 +2959,12 @@ are \"toml\" and \"yaml\"."
           ;; same for blackfriday param values.
           (cond
            ((string= key "menu")
+            (unless (listp value)
+              (user-error (concat "The `menu' front-matter did not get the expected "
+                                  "list value; probably because HUGO_MENU was not "
+                                  "used to set its value.\n"
+                                  "Usage examples: \":EXPORT_HUGO_MENU: :menu main\" or "
+                                  "\"#+hugo_menu: :menu main\"")))
             ;; Menu name needs to be non-nil to insert menu info in front matter.
             (when (assoc 'menu value)
               (let* ((menu-alist value)
@@ -3010,6 +3016,12 @@ are \"toml\" and \"yaml\"."
                                                 indent menu-key sign menu-value)))))))
                   (setq menu-string (concat menu-entry-str menu-value-str))))))
            ((string= key "resources")
+            (unless (listp value)
+              (user-error (concat "The `resources' front-matter did not get the expected "
+                                  "list value; probably because HUGO_RESOURCES was not "
+                                  "used to set its value.\n"
+                                  "Usage examples: \":EXPORT_HUGO_RESOURCES: :src \"my-image.png\" :title \"My Image\" "
+                                  "or \"#+hugo_resources: :src \"my-image.png\" :title \"My Image\"")))
             (when value
               (dolist (res-alist value)
                 (let ((res-entry-str "")

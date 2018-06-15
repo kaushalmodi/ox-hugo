@@ -193,9 +193,23 @@
   org_dir = "content-org"
   site = "https://www.baty.net/"
 
-# [tsdye1]
-#   author = "Thomas S. Dye"
-#   source = "https://github.com/tsdye/online-web-sites"
+[tsdye1]
+  author = "Thomas S. Dye"
+  source = "https://github.com/tsdye/online-web-sites"
+  branch = "master"
+  org_dir = "an-archaeologist-reads"
+  site = "http://www.tsdye.online/an-archaeologist-reads"
+
+# []
+#   author = ""
+#   source = ""
 #   branch = "master"
-#   org_dir = "an-archaeologist-reads"
-#   site = "http://www.tsdye.online/an-archaeologist-reads"
+#   org_dir = "content-org"
+#   site = ""
+
+# []
+#   author = ""
+#   source = ""
+#   branch = "master"
+#   org_dir = "content-org"
+#   site = ""

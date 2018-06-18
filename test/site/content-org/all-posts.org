@@ -4884,6 +4884,21 @@ This post has 1 author.
 :END:
 This post has multiple authors. In Org, multiple authors are added
 comma-separated.
+*** Uniquify duplicate authors                                    :duplicate:
+:PROPERTIES:
+:EXPORT_FILE_NAME: duplicate-authors
+:EXPORT_AUTHOR: Foo Bar, Foo Bar
+:END:
+#+begin_description
+Test that duplicate authors get uniquified in the export.
+#+end_description
+The duplication can happen in real use if an Org setup file has the
+same author as in the Org document where that file is included using
+~SETUPFILE~. This test mimics this case:
+#+begin_src org
+,#+setupfile: some-file.org # some-file.org contains "#+author: Foo Bar"
+,#+author: Foo Bar
+#+end_src
 ** Keywords                                                        :keywords:
 *** Single keyword in front-matter
 :PROPERTIES:

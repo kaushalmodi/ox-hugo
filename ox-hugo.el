@@ -2727,10 +2727,19 @@ INFO is a plist used as a communication channel."
                                    (org-export-data (plist-get info :author) info)))) ;`org-export-data' required
                              (when author-raw
                                ;; Multiple authors can be comma or
-                               ;; newline separated.
+                               ;; newline separated. The newline
+                               ;; separated authors work only for the
+                               ;; #+author keyword; example:
+                               ;;   #+author: Author1
+                               ;;   #+author: Author2
+                               ;;
+                               ;; If using the subtree properties they
+                               ;; need to be comma-separated:
+                               ;;   :EXPORT_AUTHOR: Author1, Author2
                                (let ((author-list-1 (org-split-string author-raw "[,\n]")))
                                  ;; Don't allow spaces around author names.
-                                 (mapcar #'org-trim author-list-1))))))
+                                 ;; Also remove duplicate authors.
+                                 (delete-dups (mapcar #'org-trim author-list-1)))))))
          (creator (and (plist-get info :with-creator)
                        (plist-get info :creator)))
          (locale (and (plist-get info :hugo-with-locale)

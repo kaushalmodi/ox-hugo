@@ -200,12 +200,12 @@
   org_dir = "an-archaeologist-reads"
   site = "http://www.tsdye.online/an-archaeologist-reads"
 
-# []
-#   author = ""
-#   source = ""
-#   branch = "master"
-#   org_dir = "content-org"
-#   site = ""
+[dschrempf]
+  author = "Dominik Schrempf"
+  source = "https://github.com/dschrempf/blog"
+  branch = "master"
+  org_dir = "org"
+  site = "https://dschrempf.github.io/"
 
 # []
 #   author = ""

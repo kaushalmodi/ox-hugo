@@ -16,7 +16,7 @@ draft = false
 
 ## Setting `alt` parameter {#setting-alt-parameter}
 
-[Reference](https://www.reddit.com/r/emacs/comments/71wy6n/orgmode_as_a_markup_language_does_make_sense_even/dnhqudn/)
+[Reference](https://www.reddit.com/r/emacs/comments/71wy6n/orgmode%5Fas%5Fa%5Fmarkup%5Flanguage%5Fdoes%5Fmake%5Fsense%5Feven/dnhqudn/)
 
 {{< figure src="/images/org-mode-unicorn-logo.png" alt="Org-mode Unicorn Logo" >}}
 
@@ -59,7 +59,7 @@ to the text that follows that image too._
 
 ### Setting `:width` parameter {#setting-width-parameter}
 
-The image [width](https://www.w3schools.com/tags/att_img_width.asp) can be specified in **pixels** using the `:width`
+The image [width](https://www.w3schools.com/tags/att%5Fimg%5Fwidth.asp) can be specified in **pixels** using the `:width`
 parameter. **The height of the image will be resized proportionally.**
 
 Below image is shown 50 pixels wide.
@@ -85,7 +85,7 @@ image is 200px × 200px. But the image will still show up in 1000px ×
 
 ---
 
-The image [height](https://www.w3schools.com/tags/att_img_height.asp) can be specified in **pixels** using the `:height`
+The image [height](https://www.w3schools.com/tags/att%5Fimg%5Fheight.asp) can be specified in **pixels** using the `:height`
 parameter. **The weight of the image will be resized proportionally.**
 
 Below image is shown 50 pixels tall.
@@ -137,7 +137,7 @@ Rendered this:
 
 **NOTE**: We cannot use `:style` in `#+attr_html` because Hugo does not
  _yet_ support a `style` argument in the `figure` shortcode
- [[Source](https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template_embedded.go#L22-L37)].
+ [[Source](https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template%5Fembedded.go#L22-L37)].
 
 So using `#+html: <style>.foo img ... </style>` and `#+attr_html: :class
  foo` as shown in the workaround above.

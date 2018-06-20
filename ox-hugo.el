@@ -1692,9 +1692,13 @@ INFO is a plist used as a communication channel.
 
 Unlike `org-md-link', this function will also copy local images
 and rewrite link paths to make blogging more seamless."
-  (let ((raw-link (org-element-property :raw-link link))
-        (raw-path (org-element-property :path link))
-        (type (org-element-property :type link)))
+  (let* ((raw-link (org-element-property :raw-link link))
+         (raw-path (org-element-property :path link))
+         (type (org-element-property :type link))
+         (link-is-url (member type '("http" "https" "ftp" "mailto"))))
+    (when (and (stringp raw-path)
+               link-is-url)
+      (setq raw-path (org-blackfriday-url-sanitize raw-path)))
     ;; (message "[ox-hugo-link DBG] link: %S" link)
     ;; (message "[ox-hugo-link DBG] link path: %s" (org-element-property :path link))
     ;; (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
@@ -1767,7 +1771,7 @@ and rewrite link paths to make blogging more seamless."
                                 grand-parent
                               parent))
              (inline-image (not (org-html-standalone-image-p useful-parent info)))
-             (source (if (member type '("http" "https" "ftp"))
+             (source (if link-is-url
                          (concat type ":" path)
                        path))
              (attr (org-export-read-attribute :attr_html useful-parent))
@@ -1861,7 +1865,7 @@ and rewrite link paths to make blogging more seamless."
      (t
       (let* ((link-param-str "")
              (path (cond
-                    ((member type '("http" "https" "ftp" "mailto"))
+                    (link-is-url
                      ;; Taken from ox-html.el -- Extract attributes
                      ;; from parent's paragraph.  HACK: Only do this
                      ;; for the first link in parent (inner image link

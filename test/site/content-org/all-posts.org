@@ -1994,6 +1994,22 @@ And these ones should be eventually removed and _underline_ the text
 - /This is italics, and *this is bold too*, and back to plain
   italics./
 - *This is bold, and /this is italics too/, and back to plain bold.*
+** Italicize links with underscores                 :italic:links:underscore:
+:PROPERTIES:
+:EXPORT_FILE_NAME: italicize-links-with-underscores
+:END:
+#+begin_description
+Test that links with underscores can be italicized/emboldened/both.
+#+end_description
+{{{oxhugoissue(170)}}}
+*** External links
+- Italic :: /What is a [[https://en.wikipedia.org/wiki/Two%27s_complement][two's complement]]?/
+- Bold :: *What is a [[https://en.wikipedia.org/wiki/Two%27s_complement][two's complement]]?*
+- Bold + Italic :: /*What is a [[https://en.wikipedia.org/wiki/Two%27s_complement][two's complement]]?*/
+*** Internal links
+- Italic :: /Link to [[file:single-posts/post_with_underscore_in_name.org][another post on this site]]?/
+- Bold :: *Link to [[file:single-posts/post_with_underscore_in_name.org][another post on this site]]?*
+- Bold + Italic :: /*Link to [[file:single-posts/post_with_underscore_in_name.org][another post on this site]]?*/
 ** Single and Double quotes
 :PROPERTIES:
 :EXPORT_FILE_NAME: single-double-quotes

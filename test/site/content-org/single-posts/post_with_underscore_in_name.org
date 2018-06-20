@@ -1,0 +1,12 @@
+#+title: Post with underscore in name
+#+author:
+#+date: 2017-07-20
+
+#+hugo_base_dir: ../../
+#+hugo_section: singles
+#+hugo_tags: "cross-link"
+#+description: Test post to test another ox-hugo test.
+
+This test post is created to test [{{< relref
+"italicize-links-with-underscores" >}}]({{< relref
+"italicize-links-with-underscores" >}}).

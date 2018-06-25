@@ -1243,7 +1243,9 @@ prefix = /dir/where/you/want/to/install/org # Default: /usr/share
 #+begin_src emacs-lisp
 (message "hello")
 #+end_src
-** Source block with list syntax in a list            :@upstream:blackfriday:
+** Source and example blocks with list syntax in a list
+*** Source blocks                                    :src_block:lists:hyphen:
+**** Source block with list syntax in a list          :@upstream:blackfriday:
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01
 :EXPORT_FILE_NAME: list-has-src-block-with-list-syntax
@@ -1266,7 +1268,7 @@ Below is an example of such a case:
   #+end_src
 - List item 3
 
-Another such example:
+Another such example, but with space before a hyphen in source block:
 
 1. First item
    #+begin_src yaml
@@ -1276,10 +1278,10 @@ Another such example:
 2. Second item
    #+begin_src yaml
    ports:
-   - port: 80
+    - port: 80
    #+end_src
 3. Third item
-** Source block without list syntax in a list
+**** Source block without list syntax in a list
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01
 :EXPORT_FILE_NAME: list-has-src-block-but-no-list-syntax
@@ -1288,12 +1290,12 @@ This case is not affected by /Blackfriday/ [[https://github.com/russross/blackfr
 code block does not have Markdown syntax lists.
 - List item 1
   #+begin_src md
-,*abc*
-/def/
-=def=
+  ,*abc*
+  /def/
+  =def=
   #+end_src
 - List item 2
-** Source block with list syntax but not in a list
+**** Source block with list syntax but not in a list
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01
 :EXPORT_FILE_NAME: src-block-outside-list-with-list-syntax
@@ -1301,6 +1303,43 @@ code block does not have Markdown syntax lists.
 #+begin_src md
 - list 1
 #+end_src
+*** Example blocks                               :lists:hyphen:example_block:
+**** Example block with list syntax in a list          :@upstream:blackfriday:
+:PROPERTIES:
+:EXPORT_FILE_NAME: list-has-example-block-with-list-syntax
+:END:
+An upstream bug in {{{bfissue(239)}}} caused fenced code blocks in
+lists to not render correctly if they contain Markdown syntax
+lists. =ox-hugo= provides a hack to get around that bug.
+
+Below is an example of such a case:
+
+- List item 1
+  #+begin_example
+  - List item 1.1 in code block
+  - List item 1.2 in code block
+  #+end_example
+- List item 2
+  #+begin_example
+  + List item 2.1 in code block
+  + List item 2.2 in code block
+  #+end_example
+- List item 3
+
+Another such example, but with spaces before the hyphens in example
+blocks:
+
+- List item 1
+  #+begin_example
+   - List item 1.1 in code block
+   - List item 1.2 in code block
+  #+end_example
+- List item 2
+  #+begin_example
+    + List item 2.1 in code block
+    + List item 2.2 in code block
+  #+end_example
+- List item 3
 ** Org Babel Results
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-babel-results-preserve-indent

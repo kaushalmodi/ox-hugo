@@ -393,6 +393,27 @@ Replaces \"_\" with \"%5F\".
 Workaround for Blackfriday bug https://github.com/russross/blackfriday/issues/278."
   (replace-regexp-in-string "_" "%5F" url))
 
+;;;; Blackfriday Issue 239 Workaround
+(defun org-blackfriday-issue-239-workaround (text parent-type)
+  "Prefix Markdown list characters with zero width space.
+
+Hack to avert the Blackfriday bug:
+https://github.com/russross/blackfriday/issues/239.  Remove this
+hack once that issue is resolved.
+
+Details: https://github.com/kaushalmodi/ox-hugo/issues/57
+
+Prefix the ASTERISK (0x2a), PLUS SIGN (0x2b) and HYPHEN-MINUS
+(0x2d) characters with ZERO WIDTH SPACE (0x200b), if they
+appear at BOL."
+  ;; (message "[ox-bf bfissue 239 DBG] parent type: %S" parent-type)
+  (if (equal 'item parent-type)
+      (setq text (replace-regexp-in-string "^\\s-*[-+*] " "​\\&" text))
+    ;; There's a ZERO WIDTH SPACE char (0x200b) here     ^^,
+    ;;                            (after «"», but before «\\&"» above)
+    ;; It's not visible (because zero width), but it's there.
+    text))
+
 
 
 ;;; Transcode Functions
@@ -413,13 +434,12 @@ information."
   (let* ((parent-element (org-export-get-parent example-block))
          (parent-type (car parent-element))
          (backticks (make-string org-blackfriday--code-block-num-backticks ?`))
+         (example (org-export-format-code-default example-block info))
          ret)
     ;; (message "[ox-bf example-block DBG]")
     ;; (message "[ox-bf example-block DBG] parent type: %S" parent-type)
-    (setq ret (format "%stext\n%s%s"
-                      backticks
-                      (org-export-format-code-default example-block info)
-                      backticks))
+    (setq ret (org-blackfriday-issue-239-workaround example parent-type))
+    (setq ret (format "%stext\n%s%s" backticks ret backticks))
     (setq ret (org-blackfriday--div-wrap-maybe example-block ret))
     (when (equal 'quote-block parent-type)
       ;; If the current example block is inside a quote block, future
@@ -787,18 +807,7 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-bf src-block DBG]")
     ;; (message "ox-bf [dbg] code: %s" code)
     ;; (message "[ox-bf src-block DBG] parent type: %S" parent-type)
-    ;; Hack to avert a bug in Blackfriday
-    ;; Details: https://github.com/kaushalmodi/ox-hugo/issues/57
-    ;; Prefix the ASTERISK (0x2a), PLUS SIGN (0x2b) and HYPHEN-MINUS
-    ;; (0x2d) characters with ZERO WIDTH SPACE (0x200b), if they
-    ;; appear at BOL.
-    ;; FIXME: Remove this hack in the when form when
-    ;; https://github.com/russross/blackfriday/issues/239 is resolved.
-    (when (equal 'item parent-type)
-      (setq code (replace-regexp-in-string "^[-+*] " "​\\&" code)))
-    ;; There's a ZERO WIDTH SPACE char (0x200b) here ^^,
-    ;;                            (after «"», but before «\\&"» above)
-    ;; It's not visible (because zero width), but it's there.
+    (setq code (org-blackfriday-issue-239-workaround code parent-type))
     (prog1
         (format "%s%s\n%s%s" backticks lang code backticks)
       (when (equal 'quote-block parent-type)

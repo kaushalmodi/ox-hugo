@@ -1,7 +1,6 @@
 +++
-title = "Source block with list syntax in a list"
-date = 2017-08-01
-tags = ["src-block", "lists", "hyphen", "blackfriday"]
+title = "Example block with list syntax in a list"
+tags = ["src-block", "lists", "hyphen", "example-block", "blackfriday"]
 categories = ["upstream"]
 draft = false
 +++
@@ -14,30 +13,31 @@ Below is an example of such a case:
 
 -   List item 1
 
-    ```md
+    ```text
     ​- List item 1.1 in code block
     ​- List item 1.2 in code block
     ```
 -   List item 2
 
-    ```md
+    ```text
     ​+ List item 2.1 in code block
     ​+ List item 2.2 in code block
     ```
 -   List item 3
 
-Another such example, but with space before a hyphen in source block:
+Another such example, but with spaces before the hyphens in example
+blocks:
 
-1.  First item
+-   List item 1
 
-    ```yaml
-    ports:
-      foo: bar
+    ```text
+    ​- List item 1.1 in code block
+    ​- List item 1.2 in code block
     ```
-2.  Second item
+-   List item 2
 
-    ```yaml
-    ports:
-    ​ - port: 80
+    ```text
+    ​+ List item 2.1 in code block
+    ​+ List item 2.2 in code block
     ```
-3.  Third item
+-   List item 3

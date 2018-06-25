@@ -3313,22 +3313,24 @@ Some quoted text.
     #+end_example
 #+end_quote
 Some other text.
-** Source block inside quote block, followed by another source block outside
+** Source block inside quote block, followed by another source block outside :backticks:src_block:@upstream:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-inside-quote-block-and-another-source-block
 :END:
-[[https://github.com/russross/blackfriday/issues/407][Blackfriday Issue # 407]]
+{{{bfissue(407)}}}
 
 Some text.
-#+begin_quote
-Some quoted text.
-    #+begin_src emacs-lisp
-    (message "hello")
-    #+end_src
-#+end_quote
-#+begin_src emacs-lisp
-(message "hello again")
-#+end_src
+#+include: "./all-posts.org::#quote-blk-with-src-block--followed-by-src" :only-contents t
+*1* Some text.
+#+include: "./all-posts.org::#quote-blk-with-src-block--followed-by-src" :only-contents t
+*2* Some text.
+#+include: "./all-posts.org::#quote-blk-with-src-block--followed-by-src" :only-contents t
+*3* Some text.
+#+include: "./all-posts.org::#quote-blk-with-src-block--followed-by-src" :only-contents t
+*4* Some text.
+#+include: "./all-posts.org::#quote-blk-with-src-block--followed-by-src" :only-contents t
+*5* Some text.
+#+include: "./all-posts.org::#quote-blk-with-src-block--followed-by-src" :only-contents t
 Some other text.
 ** Example blocks inside quote block, followed by another example block outside
 :PROPERTIES:
@@ -6195,6 +6197,19 @@ If a post has the =DRAFT= state set, the =draft= front matter variable
 should be set to =true=, even if the post has a sub-heading
 immediately after the post heading.
 * Reusable sections                                        :noexport:ARCHIVE:
+** Quote block with source block, followed by source block
+:PROPERTIES:
+:CUSTOM_ID: quote-blk-with-src-block--followed-by-src
+:END:
+#+begin_quote
+Some quoted text.
+#+begin_src emacs-lisp
+(message "hello")
+#+end_src
+#+end_quote
+#+begin_src emacs-lisp
+(message "hello again")
+#+end_src
 ** Summary portion in <details> element
 :PROPERTIES:
 :CUSTOM_ID: details-disclosure-summary

@@ -394,25 +394,29 @@ Workaround for Blackfriday bug https://github.com/russross/blackfriday/issues/27
   (replace-regexp-in-string "_" "%5F" url))
 
 ;;;; Blackfriday Issue 239 Workaround
-(defun org-blackfriday-issue-239-workaround (text parent-type)
+(defun org-blackfriday-issue-239-workaround (code parent-type)
   "Prefix Markdown list characters with zero width space.
+
+CODE is the content of the source or example block.  PARENT-TYPE
+is the type of the Org element wrapping that source or example
+block.
 
 Hack to avert the Blackfriday bug:
 https://github.com/russross/blackfriday/issues/239.  Remove this
 hack once that issue is resolved.
 
-Details: https://github.com/kaushalmodi/ox-hugo/issues/57
-
 Prefix the ASTERISK (0x2a), PLUS SIGN (0x2b) and HYPHEN-MINUS
-(0x2d) characters with ZERO WIDTH SPACE (0x200b), if they
-appear at BOL."
+\(0x2d) characters with ZERO WIDTH SPACE (0x200b), if they
+appear at BOL (following optional spaces).
+
+Details: https://github.com/kaushalmodi/ox-hugo/issues/57."
   ;; (message "[ox-bf bfissue 239 DBG] parent type: %S" parent-type)
   (if (equal 'item parent-type)
-      (setq text (replace-regexp-in-string "^\\s-*[-+*] " "​\\&" text))
+      (setq code (replace-regexp-in-string "^\\s-*[-+*] " "​\\&" code))
     ;; There's a ZERO WIDTH SPACE char (0x200b) here     ^^,
     ;;                            (after «"», but before «\\&"» above)
     ;; It's not visible (because zero width), but it's there.
-    text))
+    code))
 
 
 

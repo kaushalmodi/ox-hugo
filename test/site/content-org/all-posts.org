@@ -3593,6 +3593,30 @@ This is /some text/ wrapped in a =div= block with class =something=.
 | s | t | u |
 | v | w | x |
 #+end_bar
+** Empty Special Block                                                :empty:
+:PROPERTIES:
+:EXPORT_FILE_NAME: special-block-empty
+:END:
+#+begin_description
+This post contains an empty Org Special Block.
+#+end_description
+
+The empty Org Special Block is not exported at all.
+
+#+begin_foo
+#+end_foo
+** Special Block with just white space                           :whitespace:
+:PROPERTIES:
+:EXPORT_FILE_NAME: special-block-whitespace
+:END:
+#+begin_description
+This post contains an Org Special Block with just white space (blank
+line).
+#+end_description
+
+#+begin_foo
+
+#+end_foo
 ** Details and summary                           :details:summary:disclosure:
 :PROPERTIES:
 :EXPORT_FILE_NAME: details-and-summary

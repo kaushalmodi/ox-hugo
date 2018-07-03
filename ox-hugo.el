@@ -2284,58 +2284,60 @@ INFO is a plist holding export options."
                                               (split-string str " "))))
                              str-list))
         (sc-regexp "\\`%%?%s\\'") ;Regexp to match an element from `paired-shortcodes'
-        (contents (org-trim contents)))
-    (cond
-     ((string= block-type "description")
-      ;; Overwrite the value of the `:description' key in `info'.
-      (plist-put info :description contents)
-      nil)
-     ;; https://emacs.stackexchange.com/a/28685/115
-     ((cl-member block-type paired-shortcodes
-                 ;; If `block-type' is "foo", check if any of the
-                 ;; elements in `paired-shortcodes' is "foo" or
-                 ;; "%foo".
-                 :test (lambda (b sc) ;`sc' would be an element from `paired-shortcodes'
-                         (string-match-p (format sc-regexp b) sc)))
-      (let* ((attr-sc (org-export-read-attribute :attr_shortcode special-block))
-             ;; Positional arguments.
-             (pos-args (and (null attr-sc)
-                            ;; If the shortcode attributes are not of
-                            ;; the type ":foo bar" but are something
-                            ;; like "foo bar".
-                            (let* ((raw-list (org-element-property :attr_shortcode special-block))
-                                   (raw-str (mapconcat #'identity raw-list " ")))
-                              (org-string-nw-p raw-str))))
-             ;; Named arguments.
-             (named-args (unless pos-args
-                           (org-string-nw-p (org-html--make-attribute-string attr-sc))))
-             (sc-args (or pos-args named-args))
-             (sc-args (if sc-args
-                          (concat " " sc-args " ")
-                        " "))
-             (matched-sc-str (car
-                              (cl-member block-type paired-shortcodes
-                                         :test (lambda (b sc) ;`sc' would be an element from `paired-shortcodes'
-                                                 (string-match-p (format sc-regexp b) sc)))))
-             (sc-open-char (if (string-prefix-p "%" matched-sc-str)
-                               "%"
-                             "<"))
-             (sc-close-char (if (string-prefix-p "%" matched-sc-str)
-                                "%"
-                              ">"))
-             (sc-begin (format "{{%s %s%s%s}}"
-                               sc-open-char block-type sc-args sc-close-char))
-             (sc-end (format "{{%s /%s %s}}"
-                             sc-open-char block-type sc-close-char)))
-        ;; (message "[ox-hugo-spl-blk DBG] attr-sc1: %s"
-        ;;          (org-element-property :attr_shortcode special-block))
-        ;; (message "[ox-hugo-spl-blk DBG] attr-sc: %s" attr-sc)
-        ;; (message "[ox-hugo-spl-blk DBG] pos-args: %s" pos-args)
-        ;; (message "[ox-hugo-spl-blk DBG] named-args: %s" named-args)
-        (format "%s\n%s\n%s"
-                sc-begin contents sc-end)))
-     (t
-      (org-blackfriday-special-block special-block contents nil)))))
+        (contents (when (stringp contents)
+                    (org-trim contents))))
+    (when contents
+      (cond
+       ((string= block-type "description")
+        ;; Overwrite the value of the `:description' key in `info'.
+        (plist-put info :description contents)
+        nil)
+       ;; https://emacs.stackexchange.com/a/28685/115
+       ((cl-member block-type paired-shortcodes
+                   ;; If `block-type' is "foo", check if any of the
+                   ;; elements in `paired-shortcodes' is "foo" or
+                   ;; "%foo".
+                   :test (lambda (b sc) ;`sc' would be an element from `paired-shortcodes'
+                           (string-match-p (format sc-regexp b) sc)))
+        (let* ((attr-sc (org-export-read-attribute :attr_shortcode special-block))
+               ;; Positional arguments.
+               (pos-args (and (null attr-sc)
+                              ;; If the shortcode attributes are not of
+                              ;; the type ":foo bar" but are something
+                              ;; like "foo bar".
+                              (let* ((raw-list (org-element-property :attr_shortcode special-block))
+                                     (raw-str (mapconcat #'identity raw-list " ")))
+                                (org-string-nw-p raw-str))))
+               ;; Named arguments.
+               (named-args (unless pos-args
+                             (org-string-nw-p (org-html--make-attribute-string attr-sc))))
+               (sc-args (or pos-args named-args))
+               (sc-args (if sc-args
+                            (concat " " sc-args " ")
+                          " "))
+               (matched-sc-str (car
+                                (cl-member block-type paired-shortcodes
+                                           :test (lambda (b sc) ;`sc' would be an element from `paired-shortcodes'
+                                                   (string-match-p (format sc-regexp b) sc)))))
+               (sc-open-char (if (string-prefix-p "%" matched-sc-str)
+                                 "%"
+                               "<"))
+               (sc-close-char (if (string-prefix-p "%" matched-sc-str)
+                                  "%"
+                                ">"))
+               (sc-begin (format "{{%s %s%s%s}}"
+                                 sc-open-char block-type sc-args sc-close-char))
+               (sc-end (format "{{%s /%s %s}}"
+                               sc-open-char block-type sc-close-char)))
+          ;; (message "[ox-hugo-spl-blk DBG] attr-sc1: %s"
+          ;;          (org-element-property :attr_shortcode special-block))
+          ;; (message "[ox-hugo-spl-blk DBG] attr-sc: %s" attr-sc)
+          ;; (message "[ox-hugo-spl-blk DBG] pos-args: %s" pos-args)
+          ;; (message "[ox-hugo-spl-blk DBG] named-args: %s" named-args)
+          (format "%s\n%s\n%s"
+                  sc-begin contents sc-end)))
+       (t
+        (org-blackfriday-special-block special-block contents nil))))))
 
 
 

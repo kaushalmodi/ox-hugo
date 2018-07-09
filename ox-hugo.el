@@ -449,22 +449,26 @@ It is of the form:
 The Hugo draft state is set to true if the Org TODO keyword
 matches any of the keywords associated with `todo' or `draft'
 above.  The only difference between those two sets of keywords is
-that for the `draft' keywords, a message like \"[ox-hugo] <POST
-TITLE> post is marked as a DRAFT\" is displayed in the echo area.
+that for the `draft' keywords, a message like:
+
+    [ox-hugo] <POST TITLE> post is marked as a DRAFT
+
+is displayed in the echo area.
 
 If the Org TODO keyword matches any of the keywords associated
 with `done', the Hugo draft state is set to false.
 
 The default value of this variable works with the default set of
 Org TODO keywords (just that the `draft' state will not exist in
-that case).  If the `draft' state is desired, add this setting to
-your Org file:
+that case).  If the `draft' state is desired, one suggested
+setting for your Org file to work well with the default value of
+this variable is:
 
     #+seq_todo: TODO DRAFT DONE
 
 If this variable's value is changed, it is the user's
-responsibility to update \"#+seq_todo\" accordingly.  See (org)
-Per-file keywords for more."
+responsibility to update \"#+seq_todo\" or `org-todo-keywords'
+accordingly.  See `org-todo-keywords' for more."
   :group 'org-export-hugo
   :type '(list cons cons cons))
 
@@ -1462,23 +1466,21 @@ INFO is a plist used as a communication channel."
   (let* ((todo-keyword (org-entry-get (point) "TODO"))
          (draft (cond
                  ((stringp todo-keyword)
-                  (cond
-                   ((member todo-keyword (cdr (assoc 'todo org-hugo-todo-keywords)))
-                    t)
-                   ((member todo-keyword (cdr (assoc 'draft org-hugo-todo-keywords)))
-                    (let ((title (org-entry-get (point) "ITEM"))) ;Post title
-                      (message "[ox-hugo] `%s' post is marked as a DRAFT" title))
-                    t)
-                   ((member todo-keyword (cdr (assoc 'done org-hugo-todo-keywords)))
-                    nil)
-                   (t
-                    (let (valid-kwds-list)
-                      (dolist (kwd-cons org-hugo-todo-keywords)
-                        (let ((kwd-list (cdr kwd-cons)))
-                          (dolist (kwd kwd-list)
-                            (push kwd valid-kwds-list))))
-                      (user-error "The Org TODO keyword %S is invalid; it needs to be one of %S"
-                                  todo-keyword valid-kwds-list)))))
+                  (let ((todo-kwds (cdr (assoc 'todo org-hugo-todo-keywords)))
+                        (draft-kwds (cdr (assoc 'draft org-hugo-todo-keywords)))
+                        (done-kwds (cdr (assoc 'done org-hugo-todo-keywords))))
+                    (cond
+                     ((member todo-keyword (append todo-kwds draft-kwds))
+                      (when (member todo-keyword draft-kwds)
+                        (let ((title (org-entry-get (point) "ITEM"))) ;Post title
+                          (message "[ox-hugo] `%s' post is marked as a DRAFT" title)))
+                      t)
+                     ((member todo-keyword done-kwds)
+                      nil)
+                     (t
+                      (user-error (concat "The Org TODO keyword %S is invalid; "
+                                          "it needs to be one of %S. See `org-hugo-todo-keywords'")
+                                  todo-keyword (append todo-kwds draft-kwds done-kwds))))))
                  (;; If the HUGO_DRAFT keyword/property *is* set, but
                   ;; not to nil.
                   (plist-get info :hugo-draft)

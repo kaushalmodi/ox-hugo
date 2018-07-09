@@ -453,7 +453,18 @@ that for the `draft' keywords, a message like \"[ox-hugo] <POST
 TITLE> post is marked as a DRAFT\" is displayed in the echo area.
 
 If the Org TODO keyword matches any of the keywords associated
-with `done', the Hugo draft state is set to false."
+with `done', the Hugo draft state is set to false.
+
+The default value of this variable works with the default set of
+Org TODO keywords (just that the `draft' state will not exist in
+that case).  If the `draft' state is desired, add this setting to
+your Org file:
+
+    #+seq_todo: TODO DRAFT DONE
+
+If this variable's value is changed, it is the user's
+responsibility to update \"#+seq_todo\" accordingly.  See (org)
+Per-file keywords for more."
   :group 'org-export-hugo
   :type '(list cons cons cons))
 

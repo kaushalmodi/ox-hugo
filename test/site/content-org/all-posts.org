@@ -6229,7 +6229,8 @@ Round {30}: {9802}/{10000}
 
 本文是tensorflow官方推荐教程：[[http://neuralnetworksanddeeplearning.com/][Neural Networks and Deep Learning]]的笔记整理，原文
 [[https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md][Github Page]]。
-* TODO Pre-Draft State
+* Testing Draft state                                                 :draft:
+** TODO Pre-Draft State
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-todo
 :EXPORT_DATE: 2017-07-12T17:05:41-04:00
@@ -6239,23 +6240,85 @@ should be set to =true=.
 
 Idea to to mark a post or blog idea as =TODO= that you yet have to
 start writing.
-* DRAFT Draft state
+** HUGO_DRAFT set to true
 :PROPERTIES:
-:EXPORT_FILE_NAME: draft-state-draft
-:EXPORT_DATE: 2017-07-12T13:46:16-04:00
+:EXPORT_HUGO_DRAFT: true
 :END:
-If a post has the =DRAFT= keyword too, the =draft= front matter variable
-should be set to =true=.
+The value of ~EXPORT_HUGO_DRAFT~ state property should have no effect
+if an Org TODO state is set for the post subtree.
+*** DRAFT HUGO_DRAFT true, DRAFT state                                 :todo:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-draft-true-todo-state-draft
+:END:
+If a post has the Org TODO state set to =DRAFT=, the =draft= front
+matter variable should be set to =true= regardless of the value of
+~EXPORT_HUGO_DRAFT~ property.
 
 Idea is to mark a post as =DRAFT= that you have already started
 writing, or are in the process at the moment, but it is not yet ready
 to be published
-* DRAFT Draft state with other headlines :post_heading_followed_soon_with_subheading:
+*** DONE HUGO_DRAFT true, DONE state (Override)          :todo:done:override:
+CLOSED: [2018-07-09 Mon 10:38]
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-draft-true-todo-state-done
+:END:
+This post has ~EXPORT_HUGO_DRAFT~ set to ~"true"~. But the *DONE*
+state of Org TODO overrides that.
+*** HUGO_DRAFT true, no TODO state                                 :property:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-draft-true-todo-state-none
+:END:
+This post does not have any Org TODO state. So it uses the value of
+~EXPORT_HUGO_DRAFT~.
+** HUGO_DRAFT set to false
+:PROPERTIES:
+:EXPORT_HUGO_DRAFT: false
+:END:
+The value of ~EXPORT_HUGO_DRAFT~ state property should have no effect
+if an Org TODO state is set for the post subtree.
+*** DRAFT HUGO_DRAFT false, DRAFT state (Override)            :todo:override:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-draft-false-todo-state-draft
+:END:
+This post has ~EXPORT_HUGO_DRAFT~ set to ~"false"~. But the *DRAFT*
+state of Org TODO overrides that.
+*** DONE HUGO_DRAFT false, DONE state                             :todo:done:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-draft-false-todo-state-done
+:END:
+The *DONE* state of Org TODO sets ~draft~ to ~false~ for this post.
+*** HUGO_DRAFT false, no TODO state                            :property:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-draft-false-todo-state-none
+:END:
+This post does not have any Org TODO state. So it uses the value of
+~EXPORT_HUGO_DRAFT~.
+** HUGO_DRAFT not set
+*** DRAFT HUGO_DRAFT not set, DRAFT state                              :todo:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-draft-none-todo-state-draft
+:END:
+This post is marked as draft as the Org TODO state is set to ~DRAFT~.
+*** DONE HUGO_DRAFT not set, DONE state                           :todo:done:
+CLOSED: [2018-07-09 Mon 11:00]
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-draft-none-todo-state-done
+:END:
+This post is not marked as draft as the Org TODO state is set to
+~DONE~.
+*** HUGO_DRAFT not set, no TODO state either                        :default:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-draft-none-todo-state-none
+:END:
+This post has neither the ~EXPORT_HUGO_DRAFT~ property set, nor the
+Org TODO state. So the draft state defaults to the value of
+~org-hugo-default-draft-state~.
+** DRAFT Draft state with other headlines :post_heading_followed_soon_with_subheading:
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-other-headings-draft
 :EXPORT_DATE: 2017-07-12T13:46:16-04:00
 :END:
-** The "TODO" state of this heading (which is nil) should be ignored
+*** The "TODO" state of this heading (which is nil) should be ignored
 If a post has the =DRAFT= state set, the =draft= front matter variable
 should be set to =true=, even if the post has a sub-heading
 immediately after the post heading.

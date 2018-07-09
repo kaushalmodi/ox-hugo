@@ -434,6 +434,20 @@ directory where all Hugo posts should go by default."
   :type 'directory
   :safe #'stringp)
 
+(defcustom org-hugo-default-draft-state nil
+  "Default value of a post's draft state.
+
+When nil, a post is considered to be a draft only when its TODO
+state is set to TODO or DRAFT explicitly, or if it is drafted
+explicitly using the HUGO_DRAFT keyword/property.
+
+When non-nil, a post is considered to be a draft, unless its TODO
+state is set to DONE explicitly, or if it is undrafted explicitly
+using the HUGO_DRAFT keyword/property."
+  :group 'org-export-hugo
+  :type 'boolean
+  :safe #'booleanp)
+
 (defcustom org-hugo-footer ""
   "String to be appended at the end of each Hugo post.
 
@@ -794,8 +808,8 @@ newer."
                    ;; description
                    (:description "DESCRIPTION" nil nil)
                    ;; draft
-                   ;; "draft" value is also interpreted by TODO state
-                   ;; of a post as Org subtree.
+                   ;; "draft" value interpreted by the TODO state of a
+                   ;; post as Org subtree gets higher precedence.
                    (:hugo-draft "HUGO_DRAFT" nil nil)
                    ;; expiryDate
                    (:hugo-expirydate "HUGO_EXPIRYDATE" nil nil)
@@ -1397,6 +1411,60 @@ INFO is a plist used as a communication channel."
             (or (org-string-nw-p (plist-get info :html-todo-kwd-class-prefix)) "")
             (org-html-fix-class-name todo)
             (org-hugo--replace-underscores-with-spaces todo))))
+
+;;;; Parse draft state
+(defun org-hugo--parse-draft-state (info)
+  "Parse the draft state of the post heading at point.
+
+Return a \"true\" or \"false\" string.
+
+For per-subtree export flow, the draft state parsed from the Org
+TODO state has a higher precedence than the value of HUGO_DRAFT
+keyword/property.
+
+INFO is a plist used as a communication channel."
+  (let* ((todo-keyword (org-entry-get (point) "TODO"))
+         (draft (cond
+                 ((stringp todo-keyword)
+                  (let ((valid-kwds '((todo . ("TODO"))
+                                      (draft . ("DRAFT"))
+                                      (done . ("DONE")))))
+                    (cond
+                     ((member todo-keyword (cdr (assoc 'todo valid-kwds)))
+                      t)
+                     ((member todo-keyword (cdr (assoc 'draft valid-kwds)))
+                      (let ((title (org-entry-get (point) "ITEM"))) ;Post title
+                        (message "[ox-hugo] `%s' post is marked as a DRAFT" title))
+                      t)
+                     ((member todo-keyword (cdr (assoc 'done valid-kwds)))
+                      nil)
+                     (t
+                      (let (valid-kwds-list)
+                        (dolist (kwd-cons valid-kwds)
+                          (let ((kwd-list (cdr kwd-cons)))
+                            (dolist (kwd kwd-list)
+                              (push kwd valid-kwds-list))))
+                        (user-error "The Org TODO keyword %S is invalid; it needs to be one of %S"
+                                    todo-keyword valid-kwds-list))))))
+                 (;; If the HUGO_DRAFT keyword/property *is* set, but
+                  ;; not to nil.
+                  (plist-get info :hugo-draft)
+                  (let* ((draft-1 (org-hugo--front-matter-value-booleanize (plist-get info :hugo-draft)))
+                         (is-draft (if (string= "true" draft-1) t nil)))
+                    (when is-draft
+                      (let* ((entry (org-element-at-point))
+                             (is-subtree (org-element-property :EXPORT_FILE_NAME entry))
+                             (title (if is-subtree
+                                        (org-entry-get (point) "ITEM")
+                                      (or (car (plist-get info :title)) "<EMPTY TITLE>"))))
+                        (message "[ox-hugo] `%s' post is marked as a DRAFT" title)))
+                    is-draft))
+                 (t ;Neither of Org TODO state and HUGO_DRAFT keyword/property are set
+                  org-hugo-default-draft-state)))
+         (draft-bool-str (org-hugo--front-matter-value-booleanize (symbol-name draft))))
+    ;; (message "dbg: draft-state: todo keyword=%S HUGO_DRAFT=%S draft=%S"
+    ;;          todo-keyword (plist-get info :hugo-draft) draft-bool-str)
+    draft-bool-str))
 
 
 
@@ -2726,7 +2794,6 @@ the Hugo front-matter."
 INFO is a plist used as a communication channel."
   ;; (message "[hugo front matter DBG] info: %S" (pp info))
   (let* ((fm-format (plist-get info :hugo-front-matter-format))
-         (title (org-entry-get (point) "ITEM")) ;Post title
          (author-list (and (plist-get info :with-author)
                            (let ((author-raw
                                   (org-string-nw-p
@@ -2772,19 +2839,7 @@ INFO is a plist used as a communication channel."
          (outputs-raw (org-string-nw-p (plist-get info :hugo-outputs)))
          (outputs (when outputs-raw
                     (org-split-string outputs-raw " ")))
-         (todo-keyword (org-entry-get (point) "TODO"))
-         (draft (cond
-                 ((and todo-keyword
-                       (string= "TODO" todo-keyword))
-                  "true")
-                 ((and todo-keyword
-                       (string= "DRAFT" todo-keyword))
-                  (message "[ox-hugo] `%s' post is marked as a DRAFT" title)
-                  "true")
-                 ((org-hugo--plist-get-true-p info :hugo-draft)
-                  (org-hugo--front-matter-value-booleanize (org-hugo--plist-get-true-p info :hugo-draft)))
-                 (t
-                  "false")))
+         (draft (org-hugo--parse-draft-state info))
          (headless (when (org-hugo--plist-get-true-p info :hugo-headless)
                      (org-hugo--front-matter-value-booleanize (org-hugo--plist-get-true-p info :hugo-headless))))
          (all-t-and-c-str (org-entry-get (point) "ALLTAGS"))
@@ -2908,7 +2963,6 @@ INFO is a plist used as a communication channel."
                  (resources . ,resources)))
          (data `,(append data weight-data custom-fm-data)))
     ;; (message "[get fm DBG] tags: %s" tags)
-    ;; (message "dbg: todo-state: keyword=%S draft=%S" todo-keyword draft)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
     ;; (message "[get fm info DBG] %S" info)
     ;; (message "[get fm blackfriday DBG] %S" blackfriday)
@@ -3620,6 +3674,7 @@ buffer and returned as a string in Org format."
                                      "No Org mode shadows found in =load-path="))
                                 "** =ox-hugo= defcustoms"
                                 ,(format "|org-hugo-default-section-directory                    |%S|" org-hugo-default-section-directory)
+                                ,(format "|org-hugo-default-draft-state                          |%S|" org-hugo-default-draft-state)
                                 ,(format "|org-hugo-use-code-for-kbd                             |%S|" org-hugo-use-code-for-kbd)
                                 ,(format "|org-hugo-preserve-filling                             |%S|" org-hugo-preserve-filling)
                                 ,(format "|org-hugo-delete-trailing-ws                           |%S|" org-hugo-delete-trailing-ws)

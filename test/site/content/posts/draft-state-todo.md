@@ -1,6 +1,7 @@
 +++
 title = "Pre-Draft State"
 date = 2017-07-12T17:05:41-04:00
+tags = ["draft"]
 draft = true
 +++
 

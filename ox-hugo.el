@@ -434,60 +434,6 @@ directory where all Hugo posts should go by default."
   :type 'directory
   :safe #'stringp)
 
-(defcustom org-hugo-todo-keywords '((todo . ("TODO"))
-                                    (draft . ("DRAFT"))
-                                    (done . ("DONE")))
-  "List of Org TODO keywords for Hugo draft states.
-
-This variable is relevant only for the per-subtree export flow.
-It is of the form:
-
-    ((todo . (\"TODO_KWD1\" \"TODO_KWD2\" ..))
-     (draft . (\"DRAFT_KWD1\" \"DRAFT_KWD2\" ..))
-     (done . (\"DONE_KWD1\" \"DONE_KWD2\" ..)))
-
-The Hugo draft state is set to true if the Org TODO keyword
-matches any of the keywords associated with `todo' or `draft'
-above.  The only difference between those two sets of keywords is
-that for the `draft' keywords, a message like:
-
-    [ox-hugo] <POST TITLE> post is marked as a DRAFT
-
-is displayed in the echo area.
-
-If the Org TODO keyword matches any of the keywords associated
-with `done', the Hugo draft state is set to false.
-
-The default value of this variable works with the default set of
-Org TODO keywords (just that the `draft' state will not exist in
-that case).  If the `draft' state is desired, one suggested
-setting for your Org file to work well with the default value of
-this variable is:
-
-    #+seq_todo: TODO DRAFT DONE
-
-If this variable's value is changed, it is the user's
-responsibility to update \"#+seq_todo\" or `org-todo-keywords'
-accordingly.  See `org-todo-keywords' for more."
-  :group 'org-export-hugo
-  :type '(list cons cons cons))
-
-(defcustom org-hugo-default-draft-state nil
-  "Default value of a post's draft state.
-
-When nil, a post is considered to be a draft only when its TODO
-state is set to one of the keywords associated with `todo' or
-`draft' states explicitly (see `org-hugo-todo-keywords'), or if
-it is drafted explicitly using the HUGO_DRAFT keyword/property.
-
-When non-nil, a post is considered to be a draft, unless its TODO
-state is set to one of the keywords associated with `done' state
-explicitly, or if it is undrafted explicitly using the HUGO_DRAFT
-keyword/property."
-  :group 'org-export-hugo
-  :type 'boolean
-  :safe #'booleanp)
-
 (defcustom org-hugo-footer ""
   "String to be appended at the end of each Hugo post.
 
@@ -1466,21 +1412,13 @@ INFO is a plist used as a communication channel."
   (let* ((todo-keyword (org-entry-get (point) "TODO"))
          (draft (cond
                  ((stringp todo-keyword)
-                  (let ((todo-kwds (cdr (assoc 'todo org-hugo-todo-keywords)))
-                        (draft-kwds (cdr (assoc 'draft org-hugo-todo-keywords)))
-                        (done-kwds (cdr (assoc 'done org-hugo-todo-keywords))))
-                    (cond
-                     ((member todo-keyword (append todo-kwds draft-kwds))
-                      (when (member todo-keyword draft-kwds)
+                  (if (member todo-keyword org-done-keywords)
+                      nil
+                    (progn
+                      (when (string= "DRAFT" todo-keyword)
                         (let ((title (org-entry-get (point) "ITEM"))) ;Post title
                           (message "[ox-hugo] `%s' post is marked as a DRAFT" title)))
-                      t)
-                     ((member todo-keyword done-kwds)
-                      nil)
-                     (t
-                      (user-error (concat "The Org TODO keyword %S is invalid; "
-                                          "it needs to be one of %S. See `org-hugo-todo-keywords'")
-                                  todo-keyword (append todo-kwds draft-kwds done-kwds))))))
+                      t)))
                  (;; If the HUGO_DRAFT keyword/property *is* set, but
                   ;; not to nil.
                   (plist-get info :hugo-draft)
@@ -1495,7 +1433,7 @@ INFO is a plist used as a communication channel."
                         (message "[ox-hugo] `%s' post is marked as a DRAFT" title)))
                     is-draft))
                  (t ;Neither of Org TODO state and HUGO_DRAFT keyword/property are set
-                  org-hugo-default-draft-state)))
+                  nil)))
          (draft-bool-str (org-hugo--front-matter-value-booleanize (symbol-name draft))))
     ;; (message "dbg: draft-state: todo keyword=%S HUGO_DRAFT=%S draft=%S"
     ;;          todo-keyword (plist-get info :hugo-draft) draft-bool-str)
@@ -3709,8 +3647,6 @@ buffer and returned as a string in Org format."
                                      "No Org mode shadows found in =load-path="))
                                 "** =ox-hugo= defcustoms"
                                 ,(format "|org-hugo-default-section-directory                    |%S|" org-hugo-default-section-directory)
-                                ,(format "|org-hugo-default-draft-state                          |%S|" org-hugo-default-draft-state)
-                                ,(format "|org-hugo-todo-keywords                                |%S|" org-hugo-todo-keywords)
                                 ,(format "|org-hugo-use-code-for-kbd                             |%S|" org-hugo-use-code-for-kbd)
                                 ,(format "|org-hugo-preserve-filling                             |%S|" org-hugo-preserve-filling)
                                 ,(format "|org-hugo-delete-trailing-ws                           |%S|" org-hugo-delete-trailing-ws)

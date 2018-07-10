@@ -6299,6 +6299,12 @@ This post does not have any Org TODO state. So it uses the value of
 :EXPORT_FILE_NAME: hugo-draft-none-todo-state-draft
 :END:
 This post is marked as draft as the Org TODO state is set to ~DRAFT~.
+*** TEST__TODO HUGO_DRAFT not set, TEST__TODO state               :todo:test:
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-draft-none-todo-state-test-todo
+:END:
+This post is marked as draft as the Org TODO state is set to
+~TEST__TODO~.
 *** DONE HUGO_DRAFT not set, DONE state                           :todo:done:
 CLOSED: [2018-07-09 Mon 11:00]
 :PROPERTIES:
@@ -6306,6 +6312,13 @@ CLOSED: [2018-07-09 Mon 11:00]
 :END:
 This post is not marked as draft as the Org TODO state is set to
 ~DONE~.
+*** TEST__DONE HUGO_DRAFT not set, TEST__DONE state          :todo:done:test:
+CLOSED: [2018-07-10 Tue 10:42]
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-draft-none-todo-state-test-done
+:END:
+This post is not marked as draft as the Org TODO state is set to
+~TEST__DONE~.
 *** HUGO_DRAFT not set, no TODO state either                        :default:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hugo-draft-none-todo-state-none

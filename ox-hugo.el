@@ -470,7 +470,9 @@ If this variable's value is changed, it is the user's
 responsibility to update \"#+seq_todo\" or `org-todo-keywords'
 accordingly.  See `org-todo-keywords' for more."
   :group 'org-export-hugo
-  :type '(list cons cons cons))
+  :type '(list (cons (const todo) (repeat string))
+               (cons (const draft) (repeat string))
+               (cons (const done) (repeat string))))
 
 (defcustom org-hugo-default-draft-state nil
   "Default value of a post's draft state.

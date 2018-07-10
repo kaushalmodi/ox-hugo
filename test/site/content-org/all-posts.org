@@ -6324,8 +6324,7 @@ This post is not marked as draft as the Org TODO state is set to
 :EXPORT_FILE_NAME: hugo-draft-none-todo-state-none
 :END:
 This post has neither the ~EXPORT_HUGO_DRAFT~ property set, nor the
-Org TODO state. So the draft state defaults to the value of
-~org-hugo-default-draft-state~.
+Org TODO state. So the draft state defaults to /false/.
 ** DRAFT Draft state with other headlines :post_heading_followed_soon_with_subheading:
 :PROPERTIES:
 :EXPORT_FILE_NAME: draft-state-other-headings-draft

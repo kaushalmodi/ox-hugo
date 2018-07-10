@@ -855,8 +855,8 @@ set.
 | =lastmod = <current date>=          | =#+hugo_auto_set_lastmod: t=           | Org keyword                                                                |
 | =tags = ["toto", "zulu"]=          | =* foo :toto:zulu:=                     | Subtree heading tags                                                       |
 | =categories = ["x", "y"]=          | =* foo :@x:@y:=                         | Subtree heading tags with =@= prefix                                       |
-| =draft = true=                     | =* TODO foo=                           | Subtree heading Org TODO state set to =TODO=.                              |
-| =draft = false=                    | =* foo= or =* DONE foo=                | Subtree heading Org TODO state not set or set to =DONE=.                   |
+| =draft = true=                     | =* TODO foo=                           | Subtree heading Org TODO state set to =TODO=[fn:4].                        |
+| =draft = false=                    | =* foo= or =* DONE foo=                | Subtree heading Org TODO state not set or set to =DONE=[fn:4].             |
 | =weight = 123= (manual)            | =:EXPORT_HUGO_WEIGHT: 123=             | Manual setting of page weight                                              |
 | =weight = 123= (auto-calc)         | =:EXPORT_HUGO_WEIGHT: auto=            | When set to =auto=, page weight is auto-calculated                         |
 | =tags_weight = 123= (manual)       | =:EXPORT_HUGO_WEIGHT: :tags 123=       | Manual setting of /FOO/ taxonomy weight, by setting to =:FOO VALUE=        |
@@ -2116,6 +2116,15 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 :END:
 #+include: "./ox-hugo-manual.org::#test" :only-contents t
 * Footnotes
+
+[fn:4] The ~TODO~ / ~DONE~ keyword is used in this example as they are
+the defaults in ~org-todo-keywords~. If you have customized your
+~org-todo-keywords~, or are customizing them using other means like
+the per-file ~#+seq_todo~ setting, use those instead. Use your custom
+"DONE" keyword (it should be a part of ~org-done-keywords~) instead of
+the default ~DONE~. And similarly, use your custom "TODO" keyword
+instead of the default ~TODO~ (ensure that it is *not* in
+~org-done-keywords~).
 
 [fn:3] This requires MathJax. [[https://github.com/kaushalmodi/hugo-bare-min-theme/blob/master/layouts/partials/mathjax.html][Here]] is a MathJax configuration that is
 tested to work for equation referencing (referencing =\label{}=

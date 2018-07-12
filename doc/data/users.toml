@@ -207,6 +207,13 @@
   org_dir = "org"
   site = "https://dschrempf.github.io/"
 
+[colelyman]
+  author = "Cole Lyman"
+  source = "https://github.com/Colelyman/colelyman-hugo"
+  branch = "master"
+  org_dir = "site/content-org"
+  site = "http://colelyman.com"
+
 # []
 #   author = ""
 #   source = ""

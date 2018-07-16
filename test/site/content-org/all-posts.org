@@ -5309,7 +5309,7 @@ be ~authors~ instead of the default ~author~ created by ~ox-hugo~.
 * Date and slug inheritance                           :inheritance:date:slug:
 :PROPERTIES:
 :EXPORT_DATE: 2018-02-12
-:EXPORT_HUGO_SLUG: data-and-slug-inheritance
+:EXPORT_HUGO_SLUG: date-and-slug-inheritance
 :END:
 ** Date and slug inheritance (English)
 :PROPERTIES:

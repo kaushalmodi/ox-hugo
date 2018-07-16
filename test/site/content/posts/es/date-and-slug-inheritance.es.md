@@ -1,7 +1,7 @@
 +++
 title = "Date and slug inheritance (Spanish)"
 date = 2018-02-12
-slug = "data-and-slug-inheritance"
+slug = "date-and-slug-inheritance"
 tags = ["inheritance", "date", "slug"]
 draft = false
 +++

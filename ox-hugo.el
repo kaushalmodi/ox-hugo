@@ -976,18 +976,68 @@ This is an internal function."
       (user-error "[ox-hugo] pandoc executable not found in PATH"))
     (unless (executable-find "pandoc-citeproc")
       (user-error "[ox-hugo] pandoc-citeproc executable not found in PATH"))
-    ;; TODO: Figure out how to transfer the error in this
-    ;; `start-process' to the user.
-    (start-process "pandoc-parse-citations" " *Pandoc Parse Citations*"
-                   "pandoc"
-                   "--filter" "pandoc-citeproc"
-                   "--from=markdown"
-                   "--to=markdown-citations"
-                   "--atx-headers" ;Use "# foo" style heading for output markdown
-                   "--standalone"  ;Include meta-data at the top
-                   (concat "--output=" outfile) ;Output file
-                   outfile                      ;Input file
-                   )))
+    (let* ((bib-list (let ((bib-raw
+                            (org-string-nw-p
+                             (or (org-entry-get nil "EXPORT_BIBLIOGRAPHY" :inherit)
+                                 (org-export-data (plist-get info :bibliography) info))))) ;`org-export-data' required
+                       (when bib-raw
+                         ;; Multiple bibliographies can be comma
+                         ;; or newline separated. The newline
+                         ;; separated bibliographies work only for the
+                         ;; #+bibliography keyword; example:
+                         ;;   #+bibliography: bibliographies-1.bib
+                         ;;   #+bibliography: bibliographies-2.bib
+                         ;;
+                         ;; If using the subtree properties they need to
+                         ;; be comma-separated (now don't use commas in
+                         ;; those file names, you will suffer):
+                         ;;   :EXPORT_BIBLIOGRAPHY: bibliographies-1.bib, bibliographies-2.bib
+                         (let ((bib-list-1 (org-split-string bib-raw "[,\n]")))
+                           ;; - Don't allow spaces around bib names.
+                           ;; - Convert file names to absolute paths.
+                           ;; - Remove duplicate bibliographies.
+                           (delete-dups
+                            (mapcar (lambda (bib-file)
+                                      (let ((fname (file-truename
+                                                    (org-trim
+                                                     bib-file))))
+                                        (unless (file-exists-p fname)
+                                          (user-error "[ox-hugo] Bibliography file %S does not exist"
+                                                      fname))
+                                        fname))
+                                    bib-list-1))))))
+           (pandoc-bib-args (mapcar (lambda (bib-file)
+                                      (concat "--bibliography="
+                                              bib-file))
+                                    bib-list)))
+      (if pandoc-bib-args
+          (progn
+            ;; TODO: Figure out how to transfer the error in the below
+            ;; `call-process' to the user.
+            (apply 'call-process
+                   (append
+                    '("pandoc" nil " *Pandoc Parse Citations*" t)
+                    '("--filter" "pandoc-citeproc"
+                      "--from=markdown"
+                      "--to=markdown-citations"
+                      "--atx-headers" ;Use "# foo" style heading for output markdown
+                      "--standalone")  ;Include meta-data at the top
+                    pandoc-bib-args
+                    `(,(concat "--output=" outfile)) ;Output file
+                    `(,outfile))) ;Input file
+            ;; TODO: Figure out how to transfer the error in the below
+            ;; `start-process' to the user.
+            ;; (start-process "pandoc-parse-citations" " *Pandoc Parse Citations*"
+            ;;                "pandoc"
+            ;;                "--filter" "pandoc-citeproc"
+            ;;                "--from=markdown"
+            ;;                "--to=markdown-citations"
+            ;;                "--atx-headers" ;Use "# foo" style heading for output markdown
+            ;;                "--standalone"  ;Include meta-data at the top
+            ;;                (concat "--output=" outfile) ;Output file
+            ;;                outfile)                     ;Input file
+            )
+        (message "[ox-hugo] pandoc-citeproc: No bibliography file was specified")))))
 
 ;;;; HTMLized section number for headline
 (defun org-hugo--get-headline-number (headline info &optional toc)
@@ -2821,34 +2871,6 @@ INFO is a plist used as a communication channel."
                                  ;; Don't allow spaces around author names.
                                  ;; Also remove duplicate authors.
                                  (delete-dups (mapcar #'org-trim author-list-1)))))))
-         (bib-list (let ((bib-raw
-                          (org-string-nw-p
-                           (org-export-data (plist-get info :bibliography) info)))) ;`org-export-data' required
-                     (when bib-raw
-                       ;; Multiple bibliographies can be comma
-                       ;; or newline separated. The newline
-                       ;; separated bibliographies work only for the
-                       ;; #+bibliography keyword; example:
-                       ;;   #+bibliography: bibliographies-1.bib
-                       ;;   #+bibliography: bibliographies-2.bib
-                       ;;
-                       ;; If using the subtree properties they need to
-                       ;; be comma-separated (now don't use commas in
-                       ;; those file names, you will suffer):
-                       ;;   :EXPORT_BIBLIOGRAPHY: bibliographies-1.bib, bibliographies-2.bib
-                       (let ((bib-list-1 (org-split-string bib-raw "[,\n]")))
-                         ;; - Don't allow spaces around bib names.
-                         ;; - Convert file names to absolute paths.
-                         ;; - Remove duplicate bibliographies.
-                         (delete-dups (mapcar (lambda (bib-file)
-                                                (let ((fname (file-truename
-                                                              (org-trim
-                                                               bib-file))))
-                                                  (unless (file-exists-p fname)
-                                                    (user-error "Bibliography file %S does not exist"
-                                                                fname))
-                                                  fname))
-                                              bib-list-1))))))
          (creator (and (plist-get info :with-creator)
                        (plist-get info :creator)))
          (locale (and (plist-get info :hugo-with-locale)
@@ -2970,7 +2992,6 @@ INFO is a plist used as a communication channel."
                  (title . ,(org-hugo--sanitize-title info))
                  (audio . ,(plist-get info :hugo-audio))
                  (author . ,author-list)
-                 (bibliography . ,bib-list)
                  (description . ,description)
                  (date . ,(org-hugo--format-date :date info))
                  (publishDate . ,(org-hugo--format-date :hugo-publishdate info))
@@ -3011,7 +3032,6 @@ INFO is a plist used as a communication channel."
     ;; (message "[fm tags DBG] %S" tags)
     ;; (message "[fm categories DBG] %S" categories)
     ;; (message "[fm keywords DBG] %S" keywords)
-    ;; (message "[fm bib-list DBG] %S" bib-list)
     (setq data (org-hugo--replace-keys-maybe data info))
     (org-hugo--gen-front-matter data fm-format)))
 

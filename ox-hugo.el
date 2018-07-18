@@ -781,6 +781,8 @@ newer."
                    (:hugo-front-matter-key-replace "HUGO_FRONT_MATTER_KEY_REPLACE" nil nil space)
                    (:hugo-date-format "HUGO_DATE_FORMAT" nil org-hugo-date-format)
                    (:hugo-paired-shortcodes "HUGO_PAIRED_SHORTCODES" nil org-hugo-paired-shortcodes space)
+                   (:hugo-pandoc-citeproc "HUGO_PANDOC_CITEPROC" nil nil)
+                   (:bibliography "BIBLIOGRAPHY" nil nil newline)
 
                    ;; Front matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -947,17 +949,45 @@ This is an internal function."
     (setq org-hugo--subtree-coord nil))
   (advice-add 'org-babel-exp-code :around #'org-hugo--org-babel-exp-code))
 
-(defun org-hugo--after-export-function ()
+(defun org-hugo--after-export-function (info outfile)
   "Function to be run after an ox-hugo export.
 
 This function is called in the very end of
 `org-hugo-export-to-md', `org-hugo-export-as-md' and
 `org-hugo-publish-to-md'.
 
+INFO is a plist used as a communication channel.
+
+OUTFILE is the Org exported file name.
+
 This is an internal function."
   (setq org-hugo--section nil)
   (setq org-hugo--bundle nil)
-  (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code))
+  (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
+  ;; (message "pandoc citeproc keyword: %S"
+  ;;          (org-hugo--plist-get-true-p info :hugo-pandoc-citeproc))
+  ;; (message "pandoc citeproc prop: %S"
+  ;;          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITEPROC" :inherit))
+  ;; Optionally post-process the post for citations.
+  (when (and outfile
+             (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITEPROC" :inherit)
+                 (org-hugo--plist-get-true-p info :hugo-pandoc-citeproc)))
+    (unless (executable-find "pandoc")
+      (user-error "[ox-hugo] pandoc executable not found in PATH"))
+    (unless (executable-find "pandoc-citeproc")
+      (user-error "[ox-hugo] pandoc-citeproc executable not found in PATH"))
+    ;; TODO: Figure out how to transfer the error in this
+    ;; `start-process' to the user.
+    (start-process "pandoc-parse-citations" " *Pandoc Parse Citations*"
+                   "pandoc"
+                   "--filter" "pandoc-citeproc"
+                   "--from=markdown"
+                   "--to=markdown-citations"
+                   "--atx-headers" ;Use "# foo" style heading for output markdown
+                   "--standalone"  ;Include meta-data at the top
+                   (concat "--output=" outfile) ;Output file
+                   outfile                      ;Input file
+                   )))
 
 ;;;; HTMLized section number for headline
 (defun org-hugo--get-headline-number (headline info &optional toc)
@@ -2766,7 +2796,12 @@ the Hugo front-matter."
 
 INFO is a plist used as a communication channel."
   ;; (message "[hugo front matter DBG] info: %S" (pp info))
-  (let* ((fm-format (plist-get info :hugo-front-matter-format))
+  (let* ((fm-format (if (org-hugo--plist-get-true-p info :hugo-pandoc-citeproc)
+                        ;; pandoc-citeproc parses fields like
+                        ;; bibliography, csl and nocite from YAML
+                        ;; front-matter.
+                        "yaml"
+                      (plist-get info :hugo-front-matter-format)))
          (author-list (and (plist-get info :with-author)
                            (let ((author-raw
                                   (org-string-nw-p
@@ -2786,6 +2821,34 @@ INFO is a plist used as a communication channel."
                                  ;; Don't allow spaces around author names.
                                  ;; Also remove duplicate authors.
                                  (delete-dups (mapcar #'org-trim author-list-1)))))))
+         (bib-list (let ((bib-raw
+                          (org-string-nw-p
+                           (org-export-data (plist-get info :bibliography) info)))) ;`org-export-data' required
+                     (when bib-raw
+                       ;; Multiple bibliographies can be comma
+                       ;; or newline separated. The newline
+                       ;; separated bibliographies work only for the
+                       ;; #+bibliography keyword; example:
+                       ;;   #+bibliography: bibliographies-1.bib
+                       ;;   #+bibliography: bibliographies-2.bib
+                       ;;
+                       ;; If using the subtree properties they need to
+                       ;; be comma-separated (now don't use commas in
+                       ;; those file names, you will suffer):
+                       ;;   :EXPORT_BIBLIOGRAPHY: bibliographies-1.bib, bibliographies-2.bib
+                       (let ((bib-list-1 (org-split-string bib-raw "[,\n]")))
+                         ;; - Don't allow spaces around bib names.
+                         ;; - Convert file names to absolute paths.
+                         ;; - Remove duplicate bibliographies.
+                         (delete-dups (mapcar (lambda (bib-file)
+                                                (let ((fname (file-truename
+                                                              (org-trim
+                                                               bib-file))))
+                                                  (unless (file-exists-p fname)
+                                                    (user-error "Bibliography file %S does not exist"
+                                                                fname))
+                                                  fname))
+                                              bib-list-1))))))
          (creator (and (plist-get info :with-creator)
                        (plist-get info :creator)))
          (locale (and (plist-get info :hugo-with-locale)
@@ -2907,6 +2970,7 @@ INFO is a plist used as a communication channel."
                  (title . ,(org-hugo--sanitize-title info))
                  (audio . ,(plist-get info :hugo-audio))
                  (author . ,author-list)
+                 (bibliography . ,bib-list)
                  (description . ,description)
                  (date . ,(org-hugo--format-date :date info))
                  (publishDate . ,(org-hugo--format-date :hugo-publishdate info))
@@ -2947,6 +3011,7 @@ INFO is a plist used as a communication channel."
     ;; (message "[fm tags DBG] %S" tags)
     ;; (message "[fm categories DBG] %S" categories)
     ;; (message "[fm keywords DBG] %S" keywords)
+    ;; (message "[fm bib-list DBG] %S" bib-list)
     (setq data (org-hugo--replace-keys-maybe data info))
     (org-hugo--gen-front-matter data fm-format)))
 
@@ -3230,6 +3295,8 @@ are \"toml\" and \"yaml\"."
                      "HUGO_EXPIRYDATE"
                      "HUGO_LASTMOD"
                      "HUGO_SLUG" ;Useful for inheriting same slug to same posts in different languages
+                     "HUGO_PANDOC_CITEPROC"
+                     "BIBLIOGRAPHY"
                      "HUGO_AUTO_SET_LASTMOD")))
     (mapcar (lambda (str)
               (concat "EXPORT_" str))
@@ -3334,11 +3401,16 @@ Return the buffer the export happened to."
   (interactive)
   (org-hugo--before-export-function subtreep)
   ;; Allow certain `ox-hugo' properties to be inherited.
-  (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
+  (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance))
+        (info (org-combine-plists
+               (org-export--get-export-attributes
+                'hugo subtreep visible-only)
+               (org-export--get-buffer-attributes)
+               (org-export-get-environment 'hugo subtreep))))
     (prog1
         (org-export-to-buffer 'hugo "*Org Hugo Export*"
           async subtreep visible-only nil nil (lambda () (text-mode)))
-      (org-hugo--after-export-function))))
+      (org-hugo--after-export-function info nil))))
 
 ;;;###autoload
 (defun org-hugo-export-to-md (&optional async subtreep visible-only)
@@ -3396,7 +3468,7 @@ Return output file's name."
     (when do-export
       (prog1
           (org-export-to-file 'hugo outfile async subtreep visible-only)
-        (org-hugo--after-export-function)))))
+        (org-hugo--after-export-function info outfile)))))
 
 ;; FIXME: org-publish based exporting is not yet supported.
 ;; ;;;###autoload

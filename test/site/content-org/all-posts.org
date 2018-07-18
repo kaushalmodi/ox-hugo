@@ -4589,6 +4589,27 @@ This post should also be created in =content/section-a/=.
 :END:
 #+toc: headlines 6
 #+include: "./all-posts.org::#nested-sections-example" :only-contents t
+* Pandoc                                                             :pandoc:
+** Citeproc                                                        :citeproc:
+*** Citations Example
+:PROPERTIES:
+:EXPORT_FILE_NAME: citations-example
+:EXPORT_HUGO_PANDOC_CITEPROC: t
+:EXPORT_BIBLIOGRAPHY: bib/bib1.bib, bib/bib2.bib
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@giovanelli2016 @eilan2016)
+:END:
+**** Section 1
+Here is a test example file with an in-text citation where someone
+important says something important (e.g. @loncar2016). And here is
+another bit of blah with a footnote citation.[fn:5]
+
+See [[#citation-example-section-2]].
+**** Section 2
+:PROPERTIES:
+:CUSTOM_ID: citation-example-section-2
+:END:
+Content in section 2.
+**** COMMENT References
 * Export Options                                              :export_option:
 ** Table of Contents (TOC)                                              :toc:
 =ox-hugo= has the =with-toc= option disabled by default as Hugo has an
@@ -6587,6 +6608,8 @@ blandit in.
 Results from static site search implemented using /Fusejs/, /jquery/
 and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1cb41ae][Source]]
 * Footnotes
+
+[fn:5] See [@thompson2016].
 [fn:4] Even if the user has set the =HUGO_CODE_FENCE= value to =t=
 (via variable, keyword or subtree property), the Hugo =highlight=
 shortcode will be used automatically instead of code fences if either

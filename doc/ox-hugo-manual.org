@@ -1705,7 +1705,7 @@ flow/ or the /per-file/ export flow.
    # eval: (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local)
    # End:
    #+end_src
-   *About Footnotes*: Here I recommend adding the =* Footnotes= header
+   *About Footnotes*: Here I recommend adding the =* Footnotes= header[fn:5]
    too so that in case you add any Org footnotes, they go directly to
    that section you created. Otherwise, Org will auto-create a new
    /Footnotes/ heading *at the end of the file*.. and the /Local
@@ -2116,6 +2116,10 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 :END:
 #+include: "./ox-hugo-manual.org::#test" :only-contents t
 * Footnotes
+
+[fn:5] I am assuming that the value of ~org-footnote-section~ in your
+Emacs setup is the default value ~"Footnotes"~. If it's not, change
+the "Footnotes" heading in that example accordingly.
 
 [fn:4] The ~TODO~ / ~DONE~ keyword is used in this example as they are
 the defaults in ~org-todo-keywords~. If you have customized your

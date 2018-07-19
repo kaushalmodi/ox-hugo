@@ -1,7 +1,7 @@
 # Courtesy: https://github.com/magit/magit/blob/master/.travis.yml
 dist: trusty
 sudo: true
-language: generic
+language: r # So that pandoc comes installed, https://github.com/jgm/pandoc/wiki/Using-pandoc-in-Travis-CI
 env:
   global:
     - CURL="curl -fsSkL --retry 9 --retry-delay 9"

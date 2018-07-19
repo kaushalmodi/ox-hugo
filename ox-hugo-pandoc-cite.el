@@ -13,8 +13,7 @@
 
 ;; TODO: Change the defconst to defvar
 (defvar ox-hugo-pandoc-cite-pandoc-args-list
-  '("--filter" "pandoc-citeproc"
-    "-f" "markdown"
+  '("-f" "markdown"
     "-t" "markdown-citations"
     "--atx-headers")     ;Use "# foo" style heading for output markdown
   "Pandoc arguments used in `ox-hugo-pandoc-cite--run-pandoc'.

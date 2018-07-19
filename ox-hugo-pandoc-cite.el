@@ -79,10 +79,11 @@ Required fixes:
 - Unescape the Hugo shortcodes: \"{{\\\\=< shortcode \\\\=>}}\" ->
   \"{{< shortcode >}}\".
 
-- Replace \"::: {#refs .references}\" with \"## References\" where the
-  number of hashes depends on HUGO_LEVEL_OFFSET.
+- Replace \"::: {#refs .references}\" with \"## References\"
+  where the number of hashes depends on HUGO_LEVEL_OFFSET.
 
-- Replace \"::: {#ref-someref} with \"<a id=\"ref-someref\"></a>\".
+- Replace \"::: {#ref-someref}\" with \"<a
+  id=\"ref-someref\"></a>\".
 
 - Remove \"^:::$\""
   (with-temp-buffer
@@ -90,12 +91,18 @@ Required fixes:
     (let ((case-fold-search nil))
       (goto-char (point-min))
       (delete-matching-lines "^:::$")
+      ;; Fix Hugo shortcodes.
       (save-excursion
         (let ((regexp (concat "{{\\\\<"
                               "\\(?1:\\(.\\|\n\\)+?\\)"
                               "\\\\>}}")))
           (while (re-search-forward regexp nil :noerror)
             (replace-match "{{<\\1>}}" :fixedcase))))
+      ;; Convert Pandoc ref ID style to HTML ID's.
+      (save-excursion
+        (let ((regexp "^::: {#ref-\\(.+?\\)}$"))
+          (while (re-search-forward regexp nil :noerror)
+            (replace-match "<a id=\"ref-\\1\"></a>" :fixedcase))))
       (buffer-substring-no-properties (point-min) (point-max)))))
 
 (defun ox-hugo-pandoc-cite--parse-citations-maybe (info)

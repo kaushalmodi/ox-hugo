@@ -2074,7 +2074,7 @@ front-matter keys"/ in {{{ox-hugo-test-file}}}.
 :PROPERTIES:
 :EXPORT_FILE_NAME: pandoc-citations
 :END:
-Pandoc based citation parsing is enabled by setting the
+[[https://pandoc.org/][Pandoc]] based citation parsing is enabled by setting the
 ~#+hugo_pandoc_citations:~ keyword or ~:EXPORT_HUGO_PANDOC_CITATIONS:~
 subtree property to ~t~.
 
@@ -2123,6 +2123,31 @@ another bit of blah with a footnote citation.[fn:1]
 {{{test-search(citations)}}}
 
 Also see [[https://pandoc.org/MANUAL.html#citations][Pandoc Manual -- Citations]] for more details.
+**** Caveat
+How the Pandoc Citations support works is that:
+1. ~ox-hugo~ first exports the Org file/subtree to a Markdown file as
+   usual.
+2. ~pandoc~ then expands the ~@foo~ citations in that file and
+   *rewrites* the whole Markdown file from the AST parsed by it.
+
+/Mostly/ this would work fine.
+
+But you might end up with issues if the /Blackfriday/ workarounds
+implemented in ~ox-hugo~ exports get removed during the rewrite by
+Pandoc.
+
+To check if an issue you see is specific to Pandoc rewrites,
+- temporarily set the ~HUGO_PANDOC_CITATIONS~ option to ~nil~,
+- re-export using ~ox-hugo~, and
+- check if Hugo renders the final HTML correctly after that.
+
+If this original Markdown export is parsed fine by Hugo, open an Issue
+with all the details (reproducible Org snippet, failing Markdown
+output by Pandoc, etc.), and we can see if this is something that can
+be fixed.
+
+(Of course, open an issue whenever any ~ox-hugo~ export does do things
+as you expect :smile:)
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"

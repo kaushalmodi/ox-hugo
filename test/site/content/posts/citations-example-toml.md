@@ -1,11 +1,12 @@
----
-title: "Citations Example"
-description: >
++++
+title = "Citations Example (TOML)"
+description = """
   Test the parsing of Pandoc Citations, while also testing that ox-hugo
-  exported Markdown doesn't get broken.
-tags: ["pandoc", "citeproc"]
-draft: false
----
+  exported Markdown doesn't get broken -- TOML front-matter.
+  """
+tags = ["pandoc", "citeproc", "toml"]
+draft = false
++++
 
 `ox-hugo` Issue
 \#[175](https://github.com/kaushalmodi/ox-hugo/issues/175)

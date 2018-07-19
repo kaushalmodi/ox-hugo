@@ -131,6 +131,13 @@ subtree).")
 This variable is used to cache the original ox-hugo generated
 front-matter that's used after Pandoc Citation parsing.")
 
+(defvar org-hugo--fm-yaml nil
+  "Variable to store the current Hugo post's front-matter string in YAML format.
+
+Pandoc understands meta-data only in YAML format. So when Pandoc
+Citations are enabled, Pandoc is handed over the file with this
+YAML front-matter.")
+
 (defvar org-hugo-allow-export-after-save t
   "Enable flag for `org-hugo-export-wim-to-md-after-save'.
 When nil, the above function will not export the Org file to
@@ -974,7 +981,8 @@ This is an internal function."
   (plist-put info :outfile outfile)
   (plist-put info :front-matter org-hugo--fm)
   (ox-hugo-pandoc-cite--parse-citations-maybe info)
-  (setq org-hugo--fm nil))
+  (setq org-hugo--fm nil)
+  (setq org-hugo--fm-yaml nil))
 
 ;;;; HTMLized section number for headline
 (defun org-hugo--get-headline-number (headline info &optional toc)
@@ -2444,7 +2452,9 @@ INFO is a plist holding export options."
                   (format "\n%s" body)
                 "")))
     (setq org-hugo--fm fm)
-    (format "%s%s%s" fm body org-hugo-footer)))
+    (if (org-hugo--plist-get-true-p info :hugo-pandoc-citations)
+        (format "%s%s%s" org-hugo--fm-yaml body org-hugo-footer)
+      (format "%s%s%s" fm body org-hugo-footer))))
 
 ;;;;; Hugo Front Matter
 (defun org-hugo--quote-string (val &optional prefer-no-quotes format)
@@ -2784,11 +2794,7 @@ the Hugo front-matter."
 
 INFO is a plist used as a communication channel."
   ;; (message "[hugo front matter DBG] info: %S" (pp info))
-  (let* ((fm-format (if (org-hugo--plist-get-true-p info :hugo-pandoc-citations)
-                        ;; pandoc parses fields like csl and nocite
-                        ;; from YAML front-matter.
-                        "yaml"
-                      (plist-get info :hugo-front-matter-format)))
+  (let* ((fm-format (plist-get info :hugo-front-matter-format))
          (author-list (and (plist-get info :with-author)
                            (let ((author-raw
                                   (org-string-nw-p
@@ -2956,7 +2962,8 @@ INFO is a plist used as a communication channel."
                  (blackfriday . ,blackfriday)
                  (menu . ,menu-alist)
                  (resources . ,resources)))
-         (data `,(append data weight-data custom-fm-data)))
+         (data `,(append data weight-data custom-fm-data))
+         ret)
     ;; (message "[get fm DBG] tags: %s" tags)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
     ;; (message "[get fm info DBG] %S" info)
@@ -2970,7 +2977,15 @@ INFO is a plist used as a communication channel."
     ;; (message "[fm categories DBG] %S" categories)
     ;; (message "[fm keywords DBG] %S" keywords)
     (setq data (org-hugo--replace-keys-maybe data info))
-    (org-hugo--gen-front-matter data fm-format)))
+    (setq ret (org-hugo--gen-front-matter data fm-format))
+    (if (and (string= "toml" fm-format)
+             (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
+        ;; Pandoc parses fields like csl and nocite from YAML
+        ;; front-matter.  So create the `org-hugo--fm-yaml'
+        ;; front-matter in YAML format just for Pandoc.
+        (setq org-hugo--fm-yaml (org-hugo--gen-front-matter data "yaml"))
+      (setq org-hugo--fm-yaml ret))
+    ret))
 
 (defun org-hugo--calc-weight ()
   "Calculate the weight for a Hugo post or menu item.

@@ -59,7 +59,7 @@ The list of Pandoc specific meta-data is defined in
     (insert fm)
     (goto-char (point-min))
     (dolist (field ox-hugo-pandoc-cite-pandoc-meta-data)
-      (let ((regexp (format "^%s: " (regexp-quote field))))
+      (let ((regexp (format "^%s\\(:\\| =\\) " (regexp-quote field))))
         (delete-matching-lines regexp)))
     (buffer-substring-no-properties (point-min) (point-max))))
 

@@ -2077,8 +2077,8 @@ Pandoc based citation parsing is enabled by setting the
 ~#+hugo_pandoc_citations:~ keyword or ~:EXPORT_HUGO_PANDOC_CITATIONS:~
 subtree property to ~t~. With this property set, the exported
 front-matter is *forced to YAML*, because Pandoc needs the
-front-matter to be in YAML format to parse fields like ~bibliography~
-~csl~ and ~nocite~.
+front-matter to be in YAML format to parse fields like ~csl~ and
+~nocite~.
 
 #+begin_note
 User needs to have the ~pandoc~ executable present in their ~PATH~.

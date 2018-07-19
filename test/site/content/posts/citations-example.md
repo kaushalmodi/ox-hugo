@@ -1,15 +1,7 @@
 ---
-bibliography:
-- '/home/kmodi/stow/pub\_dotfiles/emacs/dot-emacs.d/elisp/ox-hugo/test/site/content-org/bib/bib1.bib'
-- '/home/kmodi/stow/pub\_dotfiles/emacs/dot-emacs.d/elisp/ox-hugo/test/site/content-org/bib/bib2.bib'
-draft: False
-nocite:
-- '@giovanelli2016'
-- '@eilan2016'
-tags:
-- pandoc
-- citeproc
-title: Citations Example
+title: "Citations Example"
+tags: ["pandoc", "citeproc"]
+draft: false
 ---
 
 ## Section 1

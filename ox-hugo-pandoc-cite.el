@@ -12,19 +12,22 @@
 ;;; Code:
 
 ;; TODO: Change the defconst to defvar
-(defconst ox-hugo-pandoc-cite-pandoc-args-list
+(defvar ox-hugo-pandoc-cite-pandoc-args-list
   '("--filter" "pandoc-citeproc"
     "-f" "markdown"
     "-t" "markdown-citations"
-    "--atx-headers"     ;Use "# foo" style heading for output markdown
-    "--standalone")     ;Include meta-data at the top
-  "Pandoc arguments used in `ox-hugo-pandoc-cite-run-pandoc'.
+    "--atx-headers")     ;Use "# foo" style heading for output markdown
+  "Pandoc arguments used in `ox-hugo-pandoc-cite--run-pandoc'.
 
 These arguments are added to the `pandoc' call in addition to the
 \"--bibliography\", output file and input file arguments in that
 function.")
 
-(defun ox-hugo-pandoc-cite-run-pandoc (outfile bib-list)
+(defvar ox-hugo-pandoc-cite-pandoc-meta-data
+  '("nocite" "csl")
+  "List of meta-data fields specific to Pandoc.")
+
+(defun ox-hugo-pandoc-cite--run-pandoc (outfile bib-list)
   "Run the `pandoc' process.
 
 OUTFILE is the Org exported file name.
@@ -55,22 +58,35 @@ BIB-LIST is a list of one or more bibliography files."
     ;;                outfile)                     ;Input file
     ))
 
-(defun ox-hugo-pandoc-cite--parse-citations-maybe (info outfile)
+(defun ox-hugo-pandoc-cite--remove-pandoc-meta-data (fm)
+  "Remove Pandoc meta-data from front-matter string FM and return it.
+
+The list of Pandoc specific meta-data is defined in
+`ox-hugo-pandoc-cite-pandoc-meta-data'."
+  (with-temp-buffer
+    (insert fm)
+    (goto-char (point-min))
+    (dolist (field ox-hugo-pandoc-cite-pandoc-meta-data)
+      (let ((regexp (format "^%s: " (regexp-quote field))))
+        (delete-matching-lines regexp)))
+    (buffer-substring-no-properties
+     (point-min) (point-max))))
+
+(defun ox-hugo-pandoc-cite--parse-citations-maybe (info)
   "Check if Pandoc needs to be run to parse citations.
 
-INFO is a plist used as a communication channel.
-
-OUTFILE is the Org exported file name."
+INFO is a plist used as a communication channel."
   ;; (message "pandoc citations keyword: %S"
   ;;          (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
   ;; (message "pandoc citations prop: %S"
   ;;          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit))
-  (when (and outfile
-             (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit)
-                 (org-hugo--plist-get-true-p info :hugo-pandoc-citations)))
-    (unless (executable-find "pandoc")
-      (user-error "[ox-hugo] pandoc executable not found in PATH"))
-    (ox-hugo-pandoc-cite--parse-citations info outfile)))
+  (let ((outfile (plist-get info :outfile)))
+    (when (and outfile
+               (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit)
+                   (org-hugo--plist-get-true-p info :hugo-pandoc-citations)))
+      (unless (executable-find "pandoc")
+        (user-error "[ox-hugo] pandoc executable not found in PATH"))
+      (ox-hugo-pandoc-cite--parse-citations info outfile))))
 
 (defun ox-hugo-pandoc-cite--parse-citations (info outfile)
   "Parse Pandoc Citations in OUTFILE and update that file.
@@ -111,7 +127,18 @@ OUTFILE is the Org exported file name."
                                      fname))
                                  bib-list-1)))))))
     (if bib-list
-        (ox-hugo-pandoc-cite-run-pandoc outfile bib-list)
+        (let ((fm (plist-get info :front-matter)))
+          ;; (message "fm :: %S" fm)
+          (ox-hugo-pandoc-cite--run-pandoc outfile bib-list)
+          ;; Prepend the original ox-hugo generated front-matter to
+          ;; Pandoc output.
+          (let* ((fm (ox-hugo-pandoc-cite--remove-pandoc-meta-data fm))
+                 (post-pandoc-contents (with-temp-buffer
+                                         (insert-file-contents outfile)
+                                         (buffer-substring-no-properties
+                                          (point-min) (point-max))))
+                 (fm-plus-content (concat fm "\n" post-pandoc-contents)))
+            (write-region fm-plus-content nil outfile)))
       (message "[ox-hugo-pandoc-cite] No bibliography file was specified"))))
 
 

@@ -125,6 +125,12 @@ helps set the bundle path correctly for such cases (where
 EXPORT_HUGO_BUNDLE and EXPORT_FILE_NAME are set in the same
 subtree).")
 
+(defvar org-hugo--fm nil
+  "Variable to store the current Hugo post's front-matter string.
+
+This variable is used to cache the original ox-hugo generated
+front-matter that's used after Pandoc Citation parsing.")
+
 (defvar org-hugo-allow-export-after-save t
   "Enable flag for `org-hugo-export-wim-to-md-after-save'.
 When nil, the above function will not export the Org file to
@@ -965,7 +971,10 @@ This is an internal function."
   (setq org-hugo--section nil)
   (setq org-hugo--bundle nil)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
-  (ox-hugo-pandoc-cite--parse-citations-maybe info outfile))
+  (plist-put info :outfile outfile)
+  (plist-put info :front-matter org-hugo--fm)
+  (ox-hugo-pandoc-cite--parse-citations-maybe info)
+  (setq org-hugo--fm nil))
 
 ;;;; HTMLized section number for headline
 (defun org-hugo--get-headline-number (headline info &optional toc)
@@ -2434,6 +2443,7 @@ INFO is a plist holding export options."
         (body (if (org-string-nw-p body) ;Insert extra newline if body is non-empty
                   (format "\n%s" body)
                 "")))
+    (setq org-hugo--fm fm)
     (format "%s%s%s" fm body org-hugo-footer)))
 
 ;;;;; Hugo Front Matter
@@ -2775,9 +2785,8 @@ the Hugo front-matter."
 INFO is a plist used as a communication channel."
   ;; (message "[hugo front matter DBG] info: %S" (pp info))
   (let* ((fm-format (if (org-hugo--plist-get-true-p info :hugo-pandoc-citations)
-                        ;; pandoc-citations parses fields like
-                        ;; bibliography, csl and nocite from YAML
-                        ;; front-matter.
+                        ;; pandoc parses fields like csl and nocite
+                        ;; from YAML front-matter.
                         "yaml"
                       (plist-get info :hugo-front-matter-format)))
          (author-list (and (plist-get info :with-author)

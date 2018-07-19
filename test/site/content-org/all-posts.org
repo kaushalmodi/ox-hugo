@@ -4652,6 +4652,13 @@ See [[#citation-example-section-2]].
 :CUSTOM_ID: citation-example-section-2
 :END:
 Content in section 2.
+** No Citations                                                        :none:
+:PROPERTIES:
+:EXPORT_FILE_NAME: citations-none
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '()
+:END:
+This post has Pandoc Citations parsing enabled, but has no actual
+citations.
 * Export Options                                              :export_option:
 ** Table of Contents (TOC)                                              :toc:
 =ox-hugo= has the =with-toc= option disabled by default as Hugo has an

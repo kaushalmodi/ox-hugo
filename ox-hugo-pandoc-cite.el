@@ -124,15 +124,15 @@ LOFFSET is the offset added to the base level of 1 for headings."
       ;; div tag.
       (save-excursion
         (let ((regexp "^::: {#refs \\.references}$"))
-          ;; There should be one-and-only-one replacement needed for
+          ;; There should be at max only one replacement needed for
           ;; this.
-          (re-search-forward regexp nil :noerror)
-          (replace-match (concat level-mark
-                                 " References {#references}\n\n"
-                                 "<div id=\"refs .references\">"
-                                 "\n  <div></div>\n\n")) ;See footnote 1
-          (re-search-forward "^:::$")
-          (replace-match "\n\n</div> <!-- ending references -->")))
+          (when (re-search-forward regexp nil :noerror)
+            (replace-match (concat level-mark
+                                   " References {#references}\n\n"
+                                   "<div id=\"refs .references\">"
+                                   "\n  <div></div>\n\n")) ;See footnote 1
+            (re-search-forward "^:::$")
+            (replace-match "\n\n</div> <!-- ending references -->"))))
       (buffer-substring-no-properties (point-min) (point-max)))))
 
 (defun org-hugo-pandoc-cite--parse-citations-maybe (info)

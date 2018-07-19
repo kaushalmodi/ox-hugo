@@ -980,7 +980,7 @@ This is an internal function."
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
   (plist-put info :outfile outfile)
   (plist-put info :front-matter org-hugo--fm)
-  (ox-hugo-pandoc-cite--parse-citations-maybe info)
+  (org-hugo-pandoc-cite--parse-citations-maybe info)
   (setq org-hugo--fm nil)
   (setq org-hugo--fm-yaml nil))
 

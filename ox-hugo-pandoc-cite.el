@@ -12,22 +12,25 @@
 ;;; Code:
 
 ;; TODO: Change the defconst to defvar
-(defvar ox-hugo-pandoc-cite-pandoc-args-list
+(defvar org-hugo-pandoc-cite-pandoc-args-list
   '("-f" "markdown"
     "-t" "markdown-citations"
     "--atx-headers")     ;Use "# foo" style heading for output markdown
-  "Pandoc arguments used in `ox-hugo-pandoc-cite--run-pandoc'.
+  "Pandoc arguments used in `org-hugo-pandoc-cite--run-pandoc'.
 
 These arguments are added to the `pandoc' call in addition to the
 \"--bibliography\", output file and input file arguments in that
 function.")
 
-(defvar ox-hugo-pandoc-cite-pandoc-meta-data
+(defvar org-hugo-pandoc-cite-pandoc-meta-data
   '("nocite" "csl")
   "List of meta-data fields specific to Pandoc.")
 
-(defun ox-hugo-pandoc-cite--run-pandoc (outfile bib-list)
-  "Run the `pandoc' process.
+(defvar org-hugo-pandoc-cite--run-pandoc-buffer "*Pandoc Citations*"
+  "Buffer to contain the `pandoc' run output and errors.")
+
+(defun org-hugo-pandoc-cite--run-pandoc (outfile bib-list)
+  "Run the `pandoc' process and return the exit code.
 
 OUTFILE is the Org exported file name.
 
@@ -37,33 +40,31 @@ BIB-LIST is a list of one or more bibliography files."
                                      bib-file))
                            bib-list))
          (pandoc-arg-list (append
-                           ox-hugo-pandoc-cite-pandoc-args-list
+                           org-hugo-pandoc-cite-pandoc-args-list
                            bib-args
                            `("-o" ,outfile ,outfile))) ;-o <OUTPUT FILE> <INPUT FILE>
          (pandoc-arg-list-str (mapconcat #'identity pandoc-arg-list " ")))
     (message (concat "[ox-hugo] Post-processing citations using Pandoc command:\n"
                      "  pandoc " pandoc-arg-list-str))
-    ;; TODO: Figure out how to transfer the error in the below
-    ;; `call-process' to the user.
     (apply 'call-process
            (append
-            '("pandoc" nil " *Pandoc Parse Citations*" :display)
-            pandoc-arg-list))))
+            `("pandoc" nil ,org-hugo-pandoc-cite--run-pandoc-buffer :display)
+            pandoc-arg-list))))         ;Return the exit code
 
-(defun ox-hugo-pandoc-cite--remove-pandoc-meta-data (fm)
+(defun org-hugo-pandoc-cite--remove-pandoc-meta-data (fm)
   "Remove Pandoc meta-data from front-matter string FM and return it.
 
 The list of Pandoc specific meta-data is defined in
-`ox-hugo-pandoc-cite-pandoc-meta-data'."
+`org-hugo-pandoc-cite-pandoc-meta-data'."
   (with-temp-buffer
     (insert fm)
     (goto-char (point-min))
-    (dolist (field ox-hugo-pandoc-cite-pandoc-meta-data)
+    (dolist (field org-hugo-pandoc-cite-pandoc-meta-data)
       (let ((regexp (format "^%s\\(:\\| =\\) " (regexp-quote field))))
         (delete-matching-lines regexp)))
     (buffer-substring-no-properties (point-min) (point-max))))
 
-(defun ox-hugo-pandoc-cite--fix-pandoc-output (content loffset)
+(defun org-hugo-pandoc-cite--fix-pandoc-output (content loffset)
   "Fix the Pandoc output CONTENT and return it.
 
 Required fixes:
@@ -120,7 +121,7 @@ LOFFSET is the offset added to the base level of 1 for headings."
           (replace-match "\n\n</div> <!-- ending references -->")))
       (buffer-substring-no-properties (point-min) (point-max)))))
 
-(defun ox-hugo-pandoc-cite--parse-citations-maybe (info)
+(defun org-hugo-pandoc-cite--parse-citations-maybe (info)
   "Check if Pandoc needs to be run to parse citations.
 
 INFO is a plist used as a communication channel."
@@ -134,9 +135,9 @@ INFO is a plist used as a communication channel."
                    (org-hugo--plist-get-true-p info :hugo-pandoc-citations)))
       (unless (executable-find "pandoc")
         (user-error "[ox-hugo] pandoc executable not found in PATH"))
-      (ox-hugo-pandoc-cite--parse-citations info outfile))))
+      (org-hugo-pandoc-cite--parse-citations info outfile))))
 
-(defun ox-hugo-pandoc-cite--parse-citations (info outfile)
+(defun org-hugo-pandoc-cite--parse-citations (info outfile)
   "Parse Pandoc Citations in OUTFILE and update that file.
 
 INFO is a plist used as a communication channel.
@@ -178,18 +179,28 @@ OUTFILE is the Org exported file name."
         (let ((fm (plist-get info :front-matter))
               (loffset (string-to-number
                         (or (org-entry-get nil "EXPORT_HUGO_LEVEL_OFFSET" :inherit)
-                            (plist-get info :hugo-level-offset)))))
+                            (plist-get info :hugo-level-offset))))
+              (exit-code (org-hugo-pandoc-cite--run-pandoc outfile bib-list)))
           ;; (message "[ox-hugo parse citations] fm :: %S" fm)
           ;; (message "[ox-hugo parse citations] loffset :: %S" loffset)
-          (ox-hugo-pandoc-cite--run-pandoc outfile bib-list)
+          ;; (message "[ox-hugo parse citations] exit-code :: %S" exit-code)
+
+          (unless (= 0 exit-code)
+            (user-error (format "[ox-hugo] Pandoc execution failed. See the %S buffer"
+                                org-hugo-pandoc-cite--run-pandoc-buffer)))
+
+          ;; If no error has happened, we don't need the Pandoc run
+          ;; buffer; kill it.
+          (kill-buffer org-hugo-pandoc-cite--run-pandoc-buffer)
+
           ;; Prepend the original ox-hugo generated front-matter to
           ;; Pandoc output.
-          (let* ((fm (ox-hugo-pandoc-cite--remove-pandoc-meta-data fm))
+          (let* ((fm (org-hugo-pandoc-cite--remove-pandoc-meta-data fm))
                  (post-pandoc-contents (with-temp-buffer
                                          (insert-file-contents outfile)
                                          (buffer-substring-no-properties
                                           (point-min) (point-max))))
-                 (contents-fixed (ox-hugo-pandoc-cite--fix-pandoc-output post-pandoc-contents loffset))
+                 (contents-fixed (org-hugo-pandoc-cite--fix-pandoc-output post-pandoc-contents loffset))
                  (fm-plus-content (concat fm "\n" contents-fixed)))
             (write-region fm-plus-content nil outfile)))
       (message "[ox-hugo-pandoc-cite] No bibliography file was specified"))))

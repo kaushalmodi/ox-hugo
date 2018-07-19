@@ -79,12 +79,13 @@ Required fixes:
   \"{{< shortcode >}}\".
 
 - Replace \"::: {#refs .references}\" with \"## References\"
-  where the number of hashes depends on HUGO_LEVEL_OFFSET.
+  where the number of hashes depends on HUGO_LEVEL_OFFSET,
+  followed by an opening HTML div tag.
 
-- Replace \"::: {#ref-someref}\" with \"<a
-  id=\"ref-someref\"></a>\".
+- Replace \"::: {#ref-someref}\" with \"<div
+  id=\"ref-someref\">\".
 
-- Remove \"^:::$\"
+- Replace \"^:::$\" with closing HTML div tags.
 
 LOFFSET is the offset added to the base level of 1 for headings."
   (with-temp-buffer
@@ -92,7 +93,6 @@ LOFFSET is the offset added to the base level of 1 for headings."
     (let ((case-fold-search nil)
           (level-mark (make-string (+ loffset 1) ?#)))
       (goto-char (point-min))
-      (delete-matching-lines "^:::$")
       ;; Fix Hugo shortcodes.
       (save-excursion
         (let ((regexp (concat "{{\\\\<"
@@ -102,19 +102,29 @@ LOFFSET is the offset added to the base level of 1 for headings."
                               "\\\\>}}")))
           (while (re-search-forward regexp nil :noerror)
             (replace-match "{{< \\1 >}}" :fixedcase))))
-      ;; Convert Pandoc ref ID style to HTML ID's.
+      ;; Convert Pandoc ref ID style to HTML div's.
       (save-excursion
         (let ((regexp "^::: {#ref-\\(.+?\\)}$"))
           (while (re-search-forward regexp nil :noerror)
-            (replace-match "<a id=\"ref-\\1\"></a>\n" :fixedcase))))
+            (replace-match (concat "<div id=\"ref-\\1\">"
+                                   "\n  <div></div>\n") ;See footnote 1
+                           :fixedcase)
+            (re-search-forward "^:::$")
+            (replace-match "\n</div>"))))
       ;; Replace "::: {#refs .references}" with a base-level
-      ;; "References" heading in Markdown.
+      ;; "References" heading in Markdown, followed by an opening HTML
+      ;; div tag.
       (save-excursion
         (let ((regexp "^::: {#refs \\.references}$"))
           ;; There should be one-and-only-one replacement needed for
           ;; this.
           (re-search-forward regexp nil :noerror)
-          (replace-match (concat level-mark " References {#references}\n"))))
+          (replace-match (concat level-mark
+                                 " References {#references}\n\n"
+                                 "<div id=\"refs .references\">"
+                                 "\n  <div></div>\n\n")) ;See footnote 1
+          (re-search-forward "^:::$")
+          (replace-match "\n\n</div> <!-- ending references -->")))
       (buffer-substring-no-properties (point-min) (point-max)))))
 
 (defun ox-hugo-pandoc-cite--parse-citations-maybe (info)
@@ -193,5 +203,15 @@ OUTFILE is the Org exported file name."
 
 
 (provide 'ox-hugo-pandoc-cite)
+
+
+
+;;; Footnotes
+
+;;;; Footnote 1
+;; The empty HTML element tags like "<div></div>" is a hack to get
+;; around a Blackfriday limitation.  Details:
+;; https://github.com/kaushalmodi/ox-hugo/issues/93.
+
 
 ;;; ox-hugo-pandoc-cite.el ends here

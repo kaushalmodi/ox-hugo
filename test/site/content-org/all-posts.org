@@ -4618,7 +4618,6 @@ Some text.
 #+begin_myshortcode
 Text not containing *Markdown*
 #+end_myshortcode
-**** COMMENT References
 * Export Options                                              :export_option:
 ** Table of Contents (TOC)                                              :toc:
 =ox-hugo= has the =with-toc= option disabled by default as Hugo has an

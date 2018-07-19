@@ -32,30 +32,23 @@ function.")
 OUTFILE is the Org exported file name.
 
 BIB-LIST is a list of one or more bibliography files."
-  (let ((bib-args (mapcar (lambda (bib-file)
-                            (concat "--bibliography="
-                                    bib-file))
-                          bib-list)))
+  (let* ((bib-args (mapcar (lambda (bib-file)
+                             (concat "--bibliography="
+                                     bib-file))
+                           bib-list))
+         (pandoc-arg-list (append
+                           ox-hugo-pandoc-cite-pandoc-args-list
+                           bib-args
+                           `("-o" ,outfile ,outfile))) ;-o <OUTPUT FILE> <INPUT FILE>
+         (pandoc-arg-list-str (mapconcat #'identity pandoc-arg-list " ")))
+    (message (concat "[ox-hugo] Post-processing citations using Pandoc command:\n"
+                     "  pandoc " pandoc-arg-list-str))
     ;; TODO: Figure out how to transfer the error in the below
     ;; `call-process' to the user.
     (apply 'call-process
            (append
             '("pandoc" nil " *Pandoc Parse Citations*" :display)
-            ox-hugo-pandoc-cite-pandoc-args-list
-            bib-args
-            `("-o" ,outfile ,outfile)))   ;-o <OUTPUT FILE> <INPUT FILE>
-    ;; TODO: Figure out how to transfer the error in the below
-    ;; `start-process' to the user.
-    ;; (start-process "pandoc-parse-citations" " *Pandoc Parse Citations*"
-    ;;                "pandoc"
-    ;;                "--filter" "pandoc-citeproc"
-    ;;                "--from=markdown"
-    ;;                "--to=markdown-citations"
-    ;;                "--atx-headers" ;Use "# foo" style heading for output markdown
-    ;;                "--standalone"  ;Include meta-data at the top
-    ;;                (concat "--output=" outfile) ;Output file
-    ;;                outfile)                     ;Input file
-    ))
+            pandoc-arg-list))))
 
 (defun ox-hugo-pandoc-cite--remove-pandoc-meta-data (fm)
   "Remove Pandoc meta-data from front-matter string FM and return it.

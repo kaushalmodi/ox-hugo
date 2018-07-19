@@ -14,13 +14,27 @@
 ;; TODO: Change the defconst to defvar
 (defvar org-hugo-pandoc-cite-pandoc-args-list
   '("-f" "markdown"
-    "-t" "markdown-citations"
-    "--atx-headers")     ;Use "# foo" style heading for output markdown
+    "-t" "markdown-citations-simple_tables+pipe_tables"
+    "--atx-headers")
   "Pandoc arguments used in `org-hugo-pandoc-cite--run-pandoc'.
 
+-f markdown: Convert *from* Markdown
+
+-t markdown: Convert *to* Markdown
+  -citations: Remove the \"citations\" extension.  This will cause
+              citations to be expanded instead of being included as
+              markdown citations.
+
+  -simple_tables: Remove the \"simple_tables\" style.
+
+  +pipe_tables: Add the \"pipe_tables\" style insted that Blackfriday
+                understands.
+
+--atx-headers: Use \"# foo\" style heading for output markdown.
+
 These arguments are added to the `pandoc' call in addition to the
-\"--bibliography\", output file and input file arguments in that
-function.")
+\"--bibliography\", output file (\"-o\") and input file
+arguments.")
 
 (defvar org-hugo-pandoc-cite-pandoc-meta-data
   '("nocite" "csl")

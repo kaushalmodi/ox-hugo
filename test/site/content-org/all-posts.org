@@ -4624,11 +4624,7 @@ Some text.
 #+begin_myshortcode
 Text not containing *Markdown*
 #+end_myshortcode
-*** COMMENT Testing tables
-- FIXME :: Pandoc breaks the tables.. it converts the ox-hugo generated
-           Markdown tables to something that Blackfriday does not
-           recognize.
-
+*** Testing tables
 |----------+----------+----------|
 | Header 1 | Header 2 | Header 3 |
 |----------+----------+----------|

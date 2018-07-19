@@ -31,6 +31,13 @@ Some text.
 
 {{< myshortcode >}} Text not containing **Markdown** {{< /myshortcode >}}
 
+## Testing tables
+
+| Header 1 | Header 2 | Header 3 |
+|----------|----------|----------|
+| a        | b        | c        |
+| d        | e        | f        |
+
 ## References {#references}
 
 <div id="refs .references">

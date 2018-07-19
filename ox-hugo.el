@@ -75,6 +75,7 @@
 (require 'ox-blackfriday)
 (require 'ffap)                         ;For `ffap-url-regexp'
 (require 'ob-core)                      ;For `org-babel-parse-header-arguments'
+(require 'ox-hugo-pandoc-cite)
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
 
@@ -782,7 +783,7 @@ newer."
                    (:hugo-date-format "HUGO_DATE_FORMAT" nil org-hugo-date-format)
                    (:hugo-paired-shortcodes "HUGO_PAIRED_SHORTCODES" nil org-hugo-paired-shortcodes space)
                    (:hugo-pandoc-citations "HUGO_PANDOC_CITATIONS" nil nil)
-                   (:bibliography "BIBLIOGRAPHY" nil nil newline)
+                   (:bibliography "BIBLIOGRAPHY" nil nil newline) ;Used in ox-hugo-pandoc-cite
 
                    ;; Front matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -964,78 +965,7 @@ This is an internal function."
   (setq org-hugo--section nil)
   (setq org-hugo--bundle nil)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
-  ;; (message "pandoc citations keyword: %S"
-  ;;          (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
-  ;; (message "pandoc citations prop: %S"
-  ;;          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit))
-  ;; Optionally post-process the post for citations.
-  (when (and outfile
-             (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit)
-                 (org-hugo--plist-get-true-p info :hugo-pandoc-citations)))
-    (unless (executable-find "pandoc")
-      (user-error "[ox-hugo] pandoc executable not found in PATH"))
-    (let* ((bib-list (let ((bib-raw
-                            (org-string-nw-p
-                             (or (org-entry-get nil "EXPORT_BIBLIOGRAPHY" :inherit)
-                                 (org-export-data (plist-get info :bibliography) info))))) ;`org-export-data' required
-                       (when bib-raw
-                         ;; Multiple bibliographies can be comma
-                         ;; or newline separated. The newline
-                         ;; separated bibliographies work only for the
-                         ;; #+bibliography keyword; example:
-                         ;;   #+bibliography: bibliographies-1.bib
-                         ;;   #+bibliography: bibliographies-2.bib
-                         ;;
-                         ;; If using the subtree properties they need to
-                         ;; be comma-separated (now don't use commas in
-                         ;; those file names, you will suffer):
-                         ;;   :EXPORT_BIBLIOGRAPHY: bibliographies-1.bib, bibliographies-2.bib
-                         (let ((bib-list-1 (org-split-string bib-raw "[,\n]")))
-                           ;; - Don't allow spaces around bib names.
-                           ;; - Convert file names to absolute paths.
-                           ;; - Remove duplicate bibliographies.
-                           (delete-dups
-                            (mapcar (lambda (bib-file)
-                                      (let ((fname (file-truename
-                                                    (org-trim
-                                                     bib-file))))
-                                        (unless (file-exists-p fname)
-                                          (user-error "[ox-hugo] Bibliography file %S does not exist"
-                                                      fname))
-                                        fname))
-                                    bib-list-1))))))
-           (pandoc-bib-args (mapcar (lambda (bib-file)
-                                      (concat "--bibliography="
-                                              bib-file))
-                                    bib-list)))
-      (if pandoc-bib-args
-          (progn
-            ;; TODO: Figure out how to transfer the error in the below
-            ;; `call-process' to the user.
-            (apply 'call-process
-                   (append
-                    '("pandoc" nil " *Pandoc Parse Citations*" t)
-                    '("--filter" "pandoc-citeproc"
-                      "--from=markdown"
-                      "--to=markdown-citations"
-                      "--atx-headers" ;Use "# foo" style heading for output markdown
-                      "--standalone")  ;Include meta-data at the top
-                    pandoc-bib-args
-                    `(,(concat "--output=" outfile)) ;Output file
-                    `(,outfile))) ;Input file
-            ;; TODO: Figure out how to transfer the error in the below
-            ;; `start-process' to the user.
-            ;; (start-process "pandoc-parse-citations" " *Pandoc Parse Citations*"
-            ;;                "pandoc"
-            ;;                "--filter" "pandoc-citeproc"
-            ;;                "--from=markdown"
-            ;;                "--to=markdown-citations"
-            ;;                "--atx-headers" ;Use "# foo" style heading for output markdown
-            ;;                "--standalone"  ;Include meta-data at the top
-            ;;                (concat "--output=" outfile) ;Output file
-            ;;                outfile)                     ;Input file
-            )
-        (message "[ox-hugo] pandoc-citations: No bibliography file was specified")))))
+  (ox-hugo-pandoc-cite--parse-citations-maybe info outfile))
 
 ;;;; HTMLized section number for headline
 (defun org-hugo--get-headline-number (headline info &optional toc)

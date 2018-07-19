@@ -781,7 +781,7 @@ newer."
                    (:hugo-front-matter-key-replace "HUGO_FRONT_MATTER_KEY_REPLACE" nil nil space)
                    (:hugo-date-format "HUGO_DATE_FORMAT" nil org-hugo-date-format)
                    (:hugo-paired-shortcodes "HUGO_PAIRED_SHORTCODES" nil org-hugo-paired-shortcodes space)
-                   (:hugo-pandoc-citeproc "HUGO_PANDOC_CITEPROC" nil nil)
+                   (:hugo-pandoc-citations "HUGO_PANDOC_CITATIONS" nil nil)
                    (:bibliography "BIBLIOGRAPHY" nil nil newline)
 
                    ;; Front matter variables
@@ -964,18 +964,16 @@ This is an internal function."
   (setq org-hugo--section nil)
   (setq org-hugo--bundle nil)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
-  ;; (message "pandoc citeproc keyword: %S"
-  ;;          (org-hugo--plist-get-true-p info :hugo-pandoc-citeproc))
-  ;; (message "pandoc citeproc prop: %S"
-  ;;          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITEPROC" :inherit))
+  ;; (message "pandoc citations keyword: %S"
+  ;;          (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
+  ;; (message "pandoc citations prop: %S"
+  ;;          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit))
   ;; Optionally post-process the post for citations.
   (when (and outfile
-             (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITEPROC" :inherit)
-                 (org-hugo--plist-get-true-p info :hugo-pandoc-citeproc)))
+             (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit)
+                 (org-hugo--plist-get-true-p info :hugo-pandoc-citations)))
     (unless (executable-find "pandoc")
       (user-error "[ox-hugo] pandoc executable not found in PATH"))
-    (unless (executable-find "pandoc-citeproc")
-      (user-error "[ox-hugo] pandoc-citeproc executable not found in PATH"))
     (let* ((bib-list (let ((bib-raw
                             (org-string-nw-p
                              (or (org-entry-get nil "EXPORT_BIBLIOGRAPHY" :inherit)
@@ -1037,7 +1035,7 @@ This is an internal function."
             ;;                (concat "--output=" outfile) ;Output file
             ;;                outfile)                     ;Input file
             )
-        (message "[ox-hugo] pandoc-citeproc: No bibliography file was specified")))))
+        (message "[ox-hugo] pandoc-citations: No bibliography file was specified")))))
 
 ;;;; HTMLized section number for headline
 (defun org-hugo--get-headline-number (headline info &optional toc)
@@ -2846,8 +2844,8 @@ the Hugo front-matter."
 
 INFO is a plist used as a communication channel."
   ;; (message "[hugo front matter DBG] info: %S" (pp info))
-  (let* ((fm-format (if (org-hugo--plist-get-true-p info :hugo-pandoc-citeproc)
-                        ;; pandoc-citeproc parses fields like
+  (let* ((fm-format (if (org-hugo--plist-get-true-p info :hugo-pandoc-citations)
+                        ;; pandoc-citations parses fields like
                         ;; bibliography, csl and nocite from YAML
                         ;; front-matter.
                         "yaml"
@@ -3315,7 +3313,7 @@ are \"toml\" and \"yaml\"."
                      "HUGO_EXPIRYDATE"
                      "HUGO_LASTMOD"
                      "HUGO_SLUG" ;Useful for inheriting same slug to same posts in different languages
-                     "HUGO_PANDOC_CITEPROC"
+                     "HUGO_PANDOC_CITATIONS"
                      "BIBLIOGRAPHY"
                      "HUGO_AUTO_SET_LASTMOD")))
     (mapcar (lambda (str)

@@ -2074,7 +2074,7 @@ front-matter keys"/ in {{{ox-hugo-test-file}}}.
 :EXPORT_FILE_NAME: pandoc-citation
 :END:
 Pandoc based citation parsing is enabled by setting the
-~#+hugo_pandoc_citeproc:~ keyword or ~:EXPORT_HUGO_PANDOC_CITEPROC:~
+~#+hugo_pandoc_citations:~ keyword or ~:EXPORT_HUGO_PANDOC_CITATIONS:~
 subtree property to ~t~. With this property set, the exported
 front-matter is *forced to YAML*, because Pandoc needs the
 front-matter to be in YAML format to parse fields like ~bibliography~

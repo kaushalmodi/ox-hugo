@@ -4594,7 +4594,7 @@ This post should also be created in =content/section-a/=.
 *** Citations Example
 :PROPERTIES:
 :EXPORT_FILE_NAME: citations-example
-:EXPORT_HUGO_PANDOC_CITEPROC: t
+:EXPORT_HUGO_PANDOC_CITATIONS: t
 :EXPORT_BIBLIOGRAPHY: bib/bib1.bib, bib/bib2.bib
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@giovanelli2016 @eilan2016)
 :END:

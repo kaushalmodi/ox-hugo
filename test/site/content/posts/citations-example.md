@@ -16,6 +16,13 @@ See [Section 2](#citation-example-section-2).
 
 Content in section 2.
 
+## Testing random Hugo shortcode
+
+{{% mdshortcode %}} Text containing **Markdown** {{% /mdshortcode %}}
+
+{{< myshortcode >}} Text not containing **Markdown** {{< /myshortcode
+>}}
+
 ::: {#refs .references}
 ::: {#ref-eilan2016}
 Eilan, Naomi. 2016. "You Me and the World." *Analysis* 76 (3): 311--24.

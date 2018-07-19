@@ -4597,6 +4597,7 @@ This post should also be created in =content/section-a/=.
 :EXPORT_HUGO_PANDOC_CITATIONS: t
 :EXPORT_BIBLIOGRAPHY: bib/bib1.bib, bib/bib2.bib
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@giovanelli2016 @eilan2016)
+:EXPORT_HUGO_PAIRED_SHORTCODES: %mdshortcode myshortcode
 :END:
 **** Section 1
 Here is a test example file with an in-text citation where someone
@@ -4609,6 +4610,15 @@ See [[#citation-example-section-2]].
 :CUSTOM_ID: citation-example-section-2
 :END:
 Content in section 2.
+**** Testing random Hugo shortcode
+#+begin_mdshortcode
+Text containing *Markdown*
+#+end_mdshortcode
+
+#+begin_myshortcode
+Text not containing *Markdown*
+#+end_myshortcode
+
 **** COMMENT References
 * Export Options                                              :export_option:
 ** Table of Contents (TOC)                                              :toc:

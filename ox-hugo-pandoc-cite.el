@@ -69,8 +69,24 @@ The list of Pandoc specific meta-data is defined in
     (dolist (field ox-hugo-pandoc-cite-pandoc-meta-data)
       (let ((regexp (format "^%s: " (regexp-quote field))))
         (delete-matching-lines regexp)))
-    (buffer-substring-no-properties
-     (point-min) (point-max))))
+    (buffer-substring-no-properties (point-min) (point-max))))
+
+(defun ox-hugo-pandoc-cite--fix-pandoc-output (content)
+  "Fix the Pandoc output CONTENT and return it.
+
+Required fixes:
+
+- Unescape the Hugo shortcodes: \"{{\\\\=< shortcode \\\\=>}}\" -> \"{{< shortcode >}}\""
+  (with-temp-buffer
+    (insert content)
+    (goto-char (point-min))
+    (let ((case-fold-search nil)
+          (regexp (concat "{{\\\\<"
+                          "\\(?1:\\(.\\|\n\\)+?\\)"
+                          "\\\\>}}")))
+      (while (re-search-forward regexp nil :noerror)
+        (replace-match "{{<\\1>}}" :fixedcase)))
+    (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun ox-hugo-pandoc-cite--parse-citations-maybe (info)
   "Check if Pandoc needs to be run to parse citations.
@@ -137,7 +153,8 @@ OUTFILE is the Org exported file name."
                                          (insert-file-contents outfile)
                                          (buffer-substring-no-properties
                                           (point-min) (point-max))))
-                 (fm-plus-content (concat fm "\n" post-pandoc-contents)))
+                 (contents-fixed (ox-hugo-pandoc-cite--fix-pandoc-output post-pandoc-contents))
+                 (fm-plus-content (concat fm "\n" contents-fixed)))
             (write-region fm-plus-content nil outfile)))
       (message "[ox-hugo-pandoc-cite] No bibliography file was specified"))))
 

@@ -4614,11 +4614,10 @@ Content in section 2.
 #+begin_mdshortcode
 Text containing *Markdown*
 #+end_mdshortcode
-
+Some text.
 #+begin_myshortcode
 Text not containing *Markdown*
 #+end_myshortcode
-
 **** COMMENT References
 * Export Options                                              :export_option:
 ** Table of Contents (TOC)                                              :toc:

@@ -71,7 +71,7 @@ The list of Pandoc specific meta-data is defined in
         (delete-matching-lines regexp)))
     (buffer-substring-no-properties (point-min) (point-max))))
 
-(defun ox-hugo-pandoc-cite--fix-pandoc-output (content)
+(defun ox-hugo-pandoc-cite--fix-pandoc-output (content loffset)
   "Fix the Pandoc output CONTENT and return it.
 
 Required fixes:
@@ -85,24 +85,37 @@ Required fixes:
 - Replace \"::: {#ref-someref}\" with \"<a
   id=\"ref-someref\"></a>\".
 
-- Remove \"^:::$\""
+- Remove \"^:::$\"
+
+LOFFSET is the offset added to the base level of 1 for headings."
   (with-temp-buffer
     (insert content)
-    (let ((case-fold-search nil))
+    (let ((case-fold-search nil)
+          (level-mark (make-string (+ loffset 1) ?#)))
       (goto-char (point-min))
       (delete-matching-lines "^:::$")
       ;; Fix Hugo shortcodes.
       (save-excursion
         (let ((regexp (concat "{{\\\\<"
-                              "\\(?1:\\(.\\|\n\\)+?\\)"
+                              "\\(\\s-\\|\n\\)+"
+                              "\\(?1:.+?\\)"
+                              "\\(\\s-\\|\n\\)+"
                               "\\\\>}}")))
           (while (re-search-forward regexp nil :noerror)
-            (replace-match "{{<\\1>}}" :fixedcase))))
+            (replace-match "{{< \\1 >}}" :fixedcase))))
       ;; Convert Pandoc ref ID style to HTML ID's.
       (save-excursion
         (let ((regexp "^::: {#ref-\\(.+?\\)}$"))
           (while (re-search-forward regexp nil :noerror)
-            (replace-match "<a id=\"ref-\\1\"></a>" :fixedcase))))
+            (replace-match "<a id=\"ref-\\1\"></a>\n" :fixedcase))))
+      ;; Replace "::: {#refs .references}" with a base-level
+      ;; "References" heading in Markdown.
+      (save-excursion
+        (let ((regexp "^::: {#refs \\.references}$"))
+          ;; There should be one-and-only-one replacement needed for
+          ;; this.
+          (re-search-forward regexp nil :noerror)
+          (replace-match (concat level-mark " References {#references}\n"))))
       (buffer-substring-no-properties (point-min) (point-max)))))
 
 (defun ox-hugo-pandoc-cite--parse-citations-maybe (info)
@@ -160,8 +173,12 @@ OUTFILE is the Org exported file name."
                                      fname))
                                  bib-list-1)))))))
     (if bib-list
-        (let ((fm (plist-get info :front-matter)))
-          ;; (message "fm :: %S" fm)
+        (let ((fm (plist-get info :front-matter))
+              (loffset (string-to-number
+                        (or (org-entry-get nil "EXPORT_HUGO_LEVEL_OFFSET" :inherit)
+                            (plist-get info :hugo-level-offset)))))
+          ;; (message "[ox-hugo parse citations] fm :: %S" fm)
+          ;; (message "[ox-hugo parse citations] loffset :: %S" loffset)
           (ox-hugo-pandoc-cite--run-pandoc outfile bib-list)
           ;; Prepend the original ox-hugo generated front-matter to
           ;; Pandoc output.
@@ -170,7 +187,7 @@ OUTFILE is the Org exported file name."
                                          (insert-file-contents outfile)
                                          (buffer-substring-no-properties
                                           (point-min) (point-max))))
-                 (contents-fixed (ox-hugo-pandoc-cite--fix-pandoc-output post-pandoc-contents))
+                 (contents-fixed (ox-hugo-pandoc-cite--fix-pandoc-output post-pandoc-contents loffset))
                  (fm-plus-content (concat fm "\n" contents-fixed)))
             (write-region fm-plus-content nil outfile)))
       (message "[ox-hugo-pandoc-cite] No bibliography file was specified"))))

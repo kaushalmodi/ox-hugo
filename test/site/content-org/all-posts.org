@@ -4589,33 +4589,34 @@ This post should also be created in =content/section-a/=.
 :END:
 #+toc: headlines 6
 #+include: "./all-posts.org::#nested-sections-example" :only-contents t
-* Pandoc                                                             :pandoc:
-** Citeproc                                                        :citeproc:
-*** Citations Example (TOML)                                           :toml:
+* Pandoc Citations                                         :pandoc:citations:
 :PROPERTIES:
-:EXPORT_FILE_NAME: citations-example-toml
 :EXPORT_HUGO_PANDOC_CITATIONS: t
 :EXPORT_BIBLIOGRAPHY: bib/bib1.bib, bib/bib2.bib
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@giovanelli2016 @eilan2016)
 :EXPORT_HUGO_PAIRED_SHORTCODES: %mdshortcode myshortcode
+:END:
+** Citations Example (TOML)                                            :toml:
+:PROPERTIES:
+:EXPORT_FILE_NAME: citations-example-toml
 :END:
 #+begin_description
 Test the parsing of Pandoc Citations, while also testing that ox-hugo
 exported Markdown doesn't get broken -- TOML front-matter.
 #+end_description
 {{{oxhugoissue(175)}}}
-**** Section 1
+*** Section 1
 Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
 
 See [[#citation-example-section-2]].
-**** Section 2
+*** Section 2
 :PROPERTIES:
 :CUSTOM_ID: citation-example-section-2
 :END:
 Content in section 2.
-**** Testing random Hugo shortcode
+*** Testing random Hugo shortcode
 #+begin_mdshortcode
 Text containing *Markdown*
 #+end_mdshortcode
@@ -4623,7 +4624,7 @@ Some text.
 #+begin_myshortcode
 Text not containing *Markdown*
 #+end_myshortcode
-**** COMMENT Testing tables
+*** COMMENT Testing tables
 - FIXME :: Pandoc breaks the tables.. it converts the ox-hugo generated
            Markdown tables to something that Blackfriday does not
            recognize.
@@ -4634,26 +4635,23 @@ Text not containing *Markdown*
 | a        | b        | c        |
 | d        | e        | f        |
 |----------+----------+----------|
-*** Citations Example (YAML)                                           :yaml:
+** Citations Example (YAML)                                            :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
 :EXPORT_FILE_NAME: citations-example-yaml
-:EXPORT_HUGO_PANDOC_CITATIONS: t
-:EXPORT_BIBLIOGRAPHY: bib/bib1.bib, bib/bib2.bib
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@giovanelli2016 @eilan2016)
 :END:
 #+begin_description
 Test the parsing of Pandoc Citations, while also testing that ox-hugo
 exported Markdown doesn't get broken -- YAML front-matter.
 #+end_description
 {{{oxhugoissue(175)}}}
-**** Section 1
+*** Section 1
 Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
 
 See [[#citation-example-section-2]].
-**** Section 2
+*** Section 2
 :PROPERTIES:
 :CUSTOM_ID: citation-example-section-2
 :END:

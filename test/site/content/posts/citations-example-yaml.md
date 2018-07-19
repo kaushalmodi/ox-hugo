@@ -3,7 +3,7 @@ title: "Citations Example (YAML)"
 description: >
   Test the parsing of Pandoc Citations, while also testing that ox-hugo
   exported Markdown doesn't get broken -- YAML front-matter.
-tags: ["pandoc", "citeproc", "yaml"]
+tags: ["pandoc", "citations", "yaml"]
 draft: false
 ---
 

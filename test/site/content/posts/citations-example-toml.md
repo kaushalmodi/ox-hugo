@@ -4,7 +4,7 @@ description = """
   Test the parsing of Pandoc Citations, while also testing that ox-hugo
   exported Markdown doesn't get broken -- TOML front-matter.
   """
-tags = ["pandoc", "citeproc", "toml"]
+tags = ["pandoc", "citations", "toml"]
 draft = false
 +++
 

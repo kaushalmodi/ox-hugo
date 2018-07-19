@@ -1,8 +1,14 @@
 ---
 title: "Citations Example"
+description: >
+  Test the parsing of Pandoc Citations, while also testing that ox-hugo
+  exported Markdown doesn't get broken.
 tags: ["pandoc", "citeproc"]
 draft: false
 ---
+
+`ox-hugo` Issue
+\#[175](https://github.com/kaushalmodi/ox-hugo/issues/175)
 
 ## Section 1
 

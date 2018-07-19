@@ -4599,6 +4599,11 @@ This post should also be created in =content/section-a/=.
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@giovanelli2016 @eilan2016)
 :EXPORT_HUGO_PAIRED_SHORTCODES: %mdshortcode myshortcode
 :END:
+#+begin_description
+Test the parsing of Pandoc Citations, while also testing that ox-hugo
+exported Markdown doesn't get broken.
+#+end_description
+{{{oxhugoissue(175)}}}
 **** Section 1
 Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
@@ -4618,6 +4623,17 @@ Some text.
 #+begin_myshortcode
 Text not containing *Markdown*
 #+end_myshortcode
+**** COMMENT Testing tables
+- FIXME :: Pandoc breaks the tables.. it converts the ox-hugo generated
+           Markdown tables to something that Blackfriday does not
+           recognize.
+
+|----------+----------+----------|
+| Header 1 | Header 2 | Header 3 |
+|----------+----------+----------|
+| a        | b        | c        |
+| d        | e        | f        |
+|----------+----------+----------|
 * Export Options                                              :export_option:
 ** Table of Contents (TOC)                                              :toc:
 =ox-hugo= has the =with-toc= option disabled by default as Hugo has an

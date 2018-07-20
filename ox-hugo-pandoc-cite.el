@@ -43,27 +43,42 @@ arguments.")
 (defvar org-hugo-pandoc-cite--run-pandoc-buffer "*Pandoc Citations*"
   "Buffer to contain the `pandoc' run output and errors.")
 
-(defun org-hugo-pandoc-cite--run-pandoc (outfile bib-list)
-  "Run the `pandoc' process and return the exit code.
+(defun org-hugo-pandoc-cite--run-pandoc (orig-outfile bib-list)
+  "Run the `pandoc' process and return the generated file name.
 
-OUTFILE is the Org exported file name.
+ORIG-OUTFILE is the Org exported file name.
 
 BIB-LIST is a list of one or more bibliography files."
-  (let* ((bib-args (mapcar (lambda (bib-file)
+  (let* ((pandoc-outfile (make-temp-file ;ORIG_FILE_BASENAME.RANDOM.md
+                          (concat (file-name-base orig-outfile) ".")
+                          nil ".md"))
+         (bib-args (mapcar (lambda (bib-file)
                              (concat "--bibliography="
                                      bib-file))
                            bib-list))
          (pandoc-arg-list (append
                            org-hugo-pandoc-cite-pandoc-args-list
                            bib-args
-                           `("-o" ,outfile ,outfile))) ;-o <OUTPUT FILE> <INPUT FILE>
-         (pandoc-arg-list-str (mapconcat #'identity pandoc-arg-list " ")))
+                           `("-o" ,pandoc-outfile ,orig-outfile))) ;-o <OUTPUT FILE> <INPUT FILE>
+         (pandoc-arg-list-str (mapconcat #'identity pandoc-arg-list " "))
+         exit-code)
     (message (concat "[ox-hugo] Post-processing citations using Pandoc command:\n"
                      "  pandoc " pandoc-arg-list-str))
-    (apply 'call-process
-           (append
-            `("pandoc" nil ,org-hugo-pandoc-cite--run-pandoc-buffer :display)
-            pandoc-arg-list))))         ;Return the exit code
+
+    (setq exit-code (apply 'call-process
+                           (append
+                            `("pandoc" nil
+                              ,org-hugo-pandoc-cite--run-pandoc-buffer :display)
+                            pandoc-arg-list)))
+
+    (unless (= 0 exit-code)
+      (user-error (format "[ox-hugo] Pandoc execution failed. See the %S buffer"
+                          org-hugo-pandoc-cite--run-pandoc-buffer)))
+
+    ;; If no error has happened, we don't need the Pandoc run
+    ;; buffer; kill it.
+    (kill-buffer org-hugo-pandoc-cite--run-pandoc-buffer)
+    pandoc-outfile))
 
 (defun org-hugo-pandoc-cite--remove-pandoc-meta-data (fm)
   "Remove Pandoc meta-data from front-matter string FM and return it.
@@ -143,20 +158,20 @@ INFO is a plist used as a communication channel."
   ;;          (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
   ;; (message "pandoc citations prop: %S"
   ;;          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit))
-  (let ((outfile (plist-get info :outfile)))
-    (when (and outfile
+  (let ((orig-outfile (plist-get info :outfile)))
+    (when (and orig-outfile
                (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit)
                    (org-hugo--plist-get-true-p info :hugo-pandoc-citations)))
       (unless (executable-find "pandoc")
         (user-error "[ox-hugo] pandoc executable not found in PATH"))
-      (org-hugo-pandoc-cite--parse-citations info outfile))))
+      (org-hugo-pandoc-cite--parse-citations info orig-outfile))))
 
-(defun org-hugo-pandoc-cite--parse-citations (info outfile)
-  "Parse Pandoc Citations in OUTFILE and update that file.
+(defun org-hugo-pandoc-cite--parse-citations (info orig-outfile)
+  "Parse Pandoc Citations in ORIG-OUTFILE and update that file.
 
 INFO is a plist used as a communication channel.
 
-OUTFILE is the Org exported file name."
+ORIG-OUTFILE is the Org exported file name."
   (let ((bib-list (let ((bib-raw
                          (org-string-nw-p
                           (or (org-entry-get nil "EXPORT_BIBLIOGRAPHY" :inherit)
@@ -194,29 +209,23 @@ OUTFILE is the Org exported file name."
               (loffset (string-to-number
                         (or (org-entry-get nil "EXPORT_HUGO_LEVEL_OFFSET" :inherit)
                             (plist-get info :hugo-level-offset))))
-              (exit-code (org-hugo-pandoc-cite--run-pandoc outfile bib-list)))
+              (pandoc-outfile (org-hugo-pandoc-cite--run-pandoc orig-outfile bib-list)))
           ;; (message "[ox-hugo parse citations] fm :: %S" fm)
           ;; (message "[ox-hugo parse citations] loffset :: %S" loffset)
-          ;; (message "[ox-hugo parse citations] exit-code :: %S" exit-code)
-
-          (unless (= 0 exit-code)
-            (user-error (format "[ox-hugo] Pandoc execution failed. See the %S buffer"
-                                org-hugo-pandoc-cite--run-pandoc-buffer)))
-
-          ;; If no error has happened, we don't need the Pandoc run
-          ;; buffer; kill it.
-          (kill-buffer org-hugo-pandoc-cite--run-pandoc-buffer)
+          ;; (message "[ox-hugo parse citations] pandoc-outfile :: %S" pandoc-outfile)
 
           ;; Prepend the original ox-hugo generated front-matter to
           ;; Pandoc output.
           (let* ((fm (org-hugo-pandoc-cite--remove-pandoc-meta-data fm))
-                 (post-pandoc-contents (with-temp-buffer
-                                         (insert-file-contents outfile)
-                                         (buffer-substring-no-properties
-                                          (point-min) (point-max))))
-                 (contents-fixed (org-hugo-pandoc-cite--fix-pandoc-output post-pandoc-contents loffset))
+                 (pandoc-outfile-contents (with-temp-buffer
+                                            (insert-file-contents pandoc-outfile)
+                                            (buffer-substring-no-properties
+                                             (point-min) (point-max))))
+                 (contents-fixed (org-hugo-pandoc-cite--fix-pandoc-output
+                                  pandoc-outfile-contents loffset))
                  (fm-plus-content (concat fm "\n" contents-fixed)))
-            (write-region fm-plus-content nil outfile)))
+            (write-region fm-plus-content nil orig-outfile)
+            (delete-file pandoc-outfile)))
       (message "[ox-hugo-pandoc-cite] No bibliography file was specified"))))
 
 

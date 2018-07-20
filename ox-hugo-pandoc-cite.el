@@ -184,48 +184,6 @@ LOFFSET is the offset added to the base level of 1 for headings."
           (replace-match "\n\n</div> <!-- ending references -->")))
       (buffer-substring-no-properties (point-min) (point-max)))))
 
-(defun org-hugo-pandoc-cite--parse-citations-maybe (info)
-  "Check if Pandoc needs to be run to parse citations; and run it.
-
-INFO is a plist used as a communication channel."
-  ;; (message "pandoc citations keyword: %S"
-  ;;          (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
-  ;; (message "pandoc citations prop: %S"
-  ;;          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit))
-  (let* ((orig-outfile (plist-get info :outfile))
-         (pandoc-enabled (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit)
-                             (org-hugo--plist-get-true-p info :hugo-pandoc-citations)))
-         (fm (plist-get info :front-matter))
-         (has-nocite (string-match-p "^nocite\\(:\\| =\\) " fm))
-         (orig-outfile-contents (with-temp-buffer
-                                  (insert-file-contents orig-outfile)
-                                  (buffer-substring-no-properties
-                                   (point-min) (point-max))))
-         ;; http://pandoc.org/MANUAL.html#citations
-         ;; Each citation must have a key, composed of `@' + the
-         ;; citation identifier from the database, and may optionally
-         ;; have a prefix, a locator, and a suffix. The citation key
-         ;; must begin with a letter, digit, or _, and may contain
-         ;; alphanumerics, _, and internal punctuation characters
-         ;; (:.#$%&-+?<>~/).
-         ;; A minus sign (-) before the @ will suppress mention of the
-         ;; author in the citation.
-         (valid-citation-key-char-regexp "a-zA-Z0-9_:.#$%&+?<>~/-")
-         (citation-key-regexp (concat "[^" valid-citation-key-char-regexp "]"
-                                      "\\(-?@[a-zA-Z0-9_]"
-                                      "[" valid-citation-key-char-regexp "]+\\)"))
-         (has-@ (string-match-p citation-key-regexp orig-outfile-contents)))
-    (when pandoc-enabled
-      ;; Either the nocite front-matter should be there, or the
-      ;; citation keys should be present in the `orig-outfile'.
-      (if (or has-nocite has-@)
-          (progn
-            (unless (executable-find "pandoc")
-              (user-error "[ox-hugo] pandoc executable not found in PATH"))
-            (org-hugo-pandoc-cite--parse-citations info orig-outfile))
-        (org-hugo-pandoc-cite--restore-fm-in-orig-outfile
-         orig-outfile fm orig-outfile-contents)))))
-
 (defun org-hugo-pandoc-cite--parse-citations (info orig-outfile)
   "Parse Pandoc Citations in ORIG-OUTFILE and update that file.
 
@@ -305,6 +263,45 @@ ORIG-OUTFILE is the Org exported file name."
               ;; Kill the Pandoc run buffer if it is empty.
               (kill-buffer org-hugo-pandoc-cite--run-pandoc-buffer))))
       (message "[ox-hugo] No bibliography file was specified"))))
+
+(defun org-hugo-pandoc-cite--parse-citations-maybe (info)
+  "Check if Pandoc needs to be run to parse citations; and run it.
+
+INFO is a plist used as a communication channel."
+  ;; (message "pandoc citations keyword: %S"
+  ;;          (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
+  ;; (message "pandoc citations prop: %S"
+  ;;          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit))
+  (let* ((orig-outfile (plist-get info :outfile))
+         (fm (plist-get info :front-matter))
+         (has-nocite (string-match-p "^nocite\\(:\\| =\\) " fm))
+         (orig-outfile-contents (with-temp-buffer
+                                  (insert-file-contents orig-outfile)
+                                  (buffer-substring-no-properties
+                                   (point-min) (point-max))))
+         ;; http://pandoc.org/MANUAL.html#citations
+         ;; Each citation must have a key, composed of `@' + the
+         ;; citation identifier from the database, and may optionally
+         ;; have a prefix, a locator, and a suffix. The citation key
+         ;; must begin with a letter, digit, or _, and may contain
+         ;; alphanumerics, _, and internal punctuation characters
+         ;; (:.#$%&-+?<>~/).
+         ;; A minus sign (-) before the @ will suppress mention of the
+         ;; author in the citation.
+         (valid-citation-key-char-regexp "a-zA-Z0-9_:.#$%&+?<>~/-")
+         (citation-key-regexp (concat "[^" valid-citation-key-char-regexp "]"
+                                      "\\(-?@[a-zA-Z0-9_]"
+                                      "[" valid-citation-key-char-regexp "]+\\)"))
+         (has-@ (string-match-p citation-key-regexp orig-outfile-contents)))
+    ;; Either the nocite front-matter should be there, or the
+    ;; citation keys should be present in the `orig-outfile'.
+    (if (or has-nocite has-@)
+        (progn
+          (unless (executable-find "pandoc")
+            (user-error "[ox-hugo] pandoc executable not found in PATH"))
+          (org-hugo-pandoc-cite--parse-citations info orig-outfile))
+      (org-hugo-pandoc-cite--restore-fm-in-orig-outfile
+       orig-outfile fm orig-outfile-contents))))
 
 
 (provide 'ox-hugo-pandoc-cite)

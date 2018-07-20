@@ -75,7 +75,7 @@
 (require 'ox-blackfriday)
 (require 'ffap)                         ;For `ffap-url-regexp'
 (require 'ob-core)                      ;For `org-babel-parse-header-arguments'
-(require 'ox-hugo-pandoc-cite)
+(declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
 
@@ -978,10 +978,14 @@ This is an internal function."
   (setq org-hugo--section nil)
   (setq org-hugo--bundle nil)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
-  (when outfile
-    (plist-put info :outfile outfile)
-    (plist-put info :front-matter org-hugo--fm)
-    (org-hugo-pandoc-cite--parse-citations-maybe info))
+  (let ((pandoc-enabled (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit)
+                            (org-hugo--plist-get-true-p info :hugo-pandoc-citations))))
+    (when (and outfile
+               pandoc-enabled)
+      (require 'ox-hugo-pandoc-cite)
+      (plist-put info :outfile outfile)
+      (plist-put info :front-matter org-hugo--fm)
+      (org-hugo-pandoc-cite--parse-citations-maybe info)))
   (setq org-hugo--fm nil)
   (setq org-hugo--fm-yaml nil))
 

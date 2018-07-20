@@ -56,6 +56,31 @@ Some text.
 (message "Hello World")
 ```
 
+## Lists Galore
+
+-   item1 in list
+-   item2 in list. The following list is in a separate list body.
+
+<!--listend-->
+-   L1 -- foo1
+-   L1 -- foo2
+    -   L2 -- bar1
+    -   L2 -- bar2
+        -   L3 -- baz1
+        -   L3 -- baz2
+            -   L4 -- zoo1
+            -   L4 -- zoo2
+                1.  L5 -- numbered1
+                2.  L5 -- numbered2
+            -   L4 -- zoo1
+            -   L4 -- zoo2
+        -   L3 -- baz1
+        -   L3 -- baz2
+    -   L2 -- bar1
+    -   L2 -- bar2
+-   L1 -- foo1
+-   L1 -- foo2
+
 ## References {#references}
 
 <div id="refs" class="references">

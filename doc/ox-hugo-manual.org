@@ -2143,12 +2143,16 @@ another bit of blah with a footnote citation.[fn:1]
 {{{test-search(citations)}}}
 
 Also see [[https://pandoc.org/MANUAL.html#citations][Pandoc Manual -- Citations]] for more details.
-**** Caveat
-How the Pandoc Citations support works is that:
+**** How Pandoc Citations work
 1. ~ox-hugo~ first exports the Org file/subtree to a Markdown file as
    usual.
 2. ~pandoc~ then expands the ~@foo~ citations in that file and
    *rewrites* the whole Markdown file from the AST parsed by it.
+***** COMMENT
+/Below caveat shouldn't apply now. Pandoc output seems to be pretty
+much Blackfriday-compatiable now -- <2018-07-20 Fri>/
+
+-----
 
 /Mostly/ this would work fine.
 

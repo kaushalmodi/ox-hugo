@@ -4639,6 +4639,29 @@ Text not containing *Markdown*
 #+begin_src emacs-lisp
 (message "Hello World")
 #+end_src
+*** Lists Galore
+- item1 in list
+- item2 in list. The following list is in a separate list body.
+
+
+- L1 -- foo1
+- L1 -- foo2
+  - L2 -- bar1
+  - L2 -- bar2
+    + L3 -- baz1
+    + L3 -- baz2
+      - L4 -- zoo1
+      - L4 -- zoo2
+        1. L5 -- numbered1
+        2. L5 -- numbered2
+      - L4 -- zoo1
+      - L4 -- zoo2
+    + L3 -- baz1
+    + L3 -- baz2
+  - L2 -- bar1
+  - L2 -- bar2
+- L1 -- foo1
+- L1 -- foo2
 ** Citations Example (YAML)                                            :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml

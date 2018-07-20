@@ -197,7 +197,7 @@ ORIG-OUTFILE is the Org exported file name."
   (let ((bib-list (let ((bib-raw
                          (org-string-nw-p
                           (or (org-entry-get nil "EXPORT_BIBLIOGRAPHY" :inherit)
-                              (org-export-data (plist-get info :bibliography) info))))) ;`org-export-data' required
+                              (format "%s" (plist-get info :bibliography))))))
                     (when bib-raw
                       ;; Multiple bibliographies can be comma or
                       ;; newline separated. The newline separated

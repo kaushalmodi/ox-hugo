@@ -4635,6 +4635,10 @@ Text not containing *Markdown*
 | a        | b        | c        |
 | d        | e        | f        |
 |----------+----------+----------|
+*** Testing fenced code blocks
+#+begin_src emacs-lisp
+(message "Hello World")
+#+end_src
 ** Citations Example (YAML)                                            :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml

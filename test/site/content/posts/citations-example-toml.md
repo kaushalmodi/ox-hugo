@@ -50,6 +50,12 @@ Some text.
 | a        | b        | c        |
 | d        | e        | f        |
 
+## Testing fenced code blocks
+
+``` emacs-lisp
+(message "Hello World")
+```
+
 ## References {#references}
 
 <div id="refs" class="references">

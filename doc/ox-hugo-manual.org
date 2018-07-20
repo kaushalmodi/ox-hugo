@@ -2152,8 +2152,8 @@ with all the details (reproducible Org snippet, failing Markdown
 output by Pandoc, etc.), and we can see if this is something that can
 be fixed.
 
-(Of course, open an issue whenever any ~ox-hugo~ export does do things
-as you expect :smile:)
+(Of course, open an issue whenever any ~ox-hugo~ export does not do
+things as you expect :smile:)
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"

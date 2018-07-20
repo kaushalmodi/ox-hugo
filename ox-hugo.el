@@ -134,7 +134,7 @@ front-matter that's used after Pandoc Citation parsing.")
 (defvar org-hugo--fm-yaml nil
   "Variable to store the current Hugo post's front-matter string in YAML format.
 
-Pandoc understands meta-data only in YAML format. So when Pandoc
+Pandoc understands meta-data only in YAML format.  So when Pandoc
 Citations are enabled, Pandoc is handed over the file with this
 YAML front-matter.")
 

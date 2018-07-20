@@ -2074,18 +2074,24 @@ front-matter keys"/ in {{{ox-hugo-test-file}}}.
 :PROPERTIES:
 :EXPORT_FILE_NAME: pandoc-citations
 :END:
-[[https://pandoc.org/][Pandoc]] based citation parsing is enabled by setting the
-~#+hugo_pandoc_citations:~ keyword or ~:EXPORT_HUGO_PANDOC_CITATIONS:~
-subtree property to ~t~.
+The [[https://pandoc.org/][Pandoc]] Citations are prefixed with the *@* character. If the
+citation is ~@foo~, that particular /foo/ reference much be present in
+one of the specified bibliography files.
 
 #+begin_note
 Users need to have the ~pandoc~ executable present in their ~PATH~.
 #+end_note
+**** Enabling
+Pandoc based citation parsing is enabled by setting the
+~#+hugo_pandoc_citations:~ keyword or ~:EXPORT_HUGO_PANDOC_CITATIONS:~
+subtree property to ~t~.
 
-The Pandoc Citations are prefixed with the *@* character. If the
-citation is ~@foo~, that particular /foo/ reference much be present in
-one of the specified bibliography files.
-
+#+begin_note
+If a post has neither [[* Nocite][~nocite~]] meta-data, nor valid citation keys
+(~@foo~), the Pandoc parsing step is skipped *even if* the above
+Pandoc Citations parsing option is enabled.
+#+end_note
+**** Bibliography
 Bibliography files (~example.bib~) are specified using the
 ~#+bibliography:~ keyword or ~:EXPORT_BIBLIOGRAPHY:~ subtree
 property. *It is mandatory to specify at least one bibliography file.*
@@ -2093,12 +2099,12 @@ property. *It is mandatory to specify at least one bibliography file.*
 Multiple comma-separated bibliography files can be
 specified. /Note that the path to these files should be relative to
 the Org file directory./
-
+**** Nocite
 ~nocite~ is a special Pandoc-specific meta-data which can be used to
 add extra citations even when they are not referenced in the post. It
 is set like any other list-type custom front-matter parameter
 (i.e. ~:LIST_PARAM '(ELEMENT1 ELEMENT2)~).
-
+**** Example
 Here is a mini-example using Pandoc Citations:
 #+begin_src org
 ,* Citations Example

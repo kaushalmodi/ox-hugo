@@ -978,9 +978,10 @@ This is an internal function."
   (setq org-hugo--section nil)
   (setq org-hugo--bundle nil)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
-  (plist-put info :outfile outfile)
-  (plist-put info :front-matter org-hugo--fm)
-  (org-hugo-pandoc-cite--parse-citations-maybe info)
+  (when outfile
+    (plist-put info :outfile outfile)
+    (plist-put info :front-matter org-hugo--fm)
+    (org-hugo-pandoc-cite--parse-citations-maybe info))
   (setq org-hugo--fm nil)
   (setq org-hugo--fm-yaml nil))
 

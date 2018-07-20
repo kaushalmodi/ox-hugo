@@ -151,20 +151,55 @@ LOFFSET is the offset added to the base level of 1 for headings."
       (buffer-substring-no-properties (point-min) (point-max)))))
 
 (defun org-hugo-pandoc-cite--parse-citations-maybe (info)
-  "Check if Pandoc needs to be run to parse citations.
+  "Check if Pandoc needs to be run to parse citations; and run it.
 
 INFO is a plist used as a communication channel."
   ;; (message "pandoc citations keyword: %S"
   ;;          (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
   ;; (message "pandoc citations prop: %S"
   ;;          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit))
-  (let ((orig-outfile (plist-get info :outfile)))
-    (when (and orig-outfile
-               (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit)
-                   (org-hugo--plist-get-true-p info :hugo-pandoc-citations)))
-      (unless (executable-find "pandoc")
-        (user-error "[ox-hugo] pandoc executable not found in PATH"))
-      (org-hugo-pandoc-cite--parse-citations info orig-outfile))))
+  (let* ((orig-outfile (plist-get info :outfile))
+         (pandoc-enabled (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit)
+                             (org-hugo--plist-get-true-p info :hugo-pandoc-citations)))
+         (fm (plist-get info :front-matter))
+         (has-nocite (string-match-p "^nocite\\(:\\| =\\) " fm))
+         (orig-outfile-contents (with-temp-buffer
+                                  (insert-file-contents orig-outfile)
+                                  (buffer-substring-no-properties
+                                   (point-min) (point-max))))
+         ;; http://pandoc.org/MANUAL.html#citations
+         ;; Each citation must have a key, composed of `@' + the
+         ;; citation identifier from the database, and may optionally
+         ;; have a prefix, a locator, and a suffix. The citation key
+         ;; must begin with a letter, digit, or _, and may contain
+         ;; alphanumerics, _, and internal punctuation characters
+         ;; (:.#$%&-+?<>~/).
+         ;; A minus sign (-) before the @ will suppress mention of the
+         ;; author in the citation.
+         (valid-citation-key-char-regexp "a-zA-Z0-9_:.#$%&+?<>~/-")
+         (citation-key-regexp (concat "[^" valid-citation-key-char-regexp "]"
+                                      "\\(-?@[a-zA-Z0-9_]"
+                                      "[" valid-citation-key-char-regexp "]+\\)"))
+         (has-@ (string-match-p citation-key-regexp orig-outfile-contents)))
+    (when pandoc-enabled
+      ;; Either the nocite front-matter should be there, or the
+      ;; citation keys should be present in the `orig-outfile'.
+      (if (or has-nocite has-@)
+          (progn
+            (unless (executable-find "pandoc")
+              (user-error "[ox-hugo] pandoc executable not found in PATH"))
+            (org-hugo-pandoc-cite--parse-citations info orig-outfile))
+        ;; Otherwise restore the front-matter format to TOML if set so
+        ;; by the user.
+        (unless (string= fm org-hugo--fm-yaml)
+          (let* ((orig-contents-only
+                  (replace-regexp-in-string
+                   ;; The `orig-contents-only' will always be in YAML.
+                   ;; Delete that first.
+                   "\\`---\n\\(.\\|\n\\)+\n---\n" "" orig-outfile-contents))
+                 (toml-fm-plus-orig-contents (concat fm orig-contents-only)))
+            ;; (message "[ox-hugo-pandoc-cite] orig-contents-only: %S" orig-contents-only)
+            (write-region toml-fm-plus-orig-contents nil orig-outfile)))))))
 
 (defun org-hugo-pandoc-cite--parse-citations (info orig-outfile)
   "Parse Pandoc Citations in ORIG-OUTFILE and update that file.

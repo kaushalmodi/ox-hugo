@@ -2081,6 +2081,10 @@ one of the specified bibliography files.
 #+begin_note
 Users need to have the ~pandoc~ executable present in their ~PATH~.
 #+end_note
+
+When one or more citations are found by Pandoc, a top-level
+"References" section with matching references is automatically added
+at the very end of the post.
 **** Enabling
 Pandoc based citation parsing is enabled by setting the
 ~#+hugo_pandoc_citations:~ keyword or ~:EXPORT_HUGO_PANDOC_CITATIONS:~
@@ -2103,8 +2107,17 @@ the Org file directory./
 ~nocite~ is a special Pandoc-specific meta-data which can be used to
 add extra citations even when they are not referenced in the post. It
 is set like any other list-type custom front-matter parameter
-(i.e. ~:LIST_PARAM '(ELEMENT1 ELEMENT2)~).
+(i.e. ~:LIST_PARAM '(ELEMENT1 ELEMENT2)~). See its example [[#pandoc-citations-example][below]].
+**** Link citations
+~link-citations~ is a special Pandoc-specific meta-data which, when
+set to ~true~, enables linking of the citations in the post body to
+the corresponding reference in the "References" section. It is set
+like any other single-value custom front-matter parameter
+(i.e. ~:LIST_PARAM VALUE~). See its example [[#pandoc-citations-example][below]].
 **** Example
+:PROPERTIES:
+:CUSTOM_ID: pandoc-citations-example
+:END:
 Here is a mini-example using Pandoc Citations:
 #+begin_src org
 ,* Citations Example
@@ -2113,6 +2126,7 @@ Here is a mini-example using Pandoc Citations:
 :EXPORT_HUGO_PANDOC_CITATIONS: t
 :EXPORT_BIBLIOGRAPHY: bib/bib1.bib, bib/bib2.bib
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@cite3 @cite4)
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :link-citations true
 :END:
 Here is a test example file with an in-text citation where someone
 important says something important (e.g. @cite1). And here is

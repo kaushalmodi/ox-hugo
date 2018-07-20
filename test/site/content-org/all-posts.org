@@ -4656,6 +4656,18 @@ See [[#citation-example-section-2]].
 :CUSTOM_ID: citation-example-section-2
 :END:
 Content in section 2.
+** Citation Linking                                          :link_citations:
+:PROPERTIES:
+:EXPORT_FILE_NAME: citation-linking
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :link-citations true
+:END:
+#+begin_description
+Auto-link citations from post body to the citation in References
+section.
+#+end_description
+Here is a test example file with an in-text citation where someone
+important says something important (e.g. @loncar2016). And here is
+another bit of blah with a footnote citation.[fn:5]
 ** No Citations                                                        :none:
 :PROPERTIES:
 :EXPORT_FILE_NAME: citations-none
@@ -6375,7 +6387,7 @@ state of Org TODO overrides that.
 :EXPORT_FILE_NAME: hugo-draft-false-todo-state-done
 :END:
 The *DONE* state of Org TODO sets ~draft~ to ~false~ for this post.
-*** HUGO_DRAFT false, no TODO state                            :property:
+*** HUGO_DRAFT false, no TODO state                                :property:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hugo-draft-false-todo-state-none
 :END:

@@ -45,7 +45,7 @@ These arguments are added to the `pandoc' call in addition to the
 arguments.")
 
 (defvar org-hugo-pandoc-cite-pandoc-meta-data
-  '("nocite" "csl")
+  '("nocite" "csl" "link-citations")
   "List of meta-data fields specific to Pandoc.")
 
 (defvar org-hugo-pandoc-cite--run-pandoc-buffer "*Pandoc Citations*"

@@ -14,7 +14,7 @@ draft: false
 
 Here is a test example file with an in-text citation where someone
 important says something important (e.g. Loncar (2016)). And here is
-another bit of blah with a footnote citation.[^1]
+another bit of blah with a footnote citation.[^fn:1]
 
 See [Section 2](#citation-example-section-2).
 
@@ -65,4 +65,4 @@ Level."
 
 </div> <!-- ending references -->
 
-[^1]: See (Thompson et al. 2016).
+[^fn:1]: See (Thompson et al. 2016).

@@ -24,7 +24,7 @@ Content in section 2.
 
 ## References {#references}
 
-<div id="refs .references">
+<div id="refs" class="references">
   <div></div>
 
 

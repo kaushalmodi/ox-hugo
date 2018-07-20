@@ -183,7 +183,7 @@ LOFFSET is the offset added to the base level of 1 for headings."
         (when (re-search-forward org-hugo-pandoc-cite--references-header-regexp nil :noerror)
           (replace-match (concat level-mark
                                  " References {#references}\n\n"
-                                 "<div id=\"refs .references\">"
+                                 "<div id=\"refs\" class=\"references\">"
                                  "\n  <div></div>\n\n")) ;See footnote 1
           (re-search-forward "^:::$")
           (replace-match "\n\n</div> <!-- ending references -->")))

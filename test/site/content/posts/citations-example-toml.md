@@ -40,7 +40,7 @@ Some text.
 
 ## References {#references}
 
-<div id="refs .references">
+<div id="refs" class="references">
   <div></div>
 
 

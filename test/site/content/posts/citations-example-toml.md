@@ -31,6 +31,18 @@ Some text.
 
 {{< myshortcode >}} Text not containing **Markdown** {{< /myshortcode >}}
 
+## Testing ox-hugo inserted HTML div tags
+
+<div class="foo">
+
+<div>
+
+</div>
+
+**bold** *italics*
+
+</div>
+
 ## Testing tables
 
 | Header 1 | Header 2 | Header 3 |
@@ -78,7 +90,6 @@ Level."
 
 </div>
 
-
-</div> <!-- ending references -->
+</div>
 
 [^fn:1]: See (Thompson et al. 2016).

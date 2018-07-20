@@ -14,7 +14,7 @@
 ;; TODO: Change the defconst to defvar
 (defvar org-hugo-pandoc-cite-pandoc-args-list
   '("-f" "markdown"
-    "-t" "markdown-citations-simple_tables+pipe_tables"
+    "-t" "markdown-citations-simple_tables+pipe_tables-fenced_divs"
     "--atx-headers"
     "--id-prefix=fn:")
   "Pandoc arguments used in `org-hugo-pandoc-cite--run-pandoc'.
@@ -30,6 +30,9 @@
 
   +pipe_tables : Add the \"pipe_tables\" style insted that Blackfriday
                  understands.
+
+  -fenced_divs : Do not replace HTML <div> tags with Pandoc fenced
+                 divs \":::\".
 
 --atx-headers : Use \"# foo\" style heading for output markdown.
 
@@ -48,7 +51,8 @@ arguments.")
 (defvar org-hugo-pandoc-cite--run-pandoc-buffer "*Pandoc Citations*"
   "Buffer to contain the `pandoc' run output and errors.")
 
-(defvar org-hugo-pandoc-cite--references-header-regexp "^::: {#refs \\.references}$"
+(defvar org-hugo-pandoc-cite--references-header-regexp
+  "^<div id=\"refs\" class=\"references\">$"
   "Regexp to match the Pandoc-inserted references header string.
 
 This string is present only if Pandoc has resolved one or more
@@ -138,24 +142,37 @@ The list of Pandoc specific meta-data is defined in
 
 Required fixes:
 
+- Prepend Pandoc inserted \"references\" class div with Markdown
+  heading \"## References\" where the number of hashes depends on
+  LOFFSET.  LOFFSET = 1 will insert 2 hashes.
+
+- Add the Blackfriday required \"<div></div>\" hack to Pandoc
+  divs with \"ref\" id's.
+
 - Unescape the Hugo shortcodes: \"{{\\\\=< shortcode \\\\=>}}\" ->
-  \"{{< shortcode >}}\".
-
-- Replace \"::: {#refs .references}\" with \"## References\"
-  where the number of hashes depends on HUGO_LEVEL_OFFSET,
-  followed by an opening HTML div tag.
-
-- Replace \"::: {#ref-someref}\" with \"<div
-  id=\"ref-someref\">\".
-
-- Replace \"^:::$\" with closing HTML div tags.
-
-LOFFSET is the offset added to the base level of 1 for headings."
+  \"{{< shortcode >}}\"."
   (with-temp-buffer
     (insert content)
     (let ((case-fold-search nil)
           (level-mark (make-string (+ loffset 1) ?#)))
       (goto-char (point-min))
+
+      ;; Prepend the Pandoc inserted "references" class div with
+      ;; "References" heading in Markdown.
+      (save-excursion
+        ;; There should be at max only one replacement needed for
+        ;; this.
+        (when (re-search-forward org-hugo-pandoc-cite--references-header-regexp nil :noerror)
+          (replace-match (concat level-mark
+                                 " References {#references}\n\n"
+                                 "\\&\n  <div></div>\n")))) ;See footnote 1
+
+      ;; Add the Blackfriday required hack to Pandoc ref divs.
+      (save-excursion
+        (let ((regexp "^<div id=\"ref-[^\"]+\">$"))
+          (while (re-search-forward regexp nil :noerror)
+            (replace-match "\\&\n  <div></div>")))) ;See footnote 1
+
       ;; Fix Hugo shortcodes.
       (save-excursion
         (let ((regexp (concat "{{\\\\<"
@@ -165,28 +182,7 @@ LOFFSET is the offset added to the base level of 1 for headings."
                               "\\\\>}}")))
           (while (re-search-forward regexp nil :noerror)
             (replace-match "{{< \\1 >}}" :fixedcase))))
-      ;; Convert Pandoc ref ID style to HTML div's.
-      (save-excursion
-        (let ((regexp "^::: {#ref-\\(.+?\\)}$"))
-          (while (re-search-forward regexp nil :noerror)
-            (replace-match (concat "<div id=\"ref-\\1\">"
-                                   "\n  <div></div>\n") ;See footnote 1
-                           :fixedcase)
-            (re-search-forward "^:::$")
-            (replace-match "\n</div>"))))
-      ;; Replace "::: {#refs .references}" with a base-level
-      ;; "References" heading in Markdown, followed by an opening HTML
-      ;; div tag.
-      (save-excursion
-        ;; There should be at max only one replacement needed for
-        ;; this.
-        (when (re-search-forward org-hugo-pandoc-cite--references-header-regexp nil :noerror)
-          (replace-match (concat level-mark
-                                 " References {#references}\n\n"
-                                 "<div id=\"refs\" class=\"references\">"
-                                 "\n  <div></div>\n\n")) ;See footnote 1
-          (re-search-forward "^:::$")
-          (replace-match "\n\n</div> <!-- ending references -->")))
+
       (buffer-substring-no-properties (point-min) (point-max)))))
 
 (defun org-hugo-pandoc-cite--parse-citations (info orig-outfile)

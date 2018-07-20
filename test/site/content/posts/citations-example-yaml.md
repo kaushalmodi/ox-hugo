@@ -62,7 +62,6 @@ Level."
 
 </div>
 
-
-</div> <!-- ending references -->
+</div>
 
 [^fn:1]: See (Thompson et al. 2016).

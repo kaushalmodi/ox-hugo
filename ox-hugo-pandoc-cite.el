@@ -43,6 +43,41 @@ arguments.")
 (defvar org-hugo-pandoc-cite--run-pandoc-buffer "*Pandoc Citations*"
   "Buffer to contain the `pandoc' run output and errors.")
 
+(defvar org-hugo-pandoc-cite--references-header-regexp "^::: {#refs \\.references}$"
+  "Regexp to match the Pandoc-inserted references header string.
+
+This string is present only if Pandoc has resolved one or more
+references.")
+
+(defun org-hugo-pandoc-cite--restore-fm-in-orig-outfile (orig-outfile fm &optional orig-full-contents)
+  "Restore the intended front-matter format in ORIG-OUTFILE.
+
+ORIG-OUTFILE is the Org exported file name.
+
+FM is the intended front-matter format.
+
+ORIG-FULL-CONTENTS is a string of ORIG-OUTFILE contents.  If this
+is nil it is created in this function.
+
+If FM is already in YAML format, this function doesn't do
+anything.  Otherwise, the YAML format front-matter in
+ORIG-OUTFILE is replaced with TOML format."
+  (unless (string= fm org-hugo--fm-yaml)
+    (unless orig-full-contents
+      (setq orig-full-contents (with-temp-buffer
+                                 (insert-file-contents orig-outfile)
+                                 (buffer-substring-no-properties
+                                  (point-min) (point-max)))))
+    (setq fm (org-hugo-pandoc-cite--remove-pandoc-meta-data fm))
+    (let* ((orig-contents-only
+            (replace-regexp-in-string
+             ;; The `orig-contents-only' will always be in YAML.
+             ;; Delete that first.
+             "\\`---\n\\(.\\|\n\\)+\n---\n" "" orig-full-contents))
+           (toml-fm-plus-orig-contents (concat fm orig-contents-only)))
+      ;; (message "[ox-hugo-pandoc-cite] orig-contents-only: %S" orig-contents-only)
+      (write-region toml-fm-plus-orig-contents nil orig-outfile))))
+
 (defun org-hugo-pandoc-cite--run-pandoc (orig-outfile bib-list)
   "Run the `pandoc' process and return the generated file name.
 
@@ -88,9 +123,9 @@ The list of Pandoc specific meta-data is defined in
   (with-temp-buffer
     (insert fm)
     (goto-char (point-min))
-    (dolist (field org-hugo-pandoc-cite-pandoc-meta-data)
-      (let ((regexp (format "^%s\\(:\\| =\\) " (regexp-quote field))))
-        (delete-matching-lines regexp)))
+    (let ((regexp (format "^%s\\(:\\| =\\) "
+                          (regexp-opt org-hugo-pandoc-cite-pandoc-meta-data 'words))))
+      (delete-matching-lines regexp))
     (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun org-hugo-pandoc-cite--fix-pandoc-output (content loffset)
@@ -138,16 +173,15 @@ LOFFSET is the offset added to the base level of 1 for headings."
       ;; "References" heading in Markdown, followed by an opening HTML
       ;; div tag.
       (save-excursion
-        (let ((regexp "^::: {#refs \\.references}$"))
-          ;; There should be at max only one replacement needed for
-          ;; this.
-          (when (re-search-forward regexp nil :noerror)
-            (replace-match (concat level-mark
-                                   " References {#references}\n\n"
-                                   "<div id=\"refs .references\">"
-                                   "\n  <div></div>\n\n")) ;See footnote 1
-            (re-search-forward "^:::$")
-            (replace-match "\n\n</div> <!-- ending references -->"))))
+        ;; There should be at max only one replacement needed for
+        ;; this.
+        (when (re-search-forward org-hugo-pandoc-cite--references-header-regexp nil :noerror)
+          (replace-match (concat level-mark
+                                 " References {#references}\n\n"
+                                 "<div id=\"refs .references\">"
+                                 "\n  <div></div>\n\n")) ;See footnote 1
+          (re-search-forward "^:::$")
+          (replace-match "\n\n</div> <!-- ending references -->")))
       (buffer-substring-no-properties (point-min) (point-max)))))
 
 (defun org-hugo-pandoc-cite--parse-citations-maybe (info)
@@ -189,17 +223,8 @@ INFO is a plist used as a communication channel."
             (unless (executable-find "pandoc")
               (user-error "[ox-hugo] pandoc executable not found in PATH"))
             (org-hugo-pandoc-cite--parse-citations info orig-outfile))
-        ;; Otherwise restore the front-matter format to TOML if set so
-        ;; by the user.
-        (unless (string= fm org-hugo--fm-yaml)
-          (let* ((orig-contents-only
-                  (replace-regexp-in-string
-                   ;; The `orig-contents-only' will always be in YAML.
-                   ;; Delete that first.
-                   "\\`---\n\\(.\\|\n\\)+\n---\n" "" orig-outfile-contents))
-                 (toml-fm-plus-orig-contents (concat fm orig-contents-only)))
-            ;; (message "[ox-hugo-pandoc-cite] orig-contents-only: %S" orig-contents-only)
-            (write-region toml-fm-plus-orig-contents nil orig-outfile)))))))
+        (org-hugo-pandoc-cite--restore-fm-in-orig-outfile
+         orig-outfile fm orig-outfile-contents)))))
 
 (defun org-hugo-pandoc-cite--parse-citations (info orig-outfile)
   "Parse Pandoc Citations in ORIG-OUTFILE and update that file.
@@ -249,18 +274,26 @@ ORIG-OUTFILE is the Org exported file name."
           ;; (message "[ox-hugo parse citations] loffset :: %S" loffset)
           ;; (message "[ox-hugo parse citations] pandoc-outfile :: %S" pandoc-outfile)
 
-          ;; Prepend the original ox-hugo generated front-matter to
-          ;; Pandoc output.
-          (let* ((fm (org-hugo-pandoc-cite--remove-pandoc-meta-data fm))
-                 (pandoc-outfile-contents (with-temp-buffer
+          (let* ((pandoc-outfile-contents (with-temp-buffer
                                             (insert-file-contents pandoc-outfile)
                                             (buffer-substring-no-properties
                                              (point-min) (point-max))))
-                 (contents-fixed (org-hugo-pandoc-cite--fix-pandoc-output
-                                  pandoc-outfile-contents loffset))
-                 (fm-plus-content (concat fm "\n" contents-fixed)))
-            (write-region fm-plus-content nil orig-outfile)
-            (delete-file pandoc-outfile))
+                 (content-has-references (string-match-p
+                                          org-hugo-pandoc-cite--references-header-regexp
+                                          pandoc-outfile-contents)))
+            ;; Prepend the original ox-hugo generated front-matter to
+            ;; Pandoc output, only if the Pandoc output contains
+            ;; references.
+            (if content-has-references
+                (let* ((contents-fixed (org-hugo-pandoc-cite--fix-pandoc-output
+                                        pandoc-outfile-contents loffset))
+                       (fm (org-hugo-pandoc-cite--remove-pandoc-meta-data fm))
+                       (fm-plus-content (concat fm "\n" contents-fixed)))
+                  (write-region fm-plus-content nil orig-outfile))
+              (org-hugo-pandoc-cite--restore-fm-in-orig-outfile orig-outfile fm)
+              (message (concat "[ox-hugo] Using the original Ox-hugo output instead "
+                               "of Pandoc output as it contained no References"))))
+          (delete-file pandoc-outfile)
 
           (with-current-buffer org-hugo-pandoc-cite--run-pandoc-buffer
             (if (> (point-max) 1)             ;buffer is not empty

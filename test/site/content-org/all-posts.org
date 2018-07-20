@@ -4659,6 +4659,20 @@ Content in section 2.
 :END:
 This post has Pandoc Citations parsing enabled, but has no actual
 citations.
+** Invalid Nocites                                           :invalid:nocite:
+:PROPERTIES:
+:EXPORT_FILE_NAME: invalid-nocites
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@foo @bar)
+:END:
+This post has citations ~@foo~ and ~@bar~ listed in ~nocite~
+meta-data. But they are invalid as they don't exist in any of the
+bibliography files.
+
+But that generations neither a Pandoc warning nor error.
+
+As the final Pandoc output Markdown ends up with *no* references, the
+Pandoc output is discarded, and the original ~ox-hugo~ output is used
+instead.
 * Export Options                                              :export_option:
 ** Table of Contents (TOC)                                              :toc:
 =ox-hugo= has the =with-toc= option disabled by default as Hugo has an

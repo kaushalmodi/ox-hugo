@@ -4668,6 +4668,52 @@ section.
 Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
+** Citation Forms                                                     :forms:
+:PROPERTIES:
+:EXPORT_FILE_NAME: citation-forms
+:EXPORT_BIBLIOGRAPHY: bib/bib3.bib
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :link-citations true
+:END:
+#+begin_description
+Demonstrating different styles / forms of citations
+#+end_description
+*** Citations in square brackets
+The citations withing square brackets will be rendered within
+parentheses.
+#+begin_src org
+Blah blah [see @doe99, pp. 33-35; also @smith04, ch. 1].
+#+end_src
+Blah blah [see @doe99, pp. 33-35; also @smith04, ch. 1].
+
+#+begin_src org
+Blah blah [@doe99, pp. 33-35, 38-39].
+#+end_src
+Blah blah [@doe99, pp. 33-35, 38-39].
+
+#+begin_src org
+Blah blah [@smith04; @doe99].
+#+end_src
+Blah blah [@smith04; @doe99].
+*** Citations with author name suppressed
+A minus sign (~-~) before the ~@~ will suppress mention of the author
+in the citation. This can be useful when the author is already
+mentioned in the text.
+#+begin_src org
+Smith says blah [-@smith04].
+#+end_src
+Smith says blah [-@smith04].
+*** In-text citations (no square brackets)
+#+begin_src org
+@smith04 says blah.
+#+end_src
+@smith04 says blah.
+
+#+begin_src org
+@smith04 [p. 33] says blah.
+#+end_src
+@smith04 [p. 33] says blah.
+*** Actual citations for this test post :)
+See @addCite17; @rmdCitations for more.
 ** No Citations                                                        :none:
 :PROPERTIES:
 :EXPORT_FILE_NAME: citations-none

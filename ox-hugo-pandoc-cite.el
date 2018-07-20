@@ -49,6 +49,10 @@ arguments.")
 ORIG-OUTFILE is the Org exported file name.
 
 BIB-LIST is a list of one or more bibliography files."
+  ;; First kill the Pandoc run buffer if already exists (from a
+  ;; previous run).
+  (when (get-buffer org-hugo-pandoc-cite--run-pandoc-buffer)
+    (kill-buffer org-hugo-pandoc-cite--run-pandoc-buffer))
   (let* ((pandoc-outfile (make-temp-file ;ORIG_FILE_BASENAME.RANDOM.md
                           (concat (file-name-base orig-outfile) ".")
                           nil ".md"))
@@ -74,10 +78,6 @@ BIB-LIST is a list of one or more bibliography files."
     (unless (= 0 exit-code)
       (user-error (format "[ox-hugo] Pandoc execution failed. See the %S buffer"
                           org-hugo-pandoc-cite--run-pandoc-buffer)))
-
-    ;; If no error has happened, we don't need the Pandoc run
-    ;; buffer; kill it.
-    (kill-buffer org-hugo-pandoc-cite--run-pandoc-buffer)
     pandoc-outfile))
 
 (defun org-hugo-pandoc-cite--remove-pandoc-meta-data (fm)
@@ -235,7 +235,7 @@ ORIG-OUTFILE is the Org exported file name."
                                                  (org-trim
                                                   bib-file))))
                                      (unless (file-exists-p fname)
-                                       (user-error "[ox-hugo-pandoc-cite] Bibliography file %S does not exist"
+                                       (user-error "[ox-hugo] Bibliography file %S does not exist"
                                                    fname))
                                      fname))
                                  bib-list-1)))))))
@@ -260,8 +260,18 @@ ORIG-OUTFILE is the Org exported file name."
                                   pandoc-outfile-contents loffset))
                  (fm-plus-content (concat fm "\n" contents-fixed)))
             (write-region fm-plus-content nil orig-outfile)
-            (delete-file pandoc-outfile)))
-      (message "[ox-hugo-pandoc-cite] No bibliography file was specified"))))
+            (delete-file pandoc-outfile))
+
+          (with-current-buffer org-hugo-pandoc-cite--run-pandoc-buffer
+            (if (> (point-max) 1)             ;buffer is not empty
+                (message
+                 (format
+                  (concat "[ox-hugo] See the %S buffer for possible Pandoc warnings.\n"
+                          "          Review the exported Markdown file for possible missing citations.")
+                  org-hugo-pandoc-cite--run-pandoc-buffer))
+              ;; Kill the Pandoc run buffer if it is empty.
+              (kill-buffer org-hugo-pandoc-cite--run-pandoc-buffer))))
+      (message "[ox-hugo] No bibliography file was specified"))))
 
 
 (provide 'ox-hugo-pandoc-cite)

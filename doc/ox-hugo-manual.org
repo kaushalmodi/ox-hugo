@@ -2101,8 +2101,10 @@ Bibliography files (~example.bib~) are specified using the
 property. *It is mandatory to specify at least one bibliography file.*
 
 Multiple comma-separated bibliography files can be
-specified. /Note that the path to these files should be relative to
-the Org file directory./
+specified.
+
+/Note that the path to these bibliography files is relative to the Org
+file directory./
 **** Nocite
 ~nocite~ is a special Pandoc-specific meta-data which can be used to
 add extra citations even when they are not referenced in the post. It
@@ -2114,6 +2116,24 @@ set to ~true~, enables linking of the citations in the post body to
 the corresponding reference in the "References" section. It is set
 like any other single-value custom front-matter parameter
 (i.e. ~:LIST_PARAM VALUE~). See its example [[#pandoc-citations-example][below]].
+**** Specifying Citation Style Language (CSL)
+By default, Pandoc uses /Chicago Manual of Style author-date/ as the
+[[https://citationstyles.org/][Citation Style Language]] ([[https://pandoc.org/MANUAL.html#citations][ref]]). This can be customized by using the
+Pandoc-specific meta-data ~csl~ to specify the new CSL file. It is set
+like any other single-value custom front-matter parameter
+(i.e. ~:LIST_PARAM VALUE~). See its example [[#pandoc-citations-example][below]].
+
+/Note that the path to the CSL file is relative to the Org file
+directory./
+**** Removal of Pandoc-specific meta-data
+The Pandoc-specific meta-data mentioned above (~nocite~,
+~link-citations~ and ~csl~) are auto-deleted from the front-matter in
+the final Markdown file that's supposed to be used by Hugo.
+
+Those meta-data were added using HUGO_CUSTOM_FRONT_MATTER *only for
+Pandoc* to parse. Also there's no point leaking the user's
+bibliography and CSL file paths in the front-matter to be processed by
+Hugo.
 **** Example
 :PROPERTIES:
 :CUSTOM_ID: pandoc-citations-example
@@ -2124,9 +2144,10 @@ Here is a mini-example using Pandoc Citations:
 :PROPERTIES:
 :EXPORT_FILE_NAME: citations-example
 :EXPORT_HUGO_PANDOC_CITATIONS: t
-:EXPORT_BIBLIOGRAPHY: bib/bib1.bib, bib/bib2.bib
+:EXPORT_BIBLIOGRAPHY: cite/bib/bib1.bib, cite/bib/bib2.bib
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@cite3 @cite4)
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :link-citations true
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :csl cite/csl/my-custom-csl-format.csl
 :END:
 Here is a test example file with an in-text citation where someone
 important says something important (e.g. @cite1). And here is
@@ -2137,8 +2158,9 @@ another bit of blah with a footnote citation.[fn:1]
 [fn:1] See [@cite2].
 #+end_src
 
-- Note :: Above example assumes ~bib/bib1.bib~ and ~bib/bib2.bib~ to
-          exist in the same directory containing that Org file.
+- Note :: Above example assumes ~cite/bib/bib1.bib~,
+          ~cite/bib/bib2.bib~ and ~cite/csl/my-custom-csl.format.csl~
+          to exist in the same directory containing that Org file.
 
 {{{test-search(citations)}}}
 

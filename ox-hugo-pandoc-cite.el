@@ -214,13 +214,10 @@ ORIG-OUTFILE is the Org exported file name."
                       ;;   :EXPORT_BIBLIOGRAPHY: bibliographies-1.bib, bibliographies-2.bib
                       (let ((bib-list-1 (org-split-string bib-raw "[,\n]")))
                         ;; - Don't allow spaces around bib names.
-                        ;; - Convert file names to absolute paths.
                         ;; - Remove duplicate bibliographies.
                         (delete-dups
                          (mapcar (lambda (bib-file)
-                                   (let ((fname (file-truename
-                                                 (org-trim
-                                                  bib-file))))
+                                   (let ((fname (org-trim bib-file)))
                                      (unless (file-exists-p fname)
                                        (user-error "[ox-hugo] Bibliography file %S does not exist"
                                                    fname))

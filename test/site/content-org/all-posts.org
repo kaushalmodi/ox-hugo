@@ -4592,7 +4592,7 @@ This post should also be created in =content/section-a/=.
 * Pandoc Citations                                         :pandoc:citations:
 :PROPERTIES:
 :EXPORT_HUGO_PANDOC_CITATIONS: t
-:EXPORT_BIBLIOGRAPHY: bib/bib1.bib, bib/bib2.bib
+:EXPORT_BIBLIOGRAPHY: cite/bib/bib1.bib, cite/bib/bib2.bib
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@giovanelli2016 @eilan2016)
 :EXPORT_HUGO_PAIRED_SHORTCODES: %mdshortcode myshortcode
 :END:
@@ -4698,7 +4698,7 @@ another bit of blah with a footnote citation.[fn:5]
 ** Citation Forms                                                     :forms:
 :PROPERTIES:
 :EXPORT_FILE_NAME: citation-forms
-:EXPORT_BIBLIOGRAPHY: bib/bib3.bib
+:EXPORT_BIBLIOGRAPHY: cite/bib/bib3.bib
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :link-citations true
 :END:
 #+begin_description

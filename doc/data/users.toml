@@ -214,6 +214,52 @@
   org_dir = "site/content-org"
   site = "http://colelyman.com"
 
+[zmaas]
+  author = "Zachary Maas"
+  source = "https://github.com/zmaas/zmaas.github.io"
+  branch = "master"
+  org_dir = "hugo"
+  site = "https://abstractlambda.com/"
+
+[maciejkula]
+  author = "Maciej Kula"
+  source = "https://github.com/maciejkula/hugo-blog"
+  branch = "master"
+  site = "https://maciejkula.github.io"
+
+[petercheng00]
+  author = "Peter Cheng"
+  source = "https://github.com/petercheng00/personal"
+  branch = "master"
+  org_dir = "website/v2/petercheng"
+  site = "http://petercheng.net/"
+
+[somssi]
+  author = "Somssi"
+  source = "https://github.com/somssi/hugo-somssi"
+  branch = "master"
+  org_dir = "content-org"
+  site = "https://somssi.github.io/"
+
+[palikar]
+  author = "Stanislav Arnaudov"
+  source = "https://github.com/palikar/blog-hugo-files"
+  branch = "master"
+  org_dir = "org"
+  site = "https://palikar.github.io/"
+
+[stingh711]
+  author = "stingh711"
+  source = "https://github.com/stingh711/blog-hugo"
+  branch = "master"
+  site = "https://stingh711.github.io/"
+
+[mclearc]
+  author = "Colin McLear"
+  source = "https://github.com/mclearc/colinmclear.net"
+  branch = "master"
+  site = "https://www.colinmclear.net/"
+
 # []
 #   author = ""
 #   source = ""

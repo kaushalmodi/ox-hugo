@@ -1681,6 +1681,42 @@ disclosure /details/ to show in <span class=blue>blue</span>.
 
 #+html: <style>details summary { color: green; }</style>
 #+html: <style>details .details { color: blue; }</style>
+*** Author
+    :PROPERTIES:
+    :EXPORT_FILE_NAME: author
+    :END:
+The =author= front-matter parameter is designed to always be a list,
+so multiple authors can be supported.
+
+If you already have a blog, and in your font-matter =author= is set as
+a *String*, you can use the following snippet:
+
+#+begin_src
+{{ with .Params.author }}
+    {{ $author_type := (printf "%T" .) }}
+    {{ $author_is_slice := (eq "[]string" $author_type) }}
+    <div class="author">
+        {{ if $author_is_slice }}
+            {{ index . 0 | safeHTML }}
+        {{ else }}
+            {{ . | safeHTML }}
+        {{ end }}
+    </div>
+{{ end }}
+#+end_src
+
+What the above code does:
+- If the author front-matter parameter exists:
+  - If author is a slice (list), insert its first element,
+  - Else, insert it whole.
+
+Other workaround could be to manually set the =author= param as a
+String and not a slice:
+
+#+begin_src org
+#+hugo_custom_front_matter: :author "foo bar"
+#+end_src
+
 ** Enhancements
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "6.enhancements"

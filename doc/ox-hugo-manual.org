@@ -1685,39 +1685,96 @@ disclosure /details/ to show in <span class=blue>blue</span>.
 :PROPERTIES:
 :EXPORT_FILE_NAME: author
 :END:
-The =author= front-matter parameter is designed to always be a Slice
-(list), so that multiple authors can be supported.
+The ~author~ front-matter parameter is designed to always be a list or
+an array, so that multiple authors can be supported.
+**** Default Author
+The ~author~ parameter is set to always export by default (as the
+default value of ~org-export-with-author~ is ~t~).
 
-If you already have a blog, and if the =author= front-matter already
-exists, but set as a /String/, and not a /Slice of Strings/, you can
-use the following snippet:
-
-#+begin_src go-html-template
-{{ with .Params.author }}
-    {{ $author_type := (printf "%T" .) }}
-    {{ $author_is_slice := (eq "[]string" $author_type) }}
-    <div class="author">
-        {{ if $author_is_slice }}
-            {{ index . 0 | safeHTML }}
-        {{ else }}
-            {{ . | safeHTML }}
-        {{ end }}
-    </div>
-{{ end }}
-#+end_src
-
-*What the above code does* ---
-
-If the =author= front-matter parameter exists:
-- If =author= is of /Slice/ type, insert its first element,
-- Else, insert it whole.
-
-An alternative would be to manually set the =author= param as a
-/String/ and not a /Slice/:
-
+The author name defaults to ~user-full-name~. You can choose to either
+customize this variable in your Emacs config, or manually set the
+author name by adding the below to the top of your Org file:
 #+begin_src org
-#+hugo_custom_front_matter: :author "fname lname"
+,#+author: FirstName LastName
 #+end_src
+
+If using /per-subtree/ flow, and if you want to specify the author (or
+override the value set by the above ~#+author~ keyword) differently
+for all posts under a subtree, add below in that subtree's property
+drawer:
+#+begin_src org
+:PROPERTIES:
+:EXPORT_AUTHOR: Firstname LastName
+:END:
+#+end_src
+
+Either of above two author-setting methods will export to this TOML
+front-matter:
+#+begin_src toml
+author = ["FirstName LastName"]
+#+end_src
+**** Multiple Authors
+Multiple authors can be specified by either:
+- Using multiple ~#+author~ keywords, or
+  #+begin_src org
+  ,#+author: FAuthor1 LAuthor1
+  ,#+author: FAuthor2 LAuthor2
+  #+end_src
+- Specifying comma-separated authors, if setting them in subtree
+  properties.
+  #+begin_src org
+  :PROPERTIES:
+  :EXPORT_AUTHOR: FAuthor1 LAuthor1, FAuthor2 LAuthor2
+  :END:
+  #+end_src
+
+Either of above two author-setting methods will export to this TOML
+front-matter:
+#+begin_src toml
+author = ["FAuthor1 LAuthor1", "FAuthor2 LAuthor2"]
+#+end_src
+**** Disabling exporting of ~author~ parameter
+Author exporting can be disabled using any of these ways:
+- To disable author exporting only for a specific Org file, add below
+  to the top of that file:
+  #+begin_src org
+  ,#+options: author:nil
+  #+end_src
+- If using /per-subtree/ flow, and if you want to disable author
+  exporting only for posts under specific subtrees, add below in the
+  property drawers of those:
+  #+begin_src org
+  :PROPERTIES:
+  :EXPORT_OPTIONS: author:nil
+  :END:
+  #+end_src
+- To disable author exporting by default for all exporters (not just
+  ~ox-hugo~), set ~org-export-with-author~ to ~nil~ in your Emacs
+  config.
+**** Tweaking your Hugo template to support /list/ ~author~
+#+begin_note
+The ~author~ front-matter parameter is *always* exported as a
+TOML/YAML list.
+#+end_note
+If you already have Hugo posts with the ~author~ front-matter already
+set, it is possible that those values exist as single string values
+instead of lists.
+
+If so, you can use a snippet like the [[https://github.com/kaushalmodi/hugo-onyx-theme/blob/master/layouts/partials/author.html][~author.html~ partial]] used by
+this doc site to parse the ~author~ parameter correctly (whether it's
+a plain string or a list of strings).
+***** Forcing ~author~ to be a /string/ (alternative)
+If you are not comfortable with Hugo templates, you can alternatively
+force the ~author~ param to be a plain /string/ instead of a /list/,
+by setting it as a /custom/ front-matter parameter:
+#+begin_src org
+#+author:
+#+hugo_custom_front_matter: :author "FirstName LastName"
+#+end_src
+
+- Note :: Remember to set the default author name to nil if doing this,
+          by setting the ~#+author~ keyword (or ~:EXPORT_AUTHOR:~
+          property) to /nothing/.
 ** Enhancements
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "6.enhancements"

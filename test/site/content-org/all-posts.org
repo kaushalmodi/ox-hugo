@@ -5150,7 +5150,14 @@ auto-prefixed with the section for the current post.
 :EXPORT_FILE_NAME: single-author
 :EXPORT_AUTHOR: Foo Bar
 :END:
-This post has 1 author.
+This post has 1 author set as a TOML list in front-matter.
+*** Single author as a custom parameter                           :custom_fm:
+:PROPERTIES:
+:EXPORT_FILE_NAME: single-author-custom
+:EXPORT_AUTHOR:
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :author "Foo Bar"
+:END:
+This post has 1 author set as a TOML string in front-matter.
 *** Multiple authors
 :PROPERTIES:
 :EXPORT_FILE_NAME: multiple-authors

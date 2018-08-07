@@ -5116,13 +5116,16 @@ And Markdown emphasis characters like *, `  and _ will not escaped in here.
 From {{{oxhugoissue(154)}}}, we see an actual case of where that =*=
 will need to remain unescaped:
 
-#+begin_src html
+#+begin_src org
+# Org source
+,#+begin_export html
 <div>
   <script type="text/javascript">
     var a = 3;
     var b = 2*a;
   </script>
 </div>
+,#+end_export
 #+end_src
 
 #+begin_export html
@@ -5134,7 +5137,8 @@ will need to remain unescaped:
 </div>
 #+end_export
 
-/See the Markdown source of this page./
+/See the Markdown source of this page to see the verbatim-inserted
+HTML./
 * Miscellaneous Front Matter                                   :front_matter:
 ** Hugo Aliases                                                     :aliases:
 *** Alias without section portion 1

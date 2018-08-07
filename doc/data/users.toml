@@ -252,6 +252,13 @@
   source = "https://github.com/mclearc/colinmclear.net"
   branch = "master"
   site = "https://www.colinmclear.net/"
+  
+[steventammen]
+  author = "Steven Tammen"
+  source = "https://github.com/StevenTammen/steventammen.com"
+  branch = "master"
+  org_dir = "org"
+  site = "https://www.steventammen.com/"
 
 # []
 #   author = ""

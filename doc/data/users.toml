@@ -72,7 +72,7 @@
   source = "https://github.com/zzamboni/zzamboni.org"
   branch = "master"
   org_dir = "content-org"
-  site = "http://zzamboni.org/"
+  site = "https://zzamboni.org/"
 
 [primerpy]
   author = "Isaac Zhou"
@@ -252,7 +252,7 @@
   source = "https://github.com/mclearc/colinmclear.net"
   branch = "master"
   site = "https://www.colinmclear.net/"
-  
+
 [steventammen]
   author = "Steven Tammen"
   source = "https://github.com/StevenTammen/steventammen.com"

@@ -1025,12 +1025,21 @@ When optional argument LOCAL is non-nil, build a table of
 contents according to the current headline."
   (let* ((toc-headline
           (unless local
-            (format "\n<div class=\"heading\">%s</div>\n\n"
+            (format "\n<div class=\"heading\">%s</div>\n"
                     (org-html--translate "Table of Contents" info))))
+         (current-level nil)
          (toc-items
           (mapconcat
            (lambda (headline)
-             (let* ((level (org-export-get-relative-level headline info))
+             (let* ((level-raw (org-export-get-relative-level headline info))
+                    (current-level-inner (progn
+                                           (unless current-level
+                                             (setq current-level level-raw))
+                                           current-level))
+                    (relative-level (1+ (- level-raw current-level-inner)))
+                    (level (if local
+                               relative-level
+                             level-raw))
                     (indentation (make-string (* 4 (1- level)) ?\s))
                     (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
                                (org-element-property :todo-keyword headline)))
@@ -1060,7 +1069,10 @@ contents according to the current headline."
                                  (and tags
                                       (format ":%s:"
                                               (mapconcat #'identity tags ":")))))))
+               ;; (message "[ox-hugo build-toc DBG] current-level-inner:%d relative-level:%d"
+               ;;          current-level-inner relative-level)
                ;; (message "[ox-hugo build-toc DBG] level:%d, number:%s" level number)
+               ;; (message "[ox-hugo build-toc DBG] indentation: %S" indentation)
                ;; (message "[ox-hugo build-toc DBG] todo: %s | %s" todo todo-str)
                (concat indentation "- " number toc-entry tags)))
            (org-export-collect-headlines info n (and local keyword))
@@ -1080,9 +1092,13 @@ contents according to the current headline."
                         "    list-style: none;\n"
                         "  }\n"
                         "</style>\n"))
-              "<div class=\"ox-hugo-toc toc\">\n" ;This is a nasty workaround
-              "<div></div>\n"        ;till Hugo/Blackfriday support
-              toc-headline           ;wrapping Markdown in HTML div's.
+              (format "<div class=\"ox-hugo-toc toc%s\">\n"
+                      (if local
+                          (format " local level-%d" current-level)
+                        ""))
+              "<div></div>\n" ;This is a nasty workaround till Hugo/Blackfriday support
+              toc-headline    ;wrapping Markdown in HTML div's.
+              "\n"
               toc-items ;https://github.com/kaushalmodi/ox-hugo/issues/93
               "\n\n"
               "</div>\n"

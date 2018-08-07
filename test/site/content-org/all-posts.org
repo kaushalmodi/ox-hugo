@@ -4620,6 +4620,36 @@ This post should also be created in =content/section-a/=.
 :END:
 #+toc: headlines 6
 #+include: "./all-posts.org::#nested-sections-example" :only-contents t
+*** TOC Local                                                         :local:
+:PROPERTIES:
+:EXPORT_FILE_NAME: toc-local
+:END:
+Below, TOC is exported with only level-1 headings in this post.
+#+toc: headlines 1
+**** Post sub-heading 1
+Below, TOC is exported with only level-1 headings *relative to* this
+"Post sub-heading 1" section.
+#+toc: headlines 1 local
+***** Post sub-heading 1.1
+****** Post sub-heading 1.1.1
+***** Post sub-heading 1.2
+***** Post sub-heading 1.3
+**** Post sub-heading 2
+***** Post sub-heading 2.1
+***** Post sub-heading 2.2
+Below, TOC is exported with only up to level-2 headings *relative to*
+this "Post sub-heading 2.2" section.
+#+toc: headlines 2 local
+****** Post sub-heading 2.2.1
+****** Post sub-heading 2.2.2
+****** Post sub-heading 2.2.3
+Below, TOC is exported with only level-1 headings *relative to* this
+"Post sub-heading 2.2.3" section.
+#+toc: headlines 1 local
+******* Post sub-heading 2.2.3.1
+******* Post sub-heading 2.2.3.2
+**** Post sub-heading 3
+***** Post sub-heading 3.1
 * Pandoc Citations                                         :pandoc:citations:
 :PROPERTIES:
 :EXPORT_HUGO_PANDOC_CITATIONS: t

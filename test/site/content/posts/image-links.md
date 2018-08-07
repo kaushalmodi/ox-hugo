@@ -10,7 +10,16 @@ This is some text before the first heading of this post.
 
 ## Unclickable image (works!) {#unclickable-image--works}
 
-{{< figure src="/images/org-mode-unicorn-logo.png" >}}
+```org
+# Org source
+#+name: fig__unclickable_image
+#+caption: Don't click this image -- It's not a hyperlink
+[[/images/org-mode-unicorn-logo.png]]
+```
+
+<a id="orga3633e1"></a>
+
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 1: Don't click this image -- It's not a hyperlink" >}}
 
 ---
 
@@ -41,12 +50,32 @@ tag and look the same size.
 
 [Click here to see the unicorn](/images/org-mode-unicorn-logo.png)
 
+Do **not** use `file:` prefix in the Description if you want the image
+link to show up as-is i.e. not be replaced by the image-at-link like
+in [2](#org54fce47):
+
+```org
+# Org source
+[[/images/org-mode-unicorn-logo.png][/images/org-mode-unicorn-logo.png]]
+```
+
+[/images/org-mode-unicorn-logo.png](/images/org-mode-unicorn-logo.png)
+
 
 ## Clickable image that opens the image (works!) {#clickable-image-that-opens-the-image--works}
 
 Click below image to jump to the unicorn image.
 
-{{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
+```org
+# Org source
+#+name: fig__clickable_image_that_opens_the_image
+#+caption: Click this image -- It's a hyperlink
+[[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+```
+
+<a id="org54fce47"></a>
+
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: Click this image -- It's a hyperlink" link="/images/org-mode-unicorn-logo.png" >}}
 
 NOTE
 : `file:` has to be used in the **Description component** of the
@@ -58,7 +87,7 @@ NOTE
 Here's the same link with `#+name` specified.. which should also be
 clickable.
 
-<a id="org55ede7e"></a>
+<a id="orgd697346"></a>
 
 {{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 

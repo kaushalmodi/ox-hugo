@@ -52,6 +52,16 @@ Export this *second* post only by bringing point here and doing =M-x org-hugo-ex
 :END:
 This is some text before the first heading of this post.
 *** Unclickable image (works!)
+
+#+begin_src org
+# Org source
+,#+name: fig__unclickable_image
+,#+caption: Don't click this image -- It's not a hyperlink
+[[/images/org-mode-unicorn-logo.png]]
+#+end_src
+
+#+name: fig__unclickable_image
+#+caption: Don't click this image -- It's not a hyperlink
 [[/images/org-mode-unicorn-logo.png]]
 
 -----
@@ -74,9 +84,30 @@ So the sub-heading title and the post title both get the /Heading 1/
 tag and look the same size.
 *** Clickable link that opens the image (works!)
 [[/images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
+
+Do *not* use ~file:~ prefix in the Description if you want the image
+link to show up as-is i.e. not be replaced by the image-at-link like
+in [[fig__clickable_image_that_opens_the_image]]:
+
+#+begin_src org
+# Org source
+[[/images/org-mode-unicorn-logo.png][/images/org-mode-unicorn-logo.png]]
+#+end_src
+
+[[/images/org-mode-unicorn-logo.png][/images/org-mode-unicorn-logo.png]]
+
 *** Clickable image that opens the image (works!)
 Click below image to jump to the unicorn image.
 
+#+begin_src org
+# Org source
+,#+name: fig__clickable_image_that_opens_the_image
+,#+caption: Click this image -- It's a hyperlink
+[[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+#+end_src
+
+#+name: fig__clickable_image_that_opens_the_image
+#+caption: Click this image -- It's a hyperlink
 [[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
 
 - NOTE :: =file:= has to be used in the *Description component* of the

@@ -4624,8 +4624,18 @@ This post should also be created in =content/section-a/=.
 :PROPERTIES:
 :EXPORT_FILE_NAME: toc-local
 :END:
+#+begin_description
+Test the ~#+toc: headlines N local~ syntax where a TOC is exported
+containing headlines only up to level-N relative to the headline in
+which that keyword is used.
+#+end_description
 Below, TOC is exported with only level-1 headings in this post.
 #+toc: headlines 1
+
+Below exported TOC should look the same as above even when it's
+generated using the ~local~ param as it is at the root level of this
+post.
+#+toc: headlines 1 local
 **** Post sub-heading 1
 Below, TOC is exported with only level-1 headings *relative to* this
 "Post sub-heading 1" section.

@@ -1419,8 +1419,8 @@ control on:
 - Whether you want *only some* headlines numbered (both in post body
   and the TOC) --- Set the =UNNUMBERED= property of that headline to
   =t=.
-- Whether you want to list the headings *only from the current
-  section* --- /Example: ~#+toc: headlines 1 local~/.
+- Whether you want to list the sub-headings *only from the current
+  heading in the post* --- /Example: ~#+toc: headlines 1 local~/.
 
 If you want to use the Org-generated TOC instead of the Hugo-generated
 one, do one of the following:

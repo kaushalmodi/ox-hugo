@@ -5581,6 +5581,16 @@ there shouldn't be any error.
 :END:
 Some themes might expect the front-matter list variable for authors to
 be ~authors~ instead of the default ~author~ created by ~ox-hugo~.
+*** Remove a front-matter key                                        :remove:
+:PROPERTIES:
+:EXPORT_FILE_NAME: remove-a-front-matter-key
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :foo 1 :bar 2
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: foo>nil bar>zoo
+:END:
+#+begin_description
+This test removes the ~foo~ front-matter key from the exported file
+(and replaces ~bar~ key with ~zoo~).
+#+end_description
 * Date and slug inheritance                           :inheritance:date:slug:
 :PROPERTIES:
 :EXPORT_DATE: 2018-02-12

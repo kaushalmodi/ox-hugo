@@ -2088,13 +2088,13 @@ front-matter key name to accommodate for your favorite Hugo theme.
 The syntax is:
 
 #+begin_src org
-#+hugo_front_matter_key_replace: old_key1>new_key1 old_key2>new_key2
+#+hugo_front_matter_key_replace: oldkey1>newkey1 oldkey2>newkey2
 #+end_src
 
 or, if you want this to apply only for a specific Org tree:
 
 #+begin_src org
-:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: old_key1>new_key1 old_key2>new_key2
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: oldkey1>newkey1 oldkey2>newkey2
 #+end_src
 
 Here are few use cases to better explain this feature.
@@ -2162,6 +2162,23 @@ What do you do? ..
 
 #+begin_src org
 #+hugo_front_matter_key_replace: tags>categories categories>tags
+#+end_src
+**** Removing front-matter keys during export
+:PROPERTIES:
+:CUSTOM_ID: removing-keys
+:END:
+In the front-matter key replacement syntax:
+#+begin_src org
+#+hugo_front_matter_key_replace: oldkey>newkey
+#+end_src
+If ~newkey~ is a special string *nil*, ~oldkey~ will be _removed_ from
+the exported front-matter.
+
+For example, if you want to remove the ~aliases~ front-matter from
+your exported files (but want to leave them in your Org files), simply
+add this to the top of your Org files:
+#+begin_src org
+#+hugo_front_matter_key_replace: aliases>nil
 #+end_src
 **** Examples
 You can find a bunch of examples if you search for /"Replace

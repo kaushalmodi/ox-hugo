@@ -1373,6 +1373,9 @@ The replacement syntax is:
 
     #+hugo_front_matter_key_replace: oldkey>newkey
 
+If newkey is a special string \"nil\", oldkey will be removed
+from the front-matter.
+
 You can also do multiple key replacements:
 
     #+hugo_front_matter_key_replace: oldkey1>newkey1 oldkey2>newkey2
@@ -1422,8 +1425,16 @@ INFO is a plist used as a communication channel."
                 (key-repl (cdr repl)))
             (let ((found-key-cell (assoc key-orig data)))
               (when found-key-cell
-                ;; https://emacs.stackexchange.com/a/3398/115
-                (setf (car found-key-cell) key-repl)))))))
+                ;; (message "[ox-hugo replace-key found-key-cell DBG] %S" found-key-cell)
+                ;; (message "[ox-hugo replace-key key-orig DBG] %S" key-orig)
+                ;; (message "[ox-hugo replace-key key-repl DBG] %S" key-repl)
+                (if (string= "nil" key-repl)
+                    ;; Setting value of a front-matter key to nil will
+                    ;; cause that key to be removed during export.
+                    ;; See `org-hugo--gen-front-matter'.
+                    (setf (cdr found-key-cell) nil)
+                  ;; https://emacs.stackexchange.com/a/3398/115
+                  (setf (car found-key-cell) key-repl))))))))
     data))
 
 ;;;; TODO keywords

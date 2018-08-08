@@ -439,7 +439,7 @@ If you do so, you *also need to* add =ox-hugo= to
 =dotspacemacs-additional-packages=.
 
 /Verified to work on Spacemacs =develop= branch with =spacemacs-base=
-distribution, =emacs= editing style./
+distribution, =emacs= editing style. -- <2017-10-09 Mon>/
 *** Before you export
 :PROPERTIES:
 :CUSTOM_ID: before-you-export

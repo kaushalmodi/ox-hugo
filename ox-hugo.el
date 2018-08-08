@@ -1032,13 +1032,18 @@ contents according to the current headline."
           (mapconcat
            (lambda (headline)
              (let* ((level-raw (org-export-get-relative-level headline info))
-                    (current-level-inner (progn
-                                           (unless current-level
-                                             (setq current-level level-raw))
-                                           current-level))
-                    (relative-level (1+ (- level-raw current-level-inner)))
                     (level (if local
-                               relative-level
+                               (let* ((current-level-inner
+                                       (progn
+                                         (unless current-level
+                                           (setq current-level level-raw))
+                                         current-level))
+                                      (relative-level
+                                       (1+ (- level-raw current-level-inner))))
+                                 ;; (message (concat "[ox-hugo build-toc DBG] "
+                                 ;;                  "current-level-inner:%d relative-level:%d")
+                                 ;;          current-level-inner relative-level)
+                                 relative-level)
                              level-raw))
                     (indentation (make-string (* 4 (1- level)) ?\s))
                     (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
@@ -1069,8 +1074,6 @@ contents according to the current headline."
                                  (and tags
                                       (format ":%s:"
                                               (mapconcat #'identity tags ":")))))))
-               ;; (message "[ox-hugo build-toc DBG] current-level-inner:%d relative-level:%d"
-               ;;          current-level-inner relative-level)
                ;; (message "[ox-hugo build-toc DBG] level:%d, number:%s" level number)
                ;; (message "[ox-hugo build-toc DBG] indentation: %S" indentation)
                ;; (message "[ox-hugo build-toc DBG] todo: %s | %s" todo todo-str)

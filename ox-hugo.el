@@ -1094,7 +1094,7 @@ contents according to the current headline."
                         "</style>\n"))
               (format "<div class=\"ox-hugo-toc toc%s\">\n"
                       (if local
-                          (format " local level-%d" current-level)
+                          " local"
                         ""))
               "<div></div>\n" ;This is a nasty workaround till Hugo/Blackfriday support
               toc-headline    ;wrapping Markdown in HTML div's.

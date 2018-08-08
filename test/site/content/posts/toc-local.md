@@ -27,7 +27,7 @@ Below exported TOC should look the same as above even when it's
 generated using the `local` param as it is at the root level of this
 post.
 
-<div class="ox-hugo-toc toc local level-1">
+<div class="ox-hugo-toc toc local">
 <div></div>
 
 - [Post sub-heading 1](#post-sub-heading-1)
@@ -43,7 +43,7 @@ post.
 Below, TOC is exported with only level-1 headings **relative to** this
 "Post sub-heading 1" section.
 
-<div class="ox-hugo-toc toc local level-2">
+<div class="ox-hugo-toc toc local">
 <div></div>
 
 - [Post sub-heading 1.1](#post-sub-heading-1-dot-1)
@@ -77,7 +77,7 @@ Below, TOC is exported with only level-1 headings **relative to** this
 Below, TOC is exported with only up to level-2 headings **relative to**
 this "Post sub-heading 2.2" section.
 
-<div class="ox-hugo-toc toc local level-3">
+<div class="ox-hugo-toc toc local">
 <div></div>
 
 - [Post sub-heading 2.2.1](#post-sub-heading-2-dot-2-dot-1)
@@ -101,7 +101,7 @@ this "Post sub-heading 2.2" section.
 Below, TOC is exported with only level-1 headings **relative to** this
 "Post sub-heading 2.2.3" section.
 
-<div class="ox-hugo-toc toc local level-4">
+<div class="ox-hugo-toc toc local">
 <div></div>
 
 - [Post sub-heading 2.2.3.1](#post-sub-heading-2-dot-2-dot-3-dot-1)

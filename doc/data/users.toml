@@ -113,7 +113,7 @@
   source = "https://github.com/zzamboni/cf-learn.info"
   branch = "master"
   org_dir = "content-org"
-  site = "http://cf-learn.info/"
+  site = "https://cf-learn.info/"
 
 [xianmin]
   author = "Xianmin Chen"

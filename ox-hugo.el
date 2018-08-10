@@ -79,8 +79,6 @@
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
 
-(define-obsolete-function-alias 'org-hugo-export-subtree-to-md 'org-hugo-export-wim-to-md "2017-11-30")
-(define-obsolete-function-alias 'org-hugo-export-subtree-to-md-after-save 'org-hugo-export-wim-to-md-after-save "2017-11-30")
 
 ;; Using the correct function for getting inherited Org tags.
 ;; Starting Org 9.2, `org-get-tags' returns all the inherited tags

@@ -15,11 +15,3 @@
 :PROPERTIES:
 :EXPORT_FILE_NAME: placeholder-post
 :END:
-
-* Footnotes
-* COMMENT Local Variables                                           :ARCHIVE:
-# Local Variables:
-# fill-column: 70
-# eval: (auto-fill-mode 1)
-# eval: (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local)
-# End:

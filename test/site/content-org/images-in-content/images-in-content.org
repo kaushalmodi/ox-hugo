@@ -76,10 +76,3 @@ source Org file of this post.
 Image in homepage branch bundle:
 
 [[file:images/_home/org-copy-3.png][file:images/_home/org-copy-3.png]]
-* Footnotes
-* COMMENT Local Variables                                           :ARCHIVE:
-# Local Variables:
-# fill-column: 70
-# eval: (auto-fill-mode 1)
-# eval: (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local)
-# End:

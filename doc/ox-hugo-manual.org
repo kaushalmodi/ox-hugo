@@ -410,14 +410,18 @@ any export).
 
 You can do that by adding the below to your config:
 #+begin_src emacs-lisp
+(require 'ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 (with-eval-after-load 'ox
   (require 'ox-hugo))
 #+end_src
 If you use =use-package=, you can do the below instead:
 #+begin_src emacs-lisp
+(use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 (use-package ox-hugo
   :after ox)
 #+end_src
+
+Also see the {{{doc(auto-export-on-saving,Auto Exporting)}}} section.
 
 *Spacemacs*
 
@@ -432,7 +436,9 @@ Spacemacs users can choose to add this snippet to their
   ;; ox-hugo config
   (use-package ox-hugo
     :ensure t                           ;Auto-install the package from Melpa
-    :after ox))
+    :after ox)
+  (use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
+  )
 #+end_src
 
 If you do so, you *also need to* add =ox-hugo= to
@@ -1789,112 +1795,69 @@ by setting it as a /custom/ front-matter parameter:
 Wouldn't it be awesome if you can see the live-preview of your
 Hugo-rendered post each time you saved your post in Org?
 
-Well.. you can do that with these steps:
+Well.. you can do that with these steps, which apply to both
+/per-subtree/ and /per-file/ flows:
 **** First time setup
-***** =after-save-hook= setup for both /per-subtree/ and /per-file/ flows
-This step applies whether you intend to use the /per-subtree export
-flow/ or the /per-file/ export flow.
-****** Step 1a: Set up the =after-save-hook=
-1. Add below to the very-end of your Org file:
-   #+begin_src org
-   ,* Footnotes
-   ,* COMMENT Local Variables                          :ARCHIVE:
-   # Local Variables:
-   # eval: (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local)
-   # End:
-   #+end_src
-   *About Footnotes*: Here I recommend adding the =* Footnotes= header[fn:5]
-   too so that in case you add any Org footnotes, they go directly to
-   that section you created. Otherwise, Org will auto-create a new
-   /Footnotes/ heading *at the end of the file*.. and the /Local
-   Variables/ heading would then no longer be at the end of the file.
-2. Then save the file, and do =revert-buffer=.
-3. You will be prompted to add that =eval= line to your /Customize/
-   setup, hit ~!~ to permanently save that setting and prevent future
-   prompts.
-****** Step 1b: Prevent auto-export during Org Capture
-While this sub-step is useful for the /per-subtree/ export flow, it
-won't hurt to implement even if you are using the /per-file/ flow.
+***** Step {{{n}}}: Require =ox-hugo-auto-export= package
+This package is part of the =ox-hugo= package installation. It
+implements the auto-exporting behavior on file saves. Among many other
+things, this package declares the buffer-local variable
+=org-hugo-auto-export-on-save= which is used to enable/disable the
+auto-exporting.
 
-This step is useful if you choose to write new posts using
-=org-capture= as explained in the {{{doc(org-capture-setup,/Org
-Capture Setup/)}}} section.
-
-After saving the below to your emacs config and evaluating it,
-auto-exports will be prevented when saving a new post created using
-Org Capture.
-
-/If you don't do the below, auto-exports would happen as soon as you
-=C-c C-c= on your initial capture.. which could get annoying./
+So with =ox-hugo= installed, add this to your Emacs config:
 #+begin_src emacs-lisp
-(with-eval-after-load 'org-capture
-  ;; Do not cause auto Org->Hugo export to happen when saving captures
-  (defun modi/org-capture--remove-auto-org-to-hugo-export-maybe ()
-    "Function for `org-capture-before-finalize-hook'.
-Disable `org-hugo-export-wim-to-md-after-save'."
-    (setq org-hugo-allow-export-after-save nil))
-
-  (defun modi/org-capture--add-auto-org-to-hugo-export-maybe ()
-    "Function for `org-capture-after-finalize-hook'.
-Enable `org-hugo-export-wim-to-md-after-save'."
-    (setq org-hugo-allow-export-after-save t))
-
-  (add-hook 'org-capture-before-finalize-hook #'modi/org-capture--remove-auto-org-to-hugo-export-maybe)
-  (add-hook 'org-capture-after-finalize-hook #'modi/org-capture--add-auto-org-to-hugo-export-maybe))
+(require 'ox-hugo-auto-export)
 #+end_src
-***** Alternative =after-save-hook= setup only for /per-file/ flow
-This step applies *only* to the /per-file/ export flow.
-****** Step 1: Set up the =after-save-hook= (only for /per-file/ flow)
-If you use a seperate Org file for each blog post, you can add the
-below to your config *instead* of doing the above. Skip /Step 1b/
-below altogether if you use this alternative.
+#+begin_note
+I am deliberately using =require= there. This package must not be
+lazy-loaded.
+#+end_note
+***** Step {{{n}}}: Set =org-hugo-auto-export-on-save=
+This variable is /nil/ by default, so that the auto-exporting feature
+can be enabled separately at project level or file level.
+****** Enable for the whole project
+If you want to enable auto-exporting for the whole project, add this
+to the ~.dir-locals.el~ file in the project root:
 #+begin_src emacs-lisp
-(use-package ox-hugo
-  :ensure t
-  :after ox
-  :init
-  (defconst my/hugo-org-content-dir (expand-file-name "~/hugo_base_dir/content-org/")
-    "Directory containing the Org mode posts.")
-
-  (defun my/org-hugo-publish-current-buffer-as-post ()
-    "Export the current Org file if a valid Hugo post.
-Current file is exported using `org-hugo-export-to-md' if it
-contains the #+title keyword and is present in the
-`my/hugo-org-content-dir'."
-    (let ((fname (buffer-file-name)))
-      (when (and fname
-                 (string-match-p (concat "\\`" (regexp-quote my/hugo-org-content-dir) ".*\\.org\\'")
-                                 fname))
-        (save-excursion
-          (goto-char (point-min))
-          (if (< (let ((case-fold-search t))
-                   (how-many "^#\\+title:"))
-                 1)
-              (message "Unable to export as the Org file is missing the #+title keyword.")
-            (org-hugo-export-to-md))))))
-
-  (defun my/org-mode-hook-fn ()
-    "My Org mode customization."
-    (add-hook 'after-save-hook #'my/org-hugo-publish-current-buffer-as-post :append :local))
-
-  (add-hook 'org-mode-hook #'my/org-mode-hook-fn))
+(("dir/in/the/project/containing/org/files/"
+  . ((org-mode . ((org-hugo-auto-export-on-save . t))))))
 #+end_src
+****** Enable only for an Org file
+Add below to the very-end of your Org file and *save the file*:
+#+begin_src org
+,* Footnotes
+,* COMMENT Local Variables                          :ARCHIVE:
+# Local Variables:
+# org-hugo-auto-export-on-save: t
+# End:
+#+end_src
+*About Footnotes*: Here I recommend adding the =* Footnotes=
+ header[fn:5] too so that in case you add any Org footnotes, they go
+ directly to that section you created. Otherwise, Org will auto-create
+ a new /Footnotes/ heading *at the end of the file*.. and the /Local
+ Variables/ heading would then no longer be at the end of the file.
+
+#+begin_note
+After updating the value of =org-hugo-auto-export-on-save= using
+either of the above methods, remember to (i) save the Org file where
+you expect the auto-exporting to work, and (ii) revert the buffer
+(~M-x revert-buffer~). That will ensure that the updated
+=org-hugo-auto-export-on-save= is effective.
+#+end_note
 **** Steps that /might/ need to be taken every time
 Once the initial setup is done, the following steps apply to both
 blogging flows.
-***** Step 2: Start the engines (Hugo Server)
+***** Step {{{n}}}: Start the engines (Hugo Server)
 We start the =hugo server= so that we can see the live-preview each
-time the Org file is saved.
-
-I recommend using Hugo version 0.25 at the minimum as that added
-support for the awesome =--navigateToChanged= switch!
+time the Org file is saved[fn:6].
 
 Run below in your Hugo site root (the directory that contains the site
 =config.toml=) to start the server:
 #+begin_example
 hugo server -D --navigateToChanged
 #+end_example
-***** Step 3: Open your browser
+***** Step {{{n}}}: Open your browser
 By default the site is served locally on port /1313/ on
 /localhost/. So the above step would have printed something like below
 at the end:
@@ -1904,12 +1867,12 @@ Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
 
 So open your favorite browser pointing to that address.
 **** FINAL step that needs to be taken every time
-***** Step 4: Save and be in awe
-If you are like me, you might not need to repeat steps 2 and 3 above,
+***** Step {{{n}}}: Save and be in awe
+If you are like me, you might not need to repeat steps 3 and 4 above,
 as you can leave the =hugo= server running in a separate terminal, and
 have a browser tab pinned to that localhost.
 
-So with that, have the emacs and browser frames set up side-by-side,
+So with that, have the Emacs and browser frames set up side-by-side,
 and edit your Org post.
 
 Hit =C-x C-s= and be in awe as the browser auto-refreshes to the
@@ -2356,6 +2319,10 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 #+include: "./ox-hugo-manual.org::#test" :only-contents t
 * Footnotes
 
+[fn:6] If you are still using a Hugo version older than 0.25, update
+now! -- Because that version added support for the awesome
+=--navigateToChanged= switch.
+
 [fn:5] I am assuming that the value of ~org-footnote-section~ in your
 Emacs setup is the default value ~"Footnotes"~. If it's not, change
 the "Footnotes" heading in that example accordingly.
@@ -2388,5 +2355,4 @@ files outside static directory)}}}.
 # fill-column: 70
 # eval: (auto-fill-mode 1)
 # eval: (toggle-truncate-lines 1)
-# eval: (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local)
 # End:

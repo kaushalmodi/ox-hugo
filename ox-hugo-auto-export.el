@@ -8,35 +8,107 @@
 ;; *This is NOT a stand-alone package.*
 ;;
 ;; It calls `org-hugo-export-wim-to-md' which auto-loads ox-hugo.
+;;
+;; What this file does when `require'd:
+;; - Sets `org-hugo-auto-export-on-save' as safe if boolean.
+;; - Updates `org-hugo--org-capture-active-flag'
+;;   in `org-capture-before-finalize-hook' and
+;;   `org-capture-after-finalize-hook' hooks.
+;; - Adds `org-hugo-auto-export-hook-fn' to `org-mode-hook'.
+
+;;; Usage:
+;; With `ox-hugo' installed,
+;;
+;; 1. Add below to your Emacs config:
+;;
+;;      (require 'ox-hugo-auto-export)
+;;
+;;    ** Do NOT autoload any function from this package
+;;       -- Just `require' it as shown above. **
+;;
+;; 2. Add below to your project's .dir-locals.el file (assuming that
+;;    the Org files in the "content-org" directory are meant to be
+;;    auto-exported using `ox-hugo':
+;;
+;;      (("content-org"
+;;        . ((org-mode . ((org-hugo-auto-export-on-save . t))))))
+;;
 
 ;;; Code:
 
-(defvar org-hugo-allow-export-after-save t
+(defvar-local org-hugo-auto-export-on-save nil
   "Enable flag for `org-hugo-export-wim-to-md-after-save'.
-When nil, the above function will not export the Org file to
-Hugo-compatible Markdown.
 
-This variable is usually set to nil by the user in
-`org-capture-before-finalize-hook' and set to t again in
-`org-capture-after-finalize-hook', so that the export does not
-happen as soon as a new post is created using Org capture.
+This is a buffer local variable to enable auto-exporting using
+`ox-hugo' on file saving.  It is intended to be set in
+.dir-locals.el files.
 
-Note that the export after save will not work until
-`org-hugo-export-wim-to-md-after-save' is added to the
-`after-save-hook' by the user.")
+For example, put the below in your project's .dir-locals.el if
+the Org files in the \"content-org\" directory are meant to be
+auto-exported using `ox-hugo':
 
-;;;###autoload
+\((\"content-org\"
+  . ((org-mode . ((org-hugo-auto-export-on-save . t)))))) ")
+;; Declare this variable as safe if its value is boolean (t or nil),
+;; so that adding it to .dir-locals.el does not prompt users.
+(put 'org-hugo-auto-export-on-save 'safe-local-variable 'booleanp)
+
+(defvar org-hugo--org-capture-active-flag nil
+  "Non-nil means that an Org Capture is in progress.
+
+This variable is used to prevent auto-exports when saving Org
+Captures (applicable if creating new posts using Org Capture
+using the per-subtree export flow).
+
+This is an internal flag; not to be modified by the user.")
+
 (defun org-hugo-export-wim-to-md-after-save ()
   "Fn for `after-save-hook' to run `org-hugo-export-wim-to-md'.
 
-The export is also skipped if `org-hugo-allow-export-after-save'
-is nil.  This variable is intended to be toggled dynamically in
-`org-capture-before-finalize-hook' and
+The export only if both and `org-hugo-auto-export-on-save' and
+`org-hugo--org-capture-active-flag' are non-nil.
+
+`org-hugo--org-capture-active-flag' is intended to be toggled
+dynamically in `org-capture-before-finalize-hook' and
 `org-capture-after-finalize-hook' hooks.  See the ‘Auto-export on
 Saving’ section in this package's documentation for an example."
   (save-excursion
-    (when org-hugo-allow-export-after-save
+    (when (and org-hugo-auto-export-on-save ;Should be set to t only in .dir-locals.el
+               ;; `org-hugo--org-capture-active-flag' is t by default,
+               ;; and should be set to nil only temporarily, like
+               ;; during Org Capture.
+               (not org-hugo--org-capture-active-flag))
       (org-hugo-export-wim-to-md))))
+
+(defun org-hugo-auto-export-hook-fn ()
+  "Hook function to enable/disable auto-export of Org file/subtree on file save.
+
+It is enabled if `org-hugo-auto-export-on-save' is non-nil."
+  (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local))
+
+;;; Org Capture
+;; Disallow auto-exporting when saving Org Captures.
+(defun org-hugo--disallow-auto-export-during-capture ()
+  "Function for `org-capture-before-finalize-hook'.
+
+Set `org-hugo--org-capture-active-flag' to t to prevent the
+`ox-hugo' auto-exports from happening when saving captures."
+  (setq org-hugo--org-capture-active-flag t))
+
+(defun org-hugo--allow-auto-export-after-capture ()
+  "Function for `org-capture-after-finalize-hook'.
+
+Set `org-hugo--org-capture-active-flag' back to nil so that the
+auto-export on save can resume working (if
+`org-hugo-auto-export-on-save' is non-nil)."
+  (setq org-hugo--org-capture-active-flag nil))
+
+(with-eval-after-load 'org-capture
+  (add-hook 'org-capture-before-finalize-hook #'org-hugo--disallow-auto-export-during-capture)
+  (add-hook 'org-capture-after-finalize-hook #'org-hugo--allow-auto-export-after-capture))
+
+;;; Org Mode Hook
+(add-hook 'org-mode-hook #'org-hugo-auto-export-hook-fn)
 
 
 (provide 'ox-hugo-auto-export)

@@ -8,11 +8,3 @@
 
 This post will be exported without =title= in the front-matter because
 it is disabled using =#+options: title:nil=.
-
-* Footnotes
-* COMMENT Local Variables                                           :ARCHIVE:
-# Local Variables:
-# fill-column: 70
-# eval: (auto-fill-mode 1)
-# eval: (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local)
-# End:

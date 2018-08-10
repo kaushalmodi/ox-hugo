@@ -36,8 +36,5 @@ Variables/ section below.
 * Footnotes
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:
-# fill-column: 70
-# eval: (auto-fill-mode 1)
-# eval: (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local)
 # org-hugo-footer: "\n\n[//]: # \"Exported with love from a post written in Org mode\"\n[//]: # \"- https://github.com/kaushalmodi/ox-hugo\""
 # End:

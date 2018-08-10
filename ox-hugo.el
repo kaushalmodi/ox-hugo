@@ -77,8 +77,9 @@
 (require 'ob-core)                      ;For `org-babel-parse-header-arguments'
 (declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
 
-(defvar ffap-url-regexp)                ;Silence byte-compiler
+(require 'ox-hugo-sugar)
 
+(defvar ffap-url-regexp)                ;Silence byte-compiler
 
 ;; Using the correct function for getting inherited Org tags.
 ;; Starting Org 9.2, `org-get-tags' returns all the inherited tags
@@ -135,20 +136,6 @@ front-matter that's used after Pandoc Citation parsing.")
 Pandoc understands meta-data only in YAML format.  So when Pandoc
 Citations are enabled, Pandoc is handed over the file with this
 YAML front-matter.")
-
-(defvar org-hugo-allow-export-after-save t
-  "Enable flag for `org-hugo-export-wim-to-md-after-save'.
-When nil, the above function will not export the Org file to
-Hugo-compatible Markdown.
-
-This variable is usually set to nil by the user in
-`org-capture-before-finalize-hook' and set to t again in
-`org-capture-after-finalize-hook', so that the export does not
-happen as soon as a new post is created using Org capture.
-
-Note that the export after save will not work until
-`org-hugo-export-wim-to-md-after-save' is added to the
-`after-save-hook' by the user.")
 
 (defvar org-hugo-blackfriday-options
   '("taskLists"
@@ -3661,19 +3648,6 @@ approach)."
                               (format "%s: %s" f-or-b-name msg)))))))
               (when do-export
                 (org-hugo-export-to-md async subtree visible-only)))))))))
-
-;;;###autoload
-(defun org-hugo-export-wim-to-md-after-save ()
-  "Fn for `after-save-hook' to run `org-hugo-export-wim-to-md'.
-
-The export is also skipped if `org-hugo-allow-export-after-save'
-is nil.  This variable is intended to be toggled dynamically in
-`org-capture-before-finalize-hook' and
-`org-capture-after-finalize-hook' hooks.  See the ‘Auto-export on
-Saving’ section in this package's documentation for an example."
-  (save-excursion
-    (when org-hugo-allow-export-after-save
-      (org-hugo-export-wim-to-md))))
 
 ;;;###autoload
 (defun org-hugo-debug-info ()

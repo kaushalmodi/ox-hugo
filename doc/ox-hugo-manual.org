@@ -410,15 +410,16 @@ any export).
 
 You can do that by adding the below to your config:
 #+begin_src emacs-lisp
-(require 'ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 (with-eval-after-load 'ox
   (require 'ox-hugo))
+(require 'ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 #+end_src
-If you use =use-package=, you can do the below instead:
-#+begin_src emacs-lisp
-(use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
+If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can do the below instead:
+#+begin_src emacs-lisp :noweb-ref use_package_snippet
 (use-package ox-hugo
+  :ensure t            ;Auto-install the package from Melpa (optional)
   :after ox)
+(use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 #+end_src
 
 Also see the {{{doc(auto-export-on-saving,Auto Exporting)}}} section.
@@ -428,24 +429,27 @@ Also see the {{{doc(auto-export-on-saving,Auto Exporting)}}} section.
 Spacemacs users can choose to add this snippet to their
 =dotspacemacs/user-config= function in =.spacemacs=:
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :noweb yes
 (defun dotspacemacs/user-config ()
   ;; Other stuff
   ;; ..
 
   ;; ox-hugo config
-  (use-package ox-hugo
-    :ensure t                           ;Auto-install the package from Melpa
-    :after ox)
-  (use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
+  <<use_package_snippet>>
   )
 #+end_src
 
+#+begin_note
+You do have _have_ to use the =use-package= version when using
+Spacemacs. That version was used because =use-package= is installed by
+default in Spacemacs.
+#+end_note
 If you do so, you *also need to* add =ox-hugo= to
 =dotspacemacs-additional-packages=.
 
-/Verified to work on Spacemacs =develop= branch with =spacemacs-base=
-distribution, =emacs= editing style. -- <2017-10-09 Mon>/
+/This was verified to work on Spacemacs =develop= branch with
+=spacemacs-base= distribution, =emacs= editing style. --
+<2017-10-09 Mon>/
 *** Before you export
 :PROPERTIES:
 :CUSTOM_ID: before-you-export
@@ -1809,10 +1813,12 @@ So with =ox-hugo= installed, add this to your Emacs config:
 #+begin_src emacs-lisp
 (require 'ox-hugo-auto-export)
 #+end_src
-#+begin_note
-I am deliberately using =require= there. This package must not be
-lazy-loaded.
-#+end_note
+
+or if using =use-package=:
+
+#+begin_src emacs-lisp
+(use-package ox-hugo-auto-export)
+#+end_src
 ***** Step {{{n}}}: Set =org-hugo-auto-export-on-save=
 This variable is /nil/ by default, so that the auto-exporting feature
 can be enabled separately at project level or file level.
@@ -1820,9 +1826,25 @@ can be enabled separately at project level or file level.
 If you want to enable auto-exporting for the whole project, add this
 to the ~.dir-locals.el~ file in the project root:
 #+begin_src emacs-lisp
-(("dir/in/the/project/containing/org/files/"
+(("content-org/"
   . ((org-mode . ((org-hugo-auto-export-on-save . t))))))
 #+end_src
+Above assumes that the Org files are in the /"content-org/"/ directory
+(at any nested level in there) relative to that =.dir-locals.el= file:
+#+begin_example
+<HUGO_BASE_DIR>
+  ├── config.toml
+  ├── content
+  ├── content-org      <-- Org files in there
+  ├── static
+  ├── themes
+  └── .dir-locals.el
+#+end_example
+******* Enabling for multiple projects
+To enable auto-exporting for multiple projects, simply add similar
+=.dir-locals.el= files to the root directories of those projects. Just
+ensure that the relative Org file directories, like the
+/"content-org/"/ in above example, are set correctly.
 ****** Enable only for an Org file
 Add below to the very-end of your Org file and *save the file*:
 #+begin_src org
@@ -1837,6 +1859,19 @@ Add below to the very-end of your Org file and *save the file*:
  directly to that section you created. Otherwise, Org will auto-create
  a new /Footnotes/ heading *at the end of the file*.. and the /Local
  Variables/ heading would then no longer be at the end of the file.
+****** Enable for the whole project except for few Org files
+1. Enable the auto-exporting for the whole project as explained [[* Enable for the whole project][above]].
+2. Then add below to the very-end of the Org file where you need to
+   disable the auto-exporting:
+   #+begin_src org
+   ,* Footnotes
+   ,* COMMENT Local Variables                          :ARCHIVE:
+   # Local Variables:
+   # org-hugo-auto-export-on-save: nil
+   # End:
+   #+end_src
+   Note that this time, =org-hugo-auto-export-on-save= is set to /nil/
+   to override the /t/ value set in the =.dir-locals.el=.
 
 #+begin_note
 After updating the value of =org-hugo-auto-export-on-save= using

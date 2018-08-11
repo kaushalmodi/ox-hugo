@@ -63,27 +63,18 @@ using the per-subtree export flow).
 This is an internal flag; not to be modified by the user.")
 
 (defun org-hugo-export-wim-to-md-after-save ()
-  "Fn for `after-save-hook' to run `org-hugo-export-wim-to-md'.
+  "Function for `after-save-hook' to run `org-hugo-export-wim-to-md'.
 
-The export only if both and `org-hugo-auto-export-on-save' and
-`org-hugo--org-capture-active-flag' are non-nil.
-
-`org-hugo--org-capture-active-flag' is intended to be toggled
-dynamically in `org-capture-before-finalize-hook' and
-`org-capture-after-finalize-hook' hooks.  See the ‘Auto-export on
-Saving’ section in this package's documentation for an example."
+The exporting happens only if `org-hugo-auto-export-on-save' is
+non-nil and `org-hugo--org-capture-active-flag' is nil (i.e. Org
+Capture is not is progress)."
   (save-excursion
-    (when (and org-hugo-auto-export-on-save ;Should be set to t only in .dir-locals.el
-               ;; `org-hugo--org-capture-active-flag' is t by default,
-               ;; and should be set to nil only temporarily, like
-               ;; during Org Capture.
+    (when (and org-hugo-auto-export-on-save
                (not org-hugo--org-capture-active-flag))
       (org-hugo-export-wim-to-md))))
 
 (defun org-hugo-auto-export-hook-fn ()
-  "Hook function to enable/disable auto-export of Org file/subtree on file save.
-
-It is enabled if `org-hugo-auto-export-on-save' is non-nil."
+  "Hook function to enable/disable auto-export of Org file/subtree on file save."
   (add-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :append :local))
 
 ;;; Org Capture

@@ -94,14 +94,18 @@ any export).
 
 You can do that by adding the below to your config:
 #+BEGIN_SRC emacs-lisp
+(require 'ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 (with-eval-after-load 'ox
   (require 'ox-hugo))
 #+END_SRC
 If you use =use-package=, you can do the below instead:
 #+BEGIN_SRC emacs-lisp
+(use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 (use-package ox-hugo
   :after ox)
 #+END_SRC
+
+Also see the [[https://ox-hugo.scripter.co/doc/auto-export-on-saving][Auto Exporting]] section.
 
 *Spacemacs*
 
@@ -116,7 +120,9 @@ Spacemacs users can choose to add this snippet to their
   ;; ox-hugo config
   (use-package ox-hugo
     :ensure t                           ;Auto-install the package from Melpa
-    :after ox))
+    :after ox)
+  (use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
+  )
 #+END_SRC
 
 If you do so, you *also need to* add =ox-hugo= to

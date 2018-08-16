@@ -2520,11 +2520,14 @@ Optional argument FORMAT can be \"toml\" or \"yaml\"."
             ;; "10040216507682529280" that needs more than 64 bits to
             ;; be stored as a signed integer, it will be automatically
             ;; stored as a float.  So (integerp (string-to-number
-            ;; val)) will return nil.
+            ;; val)) will return nil [or `fixnump' instead of
+            ;; `integerp' in Emacs 27 or newer]
             ;; https://github.com/toml-lang/toml#integer Integer
             ;; examples: 7, +7, -7, 7_000
             (and (string-match-p "\\`[+-]?[[:digit:]_]+\\'" val)
-                 (integerp (string-to-number val)))
+                 (if (functionp #'fixnump) ;`fixnump' and `bignump' get introduced in Emacs 27.x
+                     (fixnump (string-to-number val))
+                   (integerp (string-to-number val)))) ;On older Emacsen, `integerp' behaved the same as the new `fixnump'
             (string= "true" val)
             (string= "false" val)
             ;; or if it is a date (date, publishDate, expiryDate, lastmod)

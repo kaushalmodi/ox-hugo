@@ -1881,7 +1881,9 @@ and rewrite link paths to make blogging more seamless."
                                          useful-parent info
                                          nil #'org-html--has-caption-p))
                                 " "     ;" </span>"
-                                caption))))
+                                ;; Escape the double-quotes, if any,
+                                ;; present in the caption.
+                                (replace-regexp-in-string "\"" "\\\\\"" caption)))))
         ;; (message "[ox-hugo-link DBG] inline image? %s\npath: %s"
         ;;          inline-image path)
         ;; (message "[org-hugo-link DBG] attr: %s num of attr: %d"

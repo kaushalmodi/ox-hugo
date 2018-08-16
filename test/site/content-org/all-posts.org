@@ -204,7 +204,7 @@ This is an inline non-hyperlinked image with the width attribute:
 :END:
 Some text before image.
 
-#+caption: A unicorn!
+#+caption: A unicorn! "Something in double quotes"
 [[/images/org-mode-unicorn-logo.png]]
 
 Some more text, after image.

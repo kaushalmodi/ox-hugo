@@ -13,8 +13,13 @@
 
 ;; TODO: Change the defconst to defvar
 (defvar org-hugo-pandoc-cite-pandoc-args-list
-  '("-f" "markdown"
-    "-t" "markdown-citations-simple_tables+pipe_tables-fenced_divs-fenced_code_attributes"
+  `("-f" "markdown"
+    "-t" ,(concat "markdown-citations"
+                  "-simple_tables"
+                  "+pipe_tables"
+                  "-fenced_divs"
+                  "-fenced_code_attributes"
+                  "-bracketed_spans")
     "--atx-headers"
     "--id-prefix=fn:")
   "Pandoc arguments used in `org-hugo-pandoc-cite--run-pandoc'.
@@ -36,6 +41,9 @@
 
   -fenced_code_attributes : Create fenced code blocks like
                  \"``` lang .. ```\" instead of \"``` {.lang} .. ```\".
+
+  -bracketed_spans : Do not replace HTML <span> tags with Pandoc
+                 bracketed class notation \"{.some-class}\".
 
 --atx-headers : Use \"# foo\" style heading for output markdown.
 

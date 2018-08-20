@@ -4853,11 +4853,11 @@ But that generates neither a Pandoc warning nor error.
 As the final Pandoc output Markdown ends up with *no* references, the
 Pandoc output is discarded, and the original ~ox-hugo~ output is used
 instead.
-** DONE Citations with captions
-CLOSED: [2018-08-19 Sun 16:24]
+** Citations with captions
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: citations-with-captions
 :EXPORT_FILE_NAME: index
+:EXPORT_DATE: 2018-08-19
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :link-citations true
 :END:
 {{{oxhugoissue(191)}}}
@@ -4878,7 +4878,9 @@ rectangle "<html>, <body>, etc." as a  {
   }
 }
 #+end_src
-
+# The order of #+caption and #+RESULTS is important here.
+# Ref: https://emacs.stackexchange.com/a/12155/115
+#+caption: Figure caption
 #+RESULTS: code__plantuml_nested_boxes
 [[file:images/citations-with-captions/nested-boxes.svg]]
 *** Figure with caption

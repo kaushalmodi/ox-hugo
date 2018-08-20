@@ -1,6 +1,6 @@
 +++
 title = "Citations with captions"
-date = 2018-08-19T16:24:00-04:00
+date = 2018-08-19
 tags = ["pandoc", "citations"]
 draft = false
 +++
@@ -17,11 +17,11 @@ an electronic notebook has to happen.
 
 ## Why use Org mode?
 
-Check out the code block in [1](#org60aad95).
+Check out the code block in [1](#org37632ce).
 
 ## Using code blocks
 
-<a id="org60aad95"></a>
+<a id="org37632ce"></a>
 
 ``` plantuml
 rectangle "<html>, <body>, etc." as a  {
@@ -37,11 +37,11 @@ rectangle "<html>, <body>, etc." as a  {
 
 </div>
 
-{{< figure src="nested-boxes.svg" >}}
+{{< figure src="nested-boxes.svg" caption="Figure 1: Figure caption" >}}
 
 ## Figure with caption
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 1: A unicorn!" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: A unicorn!" >}}
 
 ## References {#references}
 

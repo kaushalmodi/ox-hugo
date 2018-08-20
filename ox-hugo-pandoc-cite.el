@@ -192,7 +192,11 @@ Required fixes:
                               "\\(\\s-\\|\n\\)+"
                               "\\\\>}}")))
           (while (re-search-forward regexp nil :noerror)
-            (replace-match "{{< \\1 >}}" :fixedcase))))
+            (let* ((sc-body (match-string-no-properties 1))
+                   (sc-body-no-newlines (replace-regexp-in-string
+                                         "\n" " " sc-body)))
+              (replace-match (format "{{< %s >}}" sc-body-no-newlines)
+                             :fixedcase)))))
 
       (buffer-substring-no-properties (point-min) (point-max)))))
 

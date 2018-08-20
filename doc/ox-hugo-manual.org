@@ -2357,9 +2357,9 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 
 [fn:7] The Pandoc Citations feature was last <2018-08-19 Sun> tested
 with Pandoc version 2.2.2. If you are running an older version, the
-quickest way to "install" might be to simply download the latest
-release archive from [[https://github.com/jgm/pandoc/releases][~Pandoc releases]], extract it and put the ~pandoc~
-and ~pandoc-citeproc~ binaries in one of the directories in your PATH.
+quickest way to install might be to simply download the latest release
+archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]], extract it and put the ~pandoc~ and
+~pandoc-citeproc~ binaries in one of the directories in your /PATH/.
 
 [fn:6] If you are still using a Hugo version older than 0.25, update
 now! -- Because that version added support for the awesome

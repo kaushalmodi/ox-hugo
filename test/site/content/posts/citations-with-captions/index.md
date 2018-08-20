@@ -1,5 +1,16 @@
 +++
 title = "Citations with captions"
+description = """
+  This test tests the following:
+
+  -   Pandoc leave the HTML `span` tags as-is.
+  -   Pandoc does not escape the `<` in the `figure` shortcodes with
+      captions (in general: `{{< ..>}}` shortcodes that could wrap across
+      lines).
+  -   While Pandoc auto-wraps the re-written Markdown, it also wraps the
+      `{{< .. >}}` shortcodes. The test checks that such "wrapped
+      shortcodes" get unwrapped.
+  """
 date = 2018-08-19
 tags = ["pandoc", "citations"]
 draft = false
@@ -17,11 +28,11 @@ an electronic notebook has to happen.
 
 ## Why use Org mode?
 
-Check out the code block in [1](#org37632ce).
+Check out the code block in [1](#orge2c7b6d).
 
 ## Using code blocks
 
-<a id="org37632ce"></a>
+<a id="orge2c7b6d"></a>
 
 ``` plantuml
 rectangle "<html>, <body>, etc." as a  {

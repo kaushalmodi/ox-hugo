@@ -879,6 +879,7 @@ Return nil if VALUE is nil, \"nil\" or \"\"."
     ;; 123 -> nil
     (org-string-nw-p value))))
 
+;;;; Check if a boolean plist value is non-nil
 (defun org-hugo--plist-get-true-p (info key)
   "Return non-nil if KEY in INFO is non-nil.
 Return nil if the value of KEY in INFO is nil, \"nil\" or \"\".
@@ -967,22 +968,12 @@ This is an internal function."
   (setq org-hugo--section nil)
   (setq org-hugo--bundle nil)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
-  (let* ((pandoc-citations-enabled--prop-val
-          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit :literal-nil))
-         (pandoc-citations-enabled--plist-val
-          (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
-         (pandoc-enabled (or pandoc-citations-enabled--prop-val
-                             pandoc-citations-enabled--plist-val))
-         (pandoc-enabled-bool (org-hugo--value-get-true-p pandoc-enabled)))
-    ;; (message "[ox-hugo DBG pandoc-citations-enabled--prop-val] %S" pandoc-citations-enabled--prop-val)
-    ;; (message "[ox-hugo DBG pandoc-citations-enabled--plist-val] %S" pandoc-citations-enabled--plist-val)
-    ;; (message "[ox-hugo DBG pandoc-enabled-bool] %S" pandoc-enabled-bool)
-    (when (and outfile
-               pandoc-enabled-bool)
-      (require 'ox-hugo-pandoc-cite)
-      (plist-put info :outfile outfile)
-      (plist-put info :front-matter org-hugo--fm)
-      (org-hugo-pandoc-cite--parse-citations-maybe info)))
+  (when (and outfile
+             (org-hugo--pandoc-citations-enabled-p info))
+    (require 'ox-hugo-pandoc-cite)
+    (plist-put info :outfile outfile)
+    (plist-put info :front-matter org-hugo--fm)
+    (org-hugo-pandoc-cite--parse-citations-maybe info))
   (setq org-hugo--fm nil)
   (setq org-hugo--fm-yaml nil))
 
@@ -1495,6 +1486,23 @@ INFO is a plist used as a communication channel."
     ;; (message "dbg: draft-state: todo keyword=%S HUGO_DRAFT=%S draft=%S"
     ;;          todo-keyword (plist-get info :hugo-draft) draft-bool-str)
     draft-bool-str))
+
+;;;; Check if Pandoc Citations parsing is needed
+(defun org-hugo--pandoc-citations-enabled-p (info)
+  "Return non-nil if Pandoc Citation parsing is enabled.
+
+INFO is a plist used as a communication channel."
+  (let* ((pandoc-citations-enabled--prop-val
+          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit :literal-nil))
+         (pandoc-citations-enabled--plist-val
+          (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
+         (pandoc-enabled (or pandoc-citations-enabled--prop-val
+                             pandoc-citations-enabled--plist-val))
+         (pandoc-enabled-bool (org-hugo--value-get-true-p pandoc-enabled)))
+    ;; (message "[ox-hugo DBG pandoc-citations-enabled--prop-val] %S" pandoc-citations-enabled--prop-val)
+    ;; (message "[ox-hugo DBG pandoc-citations-enabled--plist-val] %S" pandoc-citations-enabled--plist-val)
+    ;; (message "[ox-hugo DBG pandoc-enabled-bool] %S" pandoc-enabled-bool)
+    pandoc-enabled-bool))
 
 
 

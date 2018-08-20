@@ -1,11 +1,12 @@
----
-title: "Disabling Pandoc citations in a subtree (nil string)"
-description: >
++++
+title = "Disabling Pandoc citations in a subtree (nil string)"
+description = """
   Test that `:EXPORT_HUGO_PANDOC_CITATIONS: nil` disables Pandoc
   citations in a subtree.
-tags: ["pandoc", "citations", "disable"]
-draft: false
-nocite: ["@giovanelli2016", "@eilan2016"]
----
+  """
+tags = ["pandoc", "citations", "disable"]
+draft = false
+nocite = ["@giovanelli2016", "@eilan2016"]
++++
 
 The Nocites in the front-matter do not get rendered as citations.

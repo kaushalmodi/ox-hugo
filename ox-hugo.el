@@ -2494,7 +2494,7 @@ INFO is a plist holding export options."
                   (format "\n%s" body)
                 "")))
     (setq org-hugo--fm fm)
-    (if (org-hugo--plist-get-true-p info :hugo-pandoc-citations)
+    (if (org-hugo--pandoc-citations-enabled-p info)
         (format "%s%s%s" org-hugo--fm-yaml body org-hugo-footer)
       (format "%s%s%s" fm body org-hugo-footer))))
 
@@ -3024,7 +3024,7 @@ INFO is a plist used as a communication channel."
     (setq data (org-hugo--replace-keys-maybe data info))
     (setq ret (org-hugo--gen-front-matter data fm-format))
     (if (and (string= "toml" fm-format)
-             (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
+             (org-hugo--pandoc-citations-enabled-p info))
         ;; Pandoc parses fields like csl and nocite from YAML
         ;; front-matter.  So create the `org-hugo--fm-yaml'
         ;; front-matter in YAML format just for Pandoc.

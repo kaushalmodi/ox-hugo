@@ -861,7 +861,24 @@ newer."
 
 ;;; Miscellaneous Helper Functions
 
-;;;; Check if a boolean plist value is non-nil
+;;;; Check if a value is non-nil
+(defun org-hugo--value-get-true-p (value)
+  "Return non-nil if VALUE is non-nil.
+Return nil if VALUE is nil, \"nil\" or \"\"."
+  (cond
+   ((or (equal t value)
+        (equal nil value))
+    value)
+   ((and (stringp value)
+         (string= value "nil"))
+    nil)
+   (t
+    ;; "" -> nil
+    ;; "t" -> "t"
+    ;; "anything else" -> "anything else"
+    ;; 123 -> nil
+    (org-string-nw-p value))))
+
 (defun org-hugo--plist-get-true-p (info key)
   "Return non-nil if KEY in INFO is non-nil.
 Return nil if the value of KEY in INFO is nil, \"nil\" or \"\".
@@ -872,19 +889,7 @@ are expected to hold a boolean value.
 INFO is a plist used as a communication channel."
   (let ((value (plist-get info key)))
     ;; (message "dbg: org-hugo--plist-get-true-p:: key:%S value:%S" key value)
-    (cond
-     ((or (equal t value)
-          (equal nil value))
-      value)
-     ((and (stringp value)
-           (string= value "nil"))
-      nil)
-     (t
-      ;; "" -> nil
-      ;; "t" -> "t"
-      ;; "anything else" -> "anything else"
-      ;; 123 -> nil
-      (org-string-nw-p value)))))
+    (org-hugo--value-get-true-p value)))
 
 ;;;; Workaround to retain the :hl_lines parameter in src-block headers post `org-babel-exp-code'
 ;; http://lists.gnu.org/archive/html/emacs-orgmode/2017-10/msg00300.html
@@ -962,10 +967,18 @@ This is an internal function."
   (setq org-hugo--section nil)
   (setq org-hugo--bundle nil)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
-  (let ((pandoc-enabled (or (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit)
-                            (org-hugo--plist-get-true-p info :hugo-pandoc-citations))))
+  (let* ((pandoc-citations-enabled--prop-val
+          (org-entry-get nil "EXPORT_HUGO_PANDOC_CITATIONS" :inherit :literal-nil))
+         (pandoc-citations-enabled--plist-val
+          (org-hugo--plist-get-true-p info :hugo-pandoc-citations))
+         (pandoc-enabled (or pandoc-citations-enabled--prop-val
+                             pandoc-citations-enabled--plist-val))
+         (pandoc-enabled-bool (org-hugo--value-get-true-p pandoc-enabled)))
+    ;; (message "[ox-hugo DBG pandoc-citations-enabled--prop-val] %S" pandoc-citations-enabled--prop-val)
+    ;; (message "[ox-hugo DBG pandoc-citations-enabled--plist-val] %S" pandoc-citations-enabled--plist-val)
+    ;; (message "[ox-hugo DBG pandoc-enabled-bool] %S" pandoc-enabled-bool)
     (when (and outfile
-               pandoc-enabled)
+               pandoc-enabled-bool)
       (require 'ox-hugo-pandoc-cite)
       (plist-put info :outfile outfile)
       (plist-put info :front-matter org-hugo--fm)

@@ -4886,6 +4886,27 @@ rectangle "<html>, <body>, etc." as a  {
 #+caption: PlantUML generated figure showing nested boxes
 #+RESULTS: code__plantuml_nested_boxes
 [[file:images/citations-with-captions/nested-boxes.svg]]
+** Disabling Pandoc citations in a subtree                          :disable:
+*** Disabling Pandoc citations in a subtree (empty string)
+:PROPERTIES:
+:EXPORT_FILE_NAME: disabling-pandoc-citations-in-a-subtree-empty-string
+:EXPORT_HUGO_PANDOC_CITATIONS:
+:END:
+#+begin_description
+Test that ~:EXPORT_HUGO_PANDOC_CITATIONS:~ disables Pandoc citations
+in a subtree.
+#+end_description
+The Nocites in the front-matter do not get rendered as citations.
+*** Disabling Pandoc citations in a subtree (nil string)
+:PROPERTIES:
+:EXPORT_FILE_NAME: disabling-pandoc-citations-in-a-subtree-nil-string
+:EXPORT_HUGO_PANDOC_CITATIONS: nil
+:END:
+#+begin_description
+Test that ~:EXPORT_HUGO_PANDOC_CITATIONS: nil~ disables Pandoc
+citations in a subtree.
+#+end_description
+The Nocites in the front-matter do not get rendered as citations.
 * Export Options                                              :export_option:
 ** Table of Contents (TOC)                                              :toc:
 =ox-hugo= has the =with-toc= option disabled by default as Hugo has an

@@ -188,7 +188,7 @@ Required fixes:
       (save-excursion
         (let ((regexp (concat "{{\\\\<"
                               "\\(\\s-\\|\n\\)+"
-                              "\\(?1:.+?\\)"
+                              "\\(?1:[[:ascii:][:nonascii:]]+?\\)"
                               "\\(\\s-\\|\n\\)+"
                               "\\\\>}}")))
           (while (re-search-forward regexp nil :noerror)

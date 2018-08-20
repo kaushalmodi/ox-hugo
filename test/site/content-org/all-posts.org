@@ -4881,6 +4881,9 @@ rectangle "<html>, <body>, etc." as a  {
 
 #+RESULTS: code__plantuml_nested_boxes
 [[file:images/citations-with-captions/nested-boxes.svg]]
+*** Figure with caption
+#+caption: A unicorn!
+[[/images/org-mode-unicorn-logo.png]]
 * Export Options                                              :export_option:
 ** Table of Contents (TOC)                                              :toc:
 =ox-hugo= has the =with-toc= option disabled by default as Hugo has an

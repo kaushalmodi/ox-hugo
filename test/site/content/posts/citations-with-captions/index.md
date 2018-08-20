@@ -1,6 +1,6 @@
 +++
 title = "Citations with captions"
-date = 2018-08-19T16:24:00-00:00
+date = 2018-08-19T16:24:00+00:00
 tags = ["pandoc", "citations"]
 draft = false
 +++
@@ -17,11 +17,11 @@ an electronic notebook has to happen.
 
 ## Why use Org mode?
 
-Check out the code block in [1](#org4bfd6da).
+Check out the code block in [1](#org6cbbd55).
 
 ## Using code blocks
 
-<a id="org4bfd6da"></a>
+<a id="org6cbbd55"></a>
 
 ``` plantuml
 rectangle "<html>, <body>, etc." as a  {

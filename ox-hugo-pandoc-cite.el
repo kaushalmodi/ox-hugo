@@ -308,6 +308,8 @@ INFO is a plist used as a communication channel."
         (progn
           (unless (executable-find "pandoc")
             (user-error "[ox-hugo] pandoc executable not found in PATH"))
+          (unless (executable-find "pandoc-citeproc")
+            (user-error "[ox-hugo] pandoc-citeproc executable not found in PATH"))
           (org-hugo-pandoc-cite--parse-citations info orig-outfile))
       (org-hugo-pandoc-cite--restore-fm-in-orig-outfile
        orig-outfile fm orig-outfile-contents))))

@@ -4853,7 +4853,7 @@ But that generates neither a Pandoc warning nor error.
 As the final Pandoc output Markdown ends up with *no* references, the
 Pandoc output is discarded, and the original ~ox-hugo~ output is used
 instead.
-** Citations with captions
+** Citations with captions                          :caption:figure:plantuml:
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: citations-with-captions
 :EXPORT_FILE_NAME: index
@@ -4871,16 +4871,9 @@ This test tests the following:
   shortcodes" get unwrapped.
 #+end_description
 {{{oxhugoissue(191)}}}
-*** Why an electronic lab notebook?
-At an age where data is moving from paper to electronic form, the
-amount and *shape* of data is not very paper-compatible, and the
-analysis of that same data becomes more complex, it is just obvious
-that the move to an electronic notebook has to happen.
-*** Why use Org mode?
-Check out the code block in [[code__plantuml_nested_boxes]].
-*** Using code blocks
+
 #+name: code__plantuml_nested_boxes
-#+caption: Nested Boxes
+#+caption: Nested Boxes using PlantUML
 #+begin_src plantuml :file images/citations-with-captions/nested-boxes.svg :eval yes :exports both
 rectangle "<html>, <body>, etc." as a  {
   rectangle "<div>..." as b #antiquewhite {
@@ -4890,12 +4883,9 @@ rectangle "<html>, <body>, etc." as a  {
 #+end_src
 # The order of #+caption and #+RESULTS is important here.
 # Ref: https://emacs.stackexchange.com/a/12155/115
-#+caption: Figure caption
+#+caption: PlantUML generated figure showing nested boxes
 #+RESULTS: code__plantuml_nested_boxes
 [[file:images/citations-with-captions/nested-boxes.svg]]
-*** Figure with caption
-#+caption: A unicorn!
-[[/images/org-mode-unicorn-logo.png]]
 * Export Options                                              :export_option:
 ** Table of Contents (TOC)                                              :toc:
 =ox-hugo= has the =with-toc= option disabled by default as Hugo has an

@@ -12,27 +12,14 @@ description = """
       shortcodes" get unwrapped.
   """
 date = 2018-08-19
-tags = ["pandoc", "citations"]
+tags = ["pandoc", "citations", "caption", "figure", "plantuml"]
 draft = false
 +++
 
 `ox-hugo` Issue
 \#[191](https://github.com/kaushalmodi/ox-hugo/issues/191)
 
-## Why an electronic lab notebook?
-
-At an age where data is moving from paper to electronic form, the amount
-and **shape** of data is not very paper-compatible, and the analysis of
-that same data becomes more complex, it is just obvious that the move to
-an electronic notebook has to happen.
-
-## Why use Org mode?
-
-Check out the code block in [1](#orge2c7b6d).
-
-## Using code blocks
-
-<a id="orge2c7b6d"></a>
+<a id="org11225ac"></a>
 
 ``` plantuml
 rectangle "<html>, <body>, etc." as a  {
@@ -44,15 +31,12 @@ rectangle "<html>, <body>, etc." as a  {
 
 <div class="src-block-caption">
 
-<span class="src-block-number">Code Snippet 1:</span> Nested Boxes
+<span class="src-block-number">Code Snippet 1:</span> Nested Boxes using
+PlantUML
 
 </div>
 
-{{< figure src="nested-boxes.svg" caption="Figure 1: Figure caption" >}}
-
-## Figure with caption
-
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: A unicorn!" >}}
+{{< figure src="nested-boxes.svg" caption="Figure 1: PlantUML generated figure showing nested boxes" >}}
 
 ## References {#references}
 

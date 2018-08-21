@@ -260,6 +260,13 @@
   org_dir = "org"
   site = "https://www.steventammen.com/"
 
+[takaxp]
+  author = "Takaaki Ishikawa"
+  source = "https://github.com/takaxp/blog"
+  branch = "master"
+  org_dir = "entries"
+  site = "https://pxaka.tokyo/blog"
+
 # []
 #   author = ""
 #   source = ""

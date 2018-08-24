@@ -1671,15 +1671,15 @@ link, etc markup).
 The `slug' generated from that STR follows these rules:
 
 - Contain only lower case alphabet, number and hyphen characters
-  ([a-z0-9-]).
+  ([[:alnum:]-]).
 - Not have *any* HTML tag like \"<code>..</code>\",
   \"<span class=..>..</span>\", etc.
 - Not contain any URLs (if STR happens to be a Markdown link).
 - Replace \".\" in STR with \"dot\", and \"&\" with \"and\".
 - Replace parentheses with double-hyphens.  So \"foo (bar) baz\"
   becomes \"foo--bar--baz\".
-- Replace non [a-z0-9-] chars with spaces, and then one or more
-  consecutive spaces with a single hyphen.
+- Replace non [[:alnum:]-] chars with spaces, and then one or
+  more consecutive spaces with a single hyphen.
 - At most two consecutive hyphens are allowed.
 - No hyphens allowed at the leading or trailing end of the slug."
   (let* (;; All lower-case

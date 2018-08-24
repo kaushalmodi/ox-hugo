@@ -1654,23 +1654,34 @@ a communication channel."
 ;;;;; Headline Helpers
 ;;;###autoload
 (defun org-hugo-slug (str)
-  "Return a slug string for STR.
-STR is in Markdown format, most likely a Markdown heading.  The
-returned slug string has the following specification:
+  "Convert string STR to a `slug' and return that string.
 
-- Should contain only lower case alphabet, number and hyphen
-  characters.
-- Remove *any* HTML tag like \"<code>..</code>\", \"<span
-  class=..>..</span>\", etc from STR if present.
-- URLs if present in STR should be removed.
-- Replace \".\" in STR with \"and\", and \"&\" with \"and\".
-- Parentheses should be replaced with double-hyphens ( \"foo (bar)
-  baz\" becomes \"foo--bar--baz\").
-- One or more consecutive spaces should be replaced with a single
-  hyphen.
-- Maximum number of consecutive hyphens allowed is two.
-- No hyphens should be present at the leading or trailing end of the
-  returned string ."
+A `slug' is the part of a URL which identifies a particular page
+on a website in an easy to read form.
+
+Example: If STR is \"My First Post\", it will be converted to a
+slug \"my-first-post\", which can become part of an easy to read
+URL like \"https://example.com/posts/my-first-post/\".
+
+In general, STR is a string.  But it can also be a string with
+Markdown markup as that string passed to this function is often
+the sub-headings of a post (which can contain bold, italics,
+link, etc markup).
+
+The `slug' generated from that STR follows these rules:
+
+- Contain only lower case alphabet, number and hyphen characters
+  ([a-z0-9-]).
+- Not have *any* HTML tag like \"<code>..</code>\",
+  \"<span class=..>..</span>\", etc.
+- Not contain any URLs (if STR happens to be a Markdown link).
+- Replace \".\" in STR with \"dot\", and \"&\" with \"and\".
+- Replace parentheses with double-hyphens.  So \"foo (bar) baz\"
+  becomes \"foo--bar--baz\".
+- Replace non [a-z0-9-] chars with spaces, and then one or more
+  consecutive spaces with a single hyphen.
+- At most two consecutive hyphens are allowed.
+- No hyphens allowed at the leading or trailing end of the slug."
   (let* (;; All lower-case
          (str (downcase str))
          ;; Remove "<FOO>..</FOO>" HTML tags if present.

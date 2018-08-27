@@ -65,7 +65,7 @@ error backtrace,
        submitting it.
 * Test
 1. Clone this repo.
-2. Ensure that Pandoc (at least version 2.2.2) is
-   installed (more info
+2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
+   2.2.2) are installed (more info
    [[https://ox-hugo.scripter.co/doc/contributing-guide/#contribute-to-code][here]]).
 3. Run =make test=.

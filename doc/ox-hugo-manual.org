@@ -617,8 +617,8 @@ error backtrace,
 :CUSTOM_ID: test
 :END:
 1. Clone this repo.
-2. Ensure that Pandoc (at least version {{{pandoc_version}}}) is
-   installed (more info
+2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
+   {{{pandoc_version}}}) are installed (more info
    {{{doc(contributing-guide/#contribute-to-code,here)}}}).
 3. Run =make test=.
 ** Thanks
@@ -801,38 +801,44 @@ exported Markdown files.
 **** How to try =ox-hugo= on that site?
 1. Clone this repo:
    #+begin_example
-   git clone --recursive -j8 https://github.com/kaushalmodi/ox-hugo
+   git clone ----recurse-submodules -j8 https://github.com/kaushalmodi/ox-hugo
    #+end_example
-2. Start the =hugo= server:
+2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
+   {{{pandoc_version}}}) are installed (more info
+   {{{doc(contributing-guide/#contribute-to-code,here)}}}).
+3. Start the =hugo= server:
    #+begin_example
    make serve HUGO_BASE_DIR=test/site
    #+end_example
-3. Open =http://localhost:1337= in your browser.
-4. In a different terminal, =cd= to the repo directory.
-5. Run:
+4. Open =http://localhost:1337= in your browser.
+5. In a different terminal, =cd= to the repo directory.
+6. Run:
    #+begin_example
    make md
    #+end_example
-6. In few seconds, hundreds of test posts will get created, with the
+7. In few seconds, hundreds of test posts will get created, with the
    =hugo server= aided preview in the browser zapping through each new
    created post.
 **** Alternative way
 1. Clone this repo.
    #+begin_example
-   git clone --recursive -j8 https://github.com/kaushalmodi/ox-hugo
+   git clone --recurse-submodules -j8 https://github.com/kaushalmodi/ox-hugo
    #+end_example
-2. =cd= to the =test/site/= directory and do:
+2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
+   {{{pandoc_version}}}) are installed (more info
+   {{{doc(contributing-guide/#contribute-to-code,here)}}}).
+3. =cd= to the =test/site/= directory and do:
    #+begin_example
    hugo server -D --navigateToChanged
    #+end_example
-3. Above command will mention the localhost where the site is
+4. Above command will mention the localhost where the site is
    served. Open that in your browser.
-4. In emacs, =(require  'ox-hugo)= or evaluate the =ox-hugo.el= from the
+5. In emacs, =(require  'ox-hugo)= or evaluate the =ox-hugo.el= from the
    cloned repo.
-5. Open the {{{ox-hugo-test-file}}} file.
-6. =C-c C-e H A= -- That will export *all* subtrees in the file to
+6. Open the {{{ox-hugo-test-file}}} file.
+7. =C-c C-e H A= -- That will export *all* subtrees in the file to
    Markdown files.
-7. In few seconds, hundreds of test posts will get created, with the
+8. In few seconds, hundreds of test posts will get created, with the
    =hugo server= aided preview in the browser zapping through each new
    created post.
 *** Real World Examples

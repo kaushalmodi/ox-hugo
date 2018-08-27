@@ -22,6 +22,15 @@ for your future contributions to Emacs too!
 5. Commit *only the .org files*, push branch and create PR.
    - The =.org= → =.md= conversion is done by =ox-hugo= on Netlify.
 * Contribute to code
+#+BEGIN_note
+While the end-user does not need Pandoc installed on their machine, a
+code contributor needs to have both ~pandoc~ and ~pandoc-citeproc~
+installed[fn:-1-local1].
+
+These are needed for ~make md~ and ~make test~ steps to work as they
+use/test the [[https://ox-hugo.scripter.co/doc/pandoc-citations][Pandoc Citations]] feature too.
+#+END_note
+
 1. Clone this repo.
 2. Add/edit the .el files, *tests* in =test/site/content-org/=, and
    *documentation* to =doc/ox-hugo-manual.org=.
@@ -35,6 +44,13 @@ for your future contributions to Emacs too!
    step before this step).
 7. Fix your commit(s) if the test fails.. repeat till you succeed.
 8. Push your feature branch and create PR.
+
+[fn:-1-local1] The Pandoc Citations feature was last <2018-08-19 Sun>
+tested with Pandoc version 2.2.2. If you are running an
+older version, the quickest way to install might be to simply download
+the latest release archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]], extract it and put
+the ~pandoc~ and ~pandoc-citeproc~ binaries in one of the directories
+in your /PATH/.
 * Debug
 If the =ox-hugo= exports do not work as expected, or if you get an
 error backtrace,
@@ -49,4 +65,7 @@ error backtrace,
        submitting it.
 * Test
 1. Clone this repo.
-2. Run =make test=.
+2. Ensure that Pandoc (at least version 2.2.2) is
+   installed (more info
+   [[https://ox-hugo.scripter.co/doc/contributing-guide/#contribute-to-code][here]]).
+3. Run =make test=.

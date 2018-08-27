@@ -6,19 +6,11 @@
 
 #+options: creator:t author:nil
 
-#+macro: imageclick [[file:./static/images/$1][file:/images/$1]]
-#+macro: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
-#+macro: issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
-#+macro: bfissue Blackfriday #[[https://github.com/russross/blackfriday/issues/$1][$1]]
-#+macro: hugoissue Hugo #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
-#+macro: ox-hugo-test-file  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]]
-#+macro: doc [[/doc/$1][$2]]
-#+macro: user @[[https://github.com/$1][*$1*]]
-#+macro: testtag tests tagged [[https://ox-hugo.scripter.co/test/tags/$1][$1]]
-#+macro: test-search Search the ~ox-hugo~ test site for [[https://ox-hugo.scripter.co/test/search/?q=$1]["$1"]] examples.
+#+setupfile: doc-setupfile.org
 
-# https://scripter.co/latex-in-html/
-#+macro: latex @@html:<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>@@
+#+macro: imageclick [[file:./static/images/$1][file:/images/$1]]
+#+macro: doc [[/doc/$1][$2]]
+
 
 * Changelog
 :PROPERTIES:
@@ -574,6 +566,15 @@ for your future contributions to Emacs too!
 5. Commit *only the .org files*, push branch and create PR.
    - The =.org= → =.md= conversion is done by =ox-hugo= on Netlify.
 *** Contribute to code
+#+begin_note
+While the end-user does not need Pandoc installed on their machine, a
+code contributor needs to have both ~pandoc~ and ~pandoc-citeproc~
+installed[fn:local1].
+
+These are needed for ~make md~ and ~make test~ steps to work as they
+use/test the {{{doc(pandoc-citations,Pandoc Citations)}}} feature too.
+#+end_note
+
 1. Clone this repo.
 2. Add/edit the .el files, *tests* in =test/site/content-org/=, and
    *documentation* to =doc/ox-hugo-manual.org=.
@@ -587,6 +588,15 @@ for your future contributions to Emacs too!
    step before this step).
 7. Fix your commit(s) if the test fails.. repeat till you succeed.
 8. Push your feature branch and create PR.
+
+# Below footnote was copied manually from [fn:7] because otherwise
+# #+include of just this subtree does not work.
+[fn:local1] The Pandoc Citations feature was last <2018-08-19 Sun>
+tested with Pandoc version {{{pandoc_version}}}. If you are running an
+older version, the quickest way to install might be to simply download
+the latest release archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]], extract it and put
+the ~pandoc~ and ~pandoc-citeproc~ binaries in one of the directories
+in your /PATH/.
 ** Debug
 :PROPERTIES:
 :CUSTOM_ID: debug
@@ -607,7 +617,10 @@ error backtrace,
 :CUSTOM_ID: test
 :END:
 1. Clone this repo.
-2. Run =make test=.
+2. Ensure that Pandoc (at least version {{{pandoc_version}}}) is
+   installed (more info
+   {{{doc(contributing-guide/#contribute-to-code,here)}}}).
+3. Run =make test=.
 ** Thanks
 :PROPERTIES:
 :CUSTOM_ID: thanks
@@ -2356,10 +2369,11 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 * Footnotes
 
 [fn:7] The Pandoc Citations feature was last <2018-08-19 Sun> tested
-with Pandoc version 2.2.2. If you are running an older version, the
-quickest way to install might be to simply download the latest release
-archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]], extract it and put the ~pandoc~ and
-~pandoc-citeproc~ binaries in one of the directories in your /PATH/.
+with Pandoc version {{{pandoc_version}}}. If you are running an older
+version, the quickest way to install might be to simply download the
+latest release archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]], extract it and put the
+~pandoc~ and ~pandoc-citeproc~ binaries in one of the directories in
+your /PATH/.
 
 [fn:6] If you are still using a Hugo version older than 0.25, update
 now! -- Because that version added support for the awesome

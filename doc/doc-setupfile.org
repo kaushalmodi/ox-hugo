@@ -1,0 +1,24 @@
+#+macro: pandoc_version 2.2.2
+
+#+macro: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
+#+macro: issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+#+macro: bfissue Blackfriday #[[https://github.com/russross/blackfriday/issues/$1][$1]]
+#+macro: hugoissue Hugo #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
+#+macro: ox-hugo-test-file  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]]
+#+macro: user @[[https://github.com/$1][*$1*]]
+#+macro: testtag tests tagged [[https://ox-hugo.scripter.co/test/tags/$1][$1]]
+#+macro: test-search Search the ~ox-hugo~ test site for [[https://ox-hugo.scripter.co/test/search/?q=$1]["$1"]] examples.
+
+# https://scripter.co/latex-in-html/
+#+macro: latex @@html:<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>@@
+
+# Badges
+#+macro: travis [[https://travis-ci.org/kaushalmodi/ox-hugo][https://travis-ci.org/kaushalmodi/ox-hugo.svg?branch=master]]
+#+macro: melpa [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]]
+#+macro: GPLv3 [[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPL%20v3-blue.svg]]
+#+macro: gitter [[https://gitter.im/KaushalModi/Lobby][https://badges.gitter.im/KaushalModi/Lobby.svg]]
+#+macro: saythanks [[https://saythanks.io/to/kaushalmodi][https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg]]
+
+# Local Variables:
+# org-hugo-auto-export-on-save: nil
+# End:

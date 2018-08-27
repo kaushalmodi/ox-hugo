@@ -94,15 +94,16 @@ any export).
 
 You can do that by adding the below to your config:
 #+BEGIN_SRC emacs-lisp
-(require 'ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 (with-eval-after-load 'ox
   (require 'ox-hugo))
+(require 'ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 #+END_SRC
-If you use =use-package=, you can do the below instead:
+If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can do the below instead:
 #+BEGIN_SRC emacs-lisp
-(use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 (use-package ox-hugo
+  :ensure t            ;Auto-install the package from Melpa (optional)
   :after ox)
+(use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 #+END_SRC
 
 Also see the [[https://ox-hugo.scripter.co/doc/auto-export-on-saving][Auto Exporting]] section.
@@ -119,17 +120,23 @@ Spacemacs users can choose to add this snippet to their
 
   ;; ox-hugo config
   (use-package ox-hugo
-    :ensure t                           ;Auto-install the package from Melpa
+    :ensure t            ;Auto-install the package from Melpa (optional)
     :after ox)
   (use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
   )
 #+END_SRC
 
+#+BEGIN_note
+You do have _have_ to use the =use-package= version when using
+Spacemacs. That version was used because =use-package= is installed by
+default in Spacemacs.
+#+END_note
 If you do so, you *also need to* add =ox-hugo= to
 =dotspacemacs-additional-packages=.
 
-/Verified to work on Spacemacs =develop= branch with =spacemacs-base=
-distribution, =emacs= editing style. -- <2017-10-09 Mon>/
+/This was verified to work on Spacemacs =develop= branch with
+=spacemacs-base= distribution, =emacs= editing style. --
+<2017-10-09 Mon>/
 ** Before you export
 Before you export check that these properties are set as you need:
 - HUGO_SECTION :: The default Hugo section name for all the posts.  See
@@ -326,7 +333,7 @@ available customization options for this package.
 - If you have a case where you need to have an Org source block
   instead a quote block, and then a source block after that quote
   block (/I know, a very common case../ :wink:), Blackfriday barfs
-  (Blackfriday # [[https://github.com/russross/blackfriday/issues/407][407]]). But we now have a workaround, which /just
+  (Blackfriday #[[https://github.com/russross/blackfriday/issues/407][407]]). But we now have a workaround, which /just
   works/ -- #[[https://github.com/kaushalmodi/ox-hugo/issues/98][98]].
 - Now =ATTR_HTML= above even hyper-linked images works (earlier it
   worked only above non-hyper-linked images).

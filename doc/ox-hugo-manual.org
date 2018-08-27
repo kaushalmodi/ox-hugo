@@ -801,7 +801,7 @@ exported Markdown files.
 **** How to try =ox-hugo= on that site?
 1. Clone this repo:
    #+begin_example
-   git clone ----recurse-submodules -j8 https://github.com/kaushalmodi/ox-hugo
+   git clone --recurse-submodules -j8 https://github.com/kaushalmodi/ox-hugo
    #+end_example
 2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
    {{{pandoc_version}}}) are installed (more info

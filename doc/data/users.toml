@@ -267,6 +267,62 @@
   org_dir = "entries"
   site = "https://pxaka.tokyo/blog"
 
+[ryancummings]
+  author = "Ryan Cummings"
+  source = "https://github.com/ryancummings/blog"
+  branch = "master"
+  org_dir = ""
+  site = "https://ryancummings.github.io/"
+
+[taipapamotohus]
+  author = "taipapamotohus"
+  source = "https://github.com/taipapamotohus/Taipapablog"
+  branch = "master"
+  org_dir = ""
+  site = "https://taipapamotohus.com/"
+
+[grugrut]
+  author = "grugrut"
+  source = "https://github.com/grugrut/til"
+  branch = "master"
+  org_dir = "draft"
+  site = "https://grugrut.github.io/til"
+
+[junahan]
+  author = "junahan"
+  source = "https://github.com/junahan/junahan-site"
+  branch = "master"
+  org_dir = "draft"
+  site = "https://junahan.netlify.com/"
+
+[alexmurray]
+  author = "Alex Murray"
+  source = "https://github.com/alexmurray/ubuntu-security-podcast"
+  branch = "master"
+  org_dir = "org"
+  site = "https://ubuntusecuritypodcast.org/"
+
+[vdemeester]
+  author = "Vincent Demeester"
+  source = "https://github.com/vdemeester/blog"
+  branch = "master"
+  org_dir = "content-org"
+  site = "http://vincent.demeester.fr/"
+
+[emacsomancer1]
+  author = "Benjamin Slade"
+  source = "https://gitlab.com/emacsomancer/neobabbage_files"
+  branch = "master"
+  org_dir = "content-org"
+  site = "https://babbagefiles.xyz"
+
+[emacsomancer2]
+  author = "Benjamin Slade"
+  source = "https://gitlab.com/emacsomancer/academic-bslade"
+  branch = "master"
+  org_dir = "content-org"
+  site = "https://slade.jnanam.net/"
+
 # []
 #   author = ""
 #   source = ""

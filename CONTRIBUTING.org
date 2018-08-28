@@ -12,6 +12,8 @@ patches accepted.
 As a bonus, once you have assigned your copyright to FSF, doors open up
 for your future contributions to Emacs too!
 * Contribute to documentation
+/Minimum required Hugo version/: [[https://github.com/gohugoio/hugo/releases/tag/v0.48][*0.48*]]
+
 1. Clone this repo.
 2. Add/edit documentation to =doc/ox-hugo-manual.org=.
 3. Run =make doc=.
@@ -31,6 +33,8 @@ These are needed for ~make md~ and ~make -j1 test~ steps to work as
 they use/test the [[https://ox-hugo.scripter.co/doc/pandoc-citations][Pandoc Citations]] feature
 too.
 #+END_note
+
+/Minimum required Hugo version/: [[https://github.com/gohugoio/hugo/releases/tag/v0.48][*0.48*]]
 
 1. Clone this repo.
 2. Add/edit the .el files, *tests* in =test/site/content-org/=, and

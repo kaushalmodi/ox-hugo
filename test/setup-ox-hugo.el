@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-28 13:20:23 kmodi>
+;; Time-stamp: <2018-08-28 13:25:37 kmodi>
 
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
@@ -7,6 +7,10 @@
 (setq-default require-final-newline t)
 (setq-default indent-tabs-mode nil)
 (setq-default make-backup-files nil)
+
+;; Force the locate to en_US for the tests.
+(set-locale-environment "en_US.UTF-8")
+(setenv "LANGUAGE" "en_US.UTF-8")
 
 ;; Toggle debug on error, including `user-error'.
 (setq debug-ignored-errors (remq 'user-error debug-ignored-errors))

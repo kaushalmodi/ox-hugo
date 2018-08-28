@@ -101,16 +101,12 @@ help:
 # version that ships with Emacs and then run the stuff in --eval that
 # loads the new Org version.. and thus we'll end up with mixed Org in
 # the load-path.
-#
-# The LANGUAGE env var is hard-coded to "en_US.UTF-8" so that the
-# Locale auto-detection test always passes.
 emacs-batch:
 	@echo ""
 	@echo "$(ORG_FILE) ::"
 	@$(EMACS) --batch --eval "(progn\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
 	(when (> (length \"$(TIMEZONE)\") 0) (setenv \"TZ\" \"$(TIMEZONE)\"))\
-        (setenv \"LANGUAGE\" \"en_US.UTF-8\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	)" $(ORG_FILE) \
 	-f $(FUNC) \

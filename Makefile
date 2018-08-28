@@ -202,8 +202,8 @@ diffgolden:
 	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/content-modified
 	@cp -rf $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-modified
 	@git checkout --ignore-skip-worktree-bits -- $(OX_HUGO_TEST_SITE_DIR)/content
-	@find $(OX_HUGO_TEST_SITE_DIR)/content-modified -name "*.md" | xargs sed -r -i 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/'
-	@find $(OX_HUGO_TEST_SITE_DIR)/content-golden -name "*.md" | xargs sed -r -i 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/'
+	@find $(OX_HUGO_TEST_SITE_DIR)/content-modified -name "*.md" | xargs perl -pi -e 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/'
+	@find $(OX_HUGO_TEST_SITE_DIR)/content-golden -name "*.md" | xargs perl -pi -e 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/'
 	@diff -r $(OX_HUGO_TEST_SITE_DIR)/content-modified $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
 clean: ctemp

@@ -32,22 +32,26 @@
             </thead>
             <tbody>
                 {{ range $key, $val := . }}
-                    {{ $branch := $val.branch | default "master" }}
                     {{ $.Scratch.Set "__repo_updated_time" "" }}
+                    {{ $org_dir := $val.org_dir | default "" | replaceRE "/$" "" }}
+                    {{ $branch := $val.branch | default "master" | replaceRE "/" "%2F" }}
                     {{ $github_source := findRE "github\\.com" $val.source }}
                     {{ $gitlab_source := findRE "gitlab\\.com" $val.source }}
                     {{ $codingnet_source := findRE "coding\\.net" $val.source }}
                     {{ if $github_source }}
                         {{ $repo := replaceRE "^.*github\\.com/([^/]+/[^/]+).*" "${1}" $val.source }}
-                        {{ $repo_json := getJSON (printf "https://api.github.com/repos/%s/branches/%s" $repo $branch) }}
-                        {{ $.Scratch.Set "__repo_updated_time" (index (index (index (index $repo_json "commit") "commit") "committer") "date") }}
+                        <!-- https://developer.github.com/v3/repos/commits/#list-commits-on-a-repository -->
+                        <!-- https://api.github.com/repos/kaushalmodi/ox-hugo/commits?path=doc&sha=master -->
+                        {{ $repo_json := getJSON (printf "https://api.github.com/repos/%s/commits?path=%s&sha=%s" $repo $org_dir $branch) }}
+                        {{ $.Scratch.Set "__repo_updated_time" (index (index (index (index $repo_json 0) "commit") "committer") "date") }}
                     {{ else if $gitlab_source }}
-                        {{ $repo := replaceRE "^.*gitlab\\.com/([^/]+/[^/]+).*" "${1}" $val.source }}
-                        {{ $repo_json := getJSON (printf "https://gitlab.com/api/v4/projects/%s/repository/branches/%s" ($repo | replaceRE "/" "%2F") $branch) }}
-                        {{ $.Scratch.Set "__repo_updated_time" (index (index $repo_json "commit") "committed_date") }}
+                        {{ $repo := replaceRE "^.*gitlab\\.com/([^/]+/[^/]+).*" "${1}" $val.source | replaceRE "/" "%2F" }}
+                        <!-- https://docs.gitlab.com/ee/api/commits.html#list-repository-commits -->
+                        <!-- https://gitlab.com/api/v4/projects/kaushalmodi%2Fkaushalmodi.gitlab.io/repository/commits?path=content-org&ref_name=master -->
+                        {{ $repo_json := getJSON (printf "https://gitlab.com/api/v4/projects/%s/repository/commits?path=%s&?ref_name=%s" $repo ($org_dir | replaceRE "/" "%2F") $branch) }}
                         {{/* partial "debugprint.html" $repo_json */}}
+                        {{ $.Scratch.Set "__repo_updated_time" (index (index $repo_json 0) "committed_date") }}
                     {{ end }}
-                    {{ $org_dir := $val.org_dir | default "" | replaceRE "/$" "" }}
                     {{ if (findRE "\\.org$" $val.source) }} <!-- If the "source" is direct link to an Org file -->
                         {{ $.Scratch.Set "__org_src" $val.source }}
                     {{ else if (or $github_source $gitlab_source $codingnet_source) }}

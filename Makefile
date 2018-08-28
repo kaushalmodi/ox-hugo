@@ -1,9 +1,9 @@
-# Time-stamp: <2018-08-28 12:32:53 kmodi>
+# Makefile to export org documents to md for Hugo from the command
+# line.
+#
+# Run "make" to see the help for this Makefile.
 
-# Makefile to export org documents to md for Hugo from the command line
-# Run just "make" to see usage examples.
-
-MAKE_ := $(MAKE) --no-print-directory
+MAKE_ := $(MAKE) -j1 --no-print-directory
 
 EMACS ?= emacs
 EMACS_exists := $(shell command -v $(EMACS) 2> /dev/null)

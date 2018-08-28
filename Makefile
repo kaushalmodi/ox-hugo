@@ -1,4 +1,4 @@
-# Time-stamp: <2018-08-27 13:31:30 kmodi>
+# Time-stamp: <2018-08-28 10:45:59 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -101,6 +101,8 @@ help:
 # version that ships with Emacs and then run the stuff in --eval that
 # loads the new Org version.. and thus we'll end up with mixed Org in
 # the load-path.
+# The LANG env var is hard-coded to "en_US.UTF-8" so that the Locale
+# auto-detection test always passes.
 emacs-batch:
 	@echo ""
 	@echo "$(ORG_FILE) ::"
@@ -109,6 +111,7 @@ emacs-batch:
         (toggle-debug-on-error)\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
 	(when (> (length \"$(TIMEZONE)\") 0) (setenv \"TZ\" \"$(TIMEZONE)\"))\
+        (setenv \"LANG\" \"en_US.UTF-8\")\
 	(setq-default make-backup-files nil)\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	)" $(ORG_FILE) \

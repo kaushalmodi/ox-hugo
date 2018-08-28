@@ -5443,10 +5443,20 @@ Post content.
 :EXPORT_FILE_NAME: locale-specified
 :EXPORT_HUGO_LOCALE: es_ES
 :END:
+#+begin_description
+Specify the locale using ~:EXPORT_HUGO_LOCALE: es_ES~ property.
+#+end_description
+Locale exporting is enabled using ~:EXPORT_HUGO_WITH_LOCALE: t~ in the
+post's parent subtree.
 *** Auto-detected locale in front-matter                        :auto_detect:
 :PROPERTIES:
 :EXPORT_FILE_NAME: locale-auto-detect
 :END:
+#+begin_description
+Locale is not specified, so is auto-detected.
+#+end_description
+Locale exporting is enabled using ~:EXPORT_HUGO_WITH_LOCALE: t~ in the
+post's parent subtree.
 ** Images                                                            :images:
 *** Single image                                                     :single:
 :PROPERTIES:

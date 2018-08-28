@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-02-22 14:58:32 kmodi>
+;; Time-stamp: <2018-08-28 13:20:23 kmodi>
 
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
@@ -6,6 +6,11 @@
 ;; Some sane settings
 (setq-default require-final-newline t)
 (setq-default indent-tabs-mode nil)
+(setq-default make-backup-files nil)
+
+;; Toggle debug on error, including `user-error'.
+(setq debug-ignored-errors (remq 'user-error debug-ignored-errors))
+(toggle-debug-on-error)
 
 (defvar ox-hugo-test-setup-verbose nil
   "When non-nil, enable printing more messages from setup-ox-hugo.el.")

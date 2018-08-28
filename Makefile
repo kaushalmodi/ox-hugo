@@ -108,12 +108,9 @@ emacs-batch:
 	@echo ""
 	@echo "$(ORG_FILE) ::"
 	@$(EMACS) --batch --eval "(progn\
-        (setq debug-ignored-errors (remq 'user-error debug-ignored-errors))\
-        (toggle-debug-on-error)\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
 	(when (> (length \"$(TIMEZONE)\") 0) (setenv \"TZ\" \"$(TIMEZONE)\"))\
         (setenv \"LANGUAGE\" \"en_US.UTF-8\")\
-	(setq-default make-backup-files nil)\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	)" $(ORG_FILE) \
 	-f $(FUNC) \

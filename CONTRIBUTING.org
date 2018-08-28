@@ -27,8 +27,9 @@ While the end-user does not need Pandoc installed on their machine, a
 code contributor needs to have both ~pandoc~ and ~pandoc-citeproc~
 installed[fn:-1-local1].
 
-These are needed for ~make md~ and ~make test~ steps to work as they
-use/test the [[https://ox-hugo.scripter.co/doc/pandoc-citations][Pandoc Citations]] feature too.
+These are needed for ~make md~ and ~make -j1 test~ steps to work as
+they use/test the [[https://ox-hugo.scripter.co/doc/pandoc-citations][Pandoc Citations]] feature
+too.
 #+END_note
 
 1. Clone this repo.
@@ -40,8 +41,8 @@ use/test the [[https://ox-hugo.scripter.co/doc/pandoc-citations][Pandoc Citation
      randomly generated Org ID's (like =org17de7a9=).
 5. Commit (*don't push your branch yet!*).
    - As mentioned above, commit *only the .org files* for documentation.
-6. Run test: =make test= (you *need* to =git commit= i.e. do the above
-   step before this step).
+6. Run test: =make -j1 test= (you *need* to =git commit= i.e. do the
+   above step before this step).
 7. Fix your commit(s) if the test fails.. repeat till you succeed.
 8. Push your feature branch and create PR.
 
@@ -68,4 +69,4 @@ error backtrace,
 2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
    2.2.2) are installed (more info
    [[https://ox-hugo.scripter.co/doc/contributing-guide/#contribute-to-code][here]]).
-3. Run =make test=.
+3. Run =make -j1 test=.

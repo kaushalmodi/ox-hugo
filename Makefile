@@ -1,4 +1,4 @@
-# Time-stamp: <2018-08-28 12:15:55 kmodi>
+# Time-stamp: <2018-08-28 12:20:14 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -79,7 +79,7 @@ test_check=1
 help:
 	@echo "Help for command-line Org->Markdown for Hugo Exporter"
 	@echo "====================================================="
-	@echo " make test          <-- Run test with checks enabled"
+	@echo " make -j1 test      <-- Run test with checks enabled"
 	@echo " make md            <-- Only export the test Org files to Markdown, no checks"
 	@echo " make doc           <-- Build both Doc Site contents and GitHub docs"
 	@echo " make FOO.org       <-- Export the FOO.org file from content-org/ dir to Markdown file(s)"

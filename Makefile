@@ -1,4 +1,4 @@
-# Time-stamp: <2018-08-28 12:26:24 kmodi>
+# Time-stamp: <2018-08-28 12:32:53 kmodi>
 
 # Makefile to export org documents to md for Hugo from the command line
 # Run just "make" to see usage examples.
@@ -206,8 +206,8 @@ diffgolden:
 	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/content-modified
 	@cp -rf $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-modified
 	@git checkout --ignore-skip-worktree-bits -- $(OX_HUGO_TEST_SITE_DIR)/content
-	@find $(OX_HUGO_TEST_SITE_DIR)/content-modified -name "*.md" | xargs perl -pi -e 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/'
-	@find $(OX_HUGO_TEST_SITE_DIR)/content-golden -name "*.md" | xargs perl -pi -e 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/'
+	@find $(OX_HUGO_TEST_SITE_DIR)/content-modified -name "*.md" -exec perl -pi -e 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/' -- '{}' +
+	@find $(OX_HUGO_TEST_SITE_DIR)/content-golden -name "*.md" -exec perl -pi -e 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/' -- '{}' +
 	@diff -r $(OX_HUGO_TEST_SITE_DIR)/content-modified $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
 clean: ctemp

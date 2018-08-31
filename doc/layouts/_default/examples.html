@@ -69,7 +69,15 @@
                     {{ end }}
                     <tr>
                         <td>{{ $val.author }}</td>
-                        <td>{{ printf "<a href=\"%s\">%s</a>" $val.site ($val.site | replaceRE "^https?://" "" | replaceRE "/$" "") | safeHTML }}</td>
+                        <!-- Don't make htmltest error out becaue of user-submitted non-secure http domains.
+                             https://github.com/wjdp/htmltest/
+                        -->
+                        {{ $data_proofer_ignore_tag := "" }}
+                        {{ $user_site_is_nonsecure := findRE "^http://" $val.site }}
+                        {{ if $user_site_is_nonsecure }}
+                            {{ $data_proofer_ignore_tag = ` data-proofer-ignore="true"` }}
+                        {{ end }}
+                        <td>{{ printf "<a href=\"%s\"%s>%s</a>" $val.site $data_proofer_ignore_tag ($val.site | replaceRE "^https?://" "" | replaceRE "/$" "") | safeHTML }}</td>
                         <td>{{ printf "<a href=\"%s\">%s</a>" $org_dir_link ($org_dir | default (or $val.org_src_desc "<em>repo root</em>") | replaceRE "[^<]*/" "") | safeHTML }}</td>
                         <td>
                             {{ with $repo_updated_time }}

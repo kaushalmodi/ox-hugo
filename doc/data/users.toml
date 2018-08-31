@@ -120,7 +120,7 @@
   source = "https://coding.net/u/xianmin/p/xianmin/git"
   branch = "master"
   org_dir = "orgpost"
-  site = "https://xianmin.org/"
+  site = "https://www.xianmin.org/"
 
 [xianmin-en]
   author = "Xianmin Chen"
@@ -153,13 +153,6 @@
   branch = "master"
   site = "https://lakedenman.com/blog/"
 
-[amca01]
-  author = "Alasdair McAndrew"
-  source = "https://github.com/amca01/whats_this"
-  branch = "master"
-  org_dir = "content-org"
-  site = "https://numbersandshapes.net/blog/"
-
 [kengrimes]
   author = "Ken Grimes"
   source = "https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git"
@@ -191,7 +184,7 @@
   source = "https://github.com/tsdye/online-web-sites"
   branch = "master"
   org_dir = "an-archaeologist-reads"
-  site = "http://www.tsdye.online/an-archaeologist-reads"
+  site = "http://www.tsdye.online/an-archaeologist-reads/"
 
 [dschrempf]
   author = "Dominik Schrempf"
@@ -205,7 +198,7 @@
   source = "https://github.com/Colelyman/colelyman-hugo"
   branch = "master"
   org_dir = "site/content-org"
-  site = "http://colelyman.com"
+  site = "https://colelyman.com"
 
 [zmaas]
   author = "Zachary Maas"
@@ -265,7 +258,7 @@
   source = "https://github.com/takaxp/blog"
   branch = "master"
   org_dir = "entries"
-  site = "https://pxaka.tokyo/blog"
+  site = "https://pxaka.tokyo/blog/"
 
 [ryancummings]
   author = "Ryan Cummings"
@@ -286,7 +279,7 @@
   source = "https://github.com/grugrut/til"
   branch = "master"
   org_dir = "draft"
-  site = "https://grugrut.github.io/til"
+  site = "https://grugrut.github.io/til/"
 
 [junahan]
   author = "junahan"

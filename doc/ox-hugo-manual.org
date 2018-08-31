@@ -52,7 +52,7 @@
   #+end_src
 - Export descriptive or definition lists in Blackfriday-friendly
   Markdown format -- {{{issue(114)}}}.
-- Support Org Special Blocks [[https://www.gnu.org/software/emacs/manual/html_node/org/Special-blocks.html][like in HTML and LaTeX exports]] --
+- Support Org Special Blocks like in HTML and [[https://orgmode.org/manual/Special-blocks-in-LaTeX-export.html][LaTeX exports]] --
   {{{issue(105)}}}. Here's one little example:
   #+begin_src org
   ,#+begin_mark
@@ -447,7 +447,7 @@ If you do so, you *also need to* add =ox-hugo= to
 :END:
 Before you export check that these properties are set as you need:
 - HUGO_SECTION :: The default Hugo section name for all the posts.  See
-                  [[https://gohugo.io/content/sections/][here]] for more information on Hugo sections.  It is
+                  [[https://gohugo.io/content-management/sections/][here]] for more information on Hugo sections.  It is
                   common for this property to be set to =posts= or
                   =blog=.  The default value is set using
                   =org-hugo-default-section-directory=.
@@ -457,7 +457,7 @@ Before you export check that these properties are set as you need:
                    =~/hugo/content/<HUGO_SECTION>/= directory.  By
                    default, the Markdown files reside in a hierarchy
                    under the =content/= directory in the site root
-                   directory ([[https://gohugo.io/content/organization/][ref]]). If you try to export without
+                   directory ([[https://gohugo.io/content-management/organization/][ref]]). If you try to export without
                    setting this property, you will get this error:
   #+begin_example
   user-error: It is mandatory to set the HUGO_BASE_DIR property

@@ -99,7 +99,7 @@
   source = "https://github.com/edkolev/edkolev.github.io"
   branch = "source"
   org_dir = "content-org"
-  site = "http://evgeni.io/"
+  site = "https://evgeni.io/"
 
 [vinurs]
   author = "vinurs"

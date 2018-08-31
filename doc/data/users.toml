@@ -260,12 +260,12 @@
   org_dir = "entries"
   site = "https://pxaka.tokyo/blog/"
 
-[ryancummings]
-  author = "Ryan Cummings"
-  source = "https://github.com/ryancummings/blog"
-  branch = "master"
-  org_dir = ""
-  site = "https://ryancummings.github.io/"
+# [ryancummings]
+#   author = "Ryan Cummings"
+#   source = "https://github.com/ryancummings/blog"
+#   branch = "master"
+#   org_dir = ""
+#   site = "https://ryancummings.github.io/"
 
 [taipapamotohus]
   author = "taipapamotohus"

@@ -198,7 +198,7 @@ ifeq ("$(HTMLTEST_exists)","")
 	@git clone $(HUGO_BIN_SOURCE) /tmp/htmltest/bin
 	@tar xf /tmp/htmltest/bin/htmltest_DEV-Linux-64bit.tar.xz -C /tmp/htmltest/bin
 endif
-	@cd doc && htmltest
+	@cd doc && $(HTMLTEST)
 doc_test: doc doc_htmltest
 
 ctemp:

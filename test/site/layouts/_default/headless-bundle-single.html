@@ -18,7 +18,7 @@
             {{ with $page.Param $key }}
                 {{ $val := . }}
                 <p>
-                    {{ printf "<span style=\"font-variant: small-caps;\">%s</span>:" $key | safeHTML }}
+                    {{ printf `<span style="font-variant: small-caps;">%s</span>:` $key | safeHTML }}
                     {{ with $.Site.GetPage "taxonomyTerm" $key }}
                         {{ $taxonomy_page := . }}
                         {{ range $val }}

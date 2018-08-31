@@ -30,7 +30,7 @@ code contributor needs to have both ~pandoc~ and ~pandoc-citeproc~
 installed[fn:-1-local1].
 
 These are needed for ~make md~ and ~make -j1 test~ steps to work as
-they use/test the [[https://ox-hugo.scripter.co/doc/pandoc-citations][Pandoc Citations]] feature
+they use/test the [[https://ox-hugo.scripter.co/doc/pandoc-citations/][Pandoc Citations]] feature
 too.
 #+END_note
 

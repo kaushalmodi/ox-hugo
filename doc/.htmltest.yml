@@ -1,0 +1,93 @@
+# Config file for htmltest
+# https://github.com/wjdp/htmltest
+
+# CacheExpires: "336h"
+# CheckAnchors: true
+# CheckDoctype: true
+# CheckExternal: true
+# CheckFavicon: false
+# CheckGeneric: true
+# CheckImages: true
+# CheckInternal: true
+# CheckInternalHash: true
+# CheckLinks: true
+# CheckMailto: true
+# CheckMeta: true
+# CheckMetaRefresh: true
+# CheckScripts: true
+# CheckTel: true
+# DirectoryIndex: "index.html"
+DirectoryPath: "public"
+# DocumentConcurrencyLimit: 128
+# EnforceHTML5: false
+EnforceHTTPS: true
+# ExternalTimeout: 15
+# FileExtension: ".html"
+# FilePath: ""
+# HTTPConcurrencyLimit: 16
+# HTTPHeaders: {"Range": "bytes=0-0", "Accept": "*/*"}
+# IgnoreAltMissing: false
+# IgnoreCanonicalBrokenLinks: true
+# IgnoreDirectoryMissingTrailingSlash: false
+IgnoreDirs: # Need to ignore the below 2 dirs as they have meta redirects; else htmltest crashes.
+- "issues"  # https://github.com/wjdp/htmltest/issues/92
+- "test"
+IgnoreInternalEmptyHash: true
+# IgnoreTagAttribute: "data-proofer-ignore"
+# IgnoreURLs:
+# LogLevel: 2
+# LogSort: "document"
+# OutputCacheFile: "refcache.json"
+# OutputDir: "tmp/.htmltest"
+# OutputLogFile: "htmltest.log"
+# StripQueryExcludes: ["fonts.googleapis.com"]
+# StripQueryString: true
+# TestFilesConcurrently: false
+
+# |-------------------------------------+----------------------------------------------------------------------------------------------------------+-----------------------------------------|
+# | OPTION                              | DESCRIPTION                                                                                              | DEFAULT                                 |
+# |-------------------------------------+----------------------------------------------------------------------------------------------------------+-----------------------------------------|
+# | CacheExpires                        | Cache validity period, accepts go.time duration strings (…"m", "h").                                     | 336h (two weeks)                        |
+# | CheckAnchors                        | Enables checking <a… tags.                                                                               | true                                    |
+# | CheckDoctype                        | Enables checking the document type declaration.                                                          | true                                    |
+# | CheckExternal                       | Enables external reference checking; all tag types.                                                      | true                                    |
+# | CheckFavicon                        | Enables favicon checking, ensures every page has a favicon set.                                          | false                                   |
+# | CheckGeneric                        | Enables other tags, see items marked with checkGeneric on the tags wiki page.                            | true                                    |
+# | CheckImages                         | Enables checking <img… tags                                                                              | true                                    |
+# | CheckInternal                       | Enables internal reference checking; all tag types. When disabled will prevent internal hash checking    | true                                    |
+# |                                     | unless the reference only contains a hash fragment (#heading) and therefore refers to the current page.  |                                         |
+# | CheckInternalHash                   | Enables internal hash/fragment checking.                                                                 | true                                    |
+# | CheckLinks                          | Enables checking <link… tags.                                                                            | true                                    |
+# | CheckMailto                         | Enables–albeit quite basic–mailto: link checking.                                                      | true                                    |
+# | CheckMeta                           | Enables checking <meta… tags.                                                                            | true                                    |
+# | CheckMetaRefresh                    | Enables checking meta refresh tags.                                                                      | true                                    |
+# | CheckScripts                        | Enables checking <script… tags.                                                                          | true                                    |
+# | CheckTel                            | Enables–albeit quite basic–tel: link checking.                                                         | true                                    |
+# | DirectoryIndex                      | The file to look for when linking to a directory.                                                        | index.html                              |
+# | DirectoryPath                       | Directory to scan for HTML files.                                                                        |                                         |
+# | DocumentConcurrencyLimit            | Maximum number of documents to process at once.                                                          | 128                                     |
+# | EnforceHTML5                        | Fails when the doctype isn't <!DOCTYPE html>.                                                             | false                                   |
+# | EnforceHTTPS                        | Fails when encountering an http:// link. Useful to prevent mixed content errors when serving over HTTPS. | false                                   |
+# | ExternalTimeout                     | Number of seconds to wait on an HTTP connection before failing.                                          | 15                                      |
+# | FileExtension                       | Extension of your HTML documents, includes the dot. If FilePath is set we use the extension from that.   | .html                                   |
+# | FilePath                            | Single file to test within DirectoryPath, omit to test all.                                              |       filee                                  |
+# | HTTPConcurrencyLimit                | Maximum number of open HTTP connections. If you raise this number ensure the ExternalTimeout             | 16                                      |
+# |                                     | is suitably raised.                                                                                      |                                         |
+# | HTTPHeaders                         | Dictionary of headers to include in external requests                                                    | {"Range": "bytes=0-0", "Accept": "*/*"} |
+# | IgnoreAltMissing                    | Turns off image alt attribute checking.                                                                  | false                                   |
+# | IgnoreCanonicalBrokenLinks          | When true produces a warning, rather than an error, for broken canonical links. When testing a site      | true                                    |
+# |                                     | which isn't live yet or before publishing a new page canonical links will fail.                          |                                         |
+# | IgnoreDirectoryMissingTrailingSlash | Turns off errors for links to directories without a trailing slash.                                      | false                                   |
+# | IgnoreDirs                          | Array of regexs of directories to ignore when scanning for HTML files.                                   | empty                                   |
+# | IgnoreInternalEmptyHash             | When true prevents raising an error for links with href="#".                                             | false                                   |
+# | IgnoreTagAttribute                  | Specify the ignore attribute. All tags with this attribute will be excluded from every check.            | "data-proofer-ignore"                   |
+# | IgnoreURLs                          | Array of regexs of URLs to ignore.                                                                       | empty                                   |
+# | LogLevel                            | Logging level, 0-3: debug, info, warning, error.                                                         | 2                                       |
+# | LogSort                             | How to sort/present issues. Can be seq for sequential output or document to group by document.           | document                                |
+# | OutputCacheFile                     | File within OutputDir to store reference cache.                                                          | refcache.json                           |
+# | OutputDir                           | Directory to store cache and log files in. Relative to executing directory.                              | tmp/.htmltest                           |
+# | OutputLogFile                       | File within OutputDir to store last tests errors.                                                        | htmltest.log                            |
+# | StripQueryExcludes                  | List of URLs to disable query stripping on.                                                              | ["fonts.googleapis.com"]                |
+# | StripQueryString                    | Enables stripping of query strings from external checks.                                                 | true                                    |
+# | TestFilesConcurrently               | ⚠️ 🚧 EXPERIMENTAL Turns on concurrent checking of files.                                                 | false                                   |
+# |-------------------------------------+----------------------------------------------------------------------------------------------------------+-----------------------------------------|

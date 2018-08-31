@@ -9,7 +9,7 @@
 #+setupfile: doc-setupfile.org
 
 #+macro: imageclick [[file:./static/images/$1][file:/images/$1]]
-#+macro: doc [[/doc/$1][$2]]
+#+macro: doc [[/doc/$1/$2][$3]]
 
 * Changelog
 :PROPERTIES:
@@ -187,7 +187,7 @@
 - Add missing http/https/ftp prefix for hyper-linked images.
 *** Meta
 - Add documentation on how you can have
-  {{{doc(images-in-content,Images live in the same directory as Org
+  {{{doc(images-in-content,,Images live in the same directory as Org
   source)}}} -- {{{issue(91)}}}.
 - Now only Org files for the [[https://ox-hugo.scripter.co][documentation site]] need to be committed
   to git. =ox-hugo= then exports those to Markdown, and then Hugo
@@ -198,7 +198,7 @@
   yourself :smile:.
 ** v0.5 <2017-11-06 Mon>
 *** Features
-- Export TOC as a Markdown ordered list. See {{{doc(org-toc,Table of
+- Export TOC as a Markdown ordered list. See {{{doc(org-toc,,Table of
   Contents)}}} -- {{{issue(88)}}}.
 - =#+attr_html= above http/https/ftp links is now supported (useful
   for specifying the =target=, =rel=, attributes, for example).
@@ -232,7 +232,7 @@
     set categories (tags with "@") globally in the file.
 
 See the new section added to documentation:
-{{{doc(tags-and-categories,*Tags and Categories*)}}}
+{{{doc(tags-and-categories,,*Tags and Categories*)}}}
 *** Features
 - Support specifying the =:width= parameter in the =#+attr_html= above
   image links. That eventually gets transformed to the =width=
@@ -252,7 +252,7 @@ See the new section added to documentation:
 - Source blocks can now be exported with line numbers and/or
   highlighting!
 
-  See {{{doc(source-blocks,Source Blocks)}}} for details.
+  See {{{doc(source-blocks,,Source Blocks)}}} for details.
 ** v0.2.3 <2017-10-11 Wed>
 *** Fixes
 - =org-hugo-slug= earlier stripped off only the =code= HTML tag
@@ -413,7 +413,7 @@ If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can d
 (use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 #+end_src
 
-Also see the {{{doc(auto-export-on-saving,Auto Exporting)}}} section.
+Also see the {{{doc(auto-export-on-saving,,Auto Exporting)}}} section.
 
 *Spacemacs*
 
@@ -573,7 +573,7 @@ code contributor needs to have both ~pandoc~ and ~pandoc-citeproc~
 installed[fn:local1].
 
 These are needed for ~make md~ and ~make -j1 test~ steps to work as
-they use/test the {{{doc(pandoc-citations,Pandoc Citations)}}} feature
+they use/test the {{{doc(pandoc-citations,,Pandoc Citations)}}} feature
 too.
 #+end_note
 
@@ -623,7 +623,7 @@ error backtrace,
 1. Clone this repo.
 2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
    {{{pandoc_version}}}) are installed (more info
-   {{{doc(contributing-guide/#contribute-to-code,here)}}}).
+   {{{doc(contributing-guide,#contribute-to-code,here)}}}).
 3. Run =make -j1 test=.
 ** Thanks
 :PROPERTIES:
@@ -758,7 +758,7 @@ have the exported Markdown files.
    - [[https://github.com/kaushalmodi/ox-hugo/tree/master/doc][=ox-hugo= documentation site (you're reading it)]]
    - [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][=ox-hugo= test site]]
    - [[https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io][/scripter.co/ -- My blog]]
-5. Create an Org file in there and follow the {{{doc(usage,*Usage*)}}}
+5. Create an Org file in there and follow the {{{doc(usage,,*Usage*)}}}
    section to export it.
 *** Blogging Flow
 :PROPERTIES:
@@ -774,10 +774,10 @@ There are 2 major blogging flows that can be used with this package:
      translate to post =draft= state, auto weight calculation for
      pages, taxonomies and menu items, etc.
 
-See the {{{doc(org-capture-setup,Org Capture Setup)}}} page to see how
+See the {{{doc(org-capture-setup,,Org Capture Setup)}}} page to see how
 to quickly create new posts.
 
-See the {{{doc(auto-export-on-saving,Auto-export on Saving)}}} page to
+See the {{{doc(auto-export-on-saving,,Auto-export on Saving)}}} page to
 learn how to setup up seeing live-preview of the Hugo-rendered HTML
 each time you do =C-x C-s= in the Org file. That section explains how
 to set that up for either of the above two blogging flows.
@@ -809,7 +809,7 @@ exported Markdown files.
    #+end_example
 2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
    {{{pandoc_version}}}) are installed (more info
-   {{{doc(contributing-guide/#contribute-to-code,here)}}}).
+   {{{doc(contributing-guide,#contribute-to-code,here)}}}).
 3. Start the =hugo= server:
    #+begin_example
    make serve HUGO_BASE_DIR=test/site
@@ -830,7 +830,7 @@ exported Markdown files.
    #+end_example
 2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
    {{{pandoc_version}}}) are installed (more info
-   {{{doc(contributing-guide/#contribute-to-code,here)}}}).
+   {{{doc(contributing-guide,#contribute-to-code,here)}}}).
 3. =cd= to the =test/site/= directory and do:
    #+begin_example
    hugo server -D --navigateToChanged
@@ -930,7 +930,7 @@ set.
   For the file-based exports, the weights have to be specified
   manually. Any /weight/ assignment to ="auto"= for file-based exports
   is ignored.
-- See {{{doc(dates#org-hugo-date-format,=org-hugo-date-format=)}}} for
+- See {{{doc(dates,#org-hugo-date-format,=org-hugo-date-format=)}}} for
   customizing the date formats for all /date/ front-matter parameters.
 *** Formatting
 :PROPERTIES:
@@ -1162,7 +1162,7 @@ copied location inside =static=:
 | =~/temp/static/articles/zoo.pdf= | =<HUGO_BASE_DIR>/static/articles/zoo.pdf= | (same as above)                                                                                          |
 |----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------|
 
-See the {{{doc(usage#before-you-export,Usage → Before you export)}}}
+See the {{{doc(usage,#before-you-export,Usage → Before you export)}}}
 section to learn how to set the *HUGO_BASE_DIR*.
 ***** Source path does not contain =/static/=
 Here is an example link where the source path does not contain
@@ -1365,7 +1365,7 @@ Then in your batch export setup, add that special tag to the
 =org-export-exclude-tags= variable. You can grep through this repo for
 the special tag =dont_export_during_make_test= that is used to mark
 few Org files to not be exported when running the
-{{{doc(test,tests)}}}.
+{{{doc(test,,tests)}}}.
 ****** Why use =#+filetags= and not =#+tags=?
 - About =#+filetags= -- [[https://orgmode.org/manual/Tag-inheritance.html][Tag Inheritance]] or =C-h i g (org) Tag
   inheritance=
@@ -2047,7 +2047,7 @@ accessed at =/foo.png=.
 
 More detail for this conventional approach can be found in the
 documentation for
-{{{doc(image-links#references-to-files-in-the-static-directory,referencing
+{{{doc(image-links,#references-to-files-in-the-static-directory,referencing
 files in static directory)}}}.
 **** But.. what about putting images along with the content?
 OK, so with that short intro out of the way, =ox-hugo= supports
@@ -2091,6 +2091,8 @@ exported Markdown files.
 
 Also as the image file references are valid within the Org file, you
 can see those images inline too!
+
+#+attr_html: :alt Screenshot of an Org mode buffer showing image in content
 [[file:/images/images-in-content-screenshot.png]]
 **** Examples
 Whether you prefer the subtree-based approach or file-based approach
@@ -2357,10 +2359,10 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
   doc_md hugo_doc=).
 - [X] GitHub repo files: [[https://github.com/kaushalmodi/ox-hugo/blob/master/README.org][~README.org~]] and [[https://github.com/kaushalmodi/ox-hugo/blob/master/CONTRIBUTING.org][~CONTRIBUTING.org~]] --
   Generated using =ox-org= (=make doc_gh=).
-- [X] [[../test][Test site]] -- Regenerated after each commit to this repo (=make
+- [X] [[../test/][Test site]] -- Regenerated after each commit to this repo (=make
   test=).
 - [X] Passes =make test= and generates documentation using =make doc=
-  in [[https://play.google.com/store/apps/details?id=com.termux&hl=en][Termux]] app on Android too.
+  in [[https://termux.com/][Termux]] app on Android too.
 - [X] Passes =checkdoc= and =package-lint= ([[https://github.com/purcell/package-lint/issues/89][/almost/]]).
 *** Contributing Guide
 :PROPERTIES:
@@ -2415,7 +2417,7 @@ Org style tags too. Example: ~* I don't want to export this post
 
 [fn:1] To understand why the attachment files get copied to the
 =static/ox-hugo/= directory, have a look at the documentation for
-{{{doc(image-links#references-to-files-outside-the-static-directory,referencing
+{{{doc(image-links,#references-to-files-outside-the-static-directory,referencing
 files outside static directory)}}}.
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:

@@ -63,9 +63,9 @@ You can generate the same too! Simply clone this repo and do =make
 doc_md=.
 
 *Make sure you visit the above link to read more on:*
-- [[https://ox-hugo.scripter.co/doc/why-ox-hugo][Why =ox-hugo=?]]
-- [[https://ox-hugo.scripter.co/doc/auto-export-on-saving][Auto exporting to Markdown each time the Org file is saved]]
-- [[https://ox-hugo.scripter.co/doc/org-capture-setup][Using Org Capture to start a new blog post]]
+- [[https://ox-hugo.scripter.co/doc/why-ox-hugo/][Why =ox-hugo=?]]
+- [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto exporting to Markdown each time the Org file is saved]]
+- [[https://ox-hugo.scripter.co/doc/org-capture-setup/][Using Org Capture to start a new blog post]]
 - .. and many more topics and examples
 ** Source of the Documentation site
 - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/ox-hugo-manual.org][Org source]]
@@ -106,7 +106,7 @@ If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can d
 (use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 #+END_SRC
 
-Also see the [[https://ox-hugo.scripter.co/doc/auto-export-on-saving][Auto Exporting]] section.
+Also see the [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto Exporting]] section.
 
 *Spacemacs*
 
@@ -350,7 +350,7 @@ available customization options for this package.
 - Add missing http/https/ftp prefix for hyper-linked images.
 *** Meta
 - Add documentation on how you can have
-  [[https://ox-hugo.scripter.co/doc/images-in-content][Images live in the same directory as Org
+  [[https://ox-hugo.scripter.co/doc/images-in-content/][Images live in the same directory as Org
   source]] -- #[[https://github.com/kaushalmodi/ox-hugo/issues/91][91]].
 - Now only Org files for the [[https://ox-hugo.scripter.co][documentation site]] need to be committed
   to git. =ox-hugo= then exports those to Markdown, and then Hugo
@@ -361,7 +361,7 @@ available customization options for this package.
   yourself :smile:.
 ** v0.5 <2017-11-06 Mon>
 *** Features
-- Export TOC as a Markdown ordered list. See [[https://ox-hugo.scripter.co/doc/org-toc][Table of
+- Export TOC as a Markdown ordered list. See [[https://ox-hugo.scripter.co/doc/org-toc/][Table of
   Contents]] -- #[[https://github.com/kaushalmodi/ox-hugo/issues/88][88]].
 - =#+attr_html= above http/https/ftp links is now supported (useful
   for specifying the =target=, =rel=, attributes, for example).
@@ -395,7 +395,7 @@ available customization options for this package.
     set categories (tags with "@") globally in the file.
 
 See the new section added to documentation:
-[[https://ox-hugo.scripter.co/doc/tags-and-categories][*Tags and Categories*]]
+[[https://ox-hugo.scripter.co/doc/tags-and-categories/][*Tags and Categories*]]
 *** Features
 - Support specifying the =:width= parameter in the =#+attr_html= above
   image links. That eventually gets transformed to the =width=
@@ -415,7 +415,7 @@ See the new section added to documentation:
 - Source blocks can now be exported with line numbers and/or
   highlighting!
 
-  See [[https://ox-hugo.scripter.co/doc/source-blocks][Source Blocks]] for details.
+  See [[https://ox-hugo.scripter.co/doc/source-blocks/][Source Blocks]] for details.
 ** v0.2.3 <2017-10-11 Wed>
 *** Fixes
 - =org-hugo-slug= earlier stripped off only the =code= HTML tag

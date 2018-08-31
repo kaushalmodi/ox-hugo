@@ -1,4 +1,4 @@
-baseURL = "https://example.org/"
+baseURL = "https://ox-hugo.scripter.co/"
 
 Title = "ox-hugo - Org to Hugo exporter"
 theme = ["hugo-debugprint", "hugo-onyx-theme"]

@@ -4,7 +4,7 @@
 #+setupfile: doc-setupfile.org
 
 #+macro: imageclick [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1]]
-#+macro: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
+#+macro: doc [[https://ox-hugo.scripter.co/doc/$1/$2][$3]]
 
 
 * Readme                                                             :readme:
@@ -36,9 +36,9 @@ You can generate the same too! Simply clone this repo and do =make
 doc_md=.
 
 *Make sure you visit the above link to read more on:*
-- {{{doc(why-ox-hugo,Why =ox-hugo=?)}}}
-- {{{doc(auto-export-on-saving,Auto exporting to Markdown each time the Org file is saved)}}}
-- {{{doc(org-capture-setup,Using Org Capture to start a new blog post)}}}
+- {{{doc(why-ox-hugo,,Why =ox-hugo=?)}}}
+- {{{doc(auto-export-on-saving,,Auto exporting to Markdown each time the Org file is saved)}}}
+- {{{doc(org-capture-setup,,Using Org Capture to start a new blog post)}}}
 - .. and many more topics and examples
 *** Source of the Documentation site
 - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/ox-hugo-manual.org][Org source]]
@@ -66,3 +66,7 @@ export from Org to Markdown, and then finally =hugo=.
 #+include: "./ox-hugo-manual.org::#debug" :only-contents t
 ** Test
 #+include: "./ox-hugo-manual.org::#test" :only-contents t
+* COMMENT Local Variables                                           :ARCHIVE:
+# Local Variables:
+# org-hugo-auto-export-on-save: nil
+# End:

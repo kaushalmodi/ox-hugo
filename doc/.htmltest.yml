@@ -19,7 +19,7 @@
 # DirectoryIndex: "index.html"
 DirectoryPath: "public"
 # DocumentConcurrencyLimit: 128
-# EnforceHTML5: false
+EnforceHTML5: false
 EnforceHTTPS: true
 # ExternalTimeout: 15
 # FileExtension: ".html"
@@ -43,6 +43,7 @@ IgnoreInternalEmptyHash: true
 # StripQueryExcludes: ["fonts.googleapis.com"]
 # StripQueryString: true
 # TestFilesConcurrently: false
+
 
 # |-------------------------------------+----------------------------------------------------------------------------------------------------------+-----------------------------------------|
 # | OPTION                              | DESCRIPTION                                                                                              | DEFAULT                                 |
@@ -70,7 +71,7 @@ IgnoreInternalEmptyHash: true
 # | EnforceHTTPS                        | Fails when encountering an http:// link. Useful to prevent mixed content errors when serving over HTTPS. | false                                   |
 # | ExternalTimeout                     | Number of seconds to wait on an HTTP connection before failing.                                          | 15                                      |
 # | FileExtension                       | Extension of your HTML documents, includes the dot. If FilePath is set we use the extension from that.   | .html                                   |
-# | FilePath                            | Single file to test within DirectoryPath, omit to test all.                                              |       filee                                  |
+# | FilePath                            | Single file to test within DirectoryPath, omit to test all.                                              |                                         |
 # | HTTPConcurrencyLimit                | Maximum number of open HTTP connections. If you raise this number ensure the ExternalTimeout             | 16                                      |
 # |                                     | is suitably raised.                                                                                      |                                         |
 # | HTTPHeaders                         | Dictionary of headers to include in external requests                                                    | {"Range": "bytes=0-0", "Accept": "*/*"} |

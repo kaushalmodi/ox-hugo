@@ -22,6 +22,12 @@ ifeq ("$(HUGO_exists)","")
 	HUGO := /tmp/hugo/bin/hugo
 endif
 
+HTMLTEST ?= htmltest
+HTMLTEST_exists := $(shell command -v $(HTMLTEST) 2> /dev/null)
+ifeq ("$(HTMLTEST_exists)","")
+	HTMLTEST := /tmp/htmltest/bin/htmltest
+endif
+
 # HUGO_BIN_SOURCE and HUGO_VERSION are used later in the vcheck rule
 # only if HUGO_exists has evaluated to "".
 HUGO_BIN_SOURCE ?= https://gitlab.com/kaushalmodi/unofficial-hugo-dev-builds.git
@@ -73,7 +79,7 @@ test_check=1
 .PHONY: help emacs-batch md1 vcheck hugo hugo_doc hugo_test serve server diff \
 	test md testmkgold \
 	do_test $(test_org_files) \
-	doc_md doc_gh doc \
+	doc_md doc_gh doc doc_htmltest doc_test \
 	ctemp diffgolden clean
 
 help:
@@ -184,6 +190,16 @@ doc_gh:
 	@echo "[GitHub Docs] Done"
 
 doc: doc_md hugo_doc doc_gh
+
+doc_htmltest:
+ifeq ("$(HTMLTEST_exists)","")
+	@mkdir -p /tmp/htmltest
+	@find /tmp/htmltest -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
+	@git clone $(HUGO_BIN_SOURCE) /tmp/htmltest/bin
+	@tar xf /tmp/htmltest/bin/htmltest_DEV-Linux-64bit.tar.xz -C /tmp/htmltest/bin
+endif
+	@cd doc && htmltest
+doc_test: doc doc_htmltest
 
 ctemp:
 	@find $(OX_HUGO_TEST_SITE_DIR)/content -name "*.*~" -delete

@@ -986,7 +986,7 @@ Examples of RFC3339-compatible values for this variable:
 Do =C-h v org-hugo-date-format= for more information (within Emacs,
 once the =ox-hugo= package is loaded).
 
-***** =org-hugo-suppress-lastmod-period==
+***** =org-hugo-suppress-lastmod-period=
  - Default value :: =0.0=
 
 A suppressing period not to write the =lastmod= item in the front matter.

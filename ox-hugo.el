@@ -533,6 +533,17 @@ it is if `org-hugo-prefer-hyphen-in-tags' is nil."
   :type 'boolean
   :safe #'booleanp)
 
+(defcustom org-hugo-suppress-lastmod-period 0.0
+  "A suppressing period not to write the lastmod item in the front matter.
+The default value is 0.0, which means that the lastmod item will be
+added to front matter even if the entry is modified within just 0.1[s]
+after the initial creation of the entry.
+This variable is used to control the duration of the suppressing period.
+If the value is 86400.0, the lastmod item will not be added to the front
+matter within 24 hours from the initial exporting."
+  :group 'org-export-hugo
+  :type 'float)
+
 (defcustom org-hugo-export-with-toc nil
   "When non-nil, Markdown format TOC will be inserted.
 
@@ -1434,6 +1445,47 @@ INFO is a plist used as a communication channel."
                     (setf (cdr found-key-cell) nil)
                   ;; https://emacs.stackexchange.com/a/3398/115
                   (setf (car found-key-cell) key-repl))))))))
+    data))
+
+;;;; Helper function to use `time-subtract'
+(defun org-hugo--date-to-time (date &optional ignoretz)
+  "Return a valid time that can be passed to `time-subtract'.
+If IGNORETZ is non-nil, the timezone is removed from DATE."
+  (let ((ignoretz (or ignoretz nil))
+        (key (car date))
+        (value (cdr date))
+        (tz (format-time-string "%:z" (current-time))))
+    (cond ((eq (length value) 10) ;; "2000-01-01"
+           (setq value (concat value "T00:00:00" (unless ignoretz tz ))))
+          ((eq (length value) 19) ;; "2000-01-01T00:00:00"
+           (setq value (concat value (unless ignoretz tz))))
+          ((and (eq (length value) 25) ;; "2000-01-01T00:00:00+09:00"
+                ignoretz)
+           (setq value (substring value 0 19))))
+    ;; (message "[ox-hugo auto-lastmod] output %s:\t%s" key value)
+    (let ((time (safe-date-to-time value)))
+      (if (equal '(0 0) time)
+          (user-error "Invalid %s value: \"%s\"" key (cdr date))
+        time))))
+
+;;;; Amend lastmod
+(defun org-hugo--amend-lastmod (data)
+  "Return updated DATA.
+The lastmode value in DATA could be nil on the basis of
+`org-hugo-suppress-lastmod-period'."
+  (let ((date (assoc 'date data))
+        (lastmod (assoc 'lastmod data)))
+    ;; (message "[ox-hugo auto-lastmod] input date=%s, lastmod=%s"
+    ;;          (cdr date) (cdr lastmod))
+    ;; (message "[ox-hugo auto-lastmod] val org-hugo-suppress-lastmod-period=%s"
+    ;;          org-hugo-suppress-lastmod-period)
+    (when (and (cdr date)
+               (cdr lastmod)
+               (>= org-hugo-suppress-lastmod-period
+                   (float-time (time-subtract
+                                (org-hugo--date-to-time lastmod)
+                                (org-hugo--date-to-time date)))))
+      (setf (cdr lastmod) nil))
     data))
 
 ;;;; TODO keywords
@@ -3044,6 +3096,7 @@ INFO is a plist used as a communication channel."
     ;; (message "[fm categories DBG] %S" categories)
     ;; (message "[fm keywords DBG] %S" keywords)
     (setq data (org-hugo--replace-keys-maybe data info))
+    (setq data (org-hugo--amend-lastmod data))
     (setq ret (org-hugo--gen-front-matter data fm-format))
     (if (and (string= "toml" fm-format)
              (org-hugo--pandoc-citations-enabled-p info))

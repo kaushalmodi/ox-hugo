@@ -1,0 +1,64 @@
+#+hugo_base_dir: ../
+#+macro: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
+
+* org-hugo-suppress-lastmod-period
+** DONE suppress lastmod with auto-set-lastmod
+   CLOSED: [2018-09-01 Sat 08:35]
+:PROPERTIES:
+:EXPORT_FILE_NAME: suppress-lastmod-in-subtree-with-auto-lastmod
+:END:
+
+This post will never export =lastmod= when you initially change the
+Org TODO state to =DONE= by saving the file automatically because
+=org-hugo-suppress-lastmod-period= is always greater than the time
+differences between =date= and =lastmod= in the following condition.
+
+| Variable                         | Value |
+|----------------------------------+-------|
+| org-hugo-suppress-lastmod-period | 60.0  |
+| org-hugo-auto-set-lastmod        | t     |
+| org-hugo-auto-export-on-save     | t     |
+| org-log-done                     | time  |
+
+For instance, auto generated =date= would be =2018-09-01T08:35:00+00:00=
+and =lastmod= could be =2018-09-01T08:35:59+00:00=. But if you change
+something in this post after the initial exporting, the =lastmod= will
+be exported because the time differences will exceed
+=org-hugo-suppress-lastmod-period=.
+
+** DONE suppress lastmod
+   CLOSED: [2018-09-01 Sat 02:57]
+:PROPERTIES:
+:EXPORT_FILE_NAME: suppress-lastmod-in-subtree
+:EXPORT_HUGO_LASTMOD: 2018-09-01T02:57:59
+:END:
+
+This post will not export =lastmod= because
+=org-hugo-suppress-lastmod-period= is greater than the time
+differences between =[2018-09-01 Sat 02:57]= and
+=2018-09-01T02:57:59= described in =EXPORT_HUGO_LASTMOD=. The =date=
+will be converted to =2018-09-01T02:57:00+00:00=, and the =lastmod=
+will be converted to =2018-09-01T02:57:59+00:00=.
+
+In batch mode, the local variable could not be applied. So =lastmod=
+will be actually exported in
+{{{doc(suppress-lastmod-in-subtree,suppress lastmod)}}}.
+
+** DONE unsuppress lastmod
+   CLOSED: [2018-09-01 Sat 02:57]
+:PROPERTIES:
+:EXPORT_FILE_NAME: unsuppress-lastmod-in-subtree
+:EXPORT_HUGO_LASTMOD: 2018-09-01T03:00:00
+:END:
+
+This post will export =lastmod= because
+=org-hugo-suppress-lastmod-period= is less than the time differences
+between =[2018-09-01 Sat 02:57]= and =2018-09-01T03:00:00= described
+in =EXPORT_HUGO_LASTMOD=. the =date= will be converted to
+=2018-09-01T02:57:00+00:00=.
+
+* Local Variables :ARCHIVE:
+# Local Variables:
+# org-hugo-suppress-lastmod-period: 60.0
+# org-hugo-auto-set-lastmod: t
+# End:

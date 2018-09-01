@@ -985,6 +985,29 @@ Examples of RFC3339-compatible values for this variable:
 
 Do =C-h v org-hugo-date-format= for more information (within Emacs,
 once the =ox-hugo= package is loaded).
+
+***** =org-hugo-suppress-lastmod-period==
+ - Default value :: =0.0=
+
+A suppressing period not to write the =lastmod= item in the front matter.
+
+This variable is used to control the duration of the suppressing
+period. If the value is 86400.0, the =lastmod= item will not be added to
+the front matter within 24 hours from the initial exporting.
+
+=lastmod= would be exported when you initially change the Org TODO
+state to =DONE= by saving the file automatically with the following
+conditions. Some users may not prefer this behavior.
+
+| Variable                         | Value |
+|----------------------------------+-------|
+| org-hugo-auto-set-lastmod        | t     |
+| org-hugo-auto-export-on-save     | t     |
+| org-log-done                     | time  |
+
+In such case, you can suppress =lastmod= in the front matter if you set
+=org-hugo-suppress-lastmod-period= to =60.0= or other appropriate value.
+
 **** File-based Exports
 :PROPERTIES:
 :CUSTOM_ID: dates-file-based-exports

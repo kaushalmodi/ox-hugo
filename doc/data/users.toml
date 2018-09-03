@@ -316,6 +316,12 @@
   org_dir = "content-org"
   site = "https://slade.jnanam.net/"
 
+[flowsta]
+  author = "Adolfo Antón Bravo"
+  source = "https://git.fsfe.org/adolflow/infotics.es"
+  branch = "master"
+  site = "https://infotics.es"
+
 # []
 #   author = ""
 #   source = ""

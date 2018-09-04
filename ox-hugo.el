@@ -1261,7 +1261,7 @@ INFO is a plist used as a communication channel."
                     dir)))
     (file-truename pub-dir)))
 
-;;;; Format Dates
+;;;; Get the publish date for the current post
 (defun org-hugo--get-date (info fmt)
   "Return current post's publish date as a string.
 
@@ -1284,6 +1284,7 @@ INFO is a plist used as a communication channel."
    (org-string-nw-p
     (org-export-get-date info fmt))))
 
+;;;; Format Dates
 (defun org-hugo--format-date (date-key info)
   "Return a date string formatted in Hugo-compatible format.
 

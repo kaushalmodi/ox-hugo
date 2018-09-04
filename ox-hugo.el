@@ -1262,6 +1262,28 @@ INFO is a plist used as a communication channel."
     (file-truename pub-dir)))
 
 ;;;; Format Dates
+(defun org-hugo--get-date (info fmt)
+  "Return current post's publish date as a string.
+
+1. If the point is in an Org subtree which has the `CLOSED' property
+   set (usually generated automatically when switching a headline's
+   TODO state to \"DONE\"), get the `CLOSED' time stamp.
+
+2. If that's not the case, but the subtree has the `EXPORT_DATE'
+   property set, use the date from that.
+
+3. Else, try to get the date from the \"#+date\" keyword in the Org
+   file, and format it using the time format string FMT.  If this
+   keyword is not set either, return nil.
+
+INFO is a plist used as a communication channel."
+  (or
+   (org-entry-get (point) "CLOSED")
+   (org-string-nw-p
+    (org-export-data (plist-get info :date) info)) ;`org-export-data' required
+   (org-string-nw-p
+    (org-export-get-date info fmt))))
+
 (defun org-hugo--format-date (date-key info)
   "Return a date string formatted in Hugo-compatible format.
 
@@ -1278,19 +1300,7 @@ cannot be formatted in Hugo-compatible format."
                     ((equal date-key :date)
                      ;; (message "[ox-hugo date DBG] 1 %s" (plist-get info date-key))
                      ;; (message "[ox-hugo date DBG] 2 %s" (org-export-data (plist-get info date-key) info))
-                     (or
-                      ;; Get the date from the "CLOSED" property;
-                      ;; generated automatically when switching a
-                      ;; headline to "DONE" state,
-                      (org-entry-get (point) "CLOSED")
-                      ;; Else get the date from the subtree property,
-                      ;; `EXPORT_DATE' if available,
-                      (org-string-nw-p
-                       (org-export-data (plist-get info date-key) info)) ;`org-export-data' required
-                      ;; Else try to get it from the #+date keyword in
-                      ;; the Org file.
-                      (org-string-nw-p
-                       (org-export-get-date info date-fmt))))
+                     (org-hugo--get-date info date-fmt))
                     ((and (equal date-key :hugo-publishdate)
                           (org-entry-get (point) "SCHEDULED"))
                      ;; Get the date from the "SCHEDULED" property.

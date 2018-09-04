@@ -264,8 +264,8 @@
   author = "Ryan Cummings"
   source = "https://github.com/ryancummings/blog"
   branch = "master"
-  org_dir = "org-content"
-  site = "https://ryancummings.github.io/"
+  org_dir = "content-org"
+  site = "https://ryanwcummings.com/"
 
 [taipapamotohus]
   author = "taipapamotohus"

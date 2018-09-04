@@ -318,9 +318,10 @@
 
 [flowsta]
   author = "Adolfo Antón Bravo"
-  source = "https://git.fsfe.org/adolflow/infotics.es/src/branch/master/articulos-infotics.org"
+  source = "https://git.fsfe.org/adolflow/infotics.es"
+  branch = "master"
   site = "https://infotics.es"
-  org_src_desc = "Org file"
+  hosting = "gitea"
 
 # []
 #   author = ""

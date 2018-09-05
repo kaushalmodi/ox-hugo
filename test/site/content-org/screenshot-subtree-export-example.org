@@ -4,6 +4,8 @@
 #+hugo_weight: auto
 #+hugo_auto_set_lastmod: t
 
+#+author: Kaushal Modi
+
 * Emacs                                                              :@emacs:
 All posts in here will have the category set to /emacs/.
 ** TODO Writing Hugo blog in Org                                   :hugo:org:

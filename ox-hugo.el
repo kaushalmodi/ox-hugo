@@ -534,15 +534,23 @@ it is if `org-hugo-prefer-hyphen-in-tags' is nil."
   :safe #'booleanp)
 
 (defcustom org-hugo-suppress-lastmod-period 0.0
-  "A suppressing period not to write the lastmod item in the front matter.
-The default value is 0.0, which means that the lastmod item will be
-added to front matter even if the entry is modified within just 0.1[s]
-after the initial creation of the entry.
-This variable is used to control the duration of the suppressing period.
-If the value is 86400.0, the lastmod item will not be added to the front
-matter within 24 hours from the initial exporting.
-Note that to enable this feature, set `org-hugo-auto-set-lastmod' or
-`EXPORT_HUGO_AUTO_SET_LASTMOD' to non-nil."
+  "Suppressing period (in seconds) for adding the lastmod front-matter.
+
+The suppressing period is calculated as a delta between the
+\"date\" and auto-calculated \"lastmod\" values.
+
+The default value is 0.0 (seconds), which means that the lastmod
+parameter will be added to front-matter even if the post is
+modified within just 0.1 seconds after the initial creation of
+it (when the \"date\" is set).
+
+If the value is 86400.0, the lastmod parameter will not be added
+to the front-matter within 24 hours from the initial exporting.
+
+This variable is effective only if auto-setting of the
+\"lastmod\" parameter is enabled i.e. if
+`org-hugo-auto-set-lastmod' or `EXPORT_HUGO_AUTO_SET_LASTMOD' is
+non-nil."
   :group 'org-export-hugo
   :type 'float)
 

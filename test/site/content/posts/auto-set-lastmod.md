@@ -1,7 +1,6 @@
 +++
 title = "Auto-set Lastmod"
-lastmod = 2017-12-01T16:24:29-05:00
-tags = ["dont-export-during-make-test"]
+lastmod = 2100-12-21T00:00:00+00:00
 draft = false
 +++
 

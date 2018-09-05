@@ -2,11 +2,11 @@
 title = "Writing Hugo blog in Org"
 author = ["Kaushal Modi"]
 date = 2017-09-10
-lastmod = 2017-12-01T16:24:07-05:00
-tags = ["dont-export-during-make-test", "hugo", "org"]
+lastmod = 2100-12-21T00:00:00+00:00
+tags = ["hugo", "org"]
 categories = ["emacs"]
-weight = 2001
 draft = true
+weight = 2001
 foo = "bar"
 baz = "zoo"
 alpha = 1

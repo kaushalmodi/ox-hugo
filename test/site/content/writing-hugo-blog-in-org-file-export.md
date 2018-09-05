@@ -2,11 +2,11 @@
 title = "Writing Hugo blog in Org (File Export)"
 author = ["Kaushal Modi"]
 date = 2017-09-10
-lastmod = 2018-02-02T12:04:47-05:00
+lastmod = 2100-12-21T00:00:00+00:00
 tags = ["hugo", "org"]
 categories = ["emacs"]
-weight = 2001
 draft = true
+weight = 2001
 foo = "bar"
 baz = "zoo"
 alpha = 1

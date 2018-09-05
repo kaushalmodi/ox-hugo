@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-08-28 13:25:37 kmodi>
+;; Time-stamp: <2018-09-05 09:10:50 kmodi>
 
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
@@ -196,6 +196,15 @@ Emacs installation.  If Emacs is installed using
   (org-hugo-export-wim-to-md :all-subtrees nil nil :noerror))
 
 (require 'ox-hugo-export-gh-doc)        ;For `ox-hugo-export-gh-doc'
+
+;; Override the inbuilt `current-time' function so that the "lastmod"
+;; tests work.
+(defun ox-hugo-test/current-time-override (&rest args)
+  "Hard-code the 'current time' so that the lastmod tests are reproducible.
+Fake current time: 2100/12/21 00:00:00 (arbitrary)."
+  (encode-time 0 0 0 21 12 2100))
+(advice-add 'current-time :override #'ox-hugo-test/current-time-override)
+;; (advice-remove 'current-time #'ox-hugo-test/current-time-override)
 
 (with-eval-after-load 'org
   ;; Allow multiple line Org emphasis markup

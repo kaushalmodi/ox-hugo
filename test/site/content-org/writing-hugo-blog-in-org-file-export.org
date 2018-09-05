@@ -7,7 +7,6 @@
 #+title: Writing Hugo blog in Org (File Export)
 
 #+date: 2017-09-10
-#+filetags: dont_export_during_make_test
 #+hugo_tags: hugo org
 #+hugo_categories: emacs
 #+hugo_menu: :menu "main" :weight 2001

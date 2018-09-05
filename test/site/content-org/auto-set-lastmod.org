@@ -5,8 +5,6 @@
 
 #+author:
 
-#+filetags: dont_export_during_make_test
-
 * Auto-set Lastmod
 :PROPERTIES:
 :EXPORT_FILE_NAME: auto-set-lastmod

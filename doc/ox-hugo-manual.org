@@ -903,6 +903,8 @@ set.
      keyword.
 - Precedence for =draft= parsing :: Org TODO state based /draft/ state
      /more than/ =EXPORT_HUGO_DRAFT= subtree property.
+- Custom front-matter parameters :: See
+     {{{doc(custom-front-matter,,Custom Front-matter Parameters)}}} section.
 **** For file-based exports
 #+caption: Hugo front-matter translation for file-based exports
 #+attr_html: :class sane-table
@@ -932,6 +934,9 @@ set.
   is ignored.
 - See {{{doc(dates,#org-hugo-date-format,=org-hugo-date-format=)}}} for
   customizing the date formats for all /date/ front-matter parameters.
+- For setting custom front-matter parameters, see the
+  {{{doc(custom-front-matter,,Custom Front-matter Parameters)}}}
+  section.
 *** Formatting
 :PROPERTIES:
 :EXPORT_FILE_NAME: formatting
@@ -2361,6 +2366,118 @@ be fixed.
 
 (Of course, open an issue whenever any ~ox-hugo~ export does not do
 things as you expect :smile:)
+*** Custom Front-matter Parameters
+:PROPERTIES:
+:EXPORT_FILE_NAME: custom-front-matter
+:END:
+#+begin_description
+Setting custom front-matter parameters which have no special meaning
+to Hugo, but are used in user's themes.
+#+end_description
+
+- To set a custom front-matter parameter in a subtree, use the
+  ~:EXPORT_HUGO_CUSTOM_FRONT_MATTER:~ property.
+- To set a custom front-matter parameter globally or for /per-file/
+  export flow, use the keyword ~#+hugo_custom_front_matter:~.
+
+For the rest of this section, the /property/ method for setting the
+custom front-matter will be used. But the same applies to the
+/keyword/ method too (except for property-specific
+~:EXPORT_HUGO_CUSTOM_FRONT_MATTER+:~ syntax -- See ~(org) Property
+Syntax~ for more).
+**** Single value parameters
+***** Syntax
+#+begin_src org
+:PROPERTIES:
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :key1 value1 :key2 value2
+:END:
+#+end_src
+
+Instead of appending all the key/value pairs on the same line, they
+can instead be broken down as shown below, by appending ~+~ to the
+property name.
+
+#+begin_src org
+:PROPERTIES:
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :key1 value1
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :key2 value2
+:END:
+#+end_src
+
+If using the /keyword/ method instead, the same would be written as:
+#+begin_src org
+,#+hugo_custom_front_matter: :key1 value1
+,#+hugo_custom_front_matter: :key2 value2
+#+end_src
+
+/The above method of appending keywords will work for the other cases
+below too./
+***** Example
+#+begin_src org
+:PROPERTIES:
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :feature true
+:END:
+#+end_src
+Above exports to TOML front-matter as:
+#+begin_src toml
+feature = true
+#+end_src
+**** List value parameters
+***** Syntax
+#+begin_src org
+:PROPERTIES:
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :key1 '(elem11 elem12) :key2 '(elem21 elem22)
+:END:
+#+end_src
+***** Example
+#+begin_src org
+:PROPERTIES:
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :animals '(dog cat "penguin" "mountain gorilla")
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :integers '(123 -5 17 1_234)
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :floats '(12.3 -5.0 -17E-6)
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :booleans '(true false)
+:END:
+#+end_src
+Above exports to TOML front-matter as:
+#+begin_src toml
+animals = ["dog", "cat", "penguin", "mountain gorilla"]
+integers = [123, -5, 17, 1_234]
+floats = [12.3, -5.0, -1.7e-05]
+booleans = [true, false]
+#+end_src
+**** Maps of single and list values
+Maps of keys with single or list values are supported. /Maps of maps
+are not supported./
+***** Syntax
+#+begin_src org
+:PROPERTIES:
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :key1 '((subkey11 . subval11) (subkey12 . (subelem121 subelem122))) :key2 '((subkey21 . subval21))
+:END:
+#+end_src
+***** Example
+#+begin_src org
+:PROPERTIES:
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :versions '((emacs . "27.0.50") (hugo . "0.48"))
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :header '((image . "projects/Readingabook.jpg") (caption . "stay hungry, stay foolish"))
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :collection '((animals . (dog cat "penguin" "mountain gorilla")) (integers . (123 -5 17 1_234)) (floats . (12.3 -5.0 -17E-6)) (booleans . (true false)))
+:END:
+#+end_src
+Above exports to TOML front-matter as:
+#+begin_src toml
+[versions]
+  emacs = "27.0.50"
+  hugo = 0.48
+[header]
+  image = "projects/Readingabook.jpg"
+  caption = "stay hungry, stay foolish"
+[collection]
+  animals = ["dog", "cat", "penguin", "mountain gorilla"]
+  integers = [123, -5, 17, 1_234]
+  floats = [12.3, -5.0, -1.7e-05]
+  booleans = [true, false]
+#+end_src
+**** More Examples
+You can find many other examples by looking at {{{testtag(custom-fm)}}}.
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"

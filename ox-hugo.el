@@ -537,7 +537,8 @@ it is if `org-hugo-prefer-hyphen-in-tags' is nil."
   "Suppressing period (in seconds) for adding the lastmod front-matter.
 
 The suppressing period is calculated as a delta between the
-\"date\" and auto-calculated \"lastmod\" values.
+\"date\" and auto-calculated \"lastmod\" values.  This value can
+be 0.0 or a positive float.
 
 The default value is 0.0 (seconds), which means that the lastmod
 parameter will be added to front-matter even if the post is
@@ -1364,7 +1365,38 @@ cannot be formatted in Hugo-compatible format."
                         ;; lastmod field.
                         ((and (equal date-key :hugo-lastmod)
                               (org-hugo--plist-get-true-p info :hugo-auto-set-lastmod))
-                         (format-time-string date-fmt (org-current-time)))
+                         (let* ((curr-time (org-current-time))
+                                (lastmod-str (format-time-string date-fmt curr-time)))
+                           (if (or (> org-hugo-suppress-lastmod-period 0.0)
+                                   (< org-hugo-suppress-lastmod-period 0.0))
+                               (let* ((suppress-period (if (< 0.0 org-hugo-suppress-lastmod-period)
+                                                           org-hugo-suppress-lastmod-period
+                                                         (- org-hugo-suppress-lastmod-period)))
+                                      (date-str (org-hugo--get-date info date-fmt))
+                                      (date-time (apply #'encode-time
+                                                        (mapcar (lambda (el) (or el 0))
+                                                                (parse-time-string date-str))))
+                                      ;; It's safe to assume that
+                                      ;; `current-time' will always be
+                                      ;; >= the post date.
+                                      (delta (float-time
+                                              (time-subtract curr-time date-time))))
+                                 ;; (message "[ox-hugo suppress-lastmod] current-time = %S (decoded = %S)"
+                                 ;;          curr-time (decode-time curr-time))
+                                 ;; (message "[ox-hugo suppress-lastmod] lastmod-str = %S"
+                                 ;;          lastmod-str )
+                                 ;; (message "[ox-hugo suppress-lastmod] date-str = %S"
+                                 ;;          date-str)
+                                 ;; (message "[ox-hugo suppress-lastmod] date-time = %S (decoded = %S)"
+                                 ;;          date-time (decode-time date-time))
+                                 ;; (message "[ox-hugo suppress-lastmod] suppress-period = %S"
+                                 ;;          suppress-period)
+                                 ;; (message "[ox-hugo suppress-lastmod] delta = %S" delta)
+                                 (when (>= delta suppress-period)
+                                   lastmod-str))
+                             (progn
+                               ;; (message "[ox-hugo suppress-lastmod] not suppressed")
+                               lastmod-str))))
                         ;; Else.. do nothing.
                         (t
                          nil)))
@@ -1456,52 +1488,6 @@ INFO is a plist used as a communication channel."
                   ;; https://emacs.stackexchange.com/a/3398/115
                   (setf (car found-key-cell) key-repl))))))))
     data))
-
-;;;; Helper function to use `time-subtract'
-(defun org-hugo--date-to-time (date &optional ignoretz)
-  "Return a valid time that can be passed to `time-subtract'.
-If IGNORETZ is non-nil, the timezone is removed from DATE."
-  (let ((ignoretz (or ignoretz nil))
-        (key (car date))
-        (value (cdr date))
-        (tz (format-time-string "%:z" (current-time))))
-    (cond ((eq (length value) 10) ;; "2000-01-01"
-           (setq value (concat value "T00:00:00" (unless ignoretz tz ))))
-          ((eq (length value) 19) ;; "2000-01-01T00:00:00"
-           (setq value (concat value (unless ignoretz tz))))
-          ((and (eq (length value) 25) ;; "2000-01-01T00:00:00+09:00"
-                ignoretz)
-           (setq value (substring value 0 19))))
-    ;; (message "[ox-hugo auto-lastmod] output %s:\t%s" key value)
-    (let ((time (safe-date-to-time value)))
-      (if (equal '(0 0) time)
-          (user-error "Invalid %s value: \"%s\"" key (cdr date))
-        time))))
-
-;;;; Amend lastmod
-(defun org-hugo--amend-lastmod (data info)
-  "Return updated DATA.
-The lastmode value in DATA could be nil on the basis of
-`org-hugo-suppress-lastmod-period'.
-INFO is a plist used as a communication channel."
-  (when (and (or (org-hugo--plist-get-true-p info :hugo-auto-set-lastmod)
-                 org-hugo-auto-set-lastmod)
-             (not (plist-get info :lastmod)))
-    (let ((date (assoc 'date data))
-          (lastmod (assoc 'lastmod data)))
-      ;; (message "[ox-hugo auto-lastmod] input date=%s, lastmod=%s"
-      ;;          (cdr date) (cdr lastmod))
-      ;; (message (concat "[ox-hugo auto-lastmod] val"
-      ;;                  (format " org-hugo-suppress-lastmod-period=%s"
-      ;;                          org-hugo-suppress-lastmod-period)))
-      (when (and (cdr date)
-                 (cdr lastmod)
-                 (>= org-hugo-suppress-lastmod-period
-                     (float-time (time-subtract
-                                  (org-hugo--date-to-time lastmod)
-                                  (org-hugo--date-to-time date)))))
-        (setf (cdr lastmod) nil))))
-  data)
 
 ;;;; TODO keywords
 (defun org-hugo--todo (todo info)
@@ -3111,7 +3097,6 @@ INFO is a plist used as a communication channel."
     ;; (message "[fm categories DBG] %S" categories)
     ;; (message "[fm keywords DBG] %S" keywords)
     (setq data (org-hugo--replace-keys-maybe data info))
-    (setq data (org-hugo--amend-lastmod data info))
     (setq ret (org-hugo--gen-front-matter data fm-format))
     (if (and (string= "toml" fm-format)
              (org-hugo--pandoc-citations-enabled-p info))

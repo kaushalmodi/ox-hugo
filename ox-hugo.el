@@ -540,7 +540,9 @@ added to front matter even if the entry is modified within just 0.1[s]
 after the initial creation of the entry.
 This variable is used to control the duration of the suppressing period.
 If the value is 86400.0, the lastmod item will not be added to the front
-matter within 24 hours from the initial exporting."
+matter within 24 hours from the initial exporting.
+Note that to enable this feature, set `org-hugo-auto-set-lastmod' or
+`EXPORT_HUGO_AUTO_SET_LASTMOD' to non-nil."
   :group 'org-export-hugo
   :type 'float)
 
@@ -1469,24 +1471,29 @@ If IGNORETZ is non-nil, the timezone is removed from DATE."
         time))))
 
 ;;;; Amend lastmod
-(defun org-hugo--amend-lastmod (data)
+(defun org-hugo--amend-lastmod (data info)
   "Return updated DATA.
 The lastmode value in DATA could be nil on the basis of
-`org-hugo-suppress-lastmod-period'."
-  (let ((date (assoc 'date data))
-        (lastmod (assoc 'lastmod data)))
-    ;; (message "[ox-hugo auto-lastmod] input date=%s, lastmod=%s"
-    ;;          (cdr date) (cdr lastmod))
-    ;; (message "[ox-hugo auto-lastmod] val org-hugo-suppress-lastmod-period=%s"
-    ;;          org-hugo-suppress-lastmod-period)
-    (when (and (cdr date)
-               (cdr lastmod)
-               (>= org-hugo-suppress-lastmod-period
-                   (float-time (time-subtract
-                                (org-hugo--date-to-time lastmod)
-                                (org-hugo--date-to-time date)))))
-      (setf (cdr lastmod) nil))
-    data))
+`org-hugo-suppress-lastmod-period'.
+INFO is a plist used as a communication channel."
+  (when (and (or (org-hugo--plist-get-true-p info :hugo-auto-set-lastmod)
+                 org-hugo-auto-set-lastmod)
+             (not (plist-get info :lastmod)))
+    (let ((date (assoc 'date data))
+          (lastmod (assoc 'lastmod data)))
+      ;; (message "[ox-hugo auto-lastmod] input date=%s, lastmod=%s"
+      ;;          (cdr date) (cdr lastmod))
+      ;; (message (concat "[ox-hugo auto-lastmod] val"
+      ;;                  (format " org-hugo-suppress-lastmod-period=%s"
+      ;;                          org-hugo-suppress-lastmod-period)))
+      (when (and (cdr date)
+                 (cdr lastmod)
+                 (>= org-hugo-suppress-lastmod-period
+                     (float-time (time-subtract
+                                  (org-hugo--date-to-time lastmod)
+                                  (org-hugo--date-to-time date)))))
+        (setf (cdr lastmod) nil))))
+  data)
 
 ;;;; TODO keywords
 (defun org-hugo--todo (todo info)
@@ -3096,7 +3103,7 @@ INFO is a plist used as a communication channel."
     ;; (message "[fm categories DBG] %S" categories)
     ;; (message "[fm keywords DBG] %S" keywords)
     (setq data (org-hugo--replace-keys-maybe data info))
-    (setq data (org-hugo--amend-lastmod data))
+    (setq data (org-hugo--amend-lastmod data info))
     (setq ret (org-hugo--gen-front-matter data fm-format))
     (if (and (string= "toml" fm-format)
              (org-hugo--pandoc-citations-enabled-p info))

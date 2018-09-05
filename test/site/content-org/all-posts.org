@@ -5130,7 +5130,7 @@ it is disabled using =:EXPORT_OPTIONS: title:nil=.
 This post will be exported without =author= in the front-matter because
 it is disabled using =:EXPORT_OPTIONS: author:nil=.
 ** Creator                                             :creator:front_matter:
-*** Default Creator                            :dont_export_during_make_test:
+*** Default Creator
 :PROPERTIES:
 :EXPORT_DATE: 2017-12-01
 :EXPORT_OPTIONS: creator:t

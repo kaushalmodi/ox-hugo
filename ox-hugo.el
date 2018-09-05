@@ -416,7 +416,7 @@ Examples:
   :version "25.2")
 
 (defcustom org-hugo-front-matter-format "toml"
-  "Format used to front matter.
+  "Front-matter format.
 This variable can be set to either \"toml\" or \"yaml\"."
   :group 'org-export-hugo
   :type '(choice
@@ -782,7 +782,7 @@ newer."
                    (:hugo-pandoc-citations "HUGO_PANDOC_CITATIONS" nil nil)
                    (:bibliography "BIBLIOGRAPHY" nil nil newline) ;Used in ox-hugo-pandoc-cite
 
-                   ;; Front matter variables
+                   ;; Front-matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
                    ;; aliases
                    (:hugo-aliases "HUGO_ALIASES" nil nil space)
@@ -2475,7 +2475,7 @@ INFO is a plist holding export options."
 
 ;;;; Body Filter
 (defun org-hugo-body-filter (body _backend info)
-  "Add front matter to the BODY of the document.
+  "Add front-matter to the BODY of the document.
 
 BODY is the result of the export.
 INFO is a plist holding export options."
@@ -2520,7 +2520,7 @@ INFO is a plist holding export options."
         (format "%s%s%s" org-hugo--fm-yaml body org-hugo-footer)
       (format "%s%s%s" fm body org-hugo-footer))))
 
-;;;;; Hugo Front Matter
+;;;;; Hugo Front-Matter
 (defun org-hugo--quote-string (val &optional prefer-no-quotes format)
   "Wrap VAL with quotes as appropriate.
 
@@ -2857,10 +2857,10 @@ the Hugo front-matter."
        (string-match-p "\\`@" tag)))
 
 (defun org-hugo--get-front-matter (info)
-  "Return the Hugo front matter string.
+  "Return the Hugo front-matter string.
 
 INFO is a plist used as a communication channel."
-  ;; (message "[hugo front matter DBG] info: %S" (pp info))
+  ;; (message "[hugo front-matter DBG] info: %S" (pp info))
   (let* ((fm-format (plist-get info :hugo-front-matter-format))
          (author-list (and (plist-get info :with-author)
                            (let ((author-raw
@@ -2997,7 +2997,7 @@ INFO is a plist used as a communication channel."
          (resources (org-hugo--get-resources-alist
                      (org-hugo--parse-property-arguments (plist-get info :hugo-resources))))
          (blackfriday (org-hugo--parse-blackfriday-prop-to-alist (plist-get info :hugo-blackfriday)))
-         (data `(;; The order of the elements below will be the order in which the front matter
+         (data `(;; The order of the elements below will be the order in which the front-matter
                  ;; variables will be ordered.
                  (title . ,(org-hugo--sanitize-title info))
                  (audio . ,(plist-get info :hugo-audio))
@@ -3065,12 +3065,12 @@ LEVEL."
     (+ (* 1000 level) index)))
 
 (defun org-hugo--gen-front-matter (data format)
-  "Generate the Hugo post front matter, and return that string.
+  "Generate the Hugo post front-matter, and return that string.
 
 DATA is an alist of the form \((KEY1 . VAL1) (KEY2 . VAL2) .. \),
 where KEY is a symbol and VAL is a string.
 
-Generate the front matter in the specified FORMAT.  Valid values
+Generate the front-matter in the specified FORMAT.  Valid values
 are \"toml\" and \"yaml\"."
   (let ((sep (cond ((string= format "toml") "+++\n")
                    ((string= format "yaml") "---\n")
@@ -3088,7 +3088,7 @@ are \"toml\" and \"yaml\"."
       (let ((key (symbol-name (car pair)))
             (value (cdr pair)))
         ;; (message "[hugo fm key value DBG] %S %S" key value)
-        (unless (or (null value) ;Skip writing front matter variables whose value is nil
+        (unless (or (null value) ;Skip writing front-matter variables whose value is nil
                     (and (stringp value) ;or an empty string.
                          (string= "" value)))
           ;; In TOML/YAML, the value portion needs to be wrapped in
@@ -3098,9 +3098,9 @@ are \"toml\" and \"yaml\"."
           ;; YAML example:
           ;;     title: "My Post"
 
-          ;; In TOML, the menu information in the front matter is as a
+          ;; In TOML, the menu information in the front-matter is as a
           ;; table. So it needs to be always added to the end of the
-          ;; front matter. So generate the `menu-string' separately
+          ;; front-matter. So generate the `menu-string' separately
           ;; and then append it to `front-matter' at the end.  Do the
           ;; same for blackfriday param values.
           (cond
@@ -3111,7 +3111,7 @@ are \"toml\" and \"yaml\"."
                                   "used to set its value.\n"
                                   "Usage examples: \":EXPORT_HUGO_MENU: :menu main\" or "
                                   "\"#+hugo_menu: :menu main\"")))
-            ;; Menu name needs to be non-nil to insert menu info in front matter.
+            ;; Menu name needs to be non-nil to insert menu info in front-matter.
             (when (assoc 'menu value)
               (let* ((menu-alist value)
                      ;; Menu entry string might need to be quoted if
@@ -3291,7 +3291,7 @@ are \"toml\" and \"yaml\"."
                                   key
                                   sign
                                   (cond (;; Tags, categories, keywords, aliases,
-                                         ;; custom front matter which are lists.
+                                         ;; custom front-matter which are lists.
                                          (listp value)
                                          (org-hugo--get-yaml-toml-list-string value))
                                         (t

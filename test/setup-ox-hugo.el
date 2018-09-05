@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-09-05 13:50:11 kmodi>
+;; Time-stamp: <2018-09-05 15:53:44 kmodi>
 
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
@@ -99,15 +99,18 @@ even if they are found as dependencies."
       ;; Below require will auto-create `package-user-dir' it doesn't exist.
       (require 'package)
 
+      ;; Even if we don't need to install Org from Elpa, we need to
+      ;; add Org Elpa in `package-archives' to prevent the "Package
+      ;; ‘org-9.0’ is unavailable" error.
+      ;;
+      ;; `setq' is used instead of `add-to-list' because we don't need
+      ;; the default GNU Elpa archive for this test.
+      (setq package-archives '(("org" . "https://orgmode.org/elpa/"))) ;For latest stable `org'
+
       (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                           (not (gnutls-available-p))))
              (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
         (add-to-list 'package-archives (cons "melpa" url))) ;For `toc-org'
-
-      ;; Even if we don't need to install Org from Elpa, we need to
-      ;; add Org Elpa in `package-archives' to prevent the "Package
-      ;; ‘org-9.0’ is unavailable" error.
-      (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/")) ;For latest stable `org'
 
       ;; Load emacs packages and activate them.
       ;; Don't delete this line.

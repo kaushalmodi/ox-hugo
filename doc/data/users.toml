@@ -323,6 +323,20 @@
   site = "https://infotics.es"
   hosting = "gitea"
 
+[emacscast]
+  author = "Rakhim Davletkaliyev"
+  source = "https://github.com/freetonik/emacscast.org"
+  branch = "master"
+  org_dir = "content-org"
+  site = "https://emacscast.org/"
+  
+[rakhim]
+  author = "Rakhim Davletkaliyev"
+  source = "https://github.com/freetonik/rakhim.org"
+  branch = "master"
+  org_dir = "content-org"
+  site = "https://rakhim.org/"
+
 # []
 #   author = ""
 #   source = ""

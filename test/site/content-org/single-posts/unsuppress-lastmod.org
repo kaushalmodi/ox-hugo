@@ -1,19 +1,16 @@
 #+title: Single Post with unsuppressed lastmod
 #+hugo_base_dir: ../../
 #+hugo_section: singles
-#+date: [2018-09-01 Sat 05:11]
-#+hugo_lastmod: 2018-09-02T05:55:00
+#+date: [1999-09-01 Sat 05:11]
+#+hugo_auto_set_lastmod: t
 
 This post will export =lastmod= because
-=org-hugo-suppress-lastmod-period= is less than the time differences
-between =[2018-09-01 Sat 05:11]= and
-=2018-09-02T05:55:00= specified in
-=#+hugo_lastmod=. =[2018-09-01 Sat 05:11]= will be converted to
-=2018-09-01T05:11:00+00:00=, and =2018-09-02T05:55:00= will be
-handled as =2018-09-02T05:55:00+00:00=.
+=org-hugo-suppress-lastmod-period= is less than the time difference
+between =[1999-09-01 Sat 05:11]= and the current date.
 
 * Local Variables :ARCHIVE:
 # Local Variables:
-# org-hugo-suppress-lastmod-period: 86400.0
+# org-hugo-auto-set-lastmod: nil
+# org-hugo-suppress-lastmod-period: 0.0
 # End:
 

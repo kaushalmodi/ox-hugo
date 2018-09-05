@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-09-05 09:35:49 kmodi>
+;; Time-stamp: <2018-09-05 13:50:11 kmodi>
 
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
@@ -209,6 +209,10 @@ Fake current time: 2100/12/21 00:00:00 (arbitrary)."
 ;; Override the default `org-hugo-export-creator-string' so that this
 ;; string is consistent in all ox-hugo tests.
 (setq org-hugo-export-creator-string "Emacs + Org mode + ox-hugo")
+
+;; Allow setting few vars in Local Variables in the test files.
+(put 'org-hugo-auto-set-lastmod 'safe-local-variable 'booleanp)
+(put 'org-hugo-suppress-lastmod-period 'safe-local-variable 'floatp)
 
 (with-eval-after-load 'org
   ;; Allow multiple line Org emphasis markup

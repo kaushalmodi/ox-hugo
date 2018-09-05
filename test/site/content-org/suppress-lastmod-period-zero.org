@@ -1,0 +1,33 @@
+#+title: Tests for org-hugo-suppress-lastmod-period set to 0.0
+
+#+hugo_base_dir: ../
+
+#+filetags: suppress lastmod zero
+
+#+author:
+
+* Common
+:PROPERTIES:
+:CUSTOM_ID: common
+:END:
+~org-hugo-suppress-lastmod-period~ is set to *0.0* seconds in Local
+Variables.
+* Auto set lastmod                                                  :autoset:
+:PROPERTIES:
+:EXPORT_HUGO_AUTO_SET_LASTMOD: t
+:END:
+** Suppress lastmod with auto-set-lastmod
+:PROPERTIES:
+:EXPORT_DATE: 2100-12-21
+:EXPORT_FILE_NAME: lastmod-not-suppressed-suppress-period-zero
+:END:
+#+begin_description
+~lastmod~ front-matter parameter is *not* suppressed in this post as
+=org-hugo-suppress-lastmod-period= is 0.0.
+#+end_description
+
+#+include: "./suppress-lastmod-period-zero.org::#common" :only-contents t
+* Local Variables                                                   :ARCHIVE:
+# Local Variables:
+# org-hugo-suppress-lastmod-period: 0.0
+# End:

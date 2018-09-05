@@ -3812,6 +3812,7 @@ buffer and returned as a string in Org format."
                                 ,(format "|org-hugo-date-format                                  |%S|" org-hugo-date-format)
                                 ,(format "|org-hugo-paired-shortcodes                            |%S|" org-hugo-paired-shortcodes)
                                 ,(format "|org-hugo-langs-no-descr-in-code-fences                |%S|" org-hugo-langs-no-descr-in-code-fences)
+                                ,(format "|org-hugo-suppress-lastmod-period                      |%S|" org-hugo-suppress-lastmod-period)
                                 ,(format "|org-hugo-front-matter-format                          |%S|" org-hugo-front-matter-format))
                               "\n"))
          (org-export-with-toc nil)

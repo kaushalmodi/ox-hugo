@@ -29,9 +29,9 @@ EnforceHTTPS: true
 # IgnoreAltMissing: false
 # IgnoreCanonicalBrokenLinks: true
 # IgnoreDirectoryMissingTrailingSlash: false
-IgnoreDirs: # Need to ignore the below 2 dirs as they have meta redirects; else htmltest crashes.
-- "issues"  # https://github.com/wjdp/htmltest/issues/92
-- "test"
+# IgnoreDirs: # Need to ignore the below 2 dirs as they have meta redirects; else htmltest crashes.
+# - "issues"  # https://github.com/wjdp/htmltest/issues/92
+# - "test"
 IgnoreInternalEmptyHash: true
 # IgnoreTagAttribute: "data-proofer-ignore"
 # IgnoreURLs:

@@ -4485,6 +4485,24 @@ front-matter.
 In this post the =:EXPORT_DATE:= property is set to =2012-2017=, but
 the export will still happen fine, with the =date= front-matter not
 set.
+*** DONE Parsing date from LOGBOOK                         :logbook:noexport:
+:PROPERTIES:
+:EXPORT_FILE_NAME: parsing-date-from-logbook
+:LOG_INTO_DRAWER: t
+:LOGGING: DONE(!)
+:END:
+:LOGBOOK:
+- State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:42]
+- State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:38]
+:END:
+#+begin_description
+Parse the date from an entry like ~"- State "DONE" from "DRAFT"
+[2018-09-06 Thu 11:25]~.
+#+end_description
+{{{oxhugoissue(203)}}}
+
+In the case of multiple ~"State "DONE" from .."~ entries, use the
+oldest entry to set the ~date~.
 ** Lastmod Date                                                     :lastmod:
 *** Lastmod date set using Org time stamp
 :PROPERTIES:
@@ -4499,6 +4517,27 @@ binding.
 :EXPORT_HUGO_LASTMOD: 2018-01-23
 :END:
 The =lastmod= for this post is Hugo-compatible i.e. [[https://tools.ietf.org/html/rfc3339#section-5.8][RFC3339-compliant]].
+*** DONE Parsing lastmod from LOGBOOK                      :logbook:noexport:
+:PROPERTIES:
+:EXPORT_FILE_NAME: parsing-lastmod-from-logbook
+:LOG_INTO_DRAWER: t
+:LOGGING: DONE(!)
+:END:
+:LOGBOOK:
+- State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:41]
+- State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:40]
+:END:
+#+begin_description
+If LOGBOOK has multiple entries of ~"- State "DONE" from .."~, use the
+newest entry to parse the ~lastmod~ date from.
+#+end_description
+{{{oxhugoissue(203)}}}
+
+In the case of multiple ~"State "DONE" from .."~ entries,
+- Use the newest entry to set the ~lastmod~.
+- Use the oldest entry to set the ~date~.
+
+*Do not auto-set ~lastmod~ using ~current-time~ in this case.~
 ** Publish Date                                                 :publishdate:
 *** Publish date set using Org time stamp
 :PROPERTIES:
@@ -5655,6 +5694,58 @@ be ~authors~ instead of the default ~author~ created by ~ox-hugo~.
 This test removes the ~foo~ front-matter key from the exported file
 (and replaces ~bar~ key with ~zoo~).
 #+end_description
+** DONE Parsing notes from LOGBOOK                   :notes:logbook:noexport:
+:PROPERTIES:
+:EXPORT_FILE_NAME: parsing-notes-from-logbook
+:LOG_INTO_DRAWER: t
+:LOGGING: TODO(!) DRAFT(!) DONE(!)
+:END:
+:LOGBOOK:
+- Note taken on [2018-09-06 Thu 11:45] \\
+  Another note.
+- Note taken on [2018-09-06 Thu 11:37] \\
+  A note
+- State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:25]
+- State "DRAFT"      from "TODO"       [2018-09-06 Thu 11:25]
+- State "TODO"       from              [2018-09-06 Thu 11:25]
+:END:
+#+begin_description
+Parse notes from LOGBOOK into a TOML table (YAML map?) of ~notes~
+front-matter.
+#+end_description
+
+{{{oxhugoissue(203)}}}
+
+For example,
+
+#+begin_src org
+:LOGBOOK:
+- Note taken on [2018-09-06 Thu 11:45] \\
+  Another note.
+- Note taken on [2018-09-06 Thu 11:37] \\
+  A note
+- State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:25]
+- State "DRAFT"      from "TODO"       [2018-09-06 Thu 11:25]
+- State "TODO"       from              [2018-09-06 Thu 11:25]
+:END:
+#+end_src
+
+should export these ~notes~ in TOML front-matter (and the equivalent
+in YAML):
+#+begin_src toml
+[[notes]]
+  index = 0
+  date = 2018-09-06T11:37:00-04:00
+  content = "A note."
+[[notes]]
+  index = 1
+  date = 2018-09-06T11:45:00-04:00
+  content = "Another note."
+#+end_src
+
+- Note :: The state change notes are intentionally put in this test
+          LOGBOOK, because we want to ensure that they don't seep into
+          the ~notes~ front-matter.
 * Date and slug inheritance                           :inheritance:date:slug:
 :PROPERTIES:
 :EXPORT_DATE: 2018-02-12

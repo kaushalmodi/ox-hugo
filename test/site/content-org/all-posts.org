@@ -4490,6 +4490,7 @@ set.
 :EXPORT_FILE_NAME: parsing-date-from-logbook
 :LOG_INTO_DRAWER: t
 :LOGGING: DONE(!)
+:EXPORT_OPTIONS: d:t
 :END:
 :LOGBOOK:
 - State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:42]
@@ -4522,6 +4523,7 @@ The =lastmod= for this post is Hugo-compatible i.e. [[https://tools.ietf.org/htm
 :EXPORT_FILE_NAME: parsing-lastmod-from-logbook
 :LOG_INTO_DRAWER: t
 :LOGGING: DONE(!)
+:EXPORT_OPTIONS: d:t
 :END:
 :LOGBOOK:
 - State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:41]
@@ -5699,6 +5701,7 @@ This test removes the ~foo~ front-matter key from the exported file
 :EXPORT_FILE_NAME: parsing-notes-from-logbook
 :LOG_INTO_DRAWER: t
 :LOGGING: TODO(!) DRAFT(!) DONE(!)
+:EXPORT_OPTIONS: d:t
 :END:
 :LOGBOOK:
 - Note taken on [2018-09-06 Thu 11:45] \\

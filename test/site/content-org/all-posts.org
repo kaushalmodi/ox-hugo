@@ -5864,7 +5864,7 @@ front-matter.
 In this post the =:EXPORT_DATE:= property is set to =2012-2017=, but
 the export will still happen fine, with the =date= front-matter not
 set.
-*** DONE Parsing date from LOGBOOK                         :logbook:noexport:
+*** DONE Parsing date from LOGBOOK                                  :logbook:
 :PROPERTIES:
 :EXPORT_FILE_NAME: parsing-date-from-logbook
 :LOG_INTO_DRAWER: t
@@ -5872,6 +5872,7 @@ set.
 :EXPORT_OPTIONS: d:t
 :END:
 :LOGBOOK:
+- State "DONE"       from "TEST__TODO" [2022-01-11 Tue 11:22]
 - State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:42]
 - State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:38]
 :END:
@@ -5897,7 +5898,7 @@ binding.
 :EXPORT_HUGO_LASTMOD: 2018-01-23
 :END:
 The =lastmod= for this post is Hugo-compatible i.e. [[https://tools.ietf.org/html/rfc3339#section-5.8][RFC3339-compliant]].
-*** DONE Parsing lastmod from LOGBOOK                      :logbook:noexport:
+*** DONE Parsing lastmod from LOGBOOK                               :logbook:
 :PROPERTIES:
 :EXPORT_FILE_NAME: parsing-lastmod-from-logbook
 :LOG_INTO_DRAWER: t
@@ -7297,7 +7298,7 @@ be ~authors~ instead of the default ~author~ created by ~ox-hugo~.
 This test removes the ~foo~ front-matter key from the exported file
 (and replaces ~bar~ key with ~zoo~).
 #+end_description
-** DONE Parsing notes from LOGBOOK                   :notes:logbook:noexport:
+** DONE Parsing notes from LOGBOOK                            :notes:logbook:
 :PROPERTIES:
 :EXPORT_FILE_NAME: parsing-notes-from-logbook
 :LOG_INTO_DRAWER: t
@@ -7306,9 +7307,9 @@ This test removes the ~foo~ front-matter key from the exported file
 :END:
 :LOGBOOK:
 - Note taken on [2018-09-06 Thu 11:45] \\
-  Another note.
+  Another note *bold* /italics/.
 - Note taken on [2018-09-06 Thu 11:37] \\
-  A note
+  A note ~mono~.
 - State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:25]
 - State "DRAFT"      from "TODO"       [2018-09-06 Thu 11:25]
 - State "TODO"       from              [2018-09-06 Thu 11:25]

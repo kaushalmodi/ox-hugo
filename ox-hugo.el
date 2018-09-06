@@ -709,6 +709,7 @@ bibliography heading auto-injection is not done."
               (org-hugo-export-as-md a s v)))))
 ;;;; translate-alist
   :translate-alist '((code . org-hugo-kbd-tags-maybe)
+                     (drawer . org-hugo-drawer)
                      (example-block . org-hugo-example-block)
                      (export-block . org-hugo-export-block)
                      (export-snippet . org-hugo-export-snippet)
@@ -1720,6 +1721,38 @@ channel."
       (format "<kbd>%s</kbd>" (org-html-encode-plain-text
                                (org-element-property :value verbatim)))
     (org-md-verbatim verbatim nil nil)))
+
+;;;; Drawer (specifically Logbook)
+(defun org-hugo-drawer (drawer contents info)
+  "Transcode a DRAWER element from Org to appropriate Hugo front-matter.
+CONTENTS holds the contents of the block.  INFO is a plist
+holding contextual information."
+  (let ((drawer-name (downcase (org-element-property :drawer-name drawer))))
+    (cond
+     ((string= "logbook" drawer-name)
+      ;; (pp drawer)
+      (message "[ox-hugo logbook] elem type: %s" (org-element-type drawer))
+      (org-element-map drawer 'plain-list
+        (lambda (lst)
+          (org-element-map lst 'item
+            (lambda (item)
+              (org-element-map item 'paragraph
+                (lambda (para)
+                  ;; (pp para)
+                  (message "[ox-hugo logbook] list content: %s"
+                           (org-export-data para info))
+                  (org-element-map para 'timestamp
+                    (lambda (ts)
+                      ;; (pp ts)
+                      (message "[ox-hugo logbook] ts: %s"
+                               (org-element-property :raw-value ts))))))))))
+
+      ;; TODO: Code to save the notes content and date/lastmod
+      ;; timestamps to appropriate front-matter.
+
+      "") ;Nothing from the LOGBOOK gets exported to the Markdown body
+     (t
+      (org-html-drawer drawer contents info)))))
 
 ;;;; Example Block
 (defun org-hugo-example-block (example-block _contents info)

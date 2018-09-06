@@ -41,18 +41,15 @@ HUGO_BASE_DIR=./
 # Other hugo arguments
 HUGO_ARGS=
 
-# Set TIMEZONE to the TZ environment variable. If TZ is unset, Emacs
-# uses system wall clock time, which is a platform-dependent default
-# time zone --
-# https://www.gnu.org/software/emacs/manual/html_node/elisp/Time-Zone-Rules.html
-TIMEZONE=${TZ}
-
 # Port for hugo server
 PORT=1337
 
 # Directory where the required elisp packages are auto-installed
 TMPDIR ?= /tmp
 OX_HUGO_ELPA=$(TMPDIR)/$(USER)/ox-hugo-dev/
+
+# Below is set to 1 during "make test"
+TEST_ENABLED=0
 
 # ox-hugo test directory; also contains the setup-ox-hugo.el
 OX_HUGO_TEST_DIR=$(shell pwd)/test
@@ -112,7 +109,7 @@ emacs-batch:
 	@echo "$(ORG_FILE) ::"
 	@$(EMACS) --batch --eval "(progn\
 	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
-	(when (> (length \"$(TIMEZONE)\") 0) (setenv \"TZ\" \"$(TIMEZONE)\"))\
+	(setenv \"TEST_ENABLED\" \"$(TEST_ENABLED)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	)" $(ORG_FILE) \
 	-f $(FUNC) \
@@ -174,7 +171,7 @@ testmkgold:
 # https://stackoverflow.com/a/37748952/1219634
 do_test: $(test_org_files)
 $(test_org_files):
-	@$(MAKE_) md1 ORG_FILE=$@ TIMEZONE=UTC # Use UTC/Universal time zone for tests
+	@$(MAKE_) md1 ORG_FILE=$@ TEST_ENABLED=1
 ifeq ($(test_check),1)
 	@$(MAKE_) diffgolden
 endif

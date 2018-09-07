@@ -418,6 +418,41 @@ Details: https://github.com/kaushalmodi/ox-hugo/issues/57."
     ;; It's not visible (because zero width), but it's there.
     code))
 
+;;;; Get Reference
+(defun org-blackfriday--get-reference (elem info)
+  "Return a reference for ELEM using its ordinal if available.
+
+INFO is a plist used as a communication channel.
+
+If the ELEM doesn't have its `name' defined, nil is returned.
+
+Else, if the ELEM has its `caption' defined, a reference of the
+kind \"org-ELEM-ORDINAL\" is returned.
+
+Else, the random reference generated using
+`org-export-get-reference' is returned.
+
+The return value, if non-nil, is a string."
+  (let ((name-exists (org-element-property :name elem)))
+    ;; Reference cannot be created if #+name does not exist.
+    (when name-exists
+      (let ((elem-ordinal (org-export-get-ordinal ;This is nil if a code snippet has no caption
+                           elem info
+                           nil #'org-html--has-caption-p)))
+        (if elem-ordinal
+            (let* ((elem-type (org-element-type elem))
+                   (prefix (cond
+                            ((eq 'src-block elem-type)
+                             "code-snippet")
+                            ((eq 'table elem-type)
+                             "table")
+                            (t
+                             (format "org-%s" (symbol-name elem-type))))))
+              (format "%s-%d" prefix elem-ordinal))
+          ;; Return the randomly generated Org reference if the
+          ;; element ordinal is nil.
+          (org-export-get-reference elem info))))))
+
 
 
 ;;; Transcode Functions
@@ -936,16 +971,15 @@ contextual information."
   ;; (message "[ox-bf-table DBG] In contents: %s" contents)
   (let* ((rows (org-element-map table 'table-row 'identity info))
          (no-header (= (length rows) 1)) ;No header if table has just 1 row
-         (label (let ((lbl (and (org-element-property :name table)
-                                (org-export-get-reference table info))))
-                  (if lbl
-                      (format "<a id=\"%s\"></a>\n\n" lbl)
-                    "")))
+         (table-ref (org-blackfriday--get-reference table info))
+         (table-anchor (if table-ref
+                           (format "<a id=\"%s\"></a>\n" table-ref)
+                         ""))
          (caption (org-export-get-caption table))
          table-num
          (caption-html (if (not caption)
                            ""
-                         (let ((caption-prefix-fmt-str (org-html--translate "Table %d:" info))
+                         (let ((caption-prefix (org-html--translate "Table" info))
                                (caption-str
                                 (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
                                  (org-export-data-with-backend caption 'html info))))
@@ -953,10 +987,14 @@ contextual information."
                                             table info
                                             nil #'org-html--has-caption-p))
                            (format (concat "<div class=\"table-caption\">\n"
-                                           "  <span class=\"table-number\">%s</span>\n"
+                                           "  <span class=\"table-number\">%s</span>:\n"
                                            "  %s\n"
                                            "</div>\n\n")
-                                   (format caption-prefix-fmt-str table-num)
+                                   (if table-ref ;Hyperlink the table prefix + number
+                                       (format "<a href=\"#%s\">%s %s</a>"
+                                               table-ref caption-prefix table-num)
+                                     (format "%s %s"
+                                             caption-prefix table-num))
                                    caption-str))))
          (attr (org-export-read-attribute :attr_html table))
          ;; At the moment only the `class' attribute is supported in
@@ -1011,7 +1049,7 @@ contextual information."
              (dummy-header (replace-regexp-in-string "[-:]" " " hrule)))
         (setq tbl (concat dummy-header "\n" hrule "\n" row-1))))
     ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
-    (concat table-pre label caption-html tbl table-post)))
+    (concat table-pre table-anchor caption-html tbl table-post)))
 
 ;;;; Verse Block
 (defun org-blackfriday-verse-block (_verse-block contents info)

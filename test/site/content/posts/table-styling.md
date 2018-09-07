@@ -81,7 +81,7 @@ specified CSS attribute is auto-set for `.my-table-2 table`.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 1:</span>
+  <span class="table-number">Table 1</span>:
   Table with caption, with left-aligned text
 </div>
 
@@ -101,7 +101,7 @@ specified CSS attribute is auto-set for `.table-1 table`.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 2:</span>
+  <span class="table-number">Table 2</span>:
   Table with caption, with right-aligned text
 </div>
 
@@ -117,7 +117,7 @@ specified CSS attribute is auto-set for `.table-1 table`.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 3:</span>
+  <span class="table-number">Table 3</span>:
   Table with caption, with center-aligned text
 </div>
 
@@ -136,7 +136,7 @@ specified CSS attribute is auto-set for `.table-1 table`.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 4:</span>
+  <span class="table-number">Table 4</span>:
   Table with caption, class and CSS attributes specified
 </div>
 
@@ -184,7 +184,7 @@ block.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 5:</span>
+  <span class="table-number">Table 5</span>:
   Table with verbatim CSS
 </div>
 
@@ -217,7 +217,7 @@ block.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 6:</span>
+  <span class="table-number">Table 6</span>:
   Table with uncollapsed borders
 </div>
 
@@ -242,7 +242,7 @@ block.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 7:</span>
+  <span class="table-number">Table 7</span>:
   Table with collapsed borders
 </div>
 
@@ -280,7 +280,7 @@ block.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 8:</span>
+  <span class="table-number">Table 8</span>:
   Table with 1st row and 1st column highlighted
 </div>
 
@@ -315,7 +315,7 @@ block.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 9:</span>
+  <span class="table-number">Table 9</span>:
   Sane Table &#x2014; with minimal styling
 </div>
 
@@ -340,7 +340,7 @@ block.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 10:</span>
+  <span class="table-number">Table 10</span>:
   Table with zebra striping
 </div>
 
@@ -369,7 +369,7 @@ block.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 11:</span>
+  <span class="table-number">Table 11</span>:
   Table where the hovered-upon cell highlights
 </div>
 
@@ -395,7 +395,7 @@ block.
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 12:</span>
+  <span class="table-number">Table 12</span>:
   Table where the hovered-upon row highlights
 </div>
 
@@ -525,7 +525,7 @@ _Let's-go-ballistic-with-CSS_ Edition :smile:
 <div></div>
 
 <div class="table-caption">
-  <span class="table-number">Table 13:</span>
+  <span class="table-number">Table 13</span>:
   Table where rows except the hovered-upon get blurred
 </div>
 

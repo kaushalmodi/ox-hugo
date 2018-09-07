@@ -8,7 +8,7 @@ The caption can contain be emphasized using the usual markup
 characters too.
 
 <div class="table-caption">
-  <span class="table-number">Table 1:</span>
+  <span class="table-number">Table 1</span>:
   Awesome table
 </div>
 
@@ -19,7 +19,7 @@ characters too.
 Some text.
 
 <div class="table-caption">
-  <span class="table-number">Table 2:</span>
+  <span class="table-number">Table 2</span>:
   <i>Another</i> <b>awesome</b> table
 </div>
 
@@ -30,7 +30,7 @@ Some text.
 Some more text.
 
 <div class="table-caption">
-  <span class="table-number">Table 3:</span>
+  <span class="table-number">Table 3</span>:
   <span class="underline">Third</span> table &#x2014; Caption with em-dash &#x2013; and &#x2013; en-dash
 </div>
 

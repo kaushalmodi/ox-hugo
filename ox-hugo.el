@@ -1075,9 +1075,7 @@ contents according to the current headline."
                               (org-export-toc-entry-backend 'hugo)
                               info)
                              (or (org-element-property :CUSTOM_ID headline)
-                                 (org-hugo-slug title)
-                                 ;; (org-export-get-reference headline info)
-                                 )))
+                                 (org-hugo-slug title))))
                     (tags (and (plist-get info :with-tags)
                                (not (eq 'not-in-toc (plist-get info :with-tags)))
                                (let ((tags (org-export-get-tags headline info)))
@@ -1567,39 +1565,6 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-hugo DBG pandoc-enabled-bool] %S" pandoc-enabled-bool)
     pandoc-enabled-bool))
 
-;;;; Get Reference
-(defun org-hugo--get-reference (elem info)
-  "Return a reference for ELEM using its ordinal if available.
-
-INFO is a plist used as a communication channel.
-
-If the ELEM doesn't have its `name' defined, nil is returned.
-
-Else, if the ELEM has its `caption' defined, a reference of the
-kind \"org-ELEM-ORDINAL\" is returned.
-
-Else, the random reference generated using
-`org-export-get-reference' is returned.
-
-The return value, if non-nil, is a string."
-  (let ((name-exists (org-element-property :name elem)))
-    ;; Reference cannot be created if #+name does not exist.
-    (when name-exists
-      (let ((elem-ordinal (org-export-get-ordinal ;This is nil if a code snippet has no caption
-                           elem info
-                           nil #'org-html--has-caption-p)))
-        (if elem-ordinal
-            (let* ((elem-type (org-element-type elem))
-                   (prefix (cond
-                            ((eq 'src-block elem-type)
-                             "code-snippet")
-                            (t
-                             (format "org-%s" (symbol-name elem-type))))))
-              (format "%s-%d" prefix elem-ordinal))
-          ;; Return the randomly generated Org reference if the
-          ;; element ordinal is nil.
-          (org-export-get-reference elem info))))))
-
 
 
 ;;; Transcode Functions
@@ -1738,9 +1703,7 @@ a communication channel."
        (t
         (let ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
                               (or (org-element-property :CUSTOM_ID headline)
-                                  (org-hugo-slug title)
-                                  ;; (org-export-get-reference headline info)
-                                  )))
+                                  (org-hugo-slug title))))
               (loffset (string-to-number (plist-get info :hugo-level-offset))) ;"" -> 0, "0" -> 0, "1" -> 1, ..
               (todo (when todo
                       (concat (org-hugo--todo todo info) " "))))
@@ -1948,9 +1911,7 @@ and rewrite link paths to make blogging more seamless."
                      title))
               ;; Reference
               (or (org-element-property :CUSTOM_ID destination)
-                  (org-hugo-slug title)
-                  ;; (org-export-get-reference destination info)
-                  ))))
+                  (org-hugo-slug title)))))
           (_
            (let ((description
                   (or (org-string-nw-p desc)
@@ -1968,8 +1929,8 @@ and rewrite link paths to make blogging more seamless."
              (when description
                (format "[%s](#%s)"
                        description
-                       (if (eq 'src-block (org-element-type destination))
-                           (org-hugo--get-reference destination info)
+                       (if (memq (org-element-type destination) '(src-block table))
+                           (org-blackfriday--get-reference destination info)
                          (org-export-get-reference destination info)))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
       ;; (message "[ox-hugo-link DBG] Inline image: %s" raw-path)
@@ -2375,7 +2336,7 @@ channel."
                      (replace-regexp-in-string "," " " hl-lines)) ;"1,3-4" -> "1 3-4"
                     ((numberp hl-lines)
                      (number-to-string hl-lines))))
-         (src-ref (org-hugo--get-reference src-block info))
+         (src-ref (org-blackfriday--get-reference src-block info))
          (src-anchor (if src-ref
                          (format "<a id=\"%s\"></a>\n" src-ref)
                        ""))

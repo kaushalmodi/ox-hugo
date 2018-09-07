@@ -1567,6 +1567,39 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-hugo DBG pandoc-enabled-bool] %S" pandoc-enabled-bool)
     pandoc-enabled-bool))
 
+;;;; Get Reference
+(defun org-hugo--get-reference (elem info)
+  "Return a reference for ELEM using its ordinal if available.
+
+INFO is a plist used as a communication channel.
+
+If the ELEM doesn't have its `name' defined, nil is returned.
+
+Else, if the ELEM has its `caption' defined, a reference of the
+kind \"org-ELEM-ORDINAL\" is returned.
+
+Else, the random reference generated using
+`org-export-get-reference' is returned.
+
+The return value, if non-nil, is a string."
+  (let ((name-exists (org-element-property :name elem)))
+    ;; Reference cannot be created if #+name does not exist.
+    (when name-exists
+      (let ((elem-ordinal (org-export-get-ordinal ;This is nil if a code snippet has no caption
+                           elem info
+                           nil #'org-html--has-caption-p)))
+        (if elem-ordinal
+            (let* ((elem-type (org-element-type elem))
+                   (prefix (cond
+                            ((eq 'src-block elem-type)
+                             "code-snippet")
+                            (t
+                             (format "org-%s" (symbol-name elem-type))))))
+              (format "%s-%d" prefix elem-ordinal))
+          ;; Return the randomly generated Org reference if the
+          ;; element ordinal is nil.
+          (org-export-get-reference elem info))))))
+
 
 
 ;;; Transcode Functions
@@ -1935,7 +1968,9 @@ and rewrite link paths to make blogging more seamless."
              (when description
                (format "[%s](#%s)"
                        description
-                       (org-export-get-reference destination info))))))))
+                       (if (eq 'src-block (org-element-type destination))
+                           (org-hugo--get-reference destination info)
+                         (org-export-get-reference destination info)))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
       ;; (message "[ox-hugo-link DBG] Inline image: %s" raw-path)
       ;; (message "[org-hugo-link DBG] processing an image: %s" desc)
@@ -2340,31 +2375,33 @@ channel."
                      (replace-regexp-in-string "," " " hl-lines)) ;"1,3-4" -> "1 3-4"
                     ((numberp hl-lines)
                      (number-to-string hl-lines))))
-         (label (let ((lbl (and (org-element-property :name src-block)
-                                (org-export-get-reference src-block info))))
-                  (if lbl
-                      (format "<a id=\"%s\"></a>\n" lbl)
-                    "")))
+         (src-ref (org-hugo--get-reference src-block info))
+         (src-anchor (if src-ref
+                         (format "<a id=\"%s\"></a>\n" src-ref)
+                       ""))
          (caption (org-export-get-caption src-block))
          (caption-html (if (not caption)
                            ""
                          (let* ((src-block-num (org-export-get-ordinal
                                                 src-block info
                                                 nil #'org-html--has-caption-p))
-                                (caption-prefix (let* ((fmt-str (org-html--translate "Listing %d:" info))
-                                                       (fmt-str (or (and (string= fmt-str "Listing %d:")
-                                                                         "Code Snippet %d:")
-                                                                    fmt-str)))
-                                                  (format fmt-str src-block-num)))
+                                (caption-prefix (let ((str-translated (org-html--translate "Listing" info)))
+                                                  (if (string= str-translated "Listing")
+                                                      "Code Snippet"
+                                                    str-translated)))
                                 (caption-str
                                  (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
                                   (org-export-data-with-backend caption 'html info))))
-
                            (format (concat "\n\n<div class=\"src-block-caption\">\n"
-                                           "  <span class=\"src-block-number\">%s</span>\n"
+                                           "  <span class=\"src-block-number\">%s</span>:\n"
                                            "  %s\n"
                                            "</div>")
-                                   caption-prefix caption-str))))
+                                   (if src-ref ;Hyperlink the code snippet prefix + number
+                                       (format "<a href=\"#%s\">%s %s</a>"
+                                               src-ref caption-prefix src-block-num)
+                                     (format "%s %s"
+                                             caption-prefix src-block-num))
+                                   caption-str))))
          content
          ret)
     ;; (message "ox-hugo src [dbg] number-lines: %S" number-lines)
@@ -2431,7 +2468,7 @@ channel."
                       lang
                       (format highlight-args-str linenos-str hllines-str)
                       code)))))
-    (setq ret (concat label content caption-html))
+    (setq ret (concat src-anchor content caption-html))
     (setq ret (org-blackfriday--div-wrap-maybe src-block ret))
     ret))
 

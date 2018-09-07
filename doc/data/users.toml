@@ -1,9 +1,29 @@
-# [unique_key] # This can be any unique string, would suffice to set this to your GitHub/Gitlab/etc. username
+# [unique_key] # This can be any unique string (would suffice to set this to your GitHub/Gitlab/etc. username)
 #   author = "Foo Bar"
 #   source = "Git repo of your site; needs to have the Org source"
 #   branch = "git branch containing Org source; defaults to master if not set"
 #   org_dir = "Dir in the repo containing Org source" # Don't set this if Org file is in your repo root.
 #   site = "https://your.site/"
+#
+# Misc other keys:
+#
+#   org_src_desc = "Org file" (set this if the link in 'source' key points to just an Org file.
+#
+# Extra keys that might apply if not hosting your repo on GitHub or Gitlab:
+#
+#   hosting = "gitea" or "sr.ht"
+#     - Set hosting to "gitea" only if your repo is hosted on a Gitea instance, whether
+#       or not you have the Swagger API enabled.
+#     - Set hosting to "sr.ht" only if your repo is hosted on https://git.sr.ht.
+#   api = "gitea" or "microjson" (shouldn't be set if source is in a GitHub or Gitlab repo)
+#     - Set api to "gitea" if you host your repo on a Gitea instance
+#       *and* you have the Gitea Swagger v1 API enabled.
+#     - Set api to "microjson" if:
+#       - your repo is neither on GitHub or Gitlab, and
+#       - if your repo is on Gitea, but you don't have its API enabled, and
+#       - you have added this theme component: https://github.com/kaushalmodi/hugo-micro-json, and
+#       - added "Micro" custom output format to your "home" page Kind
+#         (see instructions in that theme's README.org).
 
 [00-ox-hugo-doc]
   author = "Kaushal Modi"
@@ -322,6 +342,7 @@
   branch = "master"
   site = "https://infotics.es"
   hosting = "gitea"
+  api = "gitea"
 
 [emacscast]
   author = "Rakhim Davletkaliyev"
@@ -329,13 +350,22 @@
   branch = "master"
   org_dir = "content-org"
   site = "https://emacscast.org/"
-  
+
 [rakhim]
   author = "Rakhim Davletkaliyev"
   source = "https://github.com/freetonik/rakhim.org"
   branch = "master"
   org_dir = "content-org"
   site = "https://rakhim.org/"
+
+[aminb]
+  author = "Amin Bandali"
+  source = "https://git.sr.ht/~aminb/aminb.org"
+  branch = "master"
+  org_dir = "content-org"
+  site = "https://aminb.org"
+  hosting = "sr.ht"
+  api = "microjson"
 
 # []
 #   author = ""

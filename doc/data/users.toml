@@ -1,9 +1,10 @@
 # [unique_key] # This can be any unique string (would suffice to set this to your GitHub/Gitlab/etc. username)
-#   author = "Foo Bar"
-#   source = "Git repo of your site; needs to have the Org source"
-#   branch = "git branch containing Org source; defaults to master if not set"
-#   org_dir = "Dir in the repo containing Org source" # Don't set this if Org file is in your repo root.
-#   site = "https://your.site/"
+#   author = "Foo Bar" (*mandatory*)
+#   source = "Git repo of your site; needs to have the Org source" (*mandatory*)
+#   site = "https://your.site/" (*mandatory*)
+#
+#   org_dir = "Dir in the repo containing Org source" (default to "" if not set i.e. Org source file is directly in your repo root)
+#   branch = "git branch containing Org source" (defaults to "master" if not set)
 #
 # Misc other keys:
 #
@@ -11,14 +12,13 @@
 #
 # Extra keys that might apply if not hosting your repo on GitHub or Gitlab:
 #
-#   hosting = "gitea" or "sr.ht"
+#   hosting = "gitea"
 #     - Set hosting to "gitea" only if your repo is hosted on a Gitea instance, whether
 #       or not you have the Swagger API enabled.
-#     - Set hosting to "sr.ht" only if your repo is hosted on https://git.sr.ht.
-#   api = "gitea" or "microjson" (shouldn't be set if source is in a GitHub or Gitlab repo)
+#   api = "gitea" or "micro.json" (shouldn't be set if source is in a GitHub or Gitlab repo)
 #     - Set api to "gitea" if you host your repo on a Gitea instance
 #       *and* you have the Gitea Swagger v1 API enabled.
-#     - Set api to "microjson" if:
+#     - Set api to "micro.json" if:
 #       - your repo is neither on GitHub or Gitlab, and
 #       - if your repo is on Gitea, but you don't have its API enabled, and
 #       - you have added this theme component: https://github.com/kaushalmodi/hugo-micro-json, and
@@ -28,318 +28,275 @@
 [00-ox-hugo-doc]
   author = "Kaushal Modi"
   source = "https://github.com/kaushalmodi/ox-hugo"
-  branch = "master"
-  org_dir = "doc"
   site = "https://ox-hugo.scripter.co/"
+  org_dir = "doc"
 
 [01-ox-hugo-test]
   author = "Kaushal Modi"
   source = "https://github.com/kaushalmodi/ox-hugo"
-  branch = "master"
-  org_dir = "test/site/content-org"
   site = "https://ox-hugo.scripter.co/test/"
+  org_dir = "test/site/content-org"
 
 [02-scripter-co]
   author = "Kaushal Modi"
   source = "https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://scripter.co/"
+  org_dir = "content-org"
 
 [oscarnajera]
   author = "Óscar Nájera"
   source = "https://gitlab.com/Titan-C/titan-c.gitlab.io"
-  branch = "master"
   site = "https://blog.oscarnajera.com/"
 
 [punchagan]
   author = "Puneeth Chaganti"
   source = "https://github.com/punchagan/punchagan.muse-amuse.in"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://punchagan.muse-amuse.in/"
+  org_dir = "content-org"
 
 [thatteidlikaalsoup]
   author = "Puneeth Chaganti"
   source = "https://github.com/thatte-idli-kaal-soup/thatteidlikaalsoup.team"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://thatteidlikaalsoup.team/"
+  org_dir = "content-org"
 
 [lambdaloop]
   author = "Pierre Karashchuk"
   source = "https://github.com/lambdaloop/blog"
-  branch = "master"
-  org_dir = "blog-org"
   site = "http://lambdaloop.com/"
+  org_dir = "blog-org"
 
 [shimmy]
   author = "Shimmy Xu"
   source = "https://github.com/shimmy1996/blog"
-  branch = "master"
-  org_dir = "org"
   site = "https://www.shimmy1996.com/"
+  org_dir = "org"
 
 # [isaaczhou]
 #  author = "Isaac Zhou"
 #  source = "https://github.com/isaaczhou/isaaczhou.github.io"
-#  branch = "dev"
-#  org_dir = "org"
 #  site = "http://www.isaaczhou.com/"
+#  org_dir = "org"
+#  branch = "dev"
 
 [zzamboni]
   author = "Diego Zamboni"
   source = "https://github.com/zzamboni/zzamboni.org"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://zzamboni.org/"
+  org_dir = "content-org"
 
 [primerpy]
   author = "Isaac Zhou"
   source = "https://github.com/primerpy/primerpy.github.io"
-  branch = "dev"
-  org_dir = "org"
   site = "http://www.primerpy.com/"
+  org_dir = "org"
+  branch = "dev"
 
 [dmolina]
   author = "Daniel Molina"
   source = "https://github.com/dmolina/my-blog"
-  branch = "master"
-  org_dir = "content_org"
   site = "https://dmolina.github.io/"
+  org_dir = "content_org"
 
 [shanesveller]
   author = "Shane Sveller"
   source = "https://github.com/shanesveller/shanesveller-dot-com"
-  branch = "master"
   site = "https://www.shanesveller.com/"
 
 [edkolev]
   author = "Evgeni Kolev"
   source = "https://github.com/edkolev/edkolev.github.io"
-  branch = "source"
-  org_dir = "content-org"
   site = "https://evgeni.io/"
+  org_dir = "content-org"
+  branch = "source"
 
 [vinurs]
   author = "vinurs"
   source = "https://github.com/vinurs/vinurs.github.io"
-  branch = "source"
-  org_dir = "content-org"
   site = "https://vinurs.me/"
+  org_dir = "content-org"
+  branch = "source"
 
 [cf-learn]
   author = "Diego Zamboni"
   source = "https://github.com/zzamboni/cf-learn.info"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://cf-learn.info/"
+  org_dir = "content-org"
 
 [xianmin]
   author = "Xianmin Chen"
   source = "https://coding.net/u/xianmin/p/xianmin/git"
-  branch = "master"
-  org_dir = "orgpost"
   site = "https://www.xianmin.org/"
+  org_dir = "orgpost"
 
 [xianmin-en]
   author = "Xianmin Chen"
   source = "https://coding.net/u/xianmin/p/en.xianmin.org/git"
-  branch = "master"
-  org_dir = "orgpost"
   site = "http://en.xianmin.org/"
+  org_dir = "orgpost"
 
 [use-package]
   author = "John Wiegley"
   source = "https://github.com/jwiegley/use-package"
-  branch = "master"
   site = "https://jwiegley.github.io/use-package/"
 
 [nicehiro]
   author = "nicehiro"
   source = "https://github.com/nicehiro/org-files"
-  branch = "master"
   site = "http://nicehiro.org/"
 
 [aaronbaugher]
   author = "Aaron Baugher"
   source = "https://aaron.baugher.biz/text/blog.org" # Site source not in a repo
-  org_src_desc = "Org file"
   site = "https://aaron.baugher.biz/"
+  org_src_desc = "Org file"
 
 [lakedenman]
   author = "Lake Denman"
   source = "https://github.com/ldenman/blog"
-  branch = "master"
   site = "https://lakedenman.com/blog/"
 
 [kengrimes]
   author = "Ken Grimes"
   source = "https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git"
-  branch = "master"
   site = "https://www.kengrimes.com/"
 
 [emacsun]
   author = "emacsun"
   source = "https://github.com/emacsun/ZHugo"
-  branch = "master"
-  org_dir = "content_org"
   site = "https://www.zcl.space/"
+  org_dir = "content_org"
 
 [cadadr]
   author = "Göktuğ Kayaalp"
   source = "https://github.com/cadadr/elisp"
-  branch = "master"
   site = "https://cadadr.github.io/elisp/index.html"
 
 [jackbaty]
   author = "Jack Baty"
   source = "https://github.com/jackbaty/baty.net-hugo"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://www.baty.net/"
+  org_dir = "content-org"
 
 [tsdye1]
   author = "Thomas S. Dye"
   source = "https://github.com/tsdye/online-web-sites"
-  branch = "master"
-  org_dir = "an-archaeologist-reads"
   site = "http://www.tsdye.online/an-archaeologist-reads/"
+  org_dir = "an-archaeologist-reads"
 
 [dschrempf]
   author = "Dominik Schrempf"
   source = "https://github.com/dschrempf/blog"
-  branch = "master"
-  org_dir = "org"
   site = "https://dschrempf.github.io/"
+  org_dir = "org"
 
 [colelyman]
   author = "Cole Lyman"
   source = "https://github.com/Colelyman/colelyman-hugo"
-  branch = "master"
-  org_dir = "site/content-org"
   site = "https://colelyman.com"
+  org_dir = "site/content-org"
 
 [zmaas]
   author = "Zachary Maas"
   source = "https://github.com/zmaas/zmaas.github.io"
-  branch = "master"
-  org_dir = "hugo"
   site = "https://abstractlambda.com/"
+  org_dir = "hugo"
 
 [maciejkula]
   author = "Maciej Kula"
   source = "https://github.com/maciejkula/hugo-blog"
-  branch = "master"
   site = "https://maciejkula.github.io"
 
 [petercheng00]
   author = "Peter Cheng"
   source = "https://github.com/petercheng00/personal"
-  branch = "master"
-  org_dir = "website/v2/petercheng"
   site = "http://petercheng.net/"
+  org_dir = "website/v2/petercheng"
 
 [somssi]
   author = "Somssi"
   source = "https://github.com/somssi/hugo-somssi"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://somssi.github.io/"
+  org_dir = "content-org"
 
 [palikar]
   author = "Stanislav Arnaudov"
   source = "https://github.com/palikar/blog-hugo-files"
-  branch = "master"
-  org_dir = "org"
   site = "https://palikar.github.io/"
+  org_dir = "org"
 
 [stingh711]
   author = "stingh711"
   source = "https://github.com/stingh711/blog-hugo"
-  branch = "master"
   site = "https://stingh711.github.io/"
 
 [mclearc]
   author = "Colin McLear"
   source = "https://github.com/mclearc/colinmclear.net"
-  branch = "master"
   site = "https://www.colinmclear.net/"
 
 [steventammen]
   author = "Steven Tammen"
   source = "https://github.com/StevenTammen/steventammen.com"
-  branch = "master"
-  org_dir = "org"
   site = "https://www.steventammen.com/"
+  org_dir = "org"
 
 [takaxp]
   author = "Takaaki Ishikawa"
   source = "https://github.com/takaxp/blog"
-  branch = "master"
-  org_dir = "entries"
   site = "https://pxaka.tokyo/blog/"
+  org_dir = "entries"
 
 [ryancummings]
   author = "Ryan Cummings"
   source = "https://github.com/ryancummings/blog"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://ryanwcummings.com/"
+  org_dir = "content-org"
 
 [taipapamotohus]
   author = "taipapamotohus"
   source = "https://github.com/taipapamotohus/Taipapablog"
-  branch = "master"
-  org_dir = ""
   site = "https://taipapamotohus.com/"
 
 [grugrut]
   author = "grugrut"
   source = "https://github.com/grugrut/til"
-  branch = "master"
-  org_dir = "draft"
   site = "https://grugrut.github.io/til/"
+  org_dir = "draft"
 
 [junahan]
   author = "junahan"
   source = "https://github.com/junahan/junahan-site"
-  branch = "master"
-  org_dir = "draft"
   site = "https://junahan.netlify.com/"
+  org_dir = "draft"
 
 [alexmurray]
   author = "Alex Murray"
   source = "https://github.com/alexmurray/ubuntu-security-podcast"
-  branch = "master"
-  org_dir = "org"
   site = "https://ubuntusecuritypodcast.org/"
+  org_dir = "org"
 
 [vdemeester]
   author = "Vincent Demeester"
   source = "https://github.com/vdemeester/blog"
-  branch = "master"
-  org_dir = "content-org"
   site = "http://vincent.demeester.fr/"
+  org_dir = "content-org"
 
 [emacsomancer1]
   author = "Benjamin Slade"
   source = "https://gitlab.com/emacsomancer/neobabbage_files"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://babbagefiles.xyz"
+  org_dir = "content-org"
 
 [emacsomancer2]
   author = "Benjamin Slade"
   source = "https://gitlab.com/emacsomancer/academic-bslade"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://slade.jnanam.net/"
+  org_dir = "content-org"
 
 [flowsta]
   author = "Adolfo Antón Bravo"
   source = "https://git.fsfe.org/adolflow/infotics.es"
-  branch = "master"
   site = "https://infotics.es"
   hosting = "gitea"
   api = "gitea"
@@ -347,29 +304,25 @@
 [emacscast]
   author = "Rakhim Davletkaliyev"
   source = "https://github.com/freetonik/emacscast.org"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://emacscast.org/"
+  org_dir = "content-org"
 
 [rakhim]
   author = "Rakhim Davletkaliyev"
   source = "https://github.com/freetonik/rakhim.org"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://rakhim.org/"
+  org_dir = "content-org"
 
 [aminb]
   author = "Amin Bandali"
   source = "https://git.sr.ht/~aminb/aminb.org"
-  branch = "master"
-  org_dir = "content-org"
   site = "https://aminb.org"
-  hosting = "sr.ht"
-  api = "microjson"
+  org_dir = "content-org"
+  api = "micro.json"
 
 # []
 #   author = ""
 #   source = ""
-#   branch = "master"
-#   org_dir = "content-org"
 #   site = ""
+#   org_dir = "specify this if Org file not directly in repo root dir"
+#   branch = "specify this if not master"

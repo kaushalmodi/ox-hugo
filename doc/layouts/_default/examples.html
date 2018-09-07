@@ -34,53 +34,65 @@
                 {{ range $key, $val := . }}
                     {{ $org_dir := $val.org_dir | default "" | replaceRE "/$" "" }}
                     {{ $branch := $val.branch | default "master" | replaceRE "/" "%2F" }}
-                    {{ $repo_updated_time := "" }}
-                    {{ $github_source := findRE "github\\.com" $val.source }}
-                    {{ $gitlab_source := findRE "gitlab\\.com" $val.source }}
-                    {{ $codingnet_source := findRE "coding\\.net" $val.source }}
-                    {{ $gitea_source := (and $val.hosting (eq "gitea" $val.hosting)) }}
-                    {{ $srht_source := (and $val.hosting (eq "sr.ht" $val.hosting)) }}
-                    {{ $gitea_api := (and $val.api (eq "gitea" $val.api)) }} <!-- Gitea Swagger v1 -->
-                    {{ $microjson_api := (and $val.api (eq "microjson" $val.api)) }} <!-- https://github.com/kaushalmodi/hugo-micro-json -->
-                    {{ if $github_source }}
+
+                    <!-- Setting $hosting and $api -->
+                    {{ $hosting := $val.hosting }}
+                    {{ $api := $val.api }}
+                    {{ if (findRE "github\\.com" $val.source) }}
+                        {{ $hosting = "github" }}
+                        {{ $api = "github" }}
+                    {{ else if (findRE "gitlab\\.com" $val.source) }}
+                        {{ $hosting = "gitlab" }}
+                        {{ $api = "gitlab" }}
+                    {{ else if (findRE "git\\.sr\\.ht" $val.source) }}
+                        {{ $hosting = "sr.ht" }}
+                    {{ else if (findRE "coding\\.net" $val.source) }}
+                        {{ $hosting = "coding.net" }}
+                    {{ else if (findRE "[Gg]itweb" $val.source) }}
+                        {{ $hosting = "gitweb" }}
+                    {{ end }}
+                    {{/* partial "debugprint.html" (slice $key $hosting $api) */}}
+
+                    <!-- Get JSON via API to figure out the $last_updated time -->
+                    {{ $last_updated := "" }}
+                    {{ if (eq "github" $api) }}
                         {{ $repo := replaceRE "^.*github\\.com/([^/]+/[^/]+).*" "${1}" $val.source }}
                         <!-- https://developer.github.com/v3/repos/commits/#list-commits-on-a-repository -->
                         <!-- https://api.github.com/repos/kaushalmodi/ox-hugo/commits?path=doc&sha=master -->
                         {{ $repo_json := getJSON (printf "https://api.github.com/repos/%s/commits?path=%s&sha=%s" $repo $org_dir $branch) }}
-                        {{ $repo_updated_time = (index (index (index (index $repo_json 0) "commit") "committer") "date") }}
-                    {{ else if $gitlab_source }}
+                        {{ $last_updated = (index (index (index (index $repo_json 0) "commit") "committer") "date") }}
+                    {{ else if (eq "gitlab" $api) }}
                         {{ $repo := replaceRE "^.*gitlab\\.com/([^/]+/[^/]+).*" "${1}" $val.source | replaceRE "/" "%2F" }}
                         {{ $org_dir = $org_dir | replaceRE "/" "%2F" }}
                         <!-- https://docs.gitlab.com/ee/api/commits.html#list-repository-commits -->
                         <!-- https://gitlab.com/api/v4/projects/kaushalmodi%2Fkaushalmodi.gitlab.io/repository/commits?path=content-org&ref_name=master -->
                         {{ $repo_json := getJSON (printf "https://gitlab.com/api/v4/projects/%s/repository/commits?path=%s&?ref_name=%s" $repo ($org_dir | replaceRE "/" "%2F") $branch) }}
                         {{/* partial "debugprint.html" $repo_json */}}
-                        {{ $repo_updated_time = (index (index $repo_json 0) "committed_date") }}
-                    {{ else if $gitea_api }}
+                        {{ $last_updated = (index (index $repo_json 0) "committed_date") }}
+                    {{ else if (eq "gitea" $api) }}
                         {{ $repo := replaceRE "^.*//[^/]+/([^/]+/[^/]+).*" "${1}" $val.source }}
                         {{ $api_url := printf "%s/api/v1" (replaceRE "^(.*//[^/]+)/.+" "${1}" $val.source) }}
                         <!-- https://try.gitea.io/api/swagger#/repository/repoGet -->
                         <!-- https://git.fsfe.org/api/v1/repos/adolflow/infotics.es -->
                         {{ $repo_json := getJSON (printf "%s/repos/%s" $api_url $repo) }}
                         {{/* partial "debugprint.html" $repo_json */}}
-                        {{ $repo_updated_time = index $repo_json "updated_at" }}
-                    {{ else if $microjson_api }}
+                        {{ $last_updated = index $repo_json "updated_at" }}
+                    {{ else if (eq "micro.json" $api) }}
                         {{ $site_url := $val.site | replaceRE "/$" "" }}
                         {{ $micro_json := getJSON (printf "%s/micro.json" $site_url) }}
                         {{/* partial "debugprint.html" $micro_json */}}
-                        {{ $site_updated_time := index $micro_json "last_updated" }}
-                        {{ $repo_updated_time = $site_updated_time }}
+                        {{ $last_updated = index $micro_json "last_updated" }}
                     {{ end }}
-                    {{ $org_dir_link := "" }}
-                    {{ if (or $github_source $gitlab_source $codingnet_source) }}
+
+                    <!-- Get the Org source link -->
+                    {{ $org_dir_link := $val.source }}
+                    {{ if (in (slice "github" "gitlab" "coding.net") $hosting) }}
                         {{ $org_dir_link = (printf "%s/tree/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
-                    {{ else if $gitea_source }}
+                    {{ else if (eq "gitea" $hosting) }}
                         {{ $org_dir_link = (printf "%s/src/branch/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
-                    {{ else if $srht_source }}
+                    {{ else if (eq "sr.ht" $hosting) }}
                         {{ $org_dir_link = (printf "%s/tree/%s/?h=%s" ($val.source | replaceRE "/$" "") $org_dir $branch) }}
-                    {{ else if (findRE "\\.org$" $val.source) }} <!-- If the "source" is direct link to an Org file -->
-                        {{ $org_dir_link = $val.source }}
-                    {{ else }}
+                    {{ else if (eq "gitweb" $hosting) }}
                         <!-- Example: https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git;a=tree;f=content;hb=refs/heads/master
                              $val.source = https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git
                              $org_dir if non-nil will be used as f=$org_dir
@@ -88,9 +100,14 @@
                         -->
                         {{ $folder_switch := (cond (eq "" $org_dir) "" (printf ";f=%s" $org_dir)) }}
                         {{ $org_dir_link = (printf "%s;a=tree%s;hb=refs/heads/%s" ($val.source | replaceRE "/$" "") $folder_switch $branch) }}
+                    {{ else if (findRE "\\.org$" $val.source) }} <!-- If the "source" is direct link to an Org file -->
+                        {{ $org_dir_link = $val.source }}
                     {{ end }}
+
                     <tr>
+                        <!-- Author -->
                         <td>{{ $val.author }}</td>
+                        <!-- Site -->
                         <!-- Don't make htmltest error out becaue of user-submitted non-secure http domains.
                              https://github.com/wjdp/htmltest/
                         -->
@@ -103,9 +120,11 @@
                             {{ $secure_icon = "🔐&nbsp;" | safeHTML }}
                         {{ end }}
                         <td>{{ printf `%s<a href="%s"%s>%s</a>` $secure_icon $val.site $data_proofer_ignore_tag ($val.site | replaceRE "^https?://" "" | replaceRE "/$" "") | safeHTML }}</td>
+                        <!-- Org Source -->
                         <td>{{ printf `<a href="%s">%s</a>` $org_dir_link ($org_dir | default (or $val.org_src_desc "<em>repo root</em>") | replaceRE "[^<]*/" "") | safeHTML }}</td>
+                        <!-- Last Updated -->
                         <td>
-                            {{ with $repo_updated_time }}
+                            {{ with $last_updated }}
                                 {{ . | dateFormat "2006/01/02" }}
                             {{ end }}
                         </td>

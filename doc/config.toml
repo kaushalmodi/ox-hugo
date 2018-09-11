@@ -41,6 +41,8 @@ LanguageCode = "en-us" # Used in RSS generation
 
 disableFastRender = true        # Hugo 0.30
 
+disableKinds = ["section", "taxonomy", "taxonomyTerm"]
+
 [Permalinks]
   # post = "/:year/:month/:title/"
   # Below, we have

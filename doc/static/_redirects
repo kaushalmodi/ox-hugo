@@ -1,2 +1,3 @@
+/doc/ https://ox-hugo.scripter.co/ 301!
 /test/* https://ox-hugo-tests.netlify.com/:splat 200!
 https://ox-hugo.netlify.com/* https://ox-hugo.scripter.co/:splat 301!

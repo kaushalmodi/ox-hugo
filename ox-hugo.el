@@ -1365,35 +1365,36 @@ cannot be formatted in Hugo-compatible format."
                               (org-hugo--plist-get-true-p info :hugo-auto-set-lastmod))
                          (let* ((curr-time (org-current-time))
                                 (lastmod-str (format-time-string date-fmt curr-time)))
+                           ;; (message "[ox-hugo suppress-lastmod] current-time = %S (decoded = %S)"
+                           ;;          curr-time (decode-time curr-time))
+                           ;; (message "[ox-hugo suppress-lastmod] lastmod-str = %S"
+                           ;;          lastmod-str )
                            (if (= 0.0 org-hugo-suppress-lastmod-period)
                                (progn
                                  ;; (message "[ox-hugo suppress-lastmod] not suppressed")
                                  lastmod-str)
-                             (let* ((suppress-period (if (< 0.0 org-hugo-suppress-lastmod-period)
-                                                         org-hugo-suppress-lastmod-period
-                                                       (- org-hugo-suppress-lastmod-period)))
-                                    (date-str (org-hugo--get-date info date-fmt))
-                                    (date-time (apply #'encode-time
-                                                      (mapcar (lambda (el) (or el 0))
-                                                              (parse-time-string date-str))))
-                                    ;; It's safe to assume that
-                                    ;; `current-time' will always be
-                                    ;; >= the post date.
-                                    (delta (float-time
-                                            (time-subtract curr-time date-time))))
-                               ;; (message "[ox-hugo suppress-lastmod] current-time = %S (decoded = %S)"
-                               ;;          curr-time (decode-time curr-time))
-                               ;; (message "[ox-hugo suppress-lastmod] lastmod-str = %S"
-                               ;;          lastmod-str )
+                             (let ((date-str (org-string-nw-p (org-hugo--get-date info date-fmt))))
                                ;; (message "[ox-hugo suppress-lastmod] date-str = %S"
                                ;;          date-str)
-                               ;; (message "[ox-hugo suppress-lastmod] date-time = %S (decoded = %S)"
-                               ;;          date-time (decode-time date-time))
-                               ;; (message "[ox-hugo suppress-lastmod] suppress-period = %S"
-                               ;;          suppress-period)
-                               ;; (message "[ox-hugo suppress-lastmod] delta = %S" delta)
-                               (when (>= delta suppress-period)
-                                 lastmod-str)))))
+                               (when date-str
+                                 (let* ((date-time (apply #'encode-time
+                                                          (mapcar (lambda (el) (or el 0))
+                                                                  (parse-time-string date-str))))
+                                        ;; It's safe to assume that
+                                        ;; `current-time' will always
+                                        ;; be >= the post date.
+                                        (delta (float-time
+                                                (time-subtract curr-time date-time)))
+                                        (suppress-period (if (< 0.0 org-hugo-suppress-lastmod-period)
+                                                             org-hugo-suppress-lastmod-period
+                                                           (- org-hugo-suppress-lastmod-period))))
+                                   ;; (message "[ox-hugo suppress-lastmod] date-time = %S (decoded = %S)"
+                                   ;;          date-time (decode-time date-time))
+                                   ;; (message "[ox-hugo suppress-lastmod] delta = %S" delta)
+                                   ;; (message "[ox-hugo suppress-lastmod] suppress-period = %S"
+                                   ;;          suppress-period)
+                                   (when (>= delta suppress-period)
+                                     lastmod-str)))))))
                         ;; Else.. do nothing.
                         (t
                          nil)))

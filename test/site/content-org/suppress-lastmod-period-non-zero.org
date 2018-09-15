@@ -31,6 +31,18 @@ days) in Local Variables.
 
 The export date is set to be the same as the "current date" (so the
 delta is 0).
+** Suppress lastmod non-zero, but date unset                     :date:unset:
+:PROPERTIES:
+:EXPORT_FILE_NAME: suppress-lastmod-non-zero-but-date-unset
+:END:
+#+begin_description
+Ensure that nil value of parsed DATE is also handled in the "suppress
+lastmod" logic.
+#+end_description
+Test for the bug-fix when ~date-str~ (internal variable) could be
+/nil/.
+
+[[https://github.com/kaushalmodi/ox-hugo/pull/197#issuecomment-421533876][Ref]]
 ** Unsuppress lastmod
 :PROPERTIES:
 :EXPORT_DATE: 2100-12-10

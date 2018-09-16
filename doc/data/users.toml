@@ -320,6 +320,12 @@
   org_dir = "content-org"
   api = "micro.json"
 
+[elbaulp]
+  author = "Alejandro Alcalde"
+  source = "https://github.com/elbaulp/algui91-hugo/"
+  site = "https://elbauldelprogramador.com/en/"
+  org_dir = "content-org"
+
 # []
 #   author = ""
 #   source = ""

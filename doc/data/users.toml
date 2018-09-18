@@ -176,7 +176,7 @@
   author = "Jack Baty"
   source = "https://github.com/jackbaty/baty.net-hugo"
   site = "https://www.baty.net/"
-  org_dir = "content-org"
+  org_dir = "org-content"
 
 [tsdye1]
   author = "Thomas S. Dye"
@@ -279,7 +279,7 @@
 [vdemeester]
   author = "Vincent Demeester"
   source = "https://github.com/vdemeester/blog"
-  site = "http://vincent.demeester.fr/"
+  site = "https://vincent.demeester.fr/"
   org_dir = "content-org"
 
 [emacsomancer1]

@@ -14,7 +14,7 @@ endif
 # EMACS_BIN_SOURCE and EMACS_BIN_VERSION are used later in the vcheck rule
 # only if EMACS_exists has evaluated to "".
 EMACS_BIN_SOURCE ?= https://github.com/npostavs/emacs-travis/releases/download/bins
-EMACS_BIN_VERSION ?= 26
+EMACS_BIN_VERSION ?= 26.1
 
 HUGO ?= hugo
 HUGO_exists := $(shell command -v $(HUGO) 2> /dev/null)

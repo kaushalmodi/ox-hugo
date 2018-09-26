@@ -6777,6 +6777,15 @@ Org TODO state. So the draft state defaults to /false/.
 If a post has the =DRAFT= state set, the =draft= front matter variable
 should be set to =true=, even if the post has a sub-heading
 immediately after the post heading.
+* Illegal cases                        :illegal:dont_export_during_make_test:
+** Subtree with empty EXPORT_FILE_NAME       :subtree:empty:export_file_name:
+:PROPERTIES:
+:EXPORT_FILE_NAME:
+:END:
+#+begin_description
+This subtree must not export because the EXPORT_FILE_NAME is empty.
+#+end_description
+{{{oxhugoissue(211)}}}
 * Reusable sections                                        :noexport:ARCHIVE:
 ** Quote block with source block, followed by source block
 :PROPERTIES:

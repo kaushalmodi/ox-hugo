@@ -3406,7 +3406,7 @@ will be moved in this case too."
   (catch 'break
     (while :infinite
       (let* ((entry (org-element-at-point))
-             (fname (org-element-property :EXPORT_FILE_NAME entry))
+             (fname (org-string-nw-p (org-element-property :EXPORT_FILE_NAME entry)))
              level)
         (when fname
           (throw 'break entry))

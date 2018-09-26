@@ -21,7 +21,7 @@ DirectoryPath: "public"
 # DocumentConcurrencyLimit: 128
 EnforceHTML5: false
 EnforceHTTPS: true
-# ExternalTimeout: 15
+ExternalTimeout: 30
 # FileExtension: ".html"
 # FilePath: ""
 # HTTPConcurrencyLimit: 16

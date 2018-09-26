@@ -68,11 +68,16 @@ This is an internal flag; not to be modified by the user.")
 The exporting happens only if `org-hugo-auto-export-on-save' is
 non-nil and `org-hugo--org-capture-active-flag' is nil (i.e. Org
 Capture is not is progress)."
+  ;; (message "[ox-hugo export after save DBG] after-save-hook = %S"
+  ;;          after-save-hook)
   ;; (message "[ox-hugo export after save DBG] org-hugo-auto-export-on-save = %S"
   ;;          org-hugo-auto-export-on-save)
   ;; (when (boundp 'org-capture-before-finalize-hook)
   ;;   (message "[ox-hugo export after save DBG] org-capture-before-finalize-hook = %S"
   ;;            org-capture-before-finalize-hook))
+  ;; (when (boundp 'org-capture-after-finalize-hook)
+  ;;   (message "[ox-hugo export after save DBG] org-capture-after-finalize-hook = %S"
+  ;;            org-capture-after-finalize-hook))
   ;; (message "[ox-hugo export after save DBG] org-hugo--org-capture-active-flag = %S"
   ;;          org-hugo--org-capture-active-flag)
   (save-excursion

@@ -1266,17 +1266,13 @@ INFO is a plist used as a communication channel."
                        (file-name-as-directory (plist-get info :hugo-base-dir))
                      (user-error "It is mandatory to set the HUGO_BASE_DIR property")))
          (content-dir "content/")
-         (section-name (or org-hugo--section ;Hugo section set in the post subtree gets higher precedence
-                           (plist-get info :hugo-section)))
-         (section-dir (if section-name
-                          (file-name-as-directory section-name)
-                        (user-error "It is mandatory to set the HUGO_SECTION property")))
+         (section-path (org-hugo--get-section-path info))
          (bundle-name (or org-hugo--bundle ;Hugo bundle set in the post subtree gets higher precedence
                           (plist-get info :hugo-bundle)))
          (bundle-dir (if bundle-name
                          (file-name-as-directory bundle-name)
                        ""))
-         (pub-dir (let ((dir (concat base-dir content-dir section-dir bundle-dir)))
+         (pub-dir (let ((dir (concat base-dir content-dir section-path bundle-dir)))
                     (make-directory dir :parents) ;Create the directory if it does not exist
                     dir)))
     (file-truename pub-dir)))
@@ -1565,6 +1561,81 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-hugo DBG pandoc-citations-enabled--plist-val] %S" pandoc-citations-enabled--plist-val)
     ;; (message "[ox-hugo DBG pandoc-enabled-bool] %S" pandoc-enabled-bool)
     pandoc-enabled-bool))
+
+;;;; Get a property value and concat it with its parent value
+(defun org-hugo--entry-get-concat (pom property &optional sep)
+  "Concatenate an Org Property value with its inherited value.
+
+Get value of PROPERTY for entry or content at point-or-marker
+POM.  If a parent subtree has the same PROPERTY set, append the
+current property value to that, following the optional SEP.
+
+SEP is the concatenation separator string.  If it is nil, it
+defaults to \"\".
+
+This function internally calls `org-entry-get' with its INHERIT
+argument set to non-nil and the LITERAL-NIL argument set to nil.
+
+If the property is present but empty, the return value is the
+empty string.  If the property is not present at all, nil is
+returned.  In any other case, return the value as a string.
+Search is case-insensitive."
+  (let ((value-no-concat (org-entry-get pom property :inherit)))
+    ;; (message "[ox-hugo section concat DBG] value-no-concat: %S" value-no-concat)
+    (if value-no-concat
+        ;; Get the value of PROPERTY from the parent relative to
+        ;; current point.
+        (let ((value-here-no-inherit (org-entry-get pom property nil))
+              (value-parent (org-with-wide-buffer
+                             (when (org-up-heading-safe)
+                               (org-hugo--entry-get-concat nil property sep)))))
+          ;; (message "[ox-hugo section concat DBG] value-here-no-inherit: %S" value-here-no-inherit)
+          ;; (message "[ox-hugo section concat DBG] value-parent: %S" value-parent)
+          (if value-here-no-inherit
+              (format "%s%s%s"
+                      (or value-parent "")
+                      (if value-parent
+                          (if (and (org-string-nw-p sep)
+                                   (string-suffix-p sep value-parent))
+                              "" ;Don't add the `sep' if `value-parent' already ends with that `sep'
+                            sep)
+                        "")
+                      value-no-concat)
+            ;; Use the value from parent directly if the property is not
+            ;; set in the current subtree.
+            value-parent))
+      nil)))
+
+(defun org-hugo--get-section-path (info)
+  "Return the Hugo section path.
+This is the path relative to the Hugo \"content\" directory.
+
+If the EXPORT_HUGO_SECTION* keyword is set in the current or a
+parent subtree, return the concatenation of the \"HUGO_SECTION\"
+and the concatenated \"EXPORT_HUGO_SECTION*\" values as a path.
+
+Else, return the \"HUGO_SECTION\" path.
+
+The function always returns a string."
+  (let* ((hugo-section-kwd
+          (directory-file-name (plist-get info :hugo-section))) ;Remove trailing slash if any
+         (hugo-section-frag-prop (org-entry-get nil "EXPORT_HUGO_SECTION*" :inherit))
+         (section-path-1 (or org-hugo--section
+                             hugo-section-kwd))
+         section-path)
+    ;; (message "[ox-hugo section-path DBG] org-hugo--section: %S" org-hugo--section)
+    ;; (message "[ox-hugo section-path DBG] :hugo-section: %S" hugo-section-kwd)
+    ;; (message "[ox-hugo section-path DBG] :hugo-section-frag: %S" hugo-section-frag-prop)
+    ;; (message "[ox-hugo section-path DBG] section path-1: %S" section-path-1)
+    (unless section-path-1
+      (user-error "It is mandatory to set the HUGO_SECTION property"))
+    (when (org-string-nw-p hugo-section-frag-prop)
+      (setq section-path-1
+            (concat section-path-1 "/"
+                    (org-hugo--entry-get-concat nil "EXPORT_HUGO_SECTION*" "/"))))
+    (setq section-path (file-name-as-directory section-path-1))
+    ;; (message "[ox-hugo section-path DBG] section path: %S" section-path)
+    section-path))
 
 
 
@@ -3358,6 +3429,7 @@ are \"toml\" and \"yaml\"."
                      "HUGO_ALLOW_SPACES_IN_TAGS"
                      "HUGO_BLACKFRIDAY"
                      "HUGO_SECTION"
+                     "HUGO_SECTION*"
                      "HUGO_BUNDLE"
                      "HUGO_BASE_DIR"
                      "HUGO_CODE_FENCE"

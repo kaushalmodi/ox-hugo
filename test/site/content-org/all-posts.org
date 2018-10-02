@@ -551,6 +551,49 @@ Case where ~EXPORT_HUGO_SECTION~ is set to ~/~.
 This behaves the same as *not setting* ~EXPORT_HUGO_SECTION~ at all.
 
 This post is created at the site root.
+** Section fragment concatenation       :fragment:concatenation:deep_nesting:
+*** sub1 section
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: sub1
+:END:
+**** Post in sub1
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-section-frag-post-in-posts-sub1
+:END:
+#+begin_description
+Test post created in ~posts/sub1~.
+#+end_description
+**** sub1/sub2 section
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: sub2
+:END:
+***** Post in sub1/sub2
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-section-frag-post-in-posts-sub1-sub2
+:END:
+#+begin_description
+Test post created in ~posts/sub1/sub2~.
+#+end_description
+***** sub1/sub2/sub3 section
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: sub3
+:END:
+****** Post in sub1/sub2/sub3
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-section-frag-post-in-posts-sub1-sub2-sub3
+:END:
+#+begin_description
+Test post created in ~posts/sub1/sub2/sub3~.
+#+end_description
+*** Post with all HUGO_SECTION, HUGO_SECTION*, EXPORT_FILE_NAME in same subtree
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: articles
+:EXPORT_HUGO_SECTION*: emacs
+:EXPORT_FILE_NAME: hugo-section-frag-post-in-articles-emacs
+:END:
+#+begin_description
+Test post created in ~articles/emacs~.
+#+end_description
 * Tables                                                              :table:
 ** Simple Table
 :PROPERTIES:

@@ -2636,7 +2636,7 @@ only for /per-subtree/ flow (and it makes sense only for this flow).
 So the final *section path* looks like this:
 #+begin_example
 <HUGO_BASE_DIR>/content/<HUGO_SECTION>/<concatenated values of EXPORT_HUGO_SECTION*>/
-                        └──────────────────  section path  ──────────────────┘
+                        └─────────────────────  section path  ──────────────────────┘
 #+end_example
 
 See the below example to get further clarity on this logic.

@@ -103,16 +103,6 @@ It holds the value returned by
   "Variable to count of number of subtrees getting exported.
 This variable is used when exporting all subtrees in a file.")
 
-(defvar org-hugo--section nil
-  "Variable to store the current valid Hugo subtree section name.
-If the EXPORT_HUGO_SECTION property is set in the same subtree as
-the post subtree, it somehow cannot be parsed from
-`org-hugo-export-to-md'.  But that property can be accessed
-within `org-hugo-export-wim-to-md' regardless.  This variable
-helps set the section path correctly for such cases (where
-EXPORT_HUGO_SECTION and EXPORT_FILE_NAME are set in the same
-subtree).")
-
 (defvar org-hugo--fm nil
   "Variable to store the current Hugo post's front-matter string.
 
@@ -977,7 +967,6 @@ INFO is a plist used as a communication channel.
 OUTFILE is the Org exported file name.
 
 This is an internal function."
-  (setq org-hugo--section nil)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
   (when (and outfile
              (org-hugo--pandoc-citations-enabled-p info))
@@ -1258,7 +1247,7 @@ INFO is a plist used as a communication channel."
          (section-path (org-hugo--get-section-path info))
          (bundle-dir (let ((bundle-path (or ;Hugo bundle set in the post subtree gets higher precedence
                                          (org-hugo--entry-get-concat nil "EXPORT_HUGO_BUNDLE" "/")
-                                         (plist-get info :hugo-bundle))))
+                                         (plist-get info :hugo-bundle)))) ;This is mainly to support per-file flow
                        (if bundle-path
                            (file-name-as-directory bundle-path)
                          "")))
@@ -1610,21 +1599,21 @@ Else, return the \"HUGO_SECTION\" path.
 The function always returns a string.
 
 INFO is a plist used as a communication channel."
-  (let* ((hugo-section-kwd
-          (directory-file-name (plist-get info :hugo-section))) ;Remove trailing slash if any
+  (let* ((hugo-section-prop (org-entry-get nil "EXPORT_HUGO_SECTION" :inherit))
+         (hugo-section-kwd (plist-get info :hugo-section))
          (hugo-section-frag-prop (org-entry-get nil "EXPORT_HUGO_SECTION*" :inherit))
-         (section-path-1 (or org-hugo--section
-                             hugo-section-kwd))
+         (section-path-1 (or hugo-section-prop ;EXPORT_HUGO_SECTION gets higher precedence
+                             hugo-section-kwd)) ;This is mainly to support per-file flow
          section-path)
-    ;; (message "[ox-hugo section-path DBG] org-hugo--section: %S" org-hugo--section)
-    ;; (message "[ox-hugo section-path DBG] :hugo-section: %S" hugo-section-kwd)
-    ;; (message "[ox-hugo section-path DBG] :hugo-section-frag: %S" hugo-section-frag-prop)
+    ;; (message "[ox-hugo section-path DBG] hugo-section-prop: %S" hugo-section-prop)
+    ;; (message "[ox-hugo section-path DBG] hugo-section-kwd: %S" hugo-section-kwd)
+    ;; (message "[ox-hugo section-path DBG] hugo-section-frag-prop: %S" hugo-section-frag-prop)
     ;; (message "[ox-hugo section-path DBG] section path-1: %S" section-path-1)
     (unless section-path-1
       (user-error "It is mandatory to set the HUGO_SECTION property"))
     (when (org-string-nw-p hugo-section-frag-prop)
       (setq section-path-1
-            (concat section-path-1 "/"
+            (concat (file-name-as-directory section-path-1) ;Add trailing slash if absent
                     (org-hugo--entry-get-concat nil "EXPORT_HUGO_SECTION*" "/"))))
     (setq section-path (file-name-as-directory section-path-1))
     ;; (message "[ox-hugo section-path DBG] section path: %S" section-path)
@@ -3770,8 +3759,6 @@ approach)."
                                     (re-search-forward "^#\\+hugo_weight:.*auto" nil :noerror)))))
                           (setq org-hugo--subtree-coord
                                 (org-hugo--get-post-subtree-coordinates subtree)))
-                        ;; Get the current subtree section name if any.
-                        (setq org-hugo--section (org-entry-get nil "EXPORT_HUGO_SECTION" :inherit))
                         (setq do-export t)))))
                 ;; If not in a valid subtree, check if the Org file is
                 ;; supposed to be exported as a whole, in which case

@@ -390,7 +390,7 @@ those by =ox-blackfriday.el=.
 :END:
 This package requires emacs 24.4+ and Org 9.0+. It is available on
 Melpa ([[https://melpa.org/#/ox-hugo]]).
-** COMMENT Usage
+** Usage
 :PROPERTIES:
 :CUSTOM_ID: usage
 :END:
@@ -450,15 +450,17 @@ Before you export check that these properties are set as you need:
                   [[https://gohugo.io/content-management/sections/][here]] for more information on Hugo sections.  It is
                   common for this property to be set to =posts= or
                   =blog=.  The default value is set using
-                  =org-hugo-default-section-directory=.
+                  =org-hugo-default-section-directory=. See
+                  {{{doc(hugo-section,,Hugo Section)}}} for details.
 - HUGO_BASE_DIR :: Root directory of the source for the Hugo site. If
                    this is set to =~/hugo/=, the exported Markdown
                    files will be saved to
-                   =~/hugo/content/<HUGO_SECTION>/= directory.  By
-                   default, the Markdown files reside in a hierarchy
-                   under the =content/= directory in the site root
-                   directory ([[https://gohugo.io/content-management/organization/][ref]]). If you try to export without
-                   setting this property, you will get this error:
+                   =~/hugo/content/<HUGO_SECTION>/=
+                   directory[fn:section_more].  By default, the
+                   Markdown files reside in a hierarchy under the
+                   =content/= directory in the site root directory
+                   ([[https://gohugo.io/content-management/organization/][ref]]). If you try to export without setting this
+                   property, you will get this error:
   #+begin_example
   user-error: It is mandatory to set the HUGO_BASE_DIR property
   #+end_example
@@ -466,6 +468,12 @@ Before you export check that these properties are set as you need:
 *Important*: If you choose to export an Org subtree as a post, you
  need to set the =EXPORT_FILE_NAME= subtree property. That property is
  used by this package to figure out where the current post starts.
+
+[fn:section_more] The ~HUGO_SECTION~ is the bare-minimum requirement
+to specify the destination path. That path can be further tweaked
+using ~HUGO_BUNDLE~ key (and the associated ~EXPORT_HUGO_BUNDLE~
+property), and the ~EXPORT_HUGO_SECTION*~ property (only for
+/per-subtree/ exports).
 *** Export bindings
 The common =ox-hugo= export bindings are:
 **** For both one-post-per-subtree and one-post-per-file flows
@@ -2478,6 +2486,201 @@ Above exports to TOML front-matter as:
 #+end_src
 **** More Examples
 You can find many other examples by looking at {{{testtag(custom-fm)}}}.
+*** Hugo Section
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-section
+:END:
+#+begin_description
+Specifying the path under Hugo "content" to where the Markdown file
+should be exported.
+#+end_description
+**** Default
+By default, ~ox-hugo~ exports all the markdown files to
+~<HUGO_BASE_DIR>/content/posts/~.
+
+The "posts" sub-directory default is set in the
+~org-hugo-default-section-directory~ /defcustom/ variable which a user
+can customize.
+
+With the below Org file, the post will export to that "posts"
+sub-directory:
+
+#+begin_src org
+,#+hugo_base_dir: .
+
+,* My post
+:PROPERTIES:
+:EXPORT_FILE_NAME: my-post
+:END:
+This gets created in ~<HUGO_BASE_DIR>/content/posts/~.
+#+end_src
+
+Setting ~org-hugo-default-section-directory~ will affect
+globally---All your ~ox-hugo~ exported projects.
+**** Setting ~HUGO_SECTION~ per file
+:PROPERTIES:
+:CUSTOM_ID: hugo-section-keyword
+:END:
+If you need to override the default ~HUGO_SECTION~ only in an Org
+file, set the ~#+hugo_section~ keyword.
+#+begin_src org
+,#+hugo_base_dir: .
+,#+hugo_section: articles
+
+,* My post
+:PROPERTIES:
+:EXPORT_FILE_NAME: my-post
+:END:
+This gets created in ~<HUGO_BASE_DIR>/content/articles/~.
+#+end_src
+**** Setting ~HUGO_SECTION~ per subtree (only /per-subtree/ flow)
+:PROPERTIES:
+:CUSTOM_ID: hugo-section-property
+:END:
+If you need to override *both* the default ~HUGO_SECTION~ and the Org
+file specific ~#+hugo_section~ keyword, set the ~EXPORT_HUGO_SECTION~
+subtree property.
+#+begin_src org
+,#+hugo_base_dir: .
+,#+hugo_section: articles
+
+,* About
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: /
+:EXPORT_FILE_NAME: about
+:END:
+This gets created directly in ~<HUGO_BASE_DIR>/content/~.
+,* My post
+:PROPERTIES:
+:EXPORT_FILE_NAME: my-post
+:END:
+This gets created in ~<HUGO_BASE_DIR>/content/articles/~. As the
+~EXPORT_HUGO_SECTION~ property is not set, the ~#+hugo_section~
+keyword value applies.
+,* Notes
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: notes
+:END:
+,** My note
+:PROPERTIES:
+:EXPORT_FILE_NAME: my-note
+:END:
+This gets created in ~<HUGO_BASE_DIR>/content/notes/~.
+#+end_src
+
+The ~EXPORT_HUGO_SECTION~ does not need to be set in the same subtree
+as the post.
+
+The benefit of this is that you can have a parent subtree set the
+~EXPORT_HUGO_SECTION~ value, and then have all the children subtrees
+inherit that value. See the "Notes" subtree in above example to see
+this inheritance in action.
+**** Section path fragments (only /per-subtree/ flow)
+:PROPERTIES:
+:CUSTOM_ID: hugo-section-fragments
+:END:
+The default Org Property behavior is that the value of a property set
+in the /closest parent/ wins. See the below example to understand
+that.
+
+#+name: code__using_only_EXPORT_HUGO_SECTION
+#+caption: Using only ~EXPORT_HUGO_SECTION~
+#+begin_src org
+,* Main section
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: main
+:END:
+The parsed value of ~EXPORT_HUGO_SECTION~ property is ~"main"~ here.
+,** Sub section 1
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: sub
+:END:
+The parsed value of ~EXPORT_HUGO_SECTION~ property is ~"sub"~ here. The
+earlier set ~"main"~ value in the parent of this subtree is lost.
+
+I would have liked the parent value ~"main"~ to get auto-prepended here.
+,** Sub section 2
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: main/sub
+:END:
+The parsed value of ~EXPORT_HUGO_SECTION~ property is ~main/sub~ here.
+
+While this works, it gets a bit inconvenient to manually prefix the
+parent property value (~"main/"~ here) as the number of nesting levels
+increase.
+#+end_src
+
+But this is Emacs, and with the help of Emacs-Lisp and kind help from
+/Ihor Radchenko/ on the [[https://lists.gnu.org/r/emacs-orgmode/2018-10/msg00002.html][Org mailing list]], ~ox-hugo~ now has a solution
+to this!
+
+#+begin_verse
+>    /Introducing *~EXPORT_HUGO_SECTION*~* (with that asterisk)/ :tada:
+#+end_verse
+
+If a subtree has the ~EXPORT_HUGO_SECTION*~ property set, it is
+treated as a section path *fragment*. Such fragment properties will be
+concatenated with the *same* fragment properties further up in the
+parent hierarchy.
+
+The collective concatenated value of ~EXPORT_HUGO_SECTION*~ properties
+is further prefixed with the value of the good old ~HUGO_SECTION~
+keyword/property that's effective in that subtree.
+
+#+begin_note
+~EXPORT_HUGO_SECTION*~ *has* to be set as a subtree property. There is
+no Org keyword equivalent for this, because this property is designed
+only for /per-subtree/ flow (and it makes sense only for this flow).
+#+end_note
+
+So the final *section path* looks like this:
+#+begin_example
+<HUGO_BASE_DIR>/content/<HUGO_SECTION>/<concatenated values of EXPORT_HUGO_SECTION*>/
+                        └──────────────────  section path  ──────────────────┘
+#+end_example
+
+See the below example to get further clarity on this logic.
+
+#+name: code__using_hugo_section_fragments
+#+caption: Using ~EXPORT_HUGO_SECTION*~ in conjunction to ~EXPORT_HUGO_SECTION~
+#+begin_src org
+,* Main section
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: main
+:END:
+The /section path/ derived at this level is ~"main/"~.
+,** Sub section 1
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: sub1
+:END:
+The /section path/ derived at this level is ~"main/sub1/"~.
+,*** Sub section 1.1
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: p1
+:END:
+The /section path/ derived at this level is ~"main/sub1/p1/"~.
+,*** Sub section 1.2
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: p2
+:END:
+The /section path/ derived at this level is ~"main/sub1/p2/"~.
+,** Sub section 2
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: sub2
+:END:
+The /section path/ derived at this level is ~"main/sub2/"~.
+#+end_src
+*** COMMENT Hugo Bundle
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-bundle
+:END:
+#+begin_description
+Specifying the [[https://gohugo.io/content-management/page-bundles/][Hugo Page Bundle]] directory name containing the
+~_index.md~ (/branch/ bundle index file) or ~index.md~ (/page/ bundle
+index file).
+#+end_description
+**** More Reading
+- [[https://scripter.co/hugo-leaf-and-branch-bundles/][scripter.co -- Hugo: Leaf and Branch Bundles]]
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"

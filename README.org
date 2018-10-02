@@ -143,15 +143,17 @@ Before you export check that these properties are set as you need:
   [[https://gohugo.io/content-management/sections/][here]] for more information on Hugo sections.  It is
   common for this property to be set to =posts= or
   =blog=.  The default value is set using
-  =org-hugo-default-section-directory=.
+  =org-hugo-default-section-directory=. See
+  [[https://ox-hugo.scripter.co/doc/hugo-section/][Hugo Section]] for details.
 - HUGO_BASE_DIR :: Root directory of the source for the Hugo site. If
   this is set to =~/hugo/=, the exported Markdown
   files will be saved to
-  =~/hugo/content/<HUGO_SECTION>/= directory.  By
-  default, the Markdown files reside in a hierarchy
-  under the =content/= directory in the site root
-  directory ([[https://gohugo.io/content-management/organization/][ref]]). If you try to export without
-  setting this property, you will get this error:
+  =~/hugo/content/<HUGO_SECTION>/=
+  directory[fn:-1-section_more].  By default, the
+  Markdown files reside in a hierarchy under the
+  =content/= directory in the site root directory
+  ([[https://gohugo.io/content-management/organization/][ref]]). If you try to export without setting this
+  property, you will get this error:
   #+BEGIN_EXAMPLE
     user-error: It is mandatory to set the HUGO_BASE_DIR property
   #+END_EXAMPLE
@@ -159,6 +161,12 @@ Before you export check that these properties are set as you need:
 *Important*: If you choose to export an Org subtree as a post, you
  need to set the =EXPORT_FILE_NAME= subtree property. That property is
  used by this package to figure out where the current post starts.
+
+[fn:-1-section_more] The ~HUGO_SECTION~ is the bare-minimum requirement
+to specify the destination path. That path can be further tweaked
+using ~HUGO_BUNDLE~ key (and the associated ~EXPORT_HUGO_BUNDLE~
+property), and the ~EXPORT_HUGO_SECTION*~ property (only for
+/per-subtree/ exports).
 ** Export bindings
 The common =ox-hugo= export bindings are:
 *** For both one-post-per-subtree and one-post-per-file flows

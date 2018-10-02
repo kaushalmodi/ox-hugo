@@ -594,6 +594,50 @@ Test post created in ~posts/sub1/sub2/sub3~.
 #+begin_description
 Test post created in ~articles/emacs~.
 #+end_description
+** Hugo Bundle concatenation :fragment:concatenation:deep_nesting:page_bundles:
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: bundle-concat
+:END:
+*** Articles
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: articles
+:END:
+**** Articles Index page
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+This is an index page (/branch/ bundle) for all the articles.
+
+[[https://github.com/kaushalmodi/ox-hugo/issues/210#issuecomment-424891371][Ref]]
+**** Article One
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: article-one
+:END:
+***** Article One Index page
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+This is an index page (/branch/ bundle) for Articles/Article One.
+***** Chapter One
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: chapter-one
+:END:
+****** Article One Chapter One Index page
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+This is an index page (/branch/ bundle) for Articles/Article
+One/Chapter One.
+****** Section 1A
+:PROPERTIES:
+:EXPORT_FILE_NAME: section-1a
+:END:
+This is the content of Articles/Article One/Chapter One/Section 1A.
+****** Section 1B
+:PROPERTIES:
+:EXPORT_FILE_NAME: section-1b
+:END:
+This is the content of Articles/Article One/Chapter One/Section 1B.
 * Tables                                                              :table:
 ** Simple Table
 :PROPERTIES:
@@ -2362,10 +2406,11 @@ Index page of /Page Bundle B/.
 
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
 ** Headless Page Bundle                                            :headless:
+*** Headless Page Bundle X
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: headless-page-bundle-x
 :END:
-*** Headless Page Bundle Index Page
+**** Headless Page Bundle Index Page
 :PROPERTIES:
 :EXPORT_FILE_NAME: index
 :EXPORT_HUGO_HEADLESS: t
@@ -2390,25 +2435,24 @@ But you can get it by =.Site.GetPage ...=. Here is an example ([[https://github.
 There are many use cases of such headless page bundles:
 - Shared media galleries
 - Reusable page content "snippets"
-*** Bundled page foo in the headless bundle
+**** Bundled page foo in the headless bundle
 :PROPERTIES:
 :EXPORT_FILE_NAME: foo
 :END:
 "Foo" page in /Headless Page Bundle/.
-*** Bundled page bar in the headless bundle
+**** Bundled page bar in the headless bundle
 :PROPERTIES:
 :EXPORT_FILE_NAME: bar
 :END:
 "Bar" page in /Headless Page Bundle/.
-*** Bundled page zoo in the headless bundle
+**** Bundled page zoo in the headless bundle
 :PROPERTIES:
 :EXPORT_FILE_NAME: zoo
 :END:
 "Zoo" page in /Headless Page Bundle/.
-*** Page using the Headless Page Bundle                              :layout:
+*** Page using the Headless Page Bundle X                            :layout:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: posts
-:EXPORT_HUGO_BUNDLE:
 :EXPORT_FILE_NAME: page-using-headless-page-bundle
 :EXPORT_HUGO_LAYOUT: headless-bundle-single
 :END:

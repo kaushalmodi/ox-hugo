@@ -1,5 +1,5 @@
 +++
-title = "Page using the Headless Page Bundle"
+title = "Page using the Headless Page Bundle X"
 layout = "headless-bundle-single"
 tags = ["page-bundles", "headless", "layout"]
 draft = false

@@ -113,16 +113,6 @@ helps set the section path correctly for such cases (where
 EXPORT_HUGO_SECTION and EXPORT_FILE_NAME are set in the same
 subtree).")
 
-(defvar org-hugo--bundle nil
-  "Variable to store the current valid Hugo subtree bundle name.
-If the EXPORT_HUGO_BUNDLE property is set in the same subtree as
-the post subtree, it somehow cannot be parsed from
-`org-hugo-export-to-md'.  But that property can be accessed
-within `org-hugo-export-wim-to-md' regardless.  This variable
-helps set the bundle path correctly for such cases (where
-EXPORT_HUGO_BUNDLE and EXPORT_FILE_NAME are set in the same
-subtree).")
-
 (defvar org-hugo--fm nil
   "Variable to store the current Hugo post's front-matter string.
 
@@ -988,7 +978,6 @@ OUTFILE is the Org exported file name.
 
 This is an internal function."
   (setq org-hugo--section nil)
-  (setq org-hugo--bundle nil)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
   (when (and outfile
              (org-hugo--pandoc-citations-enabled-p info))
@@ -1267,11 +1256,12 @@ INFO is a plist used as a communication channel."
                      (user-error "It is mandatory to set the HUGO_BASE_DIR property")))
          (content-dir "content/")
          (section-path (org-hugo--get-section-path info))
-         (bundle-name (or org-hugo--bundle ;Hugo bundle set in the post subtree gets higher precedence
-                          (plist-get info :hugo-bundle)))
-         (bundle-dir (if bundle-name
-                         (file-name-as-directory bundle-name)
-                       ""))
+         (bundle-dir (let ((bundle-path (or ;Hugo bundle set in the post subtree gets higher precedence
+                                         (org-hugo--entry-get-concat nil "EXPORT_HUGO_BUNDLE" "/")
+                                         (plist-get info :hugo-bundle))))
+                       (if bundle-path
+                           (file-name-as-directory bundle-path)
+                         "")))
          (pub-dir (let ((dir (concat base-dir content-dir section-path bundle-dir)))
                     (make-directory dir :parents) ;Create the directory if it does not exist
                     dir)))
@@ -3782,8 +3772,6 @@ approach)."
                                 (org-hugo--get-post-subtree-coordinates subtree)))
                         ;; Get the current subtree section name if any.
                         (setq org-hugo--section (org-entry-get nil "EXPORT_HUGO_SECTION" :inherit))
-                        ;; Get the current subtree bundle name if any.
-                        (setq org-hugo--bundle (org-entry-get nil "EXPORT_HUGO_BUNDLE" :inherit))
                         (setq do-export t)))))
                 ;; If not in a valid subtree, check if the Org file is
                 ;; supposed to be exported as a whole, in which case

@@ -86,12 +86,10 @@
 
                     <!-- Get the Org source link -->
                     {{ $org_dir_link := $val.source }}
-                    {{ if (in (slice "github" "gitlab" "coding.net") $hosting) }}
+                    {{ if (in (slice "github" "gitlab" "sr.ht" "coding.net") $hosting) }}
                         {{ $org_dir_link = (printf "%s/tree/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
                     {{ else if (eq "gitea" $hosting) }}
                         {{ $org_dir_link = (printf "%s/src/branch/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
-                    {{ else if (eq "sr.ht" $hosting) }}
-                        {{ $org_dir_link = (printf "%s/tree/%s/?h=%s" ($val.source | replaceRE "/$" "") $org_dir $branch) }}
                     {{ else if (eq "gitweb" $hosting) }}
                         <!-- Example: https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git;a=tree;f=content;hb=refs/heads/master
                              $val.source = https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git

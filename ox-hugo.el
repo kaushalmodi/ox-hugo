@@ -1580,7 +1580,8 @@ If the property is present but empty, the return value is the
 empty string.  If the property is not present at all, nil is
 returned.  In any other case, return the value as a string.
 Search is case-insensitive."
-  (let ((value-no-concat (org-entry-get pom property :inherit)))
+  (let ((sep (or sep ""))
+        (value-no-concat (org-entry-get pom property :inherit)))
     ;; (message "[ox-hugo section concat DBG] value-no-concat: %S" value-no-concat)
     (if value-no-concat
         ;; Get the value of PROPERTY from the parent relative to
@@ -1616,7 +1617,9 @@ and the concatenated \"EXPORT_HUGO_SECTION*\" values as a path.
 
 Else, return the \"HUGO_SECTION\" path.
 
-The function always returns a string."
+The function always returns a string.
+
+INFO is a plist used as a communication channel."
   (let* ((hugo-section-kwd
           (directory-file-name (plist-get info :hugo-section))) ;Remove trailing slash if any
          (hugo-section-frag-prop (org-entry-get nil "EXPORT_HUGO_SECTION*" :inherit))

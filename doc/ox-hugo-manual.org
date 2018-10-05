@@ -1905,6 +1905,16 @@ Above assumes that the Org files are in the /"content-org/"/ directory
   ├── themes
   └── .dir-locals.el
 #+end_example
+
+If you have the Org file directly in the project root or in the same
+directory as the ~.dir-locals.el~, add this in that file instead:
+#+begin_src emacs-lisp
+((org-mode . ((org-hugo-auto-export-on-save . t))))
+#+end_src
+
+Note that with above, ~org-hugo-auto-export-on-save~ will be set to
+~t~ for *all* Org files in the project. If that's what you don't want
+see [[* Enable only for an Org file]].
 ******* Enabling for multiple projects
 To enable auto-exporting for multiple projects, simply add similar
 =.dir-locals.el= files to the root directories of those projects. Just

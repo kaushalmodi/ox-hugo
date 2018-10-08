@@ -2934,7 +2934,6 @@ Example: \"one\\n\\\"two words\\\" three\\nfour\"
          -> (\"one\" \"two words\" \"three\" \"four\").
 
 Return nil if STR is not a string."
-  ;; (message "[ox-hugo delim str to list DBG] inp = %S" str)
   (when (stringp str)
     (let* ((str (org-trim str))
            (str-list (split-string str org-hugo--internal-list-separator))
@@ -2951,8 +2950,6 @@ Return nil if STR is not a string."
                                       elem)))
                                   lst)))
           (setq ret (append ret str-list2))))
-      (setq ret (cl-remove-if-not #'org-string-nw-p ret)) ;Remove "" elements
-      ;; (message "[ox-hugo delim str to list DBG] ret = %S" ret)
       ret)))
 
 (defun org-hugo--category-p (tag)

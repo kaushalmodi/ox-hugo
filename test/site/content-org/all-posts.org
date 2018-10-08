@@ -5619,11 +5619,20 @@ quotes.
 If a video path has spaces in it, wrap the whole path in double
 quotes.
 ** Audio                                                              :audio:
+*** Single audio file                                                :single:
 :PROPERTIES:
-:EXPORT_FILE_NAME: audio-front-matter
-:EXPORT_HUGO_AUDIO: "audio path with space.mp3"
+:EXPORT_FILE_NAME: audio-single
+:EXPORT_HUGO_AUDIOS: "audio path with space.mp3"
 :END:
-If the audio path has spaces in it, wrap the whole path in double
+If a audio path has spaces in it, wrap the whole path in double
+quotes.
+*** Multiple audio files                                           :multiple:
+:PROPERTIES:
+:EXPORT_FILE_NAME: audio-multiple
+:EXPORT_HUGO_AUDIOS: "audio foo.mp3"
+:EXPORT_HUGO_AUDIOS+: bar.wav
+:END:
+If a audio path has spaces in it, wrap the whole path in double
 quotes.
 ** Series                                                            :series:
 *** Single series                                                    :single:

@@ -789,7 +789,7 @@ newer."
                    ;; aliases
                    (:hugo-aliases "HUGO_ALIASES" nil nil space)
                    ;; audio
-                   (:hugo-audio "HUGO_AUDIO" nil nil newline)
+                   (:hugo-audio "HUGO_AUDIO" nil nil)
                    ;; date
                    ;; "date" is parsed from the Org #+date or subtree property EXPORT_HUGO_DATE
                    (:date "DATE" nil nil)
@@ -3107,7 +3107,7 @@ INFO is a plist used as a communication channel."
          (data `(;; The order of the elements below will be the order in which the front-matter
                  ;; variables will be ordered.
                  (title . ,(org-hugo--sanitize-title info))
-                 (audio . ,(org-hugo--delim-str-to-list (plist-get info :hugo-audio)))
+                 (audio . ,(plist-get info :hugo-audio))
                  (author . ,author-list)
                  (description . ,description)
                  (date . ,(org-hugo--format-date :date info))

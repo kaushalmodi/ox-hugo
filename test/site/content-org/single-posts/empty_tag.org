@@ -4,17 +4,12 @@
 #+hugo_base_dir: ../../
 
 #+hugo_section: singles
-#+hugo_tags: "" "empty-tag" "tag"
+#+hugo_tags: "" "empty-tag" "tag" "dont_export_during_make_test"
 
 #+begin_description
-Ensure that empty tag in Org file gets ignored.
+Ensure that empty tag in Org file throws a ~user-error~.
 #+end_description
 
 [[https://github.com/kaushalmodi/ox-hugo/issues/221][~ox-hugo~ issue #221]]
 
-The Org source of this post has:
-#+begin_src org
-,#+hugo_tags: "" "empty-tag"
-#+end_src
-
-This test ensures that the ~""~ tag gets ignored.
+The Org source of this post has ~""~ in the ~#+hugo_tags:~.

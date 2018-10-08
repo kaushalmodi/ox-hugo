@@ -1212,10 +1212,11 @@ or \"name\" are packed into an alist with `car' as \"params\"."
       all-src)))
 
 ;;;; List to YAML/TOML list string
-(defun org-hugo--get-yaml-toml-list-string (list)
-  "Return LIST as a YAML/TOML list represented as a string.
+(defun org-hugo--get-yaml-toml-list-string (key list)
+  "Return KEY's LIST value as a YAML/TOML list, represented as a string.
 
-Examples:
+KEY is a string and LIST is a list where an element can be a
+symbol, number or a non-empty string.  Examples:
 
   \(\"abc\" \"def\")   -> \"[\\\"abc\\\", \\\"def\\\"]\"."
   (concat "["
@@ -1227,8 +1228,10 @@ Examples:
                                   (symbol-name v))
                                  ((numberp v)
                                   (number-to-string v))
+                                 ((org-string-nw-p v)
+                                  v)
                                  (t
-                                  v))))
+                                  (user-error "Invalid element %S in %S value %S" v key list)))))
                              list)
                      ", ")
           "]"))
@@ -2939,7 +2942,7 @@ Return nil if STR is not a string."
            (str-list (split-string str org-hugo--internal-list-separator))
            ret)
       (dolist (str-elem str-list)
-        (let* ((format-str ":dummy '(%s)") ;The :dummy key is later discarded
+        (let* ((format-str ":dummy '(%s)") ;The :dummy key is discarded in the `lst' var below.
                (alist (org-babel-parse-header-arguments (format format-str str-elem)))
                (lst (cdr (car alist)))
                (str-list2 (mapcar (lambda (elem)
@@ -3309,7 +3312,7 @@ are \"toml\" and \"yaml\"."
                                  ;; (message "[resources DBG] param-key: %S" param-key)
                                  ;; (message "[resources DBG] param-value: %S" param-value)
                                  (setq param-value-str (if (listp param-value)
-                                                           (org-hugo--get-yaml-toml-list-string param-value)
+                                                           (org-hugo--get-yaml-toml-list-string param-key param-value)
                                                          (org-hugo--quote-string param-value)))
                                  (setq res-param-str
                                        (concat res-param-str
@@ -3368,9 +3371,10 @@ are \"toml\" and \"yaml\"."
                                                 (or (string= nested-key "extensions")
                                                     (string= nested-key "extensionsmask")))
                                            (org-hugo--get-yaml-toml-list-string
+                                            nested-key
                                             (mapcar #'org-hugo--return-valid-blackfriday-extension
                                                     nested-value))
-                                         (org-hugo--get-yaml-toml-list-string nested-value)))
+                                         (org-hugo--get-yaml-toml-list-string nested-key nested-value)))
                                       ((null nested-value)
                                        "false")
                                       ((equal nested-value 't)
@@ -3397,7 +3401,7 @@ are \"toml\" and \"yaml\"."
                                   (cond (;; Tags, categories, keywords, aliases,
                                          ;; custom front-matter which are lists.
                                          (listp value)
-                                         (org-hugo--get-yaml-toml-list-string value))
+                                         (org-hugo--get-yaml-toml-list-string key value))
                                         (t
                                          (org-hugo--quote-string value nil format)))))))))))
     (concat sep front-matter nested-string menu-string res-string sep)))

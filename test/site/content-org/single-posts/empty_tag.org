@@ -1,0 +1,20 @@
+#+title: Post with an empty tag
+#+author:
+
+#+hugo_base_dir: ../../
+
+#+hugo_section: singles
+#+hugo_tags: "" "empty-tag" "tag"
+
+#+begin_description
+Ensure that empty tag in Org file gets ignored.
+#+end_description
+
+[[https://github.com/kaushalmodi/ox-hugo/issues/221][~ox-hugo~ issue #221]]
+
+The Org source of this post has:
+#+begin_src org
+,#+hugo_tags: "" "empty-tag"
+#+end_src
+
+This test ensures that the ~""~ tag gets ignored.

@@ -1231,7 +1231,7 @@ symbol, number or a non-empty string.  Examples:
                                  ((org-string-nw-p v)
                                   v)
                                  (t
-                                  (user-error "Invalid element %S in %S value %S" v key list)))))
+                                  (user-error "Invalid element %S in `%s' value %S" v key list)))))
                              list)
                      ", ")
           "]"))
@@ -3598,12 +3598,14 @@ Return output file's name."
          (do-export t))
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (unless subtreep
-      ;; Below stuff applies only to per-file export flow.
-      (let ((fname (file-name-nondirectory (buffer-file-name)))
-            (title (format "%s" (or (car (plist-get info :title)) "<EMPTY TITLE>")))
-            (all-tags (let ((org-use-tag-inheritance t))
-                        (org-hugo--get-tags)))
-            matched-exclude-tag)
+      ;; Below stuff applies only to *per-file* export flow.
+      (let* ((fname (file-name-nondirectory (buffer-file-name)))
+             (title (format "%s" (or (car (plist-get info :title)) "<EMPTY TITLE>")))
+             (all-tags-1 (plist-get info :hugo-tags))
+             (all-tags (when all-tags-1
+                         (split-string
+                          (replace-regexp-in-string "\"" "" all-tags-1))))
+             matched-exclude-tag)
         (when all-tags
           (dolist (exclude-tag org-export-exclude-tags)
             (when (member exclude-tag all-tags)

@@ -2,8 +2,8 @@
 #+author:
 
 #+hugo_base_dir: ../../
-
 #+hugo_section: singles
+
 #+hugo_tags: "" "empty-tag" "tag" "dont_export_during_make_test"
 
 #+begin_description

@@ -1,4 +1,5 @@
 +++
+tags = ["empty", "title"]
 draft = false
 +++
 

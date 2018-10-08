@@ -2,7 +2,7 @@
 
 #+title:
 #+author:
-#+filetags: empty title
+#+hugo_tags: empty title
 
 This post will be exported without =title= in the front-matter because
 it is explicitly set to /empty/ using =#+title:=.

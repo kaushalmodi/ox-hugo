@@ -4,7 +4,7 @@
 #+author:
 #+options: title:nil
 
-#+filetags: disable title
+#+hugo_tags: disable title
 
 This post will be exported without =title= in the front-matter because
 it is disabled using =#+options: title:nil=.

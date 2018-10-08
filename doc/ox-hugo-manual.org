@@ -1853,6 +1853,26 @@ by setting it as a /custom/ front-matter parameter:
 - Note :: Remember to set the default author name to nil if doing this,
           by setting the ~#+author~ keyword (or ~:EXPORT_AUTHOR:~
           property) to /nothing/.
+*** Hugo Summary Splitter
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-summary-splitter
+:END:
+#+begin_description
+Manual splitting of Hugo summary.
+#+end_description
+In Hugo, the point of split between the summary and main content can
+be specified using the ~<!--more-->~ HTML snippet. See [[https://gohugo.io/content-management/summaries/#manual-summary-splitting][its
+documentation]] for more information.
+
+The recommended way to do that in the Org files you export using
+~ox-hugo~ is to use ~#+hugo: more~.
+
+Here's an example:
+#+begin_src org
+My post summary.
+,#+hugo: more
+My post content.
+#+end_src
 ** Enhancements
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "6.enhancements"

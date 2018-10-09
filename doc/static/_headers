@@ -50,3 +50,10 @@
 ## Hashes for Privacy Badger injected scripts: https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io/blob/29fc983ac72fa886ac39bff6b46dc7e426cb993b/netlify.toml#L174-199
 /*
   Content-Security-Policy: default-src 'none'; script-src 'self' 'sha256-O+U/ptNNoUqEhNU1BSkb7izMavM1GxrvRrabNX8WTKE=' 'sha256-YiWMVJIplziLxmHOI6iqs51JQS9W2hg1wDsKBD3u09g=' 'sha256-Zgc2pp+yOmAVogxvTHYBMFKubY0HKk2a0+0+8sX17WY=' 'sha256-kNsowQfHpWMrbQG7AtSzSuMQg2t/YKwmDWdqeKfm4BI=' 'sha256-afSIEhWGAPlY458Q4YkhPLVnsVEBh/u5YNlpg6od8TU=' https://cdnjs.cloudflare.com/ajax/libs/mathjax/ https://d33wubrfki0l68.cloudfront.net/js/ https://cdn.datatables.net 'unsafe-inline'; object-src 'none'; style-src 'self' https://d33wubrfki0l68.cloudfront.net https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/ https://cdn.datatables.net 'unsafe-inline'; img-src 'self' https://d33wubrfki0l68.cloudfront.net https://api.travis-ci.org/kaushalmodi/ https://cdn.datatables.net; font-src 'self' about: data: https://cdnjs.cloudflare.com/ajax/libs/mathjax/ https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src https://ghbtns.com; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; block-all-mixed-content; report-uri https://c571407e2c6d71ed2021633b7fdad0de.report-uri.com/r/d/csp/enforce;
+
+# Feature Policy
+## https://github.com/WICG/feature-policy/blob/master/features.md
+## https://scotthelme.co.uk/a-new-security-header-feature-policy/
+## https://developers.google.com/web/updates/2018/06/feature-policy
+/*
+  Feature-Policy: accelerometer 'none' ; ambient-light-sensor 'none' ; autoplay 'self' ; camera 'none' ; encrypted-media 'none' ; fullscreen 'self' ; geolocation 'none' ; gyroscope 'none' ; magnetometer 'none' ; microphone 'none' ; midi 'none' ; payment 'none' ; picture-in-picture * ; speaker 'none' ; sync-xhr 'none' ; usb 'none' ; vr 'none'

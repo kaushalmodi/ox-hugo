@@ -2489,8 +2489,12 @@ floats = [12.3, -5.0, -1.7e-05]
 booleans = [true, false]
 #+end_src
 **** Maps of single and list values
-Maps of keys with single or list values are supported. /Maps of maps
-are not supported./
+Maps of keys with single or list values are supported.
+
+#+begin_note
+/Maps of maps/ or /TOML tables of tables/ are not supported. See [[*
+Front-matter Extra]] section for an alternative.
+#+end_note
 ***** Syntax
 #+begin_src org
 :PROPERTIES:
@@ -2519,6 +2523,66 @@ Above exports to TOML front-matter as:
   floats = [12.3, -5.0, -1.7e-05]
   booleans = [true, false]
 #+end_src
+**** Front-matter Extra
+You would use this feature only if you need to use some front-matter
+that ~ox-hugo~ cannot translate from native Org keywords/properties to
+TOML/YAML front-matter. A good example is if you need to add custom
+/map of map/ type front-matter (or TOML /tables of tables/).
+
+The front-matter specified in this manner is appended *verbatim* to
+the *end* of the ~ox-hugo~ generated front-matter.
+***** TOML Extra front-matter
+Create a *toml* Org source block anywhere in your post, and add the
+special header args ~:front_matter_extra t~ to it.
+
+/The TOML front-matter is the default. So you do not need to set
+~:EXPORT_HUGO_FRONT_MATTER_FORMAT: toml~./
+#+begin_src org
+,* Post with TOML front-matter (default)
+:PROPERTIES:
+:EXPORT_FILE_NAME: extra-front-matter-toml
+:END:
+The contents of the ~#+begin_src toml :front_matter_extra t~ TOML
+block here will get appended to the TOML front-matter.
+,#+begin_src toml :front_matter_extra t
+[[foo]]
+  bar = 1
+  zoo = "abc"
+[[foo]]
+  bar = 2
+  zoo = "def"
+,#+end_src
+#+end_src
+***** YAML Extra front-matter
+Create a *yaml* Org source block anywhere in your post, and add the
+special header args ~:front_matter_extra t~ to it.
+
+#+begin_src org
+,* Post with YAML front-matter
+:PROPERTIES:
+:EXPORT_FILE_NAME: extra-front-matter-yaml
+:EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
+:END:
+The contents of the ~#+begin_src yaml :front_matter_extra t~ YAML
+block here will get appended to the YAML front-matter.
+,#+begin_src yaml :front_matter_extra t
+foo:
+  - bar: 1
+    zoo: abc
+  - bar: 2
+    zoo: def
+,#+end_src
+#+end_src
+***** Wrong format of extra front-matter
+The ~:front_matter_extra t~ source block LANG *has* to match your
+selected front-matter format.
+
+You cannot have a ~#+begin_src yaml :front_matter_extra t~ extra
+front-matter block if your front-matter format is YAML (and
+vice-versa).
+
+If that happens, that blocks gets exported neither to the Markdown
+body nor to the front-matter.
 **** More Examples
 You can find many other examples by looking at {{{testtag(custom-fm)}}}.
 *** Hugo Section

@@ -5836,6 +5836,129 @@ in YAML):
 - Note :: The state change notes are intentionally put in this test
           LOGBOOK, because we want to ensure that they don't seep into
           the ~notes~ front-matter.
+** Extra Front-matter                          :extra:verbatim:special_block:
+:PROPERTIES:
+:EXPORT_HUGO_WEIGHT: 5
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :widget "about"
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :active "true"
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :interests '((interests . ("Artificial Intelligence" "Computational Linguistics" "Information Retrieval")))
+:END:
+*** TOML Front-matter                                                  :toml:
+:PROPERTIES:
+:EXPORT_HUGO_FRONT_MATTER_FORMAT: toml
+:END:
+**** Extra Front-matter (TOML, TOML extra)                       :toml_extra:
+:PROPERTIES:
+:EXPORT_FILE_NAME: front-matter-toml-toml-extra
+:END:
+{{{oxhugoissue(226)}}}
+
+The ~#+begin_src toml :front_matter_extra t~ TOML block here will get
+appended to the TOML front-matter.
+#+begin_src toml :front_matter_extra t
+# List your qualifications (such as academic degrees).
+[[education.courses]]
+  course = "PhD in Artificial Intelligence"
+  institution = "Stanford University"
+  year = 2012
+
+[[education.courses]]
+  course = "MEng in Artificial Intelligence"
+  institution = "Massachusetts Institute of Technology"
+  year = 2009
+
+[[education.courses]]
+  course = "BSc in Artificial Intelligence"
+  institution = "Massachusetts Institute of Technology"
+  year = 2008
+#+end_src
+
+#+begin_src toml
+# this TOML block will export to the Markdown body
+#+end_src
+**** Extra Front-matter (TOML, YAML extra)                       :yaml_extra:
+:PROPERTIES:
+:EXPORT_FILE_NAME: front-matter-toml-yaml-extra
+:END:
+{{{oxhugoissue(226)}}}
+
+The ~#+begin_src yaml :front_matter_extra t~ YAML block here will get
+discarded because the front-matter type is TOML.
+#+begin_src yaml :front_matter_extra t
+education:
+  courses:
+    - course: PhD in Artificial Intelligence
+      institution: Stanford University
+      year: 2012
+    - course: MEng in Artificial Intelligence
+      institution: Massachusetts Institute of Technology
+      year: 2009
+    - course: BSc in Artificial Intelligence
+      institution: Massachusetts Institute of Technology
+      year: 2008
+#+end_src
+
+#+begin_src toml
+# this TOML block will export to the Markdown body
+#+end_src
+*** YAML Front-matter                                                  :yaml:
+:PROPERTIES:
+:EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
+:END:
+**** Extra Front-matter (YAML, YAML extra)                       :yaml_extra:
+:PROPERTIES:
+:EXPORT_FILE_NAME: front-matter-yaml-yaml-extra
+:END:
+{{{oxhugoissue(226)}}}
+
+The ~#+begin_src yaml :front_matter_extra t~ YAML block here will get
+appended to the YAML front-matter.
+#+begin_src yaml :front_matter_extra t
+education:
+  courses:
+    - course: PhD in Artificial Intelligence
+      institution: Stanford University
+      year: 2012
+    - course: MEng in Artificial Intelligence
+      institution: Massachusetts Institute of Technology
+      year: 2009
+    - course: BSc in Artificial Intelligence
+      institution: Massachusetts Institute of Technology
+      year: 2008
+#+end_src
+
+#+begin_src toml
+# this TOML block will export to the Markdown body
+#+end_src
+**** Extra Front-matter (YAML, TOML extra)                       :toml_extra:
+:PROPERTIES:
+:EXPORT_FILE_NAME: front-matter-yaml-toml-extra
+:END:
+{{{oxhugoissue(226)}}}
+
+The ~#+begin_src toml :front_matter_extra t~ TOML block here will get
+discarded because the front-matter type is YAML.
+#+begin_src toml :front_matter_extra t
+# List your qualifications (such as academic degrees).
+[[education.courses]]
+  course = "PhD in Artificial Intelligence"
+  institution = "Stanford University"
+  year = 2012
+
+[[education.courses]]
+  course = "MEng in Artificial Intelligence"
+  institution = "Massachusetts Institute of Technology"
+  year = 2009
+
+[[education.courses]]
+  course = "BSc in Artificial Intelligence"
+  institution = "Massachusetts Institute of Technology"
+  year = 2008
+#+end_src
+
+#+begin_src toml
+# this TOML block will export to the Markdown body
+#+end_src
 * Date and slug inheritance                           :inheritance:date:slug:
 :PROPERTIES:
 :EXPORT_DATE: 2018-02-12

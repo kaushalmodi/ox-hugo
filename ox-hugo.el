@@ -894,7 +894,7 @@ INFO is a plist used as a communication channel."
     ;; (message "dbg: org-hugo--plist-get-true-p:: key:%S value:%S" key value)
     (org-hugo--value-get-true-p value)))
 
-;;;; Workaround to retain the :hl_lines parameter in src-block headers post `org-babel-exp-code'
+;;;; Workaround to retain custom parameters in src-block headers post `org-babel-exp-code'
 ;; http://lists.gnu.org/archive/html/emacs-orgmode/2017-10/msg00300.html
 (defun org-hugo--org-babel-exp-code (orig-fun &rest args)
   "Return the original code block formatted for export.
@@ -902,13 +902,14 @@ ORIG-FUN is the original function `org-babel-exp-code' that this
 function is designed to advice using `:around'.  ARGS are the
 arguments of the ORIG-FUN.
 
-This advice retains the `:hl_lines' parameter, if added to any
-source block.  This parameter is used in `org-hugo-src-block'.
+This advice retains the `:hl_lines' and `:front_matter_extra'
+parameters, if added to any source block.  This parameter is used
+in `org-hugo-src-block'.
 
 This advice is added to the ORIG-FUN only while an ox-hugo export
 is in progress.  See `org-hugo--before-export-function' and
 `org-hugo--after-export-function'."
-  (let* ((param-keys-to-be-retained '(:hl_lines))
+  (let* ((param-keys-to-be-retained '(:hl_lines :front_matter_extra))
          (info (car args))
          (parameters (nth 2 info))
          (ox-hugo-params-str (let ((str ""))
@@ -2383,112 +2384,128 @@ Hugo \"highlight\" shortcode features:
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
   (let* ((lang (org-element-property :language src-block))
-         ;; See `org-element-src-block-parser' for all SRC-BLOCK properties.
-         (number-lines (org-element-property :number-lines src-block)) ;Non-nil if -n or +n switch is used
          (parameters-str (org-element-property :parameters src-block))
          (parameters (org-babel-parse-header-arguments parameters-str))
-         (hl-lines (cdr (assoc :hl_lines parameters)))
-         (hl-lines (cond
-                    ((stringp hl-lines)
-                     (replace-regexp-in-string "," " " hl-lines)) ;"1,3-4" -> "1 3-4"
-                    ((numberp hl-lines)
-                     (number-to-string hl-lines))))
-         (src-ref (org-blackfriday--get-reference src-block info))
-         (src-anchor (if src-ref
-                         (format "<a id=\"%s\"></a>\n" src-ref)
-                       ""))
-         (caption (org-export-get-caption src-block))
-         (caption-html (if (not caption)
-                           ""
-                         (let* ((src-block-num (org-export-get-ordinal
-                                                src-block info
-                                                nil #'org-html--has-caption-p))
-                                (caption-prefix (let ((str-translated (org-html--translate "Listing" info)))
-                                                  (if (string= str-translated "Listing")
-                                                      "Code Snippet"
-                                                    str-translated)))
-                                (caption-str
-                                 (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
-                                  (org-export-data-with-backend caption 'html info))))
-                           (format (concat "\n\n<div class=\"src-block-caption\">\n"
-                                           "  <span class=\"src-block-number\">%s</span>:\n"
-                                           "  %s\n"
-                                           "</div>")
-                                   (if src-ref ;Hyperlink the code snippet prefix + number
-                                       (format "<a href=\"#%s\">%s %s</a>"
-                                               src-ref caption-prefix src-block-num)
-                                     (format "%s %s"
-                                             caption-prefix src-block-num))
-                                   caption-str))))
-         content
-         ret)
-    ;; (message "ox-hugo src [dbg] number-lines: %S" number-lines)
-    ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
-    (setq content
-          (cond
-           ;; If both number-lines and hl-lines are nil
-           ;; , AND if :hugo-code-fence is non-nil (which is, by default).
-           ((and (null number-lines)
-                 (null hl-lines)
-                 (org-hugo--plist-get-true-p info :hugo-code-fence))
-            (let ((content1 (org-blackfriday-src-block src-block nil info)))
-              (when (and org-hugo-langs-no-descr-in-code-fences
-                         (member (intern lang) org-hugo-langs-no-descr-in-code-fences))
-                ;; When using Pygments, with the pygmentsCodeFences
-                ;; options enabled in Hugo, `org' is not recognized as a
-                ;; "language", because Pygments does not have a lexer for
-                ;; Org.
-                ;; Issue on Pygments repo:
-                ;; https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org
-                ;; So attempt to do below:
-                ;;   ```org
-                ;;   # org comment
-                ;;   ```
-                ;; will not result in a <code> tag wrapped block in HTML.
-                ;;
-                ;; So override the language to be an empty string in such cases.
-                ;;
-                ;; *Note* that this issue does NOT exist if using Chroma,
-                ;; which is the default syntax highlighter after Hugo
-                ;; v0.28.
-                (setq content1 (replace-regexp-in-string (concat "\\`\\(```+\\)" lang) "\\1" content1)))
-              (setq content1 (org-hugo--escape-hugo-shortcode content1 lang))
-              content1))
-           ;; If number-lines is non-nil
-           ;; , or if hl-lines is non-nil
-           ;; , or if :hugo-code-fence is nil
-           (t
-            (let ((code (org-export-format-code-default src-block info))
-                  (linenos-str "")
-                  (hllines-str "")
-                  ;; Formatter string where the first arg si linenos-str and
-                  ;; second is hllines-str.
-                  (highlight-args-str "%s%s"))
-              (when (or number-lines
-                        hl-lines)
-                (setq highlight-args-str " \"%s%s\""))
-              (when number-lines
-                (let ((linenostart-str (progn
-                                         ;; Extract the start line number of the code block
-                                         (string-match "\\`\\s-*\\([0-9]+\\)\\s-\\{2\\}" code)
-                                         (match-string-no-properties 1 code))))
-                  (setq linenos-str (format "linenos=table, linenostart=%s" linenostart-str)))
-                ;; Remove Org-inserted numbers from the beginning of each
-                ;; line as the Hugo highlight shortcode will be used instead
-                ;; of literally inserting the line numbers.
-                (setq code (replace-regexp-in-string "^\\s-*[0-9]+\\s-\\{2\\}" "" code)))
-              (when hl-lines
-                (setq hllines-str (concat "hl_lines=" hl-lines))
-                (when number-lines
-                  (setq hllines-str (concat ", " hllines-str))))
-              (setq code (org-hugo--escape-hugo-shortcode code lang))
-              (format "{{< highlight %s%s >}}\n%s{{< /highlight >}}\n"
-                      lang
-                      (format highlight-args-str linenos-str hllines-str)
-                      code)))))
-    (setq ret (concat src-anchor content caption-html))
-    (setq ret (org-blackfriday--div-wrap-maybe src-block ret))
-    ret))
+         (is-fm-extra (cdr (assoc :front_matter_extra parameters)))
+         (fm-format (plist-get info :hugo-front-matter-format)))
+    ;; (message "ox-hugo src [dbg] lang: %S" lang)
+    ;; (message "ox-hugo src [dbg] is-fm-extra: %S" is-fm-extra)
+    (if (and is-fm-extra
+             (member lang '("toml" "yaml")))
+        (progn
+          ;; The fm-extra src block lang and user-set fm-format have to
+          ;; be the same.  Else. that src block is completely discarded.
+          (when (string= lang fm-format)
+            (let ((fm-extra (org-export-format-code-default src-block info)))
+              ;; (message "ox-hugo src [dbg] fm-extra: %S" fm-extra)
+              (plist-put info :fm-extra fm-extra)))
+          ;; Do not export the `:front_matter_extra' TOML/YAML source
+          ;; blocks in Markdown body.
+          nil)
+      (let* (;; See `org-element-src-block-parser' for all SRC-BLOCK properties.
+             (number-lines (org-element-property :number-lines src-block)) ;Non-nil if -n or +n switch is used
+             (hl-lines (cdr (assoc :hl_lines parameters)))
+             (hl-lines (cond
+                        ((stringp hl-lines)
+                         (replace-regexp-in-string "," " " hl-lines)) ;"1,3-4" -> "1 3-4"
+                        ((numberp hl-lines)
+                         (number-to-string hl-lines))))
+             (src-ref (org-blackfriday--get-reference src-block info))
+             (src-anchor (if src-ref
+                             (format "<a id=\"%s\"></a>\n" src-ref)
+                           ""))
+             (caption (org-export-get-caption src-block))
+             (caption-html (if (not caption)
+                               ""
+                             (let* ((src-block-num (org-export-get-ordinal
+                                                    src-block info
+                                                    nil #'org-html--has-caption-p))
+                                    (caption-prefix (let ((str-translated (org-html--translate "Listing" info)))
+                                                      (if (string= str-translated "Listing")
+                                                          "Code Snippet"
+                                                        str-translated)))
+                                    (caption-str
+                                     (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
+                                      (org-export-data-with-backend caption 'html info))))
+                               (format (concat "\n\n<div class=\"src-block-caption\">\n"
+                                               "  <span class=\"src-block-number\">%s</span>:\n"
+                                               "  %s\n"
+                                               "</div>")
+                                       (if src-ref ;Hyperlink the code snippet prefix + number
+                                           (format "<a href=\"#%s\">%s %s</a>"
+                                                   src-ref caption-prefix src-block-num)
+                                         (format "%s %s"
+                                                 caption-prefix src-block-num))
+                                       caption-str))))
+             content
+             ret)
+        ;; (message "ox-hugo src [dbg] number-lines: %S" number-lines)
+        ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
+        (setq content
+              (cond
+               ;; If both number-lines and hl-lines are nil
+               ;; , AND if :hugo-code-fence is non-nil (which is, by default).
+               ((and (null number-lines)
+                     (null hl-lines)
+                     (org-hugo--plist-get-true-p info :hugo-code-fence))
+                (let ((content1 (org-blackfriday-src-block src-block nil info)))
+                  (when (and org-hugo-langs-no-descr-in-code-fences
+                             (member (intern lang) org-hugo-langs-no-descr-in-code-fences))
+                    ;; When using Pygments, with the pygmentsCodeFences
+                    ;; options enabled in Hugo, `org' is not recognized as a
+                    ;; "language", because Pygments does not have a lexer for
+                    ;; Org.
+                    ;; Issue on Pygments repo:
+                    ;; https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org
+                    ;; So attempt to do below:
+                    ;;   ```org
+                    ;;   # org comment
+                    ;;   ```
+                    ;; will not result in a <code> tag wrapped block in HTML.
+                    ;;
+                    ;; So override the language to be an empty string in such cases.
+                    ;;
+                    ;; *Note* that this issue does NOT exist if using Chroma,
+                    ;; which is the default syntax highlighter after Hugo
+                    ;; v0.28.
+                    (setq content1 (replace-regexp-in-string (concat "\\`\\(```+\\)" lang) "\\1" content1)))
+                  (setq content1 (org-hugo--escape-hugo-shortcode content1 lang))
+                  content1))
+               ;; If number-lines is non-nil
+               ;; , or if hl-lines is non-nil
+               ;; , or if :hugo-code-fence is nil
+               (t
+                (let ((code (org-export-format-code-default src-block info))
+                      (linenos-str "")
+                      (hllines-str "")
+                      ;; Formatter string where the first arg si linenos-str and
+                      ;; second is hllines-str.
+                      (highlight-args-str "%s%s"))
+                  (when (or number-lines
+                            hl-lines)
+                    (setq highlight-args-str " \"%s%s\""))
+                  (when number-lines
+                    (let ((linenostart-str (progn
+                                             ;; Extract the start line number of the code block
+                                             (string-match "\\`\\s-*\\([0-9]+\\)\\s-\\{2\\}" code)
+                                             (match-string-no-properties 1 code))))
+                      (setq linenos-str (format "linenos=table, linenostart=%s" linenostart-str)))
+                    ;; Remove Org-inserted numbers from the beginning of each
+                    ;; line as the Hugo highlight shortcode will be used instead
+                    ;; of literally inserting the line numbers.
+                    (setq code (replace-regexp-in-string "^\\s-*[0-9]+\\s-\\{2\\}" "" code)))
+                  (when hl-lines
+                    (setq hllines-str (concat "hl_lines=" hl-lines))
+                    (when number-lines
+                      (setq hllines-str (concat ", " hllines-str))))
+                  (setq code (org-hugo--escape-hugo-shortcode code lang))
+                  (format "{{< highlight %s%s >}}\n%s{{< /highlight >}}\n"
+                          lang
+                          (format highlight-args-str linenos-str hllines-str)
+                          code)))))
+        (setq ret (concat src-anchor content caption-html))
+        (setq ret (org-blackfriday--div-wrap-maybe src-block ret))
+        ret))))
 
 ;;;; Special Block
 (defun org-hugo-special-block (special-block contents info)
@@ -2619,9 +2636,18 @@ INFO is a plist holding export options."
                   (backward-char))
                 ;; (message "[body filter DBG] line at pt: %s" (thing-at-point 'line))
                 (org-hugo--get-front-matter info))))
+        (fm-extra (plist-get info :fm-extra))
         (body (if (org-string-nw-p body) ;Insert extra newline if body is non-empty
                   (format "\n%s" body)
                 "")))
+    ;; (message "[body filter DBG fm] %S" fm)
+    ;; (message "[body filter DBG fm-extra] %S" fm-extra)
+    (when fm-extra
+      ;; If fm-extra is present, append it to the end of the
+      ;; front-matter, before the closing "+++" or "---" marker.
+      (setq fm (replace-regexp-in-string "\\(\\+\\+\\+\\|---\\)\n*\\'"
+                                         (concat fm-extra "\\&")
+                                         fm)))
     (setq org-hugo--fm fm)
     (if (org-hugo--pandoc-citations-enabled-p info)
         (format "%s%s%s" org-hugo--fm-yaml body org-hugo-footer)

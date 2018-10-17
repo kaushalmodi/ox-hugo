@@ -315,7 +315,7 @@
 
 [aminb]
   author = "Amin Bandali"
-  source = "https://git.sr.ht/~aminb/aminb.org"
+  source = "https://git.sr.ht/~bandali/aminb.org"
   site = "https://aminb.org"
   org_dir = "content-org"
   api = "micro.json"

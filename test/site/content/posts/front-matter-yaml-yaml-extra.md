@@ -1,6 +1,6 @@
 ---
 title: "Extra Front-matter (YAML, YAML extra)"
-tags: ["front-matter", "extra", "verbatim", "special-block", "yaml", "yaml-extra"]
+tags: ["front-matter", "extra", "verbatim", "src-block", "yaml", "yaml-extra"]
 draft: false
 weight: 5
 widget: "about"

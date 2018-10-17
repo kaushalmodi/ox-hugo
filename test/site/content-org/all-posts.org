@@ -5836,7 +5836,7 @@ in YAML):
 - Note :: The state change notes are intentionally put in this test
           LOGBOOK, because we want to ensure that they don't seep into
           the ~notes~ front-matter.
-** Extra Front-matter                          :extra:verbatim:special_block:
+** Extra Front-matter                              :extra:verbatim:src_block:
 :PROPERTIES:
 :EXPORT_HUGO_WEIGHT: 5
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :widget "about"

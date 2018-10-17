@@ -1,6 +1,6 @@
 +++
 title = "Extra Front-matter (TOML, TOML extra)"
-tags = ["front-matter", "extra", "verbatim", "special-block", "toml", "toml-extra"]
+tags = ["front-matter", "extra", "verbatim", "src-block", "toml", "toml-extra"]
 draft = false
 weight = 5
 widget = "about"

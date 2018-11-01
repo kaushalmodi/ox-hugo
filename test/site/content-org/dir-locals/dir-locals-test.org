@@ -1,0 +1,37 @@
+#+hugo_base_dir: ../../.
+
+#+title: .dir-locals.el test
+#+date: <2018-10-31 Wed>
+
+#+options: creator:t author:nil
+
+#+hugo_tags: "dir-locals"
+
+#+begin_description
+Test setting of few Org Hugo variables via =.dir-locals.el=.
+#+end_description
+* Variables set in ~.dir-locals.el~
+#+caption: Variables set using =.dir-locals.el=
+#+name: tab__vars_dir_locals
+|----------------------------------------+-------------------------------------------------------------------------|
+| Variable                               | Value                                                                   |
+|----------------------------------------+-------------------------------------------------------------------------|
+| =org-hugo-section=                     | ="dir-locals-test"=                                                     |
+| =org-hugo-front-matter-format=         | ="yaml"=                                                                |
+| =org-hugo-footer=                      | ="\n\nThis text is auto inserted at the end of the exported Markdown."= |
+| =org-hugo-preserve-filling=            | =nil=                                                                   |
+| =org-hugo-use-code-for-kbd=            | =t=                                                                     |
+| =org-hugo-export-with-toc=             | =t=                                                                     |
+| =org-hugo-export-with-section-numbers= | =t=                                                                     |
+| =org-hugo-export-creator-string=       | ="Dummy creator string"=                                                |
+| =org-hugo-date-format=                 | ="%Y-%m-%d"=                                                            |
+| =org-hugo-auto-export-on-save=         | =t=                                                                     |
+|----------------------------------------+-------------------------------------------------------------------------|
+* Test text
+=This is verbatim= but ~this~ is wrapped in the =kbd= tag.  As
+=org-hugo-preserve-filling= is set to =nil=, the column filling in the
+Org source is not preserved in the exported Markdown.
+* Local Variables                                                   :ARCHIVE:
+# Local Variables:
+# eval: (toggle-truncate-lines 1)
+# End:

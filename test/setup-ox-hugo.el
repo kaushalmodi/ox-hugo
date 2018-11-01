@@ -1,4 +1,4 @@
-;; Time-stamp: <2018-09-05 21:36:21 kmodi>
+;; Time-stamp: <2018-11-01 00:37:59 kmodi>
 
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
@@ -60,6 +60,9 @@ or newer.")
 (when ox-hugo-test-setup-verbose
   (message "ox-hugo-site-git-root: %S" ox-hugo-site-git-root))
 
+(defvar ox-hugo-autoloads-file (expand-file-name "ox-hugo-autoloads.el" ox-hugo-site-git-root)
+  "Path to ox-hugo package's generated autoloads file.")
+
 ;; Below will prevent installation of `org' package as a dependency
 ;; when installing `ox-hugo' from Melpa.
 (defun ox-hugo-package-dependency-check-ignore (orig-ret)
@@ -108,13 +111,18 @@ even if they are found as dependencies."
              (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
         (add-to-list 'package-archives (cons "melpa" url))) ;For `toc-org'
 
+      ;; Generate/update autoloads for ox-hugo.el and co.
+      (let ((generated-autoload-file ox-hugo-autoloads-file))
+        (update-directory-autoloads ox-hugo-site-git-root))
+
       ;; Load emacs packages and activate them.
       ;; Don't delete this line.
       (package-initialize)
       ;; `package-initialize' call is required before any of the below
       ;; can happen.
+
       (add-to-list 'load-path (concat ox-hugo-site-git-root "doc/")) ;For ox-hugo-export-gh-doc.el
-      (add-to-list 'load-path ox-hugo-site-git-root) ;For ox-hugo.el, ox-blackfriday.el
+      (add-to-list 'load-path ox-hugo-site-git-root) ;For ox-hugo.el, ox-blackfriday.el, etc.
 
       (defvar ox-hugo-missing-packages '()
         "List populated at each startup that contains the list of packages that need
@@ -245,6 +253,9 @@ Emacs installation.  If Emacs is installed using
   ;; Force the locate to en_US for the tests.
   (set-locale-environment "en_US.UTF-8")
   (setenv "LANGUAGE" "en_US.UTF-8")
+
+  ;; Set all local variables from .dir-locals.el, etc.
+  (setq enable-local-variables :all)
 
   ;; Override the default `org-hugo-export-creator-string' so that this
   ;; string is consistent in all ox-hugo tests.

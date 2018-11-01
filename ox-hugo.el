@@ -412,20 +412,21 @@ This variable can be set to either \"toml\" or \"yaml\"."
   :type '(choice
           (const :tag "TOML" "toml")
           (const :tag "YAML" "yaml")))
+;;;###autoload (put 'org-hugo-front-matter-format 'safe-local-variable 'stringp)
 
 (defcustom org-hugo-footer ""
   "String to be appended at the end of each Hugo post.
 
 The string needs to be in a Hugo-compatible Markdown format or HTML."
   :group 'org-export-hugo
-  :type 'string
-  :safe #'stringp)
+  :type 'string)
+;;;###autoload (put 'org-hugo-footer 'safe-local-variable 'stringp)
 
 (defcustom org-hugo-preserve-filling t
   "When non-nil, text filling done in Org will be retained in Markdown."
   :group 'org-export-hugo
-  :type 'boolean
-  :safe #'booleanp)
+  :type 'boolean)
+;;;###autoload (put 'org-hugo-preserve-filling 'safe-local-variable 'booleanp)
 
 (defcustom org-hugo-delete-trailing-ws t
   "When non-nil, delete trailing whitespace in Markdown output.
@@ -449,14 +450,14 @@ Those trailing whitespaces render to \"<br />\" tags in the Hugo
 generated HTML.  But the same result can also be achived by using the
 Org Verse block or Blackfriday hardLineBreak extension."
   :group 'org-export-hugo
-  :type 'boolean
-  :safe #'booleanp)
+  :type 'boolean)
+;;;###autoload (put 'org-hugo-delete-trailing-ws 'safe-local-variable 'booleanp)
 
 (defcustom org-hugo-use-code-for-kbd nil
   "When non-nil, ~text~ will translate to <kbd>text</kbd>."
   :group 'org-export-hugo
-  :type 'boolean
-  :safe #'booleanp)
+  :type 'boolean)
+;;;###autoload (put 'org-hugo-use-code-for-kbd 'safe-local-variable 'booleanp)
 
 (defcustom org-hugo-allow-spaces-in-tags t
   "When non-nil, replace double underscores in Org tags with spaces.
@@ -467,8 +468,8 @@ more information.
 This variable affects the Hugo tags and categories (set via Org
 tags using the \"@\" prefix)."
   :group 'org-export-hugo
-  :type 'boolean
-  :safe #'booleanp)
+  :type 'boolean)
+;;;###autoload (put 'org-hugo-allow-spaces-in-tags 'safe-local-variable 'booleanp)
 
 (defcustom org-hugo-prefer-hyphen-in-tags t
   "When non-nil, replace single underscores in Org tags with hyphens.
@@ -479,8 +480,8 @@ more information.
 This variable affects the Hugo tags and categories (set via Org
 tags using the \"@\" prefix)."
   :group 'org-export-hugo
-  :type 'boolean
-  :safe #'booleanp)
+  :type 'boolean)
+;;;###autoload (put 'org-hugo-prefer-hyphen-in-tags 'safe-local-variable 'booleanp)
 
 (defcustom org-hugo-tag-processing-functions '(org-hugo--tag-processing-fn-replace-with-spaces-maybe
                                                org-hugo--tag-processing-fn-replace-with-hyphens-maybe)
@@ -511,8 +512,8 @@ it is if `org-hugo-prefer-hyphen-in-tags' is nil."
 (defcustom org-hugo-auto-set-lastmod nil
   "When non-nil, set the lastmod field in front-matter to current time."
   :group 'org-export-hugo
-  :type 'boolean
-  :safe #'booleanp)
+  :type 'boolean)
+;;;###autoload (put 'org-hugo-auto-set-lastmod 'safe-local-variable 'booleanp)
 
 (defcustom org-hugo-suppress-lastmod-period 0.0
   "Suppressing period (in seconds) for adding the lastmod front-matter.
@@ -535,6 +536,7 @@ This variable is effective only if auto-setting of the
 non-nil."
   :group 'org-export-hugo
   :type 'float)
+;;;###autoload (put 'org-hugo-suppress-lastmod-period 'safe-local-variable 'floatp)
 
 (defcustom org-hugo-export-with-toc nil
   "When non-nil, Markdown format TOC will be inserted.
@@ -552,10 +554,8 @@ e.g. \"toc:nil\", \"toc:t\" or \"toc:3\"."
   :type '(choice
           (const :tag "No Table of Contents" nil)
           (const :tag "Full Table of Contents" t)
-          (integer :tag "TOC to level"))
-  :safe (lambda (x)
-          (or (booleanp x)
-              (integerp x))))
+          (integer :tag "TOC to level")))
+;;;###autoload (put 'org-hugo-export-with-toc 'safe-local-variable (lambda (x) (or (booleanp x) (integerp x))))
 
 (defcustom org-hugo-export-with-section-numbers nil
   "Configuration for adding section numbers to headlines.
@@ -577,10 +577,8 @@ e.g. \"num:onlytoc\", \"num:nil\", \"num:t\" or \"num:3\"."
           (const :tag "Don't number only in body" 'onlytoc)
           (const :tag "Don't number any headline" nil)
           (const :tag "Number all headlines" t)
-          (integer :tag "Number to level"))
-  :safe (lambda (x)
-          (or (booleanp x)
-              (integerp x))))
+          (integer :tag "Number to level")))
+;;;###autoload (put 'org-hugo-export-with-section-numbers 'safe-local-variable (lambda (x) (or (booleanp x) (equal 'onlytoc x) (integerp x))))
 
 (defcustom org-hugo-default-static-subdirectory-for-externals "ox-hugo"
   "Default sub-directory in Hugo static directory for external files.
@@ -589,8 +587,8 @@ If the source path for external files does not contain
 create inside the Hugo static directory.  So all such files are
 copied to this sub-directory inside the Hugo static directory."
   :group 'org-export-hugo
-  :type 'string
-  :safe #'stringp)
+  :type 'string)
+;;;###autoload (put 'org-hugo-default-static-subdirectory-for-externals 'safe-local-variable 'stringp)
 
 (defcustom org-hugo-external-file-extensions-allowed-for-copying
   '("jpg" "jpeg" "tiff" "png" "svg" "gif"
@@ -616,8 +614,8 @@ nil."
   "Information about the creator of the document.
 This option can also be set on with the CREATOR keyword."
   :group 'org-export-hugo
-  :type '(string :tag "Creator string")
-  :safe #'stringp)
+  :type '(string :tag "Creator string"))
+;;;###autoload (put 'org-hugo-export-creator-string 'safe-local-variable 'stringp)
 
 (defcustom org-hugo-date-format "%Y-%m-%dT%T%z"
   "Date format used for exporting date in front-matter.
@@ -647,8 +645,8 @@ results in a date string like \"2017-07-31T17:05:38-04:00\".
 See `format-time-string' to learn about the date format string
 expression."
   :group 'org-export-hugo
-  :type 'string
-  :safe #'stringp)
+  :type 'string)
+;;;###autoload (put 'org-hugo-date-format 'safe-local-variable 'stringp)
 
 (defcustom org-hugo-paired-shortcodes ""
   "Space-separated string of paired shortcode strings.
@@ -683,8 +681,8 @@ would be collectively added to this variable as:
 Hugo shortcodes documentation:
 https://gohugo.io/content-management/shortcodes/."
   :group 'org-export-hugo
-  :type 'string
-  :safe #'stringp)
+  :type 'string)
+;;;###autoload (put 'org-hugo-paired-shortcodes 'safe-local-variable 'stringp)
 
 (defcustom org-hugo-langs-no-descr-in-code-fences '()
   "List of languages whose descriptors should not be exported to Markdown.
@@ -710,8 +708,7 @@ It is suggested to instead leave this value at its default value
 and use the Chroma syntax highlighter (default) in Hugo v0.28 and
 newer."
   :group 'org-export-hugo
-  :type '(repeat symbol)
-  :safe #'listp)
+  :type '(repeat symbol))
 
 
 

@@ -395,6 +395,16 @@ Examples:
   :group 'org-export
   :version "25.2")
 
+(define-obsolete-variable-alias 'org-hugo-default-section-directory 'org-hugo-section "Oct 31, 2018")
+(defcustom org-hugo-section "posts"
+  "Default section for Hugo posts.
+
+This variable is the name of the directory under the \"content/\"
+directory where all Hugo posts should go by default."
+  :group 'org-export-hugo
+  :type 'directory)
+;;;###autoload (put 'org-hugo-section 'safe-local-variable 'stringp)
+
 (defcustom org-hugo-front-matter-format "toml"
   "Front-matter format.
 This variable can be set to either \"toml\" or \"yaml\"."
@@ -402,15 +412,6 @@ This variable can be set to either \"toml\" or \"yaml\"."
   :type '(choice
           (const :tag "TOML" "toml")
           (const :tag "YAML" "yaml")))
-
-(defcustom org-hugo-default-section-directory "posts"
-  "Default section for Hugo posts.
-
-This variable is the name of the directory under the \"content/\"
-directory where all Hugo posts should go by default."
-  :group 'org-export-hugo
-  :type 'directory
-  :safe #'stringp)
 
 (defcustom org-hugo-footer ""
   "String to be appended at the end of each Hugo post.
@@ -768,7 +769,7 @@ newer."
                    (:hugo-level-offset "HUGO_LEVEL_OFFSET" nil "1")
                    (:hugo-preserve-filling "HUGO_PRESERVE_FILLING" nil org-hugo-preserve-filling) ;Preserve breaks so that text filling in Markdown matches that of Org
                    (:hugo-delete-trailing-ws "HUGO_DELETE_TRAILING_WS" nil org-hugo-delete-trailing-ws)
-                   (:hugo-section "HUGO_SECTION" nil org-hugo-default-section-directory)
+                   (:hugo-section "HUGO_SECTION" nil org-hugo-section)
                    (:hugo-bundle "HUGO_BUNDLE" nil nil)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil t) ;Prefer to generate triple-backquoted Markdown code blocks by default.
@@ -3877,7 +3878,7 @@ buffer and returned as a string in Org format."
                                                   "\n")
                                      "No Org mode shadows found in =load-path="))
                                 "** =ox-hugo= defcustoms"
-                                ,(format "|org-hugo-default-section-directory                    |%S|" org-hugo-default-section-directory)
+                                ,(format "|org-hugo-section                                      |%S|" org-hugo-section)
                                 ,(format "|org-hugo-use-code-for-kbd                             |%S|" org-hugo-use-code-for-kbd)
                                 ,(format "|org-hugo-preserve-filling                             |%S|" org-hugo-preserve-filling)
                                 ,(format "|org-hugo-delete-trailing-ws                           |%S|" org-hugo-delete-trailing-ws)

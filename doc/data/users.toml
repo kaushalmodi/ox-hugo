@@ -326,6 +326,41 @@
   site = "https://elbauldelprogramador.com/en/"
   org_dir = "content-org"
 
+[amca01]
+  author = "Alasdair McAndrew"
+  source = "https://github.com/amca01/whats_this"
+  site = "https://blog.numbersandshapes.net/"
+  org_dir = "content-org"
+
+[BloggerBust]
+  author = "BloggerBust"
+  source = "https://github.com/BloggerBust/bloggerbust.ca"
+  site = "https://bloggerbust.ca/"
+  org_dir = "content-org"
+
+[semgilo]
+  author = "semgilo"
+  source = "https://github.com/semgilo/blog"
+  site = "http://www.lanhuzi.com/"
+  org_dir = "content-org"
+
+[derui]
+  author = "derui"
+  source = "https://github.com/derui/blog"
+  site = "https://blog.deltabox.site/"
+  org_dir = "content_org"
+
+[jarss]
+  author = "jarss"
+  source = "https://github.com/jarss/TAONAW"
+  site = "https://jarss.github.io/TAONAW/"
+
+# []
+#   author = ""
+#   source = ""
+#   site = ""
+#   org_dir = "content-org"
+
 # []
 #   author = ""
 #   source = ""

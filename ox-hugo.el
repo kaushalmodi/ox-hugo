@@ -1974,13 +1974,12 @@ and rewrite link paths to make blogging more seamless."
                       (let ((number (org-export-get-ordinal
                                      destination info
                                      nil #'org-html--has-caption-p)))
-                        (cond
-                         ((not number)
-                          nil)
-                         ((atom number)
-                          (number-to-string number))
-                         (t
-                          (mapconcat #'number-to-string number ".")))))))
+                        (when number
+                          (let ((num-str (if (atom number)
+                                             (number-to-string number)
+                                           (mapconcat #'number-to-string number "."))))
+                            ;; (message "[ox-hugo-link DBG] num-str: %s" num-str)
+                            num-str))))))
              ;; (message "[ox-hugo-link DBG] link description: %s" description)
              (when description
                (format "[%s](#%s)"

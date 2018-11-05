@@ -1,5 +1,6 @@
 +++
 title = "Links to tables"
+description = "Test for internal links to table references."
 tags = ["links", "internal-links", "table", "caption"]
 draft = false
 +++
@@ -14,9 +15,9 @@ mandatory in order to get proper numbering** for <span class="underline">source 
 | a | b |
 | c | d |
 
-*Here we refer to table [[tab__simple2]].*
+*Here we refer to [[tab__simple2]].*
 
-#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "../misc/common.org::#lorem-ipsum" :only-contents t
 
 Here's another table:
 
@@ -25,7 +26,7 @@ Here's another table:
 | e | f |
 | g | h |
 
-*Here we refer to table [[tab__simple1]].*
+*Here we refer to [[tab__simple1]].*
 ```
 
 will output below (_lorem-ipsum_ added to increase page content so
@@ -41,7 +42,7 @@ that the link jump is evident):
 |---|---|
 | c | d |
 
-**Here we refer to table [2](#table--simple2).**
+**Here we refer to [2](#table--simple2).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -107,7 +108,7 @@ Here's another table:
 |---|---|
 | g | h |
 
-**Here we refer to table [1](#table--simple1).**
+**Here we refer to [1](#table--simple1).**
 
 ---
 

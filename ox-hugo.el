@@ -684,6 +684,20 @@ https://gohugo.io/content-management/shortcodes/."
   :type 'string)
 ;;;###autoload (put 'org-hugo-paired-shortcodes 'safe-local-variable 'stringp)
 
+(defcustom org-hugo-link-desc-insert-type nil
+  "Insert the element type in link descriptions for numbered elements.
+
+String representing the type is inserted for these Org elements
+if they are numbered (i.e. both \"#+name\" and \"#+caption\" are
+specified for them):
+
+- src-block : \"Code Snippet\"
+- table: \"Table\"
+- figure: \"Figure\"."
+  :group 'org-export-hugo
+  :type 'boolean)
+;;;###autoload (put 'org-hugo-link-desc-insert-type 'safe-local-variable 'booleanp)
+
 (defcustom org-hugo-langs-no-descr-in-code-fences '()
   "List of languages whose descriptors should not be exported to Markdown.
 
@@ -1942,6 +1956,7 @@ and rewrite link paths to make blogging more seamless."
       (let ((destination (if (string= type "fuzzy")
                              (org-export-resolve-fuzzy-link link info)
                            (org-export-resolve-id-link link info))))
+        ;; (message "[org-hugo-link DBG] link destination elem type: %S" (org-element-type destination))
         (pcase (org-element-type destination)
           (`plain-text                  ;External file
            (let ((path (progn
@@ -1979,7 +1994,22 @@ and rewrite link paths to make blogging more seamless."
                                              (number-to-string number)
                                            (mapconcat #'number-to-string number "."))))
                             ;; (message "[ox-hugo-link DBG] num-str: %s" num-str)
-                            num-str))))))
+                            (if org-hugo-link-desc-insert-type
+                                (let* ((type (org-element-type destination))
+                                       ;; Org doesn't have a specific
+                                       ;; element for figures. So if
+                                       ;; the element is `paragraph',
+                                       ;; and as this element has an
+                                       ;; ordinal, we will assume that
+                                       ;; to be a figure.
+                                       (type (if (equal 'paragraph type)
+                                                 'figure
+                                               type))
+                                       (type-str (org-html--translate
+                                                  (cdr (assoc type org-blackfriday--org-element-string))
+                                                  info)))
+                                  (format "%s %s" type-str num-str))
+                              num-str)))))))
              ;; (message "[ox-hugo-link DBG] link description: %s" description)
              (when description
                (format "[%s](#%s)"

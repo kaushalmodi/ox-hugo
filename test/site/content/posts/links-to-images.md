@@ -1,6 +1,7 @@
 +++
 title = "Links to images"
-tags = ["links", "internal-links"]
+description = "Test for internal links to image references."
+tags = ["links", "internal-links", "image", "figure"]
 draft = false
 +++
 
@@ -13,9 +14,9 @@ mandatory in order to get proper numbering** for <span class="underline">source 
 #+name: img__org_logo1
 [[/images/org-mode-unicorn-logo.png]]
 
-*Here we refer to image [[img__org_logo2]].*
+*Here we refer to [[img__org_logo2]].*
 
-#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "../misc/common.org::#lorem-ipsum" :only-contents t
 
 Here's the same image again, but with a different Org link ID:
 
@@ -23,17 +24,17 @@ Here's the same image again, but with a different Org link ID:
 #+name: img__org_logo2
 [[/images/org-mode-unicorn-logo.png]]
 
-*Here we refer to image [[img__org_logo1]].*
+*Here we refer to [[img__org_logo1]].*
 ```
 
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="org2036975"></a>
+<a id="org93b5383"></a>
 
 {{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 1: Org Logo" >}}
 
-**Here we refer to image [2](#org596be4b).**
+**Here we refer to [2](#org6beb2f2).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -89,11 +90,11 @@ blandit in.
 
 Here's the same image again, but with a different Org link ID:
 
-<a id="org596be4b"></a>
+<a id="org6beb2f2"></a>
 
 {{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: Same Org Logo" >}}
 
-**Here we refer to image [1](#org2036975).**
+**Here we refer to [1](#org93b5383).**
 
 ---
 

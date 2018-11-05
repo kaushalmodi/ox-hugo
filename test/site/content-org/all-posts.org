@@ -2861,10 +2861,10 @@ Once that is evaluated, links like these will export fine i.e. no
 :CUSTOM_ID: link-heading-1
 :END:
 - Link to [[#link-heading-2][Heading 2]]
-#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
-#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
-#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
-#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./misc/common.org::#lorem-ipsum" :only-contents t
+#+include: "./misc/common.org::#lorem-ipsum" :only-contents t
+#+include: "./misc/common.org::#lorem-ipsum" :only-contents t
+#+include: "./misc/common.org::#lorem-ipsum" :only-contents t
 **** Heading 2
 :PROPERTIES:
 :CUSTOM_ID: link-heading-2
@@ -2891,169 +2891,33 @@ that the link jump is evident):
 /Scroll to the end of the below 'lorem-ipsum' block to find the test
 link./
 
-#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./misc/common.org::#lorem-ipsum" :only-contents t
 
 *Here we refer to item [[target]].*
-*** Links to source blocks
+*** Links to source blocks                                        :src_block:
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-source-blocks
 :END:
-From [[https://orgmode.org/manual/Internal-links.html][(org) Internal links]],
-
-#+begin_quote
-   If no dedicated target exists, the link will then try to match the
-exact name of an element within the buffer.  Naming is done with the
-‘#+name’ keyword, which has to be put in the line before the element it
-refers to, as in the following example
-    #+begin_example
-    ,#+name: My Target
-    | a  | table      |
-    |----+------------|
-    | of | four cells |
-    #+end_example
-#+end_quote
-
-Also, when targeting a =#+name= keyword, *=#+caption= keyword is
-mandatory in order to get proper numbering* for _source blocks_,
-_images_ and _tables_.
-
-So the below code block:
-#+begin_src org
-,#+caption: Hello
-,#+name: code__hello
-,#+begin_src emacs-lisp
-(message "Hello")
-,#+end_src
-
-,*Here we refer to code snippet [[code__helloagain]].*
-
-,#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
-
-,#+caption: Hello Again
-,#+name: code__helloagain
-,#+begin_src emacs-lisp
-(message "Hello again")
-,#+end_src
-
-,*Here we refer to code snippet [[code__hello]].*
-#+end_src
-
-will output below (/lorem-ipsum/ added to increase page content so
-that the link jump is evident):
-
-#+caption: Hello
-#+name: code__hello
-#+begin_src emacs-lisp
-(message "Hello")
-#+end_src
-
-*Here we refer to code snippet [[code__helloagain]].*
-
-#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
-
-#+caption: Hello Again
-#+name: code__helloagain
-#+begin_src emacs-lisp
-(message "Hello again")
-#+end_src
-
-*Here we refer to code snippet [[code__hello]].*
+#+begin_description
+Test for internal links to source block references.
+#+end_description
+#+include: "./single-posts/links-to-org-elements.org::#links-to-source-blocks" :only-contents t
 *** Links to tables                                           :table:caption:
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-tables
 :END:
-*Note*: When targeting a =#+name= keyword, *=#+caption= keyword is
-mandatory in order to get proper numbering* for _source blocks_,
-_images_ and _tables_.
-
-#+begin_src org
-,#+caption: Simple table 1
-,#+name: tab__simple1
-| a | b |
-| c | d |
-
-,*Here we refer to table [[tab__simple2]].*
-
-,#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
-
-Here's another table:
-
-,#+caption: Simple table 2
-,#+name: tab__simple2
-| e | f |
-| g | h |
-
-,*Here we refer to table [[tab__simple1]].*
-#+end_src
-
-will output below (/lorem-ipsum/ added to increase page content so
-that the link jump is evident):
-
-#+caption: Simple table 1
-#+name: tab__simple1
-| a | b |
-| c | d |
-
-*Here we refer to table [[tab__simple2]].*
-
-#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
-
-Here's another table:
-
-#+caption: Simple table 2
-#+name: tab__simple2
-| e | f |
-| g | h |
-
-*Here we refer to table [[tab__simple1]].*
------
-Reference: [[https://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
-*** Links to images
+#+begin_description
+Test for internal links to table references.
+#+end_description
+#+include: "./single-posts/links-to-org-elements.org::#links-to-tables" :only-contents t
+*** Links to images                                            :image:figure:
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-images
 :END:
-*Note*: When targeting a =#+name= keyword, *=#+caption= keyword is
-mandatory in order to get proper numbering* for _source blocks_,
-_images_ and _tables_.
-
-#+begin_src org
-,#+caption: Org Logo
-,#+name: img__org_logo1
-[[/images/org-mode-unicorn-logo.png]]
-
-,*Here we refer to image [[img__org_logo2]].*
-
-,#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
-
-Here's the same image again, but with a different Org link ID:
-
-,#+caption: Same Org Logo
-,#+name: img__org_logo2
-[[/images/org-mode-unicorn-logo.png]]
-
-,*Here we refer to image [[img__org_logo1]].*
-#+end_src
-
-will output below (/lorem-ipsum/ added to increase page content so
-that the link jump is evident):
-
-#+caption: Org Logo
-#+name: img__org_logo1
-[[/images/org-mode-unicorn-logo.png]]
-
-*Here we refer to image [[img__org_logo2]].*
-
-#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
-
-Here's the same image again, but with a different Org link ID:
-
-#+caption: Same Org Logo
-#+name: img__org_logo2
-[[/images/org-mode-unicorn-logo.png]]
-
-*Here we refer to image [[img__org_logo1]].*
------
-Reference: [[https://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
+#+begin_description
+Test for internal links to image references.
+#+end_description
+#+include: "./single-posts/links-to-org-elements.org::#links-to-images" :only-contents t
 *** Links to equations                                            :equations:
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-equations
@@ -3070,7 +2934,7 @@ C = W\log_{2} (1+\mathrm{SNR})
 Below, /lorem-ipsum/ is added to increase page content so that the
 link jump is evident:
 
-#+include: "./all-posts.org::#lorem-ipsum" :only-contents t
+#+include: "./misc/common.org::#lorem-ipsum" :only-contents t
 
 Here's the same equation again, but with a different label:
 
@@ -7180,62 +7044,6 @@ So, for emacs version 25.0.50.1, this variable will be 25_0.")
 (message "This is line 6")
 ,#+end_src
 #+end_src
-** Lorem Ipsum
-:PROPERTIES:
-:CUSTOM_ID: lorem-ipsum
-:END:
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
-quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
-mi. Maecenas pharetra sapien nunc, ut mollis enim aliquam quis. Nam at
-ultricies metus. Nulla tempor augue in vestibulum tristique. Phasellus
-volutpat pharetra metus quis suscipit. Morbi maximus sem dolor, id
-accumsan ipsum commodo non.
-
-Fusce quam ligula, gravida ac dui venenatis, bibendum commodo
-lorem. Duis id elit turpis. Integer sed diam nibh. Donec tempus
-lacinia odio, a laoreet velit dictum id. Suspendisse efficitur euismod
-purus et porttitor. Aliquam sit amet tellus mauris. Mauris semper
-dignissim nibh, faucibus vestibulum purus varius quis. Suspendisse
-potenti. Cras at ligula sit amet nunc vehicula condimentum quis nec
-est. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-posuere cubilia Curae; Donec iaculis, neque sit amet maximus rhoncus,
-nisl tortor convallis ante, ut mollis purus augue ut justo. Praesent
-felis urna, volutpat sit amet posuere dictum, luctus quis nibh. Proin
-et tristique ipsum, in aliquam ante.
-
-Aenean eget ex mauris. Cras ut tempor quam. Curabitur eget nulla
-laoreet, bibendum neque porta, tempus nulla. Ut tellus nisi, semper eu
-ligula pretium, aliquam accumsan dolor. Nunc fermentum cursus arcu eu
-suscipit. Nam dolor tellus, efficitur sed condimentum at, fringilla
-eget nisi. Nulla luctus metus felis. Suspendisse potenti. Cras lacinia
-orci nec dui sodales commodo. Donec tellus arcu, congue porta ultrices
-non, pretium et sapien. Proin mattis risus dignissim feugiat
-tristique. Donec nibh lorem, facilisis id posuere ut, varius ac
-urna. Etiam ultrices dignissim mauris, quis venenatis ex semper ut.
-
-Curabitur id fermentum erat, rhoncus scelerisque est. Sed pulvinar,
-nulla sed sollicitudin scelerisque, ipsum erat sollicitudin dolor, ut
-commodo arcu justo vel libero. Curabitur turpis dolor, fermentum ut
-elit a, vehicula commodo nunc. Sed sit amet blandit nulla, quis
-sodales massa. Donec lobortis, urna vel volutpat ullamcorper, mauris
-est efficitur nulla, et suscipit velit dui at metus. Aliquam id sem
-sed metus tristique scelerisque nec vitae odio. Phasellus a
-pellentesque libero, vel convallis metus. Sed nec fringilla magna, non
-varius ex. Sed interdum eleifend ligula, quis porta enim ultrices
-a. Donec hendrerit diam ac elementum tincidunt.
-
-Pellentesque eget nisl rhoncus, malesuada justo nec, suscipit
-quam. Nam sodales mauris eu bibendum suscipit. Vivamus sodales dui
-lorem, scelerisque pellentesque diam fermentum sed. Etiam fermentum
-nisl id nisl blandit, sit amet semper erat ultricies. Nulla tincidunt
-nulla metus, eu imperdiet lorem malesuada sagittis. Maecenas accumsan
-risus sed ante eleifend, vitae pretium leo porta. Suspendisse vitae
-eros vitae dui ornare condimentum id sit amet mauris. Etiam tincidunt
-consequat risus, eu posuere mi. Donec ut nunc eu massa porttitor
-suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
-molestie velit. Nullam pellentesque convallis ante, vel posuere libero
-blandit in.
-# a comment forces paragraph break in Org
 * Meta
 ** Search
 :PROPERTIES:

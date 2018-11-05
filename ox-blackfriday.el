@@ -56,7 +56,7 @@ Note that this variable is *only* for internal use.")
 
 (defvar org-blackfriday--org-element-string '((src-block . "Code Snippet")
                                               (table . "Table")
-                                              (figure . "Figure"))
+                                              (figure . "Figure")) ;Note that `figure' is not an actual Org element
   "Alist of strings used to represent various Org elements.")
 
 

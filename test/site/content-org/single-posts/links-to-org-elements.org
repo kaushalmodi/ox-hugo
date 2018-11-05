@@ -1,0 +1,177 @@
+#+title: Links to Org Elements (tables, source blocks, ..)
+#+author:
+#+date: <2018-11-06 Tue>
+
+#+hugo_base_dir: ../../
+#+hugo_section: singles
+#+hugo_tags: internal-links table src-block image figure link-type
+
+#+begin_description
+Test for links generated for internal links to tables, source blocks,
+figures.
+#+end_description
+
+* Links to source blocks
+:PROPERTIES:
+:CUSTOM_ID: links-to-source-blocks
+:END:
+From [[https://orgmode.org/manual/Internal-links.html][(org) Internal links]],
+
+#+begin_quote
+   If no dedicated target exists, the link will then try to match the
+exact name of an element within the buffer.  Naming is done with the
+‘#+name’ keyword, which has to be put in the line before the element it
+refers to, as in the following example
+    #+begin_example
+    ,#+name: My Target
+    | a  | table      |
+    |----+------------|
+    | of | four cells |
+    #+end_example
+#+end_quote
+
+Also, when targeting a =#+name= keyword, *=#+caption= keyword is
+mandatory in order to get proper numbering* for _source blocks_,
+_images_ and _tables_.
+
+So the below code block:
+#+begin_src org
+,#+caption: Hello
+,#+name: code__hello
+,#+begin_src emacs-lisp
+(message "Hello")
+,#+end_src
+
+,*Here we refer to [[code__helloagain]].*
+
+,#+include: "../misc/common.org::#lorem-ipsum" :only-contents t
+
+,#+caption: Hello Again
+,#+name: code__helloagain
+,#+begin_src emacs-lisp
+(message "Hello again")
+,#+end_src
+
+,*Here we refer to [[code__hello]].*
+#+end_src
+
+will output below (/lorem-ipsum/ added to increase page content so
+that the link jump is evident):
+
+#+caption: Hello
+#+name: code__hello
+#+begin_src emacs-lisp
+(message "Hello")
+#+end_src
+
+*Here we refer to [[code__helloagain]].*
+
+#+include: "../misc/common.org::#lorem-ipsum" :only-contents t
+
+#+caption: Hello Again
+#+name: code__helloagain
+#+begin_src emacs-lisp
+(message "Hello again")
+#+end_src
+
+*Here we refer to [[code__hello]].*
+* Links to tables
+:PROPERTIES:
+:CUSTOM_ID: links-to-tables
+:END:
+*Note*: When targeting a =#+name= keyword, *=#+caption= keyword is
+mandatory in order to get proper numbering* for _source blocks_,
+_images_ and _tables_.
+
+#+begin_src org
+,#+caption: Simple table 1
+,#+name: tab__simple1
+| a | b |
+| c | d |
+
+,*Here we refer to [[tab__simple2]].*
+
+,#+include: "../misc/common.org::#lorem-ipsum" :only-contents t
+
+Here's another table:
+
+,#+caption: Simple table 2
+,#+name: tab__simple2
+| e | f |
+| g | h |
+
+,*Here we refer to [[tab__simple1]].*
+#+end_src
+
+will output below (/lorem-ipsum/ added to increase page content so
+that the link jump is evident):
+
+#+caption: Simple table 1
+#+name: tab__simple1
+| a | b |
+| c | d |
+
+*Here we refer to [[tab__simple2]].*
+
+#+include: "../misc/common.org::#lorem-ipsum" :only-contents t
+
+Here's another table:
+
+#+caption: Simple table 2
+#+name: tab__simple2
+| e | f |
+| g | h |
+
+*Here we refer to [[tab__simple1]].*
+-----
+Reference: [[https://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
+* Links to images
+:PROPERTIES:
+:CUSTOM_ID: links-to-images
+:END:
+*Note*: When targeting a =#+name= keyword, *=#+caption= keyword is
+mandatory in order to get proper numbering* for _source blocks_,
+_images_ and _tables_.
+
+#+begin_src org
+,#+caption: Org Logo
+,#+name: img__org_logo1
+[[/images/org-mode-unicorn-logo.png]]
+
+,*Here we refer to [[img__org_logo2]].*
+
+,#+include: "../misc/common.org::#lorem-ipsum" :only-contents t
+
+Here's the same image again, but with a different Org link ID:
+
+,#+caption: Same Org Logo
+,#+name: img__org_logo2
+[[/images/org-mode-unicorn-logo.png]]
+
+,*Here we refer to [[img__org_logo1]].*
+#+end_src
+
+will output below (/lorem-ipsum/ added to increase page content so
+that the link jump is evident):
+
+#+caption: Org Logo
+#+name: img__org_logo1
+[[/images/org-mode-unicorn-logo.png]]
+
+*Here we refer to [[img__org_logo2]].*
+
+#+include: "../misc/common.org::#lorem-ipsum" :only-contents t
+
+Here's the same image again, but with a different Org link ID:
+
+#+caption: Same Org Logo
+#+name: img__org_logo2
+[[/images/org-mode-unicorn-logo.png]]
+
+*Here we refer to [[img__org_logo1]].*
+-----
+Reference: [[https://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
+* COMMENT Local Variables                                           :ARCHIVE:
+# Local Variables:
+# org-hugo-link-desc-insert-type: t
+# End:

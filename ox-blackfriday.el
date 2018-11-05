@@ -420,38 +420,46 @@ Details: https://github.com/kaushalmodi/ox-hugo/issues/57."
 
 ;;;; Get Reference
 (defun org-blackfriday--get-reference (elem info)
-  "Return a reference for ELEM using its ordinal if available.
+  "Return a reference for ELEM using its \"#+name\" if available.
 
 INFO is a plist used as a communication channel.
 
-If the ELEM doesn't have its `name' defined, nil is returned.
+If the ELEM has its `name' defined, the anchor is derived from it:
 
-Else, if the ELEM has its `caption' defined, a reference of the
-kind \"org-ELEM-ORDINAL\" is returned.
+- If the `name' begins with \"code__\", \"tab__\", \"table__\",
+  \"fig__\" or \"figure__\", that prefix is removed as this
+  function adds its own appropriate prefix.
+- Underscores and forward slashes in the `name' get replaced with
+  hyphens.
 
-Else, the random reference generated using
-`org-export-get-reference' is returned.
+This conditioned `name' is then appended to the
+code/table/figure-appropriate prefix, and returned.
+
+Else, return nil.
 
 The return value, if non-nil, is a string."
-  (let ((name-exists (org-element-property :name elem)))
+  (let ((name (org-element-property :name elem))) ;Value of #+name
     ;; Reference cannot be created if #+name does not exist.
-    (when name-exists
-      (let ((elem-ordinal (org-export-get-ordinal ;This is nil if a code snippet has no caption
-                           elem info
-                           nil #'org-html--has-caption-p)))
-        (if elem-ordinal
-            (let* ((elem-type (org-element-type elem))
-                   (prefix (cond
-                            ((eq 'src-block elem-type)
-                             "code-snippet")
-                            ((eq 'table elem-type)
-                             "table")
-                            (t
-                             (format "org-%s" (symbol-name elem-type))))))
-              (format "%s-%d" prefix elem-ordinal))
-          ;; Return the randomly generated Org reference if the
-          ;; element ordinal is nil.
-          (org-export-get-reference elem info))))))
+    ;; (message "[ox-bf ref DBG] name: %S" name)
+    (when name
+      (let* ((elem-type (org-element-type elem))
+             (prefix (cond
+                      ((eq 'src-block elem-type)
+                       "code-snippet")
+                      ((eq 'table elem-type)
+                       "table")
+                      (t
+                       (format "org-%s" (symbol-name elem-type)))))
+             (name1 (let* ((tmp name)
+                           ;; Remove commonly used code/table/figure
+                           ;; prefixes in the #+name itself.
+                           (tmp (replace-regexp-in-string "\\`\\(code\\|tab\\|table\\|fig\\|figure\\|\\)__" "" tmp))
+                           ;; Prefer to use hyphens instead of
+                           ;; underscores in anchors.  Also replace /
+                           ;; chars with hyphens.
+                           (tmp (replace-regexp-in-string "[_/]" "-" tmp)))
+                      tmp)))
+        (format "%s--%s" prefix name1)))))
 
 
 

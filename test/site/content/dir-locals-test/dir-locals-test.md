@@ -28,9 +28,9 @@ creator: "Dummy creator string"
 
 ## <span class="section-num">1</span> Variables set in <kbd>.dir-locals.el</kbd> {#variables-set-in}
 
-<a id="table-1"></a>
+<a id="table--vars-dir-locals"></a>
 <div class="table-caption">
-  <span class="table-number"><a href="#table-1">Table 1</a></span>:
+  <span class="table-number"><a href="#table--vars-dir-locals">Table 1</a></span>:
   Variables set using <code>.dir-locals.el</code>
 </div>
 

@@ -31,9 +31,9 @@ Here's another table:
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="table-1"></a>
+<a id="table--simple1"></a>
 <div class="table-caption">
-  <span class="table-number"><a href="#table-1">Table 1</a></span>:
+  <span class="table-number"><a href="#table--simple1">Table 1</a></span>:
   Simple table 1
 </div>
 
@@ -41,7 +41,7 @@ that the link jump is evident):
 |---|---|
 | c | d |
 
-**Here we refer to table [2](#table-2).**
+**Here we refer to table [2](#table--simple2).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -97,9 +97,9 @@ blandit in.
 
 Here's another table:
 
-<a id="table-2"></a>
+<a id="table--simple2"></a>
 <div class="table-caption">
-  <span class="table-number"><a href="#table-2">Table 2</a></span>:
+  <span class="table-number"><a href="#table--simple2">Table 2</a></span>:
   Simple table 2
 </div>
 
@@ -107,7 +107,7 @@ Here's another table:
 |---|---|
 | g | h |
 
-**Here we refer to table [1](#table-1).**
+**Here we refer to table [1](#table--simple1).**
 
 ---
 

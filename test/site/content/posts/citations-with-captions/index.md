@@ -19,7 +19,7 @@ draft = false
 `ox-hugo` Issue
 \#[191](https://github.com/kaushalmodi/ox-hugo/issues/191)
 
-<a id="code-snippet-1"></a>
+<a id="code-snippet--plantuml-nested-boxes"></a>
 
 ``` plantuml
 rectangle "<html>, <body>, etc." as a  {
@@ -31,8 +31,9 @@ rectangle "<html>, <body>, etc." as a  {
 
 <div class="src-block-caption">
 
-<span class="src-block-number"><a href="#code-snippet-1">Code Snippet
-1</a></span>: Nested Boxes using PlantUML
+<span
+class="src-block-number"><a href="#code-snippet--plantuml-nested-boxes">Code
+Snippet 1</a></span>: Nested Boxes using PlantUML
 
 </div>
 

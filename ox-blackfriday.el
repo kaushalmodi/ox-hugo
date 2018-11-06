@@ -479,8 +479,10 @@ return the translated version of of the string associated in that
 alist.
 
 Else if TYPE key does not exist in
-`org-blackfriday--org-element-string', or if TYPE is nil, return
-the translation of STR directly."
+`org-blackfriday--org-element-string', or if TYPE is nil, but STR
+is non-nil, return the translation of STR directly.
+
+Else return an empty string."
   (let ((elem-str (cdr (assoc type org-blackfriday--org-element-string))))
     (if elem-str
         (cond
@@ -491,7 +493,9 @@ the translation of STR directly."
               listing-tr)))
          (t
           (org-html--translate elem-str info)))
-      (org-html--translate str info))))
+      (if (stringp str)
+          (org-html--translate str info)
+        ""))))
 
 
 

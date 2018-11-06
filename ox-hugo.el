@@ -1944,7 +1944,7 @@ and rewrite link paths to make blogging more seamless."
          (link-is-url (member type '("http" "https" "ftp" "mailto"))))
     (when (and (stringp raw-path)
                link-is-url)
-      (setq raw-path (org-blackfriday-url-sanitize raw-path)))
+      (setq raw-path (org-blackfriday--url-sanitize raw-path)))
     ;; (message "[ox-hugo-link DBG] link: %S" link)
     ;; (message "[ox-hugo-link DBG] link path: %s" (org-element-property :path link))
     ;; (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))

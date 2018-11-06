@@ -419,10 +419,8 @@ Details: https://github.com/kaushalmodi/ox-hugo/issues/57."
     code))
 
 ;;;; Get Reference
-(defun org-blackfriday--get-reference (elem info)
+(defun org-blackfriday--get-reference (elem)
   "Return a reference for ELEM using its \"#+name\" if available.
-
-INFO is a plist used as a communication channel.
 
 If the ELEM has its `name' defined, the anchor is derived from it:
 
@@ -979,7 +977,7 @@ contextual information."
   ;; (message "[ox-bf-table DBG] In contents: %s" contents)
   (let* ((rows (org-element-map table 'table-row 'identity info))
          (no-header (= (length rows) 1)) ;No header if table has just 1 row
-         (table-ref (org-blackfriday--get-reference table info))
+         (table-ref (org-blackfriday--get-reference table))
          (table-anchor (if table-ref
                            (format "<a id=\"%s\"></a>\n" table-ref)
                          ""))

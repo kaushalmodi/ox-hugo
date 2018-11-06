@@ -1985,7 +1985,7 @@ and rewrite link paths to make blogging more seamless."
                (format "[%s](#%s)"
                        description
                        (if (memq (org-element-type destination) '(src-block table))
-                           (org-blackfriday--get-reference destination info)
+                           (org-blackfriday--get-reference destination)
                          (org-export-get-reference destination info)))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
       ;; (message "[ox-hugo-link DBG] Inline image: %s" raw-path)
@@ -2407,7 +2407,7 @@ channel."
                          (replace-regexp-in-string "," " " hl-lines)) ;"1,3-4" -> "1 3-4"
                         ((numberp hl-lines)
                          (number-to-string hl-lines))))
-             (src-ref (org-blackfriday--get-reference src-block info))
+             (src-ref (org-blackfriday--get-reference src-block))
              (src-anchor (if src-ref
                              (format "<a id=\"%s\"></a>\n" src-ref)
                            ""))

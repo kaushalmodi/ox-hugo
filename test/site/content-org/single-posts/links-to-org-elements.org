@@ -4,12 +4,19 @@
 
 #+hugo_base_dir: ../../
 #+hugo_section: singles
-#+hugo_tags: internal-links table src-block image figure link-type
+#+hugo_tags: internal-links table src-block image figure link-type language
+
+#+macro: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+
+#+language: de
 
 #+begin_description
 Test for links generated for internal links to tables, source blocks,
-figures.
+figures. Also the language is set to "de" to test the translation of
+Org element strings.
 #+end_description
+
+{{{oxhugoissue(233)}}}
 
 * Links to source blocks
 :PROPERTIES:

@@ -2,12 +2,16 @@
 title = "Links to Org Elements (tables, source blocks, ..)"
 description = """
   Test for links generated for internal links to tables, source blocks,
-  figures.
+  figures. Also the language is set to "de" to test the translation of
+  Org element strings.
   """
 date = 2018-11-06T00:00:00+00:00
-tags = ["internal-links", "table", "src-block", "image", "figure", "link-type"]
+tags = ["internal-links", "table", "src-block", "image", "figure", "link-type", "language"]
 draft = false
 +++
+
+`ox-hugo` Issue #[233](https://github.com/kaushalmodi/ox-hugo/issues/233)
+
 
 ## Links to source blocks {#links-to-source-blocks}
 
@@ -60,11 +64,11 @@ that the link jump is evident):
 ````
 
 <div class="src-block-caption">
-  <span class="src-block-number"><a href="#code-snippet--hello">Code Snippet 1</a></span>:
+  <span class="src-block-number"><a href="#code-snippet--hello">Programmlisting 1</a></span>:
   Hello
 </div>
 
-**Here we refer to [Code Snippet 2](#code-snippet--helloagain).**
+**Here we refer to [Programmlisting 2](#code-snippet--helloagain).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -124,11 +128,11 @@ blandit in.
 ````
 
 <div class="src-block-caption">
-  <span class="src-block-number"><a href="#code-snippet--helloagain">Code Snippet 2</a></span>:
+  <span class="src-block-number"><a href="#code-snippet--helloagain">Programmlisting 2</a></span>:
   Hello Again
 </div>
 
-**Here we refer to [Code Snippet 1](#code-snippet--hello).**
+**Here we refer to [Programmlisting 1](#code-snippet--hello).**
 
 
 ## Links to tables {#links-to-tables}
@@ -162,7 +166,7 @@ that the link jump is evident):
 
 <a id="table--simple1"></a>
 <div class="table-caption">
-  <span class="table-number"><a href="#table--simple1">Table 1</a></span>:
+  <span class="table-number"><a href="#table--simple1">Tabelle 1</a></span>:
   Simple table 1
 </div>
 
@@ -170,7 +174,7 @@ that the link jump is evident):
 |---|---|
 | c | d |
 
-**Here we refer to [Table 2](#table--simple2).**
+**Here we refer to [Tabelle 2](#table--simple2).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -228,7 +232,7 @@ Here's another table:
 
 <a id="table--simple2"></a>
 <div class="table-caption">
-  <span class="table-number"><a href="#table--simple2">Table 2</a></span>:
+  <span class="table-number"><a href="#table--simple2">Tabelle 2</a></span>:
   Simple table 2
 </div>
 
@@ -236,7 +240,7 @@ Here's another table:
 |---|---|
 | g | h |
 
-**Here we refer to [Table 1](#table--simple1).**
+**Here we refer to [Tabelle 1](#table--simple1).**
 
 ---
 
@@ -270,11 +274,11 @@ Here's the same image again, but with a different Org link ID:
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="org96670c2"></a>
+<a id="org2f8d647"></a>
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 1: Org Logo" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="Abbildung 1: Org Logo" >}}
 
-**Here we refer to [Figure 2](#org15ecb34).**
+**Here we refer to [Abbildung 2](#orgf9db9d2).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -330,11 +334,11 @@ blandit in.
 
 Here's the same image again, but with a different Org link ID:
 
-<a id="org15ecb34"></a>
+<a id="orgf9db9d2"></a>
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: Same Org Logo" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="Abbildung 2: Same Org Logo" >}}
 
-**Here we refer to [Figure 1](#org96670c2).**
+**Here we refer to [Abbildung 1](#org2f8d647).**
 
 ---
 

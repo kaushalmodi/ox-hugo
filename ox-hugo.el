@@ -2005,9 +2005,7 @@ and rewrite link paths to make blogging more seamless."
                                        (type (if (equal 'paragraph type)
                                                  'figure
                                                type))
-                                       (type-str (org-html--translate
-                                                  (cdr (assoc type org-blackfriday--org-element-string))
-                                                  info)))
+                                       (type-str (org-blackfriday--translate type info)))
                                   (format "%s %s" type-str num-str))
                               num-str)))))))
              ;; (message "[ox-hugo-link DBG] link description: %s" description)
@@ -2451,10 +2449,7 @@ channel."
                              (let* ((src-block-num (org-export-get-ordinal
                                                     src-block info
                                                     nil #'org-html--has-caption-p))
-                                    (caption-prefix (let ((str-translated (org-html--translate "Listing" info)))
-                                                      (if (string= str-translated "Listing")
-                                                          (cdr (assoc 'src-block org-blackfriday--org-element-string))
-                                                        str-translated)))
+                                    (caption-prefix (org-blackfriday--translate 'src-block info))
                                     (caption-str
                                      (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
                                       (org-export-data-with-backend caption 'html info))))

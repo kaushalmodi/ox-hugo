@@ -462,6 +462,37 @@ The return value, if non-nil, is a string."
                       tmp)))
         (format "%s--%s" prefix name1)))))
 
+;;;; Translate
+(defun org-blackfriday--translate (type info &optional str)
+  "Return translated string for element TYPE to the lang set by \"#+language\".
+
+TYPE is the Org element type.
+
+INFO is a plist holding contextual information.
+
+If TYPE is `src-block' and if \"Listing\" translates to
+\"Listing\", translate the string associated with `src-block'
+from `org-blackfriday--org-element-string'.
+
+Else if TYPE key exists in `org-blackfriday--org-element-string',
+return the translated version of of the string associated in that
+alist.
+
+Else if TYPE key does not exist in
+`org-blackfriday--org-element-string', or if TYPE is nil, return
+the translation of STR directly."
+  (let ((elem-str (cdr (assoc type org-blackfriday--org-element-string))))
+    (if elem-str
+        (cond
+         ((equal 'src-block type)
+          (let ((listing-tr (org-html--translate "Listing" info)))
+            (if (string= "Listing" listing-tr)
+                (org-html--translate elem-str info)
+              listing-tr)))
+         (t
+          (org-html--translate elem-str info)))
+      (org-html--translate str info))))
+
 
 
 ;;; Transcode Functions
@@ -988,9 +1019,7 @@ contextual information."
          table-num
          (caption-html (if (not caption)
                            ""
-                         (let ((caption-prefix (org-html--translate
-                                                (cdr (assoc 'table org-blackfriday--org-element-string))
-                                                info))
+                         (let ((caption-prefix (org-blackfriday--translate 'table info))
                                (caption-str
                                 (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
                                  (org-export-data-with-backend caption 'html info))))

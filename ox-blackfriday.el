@@ -54,6 +54,11 @@ corner cases.
 
 Note that this variable is *only* for internal use.")
 
+(defvar org-blackfriday--org-element-string '((src-block . "Code Snippet")
+                                              (table . "Table")
+                                              (figure . "Figure"))
+  "Alist of strings used to represent various Org elements.")
+
 
 
 ;;; User-Configurable Variables
@@ -441,13 +446,11 @@ The return value, if non-nil, is a string."
     ;; (message "[ox-bf ref DBG] name: %S" name)
     (when name
       (let* ((elem-type (org-element-type elem))
-             (prefix (cond
-                      ((eq 'src-block elem-type)
-                       "code-snippet")
-                      ((eq 'table elem-type)
-                       "table")
-                      (t
-                       (format "org-%s" (symbol-name elem-type)))))
+             (prefix (if (assoc elem-type org-blackfriday--org-element-string)
+                         (let ((type-str (cdr (assoc elem-type org-blackfriday--org-element-string))))
+                           (replace-regexp-in-string " " "-"
+                                                     (downcase type-str)))
+                       (format "org-%s" (symbol-name elem-type))))
              (name1 (let* ((tmp name)
                            ;; Remove commonly used code/table/figure
                            ;; prefixes in the #+name itself.
@@ -985,7 +988,9 @@ contextual information."
          table-num
          (caption-html (if (not caption)
                            ""
-                         (let ((caption-prefix (org-html--translate "Table" info))
+                         (let ((caption-prefix (org-html--translate
+                                                (cdr (assoc 'table org-blackfriday--org-element-string))
+                                                info))
                                (caption-str
                                 (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
                                  (org-export-data-with-backend caption 'html info))))

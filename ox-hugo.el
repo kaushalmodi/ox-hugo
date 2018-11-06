@@ -2022,7 +2022,11 @@ and rewrite link paths to make blogging more seamless."
                                 ;; https://github.com/gohugoio/hugo/issues/4406
                                 ;; gets resolved.
                                 "" ;"<span class=\\\"figure-number\\\">"
-                                (format (org-html--translate "Figure %d:" info)
+                                (format (org-html--translate
+                                         (concat
+                                          (cdr (assoc 'figure org-blackfriday--org-element-string))
+                                          " %d:")
+                                         info)
                                         (org-export-get-ordinal
                                          useful-parent info
                                          nil #'org-html--has-caption-p))
@@ -2419,7 +2423,7 @@ channel."
                                                     nil #'org-html--has-caption-p))
                                     (caption-prefix (let ((str-translated (org-html--translate "Listing" info)))
                                                       (if (string= str-translated "Listing")
-                                                          "Code Snippet"
+                                                          (cdr (assoc 'src-block org-blackfriday--org-element-string))
                                                         str-translated)))
                                     (caption-str
                                      (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.

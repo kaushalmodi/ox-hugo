@@ -222,6 +222,7 @@ clean: ctemp
 	@rm -rf $(OX_HUGO_ELPA)
 	@rm -rf ./doc/public
 	@rm -rf /tmp/hugo/bin
+	@rm ox-hugo-autoloads.el
 
 # Set a make variable during rule execution
 # https://stackoverflow.com/a/1909390/1219634

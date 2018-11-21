@@ -39,17 +39,17 @@
                     {{ $hosting := $val.hosting }}
                     {{ $api := $val.api }}
                     {{ if (findRE "github\\.com" $val.source) }}
-                        {{ $hosting = "github" }}
-                        {{ $api = "github" }}
+                        {{ $hosting := "github" }}
+                        {{ $api := "github" }}
                     {{ else if (findRE "gitlab\\.com" $val.source) }}
-                        {{ $hosting = "gitlab" }}
-                        {{ $api = "gitlab" }}
+                        {{ $hosting := "gitlab" }}
+                        {{ $api := "gitlab" }}
                     {{ else if (findRE "git\\.sr\\.ht" $val.source) }}
-                        {{ $hosting = "sr.ht" }}
+                        {{ $hosting := "sr.ht" }}
                     {{ else if (findRE "coding\\.net" $val.source) }}
-                        {{ $hosting = "coding.net" }}
+                        {{ $hosting := "coding.net" }}
                     {{ else if (findRE "[Gg]itweb" $val.source) }}
-                        {{ $hosting = "gitweb" }}
+                        {{ $hosting := "gitweb" }}
                     {{ end }}
                     {{/* partial "debugprint.html" (slice $key $hosting $api) */}}
 
@@ -60,15 +60,15 @@
                         <!-- https://developer.github.com/v3/repos/commits/#list-commits-on-a-repository -->
                         <!-- https://api.github.com/repos/kaushalmodi/ox-hugo/commits?path=doc&sha=master -->
                         {{ $repo_json := getJSON (printf "https://api.github.com/repos/%s/commits?path=%s&sha=%s" $repo $org_dir $branch) }}
-                        {{ $last_updated = (index (index (index (index $repo_json 0) "commit") "committer") "date") }}
+                        {{ $last_updated := (index (index (index (index $repo_json 0) "commit") "committer") "date") }}
                     {{ else if (eq "gitlab" $api) }}
                         {{ $repo := replaceRE "^.*gitlab\\.com/([^/]+/[^/]+).*" "${1}" $val.source | replaceRE "/" "%2F" }}
-                        {{ $org_dir = $org_dir | replaceRE "/" "%2F" }}
+                        {{ $org_dir := $org_dir | replaceRE "/" "%2F" }}
                         <!-- https://docs.gitlab.com/ee/api/commits.html#list-repository-commits -->
                         <!-- https://gitlab.com/api/v4/projects/kaushalmodi%2Fkaushalmodi.gitlab.io/repository/commits?path=content-org&ref_name=master -->
                         {{ $repo_json := getJSON (printf "https://gitlab.com/api/v4/projects/%s/repository/commits?path=%s&?ref_name=%s" $repo ($org_dir | replaceRE "/" "%2F") $branch) }}
                         {{/* partial "debugprint.html" $repo_json */}}
-                        {{ $last_updated = (index (index $repo_json 0) "committed_date") }}
+                        {{ $last_updated := (index (index $repo_json 0) "committed_date") }}
                     {{ else if (eq "gitea" $api) }}
                         {{ $repo := replaceRE "^.*//[^/]+/([^/]+/[^/]+).*" "${1}" $val.source }}
                         {{ $api_url := printf "%s/api/v1" (replaceRE "^(.*//[^/]+)/.+" "${1}" $val.source) }}
@@ -76,20 +76,20 @@
                         <!-- https://git.fsfe.org/api/v1/repos/adolflow/infotics.es -->
                         {{ $repo_json := getJSON (printf "%s/repos/%s" $api_url $repo) }}
                         {{/* partial "debugprint.html" $repo_json */}}
-                        {{ $last_updated = index $repo_json "updated_at" }}
+                        {{ $last_updated := index $repo_json "updated_at" }}
                     {{ else if (eq "micro.json" $api) }}
                         {{ $site_url := $val.site | replaceRE "/$" "" }}
                         {{ $micro_json := getJSON (printf "%s/micro.json" $site_url) }}
                         {{/* partial "debugprint.html" $micro_json */}}
-                        {{ $last_updated = index $micro_json "last_updated" }}
+                        {{ $last_updated := index $micro_json "last_updated" }}
                     {{ end }}
 
                     <!-- Get the Org source link -->
                     {{ $org_dir_link := $val.source }}
                     {{ if (in (slice "github" "gitlab" "sr.ht" "coding.net") $hosting) }}
-                        {{ $org_dir_link = (printf "%s/tree/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
+                        {{ $org_dir_link := (printf "%s/tree/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
                     {{ else if (eq "gitea" $hosting) }}
-                        {{ $org_dir_link = (printf "%s/src/branch/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
+                        {{ $org_dir_link := (printf "%s/src/branch/%s/%s" ($val.source | replaceRE "/$" "") $branch $org_dir) }}
                     {{ else if (eq "gitweb" $hosting) }}
                         <!-- Example: https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git;a=tree;f=content;hb=refs/heads/master
                              $val.source = https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git
@@ -97,9 +97,9 @@
                              $branch = master
                         -->
                         {{ $folder_switch := (cond (eq "" $org_dir) "" (printf ";f=%s" $org_dir)) }}
-                        {{ $org_dir_link = (printf "%s;a=tree%s;hb=refs/heads/%s" ($val.source | replaceRE "/$" "") $folder_switch $branch) }}
+                        {{ $org_dir_link := (printf "%s;a=tree%s;hb=refs/heads/%s" ($val.source | replaceRE "/$" "") $folder_switch $branch) }}
                     {{ else if (findRE "\\.org$" $val.source) }} <!-- If the "source" is direct link to an Org file -->
-                        {{ $org_dir_link = $val.source }}
+                        {{ $org_dir_link := $val.source }}
                     {{ end }}
 
                     <tr>
@@ -113,9 +113,9 @@
                         {{ $secure_icon := "" }}
                         {{ $user_site_is_nonsecure := findRE "^http://" $val.site }}
                         {{ if $user_site_is_nonsecure }}
-                            {{ $data_proofer_ignore_tag = " data-proofer-ignore" }}
+                            {{ $data_proofer_ignore_tag := " data-proofer-ignore" }}
                         {{ else }}
-                            {{ $secure_icon = "🔐&nbsp;" | safeHTML }}
+                            {{ $secure_icon := "🔐&nbsp;" | safeHTML }}
                         {{ end }}
                         <td>{{ printf `%s<a href="%s"%s>%s</a>` $secure_icon $val.site $data_proofer_ignore_tag ($val.site | replaceRE "^https?://" "" | replaceRE "/$" "") | safeHTML }}</td>
                         <!-- Org Source -->

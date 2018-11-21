@@ -762,7 +762,7 @@ newer."
                      (keyword . org-hugo-keyword)
                      (link . org-hugo-link)
                      (paragraph . org-hugo-paragraph)
-                     (src-block . org-hugo-src-block)
+                     (src-block . my-org-hugo-src-block)
                      (special-block . org-hugo-special-block))
   :filters-alist '((:filter-body . org-hugo-body-filter))
 ;;;; options-alist
@@ -2387,7 +2387,7 @@ communication channel."
     ret))
 
 ;;;; Source Blocks
-(defun org-hugo-src-block (src-block _contents info)
+(defun my-org-hugo-src-block (src-block _contents info)
   "Convert SRC-BLOCK element to Hugo-compatible Markdown.
 
 The Markdown style triple-backquoted code blocks are created if:

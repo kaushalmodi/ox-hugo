@@ -98,7 +98,7 @@ Note that this variable is *only* for internal use.")
                      (plain-text . org-blackfriday-plain-text)
                      (quote-block . org-blackfriday-quote-block)
                      (special-block . org-blackfriday-special-block)
-                     (src-block . org-blackfriday-src-block)
+                     (src-block . my-org-blackfriday-src-block)
                      (strike-through . org-blackfriday-strike-through)
                      (table-cell . org-blackfriday-table-cell)
                      (table-row . org-blackfriday-table-row)
@@ -867,6 +867,7 @@ This function is adapted from `org-html-special-block'."
 
 INFO is a plist used as a communication channel."
   (let* ((lang (org-element-property :language src-block))
+         (ravel-attr (org-element-property :attr_ravel src-block))
          (code (org-export-format-code-default src-block info))
          (parent-element (org-export-get-parent src-block))
          (parent-type (car parent-element))
@@ -892,7 +893,7 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-bf src-block DBG] parent type: %S" parent-type)
     (setq code (org-blackfriday--issue-239-workaround code parent-type))
     (prog1
-        (format "%s%s\n%s%s" backticks lang code backticks)
+        (format "%s\{%s %s\}\n%s%s" backticks lang ravel-attr code backticks)
       (when (equal 'quote-block parent-type)
         ;; If the current code block is inside a quote block, future
         ;; example/code blocks (especially the ones outside this quote

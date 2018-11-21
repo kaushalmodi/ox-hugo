@@ -5,8 +5,13 @@
 
 MAKE_ := $(MAKE) -j1 --no-print-directory
 
-EMACS ?= emacs
-EMACS_exists := $(shell command -v $(EMACS) 2> /dev/null)
+ifdef INSIDE_EMACS
+  EMACS := $(shell which emacs)
+else
+  EMACS ?= emacs
+endif
+
+EMACS_exists := "$(shell command -v "$(EMACS)" 2> /dev/null)"
 ifeq ("$(EMACS_exists)","")
 	EMACS := /tmp/emacs/bin/emacs
 endif

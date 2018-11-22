@@ -795,6 +795,7 @@ newer."
                    (:hugo-paired-shortcodes "HUGO_PAIRED_SHORTCODES" nil org-hugo-paired-shortcodes space)
                    (:hugo-pandoc-citations "HUGO_PANDOC_CITATIONS" nil nil)
                    (:bibliography "BIBLIOGRAPHY" nil nil newline) ;Used in ox-hugo-pandoc-cite
+                   (:hugo-export-rmd "HUGO_EXPORT_RMD" nil) ;Export to R Markdown
 
                    ;; Front-matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -2474,7 +2475,7 @@ channel."
                ((and (null number-lines)
                      (null hl-lines)
                      (org-hugo--plist-get-true-p info :hugo-code-fence))
-                (let ((content1 (org-blackfriday-src-block src-block nil info)))
+                (let ((content1 (my-org-blackfriday-src-block src-block nil info)))
                   (when (and org-hugo-langs-no-descr-in-code-fences
                              (member (intern lang) org-hugo-langs-no-descr-in-code-fences))
                     ;; When using Pygments, with the pygmentsCodeFences
@@ -3646,7 +3647,8 @@ Return output file's name."
                 (org-export--get-buffer-attributes)
                 (org-export-get-environment 'hugo subtreep)))
          (pub-dir (org-hugo--get-pub-dir info))
-         (outfile (org-export-output-file-name ".md" subtreep pub-dir))
+         (outfile (org-export-output-file-name (if (org-hugo--plist-get-true-p info :hugo-export-rmd)
+                                                   ".rmd" ".md") subtreep pub-dir))
          (do-export t))
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (unless subtreep

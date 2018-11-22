@@ -861,8 +861,18 @@ This function is adapted from `org-html-special-block'."
         (format "<div%s>\n  <div></div>\n\n%s\n\n</div>" ;See footnote 1
                 attr-str contents))))))
 
+;; defun-org-ravel-attr-plus-header
+;; #+NAME: defun-org-ravel-attr-plus-header
+
+(defun org-blackfriday-ravel-attr-plus-header
+    (ravel-attr)
+  "Separate RAVELARG and RAVEL-ATTR by commas."
+  (mapconcat #'identity
+             (delete nil
+                     ravel-attr) ", "))
+
 ;;;; Src Block
-(defun org-blackfriday-src-block (src-block _contents info)
+(defun my-org-blackfriday-src-block (src-block _contents info)
   "Transcode SRC-BLOCK element into Blackfriday Markdown format.
 
 INFO is a plist used as a communication channel."
@@ -874,6 +884,7 @@ INFO is a plist used as a communication channel."
          (num-backticks-in-code (when (string-match "^[[:blank:]]*\\(`\\{3,\\}\\)" code)
                                   (length (match-string-no-properties 1 code))))
          backticks)
+         (setq ravel (org-blackfriday-ravel-attr-plus-header ravel-attr))
     ;; In order to show the code-fence backticks in a code-fenced code
     ;; block, you need to have the wrapping code fence to have at
     ;; least 1 more backtick in the fence compared to those in the
@@ -893,7 +904,9 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-bf src-block DBG] parent type: %S" parent-type)
     (setq code (org-blackfriday--issue-239-workaround code parent-type))
     (prog1
-        (format "%s\{%s %s\}\n%s%s" backticks lang ravel-attr code backticks)
+        (when (org-hugo--plist-get-true-p info :hugo-export-rmd)
+          (format "%s\{%s  %s\}\n%s%s" backticks lang ravel code backticks))
+      (format "%s%s\n%s%s" backticks lang code backticks)
       (when (equal 'quote-block parent-type)
         ;; If the current code block is inside a quote block, future
         ;; example/code blocks (especially the ones outside this quote

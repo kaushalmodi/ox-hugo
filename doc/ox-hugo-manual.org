@@ -401,16 +401,18 @@ any export).
 
 You can do that by adding the below to your config:
 #+begin_src emacs-lisp
+(require 'ox-hugo-auto-export) ;If you want the auto-exporting on file saves
+
 (with-eval-after-load 'ox
   (require 'ox-hugo))
-(require 'ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 #+end_src
 If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can do the below instead:
-#+begin_src emacs-lisp :noweb-ref use_package_snippet
+#+begin_src emacs-lisp
+(use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
+
 (use-package ox-hugo
   :ensure t            ;Auto-install the package from Melpa (optional)
   :after ox)
-(use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 #+end_src
 
 Also see the {{{doc(auto-export-on-saving,,Auto Exporting)}}} section.
@@ -420,14 +422,17 @@ Also see the {{{doc(auto-export-on-saving,,Auto Exporting)}}} section.
 Spacemacs users can choose to add this snippet to their
 =dotspacemacs/user-config= function in =.spacemacs=:
 
-#+begin_src emacs-lisp :noweb yes
+#+begin_src emacs-lisp
 (defun dotspacemacs/user-config ()
   ;; Other stuff
   ;; ..
 
   ;; ox-hugo config
-  <<use_package_snippet>>
-  )
+  (use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
+
+  (use-package ox-hugo
+    :ensure t          ;Auto-install the package from Melpa (optional)
+    :after ox))
 #+end_src
 
 #+begin_note

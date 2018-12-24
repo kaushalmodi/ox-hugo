@@ -1139,17 +1139,18 @@ Org files in a way that's compatible with =ox-hugo= and Hugo.
 
 For the sake of the below explanation, let's have the /HUGO_BASE_DIR/
 (the directory containing the Hugo site's =config.toml= file) be
-=~/hugo/=.
-
-In that case, the Hugo /static/ directory will be =~/hugo/static/=.
+=~/hugo/=. Then the Hugo /static/ directory will be =~/hugo/static/=.
 **** References to files in the /static/ directory
 :PROPERTIES:
 :CUSTOM_ID: references-to-files-in-the-static-directory
 :END:
 Now if you have a file =~/hugo/static/images/foo.png=, =ox-hugo= makes
 it convenient for you to reference that image by simply
-=/images/foo.png=. Note that this is *not* the default behavior of
-other Org exporters.
+=/images/foo.png=.
+
+#+begin_note
+Note that this is *not* the default behavior of other Org exporters.
+#+end_note
 
 But in the case of Hugo, as the referenced file will /normally/ be in
 the Hugo /static/ directory, =ox-hugo= allows the =/images/foo.png=
@@ -1157,19 +1158,30 @@ style of short reference *if* that is a valid path under that Hugo
 site's /static/ directory.
 
 See the below examples on how to reference images in different ways:
-***** Inline image (Unhyperlinked)
+***** Inline image -- Unhyperlinked
+#+caption: Unhyperlinked image (don't click it)
+#+name: fig__unhyperlinked_image
+[[/images/org-mode-unicorn-logo-200px.png]]
 #+begin_src org
-[[/images/foo.png]]
+[[/images/org-mode-unicorn-logo-200px.png]]
 #+end_src
-***** Inline image (Hyperlinked to the image itself)
+***** Inline image -- Also hyperlinked to an image
+#+caption: Image hyperlinked to an image (click it!)
+#+name: fig__hyperlinked_image
+[[/images/org-mode-unicorn-logo-200px.png][file:/images/org-mode-unicorn-logo-50px.png]]
 #+begin_src org
-[[file:/images/foo.png][file:/images/foo.png]]
+[[/images/org-mode-unicorn-logo-200px.png][file:/images/org-mode-unicorn-logo-50px.png]]
 #+end_src
-- NOTE :: The =file:= prefix *has to be used* in both Link and
-          Description components of the Org link.
-***** Link to an image (Image not inlined)
+This style of link is normally used if you want to link a low
+resolution image to its higher resolution version.
+- NOTE 1 :: The =file:= prefix has to be used in the *Description
+            component* of the Org link.
+- NOTE 2 :: The =file:= prefix can be used for the *Link component* of
+            the Org link too --- it doesn't hurt.
+***** Regular link to an image
+[[/images/org-mode-unicorn-logo-200px.png][Click here to see org-mode-unicorn-logo-200px.png]]
 #+begin_src org
-[[/images/foo.png][Click here to see foo.png]]
+[[/images/org-mode-unicorn-logo-200px.png][Click here to see org-mode-unicorn-logo-200px.png]]
 #+end_src
 This style of linking will work for references to non-image files in
 the /static/ directory too.
@@ -1180,7 +1192,7 @@ the /static/ directory too.
 This is a unique feature of =ox-hugo=.
 
 (i) If a reference is made to a file outside the Hugo /static/
-directory *and* (ii) if it has one of the extensions listed in
+directory, *and* (ii) if it has one of the extensions listed in
 =org-hugo-external-file-extensions-allowed-for-copying=, then that
 file is copied by =ox-hugo= to the /static/ directory.
 

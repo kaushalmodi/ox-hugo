@@ -43,6 +43,11 @@ disableFastRender = true        # Hugo 0.30
 
 disableKinds = ["taxonomy", "taxonomyTerm"]
 
+[caches]
+  [caches.getjson]
+    dir = ":cacheDir/:project"
+    maxAge = "1m" # Disable caching getJSON data
+
 [Permalinks]
   # post = "/:year/:month/:title/"
   # Below, we have

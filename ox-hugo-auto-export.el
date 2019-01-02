@@ -36,6 +36,11 @@
 
 ;;; Code:
 
+(warn (concat "`ox-hugo-auto-export.el' has been deprecated.\n"
+              "This module will be deleted on 2018/01/20.\n"
+              "See the updated instructions on https://ox-hugo.scripter.co/doc/auto-export-on-saving/\n"
+              "for enabling auto-export."))
+
 (defvar-local org-hugo-auto-export-on-save nil
   "Enable flag for `org-hugo-export-wim-to-md-after-save'.
 
@@ -49,9 +54,6 @@ auto-exported using `ox-hugo':
 
 \((\"content-org\"
   . ((org-mode . ((org-hugo-auto-export-on-save . t)))))) ")
-;; Declare this variable as safe if its value is boolean (t or nil),
-;; so that adding it to .dir-locals.el does not prompt users.
-(put 'org-hugo-auto-export-on-save 'safe-local-variable 'booleanp)
 
 (defvar org-hugo--org-capture-active-flag nil
   "Non-nil means that an Org Capture is in progress.

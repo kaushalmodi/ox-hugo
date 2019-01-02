@@ -6,6 +6,7 @@ sudo: true
 env:
   global:
     - CURL="curl -fsSkL --retry 9 --retry-delay 9"
+    - OX_HUGO_TMP_DIR="/tmp/${USER}/ox-hugo-dev"
     - PANDOC_VERSION=2.5
   matrix:
   # https://github.com/npostavs/emacs-travis/releases
@@ -23,6 +24,8 @@ install:
   - tar xf emacs-bin-${EMACS_VERSION}.tar.gz -C /
   - export EMACS=/tmp/emacs/bin/emacs
   - $EMACS --version
+  # Add the yet-to-be Makefile downloaded pandoc to PATH
+  - export PATH="${OX_HUGO_TMP_DIR}/pandoc/bin:${PATH}"
 
 script:
   # Don't run "make doc" on travis; it's finicky

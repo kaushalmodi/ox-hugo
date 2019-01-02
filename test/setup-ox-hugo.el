@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-01-02 18:03:58 kmodi>
+;; Time-stamp: <2019-01-02 18:26:47 kmodi>
 
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
@@ -249,13 +249,6 @@ Emacs installation.  If Emacs is installed using
   ;; platform-dependent default time zone --
   ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Time-Zone-Rules.html
   (setenv "TZ" "UTC")
-
-  ;; Use Pandoc binaries from `ox-hugo-tmp-dir'/bin.
-  (setenv "PATH" (concat (file-name-as-directory
-                          (expand-file-name "bin"
-                                            (expand-file-name "pandoc" ox-hugo-tmp-dir)))
-                         ":"
-                         (getenv "PATH")))
 
   ;; Force the locate to en_US for the tests.
   (set-locale-environment "en_US.UTF-8")

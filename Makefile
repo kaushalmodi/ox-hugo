@@ -123,7 +123,7 @@ emacs-batch:
 	@echo ""
 	@echo "$(ORG_FILE) ::"
 	@$(EMACS) --batch --eval "(progn\
-	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_TMP_DIR)\")\
+	(setenv \"OX_HUGO_TMP_DIR\" \"$(OX_HUGO_TMP_DIR)\")\
 	(setenv \"TEST_ENABLED\" \"$(TEST_ENABLED)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	)" $(ORG_FILE) \
@@ -140,7 +140,7 @@ ifeq ("$(EMACS_exists)","")
 endif
 	@echo "Emacs binary used: $(EMACS)"
 	@$(EMACS) --batch --eval "(progn\
-	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_TMP_DIR)\")\
+	(setenv \"OX_HUGO_TMP_DIR\" \"$(OX_HUGO_TMP_DIR)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	(message \"[Version check] Emacs %s\" emacs-version)\
 	(message \"[Version check] %s\" (org-version nil :full))\

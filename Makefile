@@ -18,7 +18,7 @@ endif
 
 EMACS_exists := $(shell command -v $(EMACS) 2> /dev/null)
 ifeq ("$(EMACS_exists)","")
-	EMACS := $(OX_HUGO_TMP_DIR)/emacs/bin/emacs
+	EMACS := /tmp/emacs/bin/emacs
 endif
 
 # EMACS_BIN_SOURCE and EMACS_BIN_VERSION are used later in the vcheck rule
@@ -138,8 +138,7 @@ vcheck:
 	@mkdir -p $(OX_HUGO_TMP_DIR)
 ifeq ("$(EMACS_exists)","")
 	@$(CURL) -O $(EMACS_BIN_SOURCE)/emacs-bin-$(EMACS_BIN_VERSION).tar.gz
-	@tar xf emacs-bin-$(EMACS_BIN_VERSION).tar.gz
-	@mv ./tmp/emacs $(OX_HUGO_TMP_DIR)/.
+	@tar xf emacs-bin-$(EMACS_BIN_VERSION).tar.gz -C /
 endif
 	@echo "Emacs binary used: $(EMACS)"
 	@$(EMACS) --batch --eval "(progn\

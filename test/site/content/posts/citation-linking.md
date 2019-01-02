@@ -9,7 +9,7 @@ draft = false
 +++
 
 Here is a test example file with an in-text citation where someone
-important says something important (e.g. Loncar
+important says something important (e.g. Loncar
 ([2016](#ref-loncar2016))). And here is another bit of blah with a
 footnote citation.[^fn:1]
 

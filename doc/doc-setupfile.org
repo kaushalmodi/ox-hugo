@@ -1,4 +1,4 @@
-#+macro: pandoc_version 2.2.2
+#+macro: pandoc_version 2.5
 #+macro: doc_site_min_hugo_version /Minimum required Hugo version/: [[https://github.com/gohugoio/hugo/releases/tag/v0.48][*0.48*]]
 
 #+macro: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]

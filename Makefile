@@ -135,6 +135,7 @@ md1:
 	@$(MAKE_) emacs-batch FUNC=org-hugo-export-all-wim-to-md
 
 vcheck:
+	@mkdir -p $(OX_HUGO_TMP_DIR)
 ifeq ("$(EMACS_exists)","")
 	@$(CURL) -O $(EMACS_BIN_SOURCE)/emacs-bin-$(EMACS_BIN_VERSION).tar.gz
 	@tar xf emacs-bin-$(EMACS_BIN_VERSION).tar.gz

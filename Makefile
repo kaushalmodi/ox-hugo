@@ -7,6 +7,7 @@ MAKE_ := $(MAKE) -j1 --no-print-directory
 
 CURL ?= curl -fsSkL --retry 9 --retry-delay 9
 
+USER ?= me
 OX_HUGO_TMP_DIR ?= /tmp/$(USER)/ox-hugo-dev
 
 ifdef INSIDE_EMACS

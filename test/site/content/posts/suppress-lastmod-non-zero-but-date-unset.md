@@ -4,7 +4,7 @@ description = """
   Ensure that nil value of parsed DATE is also handled in the "suppress
   lastmod" logic.
   """
-tags = ["suppress", "lastmod", "nonzero", "autoset", "date", "unset"]
+tags = ["autoset", "suppress", "lastmod", "nonzero", "date", "unset"]
 draft = false
 +++
 

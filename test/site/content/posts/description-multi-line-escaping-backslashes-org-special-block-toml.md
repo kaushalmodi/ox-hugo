@@ -4,7 +4,7 @@ description = """
   Test to check that backslashes in `\\|` and `\\\\` are correctly escaped
   in the front-matter.
   """
-tags = ["description", "special-block", "toml", "escaping", "backslashes", "front-matter", "multi-line"]
+tags = ["front-matter", "description", "special-block", "toml", "escaping", "backslashes", "multi-line"]
 draft = false
 +++
 

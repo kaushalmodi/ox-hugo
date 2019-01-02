@@ -137,7 +137,8 @@ md1:
 vcheck:
 ifeq ("$(EMACS_exists)","")
 	@$(CURL) -O $(EMACS_BIN_SOURCE)/emacs-bin-$(EMACS_BIN_VERSION).tar.gz
-	@tar xf emacs-bin-$(EMACS_BIN_VERSION).tar.gz -C /
+	@tar xf emacs-bin-$(EMACS_BIN_VERSION).tar.gz
+	@mv ./tmp/emacs $(OX_HUGO_TMP_DIR)/.
 endif
 	@echo "Emacs binary used: $(EMACS)"
 	@$(EMACS) --batch --eval "(progn\

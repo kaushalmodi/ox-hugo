@@ -5,6 +5,10 @@
 
 MAKE_ := $(MAKE) -j1 --no-print-directory
 
+CURL ?= curl -fsSkL --retry 9 --retry-delay 9
+
+OX_HUGO_TMP_DIR ?= /tmp/$(USER)/ox-hugo-dev
+
 ifdef INSIDE_EMACS
 	EMACS := $(shell which emacs)
 else
@@ -13,7 +17,7 @@ endif
 
 EMACS_exists := $(shell command -v $(EMACS) 2> /dev/null)
 ifeq ("$(EMACS_exists)","")
-	EMACS := /tmp/emacs/bin/emacs
+	EMACS := $(OX_HUGO_TMP_DIR)/emacs/bin/emacs
 endif
 
 # EMACS_BIN_SOURCE and EMACS_BIN_VERSION are used later in the vcheck rule
@@ -24,19 +28,29 @@ EMACS_BIN_VERSION ?= 26.1
 HUGO ?= hugo
 HUGO_exists := $(shell command -v $(HUGO) 2> /dev/null)
 ifeq ("$(HUGO_exists)","")
-	HUGO := /tmp/hugo/bin/hugo
+	HUGO := $(OX_HUGO_TMP_DIR)/hugo/bin/hugo
 endif
 
 HTMLTEST ?= htmltest
 HTMLTEST_exists := $(shell command -v $(HTMLTEST) 2> /dev/null)
 ifeq ("$(HTMLTEST_exists)","")
-	HTMLTEST := /tmp/htmltest/bin/htmltest
+	HTMLTEST := $(OX_HUGO_TMP_DIR)/htmltest/bin/htmltest
+endif
+
+PANDOC ?= pandoc
+PANDOC_exists := $(shell command -v $(PANDOC) 2> /dev/null)
+ifeq ("$(PANDOC_exists)","")
+	PANDOC := $(OX_HUGO_TMP_DIR)/pandoc/bin/pandoc
 endif
 
 # HUGO_BIN_SOURCE and HUGO_VERSION are used later in the vcheck rule
 # only if HUGO_exists has evaluated to "".
 HUGO_BIN_SOURCE ?= https://gitlab.com/kaushalmodi/unofficial-hugo-dev-builds.git
 HUGO_VERSION ?= DEV
+
+PANDOC_BIN_VERSION ?= 2.5
+PANDOC_ARCHIVE_NAME ?= pandoc-$(PANDOC_BIN_VERSION)-linux.tar.gz
+PANDOC_BIN_SOURCE ?= https://github.com/jgm/pandoc/releases/download/$(PANDOC_BIN_VERSION)
 
 # baseURL value set via environment variable HUGO_BASEURL
 HUGO_BASEURL ?= http://localhost
@@ -48,10 +62,6 @@ HUGO_ARGS=
 
 # Port for hugo server
 PORT=1337
-
-# Directory where the required elisp packages are auto-installed
-TMPDIR ?= /tmp
-OX_HUGO_ELPA=$(TMPDIR)/$(USER)/ox-hugo-dev/
 
 # Below is set to 1 during "make test"
 TEST_ENABLED=0
@@ -113,7 +123,7 @@ emacs-batch:
 	@echo ""
 	@echo "$(ORG_FILE) ::"
 	@$(EMACS) --batch --eval "(progn\
-	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
+	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_TMP_DIR)\")\
 	(setenv \"TEST_ENABLED\" \"$(TEST_ENABLED)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	)" $(ORG_FILE) \
@@ -125,24 +135,33 @@ md1:
 
 vcheck:
 ifeq ("$(EMACS_exists)","")
-	@curl -fsSkL --retry 9 --retry-delay 9 -O $(EMACS_BIN_SOURCE)/emacs-bin-$(EMACS_BIN_VERSION).tar.gz
+	@$(CURL) -O $(EMACS_BIN_SOURCE)/emacs-bin-$(EMACS_BIN_VERSION).tar.gz
 	@tar xf emacs-bin-$(EMACS_BIN_VERSION).tar.gz -C /
 endif
 	@echo "Emacs binary used: $(EMACS)"
 	@$(EMACS) --batch --eval "(progn\
-	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_ELPA)\")\
+	(setenv \"OX_HUGO_ELPA\" \"$(OX_HUGO_TMP_DIR)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	(message \"[Version check] Emacs %s\" emacs-version)\
 	(message \"[Version check] %s\" (org-version nil :full))\
 	)" \
 	--kill
 ifeq ("$(HUGO_exists)","")
-	@mkdir -p /tmp/hugo
-	@find /tmp/hugo -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
-	@git clone $(HUGO_BIN_SOURCE) /tmp/hugo/bin
-	@tar xf /tmp/hugo/bin/hugo_DEV-Linux-64bit.tar.xz -C /tmp/hugo/bin
+	@mkdir -p $(OX_HUGO_TMP_DIR)/hugo
+	@find $(OX_HUGO_TMP_DIR)/hugo -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
+	@git clone $(HUGO_BIN_SOURCE) $(OX_HUGO_TMP_DIR)/hugo/bin
+	@tar xf $(OX_HUGO_TMP_DIR)/hugo/bin/hugo_DEV-Linux-64bit.tar.xz -C $(OX_HUGO_TMP_DIR)/hugo/bin
 endif
-	@$(HUGO) version
+	$(HUGO) version
+ifeq ("$(PANDOC_exists)","")
+	@mkdir -p $(OX_HUGO_TMP_DIR)/pandoc
+	@find $(OX_HUGO_TMP_DIR)/pandoc -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
+	@$(CURL) -O $(PANDOC_BIN_SOURCE)/$(PANDOC_ARCHIVE_NAME)
+	@tar xf $(PANDOC_ARCHIVE_NAME)
+	@mv pandoc-$(PANDOC_BIN_VERSION)/bin $(OX_HUGO_TMP_DIR)/pandoc/.
+	@rm -rf pandoc-$(PANDOC_BIN_VERSION)
+endif
+	$(PANDOC) --version
 
 hugo: vcheck
 	@cd $(HUGO_BASE_DIR) && $(HUGO) $(HUGO_ARGS)
@@ -151,7 +170,7 @@ hugo_doc:
 	@$(MAKE_) hugo HUGO_BASE_DIR=./doc HUGO_BASEURL=https://ox-hugo.scripter.co/
 
 hugo_test:
-	@$(MAKE_) hugo HUGO=/tmp/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASEURL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
+	@$(MAKE_) hugo HUGO=$(OX_HUGO_TMP_DIR)/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASEURL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
 
 serve server: vcheck
 	@echo "Serving the site on $(HUGO_BASEURL):$(PORT) .."
@@ -195,10 +214,10 @@ doc: doc_md hugo_doc doc_gh
 
 doc_htmltest:
 ifeq ("$(HTMLTEST_exists)","")
-	@mkdir -p /tmp/htmltest
-	@find /tmp/htmltest -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
-	@git clone $(HUGO_BIN_SOURCE) /tmp/htmltest/bin
-	@tar xf /tmp/htmltest/bin/htmltest_DEV-Linux-64bit.tar.xz -C /tmp/htmltest/bin
+	@mkdir -p $(OX_HUGO_TMP_DIR)/htmltest
+	@find $(OX_HUGO_TMP_DIR)/htmltest -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
+	@git clone $(HUGO_BIN_SOURCE) $(OX_HUGO_TMP_DIR)/htmltest/bin
+	@tar xf $(OX_HUGO_TMP_DIR)/htmltest/bin/htmltest_DEV-Linux-64bit.tar.xz -C $(OX_HUGO_TMP_DIR)/htmltest/bin
 endif
 	@cd doc && $(HTMLTEST)
 doc_test: doc doc_htmltest
@@ -224,9 +243,8 @@ diffgolden:
 clean: ctemp
 	@find ./doc/content -name "*.md" -delete
 	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/public $(OX_HUGO_TEST_SITE_DIR)/content-golden
-	@rm -rf $(OX_HUGO_ELPA)
+	@rm -rf $(OX_HUGO_TMP_DIR)
 	@rm -rf ./doc/public
-	@rm -rf /tmp/hugo/bin
 	@rm -f ox-hugo-autoloads.el
 
 # Set a make variable during rule execution

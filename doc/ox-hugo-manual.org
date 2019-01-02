@@ -2874,7 +2874,5 @@ Org style tags too. Example: ~* I don't want to export this post
 files outside static directory)}}}.
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:
-# fill-column: 70
-# eval: (auto-fill-mode 1)
 # eval: (toggle-truncate-lines 1)
 # End:

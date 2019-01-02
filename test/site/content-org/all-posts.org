@@ -7072,8 +7072,3 @@ over multiple lines. But even then it should be handled fine.
 [fn:2] Second footnote
 
 [fn:1] First footnote
-* COMMENT Local Variables                                           :ARCHIVE:
-# Local Variables:
-# fill-column: 70
-# eval: (auto-fill-mode 1)
-# End:

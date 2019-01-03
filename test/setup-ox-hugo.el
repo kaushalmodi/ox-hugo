@@ -109,9 +109,10 @@ even if they are found as dependencies."
              (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
         (add-to-list 'package-archives (cons "melpa" url))) ;For `toc-org'
 
-      ;; Generate/update autoloads for ox-hugo.el and co.
+      ;; Generate/update and load the autoloads for ox-hugo.el and co.
       (let ((generated-autoload-file ox-hugo-autoloads-file))
-        (update-directory-autoloads ox-hugo-site-git-root))
+        (update-directory-autoloads ox-hugo-site-git-root)
+        (load-file ox-hugo-autoloads-file))
 
       ;; Load emacs packages and activate them.
       ;; Don't delete this line.

@@ -568,7 +568,8 @@ patches accepted.
 As a bonus, once you have assigned your copyright to FSF, doors open up
 for your future contributions to Emacs too!
 *** Contribute to documentation
-{{{doc_site_min_hugo_version}}}
+*See {{{doc(requirements#doc_contributor_reqs,,Requirements for doc
+contributor)}}}.*
 
 1. Clone this repo.
 2. Add/edit documentation to =doc/ox-hugo-manual.org=.
@@ -580,17 +581,8 @@ for your future contributions to Emacs too!
 5. Commit *only the .org files*, push branch and create PR.
    - The =.org= → =.md= conversion is done by =ox-hugo= on Netlify.
 *** Contribute to code
-#+begin_note
-While the end-user does not need Pandoc installed on their machine, a
-code contributor needs to have both ~pandoc~ and ~pandoc-citeproc~
-installed[fn:local1].
-
-These are needed for ~make md~ and ~make -j1 test~ steps to work as
-they use/test the {{{doc(pandoc-citations,,Pandoc Citations)}}} feature
-too.
-#+end_note
-
-{{{doc_site_min_hugo_version}}}
+*See {{{doc(requirements#code_contributor_reqs,,Requirements for code
+contributor)}}}.*
 
 1. Clone this repo.
 2. Add/edit the .el files, *tests* in =test/site/content-org/=, and
@@ -605,15 +597,6 @@ too.
    above step before this step).
 7. Fix your commit(s) if the test fails.. repeat till you succeed.
 8. Push your feature branch and create PR.
-
-# Below footnote was copied manually from [fn:7] because otherwise
-# #+include of just this subtree does not work.
-[fn:local1] The Pandoc Citations feature was last <2018-08-19 Sun>
-tested with Pandoc version {{{pandoc_version}}}. If you are running an
-older version, the quickest way to install might be to simply download
-the latest release archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]], extract it and put
-the ~pandoc~ and ~pandoc-citeproc~ binaries in one of the directories
-in your /PATH/.
 ** Debug
 :PROPERTIES:
 :CUSTOM_ID: debug
@@ -2299,8 +2282,8 @@ citation is ~@foo~, that particular /foo/ reference much be present in
 one of the specified bibliography files.
 
 #+begin_note
-Users need to have the ~pandoc~ and ~pandoc-citeproc~ binaries[fn:7] present
-in the ~PATH~.
+Users need to have the ~pandoc~ and ~pandoc-citeproc~ binaries[fn:7]
+present in the ~PATH~.
 #+end_note
 
 When one or more citations are found by Pandoc, a top-level
@@ -2817,6 +2800,34 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 - [X] Passes =make test= and generates documentation using =make doc=
   in [[https://termux.com/][Termux]] app on Android too.
 - [X] Passes =checkdoc= and =package-lint= ([[https://github.com/purcell/package-lint/issues/89][/almost/]]).
+*** Requirements
+:PROPERTIES:
+:EXPORT_FILE_NAME: requirements
+:END:
+**** Requirements for doc contributor
+:PROPERTIES:
+:CUSTOM_ID: doc_contributor_reqs
+:END:
+#+begin_note
+- Minimum required ~hugo~ version: {{{min_hugo_version}}}
+#+end_note
+**** Requirements for code contributor
+:PROPERTIES:
+:CUSTOM_ID: code_contributor_reqs
+:END:
+#+begin_note
+- Org mode version used for tests: {{{org_mode_version}}}
+- Minimum required ~hugo~ version: {{{min_hugo_version}}}
+- ~pandoc~ and ~pandoc_site~ version {{{pandoc_version}}}
+#+end_note
+
+- About Pandoc :: /While the end-user does not need Pandoc installed on
+                  their machine, a code contributor needs to have both
+                  ~pandoc~ and ~pandoc-citeproc~
+                  installed[fn:7]. These are needed for ~make md~ and
+                  ~make -j1 test~ steps to work as they use/test the
+                  {{{doc(pandoc-citations,,Pandoc Citations)}}}
+                  feature too./
 *** Contributing Guide
 :PROPERTIES:
 :EXPORT_FILE_NAME: contributing-guide
@@ -2834,12 +2845,12 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 #+include: "./ox-hugo-manual.org::#test" :only-contents t
 * Footnotes
 
-[fn:7] The Pandoc Citations feature was last <2018-08-19 Sun> tested
-with Pandoc version {{{pandoc_version}}}. If you are running an older
-version, the quickest way to install might be to simply download the
-latest release archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]], extract it and put the
-~pandoc~ and ~pandoc-citeproc~ binaries in one of the directories in
-your /PATH/.
+[fn:7] The Pandoc Citations feature was last tested on
+<2019-01-03 Thu> with Pandoc version {{{pandoc_version}}}. If you are
+running an older version, the quickest way to install might be to
+simply download the latest release archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]],
+extract it and put the ~pandoc~ and ~pandoc-citeproc~ binaries in one
+of the directories in your /PATH/.
 
 [fn:6] If you are still using a Hugo version older than 0.25, update
 now! -- Because that version added support for the awesome
@@ -2875,4 +2886,5 @@ files outside static directory)}}}.
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:
 # eval: (toggle-truncate-lines 1)
+# eval: (org-hugo-auto-export-mode)
 # End:

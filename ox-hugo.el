@@ -1740,7 +1740,9 @@ CONTENTS is the headline contents.  INFO is a plist used as
 a communication channel."
   (unless (org-element-property :footnote-section-p headline)
     (let* ((numbers (org-hugo--get-headline-number headline info nil))
+           (loffset (string-to-number (plist-get info :hugo-level-offset))) ;"" -> 0, "0" -> 0, "1" -> 1, ..
            (level (org-export-get-relative-level headline info))
+           (level-effective (+ loffset level))
            (title (org-export-data (org-element-property :title headline) info)) ;`org-export-data' required
            (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
                       (org-element-property :todo-keyword headline)))
@@ -1759,8 +1761,8 @@ a communication channel."
        ;; Cannot create a headline.  Fall-back to a list.
        ((or (org-export-low-level-p headline info)
             (not (memq style '(atx setext)))
-            (and (eq style 'atx) (> level 6))
-            (and (eq style 'setext) (> level 2)))
+            (and (eq style 'atx) (> level-effective 6))
+            (and (eq style 'setext) (> level-effective 2)))
         (let ((bullet
                (if (not (org-export-numbered-headline-p headline info)) "-"
                  (concat (number-to-string
@@ -1774,7 +1776,6 @@ a communication channel."
         (let ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
                               (or (org-element-property :CUSTOM_ID headline)
                                   (org-hugo-slug title))))
-              (loffset (string-to-number (plist-get info :hugo-level-offset))) ;"" -> 0, "0" -> 0, "1" -> 1, ..
               (todo (when todo
                       (concat (org-hugo--todo todo info) " "))))
           (concat (org-hugo--headline-title style level loffset title todo anchor numbers)

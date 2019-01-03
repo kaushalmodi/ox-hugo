@@ -4039,6 +4039,55 @@ with spaces was added in {{{commit(7691f0453b)}}}.
 #+end_description
 *** TEST__TODO This heading's TODO kwd should read as "TEST TODO"
 *** TEST__DONE This heading's TODO kwd should read as "TEST DONE"
+** Deeply nested Org TODO headings                                   :nested:
+*** Reused test body
+:PROPERTIES:
+:CUSTOM_ID: deeply-nested-todo-headings
+:END:
+{{{oxhugoissue(250)}}}
+**** TODO Level 1
+***** TODO Level 2
+****** TODO Level 3
+******* TODO Level 4
+******** TODO Level 5
+********* TODO Level 6
+********** TODO Level 7
+*** Deeply nested Org TODO headings -- Default heading level
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--default-h
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
+*** Deeply nested Org TODO headings -- h1
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h1
+:EXPORT_OPTIONS: h:1
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
+*** Deeply nested Org TODO headings -- h2
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h2
+:EXPORT_OPTIONS: h:2
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
+*** Deeply nested Org TODO headings -- h5
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h5
+:EXPORT_OPTIONS: h:5
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
+*** Deeply nested Org TODO headings -- h6
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h6
+:EXPORT_OPTIONS: h:6
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
+*** Deeply nested Org TODO headings -- h6, Offset 0
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h6--offset0
+:EXPORT_OPTIONS: h:6
+:EXPORT_HUGO_LEVEL_OFFSET: 0
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
 * Level Offset                                                 :level_offset:
 ** Default level offset
 :PROPERTIES:

@@ -1,8 +1,13 @@
 # Courtesy: https://github.com/magit/magit/blob/master/.travis.yml
-dist: trusty
+dist: xenial
 language: minimal
 
 sudo: true
+
+addons:
+  apt:
+    packages:
+      - libgnutls-dev
 
 env:
   global:

@@ -9,14 +9,14 @@ draft = false
 
 ## <span class="org-todo todo TODO">TODO</span> Level 1 {#level-1}
 
--   TODO Level 2
+-   <span class="org-todo todo TODO">TODO</span>  Level 2
 
-    -   TODO Level 3
+    -   <span class="org-todo todo TODO">TODO</span>  Level 3
 
-        -   TODO Level 4
+        -   <span class="org-todo todo TODO">TODO</span>  Level 4
 
-            -   TODO Level 5
+            -   <span class="org-todo todo TODO">TODO</span>  Level 5
 
-                -   TODO Level 6
+                -   <span class="org-todo todo TODO">TODO</span>  Level 6
 
-                    -   TODO Level 7
+                    -   <span class="org-todo todo TODO">TODO</span>  Level 7

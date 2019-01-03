@@ -1746,6 +1746,8 @@ a communication channel."
            (title (org-export-data (org-element-property :title headline) info)) ;`org-export-data' required
            (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
                       (org-element-property :todo-keyword headline)))
+           (todo-fmtd (when todo
+                        (concat (org-hugo--todo todo info) " ")))
            (tags (and (org-hugo--plist-get-true-p info :with-tags)
                       (let ((tag-list (org-export-get-tags headline info)))
                         (and tag-list
@@ -1769,16 +1771,14 @@ a communication channel."
                           (car (last (org-export-get-headline-number
                                       headline info))))
                          ".")))
-              (heading (concat todo " " priority title))) ;Headline text without tags
+              (heading (concat todo-fmtd " " priority title))) ;Headline text without tags
           (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
         (let ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
                               (or (org-element-property :CUSTOM_ID headline)
-                                  (org-hugo-slug title))))
-              (todo (when todo
-                      (concat (org-hugo--todo todo info) " "))))
-          (concat (org-hugo--headline-title style level loffset title todo anchor numbers)
+                                  (org-hugo-slug title)))))
+          (concat (org-hugo--headline-title style level loffset title todo-fmtd anchor numbers)
                   contents)))))))
 
 ;;;;; Headline Helpers

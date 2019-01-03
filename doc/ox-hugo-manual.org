@@ -1021,7 +1021,6 @@ conditions. Some users may not prefer this behavior.
 | Variable                         | Value |
 |----------------------------------+-------|
 | org-hugo-auto-set-lastmod        | t     |
-| org-hugo-auto-export-on-save     | t     |
 | org-log-done                     | time  |
 
 In such case, you can suppress =lastmod= in the front-matter if you set
@@ -1909,32 +1908,21 @@ Hugo-rendered post each time you saved your post in Org?
 Well.. you can do that with these steps, which apply to both
 /per-subtree/ and /per-file/ flows:
 **** First time setup
-***** Step {{{n}}}: Require =ox-hugo-auto-export= package
-This package is part of the =ox-hugo= package installation. It
-implements the auto-exporting behavior on file saves. Among many other
-things, this package declares the buffer-local variable
-=org-hugo-auto-export-on-save= which is used to enable/disable the
-auto-exporting.
-
-So with =ox-hugo= installed, add this to your Emacs config:
-#+begin_src emacs-lisp
-(require 'ox-hugo-auto-export)
-#+end_src
-
-or if using =use-package=:
-
-#+begin_src emacs-lisp
-(use-package ox-hugo-auto-export)
-#+end_src
-***** Step {{{n}}}: Set =org-hugo-auto-export-on-save=
-This variable is /nil/ by default, so that the auto-exporting feature
-can be enabled separately at project level or file level.
+***** Step {{{n}}}: Enable minor mode =org-hugo-auto-export-mode=
+This minor mode is disabled by default. It can be enabled separately
+at project level or file level.
+#+begin_note
+Note that once you update the ~.dir-locals.el~ file or file-local
+Variables as shown below, you will be prompted by Emacs to tell it if
+those settings are safe. Hit ~!~ in that prompt to says /yes/ and to
+save that choice for future Emacs sessions.
+#+end_note
 ****** Enable for the whole project
 If you want to enable auto-exporting for the whole project, add this
 to the ~.dir-locals.el~ file in the project root:
 #+begin_src emacs-lisp
 (("content-org/"
-  . ((org-mode . ((org-hugo-auto-export-on-save . t))))))
+  . ((org-mode . ((eval . (org-hugo-auto-export-mode)))))))
 #+end_src
 Above assumes that the Org files are in the /"content-org/"/ directory
 (at any nested level in there) relative to that =.dir-locals.el= file:
@@ -1951,12 +1939,12 @@ Above assumes that the Org files are in the /"content-org/"/ directory
 If you have the Org file directly in the project root or in the same
 directory as the ~.dir-locals.el~, add this in that file instead:
 #+begin_src emacs-lisp
-((org-mode . ((org-hugo-auto-export-on-save . t))))
+((org-mode . ((eval . (org-hugo-auto-export-mode)))))
 #+end_src
 
-Note that with above, ~org-hugo-auto-export-on-save~ will be set to
-~t~ for *all* Org files in the project. If that's what you don't want
-see [[* Enable only for an Org file]].
+Note that with above, ~org-hugo-auto-export-mode~ will be enabled for
+*all* Org files in the project. If you do not want that, see [[* Enable
+only for an Org file]].
 ******* Enabling for multiple projects
 To enable auto-exporting for multiple projects, simply add similar
 =.dir-locals.el= files to the root directories of those projects. Just
@@ -1968,7 +1956,7 @@ Add below to the very-end of your Org file and *save the file*:
 ,* Footnotes
 ,* COMMENT Local Variables                          :ARCHIVE:
 # Local Variables:
-# org-hugo-auto-export-on-save: t
+# eval: (org-hugo-auto-export-mode)
 # End:
 #+end_src
 *About Footnotes*: Here I recommend adding the =* Footnotes=
@@ -1978,24 +1966,25 @@ Add below to the very-end of your Org file and *save the file*:
  Variables/ heading would then no longer be at the end of the file.
 ****** Enable for the whole project except for few Org files
 1. Enable the auto-exporting for the whole project as explained [[* Enable for the whole project][above]].
-2. Then add below to the very-end of the Org file where you need to
-   disable the auto-exporting:
+2. Then add below to the end of the Org file where you need to disable
+   the auto-exporting:
    #+begin_src org
    ,* Footnotes
    ,* COMMENT Local Variables                          :ARCHIVE:
    # Local Variables:
-   # org-hugo-auto-export-on-save: nil
+   # eval: (org-hugo-auto-export-mode -1)
    # End:
    #+end_src
-   Note that this time, =org-hugo-auto-export-on-save= is set to /nil/
-   to override the /t/ value set in the =.dir-locals.el=.
+   Note that this time, =org-hugo-auto-export-mode= is disabled to
+   override its enabled state in =.dir-locals.el=.
 
 #+begin_note
-After updating the value of =org-hugo-auto-export-on-save= using
-either of the above methods, remember to (i) save the Org file where
-you expect the auto-exporting to work, and (ii) revert the buffer
-(~M-x revert-buffer~). That will ensure that the updated
-=org-hugo-auto-export-on-save= is effective.
+After updating the state of =org-hugo-auto-export-mode= using either
+of the above methods, remember to:
+1. Save the Org file where you expect the auto-exporting to work.
+2. Revert the buffer (~M-x revert-buffer~). That will ensure that the
+   updated state for the =org-hugo-auto-export-mode= minor mode is
+   effective.
 #+end_note
 **** Steps that /might/ need to be taken every time
 Once the initial setup is done, the following steps apply to both

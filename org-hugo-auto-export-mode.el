@@ -1,4 +1,4 @@
-;;; ox-hugo-auto-export-mode.el --- Minor mode for auto-exporting using ox-hugo -*- lexical-binding: t -*-
+;;; org-hugo-auto-export-mode.el --- Minor mode for auto-exporting using ox-hugo -*- lexical-binding: t -*-
 
 ;; Authors: Kaushal Modi <kaushal.mod@gmail.com>, Evgeni Kolev <evgenysw@gmail.com>
 ;; URL: https://ox-hugo.scripter.co
@@ -41,6 +41,6 @@ The exporting happens only when Org Capture is not in progress."
     (remove-hook 'after-save-hook #'org-hugo-export-wim-to-md-after-save :local)))
 
 
-(provide 'ox-hugo-auto-export-mode)
+(provide 'org-hugo-auto-export-mode)
 
-;;; ox-hugo-auto-export-mode.el ends here
+;;; org-hugo-auto-export-mode.el ends here

@@ -1,8 +1,6 @@
 # Courtesy: https://github.com/magit/magit/blob/master/.travis.yml
-dist: xenial
+dist: trusty
 language: minimal
-
-sudo: true
 
 env:
   global:
@@ -10,15 +8,15 @@ env:
     - OX_HUGO_TMP_DIR="/tmp/${USER}/ox-hugo-dev"
     - PANDOC_VERSION=2.5
   matrix:
-  # https://github.com/npostavs/emacs-travis/releases
-  - EMACS_VERSION=26.1
-  - EMACS_VERSION=25.3
-  - EMACS_VERSION=25.1
-  - EMACS_VERSION=24.5
-  - EMACS_VERSION=24.4
-  # Disabling test on master branch emacs build for now
-  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25061#144
-  # - EMACS_VERSION=master # master branch
+    # https://github.com/npostavs/emacs-travis/releases
+    - EMACS_VERSION=26.1
+    - EMACS_VERSION=25.3
+    - EMACS_VERSION=25.1
+    - EMACS_VERSION=24.5
+    - EMACS_VERSION=24.4
+    # Disabling test on master branch emacs build for now
+    # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25061#144
+    # - EMACS_VERSION=master # master branch
 
 install:
   - $CURL -O https://github.com/npostavs/emacs-travis/releases/download/bins/emacs-bin-${EMACS_VERSION}.tar.gz

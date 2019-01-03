@@ -2908,8 +2908,8 @@ INFO is a plist used as a communication channel."
            ;; do that here instead.  Convert "---" to EM DASH, "--" to EN
            ;; DASH, and "..." to HORIZONTAL ELLIPSIS.
            ;; Below two replacements are order sensitive!
-           (title (replace-regexp-in-string "---\\([^-]\\)" "—" title)) ;EM DASH
-           (title (replace-regexp-in-string "--\\([^-]\\)" "–" title)) ;EN DASH
+           (title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
+           (title (replace-regexp-in-string "--\\([^-]\\)" "–\\1" title)) ;EN DASH
            (title (replace-regexp-in-string "\\.\\.\\." "…" title))) ;HORIZONTAL ELLIPSIS
       title)))
 

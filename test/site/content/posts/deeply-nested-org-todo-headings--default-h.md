@@ -1,5 +1,5 @@
 +++
-title = "Deeply nested Org TODO headings –Default heading level"
+title = "Deeply nested Org TODO headings – Default heading level"
 tags = ["todo", "nested"]
 draft = false
 +++

@@ -1422,7 +1422,7 @@ code block does not have Markdown syntax lists.
 - list 1
 #+end_src
 *** Example blocks                               :lists:hyphen:example_block:
-**** Example block with list syntax in a list          :@upstream:blackfriday:
+**** Example block with list syntax in a list         :@upstream:blackfriday:
 :PROPERTIES:
 :EXPORT_FILE_NAME: list-has-example-block-with-list-syntax
 :END:
@@ -2114,7 +2114,7 @@ only the HTML output will be created (default).
 Here is the summary.
 #+hugo: more
 Here is text after the [[https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting][summary splitter]].
-*** COMMENT Summary Splitter at EOF                                             :eof:
+*** COMMENT Summary Splitter at EOF                                     :eof:
 :PROPERTIES:
 :EXPORT_FILE_NAME: summary-splitter-at-eof
 :END:
@@ -5414,7 +5414,7 @@ If the description is set via the subtree property
 #+begin_description
 Description set in special block
 #+end_description
-***** Single-line description with backslashes (TOML) :escaping:backslashes:front_matter:single_line:
+***** Single-line description with backslashes (TOML) :escaping:backslashes:single_line:
 :PROPERTIES:
 :EXPORT_FILE_NAME: description-single-line-escaping-backslashes-org-special-block-toml
 :END:
@@ -5422,7 +5422,7 @@ Description set in special block
 Test to check that backslashes in =\|= and =\\= are correctly escaped.
 #+end_description
 Post content.
-***** Multi-line description with backslashes (TOML) :escaping:backslashes:front_matter:multi_line:
+***** Multi-line description with backslashes (TOML) :escaping:backslashes:multi_line:
 :PROPERTIES:
 :EXPORT_FILE_NAME: description-multi-line-escaping-backslashes-org-special-block-toml
 :END:
@@ -5458,7 +5458,7 @@ show up with line breaks \\
 but within the same paragraph.
 #+end_description
 Post content.
-***** Single-line description with backslashes (YAML) :escaping:backslashes:front_matter:single_line:
+***** Single-line description with backslashes (YAML) :escaping:backslashes:single_line:
 :PROPERTIES:
 :EXPORT_FILE_NAME: description-single-line-escaping-backslashes-org-special-block-yaml
 :END:
@@ -5466,7 +5466,7 @@ Post content.
 Test to check that backslashes in =\|= and =\\= are correctly escaped.
 #+end_description
 Post content.
-***** Multi-line description with backslashes (YAML) :escaping:backslashes:front_matter:multi_line:
+***** Multi-line description with backslashes (YAML) :escaping:backslashes:multi_line:
 :PROPERTIES:
 :EXPORT_FILE_NAME: description-multi-line-escaping-backslashes-org-special-block-yaml
 :END:

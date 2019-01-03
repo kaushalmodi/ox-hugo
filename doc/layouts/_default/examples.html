@@ -55,33 +55,36 @@
 
                     <!-- Get JSON via API to figure out the $last_updated time -->
                     {{ $last_updated := "" }}
-                    {{ if (eq "github" $api) }}
-                        {{ $repo := replaceRE "^.*github\\.com/([^/]+/[^/]+).*" "${1}" $val.source }}
-                        <!-- https://developer.github.com/v3/repos/commits/#list-commits-on-a-repository -->
-                        <!-- https://api.github.com/repos/kaushalmodi/ox-hugo/commits?path=doc&sha=master -->
-                        {{ $repo_json := getJSON (printf "https://api.github.com/repos/%s/commits?path=%s&sha=%s" $repo $org_dir $branch) }}
-                        {{ $last_updated = (index (index (index (index $repo_json 0) "commit") "committer") "date") }}
-                    {{ else if (eq "gitlab" $api) }}
-                        {{ $repo := replaceRE "^.*gitlab\\.com/([^/]+/[^/]+).*" "${1}" $val.source | replaceRE "/" "%2F" }}
-                        {{ $org_dir = $org_dir | replaceRE "/" "%2F" }}
-                        <!-- https://docs.gitlab.com/ee/api/commits.html#list-repository-commits -->
-                        <!-- https://gitlab.com/api/v4/projects/kaushalmodi%2Fkaushalmodi.gitlab.io/repository/commits?path=content-org&ref_name=master -->
-                        {{ $repo_json := getJSON (printf "https://gitlab.com/api/v4/projects/%s/repository/commits?path=%s&?ref_name=%s" $repo ($org_dir | replaceRE "/" "%2F") $branch) }}
-                        {{/* partial "debugprint.html" $repo_json */}}
-                        {{ $last_updated = (index (index $repo_json 0) "committed_date") }}
-                    {{ else if (eq "gitea" $api) }}
-                        {{ $repo := replaceRE "^.*//[^/]+/([^/]+/[^/]+).*" "${1}" $val.source }}
-                        {{ $api_url := printf "%s/api/v1" (replaceRE "^(.*//[^/]+)/.+" "${1}" $val.source) }}
-                        <!-- https://try.gitea.io/api/swagger#/repository/repoGet -->
-                        <!-- https://git.fsfe.org/api/v1/repos/adolflow/infotics.es -->
-                        {{ $repo_json := getJSON (printf "%s/repos/%s" $api_url $repo) }}
-                        {{/* partial "debugprint.html" $repo_json */}}
-                        {{ $last_updated = index $repo_json "updated_at" }}
-                    {{ else if (eq "micro.json" $api) }}
-                        {{ $site_url := $val.site | replaceRE "/$" "" }}
-                        {{ $micro_json := getJSON (printf "%s/micro.json" $site_url) }}
-                        {{/* partial "debugprint.html" $micro_json */}}
-                        {{ $last_updated = index $micro_json "last_updated" }}
+                    <!-- Do not do the getJSON calls if running hugo server -->
+                    {{ if (not $.Site.IsServer) }}
+                        {{ if (eq "github" $api) }}
+                            {{ $repo := replaceRE "^.*github\\.com/([^/]+/[^/]+).*" "${1}" $val.source }}
+                            <!-- https://developer.github.com/v3/repos/commits/#list-commits-on-a-repository -->
+                            <!-- https://api.github.com/repos/kaushalmodi/ox-hugo/commits?path=doc&sha=master -->
+                            {{ $repo_json := getJSON (printf "https://api.github.com/repos/%s/commits?path=%s&sha=%s" $repo $org_dir $branch) }}
+                            {{ $last_updated = (index (index (index (index $repo_json 0) "commit") "committer") "date") }}
+                        {{ else if (eq "gitlab" $api) }}
+                            {{ $repo := replaceRE "^.*gitlab\\.com/([^/]+/[^/]+).*" "${1}" $val.source | replaceRE "/" "%2F" }}
+                            {{ $org_dir = $org_dir | replaceRE "/" "%2F" }}
+                            <!-- https://docs.gitlab.com/ee/api/commits.html#list-repository-commits -->
+                            <!-- https://gitlab.com/api/v4/projects/kaushalmodi%2Fkaushalmodi.gitlab.io/repository/commits?path=content-org&ref_name=master -->
+                            {{ $repo_json := getJSON (printf "https://gitlab.com/api/v4/projects/%s/repository/commits?path=%s&?ref_name=%s" $repo ($org_dir | replaceRE "/" "%2F") $branch) }}
+                            {{/* partial "debugprint.html" $repo_json */}}
+                            {{ $last_updated = (index (index $repo_json 0) "committed_date") }}
+                        {{ else if (eq "gitea" $api) }}
+                            {{ $repo := replaceRE "^.*//[^/]+/([^/]+/[^/]+).*" "${1}" $val.source }}
+                            {{ $api_url := printf "%s/api/v1" (replaceRE "^(.*//[^/]+)/.+" "${1}" $val.source) }}
+                            <!-- https://try.gitea.io/api/swagger#/repository/repoGet -->
+                            <!-- https://git.fsfe.org/api/v1/repos/adolflow/infotics.es -->
+                            {{ $repo_json := getJSON (printf "%s/repos/%s" $api_url $repo) }}
+                            {{/* partial "debugprint.html" $repo_json */}}
+                            {{ $last_updated = index $repo_json "updated_at" }}
+                        {{ else if (eq "micro.json" $api) }}
+                            {{ $site_url := $val.site | replaceRE "/$" "" }}
+                            {{ $micro_json := getJSON (printf "%s/micro.json" $site_url) }}
+                            {{/* partial "debugprint.html" $micro_json */}}
+                            {{ $last_updated = index $micro_json "last_updated" }}
+                        {{ end }}
                     {{ end }}
 
                     <!-- Get the Org source link -->

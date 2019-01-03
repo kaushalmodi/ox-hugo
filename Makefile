@@ -8,7 +8,8 @@ MAKE_ := $(MAKE) -j1 --no-print-directory
 CURL ?= curl -fsSkL --retry 9 --retry-delay 9
 
 USER ?= me
-OX_HUGO_TMP_DIR ?= /tmp/$(USER)/ox-hugo-dev
+OX_HUGO_TMP_DIR_BASE ?= /tmp/$(USER)
+ox_hugo_tmp_dir ?= $(OX_HUGO_TMP_DIR_BASE)/ox-hugo-dev
 
 ifdef INSIDE_EMACS
 	EMACS := $(shell which emacs)
@@ -29,19 +30,19 @@ EMACS_BIN_VERSION ?= 26.1
 HUGO ?= hugo
 HUGO_exists := $(shell command -v $(HUGO) 2> /dev/null)
 ifeq ("$(HUGO_exists)","")
-	HUGO := $(OX_HUGO_TMP_DIR)/hugo/bin/hugo
+	HUGO := $(ox_hugo_tmp_dir)/hugo/bin/hugo
 endif
 
 HTMLTEST ?= htmltest
 HTMLTEST_exists := $(shell command -v $(HTMLTEST) 2> /dev/null)
 ifeq ("$(HTMLTEST_exists)","")
-	HTMLTEST := $(OX_HUGO_TMP_DIR)/htmltest/bin/htmltest
+	HTMLTEST := $(ox_hugo_tmp_dir)/htmltest/bin/htmltest
 endif
 
 PANDOC ?= pandoc
 PANDOC_exists := $(shell command -v $(PANDOC) 2> /dev/null)
 ifeq ("$(PANDOC_exists)","")
-	PANDOC := $(OX_HUGO_TMP_DIR)/pandoc/bin/pandoc
+	PANDOC := $(ox_hugo_tmp_dir)/pandoc/bin/pandoc
 endif
 
 # HUGO_BIN_SOURCE and HUGO_VERSION are used later in the vcheck rule
@@ -124,7 +125,7 @@ emacs-batch:
 	@echo ""
 	@echo "$(ORG_FILE) ::"
 	@$(EMACS) --batch --eval "(progn\
-	(setenv \"OX_HUGO_TMP_DIR\" \"$(OX_HUGO_TMP_DIR)\")\
+	(setenv \"OX_HUGO_TMP_DIR\" \"$(ox_hugo_tmp_dir)\")\
 	(setenv \"TEST_ENABLED\" \"$(TEST_ENABLED)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	)" $(ORG_FILE) \
@@ -135,32 +136,32 @@ md1:
 	@$(MAKE_) emacs-batch FUNC=org-hugo-export-all-wim-to-md
 
 vcheck:
-	@mkdir -p $(OX_HUGO_TMP_DIR)
+	@mkdir -p $(ox_hugo_tmp_dir)
 ifeq ("$(EMACS_exists)","")
 	@$(CURL) -O $(EMACS_BIN_SOURCE)/emacs-bin-$(EMACS_BIN_VERSION).tar.gz
 	@tar xf emacs-bin-$(EMACS_BIN_VERSION).tar.gz -C /
 endif
 	@echo "Emacs binary used: $(EMACS)"
 	@$(EMACS) --batch --eval "(progn\
-	(setenv \"OX_HUGO_TMP_DIR\" \"$(OX_HUGO_TMP_DIR)\")\
+	(setenv \"OX_HUGO_TMP_DIR\" \"$(ox_hugo_tmp_dir)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
 	(message \"[Version check] Emacs %s\" emacs-version)\
 	(message \"[Version check] %s\" (org-version nil :full))\
 	)" \
 	--kill
 ifeq ("$(HUGO_exists)","")
-	@mkdir -p $(OX_HUGO_TMP_DIR)/hugo
-	@find $(OX_HUGO_TMP_DIR)/hugo -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
-	@git clone $(HUGO_BIN_SOURCE) $(OX_HUGO_TMP_DIR)/hugo/bin
-	@tar xf $(OX_HUGO_TMP_DIR)/hugo/bin/hugo_DEV-Linux-64bit.tar.xz -C $(OX_HUGO_TMP_DIR)/hugo/bin
+	@mkdir -p $(ox_hugo_tmp_dir)/hugo
+	@find $(ox_hugo_tmp_dir)/hugo -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
+	@git clone $(HUGO_BIN_SOURCE) $(ox_hugo_tmp_dir)/hugo/bin
+	@tar xf $(ox_hugo_tmp_dir)/hugo/bin/hugo_DEV-Linux-64bit.tar.xz -C $(ox_hugo_tmp_dir)/hugo/bin
 endif
 	$(HUGO) version
 ifeq ("$(PANDOC_exists)","")
-	@mkdir -p $(OX_HUGO_TMP_DIR)/pandoc
-	@find $(OX_HUGO_TMP_DIR)/pandoc -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
+	@mkdir -p $(ox_hugo_tmp_dir)/pandoc
+	@find $(ox_hugo_tmp_dir)/pandoc -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
 	@$(CURL) -O $(PANDOC_BIN_SOURCE)/$(PANDOC_ARCHIVE_NAME)
 	@tar xf $(PANDOC_ARCHIVE_NAME)
-	@mv pandoc-$(PANDOC_BIN_VERSION)/bin $(OX_HUGO_TMP_DIR)/pandoc/.
+	@mv pandoc-$(PANDOC_BIN_VERSION)/bin $(ox_hugo_tmp_dir)/pandoc/.
 	@rm -rf pandoc-$(PANDOC_BIN_VERSION)
 endif
 	$(PANDOC) --version
@@ -172,7 +173,7 @@ hugo_doc:
 	@$(MAKE_) hugo HUGO_BASE_DIR=./doc HUGO_BASEURL=https://ox-hugo.scripter.co/
 
 hugo_test:
-	@$(MAKE_) hugo HUGO=$(OX_HUGO_TMP_DIR)/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASEURL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
+	@$(MAKE_) hugo HUGO=$(ox_hugo_tmp_dir)/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASEURL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
 
 serve server: vcheck
 	@echo "Serving the site on $(HUGO_BASEURL):$(PORT) .."
@@ -216,10 +217,10 @@ doc: doc_md hugo_doc doc_gh
 
 doc_htmltest:
 ifeq ("$(HTMLTEST_exists)","")
-	@mkdir -p $(OX_HUGO_TMP_DIR)/htmltest
-	@find $(OX_HUGO_TMP_DIR)/htmltest -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
-	@git clone $(HUGO_BIN_SOURCE) $(OX_HUGO_TMP_DIR)/htmltest/bin
-	@tar xf $(OX_HUGO_TMP_DIR)/htmltest/bin/htmltest_DEV-Linux-64bit.tar.xz -C $(OX_HUGO_TMP_DIR)/htmltest/bin
+	@mkdir -p $(ox_hugo_tmp_dir)/htmltest
+	@find $(ox_hugo_tmp_dir)/htmltest -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
+	@git clone $(HUGO_BIN_SOURCE) $(ox_hugo_tmp_dir)/htmltest/bin
+	@tar xf $(ox_hugo_tmp_dir)/htmltest/bin/htmltest_DEV-Linux-64bit.tar.xz -C $(ox_hugo_tmp_dir)/htmltest/bin
 endif
 	@cd doc && $(HTMLTEST)
 doc_test: doc doc_htmltest
@@ -243,11 +244,11 @@ diffgolden:
 	@diff -r $(OX_HUGO_TEST_SITE_DIR)/content-modified $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
 clean: ctemp
-	@find ./doc/content -name "*.md" -delete
-	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/public $(OX_HUGO_TEST_SITE_DIR)/content-golden
-	@rm -rf $(OX_HUGO_TMP_DIR)
-	@rm -rf ./doc/public
-	@rm -f ox-hugo-autoloads.el
+	find $(OX_HUGO_TMP_DIR_BASE)  -maxdepth 1 -type d -name ox-hugo-dev -exec rm -rf "{}" \;
+	find $(OX_HUGO_TEST_SITE_DIR) -maxdepth 1 -type d \( -name public -o -name content-golden -o -name content-modified \) -exec rm -rf "{}" \;
+	find ./doc -maxdepth 1 -type d -name public -exec rm -rf "{}" \;
+	find ./doc/content -name "*.md" -delete
+	rm -f ox-hugo-autoloads.el
 
 # Set a make variable during rule execution
 # https://stackoverflow.com/a/1909390/1219634

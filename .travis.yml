@@ -7,7 +7,7 @@ sudo: true
 addons:
   apt:
     packages:
-      - libgnutls-dev
+      - libgnutls26
 
 env:
   global:

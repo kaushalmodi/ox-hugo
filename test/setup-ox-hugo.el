@@ -1,5 +1,3 @@
-;; Time-stamp: <2019-01-02 18:26:47 kmodi>
-
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
 

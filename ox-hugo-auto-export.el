@@ -38,8 +38,8 @@
 
 (warn (concat "`ox-hugo-auto-export.el' has been deprecated.\n"
               "This module will be deleted on 2018/01/20.\n"
-              "See the updated instructions on https://ox-hugo.scripter.co/doc/auto-export-on-saving/\n"
-              "for enabling auto-export."))
+              "See https://ox-hugo.scripter.co/doc/deprecation-notices/#org-hugo-auto-export-feature-now-a-minor-mode\n"
+              "for details."))
 
 (defvar-local org-hugo-auto-export-on-save nil
   "Enable flag for `org-hugo-export-wim-to-md-after-save'.

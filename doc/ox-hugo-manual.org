@@ -401,15 +401,11 @@ any export).
 
 You can do that by adding the below to your config:
 #+begin_src emacs-lisp
-(require 'ox-hugo-auto-export) ;If you want the auto-exporting on file saves
-
 (with-eval-after-load 'ox
   (require 'ox-hugo))
 #+end_src
 If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can do the below instead:
 #+begin_src emacs-lisp
-(use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
-
 (use-package ox-hugo
   :ensure t            ;Auto-install the package from Melpa (optional)
   :after ox)
@@ -428,8 +424,6 @@ Spacemacs users can choose to add this snippet to their
   ;; ..
 
   ;; ox-hugo config
-  (use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
-
   (use-package ox-hugo
     :ensure t          ;Auto-install the package from Melpa (optional)
     :after ox))
@@ -719,6 +713,40 @@ necessity if you want to start using =ox-hugo=.
 
 .. And if at some point, you want to stop using =ox-hugo=, you still
 have the exported Markdown files.
+*** Deprecation Notices
+:PROPERTIES:
+:EXPORT_FILE_NAME: deprecation-notices
+:END:
+**** Org Hugo Auto Export feature now a /minor mode/ -- <2019-01-03 Thu>
+***** Changes needed to be done in user config
+1. Do *not* require ~ox-hugo-auto-export~ any more!
+   - For now, you will get a warning each time you do that
+     /require/. But in few weeks, the old ~ox-hugo-auto-export.el~
+     file will be deleted from this project, and then doing that
+     /require/ will throw an error.
+2. Make these changes in your ~.dir-locals.el~ or File Local Variables
+   as applicable:
+   |---------------------+----------------------------------------+-------------------------------------------|
+   | Auto-export on save | Earlier                                | Now                                       |
+   |---------------------+----------------------------------------+-------------------------------------------|
+   | *Enable*            | ~(org-hugo-auto-export-on-save . t)~   | ~(eval . (org-hugo-auto-export-mode))~    |
+   | *Disable*           | ~(org-hugo-auto-export-on-save . nil)~ | ~(eval . (org-hugo-auto-export-mode -1))~ |
+   |---------------------+----------------------------------------+-------------------------------------------|
+***** Summary
+~org-hugo-auto-export-mode~ is a new minor mode that now ships with
+~ox-hugo~. So the user doesn't need to do anything special to install
+it --- it simply autoloads.
+
+As a bonus, now ~M-x org-hugo-auto-export-mode~ can be used to toggle
+the auto-exporting on and off in an Org buffer.
+
+#+begin_note
+See the updated docs for {{{doc(usage,,~ox-hugo~ Usage)}}} and
+{{{doc(auto-export-on-saving,,Auto-export on Saving)}}}.
+#+end_note
+
+For history behind this change, see {{{issue(247)}}}. \\
+--- /*tl;dr*: doing the Right thing/
 ** Getting Started
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "3.getting_started"

@@ -22,8 +22,6 @@ ifeq ("$(EMACS_exists)","")
 	EMACS := /tmp/emacs/bin/emacs
 endif
 
-# EMACS_BIN_SOURCE and EMACS_BIN_VERSION are used later in the vcheck rule
-# only if EMACS_exists has evaluated to "".
 EMACS_BIN_SOURCE ?= https://github.com/npostavs/emacs-travis/releases/download/bins
 EMACS_BIN_VERSION ?= 26.1
 
@@ -45,8 +43,6 @@ ifeq ("$(PANDOC_exists)","")
 	PANDOC := $(ox_hugo_tmp_dir)/pandoc/bin/pandoc
 endif
 
-# HUGO_BIN_SOURCE and HUGO_VERSION are used later in the vcheck rule
-# only if HUGO_exists has evaluated to "".
 HUGO_BIN_SOURCE ?= https://gitlab.com/kaushalmodi/unofficial-hugo-dev-builds.git
 HUGO_VERSION ?= DEV
 
@@ -90,7 +86,9 @@ FUNC=
 
 test_check=1
 
-.PHONY: help emacs-batch md1 vcheck hugo hugo_doc hugo_test serve server diff \
+.PHONY: help emacs-batch md1 \
+	vcheck_emacs vcheck_hugo vcheck_pandoc vcheck \
+	hugo hugo_doc hugo_test serve server diff \
 	test md testmkgold \
 	do_test $(test_org_files) \
 	doc_md doc_gh doc doc_htmltest doc_test \
@@ -103,7 +101,7 @@ help:
 	@echo " make md            <-- Only export the test Org files to Markdown, no checks"
 	@echo " make doc           <-- Build both Doc Site contents and GitHub docs"
 	@echo " make FOO.org       <-- Export the FOO.org file from content-org/ dir to Markdown file(s)"
-	@echo " make vcheck        <-- Print emacs and Org versions"
+	@echo " make vcheck        <-- Print Emacs, Org and Pandoc versions"
 	@echo " make hugo          <-- Run hugo"
 	@echo " make serve         <-- Run the hugo server on http://localhost:$(PORT)"
 	@echo " make diff          <-- Run git diff"
@@ -135,7 +133,7 @@ emacs-batch:
 md1:
 	@$(MAKE_) emacs-batch FUNC=org-hugo-export-all-wim-to-md
 
-vcheck:
+vcheck_emacs:
 	@mkdir -p $(ox_hugo_tmp_dir)
 ifeq ("$(EMACS_exists)","")
 	@$(CURL) -O $(EMACS_BIN_SOURCE)/emacs-bin-$(EMACS_BIN_VERSION).tar.gz
@@ -149,6 +147,9 @@ endif
 	(message \"[Version check] %s\" (org-version nil :full))\
 	)" \
 	--kill
+
+vcheck_hugo:
+	@mkdir -p $(ox_hugo_tmp_dir)
 ifeq ("$(HUGO_exists)","")
 	@mkdir -p $(ox_hugo_tmp_dir)/hugo
 	@find $(ox_hugo_tmp_dir)/hugo -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
@@ -156,6 +157,9 @@ ifeq ("$(HUGO_exists)","")
 	@tar xf $(ox_hugo_tmp_dir)/hugo/bin/hugo_DEV-Linux-64bit.tar.xz -C $(ox_hugo_tmp_dir)/hugo/bin
 endif
 	$(HUGO) version
+
+vcheck_pandoc:
+	@mkdir -p $(ox_hugo_tmp_dir)
 ifeq ("$(PANDOC_exists)","")
 	@mkdir -p $(ox_hugo_tmp_dir)/pandoc
 	@find $(ox_hugo_tmp_dir)/pandoc -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
@@ -166,7 +170,9 @@ ifeq ("$(PANDOC_exists)","")
 endif
 	$(PANDOC) --version
 
-hugo: vcheck
+vcheck: vcheck_emacs vcheck_hugo vcheck_pandoc
+
+hugo: vcheck_hugo
 	@cd $(HUGO_BASE_DIR) && $(HUGO) $(HUGO_ARGS)
 
 hugo_doc:
@@ -175,16 +181,16 @@ hugo_doc:
 hugo_test:
 	@$(MAKE_) hugo HUGO=$(ox_hugo_tmp_dir)/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASEURL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
 
-serve server: vcheck
+serve server: vcheck_hugo
 	@echo "Serving the site on $(HUGO_BASEURL):$(PORT) .."
 	@cd $(HUGO_BASE_DIR) && $(HUGO) server --port $(PORT) --buildDrafts --buildFuture --navigateToChanged
 
 diff:
 	@git diff
 
-test: vcheck testmkgold do_test
+test: vcheck_emacs vcheck_pandoc testmkgold do_test
 
-md:
+md: vcheck_emacs vcheck_pandoc
 	@$(MAKE_) do_test test_check=0
 
 # Get rid of all changes in $(OX_HUGO_TEST_SITE_DIR)/content.
@@ -213,7 +219,7 @@ doc_gh:
 	@$(MAKE_) emacs-batch FUNC=ox-hugo-export-gh-doc ORG_FILE=./doc/github-files.org
 	@echo "[GitHub Docs] Done"
 
-doc: doc_md hugo_doc doc_gh
+doc: vcheck_emacs doc_md hugo_doc doc_gh
 
 doc_htmltest:
 ifeq ("$(HTMLTEST_exists)","")

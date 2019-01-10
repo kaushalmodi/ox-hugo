@@ -49,3 +49,7 @@ x1="80.5" x2="80.5" y1="83.9688" y2="103.9688"/><polygon
 fill="#A80036"
 points="76.5,93.9688,80.5,103.9688,84.5,93.9688,80.5,97.9688"
 style="stroke: #A80036; stroke-width: 1.0;"/></g></svg>
+
+<div class="figure-caption">
+  Figure 1: An SVG with hyperlinks generated using PlantUML
+</div>

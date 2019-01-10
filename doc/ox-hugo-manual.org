@@ -2798,12 +2798,14 @@ Simply add ~#+attr_html: :inlined t~ above the SVG file link.
 Here's an example of inlining an SVG:
 
 #+begin_src org
+,#+caption: An SVG with hyperlink
 ,#+attr_html: :inlined t
 [[file:../test/site/content-org/svg-with-hyperlinks.svg]]
 #+end_src
 
 .. which results in:
 
+#+caption: An SVG with hyperlink
 #+attr_html: :inlined t
 [[file:../test/site/content-org/svg-with-hyperlinks.svg]]
 *** COMMENT Hugo Bundle

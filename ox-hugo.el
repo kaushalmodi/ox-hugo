@@ -2029,12 +2029,39 @@ and rewrite link paths to make blogging more seamless."
                                 grand-parent
                               parent))
              (attr (org-export-read-attribute :attr_html useful-parent))
+             (caption (or
+                       ;; Caption set using #+caption takes higher precedence.
+                       (org-string-nw-p
+                        (org-export-data  ;Look for caption set using #+caption
+                         (org-export-get-caption (org-export-get-parent-element link))
+                         info))
+                       (plist-get attr :caption)))
+             (caption (when (org-string-nw-p caption)
+                        (format "%s%s%s%s"
+                                ;; Tue Feb 13 11:32:45 EST 2018 - kmodi
+                                ;; Add the span tag once
+                                ;; https://github.com/gohugoio/hugo/issues/4406
+                                ;; gets resolved.
+                                "" ;"<span class=\\\"figure-number\\\">"
+                                (format (org-html--translate
+                                         (concat
+                                          (cdr (assoc 'figure org-blackfriday--org-element-string))
+                                          " %d:")
+                                         info)
+                                        (org-export-get-ordinal
+                                         useful-parent info
+                                         nil #'org-html--has-caption-p))
+                                " "     ;" </span>"
+                                ;; Escape the double-quotes, if any,
+                                ;; present in the caption.
+                                (replace-regexp-in-string "\"" "\\\\\"" caption))))
              (extension (downcase (file-name-extension raw-path)))
              (inlined-svg (and (stringp extension)
                                (string= "svg" extension)
                                (plist-get attr :inlined))))
         ;; (message "[ox-hugo-link DBG] Inline image: %s, extension: %s" raw-path extension)
         ;; (message "[ox-hugo-link DBG] inlined svg? %S" inlined-svg)
+        ;; (message "[ox-hugo-link DBG] caption: %s" caption)
         (if inlined-svg
             (let* ((svg-contents (with-temp-buffer
                                    (insert-file-contents raw-path)
@@ -2047,43 +2074,26 @@ and rewrite link paths to make blogging more seamless."
                                              ;; Remove the xml document tag as that cannot be inlined in-between
                                              ;; a Markdown (or even an HTML) file.
                                              "<\\?xml version=\"1\\.0\" encoding=\"UTF-8\" standalone=\"no\"\\?>" ""
-                                             svg-contents))))
+                                             svg-contents)))
+                   (caption-html (if (not caption)
+                                     ""
+                                   ;; (caption-str
+                                   ;;  (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
+                                   ;;   (org-export-data-with-backend caption 'html info)))
+                                   (format (concat "\n\n<div class=\"figure-caption\">\n"
+                                                   "  %s\n"
+                                                   "</div>")
+                                           caption))))
               ;; (message "[ox-hugo-link DBG] svg contents: %s" svg-contents)
               ;; (message "[ox-hugo-link DBG] svg contents sanitized: %s" svg-contents-sanitized)
-              svg-contents-sanitized)
+              (concat svg-contents-sanitized caption-html))
           (let* ((path (org-hugo--attachment-rewrite-maybe raw-path info))
                  (inline-image (not (org-html-standalone-image-p useful-parent info)))
                  (source (if link-is-url
                              (concat type ":" path)
                            path))
                  (num-attr (/ (length attr) 2)) ;(:alt foo) -> num-attr = 1
-                 (alt-text (plist-get attr :alt))
-                 (caption (or
-                           ;;Caption set using #+caption takes higher precedence
-                           (org-string-nw-p
-                            (org-export-data  ;Look for caption set using #+caption
-                             (org-export-get-caption (org-export-get-parent-element link))
-                             info))
-                           (plist-get attr :caption)))
-                 (caption (when (org-string-nw-p caption)
-                            (format "%s%s%s%s"
-                                    ;; Tue Feb 13 11:32:45 EST 2018 - kmodi
-                                    ;; Add the span tag once
-                                    ;; https://github.com/gohugoio/hugo/issues/4406
-                                    ;; gets resolved.
-                                    "" ;"<span class=\\\"figure-number\\\">"
-                                    (format (org-html--translate
-                                             (concat
-                                              (cdr (assoc 'figure org-blackfriday--org-element-string))
-                                              " %d:")
-                                             info)
-                                            (org-export-get-ordinal
-                                             useful-parent info
-                                             nil #'org-html--has-caption-p))
-                                    " "     ;" </span>"
-                                    ;; Escape the double-quotes, if any,
-                                    ;; present in the caption.
-                                    (replace-regexp-in-string "\"" "\\\\\"" caption)))))
+                 (alt-text (plist-get attr :alt)))
             ;; (message "[ox-hugo-link DBG] path: %s" path)
             ;; (message "[ox-hugo-link DBG] inline image? %s" inline-image)
             ;; (message "[org-hugo-link DBG] attr: %s num of attr: %d"

@@ -358,7 +358,7 @@ Test inlined SVGs with hyperlinks.
 
 Introduce a new ~:inlined t~ HTML attribute.
 
-#+begin_src plantuml :file svg-with-hyperlinks.svg :exports results
+#+begin_src plantuml :file images/svg-with-hyperlinks.svg :exports results
 skinparam svgLinkTarget _parent
 start
 :[[https://ox-hugo.scripter.co/ ox-hugo homepage]];
@@ -367,7 +367,7 @@ stop
 #+caption: An SVG with *hyperlinks* -- generated using PlantUML
 #+attr_html: :inlined t
 #+RESULTS:
-[[file:svg-with-hyperlinks.svg]]
+[[file:images/svg-with-hyperlinks.svg]]
 
 * Setting heading anchors
 :PROPERTIES:

@@ -2786,6 +2786,26 @@ The /section path/ derived at this level is ~"main/sub1/p2/"~.
 :END:
 The /section path/ derived at this level is ~"main/sub2/"~.
 #+end_src
+*** Inlined SVGs
+:PROPERTIES:
+:EXPORT_FILE_NAME: inlined-svgs
+:END:
+Inlined SVGs are supported by a new HTML attribute introduced by
+~ox-hugo~: *inlined*.
+
+Simply add ~#+attr_html: :inlined t~ above the SVG file link.
+
+Here's an example of inlining an SVG:
+
+#+begin_src org
+,#+attr_html: :inlined t
+[[file:../test/site/content-org/svg-with-hyperlinks.svg]]
+#+end_src
+
+.. which results in:
+
+#+attr_html: :inlined t
+[[file:../test/site/content-org/svg-with-hyperlinks.svg]]
 *** COMMENT Hugo Bundle
 :PROPERTIES:
 :EXPORT_FILE_NAME: hugo-bundle

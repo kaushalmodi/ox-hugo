@@ -3,7 +3,7 @@
 #+seq_todo: TODO DRAFT DONE
 #+seq_todo: TEST__TODO | TEST__DONE
 
-#+property: header-args :eval no
+#+property: header-args :eval never-export
 
 #+startup: indent
 
@@ -44,7 +44,7 @@ Export this *first* post only by bringing point here and doing =M-x org-hugo-exp
 This post has no date.
 
 Export this *second* post only by bringing point here and doing =M-x org-hugo-export-wim-to-md=.
-* Image                                                               :image:
+* Image / Figure                                                      :image:
 ** Image links
 :PROPERTIES:
 :EXPORT_FILE_NAME: image-links
@@ -344,6 +344,30 @@ So using =#+html: <style>.foo img ... </style>= and =#+attr_html: :class
 Similarly, =:link=, =:attr=, =:attrlink= parameters in =#+attr_html=
 are also supported to set the corresponding parameter in the Hugo
 =figure= shortcode.
+** Inlined SVG                                                   :svg:inline:
+:PROPERTIES:
+:EXPORT_FILE_NAME: inlined-svg
+:END:
+#+begin_description
+Test inlined SVGs with hyperlinks.
+#+end_description
+{{{oxhugoissue(253)}}}
+
+- [[http://plantuml.com/svg][Example of generating SVG with hyperlinks using PlantUML]]
+- [[https://alligator.io/svg/hyperlinks-svg/][SVGs with hyperlinks need to be inlined]]
+
+Introduce a new ~:inlined t~ HTML attribute.
+
+#+begin_src plantuml :file svg-with-hyperlinks.svg :exports results
+skinparam svgLinkTarget _parent
+start
+:[[https://ox-hugo.scripter.co/ ox-hugo homepage]];
+stop
+#+end_src
+#+attr_html: :inlined t
+#+RESULTS:
+[[file:svg-with-hyperlinks.svg]]
+
 * Setting heading anchors
 :PROPERTIES:
 :EXPORT_FILE_NAME: setting-heading-anchors

@@ -2052,8 +2052,7 @@ and rewrite link paths to make blogging more seamless."
                                          useful-parent info
                                          nil #'org-html--has-caption-p))
                                 " "     ;" </span>"
-                                ;; Escape the double-quotes, if any,
-                                ;; present in the caption.
+                                ;; Escape the double-quotes, if any.
                                 (replace-regexp-in-string "\"" "\\\\\"" caption))))
              (extension (downcase (file-name-extension raw-path)))
              (inlined-svg (and (stringp extension)
@@ -2077,13 +2076,11 @@ and rewrite link paths to make blogging more seamless."
                                              svg-contents)))
                    (caption-html (if (not caption)
                                      ""
-                                   ;; (caption-str
-                                   ;;  (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
-                                   ;;   (org-export-data-with-backend caption 'html info)))
                                    (format (concat "\n\n<div class=\"figure-caption\">\n"
                                                    "  %s\n"
                                                    "</div>")
-                                           caption))))
+                                           (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
+                                            (org-export-data-with-backend caption 'html info))))))
               ;; (message "[ox-hugo-link DBG] svg contents: %s" svg-contents)
               ;; (message "[ox-hugo-link DBG] svg contents sanitized: %s" svg-contents-sanitized)
               (concat svg-contents-sanitized caption-html))

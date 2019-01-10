@@ -364,7 +364,7 @@ start
 :[[https://ox-hugo.scripter.co/ ox-hugo homepage]];
 stop
 #+end_src
-#+caption: An SVG with hyperlinks generated using PlantUML
+#+caption: An SVG with *hyperlinks* -- generated using PlantUML
 #+attr_html: :inlined t
 #+RESULTS:
 [[file:svg-with-hyperlinks.svg]]

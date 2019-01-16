@@ -98,7 +98,8 @@ Note that this variable is *only* for internal use.")
                      (plain-text . org-blackfriday-plain-text)
                      (quote-block . org-blackfriday-quote-block)
                      (special-block . org-blackfriday-special-block)
-                     (src-block . my-org-blackfriday-src-block)
+                     (src-block . org-blackfriday-src-block)
+                     (inline-src-block . org-blackfriday-inline-src-block)
                      (strike-through . org-blackfriday-strike-through)
                      (table-cell . org-blackfriday-table-cell)
                      (table-row . org-blackfriday-table-row)
@@ -865,18 +866,26 @@ This function is adapted from `org-html-special-block'."
 ;; #+NAME: defun-org-ravel-attr-plus-header
 
 (defun org-blackfriday-ravel-attr-plus-header
-    (ravel-attr)
-  "Separate RAVELARG and RAVEL-ATTR by commas."
+    (label ravelarg ravel-attr)
+  "Separate LABEL and RAVEL-ATTR by commas."
   (mapconcat #'identity
              (delete nil
-                     ravel-attr) ", "))
+                     (cons label
+                           (cons ravelarg ravel-attr))) ", "))
 
 ;;;; Src Block
-(defun my-org-blackfriday-src-block (src-block _contents info)
+(defun org-blackfriday-src-block (src-block _contents info)
   "Transcode SRC-BLOCK element into Blackfriday Markdown format.
 
 INFO is a plist used as a communication channel."
   (let* ((lang (org-element-property :language src-block))
+         (label-str (org-element-property :name src-block))
+         (label
+		      (if label-str
+		          (replace-regexp-in-string "[^[:alnum:]#+-_.]" "_" label-str)))
+         (parameters-str (org-element-property :parameters src-block))
+         (parameters (org-babel-parse-header-arguments parameters-str))
+         (ravelarg (cdr (assoc :ravel parameters)))
          (ravel-attr (org-element-property :attr_ravel src-block))
          (code (org-export-format-code-default src-block info))
          (parent-element (org-export-get-parent src-block))
@@ -884,7 +893,7 @@ INFO is a plist used as a communication channel."
          (num-backticks-in-code (when (string-match "^[[:blank:]]*\\(`\\{3,\\}\\)" code)
                                   (length (match-string-no-properties 1 code))))
          backticks)
-         (setq ravel (org-blackfriday-ravel-attr-plus-header ravel-attr))
+         (setq ravel (org-blackfriday-ravel-attr-plus-header label ravelarg ravel-attr))
     ;; In order to show the code-fence backticks in a code-fenced code
     ;; block, you need to have the wrapping code fence to have at
     ;; least 1 more backtick in the fence compared to those in the
@@ -904,9 +913,9 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-bf src-block DBG] parent type: %S" parent-type)
     (setq code (org-blackfriday--issue-239-workaround code parent-type))
     (prog1
-        (when (org-hugo--plist-get-true-p info :hugo-export-rmd)
-          (format "%s\{%s  %s\}\n%s%s" backticks lang ravel code backticks))
-      (format "%s%s\n%s%s" backticks lang code backticks)
+        (if (org-hugo--plist-get-true-p info :hugo-export-rmarkdown)
+          (format "%s\{%s  %s\}\n%s%s" backticks lang ravel code backticks)
+      (format "%s%s\n%s%s" backticks lang code backticks))
       (when (equal 'quote-block parent-type)
         ;; If the current code block is inside a quote block, future
         ;; example/code blocks (especially the ones outside this quote
@@ -914,6 +923,18 @@ INFO is a plist used as a communication channel."
         ;; for https://github.com/russross/blackfriday/issues/407.
         (setq org-blackfriday--code-block-num-backticks
               (1+ org-blackfriday--code-block-num-backticks))))))
+
+;;;; Inline Code
+(defun org-blackfriday-inline-src-block (inline-src-block _contents info)
+  "Export inline code to R markdown format if `hugo-export-rmarkdown' is non-nil.
+
+CONTENTS is nil.  INFO is a plist used as a communication
+channel."
+  (let* ((lang (org-element-property :language inline-src-block))
+         (code (org-export-format-code-default inline-src-block info)))
+    (if (and (org-hugo--plist-get-true-p info :hugo-export-rmarkdown) (or (string= lang "R") (string= lang "r")))
+        (format "\`r %s\`" code)
+      (format "\`%s\`" code))))
 
 ;;;; Strike-Through
 (defun org-blackfriday-strike-through (_strike-through contents _info)

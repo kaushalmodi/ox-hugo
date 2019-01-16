@@ -762,7 +762,7 @@ newer."
                      (keyword . org-hugo-keyword)
                      (link . org-hugo-link)
                      (paragraph . org-hugo-paragraph)
-                     (src-block . my-org-hugo-src-block)
+                     (src-block . org-hugo-src-block)
                      (special-block . org-hugo-special-block))
   :filters-alist '((:filter-body . org-hugo-body-filter))
 ;;;; options-alist
@@ -795,7 +795,7 @@ newer."
                    (:hugo-paired-shortcodes "HUGO_PAIRED_SHORTCODES" nil org-hugo-paired-shortcodes space)
                    (:hugo-pandoc-citations "HUGO_PANDOC_CITATIONS" nil nil)
                    (:bibliography "BIBLIOGRAPHY" nil nil newline) ;Used in ox-hugo-pandoc-cite
-                   (:hugo-export-rmd "HUGO_EXPORT_RMD" nil) ;Export to R Markdown
+                   (:hugo-export-rmarkdown "HUGO_EXPORT_RMARKDOWN" nil) ;Export to R Markdown
 
                    ;; Front-matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -1640,6 +1640,7 @@ INFO is a plist used as a communication channel."
 
 ;;; Transcode Functions
 
+
 ;;;; Code (<kdb> tags)
 (defun org-hugo-kbd-tags-maybe (verbatim _contents info)
   "Wrap text in VERBATIM object with HTML kbd tags.
@@ -2388,7 +2389,7 @@ communication channel."
     ret))
 
 ;;;; Source Blocks
-(defun my-org-hugo-src-block (src-block _contents info)
+(defun org-hugo-src-block (src-block _contents info)
   "Convert SRC-BLOCK element to Hugo-compatible Markdown.
 
 The Markdown style triple-backquoted code blocks are created if:
@@ -2475,7 +2476,7 @@ channel."
                ((and (null number-lines)
                      (null hl-lines)
                      (org-hugo--plist-get-true-p info :hugo-code-fence))
-                (let ((content1 (my-org-blackfriday-src-block src-block nil info)))
+                (let ((content1 (org-blackfriday-src-block src-block nil info)))
                   (when (and org-hugo-langs-no-descr-in-code-fences
                              (member (intern lang) org-hugo-langs-no-descr-in-code-fences))
                     ;; When using Pygments, with the pygmentsCodeFences
@@ -3498,7 +3499,8 @@ are \"toml\" and \"yaml\"."
                      "HUGO_SLUG" ;Useful for inheriting same slug to same posts in different languages
                      "HUGO_PANDOC_CITATIONS"
                      "BIBLIOGRAPHY"
-                     "HUGO_AUTO_SET_LASTMOD")))
+                     "HUGO_AUTO_SET_LASTMOD"
+                     "HUGO_EXPORT_RMARKDOWN")))
     (mapcar (lambda (str)
               (concat "EXPORT_" str))
             prop-list)))
@@ -3647,8 +3649,8 @@ Return output file's name."
                 (org-export--get-buffer-attributes)
                 (org-export-get-environment 'hugo subtreep)))
          (pub-dir (org-hugo--get-pub-dir info))
-         (outfile (org-export-output-file-name (if (org-hugo--plist-get-true-p info :hugo-export-rmd)
-                                                   ".rmd" ".md") subtreep pub-dir))
+         (outfile (org-export-output-file-name (if (org-hugo--plist-get-true-p info :hugo-export-rmarkdown)
+                                                   ".rmarkdown" ".md") subtreep pub-dir))
          (do-export t))
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (unless subtreep

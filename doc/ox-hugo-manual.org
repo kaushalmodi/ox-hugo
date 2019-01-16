@@ -403,14 +403,12 @@ You can do that by adding the below to your config:
 #+begin_src emacs-lisp
 (with-eval-after-load 'ox
   (require 'ox-hugo))
-(require 'ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 #+end_src
 If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can do the below instead:
-#+begin_src emacs-lisp :noweb-ref use_package_snippet
+#+begin_src emacs-lisp
 (use-package ox-hugo
   :ensure t            ;Auto-install the package from Melpa (optional)
   :after ox)
-(use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
 #+end_src
 
 Also see the {{{doc(auto-export-on-saving,,Auto Exporting)}}} section.
@@ -420,14 +418,15 @@ Also see the {{{doc(auto-export-on-saving,,Auto Exporting)}}} section.
 Spacemacs users can choose to add this snippet to their
 =dotspacemacs/user-config= function in =.spacemacs=:
 
-#+begin_src emacs-lisp :noweb yes
+#+begin_src emacs-lisp
 (defun dotspacemacs/user-config ()
   ;; Other stuff
   ;; ..
 
   ;; ox-hugo config
-  <<use_package_snippet>>
-  )
+  (use-package ox-hugo
+    :ensure t          ;Auto-install the package from Melpa (optional)
+    :after ox))
 #+end_src
 
 #+begin_note
@@ -563,7 +562,8 @@ patches accepted.
 As a bonus, once you have assigned your copyright to FSF, doors open up
 for your future contributions to Emacs too!
 *** Contribute to documentation
-{{{doc_site_min_hugo_version}}}
+*See {{{doc(requirements#doc_contributor_reqs,,Requirements for doc
+contributor)}}}.*
 
 1. Clone this repo.
 2. Add/edit documentation to =doc/ox-hugo-manual.org=.
@@ -575,17 +575,8 @@ for your future contributions to Emacs too!
 5. Commit *only the .org files*, push branch and create PR.
    - The =.org= → =.md= conversion is done by =ox-hugo= on Netlify.
 *** Contribute to code
-#+begin_note
-While the end-user does not need Pandoc installed on their machine, a
-code contributor needs to have both ~pandoc~ and ~pandoc-citeproc~
-installed[fn:local1].
-
-These are needed for ~make md~ and ~make -j1 test~ steps to work as
-they use/test the {{{doc(pandoc-citations,,Pandoc Citations)}}} feature
-too.
-#+end_note
-
-{{{doc_site_min_hugo_version}}}
+*See {{{doc(requirements#code_contributor_reqs,,Requirements for code
+contributor)}}}.*
 
 1. Clone this repo.
 2. Add/edit the .el files, *tests* in =test/site/content-org/=, and
@@ -600,15 +591,6 @@ too.
    above step before this step).
 7. Fix your commit(s) if the test fails.. repeat till you succeed.
 8. Push your feature branch and create PR.
-
-# Below footnote was copied manually from [fn:7] because otherwise
-# #+include of just this subtree does not work.
-[fn:local1] The Pandoc Citations feature was last <2018-08-19 Sun>
-tested with Pandoc version {{{pandoc_version}}}. If you are running an
-older version, the quickest way to install might be to simply download
-the latest release archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]], extract it and put
-the ~pandoc~ and ~pandoc-citeproc~ binaries in one of the directories
-in your /PATH/.
 ** Debug
 :PROPERTIES:
 :CUSTOM_ID: debug
@@ -731,6 +713,40 @@ necessity if you want to start using =ox-hugo=.
 
 .. And if at some point, you want to stop using =ox-hugo=, you still
 have the exported Markdown files.
+*** Deprecation Notices
+:PROPERTIES:
+:EXPORT_FILE_NAME: deprecation-notices
+:END:
+**** Org Hugo Auto Export feature now a /minor mode/ -- <2019-01-03 Thu>
+***** Changes needed to be done in user config
+1. Do *not* require ~ox-hugo-auto-export~ any more!
+   - For now, you will get a warning each time you do that
+     /require/. But in few weeks, the old ~ox-hugo-auto-export.el~
+     file will be deleted from this project, and then doing that
+     /require/ will throw an error.
+2. Make these changes in your ~.dir-locals.el~ or File Local Variables
+   as applicable:
+   |---------------------+----------------------------------------+-------------------------------------------|
+   | Auto-export on save | Earlier                                | Now                                       |
+   |---------------------+----------------------------------------+-------------------------------------------|
+   | *Enable*            | ~(org-hugo-auto-export-on-save . t)~   | ~(eval . (org-hugo-auto-export-mode))~    |
+   | *Disable*           | ~(org-hugo-auto-export-on-save . nil)~ | ~(eval . (org-hugo-auto-export-mode -1))~ |
+   |---------------------+----------------------------------------+-------------------------------------------|
+***** Summary
+~org-hugo-auto-export-mode~ is a new minor mode that now ships with
+~ox-hugo~. So the user doesn't need to do anything special to install
+it --- it simply autoloads.
+
+As a bonus, now ~M-x org-hugo-auto-export-mode~ can be used to toggle
+the auto-exporting on and off in an Org buffer.
+
+#+begin_note
+See the updated docs for {{{doc(usage,,~ox-hugo~ Usage)}}} and
+{{{doc(auto-export-on-saving,,Auto-export on Saving)}}}.
+#+end_note
+
+For history behind this change, see {{{issue(247)}}}. \\
+--- /*tl;dr*: doing the Right thing/
 ** Getting Started
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "3.getting_started"
@@ -1016,7 +1032,6 @@ conditions. Some users may not prefer this behavior.
 | Variable                         | Value |
 |----------------------------------+-------|
 | org-hugo-auto-set-lastmod        | t     |
-| org-hugo-auto-export-on-save     | t     |
 | org-log-done                     | time  |
 
 In such case, you can suppress =lastmod= in the front-matter if you set
@@ -1134,17 +1149,18 @@ Org files in a way that's compatible with =ox-hugo= and Hugo.
 
 For the sake of the below explanation, let's have the /HUGO_BASE_DIR/
 (the directory containing the Hugo site's =config.toml= file) be
-=~/hugo/=.
-
-In that case, the Hugo /static/ directory will be =~/hugo/static/=.
+=~/hugo/=. Then the Hugo /static/ directory will be =~/hugo/static/=.
 **** References to files in the /static/ directory
 :PROPERTIES:
 :CUSTOM_ID: references-to-files-in-the-static-directory
 :END:
 Now if you have a file =~/hugo/static/images/foo.png=, =ox-hugo= makes
 it convenient for you to reference that image by simply
-=/images/foo.png=. Note that this is *not* the default behavior of
-other Org exporters.
+=/images/foo.png=.
+
+#+begin_note
+Note that this is *not* the default behavior of other Org exporters.
+#+end_note
 
 But in the case of Hugo, as the referenced file will /normally/ be in
 the Hugo /static/ directory, =ox-hugo= allows the =/images/foo.png=
@@ -1152,19 +1168,30 @@ style of short reference *if* that is a valid path under that Hugo
 site's /static/ directory.
 
 See the below examples on how to reference images in different ways:
-***** Inline image (Unhyperlinked)
+***** Inline image -- Unhyperlinked
+#+caption: Unhyperlinked image (don't click it)
+#+name: fig__unhyperlinked_image
+[[/images/org-mode-unicorn-logo-200px.png]]
 #+begin_src org
-[[/images/foo.png]]
+[[/images/org-mode-unicorn-logo-200px.png]]
 #+end_src
-***** Inline image (Hyperlinked to the image itself)
+***** Inline image -- Also hyperlinked to an image
+#+caption: Image hyperlinked to an image (click it!)
+#+name: fig__hyperlinked_image
+[[/images/org-mode-unicorn-logo-200px.png][file:/images/org-mode-unicorn-logo-50px.png]]
 #+begin_src org
-[[file:/images/foo.png][file:/images/foo.png]]
+[[/images/org-mode-unicorn-logo-200px.png][file:/images/org-mode-unicorn-logo-50px.png]]
 #+end_src
-- NOTE :: The =file:= prefix *has to be used* in both Link and
-          Description components of the Org link.
-***** Link to an image (Image not inlined)
+This style of link is normally used if you want to link a low
+resolution image to its higher resolution version.
+- NOTE 1 :: The =file:= prefix has to be used in the *Description
+            component* of the Org link.
+- NOTE 2 :: The =file:= prefix can be used for the *Link component* of
+            the Org link too --- it doesn't hurt.
+***** Regular link to an image
+[[/images/org-mode-unicorn-logo-200px.png][Click here to see org-mode-unicorn-logo-200px.png]]
 #+begin_src org
-[[/images/foo.png][Click here to see foo.png]]
+[[/images/org-mode-unicorn-logo-200px.png][Click here to see org-mode-unicorn-logo-200px.png]]
 #+end_src
 This style of linking will work for references to non-image files in
 the /static/ directory too.
@@ -1175,7 +1202,7 @@ the /static/ directory too.
 This is a unique feature of =ox-hugo=.
 
 (i) If a reference is made to a file outside the Hugo /static/
-directory *and* (ii) if it has one of the extensions listed in
+directory, *and* (ii) if it has one of the extensions listed in
 =org-hugo-external-file-extensions-allowed-for-copying=, then that
 file is copied by =ox-hugo= to the /static/ directory.
 
@@ -1892,32 +1919,21 @@ Hugo-rendered post each time you saved your post in Org?
 Well.. you can do that with these steps, which apply to both
 /per-subtree/ and /per-file/ flows:
 **** First time setup
-***** Step {{{n}}}: Require =ox-hugo-auto-export= package
-This package is part of the =ox-hugo= package installation. It
-implements the auto-exporting behavior on file saves. Among many other
-things, this package declares the buffer-local variable
-=org-hugo-auto-export-on-save= which is used to enable/disable the
-auto-exporting.
-
-So with =ox-hugo= installed, add this to your Emacs config:
-#+begin_src emacs-lisp
-(require 'ox-hugo-auto-export)
-#+end_src
-
-or if using =use-package=:
-
-#+begin_src emacs-lisp
-(use-package ox-hugo-auto-export)
-#+end_src
-***** Step {{{n}}}: Set =org-hugo-auto-export-on-save=
-This variable is /nil/ by default, so that the auto-exporting feature
-can be enabled separately at project level or file level.
+***** Step {{{n}}}: Enable minor mode =org-hugo-auto-export-mode=
+This minor mode is disabled by default. It can be enabled separately
+at project level or file level.
+#+begin_note
+Note that once you update the ~.dir-locals.el~ file or file-local
+Variables as shown below, you will be prompted by Emacs to tell it if
+those settings are safe. Hit ~!~ in that prompt to says /yes/ and to
+save that choice for future Emacs sessions.
+#+end_note
 ****** Enable for the whole project
 If you want to enable auto-exporting for the whole project, add this
 to the ~.dir-locals.el~ file in the project root:
 #+begin_src emacs-lisp
 (("content-org/"
-  . ((org-mode . ((org-hugo-auto-export-on-save . t))))))
+  . ((org-mode . ((eval . (org-hugo-auto-export-mode)))))))
 #+end_src
 Above assumes that the Org files are in the /"content-org/"/ directory
 (at any nested level in there) relative to that =.dir-locals.el= file:
@@ -1934,12 +1950,12 @@ Above assumes that the Org files are in the /"content-org/"/ directory
 If you have the Org file directly in the project root or in the same
 directory as the ~.dir-locals.el~, add this in that file instead:
 #+begin_src emacs-lisp
-((org-mode . ((org-hugo-auto-export-on-save . t))))
+((org-mode . ((eval . (org-hugo-auto-export-mode)))))
 #+end_src
 
-Note that with above, ~org-hugo-auto-export-on-save~ will be set to
-~t~ for *all* Org files in the project. If that's what you don't want
-see [[* Enable only for an Org file]].
+Note that with above, ~org-hugo-auto-export-mode~ will be enabled for
+*all* Org files in the project. If you do not want that, see [[* Enable
+only for an Org file]].
 ******* Enabling for multiple projects
 To enable auto-exporting for multiple projects, simply add similar
 =.dir-locals.el= files to the root directories of those projects. Just
@@ -1951,7 +1967,7 @@ Add below to the very-end of your Org file and *save the file*:
 ,* Footnotes
 ,* COMMENT Local Variables                          :ARCHIVE:
 # Local Variables:
-# org-hugo-auto-export-on-save: t
+# eval: (org-hugo-auto-export-mode)
 # End:
 #+end_src
 *About Footnotes*: Here I recommend adding the =* Footnotes=
@@ -1961,24 +1977,25 @@ Add below to the very-end of your Org file and *save the file*:
  Variables/ heading would then no longer be at the end of the file.
 ****** Enable for the whole project except for few Org files
 1. Enable the auto-exporting for the whole project as explained [[* Enable for the whole project][above]].
-2. Then add below to the very-end of the Org file where you need to
-   disable the auto-exporting:
+2. Then add below to the end of the Org file where you need to disable
+   the auto-exporting:
    #+begin_src org
    ,* Footnotes
    ,* COMMENT Local Variables                          :ARCHIVE:
    # Local Variables:
-   # org-hugo-auto-export-on-save: nil
+   # eval: (org-hugo-auto-export-mode -1)
    # End:
    #+end_src
-   Note that this time, =org-hugo-auto-export-on-save= is set to /nil/
-   to override the /t/ value set in the =.dir-locals.el=.
+   Note that this time, =org-hugo-auto-export-mode= is disabled to
+   override its enabled state in =.dir-locals.el=.
 
 #+begin_note
-After updating the value of =org-hugo-auto-export-on-save= using
-either of the above methods, remember to (i) save the Org file where
-you expect the auto-exporting to work, and (ii) revert the buffer
-(~M-x revert-buffer~). That will ensure that the updated
-=org-hugo-auto-export-on-save= is effective.
+After updating the state of =org-hugo-auto-export-mode= using either
+of the above methods, remember to:
+1. Save the Org file where you expect the auto-exporting to work.
+2. Revert the buffer (~M-x revert-buffer~). That will ensure that the
+   updated state for the =org-hugo-auto-export-mode= minor mode is
+   effective.
 #+end_note
 **** Steps that /might/ need to be taken every time
 Once the initial setup is done, the following steps apply to both
@@ -2293,8 +2310,8 @@ citation is ~@foo~, that particular /foo/ reference much be present in
 one of the specified bibliography files.
 
 #+begin_note
-Users need to have the ~pandoc~ and ~pandoc-citeproc~ binaries[fn:7] present
-in the ~PATH~.
+Users need to have the ~pandoc~ and ~pandoc-citeproc~ binaries[fn:7]
+present in the ~PATH~.
 #+end_note
 
 When one or more citations are found by Pandoc, a top-level
@@ -2769,6 +2786,28 @@ The /section path/ derived at this level is ~"main/sub1/p2/"~.
 :END:
 The /section path/ derived at this level is ~"main/sub2/"~.
 #+end_src
+*** Inlined SVGs
+:PROPERTIES:
+:EXPORT_FILE_NAME: inlined-svgs
+:END:
+Inlined SVGs are supported by a new HTML attribute introduced by
+~ox-hugo~: *inlined*.
+
+Simply add ~#+attr_html: :inlined t~ above the SVG file link.
+
+Here's an example of inlining an SVG:
+
+#+begin_src org
+,#+caption: An SVG with hyperlink
+,#+attr_html: :inlined t
+[[file:../test/site/content-org/images/svg-with-hyperlinks.svg]]
+#+end_src
+
+.. which results in:
+
+#+caption: An SVG with hyperlink
+#+attr_html: :inlined t
+[[file:../test/site/content-org/images/svg-with-hyperlinks.svg]]
 *** COMMENT Hugo Bundle
 :PROPERTIES:
 :EXPORT_FILE_NAME: hugo-bundle
@@ -2811,6 +2850,34 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 - [X] Passes =make test= and generates documentation using =make doc=
   in [[https://termux.com/][Termux]] app on Android too.
 - [X] Passes =checkdoc= and =package-lint= ([[https://github.com/purcell/package-lint/issues/89][/almost/]]).
+*** Requirements
+:PROPERTIES:
+:EXPORT_FILE_NAME: requirements
+:END:
+**** Requirements for doc contributor
+:PROPERTIES:
+:CUSTOM_ID: doc_contributor_reqs
+:END:
+#+begin_note
+- Minimum required ~hugo~ version: {{{min_hugo_version}}}
+#+end_note
+**** Requirements for code contributor
+:PROPERTIES:
+:CUSTOM_ID: code_contributor_reqs
+:END:
+#+begin_note
+- Org mode version used for tests: {{{org_mode_version}}}
+- Minimum required ~hugo~ version: {{{min_hugo_version}}}
+- ~pandoc~ and ~pandoc_site~ version {{{pandoc_version}}}
+#+end_note
+
+- About Pandoc :: /While the end-user does not need Pandoc installed on
+                  their machine, a code contributor needs to have both
+                  ~pandoc~ and ~pandoc-citeproc~
+                  installed[fn:7]. These are needed for ~make md~ and
+                  ~make -j1 test~ steps to work as they use/test the
+                  {{{doc(pandoc-citations,,Pandoc Citations)}}}
+                  feature too./
 *** Contributing Guide
 :PROPERTIES:
 :EXPORT_FILE_NAME: contributing-guide
@@ -2828,12 +2895,12 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 #+include: "./ox-hugo-manual.org::#test" :only-contents t
 * Footnotes
 
-[fn:7] The Pandoc Citations feature was last <2018-08-19 Sun> tested
-with Pandoc version {{{pandoc_version}}}. If you are running an older
-version, the quickest way to install might be to simply download the
-latest release archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]], extract it and put the
-~pandoc~ and ~pandoc-citeproc~ binaries in one of the directories in
-your /PATH/.
+[fn:7] The Pandoc Citations feature was last tested on
+<2019-01-03 Thu> with Pandoc version {{{pandoc_version}}}. If you are
+running an older version, the quickest way to install might be to
+simply download the latest release archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]],
+extract it and put the ~pandoc~ and ~pandoc-citeproc~ binaries in one
+of the directories in your /PATH/.
 
 [fn:6] If you are still using a Hugo version older than 0.25, update
 now! -- Because that version added support for the awesome
@@ -2868,7 +2935,6 @@ Org style tags too. Example: ~* I don't want to export this post
 files outside static directory)}}}.
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:
-# fill-column: 70
-# eval: (auto-fill-mode 1)
 # eval: (toggle-truncate-lines 1)
+# eval: (org-hugo-auto-export-mode)
 # End:

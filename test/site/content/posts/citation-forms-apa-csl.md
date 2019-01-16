@@ -58,7 +58,7 @@ Smith ([2004](#ref-smith04), p. 33) says blah.
 ## Actual citations for this test post :)
 
 See Xie ([2017](#ref-addCite17)); ("Bibliographies and citations /
-citations," n.d.) for more.
+citations," [n.d.](#ref-rmdCitations)) for more.
 
 **Compare the References section below with
 [that](/posts/citation-forms/#references) when using the default CSL.**

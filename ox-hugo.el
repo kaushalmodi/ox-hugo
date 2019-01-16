@@ -1742,10 +1742,14 @@ CONTENTS is the headline contents.  INFO is a plist used as
 a communication channel."
   (unless (org-element-property :footnote-section-p headline)
     (let* ((numbers (org-hugo--get-headline-number headline info nil))
+           (loffset (string-to-number (plist-get info :hugo-level-offset))) ;"" -> 0, "0" -> 0, "1" -> 1, ..
            (level (org-export-get-relative-level headline info))
+           (level-effective (+ loffset level))
            (title (org-export-data (org-element-property :title headline) info)) ;`org-export-data' required
            (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
                       (org-element-property :todo-keyword headline)))
+           (todo-fmtd (when todo
+                        (concat (org-hugo--todo todo info) " ")))
            (tags (and (org-hugo--plist-get-true-p info :with-tags)
                       (let ((tag-list (org-export-get-tags headline info)))
                         (and tag-list
@@ -1761,25 +1765,22 @@ a communication channel."
        ;; Cannot create a headline.  Fall-back to a list.
        ((or (org-export-low-level-p headline info)
             (not (memq style '(atx setext)))
-            (and (eq style 'atx) (> level 6))
-            (and (eq style 'setext) (> level 2)))
+            (and (eq style 'atx) (> level-effective 6))
+            (and (eq style 'setext) (> level-effective 2)))
         (let ((bullet
                (if (not (org-export-numbered-headline-p headline info)) "-"
                  (concat (number-to-string
                           (car (last (org-export-get-headline-number
                                       headline info))))
                          ".")))
-              (heading (concat todo " " priority title))) ;Headline text without tags
+              (heading (concat todo-fmtd " " priority title))) ;Headline text without tags
           (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
         (let ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
                               (or (org-element-property :CUSTOM_ID headline)
-                                  (org-hugo-slug title))))
-              (loffset (string-to-number (plist-get info :hugo-level-offset))) ;"" -> 0, "0" -> 0, "1" -> 1, ..
-              (todo (when todo
-                      (concat (org-hugo--todo todo info) " "))))
-          (concat (org-hugo--headline-title style level loffset title todo anchor numbers)
+                                  (org-hugo-slug title)))))
+          (concat (org-hugo--headline-title style level loffset title todo-fmtd anchor numbers)
                   contents)))))))
 
 ;;;;; Headline Helpers
@@ -2018,10 +2019,8 @@ and rewrite link paths to make blogging more seamless."
                            (org-blackfriday--get-reference destination)
                          (org-export-get-reference destination info)))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
-      ;; (message "[ox-hugo-link DBG] Inline image: %s" raw-path)
       ;; (message "[org-hugo-link DBG] processing an image: %s" desc)
-      (let* ((path (org-hugo--attachment-rewrite-maybe raw-path info))
-             (parent (org-export-get-parent link))
+      (let* ((parent (org-export-get-parent link))
              (parent-type (org-element-type parent))
              ;; If this is a hyper-linked image, it's parent type will
              ;; be a link too. Get the parent of *that* link in that
@@ -2031,15 +2030,9 @@ and rewrite link paths to make blogging more seamless."
              (useful-parent (if grand-parent
                                 grand-parent
                               parent))
-             (inline-image (not (org-html-standalone-image-p useful-parent info)))
-             (source (if link-is-url
-                         (concat type ":" path)
-                       path))
              (attr (org-export-read-attribute :attr_html useful-parent))
-             (num-attr (/ (length attr) 2)) ;(:alt foo) -> num-attr = 1
-             (alt-text (plist-get attr :alt))
              (caption (or
-                       ;;Caption set using #+caption takes higher precedence
+                       ;; Caption set using #+caption takes higher precedence.
                        (org-string-nw-p
                         (org-export-data  ;Look for caption set using #+caption
                          (org-export-get-caption (org-export-get-parent-element link))
@@ -2061,68 +2054,104 @@ and rewrite link paths to make blogging more seamless."
                                          useful-parent info
                                          nil #'org-html--has-caption-p))
                                 " "     ;" </span>"
-                                ;; Escape the double-quotes, if any,
-                                ;; present in the caption.
-                                (replace-regexp-in-string "\"" "\\\\\"" caption)))))
-        ;; (message "[ox-hugo-link DBG] inline image? %s\npath: %s"
-        ;;          inline-image path)
-        ;; (message "[org-hugo-link DBG] attr: %s num of attr: %d"
-        ;;          attr (length attr))
-        ;; (message "[org-hugo-link DBG] parent-type: %s" parent-type)
-        ;; (message "[org-hugo-link DBG] useful-parent-type: %s"
-        ;;          (org-element-type useful-parent))
-        (cond
-         (;; Use the Markdown image syntax if the image is inline and
-          ;; there are no HTML attributes for the image, or just one
-          ;; attribute, the `alt-text'.
-          (and inline-image
-               (or (= 0 num-attr)
-                   (and alt-text
-                        (= 1 num-attr))))
-          (let ((alt-text (if alt-text
-                              alt-text
-                            "")))
-            (format "![%s](%s)" alt-text source)))
-         (;; Else if the image is inline (with non-alt-text
-          ;; attributes), use HTML <img> tag syntax.
-          inline-image
-          ;; The "target" and "rel" attributes would be meant for <a>
-          ;; tags. So do not pass them to the <img> tag.
-          (plist-put attr :target nil)
-          (plist-put attr :rel nil)
-          (org-html--format-image source attr info))
-         (t ;Else use the Hugo `figure' shortcode.
-          ;; Hugo `figure' shortcode named parameters.
-          ;; https://gohugo.io/content-management/shortcodes/#figure
-          (let ((figure-params `((src . ,source)
-                                 (alt . ,alt-text)
-                                 (caption . ,caption)
-                                 (link . ,(plist-get attr :link))
-                                 (title . ,(plist-get attr :title))
-                                 (class . ,(plist-get attr :class))
-                                 (attr . ,(plist-get attr :attr))
-                                 (attrlink . ,(plist-get attr :attrlink))
-                                 (width . ,(plist-get attr :width))
-                                 (height . ,(plist-get attr :height))
-                                 ;; While the `target' and `rel'
-                                 ;; attributes are not supported by
-                                 ;; the inbuilt Hugo `figure'
-                                 ;; shortcode, they can be used as
-                                 ;; intended if a user has a custom
-                                 ;; `figure' shortcode with the
-                                 ;; support added for those.
-                                 (target . ,(plist-get attr :target))
-                                 (rel . ,(plist-get attr :rel))))
-                (figure-param-str ""))
-            (dolist (param figure-params)
-              (let ((name (car param))
-                    (val (cdr param)))
-                (when val
-                  (setq figure-param-str (concat figure-param-str
-                                                 (format "%s=\"%s\" "
-                                                         name val))))))
-            ;; (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
-            (format "{{< figure %s >}}" (org-trim figure-param-str)))))))
+                                ;; Escape the double-quotes, if any.
+                                (replace-regexp-in-string "\"" "\\\\\"" caption))))
+             (extension (downcase (file-name-extension raw-path)))
+             (inlined-svg (and (stringp extension)
+                               (string= "svg" extension)
+                               (plist-get attr :inlined))))
+        ;; (message "[ox-hugo-link DBG] Inline image: %s, extension: %s" raw-path extension)
+        ;; (message "[ox-hugo-link DBG] inlined svg? %S" inlined-svg)
+        ;; (message "[ox-hugo-link DBG] caption: %s" caption)
+        (if inlined-svg
+            (let* ((svg-contents (with-temp-buffer
+                                   (insert-file-contents raw-path)
+                                   (fill-region (point-min) (point-max)) ;Make huge one-liner SVGs sane
+                                   (buffer-substring-no-properties (point-min) (point-max))))
+                   (svg-contents-sanitized (replace-regexp-in-string
+                                            ;; Remove the HTML comments.
+                                            "<!--\\(.\\|\n\\)*?-->" ""
+                                            (replace-regexp-in-string
+                                             ;; Remove the xml document tag as that cannot be inlined in-between
+                                             ;; a Markdown (or even an HTML) file.
+                                             "<\\?xml version=\"1\\.0\" encoding=\"UTF-8\" standalone=\"no\"\\?>" ""
+                                             svg-contents)))
+                   (caption-html (if (not caption)
+                                     ""
+                                   (format (concat "\n\n<div class=\"figure-caption\">\n"
+                                                   "  %s\n"
+                                                   "</div>")
+                                           (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
+                                            (org-export-data-with-backend caption 'html info))))))
+              ;; (message "[ox-hugo-link DBG] svg contents: %s" svg-contents)
+              ;; (message "[ox-hugo-link DBG] svg contents sanitized: %s" svg-contents-sanitized)
+              (concat svg-contents-sanitized caption-html))
+          (let* ((path (org-hugo--attachment-rewrite-maybe raw-path info))
+                 (inline-image (not (org-html-standalone-image-p useful-parent info)))
+                 (source (if link-is-url
+                             (concat type ":" path)
+                           path))
+                 (num-attr (/ (length attr) 2)) ;(:alt foo) -> num-attr = 1
+                 (alt-text (plist-get attr :alt)))
+            ;; (message "[ox-hugo-link DBG] path: %s" path)
+            ;; (message "[ox-hugo-link DBG] inline image? %s" inline-image)
+            ;; (message "[org-hugo-link DBG] attr: %s num of attr: %d"
+            ;;          attr (length attr))
+            ;; (message "[org-hugo-link DBG] parent-type: %s" parent-type)
+            ;; (message "[org-hugo-link DBG] useful-parent-type: %s"
+            ;;          (org-element-type useful-parent))
+            (cond
+             (;; Use the Markdown image syntax if the image is inline and
+              ;; there are no HTML attributes for the image, or just one
+              ;; attribute, the `alt-text'.
+              (and inline-image
+                   (or (= 0 num-attr)
+                       (and alt-text
+                            (= 1 num-attr))))
+              (let ((alt-text (if alt-text
+                                  alt-text
+                                "")))
+                (format "![%s](%s)" alt-text source)))
+             (;; Else if the image is inline (with non-alt-text
+              ;; attributes), use HTML <img> tag syntax.
+              inline-image
+              ;; The "target" and "rel" attributes would be meant for <a>
+              ;; tags. So do not pass them to the <img> tag.
+              (plist-put attr :target nil)
+              (plist-put attr :rel nil)
+              (org-html--format-image source attr info))
+             (t ;Else use the Hugo `figure' shortcode.
+              ;; Hugo `figure' shortcode named parameters.
+              ;; https://gohugo.io/content-management/shortcodes/#figure
+              (let ((figure-params `((src . ,source)
+                                     (alt . ,alt-text)
+                                     (caption . ,caption)
+                                     (link . ,(plist-get attr :link))
+                                     (title . ,(plist-get attr :title))
+                                     (class . ,(plist-get attr :class))
+                                     (attr . ,(plist-get attr :attr))
+                                     (attrlink . ,(plist-get attr :attrlink))
+                                     (width . ,(plist-get attr :width))
+                                     (height . ,(plist-get attr :height))
+                                     ;; While the `target' and `rel'
+                                     ;; attributes are not supported by
+                                     ;; the inbuilt Hugo `figure'
+                                     ;; shortcode, they can be used as
+                                     ;; intended if a user has a custom
+                                     ;; `figure' shortcode with the
+                                     ;; support added for those.
+                                     (target . ,(plist-get attr :target))
+                                     (rel . ,(plist-get attr :rel))))
+                    (figure-param-str ""))
+                (dolist (param figure-params)
+                  (let ((name (car param))
+                        (val (cdr param)))
+                    (when val
+                      (setq figure-param-str (concat figure-param-str
+                                                     (format "%s=\"%s\" "
+                                                             name val))))))
+                (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
+                (format "{{< figure %s >}}" (org-trim figure-param-str)))))))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
         (format (org-export-get-coderef-format ref desc)
@@ -2909,8 +2938,8 @@ INFO is a plist used as a communication channel."
            ;; do that here instead.  Convert "---" to EM DASH, "--" to EN
            ;; DASH, and "..." to HORIZONTAL ELLIPSIS.
            ;; Below two replacements are order sensitive!
-           (title (replace-regexp-in-string "---\\([^-]\\)" "—" title)) ;EM DASH
-           (title (replace-regexp-in-string "--\\([^-]\\)" "–" title)) ;EN DASH
+           (title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
+           (title (replace-regexp-in-string "--\\([^-]\\)" "–\\1" title)) ;EN DASH
            (title (replace-regexp-in-string "\\.\\.\\." "…" title))) ;HORIZONTAL ELLIPSIS
       title)))
 

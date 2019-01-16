@@ -1,5 +1,3 @@
-;; Time-stamp: <2018-11-01 00:37:59 kmodi>
-
 ;; Setup to export Org files to Hugo-compatible Markdown using
 ;; `ox-hugo' in an "emacs -Q" environment.
 
@@ -29,17 +27,17 @@ minimum requirement for `ox-hugo'.  So set the environment
 variable OX_HUGO_DEFAULT_ORG to a value like 1 if using emacs 26
 or newer.")
 
-(defvar ox-hugo-elpa (let ((dir (getenv "OX_HUGO_ELPA")))
-                       (unless dir
-                         (setq dir
-                               (let* ((dir-1 (file-name-as-directory (expand-file-name user-login-name temporary-file-directory)))
-                                      (dir-2 (file-name-as-directory (expand-file-name "ox-hugo-dev" dir-1))))
-                                 dir-2)))
-                       (setq dir (file-name-as-directory dir))
-                       (make-directory dir :parents)
-                       dir))
+(defvar ox-hugo-tmp-dir (let ((dir (file-name-as-directory (getenv "OX_HUGO_TMP_DIR"))))
+                          (unless dir
+                            (setq dir
+                                  (let* ((dir-1 (file-name-as-directory (expand-file-name user-login-name temporary-file-directory)))
+                                         (dir-2 (file-name-as-directory (expand-file-name "ox-hugo-dev" dir-1))))
+                                    dir-2)))
+                          (setq dir (file-name-as-directory dir))
+                          (make-directory dir :parents)
+                          dir))
 (when ox-hugo-test-setup-verbose
-  (message "ox-hugo-elpa: %s" ox-hugo-elpa))
+  (message "ox-hugo-tmp-dir: %s" ox-hugo-tmp-dir))
 
 (defvar ox-hugo-packages '(toc-org))
 (when ox-hugo-install-org-from-elpa
@@ -87,13 +85,13 @@ even if they are found as dependencies."
 (advice-add 'package-compute-transaction :filter-return #'ox-hugo-package-dependency-check-ignore)
 ;; (advice-remove 'package-compute-transaction #'ox-hugo-package-dependency-check-ignore)
 
-(if (and (stringp ox-hugo-elpa)
-         (file-exists-p ox-hugo-elpa))
+(if (and (stringp ox-hugo-tmp-dir)
+         (file-exists-p ox-hugo-tmp-dir))
     (progn
       ;; Load newer version of .el and .elc if both are available
       (setq load-prefer-newer t)
 
-      (setq package-user-dir (format "%selpa_%s/" ox-hugo-elpa emacs-major-version))
+      (setq package-user-dir (format "%selpa_%s/" ox-hugo-tmp-dir emacs-major-version))
 
       ;; Below require will auto-create `package-user-dir' it doesn't exist.
       (require 'package)
@@ -111,9 +109,10 @@ even if they are found as dependencies."
              (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
         (add-to-list 'package-archives (cons "melpa" url))) ;For `toc-org'
 
-      ;; Generate/update autoloads for ox-hugo.el and co.
+      ;; Generate/update and load the autoloads for ox-hugo.el and co.
       (let ((generated-autoload-file ox-hugo-autoloads-file))
-        (update-directory-autoloads ox-hugo-site-git-root))
+        (update-directory-autoloads ox-hugo-site-git-root)
+        (load-file ox-hugo-autoloads-file))
 
       ;; Load emacs packages and activate them.
       ;; Don't delete this line.
@@ -141,7 +140,7 @@ to be installed.")
           (message "Installing `%s' .." p)
           (package-install p))
         (setq ox-hugo-missing-packages '())))
-  (error "The environment variable OX_HUGO_ELPA needs to be set"))
+  (error "The environment variable OX_HUGO_TMP_DIR needs to be set"))
 
 ;; Remove Org that ships with Emacs from the `load-path' if installing
 ;; it from Elpa.

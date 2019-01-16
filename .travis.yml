@@ -1,33 +1,39 @@
 # Courtesy: https://github.com/magit/magit/blob/master/.travis.yml
 dist: trusty
-sudo: true
-language: r # So that pandoc comes installed, https://github.com/jgm/pandoc/wiki/Using-pandoc-in-Travis-CI
+language: minimal
+
 env:
   global:
     - CURL="curl -fsSkL --retry 9 --retry-delay 9"
+    - OX_HUGO_TMP_DIR="/tmp/${USER}/ox-hugo-dev"
+    - PANDOC_VERSION=2.5
   matrix:
-  # https://github.com/npostavs/emacs-travis/releases
-  - EMACS_VERSION=26.1
-  - EMACS_VERSION=25.3
-  - EMACS_VERSION=25.1
-  - EMACS_VERSION=24.5
-  - EMACS_VERSION=24.4
-  # Disabling test on master branch emacs build for now
-  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25061#144
-  # - EMACS_VERSION=master # master branch
+    # https://github.com/npostavs/emacs-travis/releases
+    - EMACS_VERSION=26.1
+    - EMACS_VERSION=25.3
+    - EMACS_VERSION=25.1
+    - EMACS_VERSION=24.5
+    - EMACS_VERSION=24.4
+    # Disabling test on master branch emacs build for now
+    # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25061#144
+    # - EMACS_VERSION=master # master branch
+
 install:
   - $CURL -O https://github.com/npostavs/emacs-travis/releases/download/bins/emacs-bin-${EMACS_VERSION}.tar.gz
   - tar xf emacs-bin-${EMACS_VERSION}.tar.gz -C /
   - export EMACS=/tmp/emacs/bin/emacs
   - $EMACS --version
+  # Add the yet-to-be Makefile downloaded pandoc to PATH
+  - export PATH="${OX_HUGO_TMP_DIR}/pandoc/bin:${PATH}"
+
 script:
   # Don't run "make doc" on travis; it's finicky
   # and fails on running the getJSON command in hugo.
   # - make --no-print-directory doc EMACS=${EMACS} # Just ensure that "make doc" doesn't fail for any reason.. this is *not* used to do Org->Markdown doc conversion using Travis.
   - make --no-print-directory -j1 test EMACS=${EMACS}
   - make --no-print-directory vcheck EMACS=${EMACS}
+
 notifications:
   email:
-    # Default is change, but that includes a new branch's 1st success.
-    on_success: never
-    on_failure: always # The default.
+    on_success: never # default: change
+    on_failure: always # default: always

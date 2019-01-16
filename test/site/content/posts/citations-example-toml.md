@@ -14,7 +14,7 @@ draft = false
 ## Section 1
 
 Here is a test example file with an in-text citation where someone
-important says something important (e.g. Loncar (2016)). And here is
+important says something important (e.g. Loncar (2016)). And here is
 another bit of blah with a footnote citation.[^fn:1]
 
 See [Section 2](#citation-example-section-2).
@@ -62,6 +62,7 @@ Some text.
 -   item2 in list. The following list is in a separate list body.
 
 <!--listend-->
+
 -   L1 -- foo1
 -   L1 -- foo2
     -   L2 -- bar1

@@ -11,4 +11,4 @@
               (org-hugo-export-with-section-numbers . t)
               (org-hugo-export-creator-string . "Dummy creator string")
               (org-hugo-date-format . "%Y-%m-%d")
-              (org-hugo-auto-export-on-save . t))))
+              (eval . (org-hugo-auto-export-mode)))))

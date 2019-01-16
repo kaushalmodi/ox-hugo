@@ -45,7 +45,6 @@ creator: "Dummy creator string"
 | `org-hugo-export-with-section-numbers` | `t`                                                                     |
 | `org-hugo-export-creator-string`       | `"Dummy creator string"`                                                |
 | `org-hugo-date-format`                 | `"%Y-%m-%d"`                                                            |
-| `org-hugo-auto-export-on-save`         | `t`                                                                     |
 
 
 ## <span class="section-num">2</span> Test text {#test-text}

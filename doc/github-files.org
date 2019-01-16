@@ -68,5 +68,5 @@ export from Org to Markdown, and then finally =hugo=.
 #+include: "./ox-hugo-manual.org::#test" :only-contents t
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:
-# org-hugo-auto-export-on-save: nil
+# eval: (org-hugo-auto-export-mode -1)
 # End:

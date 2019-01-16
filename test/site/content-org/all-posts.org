@@ -3,7 +3,7 @@
 #+seq_todo: TODO DRAFT DONE
 #+seq_todo: TEST__TODO | TEST__DONE
 
-#+property: header-args :eval no
+#+property: header-args :eval never-export
 
 #+startup: indent
 
@@ -44,7 +44,7 @@ Export this *first* post only by bringing point here and doing =M-x org-hugo-exp
 This post has no date.
 
 Export this *second* post only by bringing point here and doing =M-x org-hugo-export-wim-to-md=.
-* Image                                                               :image:
+* Image / Figure                                                      :image:
 ** Image links
 :PROPERTIES:
 :EXPORT_FILE_NAME: image-links
@@ -344,6 +344,31 @@ So using =#+html: <style>.foo img ... </style>= and =#+attr_html: :class
 Similarly, =:link=, =:attr=, =:attrlink= parameters in =#+attr_html=
 are also supported to set the corresponding parameter in the Hugo
 =figure= shortcode.
+** Inlined SVG                                                   :svg:inline:
+:PROPERTIES:
+:EXPORT_FILE_NAME: inlined-svg
+:END:
+#+begin_description
+Test inlined SVGs with hyperlinks.
+#+end_description
+{{{oxhugoissue(253)}}}
+
+- [[http://plantuml.com/svg][Example of generating SVG with hyperlinks using PlantUML]]
+- [[https://alligator.io/svg/hyperlinks-svg/][SVGs with hyperlinks need to be inlined]]
+
+Introduce a new ~:inlined t~ HTML attribute.
+
+#+begin_src plantuml :file images/svg-with-hyperlinks.svg :exports results
+skinparam svgLinkTarget _parent
+start
+:[[https://ox-hugo.scripter.co/ ox-hugo homepage]];
+stop
+#+end_src
+#+caption: An SVG with *hyperlinks* -- generated using PlantUML
+#+attr_html: :inlined t
+#+RESULTS:
+[[file:images/svg-with-hyperlinks.svg]]
+
 * Setting heading anchors
 :PROPERTIES:
 :EXPORT_FILE_NAME: setting-heading-anchors
@@ -1422,7 +1447,7 @@ code block does not have Markdown syntax lists.
 - list 1
 #+end_src
 *** Example blocks                               :lists:hyphen:example_block:
-**** Example block with list syntax in a list          :@upstream:blackfriday:
+**** Example block with list syntax in a list         :@upstream:blackfriday:
 :PROPERTIES:
 :EXPORT_FILE_NAME: list-has-example-block-with-list-syntax
 :END:
@@ -2114,7 +2139,7 @@ only the HTML output will be created (default).
 Here is the summary.
 #+hugo: more
 Here is text after the [[https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting][summary splitter]].
-*** COMMENT Summary Splitter at EOF                                             :eof:
+*** COMMENT Summary Splitter at EOF                                     :eof:
 :PROPERTIES:
 :EXPORT_FILE_NAME: summary-splitter-at-eof
 :END:
@@ -4039,6 +4064,55 @@ with spaces was added in {{{commit(7691f0453b)}}}.
 #+end_description
 *** TEST__TODO This heading's TODO kwd should read as "TEST TODO"
 *** TEST__DONE This heading's TODO kwd should read as "TEST DONE"
+** Deeply nested Org TODO headings                                   :nested:
+*** Reused test body
+:PROPERTIES:
+:CUSTOM_ID: deeply-nested-todo-headings
+:END:
+{{{oxhugoissue(250)}}}
+**** TODO Level 1
+***** TODO Level 2
+****** TODO Level 3
+******* TODO Level 4
+******** TODO Level 5
+********* TODO Level 6
+********** TODO Level 7
+*** Deeply nested Org TODO headings -- Default heading level
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--default-h
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
+*** Deeply nested Org TODO headings -- h1
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h1
+:EXPORT_OPTIONS: h:1
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
+*** Deeply nested Org TODO headings -- h2
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h2
+:EXPORT_OPTIONS: h:2
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
+*** Deeply nested Org TODO headings -- h5
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h5
+:EXPORT_OPTIONS: h:5
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
+*** Deeply nested Org TODO headings -- h6
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h6
+:EXPORT_OPTIONS: h:6
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
+*** Deeply nested Org TODO headings -- h6, Offset 0
+:PROPERTIES:
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h6--offset0
+:EXPORT_OPTIONS: h:6
+:EXPORT_HUGO_LEVEL_OFFSET: 0
+:END:
+#+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
 * Level Offset                                                 :level_offset:
 ** Default level offset
 :PROPERTIES:
@@ -5365,7 +5439,7 @@ If the description is set via the subtree property
 #+begin_description
 Description set in special block
 #+end_description
-***** Single-line description with backslashes (TOML) :escaping:backslashes:front_matter:single_line:
+***** Single-line description with backslashes (TOML) :escaping:backslashes:single_line:
 :PROPERTIES:
 :EXPORT_FILE_NAME: description-single-line-escaping-backslashes-org-special-block-toml
 :END:
@@ -5373,7 +5447,7 @@ Description set in special block
 Test to check that backslashes in =\|= and =\\= are correctly escaped.
 #+end_description
 Post content.
-***** Multi-line description with backslashes (TOML) :escaping:backslashes:front_matter:multi_line:
+***** Multi-line description with backslashes (TOML) :escaping:backslashes:multi_line:
 :PROPERTIES:
 :EXPORT_FILE_NAME: description-multi-line-escaping-backslashes-org-special-block-toml
 :END:
@@ -5409,7 +5483,7 @@ show up with line breaks \\
 but within the same paragraph.
 #+end_description
 Post content.
-***** Single-line description with backslashes (YAML) :escaping:backslashes:front_matter:single_line:
+***** Single-line description with backslashes (YAML) :escaping:backslashes:single_line:
 :PROPERTIES:
 :EXPORT_FILE_NAME: description-single-line-escaping-backslashes-org-special-block-yaml
 :END:
@@ -5417,7 +5491,7 @@ Post content.
 Test to check that backslashes in =\|= and =\\= are correctly escaped.
 #+end_description
 Post content.
-***** Multi-line description with backslashes (YAML) :escaping:backslashes:front_matter:multi_line:
+***** Multi-line description with backslashes (YAML) :escaping:backslashes:multi_line:
 :PROPERTIES:
 :EXPORT_FILE_NAME: description-multi-line-escaping-backslashes-org-special-block-yaml
 :END:
@@ -7072,8 +7146,3 @@ over multiple lines. But even then it should be handled fine.
 [fn:2] Second footnote
 
 [fn:1] First footnote
-* COMMENT Local Variables                                           :ARCHIVE:
-# Local Variables:
-# fill-column: 70
-# eval: (auto-fill-mode 1)
-# End:

@@ -93,18 +93,16 @@ Dispatcher/ menu (the one you see when you hit =C-c C-e= to initiate
 any export).
 
 You can do that by adding the below to your config:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (with-eval-after-load 'ox
   (require 'ox-hugo))
-(require 'ox-hugo-auto-export) ;If you want the auto-exporting on file saves
-#+END_SRC
+#+end_src
 If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can do the below instead:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ox-hugo
   :ensure t            ;Auto-install the package from Melpa (optional)
   :after ox)
-(use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
-#+END_SRC
+#+end_src
 
 Also see the [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto Exporting]] section.
 
@@ -113,24 +111,22 @@ Also see the [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto Expo
 Spacemacs users can choose to add this snippet to their
 =dotspacemacs/user-config= function in =.spacemacs=:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun dotspacemacs/user-config ()
   ;; Other stuff
   ;; ..
 
   ;; ox-hugo config
   (use-package ox-hugo
-    :ensure t            ;Auto-install the package from Melpa (optional)
-    :after ox)
-  (use-package ox-hugo-auto-export) ;If you want the auto-exporting on file saves
-  )
-#+END_SRC
+    :ensure t          ;Auto-install the package from Melpa (optional)
+    :after ox))
+#+end_src
 
-#+BEGIN_note
+#+begin_note
 You do have _have_ to use the =use-package= version when using
 Spacemacs. That version was used because =use-package= is installed by
 default in Spacemacs.
-#+END_note
+#+end_note
 If you do so, you *also need to* add =ox-hugo= to
 =dotspacemacs-additional-packages=.
 
@@ -140,23 +136,23 @@ If you do so, you *also need to* add =ox-hugo= to
 ** Before you export
 Before you export check that these properties are set as you need:
 - HUGO_SECTION :: The default Hugo section name for all the posts.  See
-  [[https://gohugo.io/content-management/sections/][here]] for more information on Hugo sections.  It is
-  common for this property to be set to =posts= or
-  =blog=.  The default value is set using
-  =org-hugo-default-section-directory=. See
-  [[https://ox-hugo.scripter.co/doc/hugo-section/][Hugo Section]] for details.
+     [[https://gohugo.io/content-management/sections/][here]] for more information on Hugo sections.  It is
+     common for this property to be set to =posts= or
+     =blog=.  The default value is set using
+     =org-hugo-default-section-directory=. See
+     [[https://ox-hugo.scripter.co/doc/hugo-section/][Hugo Section]] for details.
 - HUGO_BASE_DIR :: Root directory of the source for the Hugo site. If
-  this is set to =~/hugo/=, the exported Markdown
-  files will be saved to
-  =~/hugo/content/<HUGO_SECTION>/=
-  directory[fn:-1-section_more].  By default, the
-  Markdown files reside in a hierarchy under the
-  =content/= directory in the site root directory
-  ([[https://gohugo.io/content-management/organization/][ref]]). If you try to export without setting this
-  property, you will get this error:
-  #+BEGIN_EXAMPLE
-    user-error: It is mandatory to set the HUGO_BASE_DIR property
-  #+END_EXAMPLE
+     this is set to =~/hugo/=, the exported Markdown
+     files will be saved to
+     =~/hugo/content/<HUGO_SECTION>/=
+     directory[fn:-1-section_more].  By default, the
+     Markdown files reside in a hierarchy under the
+     =content/= directory in the site root directory
+     ([[https://gohugo.io/content-management/organization/][ref]]). If you try to export without setting this
+     property, you will get this error:
+     #+begin_example
+       user-error: It is mandatory to set the HUGO_BASE_DIR property
+     #+end_example
 
 *Important*: If you choose to export an Org subtree as a post, you
  need to set the =EXPORT_FILE_NAME= subtree property. That property is
@@ -213,23 +209,23 @@ available customization options for this package.
     =HUGO_PUBLISHDATE= and =HUGO_EXPIRYDATE= properties too.
 - Export source blocks and table captions -- #[[https://github.com/kaushalmodi/ox-hugo/issues/38][38]]. Here's a
   suggested CSS for the captions:
-  #+BEGIN_SRC css
+  #+begin_src css
     figcaption,
     .src-block-caption,
     .table-caption {
         font-style: italic;
         text-align: center;
     }
-  #+END_SRC
+  #+end_src
 - Export descriptive or definition lists in Blackfriday-friendly
   Markdown format -- #[[https://github.com/kaushalmodi/ox-hugo/issues/114][114]].
 - Support Org Special Blocks like in HTML and [[https://orgmode.org/manual/Special-blocks-in-LaTeX-export.html][LaTeX exports]] --
   #[[https://github.com/kaushalmodi/ox-hugo/issues/105][105]]. Here's one little example:
-  #+BEGIN_SRC org
+  #+begin_src org
     ,#+begin_mark
     /Some/ *marked* text
     ,#+end_mark
-  #+END_SRC
+  #+end_src
 - Allow setting =:EXPORT_HUGO_SECTION:= in the valid Hugo post subtree
   itself.
 - Enable replacing any key in the front-matter with anything; it's
@@ -358,8 +354,7 @@ available customization options for this package.
 - Add missing http/https/ftp prefix for hyper-linked images.
 *** Meta
 - Add documentation on how you can have
-  [[https://ox-hugo.scripter.co/doc/images-in-content/][Images live in the same directory as Org
-  source]] -- #[[https://github.com/kaushalmodi/ox-hugo/issues/91][91]].
+  [[https://ox-hugo.scripter.co/doc/images-in-content/][Images live in the same directory as Org source]] -- #[[https://github.com/kaushalmodi/ox-hugo/issues/91][91]].
 - Now only Org files for the [[https://ox-hugo.scripter.co][documentation site]] need to be committed
   to git. =ox-hugo= then exports those to Markdown, and then Hugo
   publishes those to HTML (as before) --- all on Netlify.
@@ -369,8 +364,7 @@ available customization options for this package.
   yourself :smile:.
 ** v0.5 <2017-11-06 Mon>
 *** Features
-- Export TOC as a Markdown ordered list. See [[https://ox-hugo.scripter.co/doc/org-toc/][Table of
-  Contents]] -- #[[https://github.com/kaushalmodi/ox-hugo/issues/88][88]].
+- Export TOC as a Markdown ordered list. See [[https://ox-hugo.scripter.co/doc/org-toc/][Table of Contents]] -- #[[https://github.com/kaushalmodi/ox-hugo/issues/88][88]].
 - =#+attr_html= above http/https/ftp links is now supported (useful
   for specifying the =target=, =rel=, attributes, for example).
 ** v0.4.1 <2017-10-29 Sun>

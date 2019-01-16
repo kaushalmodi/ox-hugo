@@ -1,5 +1,5 @@
 +++
-title = "En dash – Em dash — Horizontal ellipsis … in titles"
+title = "En dash –, Em dash —, Horizontal ellipsis … in titles"
 tags = ["title"]
 categories = ["upstream"]
 draft = false

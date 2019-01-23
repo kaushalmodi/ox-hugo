@@ -6,7 +6,7 @@ description = """
   """
 date = 2100-12-21
 lastmod = 2100-12-21
-tags = ["manual", "suppress", "lastmod", "nonzero"]
+tags = ["suppress", "lastmod", "nonzero", "manual"]
 draft = false
 +++
 

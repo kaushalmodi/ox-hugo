@@ -2,7 +2,7 @@
 title = "Suppress lastmod with auto-set-lastmod"
 description = "`lastmod` front-matter parameter is suppressed in this post."
 date = 2100-12-21
-tags = ["autoset", "suppress", "lastmod", "nonzero"]
+tags = ["suppress", "lastmod", "nonzero", "autoset"]
 draft = false
 +++
 

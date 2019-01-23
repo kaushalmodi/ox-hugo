@@ -6,7 +6,7 @@ description = """
   """
 date = 2100-12-21
 lastmod = 2100-12-21T00:00:00+00:00
-tags = ["autoset", "suppress", "lastmod", "zero"]
+tags = ["suppress", "lastmod", "zero", "autoset"]
 draft = false
 +++
 

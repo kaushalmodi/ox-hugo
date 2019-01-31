@@ -2148,7 +2148,7 @@ and rewrite link paths to make blogging more seamless."
                       (setq figure-param-str (concat figure-param-str
                                                      (format "%s=\"%s\" "
                                                              name val))))))
-                (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
+                ;; (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
                 (format "{{< figure %s >}}" (org-trim figure-param-str)))))))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))

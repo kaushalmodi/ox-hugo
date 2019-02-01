@@ -355,6 +355,13 @@
   source = "https://github.com/jarss/TAONAW"
   site = "https://jarss.github.io/TAONAW/"
 
+[jubnzv]
+  author = "Georgy Komarov"
+  source = "https://github.com/jubnzv/jubnzv.github.io"
+  branch = "master"
+  site = "https://idie.ru"
+  org_dir = "content-org"
+
 # []
 #   author = ""
 #   source = ""

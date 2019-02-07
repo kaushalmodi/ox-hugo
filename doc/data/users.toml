@@ -362,6 +362,12 @@
   site = "https://idie.ru"
   org_dir = "content-org"
 
+[jethrokuan]
+  author = "Jethro Kuan"
+  source = "https://github.com/jethrokuan/braindump"
+  site = "https://braindump.jethrokuan.com"
+  org_dir = "org"
+
 # []
 #   author = ""
 #   source = ""

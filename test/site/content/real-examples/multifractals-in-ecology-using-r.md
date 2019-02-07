@@ -30,7 +30,7 @@ Disclaimer
 
 -   Consider a given object \\(\Omega\\), its multifractal nature is
     practically determined by covering the system with a set of boxes
-    \\(\{B\_i( r)\}\\) with \\((i=1,..., N( r))\\) of side length \\(r\\)
+    \\(\\{B\_i( r)\\}\\) with \\((i=1,..., N( r))\\) of side length \\(r\\)
 -   These boxes are nonoverlaping and such that
 
     \\[\Omega = \bigcup\_{i=1}^{N( r)} B\_i( r)\\]

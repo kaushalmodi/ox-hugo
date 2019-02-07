@@ -38,3 +38,12 @@ a^3  &=  σ(W^3a^2 + b^3)\\\\\\
 a^L  &= σ(W^La^{L-1} + b^L)\\\\\\
 y  &= a^L\\\\\\
 \end{align}
+
+
+## `\{` → `\\{`, `\}` → `\\}` {#}
+
+`ox-hugo` Issue #[258](https://github.com/kaushalmodi/ox-hugo/issues/258)
+
+\begin{equation}
+\phi\_j(x) = \mathrm{exp}\left\\{ - \frac{(x - \mu\_j)^2}{2s^2} \right\\}
+\end{equation}

@@ -383,7 +383,6 @@
   author = "KK"
   source = "https://github.com/bebound/hugo_blog"
   site = "https://blog.fromkk.com/"
-  org_dir = "content-org"
 
 [emilioj]
   author = "Emilio J. Padrón González"
@@ -412,7 +411,6 @@
   author = "Doug Davis"
   source = "https://github.com/drdavis/ddavis.io"
   site = "https://ddavis.io/"
-  org_dir = "content-org"
 
 # []
 #   author = ""

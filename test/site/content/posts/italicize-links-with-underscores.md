@@ -11,13 +11,13 @@ draft = false
 ## External links {#external-links}
 
 Italic
-: _What is a [two's complement](https://en.wikipedia.org/wiki/Two%27s%5Fcomplement)?_
+: _What is a [two's complement](https://en.wikipedia.org/wiki/Two's%5Fcomplement)?_
 
 Bold
-: **What is a [two's complement](https://en.wikipedia.org/wiki/Two%27s%5Fcomplement)?**
+: **What is a [two's complement](https://en.wikipedia.org/wiki/Two's%5Fcomplement)?**
 
 Bold + Italic
-: _**What is a [two's complement](https://en.wikipedia.org/wiki/Two%27s%5Fcomplement)?**_
+: _**What is a [two's complement](https://en.wikipedia.org/wiki/Two's%5Fcomplement)?**_
 
 
 ## Internal links {#internal-links}

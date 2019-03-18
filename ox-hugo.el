@@ -2150,7 +2150,7 @@ and rewrite link paths to make blogging more seamless."
                       (setq figure-param-str (concat figure-param-str
                                                      (format "%s=\"%s\" "
                                                              name val))))))
-                (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
+                ;; (message "[org-hugo-link DBG] figure params: %s" figure-param-str)
                 (format "{{< figure %s >}}" (org-trim figure-param-str)))))))))
      ((string= type "coderef")
       (let ((ref (org-element-property :path link)))
@@ -3690,9 +3690,11 @@ Return output file's name."
              (all-tags (when all-tags-1
                          (split-string
                           (replace-regexp-in-string "\"" "" all-tags-1))))
+             (exclude-tags (plist-get info :exclude-tags))
              matched-exclude-tag)
         (when all-tags
-          (dolist (exclude-tag org-export-exclude-tags)
+          ;; (message "[org-hugo-export-to-md DBG] exclude-tags = %s" exclude-tags)
+          (dolist (exclude-tag exclude-tags)
             (when (member exclude-tag all-tags)
               (setq matched-exclude-tag exclude-tag)
               (setq do-export nil))))
@@ -3795,8 +3797,15 @@ approach)."
             ;; Publish only the current subtree
             (ignore-errors
               (org-back-to-heading :invisible-ok))
-            (let ((subtree (org-hugo--get-valid-subtree))
-                  is-commented is-excluded matched-exclude-tag do-export)
+            (let* ((subtree (org-hugo--get-valid-subtree))
+                   (info (org-combine-plists
+                          (org-export--get-export-attributes
+                           'hugo subtree visible-only)
+                          (org-export--get-buffer-attributes)
+                          (org-export-get-environment 'hugo subtree)))
+                   (exclude-tags (plist-get info :exclude-tags))
+                   is-commented is-excluded matched-exclude-tag do-export)
+              ;; (message "[org-hugo-export-wim-to-md DBG] exclude-tags = %s" exclude-tags)
               (if subtree
                   (progn
                     ;; If subtree is a valid Hugo post subtree, proceed ..
@@ -3805,7 +3814,7 @@ approach)."
                     (let ((all-tags (let ((org-use-tag-inheritance t))
                                       (org-hugo--get-tags))))
                       (when all-tags
-                        (dolist (exclude-tag org-export-exclude-tags)
+                        (dolist (exclude-tag exclude-tags)
                           (when (member exclude-tag all-tags)
                             (setq matched-exclude-tag exclude-tag)
                             (setq is-excluded t)))))

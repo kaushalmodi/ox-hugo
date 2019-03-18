@@ -5,6 +5,7 @@
 #+hugo_section: singles
 
 #+hugo_tags: "" "empty-tag" "tag" "dont_export_during_make_test"
+#+exclude_tags: dont_export_during_make_test
 
 #+begin_description
 Ensure that empty tag in Org file throws a ~user-error~.

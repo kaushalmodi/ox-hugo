@@ -1,0 +1,17 @@
+#+hugo_base_dir: ../.
+#+hugo_section: exclude_tags_tests
+#+exclude_tags: nonono
+
+#+author:
+
+* section 1
+** post 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: post1
+:END:
+This post will be exported.
+** post 2                                                            :nonono:
+:PROPERTIES:
+:EXPORT_FILE_NAME: post2
+:END:
+This post will not be exported.

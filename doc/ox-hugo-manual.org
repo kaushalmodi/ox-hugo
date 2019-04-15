@@ -724,6 +724,10 @@ have the exported Markdown files.
      /require/. But in few weeks, the old ~ox-hugo-auto-export.el~
      file will be deleted from this project, and then doing that
      /require/ will throw an error.
+   #+begin_note
+   The ~ox-hugo-auto-export.el~ has been deleted from this project. So
+   doing that /require/ will throw an error now. -- <2019-04-15 Mon>
+   #+end_note
 2. Make these changes in your ~.dir-locals.el~ or File Local Variables
    as applicable:
    |---------------------+----------------------------------------+-------------------------------------------|

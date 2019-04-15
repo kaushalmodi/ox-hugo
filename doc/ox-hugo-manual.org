@@ -2221,25 +2221,39 @@ Here are few use cases to better explain this feature.
           keyword equivalents in file-based flow too.
 
 **** Use =description= in Org file, but export as =summary=
-The /Description/ meta-data is standard in Org and even Hugo. But some
-theme may choose to have its own front-matter key called =summary=
-instead of =description=.
+The /Description/ meta-data is standard in Org.
 
-As =summary= is not a default front-matter key in Hugo, you would need
-to set it using the following property:
+Starting with *v0.55.0*, Hugo now supports ~summary~ as an inbuilt
+front-matter variable to directly specify the post /summary/. See Hugo
+commit [[https://github.com/gohugoio/hugo/commit/3a62d54745e2cbfda6772390830042908d725c71][3a62d547]] for details.
+
+#+begin_description
+~ox-hugo~ has also been supporting the ~description~ front-matter
+variable. So support for the new ~summary~ front-matter variable,
+which is essentially a duplicate of ~description~, is not added
+explicitly.
+#+end_description
+
+As the ~summary~ parameter does not have explicit support in
+~ox-hugo~, you would need to set it using the following property:
 
 #+begin_src org
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :summary "Here is my post summary."
 #+end_src
 
-But if you use =description=, you can use the same in a more concise
-fashion:
+But instead, you can simply add this at the top of your Org file:
+
+#+begin_src org
+#+hugo_front_matter_key_replace: description>summary
+#+end_src
+
+and then use ~description~ to do the same:
 
 #+begin_src org
 :EXPORT_DESCRIPTION: Here is my post summary.
 #+end_src
 
-or even this in the Org body:
+It gets even better if you use the *description* Org Special Block:
 
 #+begin_src org
 ,#+begin_description
@@ -2249,15 +2263,8 @@ And this can be over /multiple lines/ too!
 ,#+end_description
 #+end_src
 
-The good news is that you can use the above concise forms (using
-/description/) in your Org source, and *still export those as
-=summary=*! :smile:
-
-Simply add this at the top of your Org file:
-
-#+begin_src org
-#+hugo_front_matter_key_replace: description>summary
-#+end_src
+By doing above, you would be using /description/ in your Org source,
+but they would be exporting at *summary* in the Markdown! :smile:
 **** Use Org tags, but export as =keywords=
 Here's another scenario.. you painstakingly set Org tags for all your
 posts, and then you switch to a theme that calls refers to your =tags=

@@ -2264,7 +2264,7 @@ And this can be over /multiple lines/ too!
 #+end_src
 
 By doing above, you would be using /description/ in your Org source,
-but they would be exporting at *summary* in the Markdown! :smile:
+but that would get exported as /summary/ in the Markdown! :smile:
 **** Use Org tags, but export as =keywords=
 Here's another scenario.. you painstakingly set Org tags for all your
 posts, and then you switch to a theme that calls refers to your =tags=

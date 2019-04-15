@@ -480,7 +480,7 @@ The common =ox-hugo= export bindings are:
   - If point is in a /valid Hugo post subtree/, export that
     subtree to a Hugo post in Markdown.
 
-    A /valid Hugo post subtree/ is an Org subtree has the
+    A /valid Hugo post subtree/ is an Org subtree that has the
     =EXPORT_FILE_NAME= property set.
   - If the file is intended to be exported as a whole (i.e. has the
     =#+title= keyword), export the whole Org file to a Hugo post in

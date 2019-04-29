@@ -40,7 +40,7 @@ This file will export the front-matter in TOML (default). See
 [{{< relref "post-yaml" >}}]({{< relref "post-yaml" >}}) that exports that in YAML.
 
 
-### Link + Description {#link-description}
+### Link + Description {#link-plus-description}
 
 Here's the same link with description: [Post exported with YAML
 front-matter]({{< relref "post-yaml" >}}).

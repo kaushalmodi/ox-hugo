@@ -12,6 +12,14 @@ draft = false
 
 ## (Foo)Bar.Baz&Zoo {#foo--bar-dot-baz-and-zoo}
 
+-   `.` → `dot`
+-   `&` → `and`
+
+
+## C++ {#c-plus-plus}
+
+-   `+` → `plus`
+
 
 ## Hey! I have a link [here](https://example.org) (Awesome!) {#hey-i-have-a-link-here--awesome}
 

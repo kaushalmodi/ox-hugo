@@ -402,6 +402,10 @@ Something 2.1
 ** Releasing version 1.1
 ** Foo ( Bar ) Baz
 ** (Foo)Bar.Baz&Zoo
+- ~.~ → ~dot~
+- ~&~ → ~and~
+** C++
+- ~+~ → ~plus~
 ** Hey! I have a link [[https://example.org][here]] (Awesome!)
 ** Este título es en español
 ** Non-English titles

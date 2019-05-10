@@ -402,6 +402,10 @@ Something 2.1
 ** Releasing version 1.1
 ** Foo ( Bar ) Baz
 ** (Foo)Bar.Baz&Zoo
+- ~.~ → ~dot~
+- ~&~ → ~and~
+** C++
+- ~+~ → ~plus~
 ** Hey! I have a link [[https://example.org][here]] (Awesome!)
 ** Este título es en español
 ** Non-English titles
@@ -5650,6 +5654,17 @@ extension). So in this case, it would have been
 The markup for this post is set to =org=. So the Markdown markup based
 emphasis *won't work* here.
 ** Replace front-matter keys                                   :keys:replace:
+*** Replace "description" with "summary"                :description:summary:
+:PROPERTIES:
+:EXPORT_FILE_NAME: replace-description-with-summary
+:EXPORT_HUGO_FRONT_MATTER_KEY_REPLACE: description>summary
+:END:
+#+begin_description
+This should be rendered as ~.Summary~ in Hugo v0.55+. For only Hugo
+versions, this will front-matter can be retrieved only as
+~.Params.summary~.
+#+end_description
+This text will be in the post body.
 *** Replace only "linkTitle" key                                  :linktitle:
 :PROPERTIES:
 :EXPORT_FILE_NAME: replace-only-linktitle-key

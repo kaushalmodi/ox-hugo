@@ -15,7 +15,7 @@ in a "summary" Org Special block `#+begin_summary` .. `#+end_summary`.
 ## Closed details disclosure (default) {#closed-details-disclosure--default}
 
 
-### Summary + Details {#summary-details}
+### Summary + Details {#summary-plus-details}
 
 <details>
 <summary>
@@ -132,7 +132,7 @@ t` right below the details special block to have the disclosures open
 by default.
 
 
-### Summary + Details (Open) {#summary-details--open}
+### Summary + Details (Open) {#summary-plus-details--open}
 
 <details open>
 <summary>

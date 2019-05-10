@@ -22,7 +22,7 @@
                     {{ with $.Site.GetPage "taxonomyTerm" $key }}
                         {{ $taxonomy_page := . }}
                         {{ range $val }}
-                            <a href="{{ printf "%s%s" $taxonomy_page.URL (. | urlize) }}">{{ . }}</a>
+                            <a href="{{ printf "%s%s" $taxonomy_page.Permalink (. | urlize) }}">{{ . }}</a>
                         {{ end }}
                     {{ end }}
                 </p>

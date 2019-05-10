@@ -1807,7 +1807,8 @@ The `slug' generated from that STR follows these rules:
 - Not have *any* HTML tag like \"<code>..</code>\",
   \"<span class=..>..</span>\", etc.
 - Not contain any URLs (if STR happens to be a Markdown link).
-- Replace \".\" in STR with \"dot\", and \"&\" with \"and\".
+- Replace \".\" in STR with \"dot\", \"&\" with \"and\",
+  \"+\" with \"plus\".
 - Replace parentheses with double-hyphens.  So \"foo (bar) baz\"
   becomes \"foo--bar--baz\".
 - Replace non [[:alnum:]-] chars with spaces, and then one or
@@ -1822,10 +1823,14 @@ The `slug' generated from that STR follows these rules:
          ;; below regexp is the closing parenthesis of a Markdown
          ;; link: [Desc](Link).
          (str (replace-regexp-in-string (concat "\\](" ffap-url-regexp "[^)]+)") "]" str))
-         ;; Replace "&" with " and ".
-         (str (replace-regexp-in-string "&" " and " str))
-         ;; Replace "." with " dot ".
-         (str (replace-regexp-in-string "\\." " dot " str))
+         ;; Replace "&" with " and ", "." with " dot ", "+" with
+         ;; " plus ".
+         (str (replace-regexp-in-string
+               "&" " and "
+               (replace-regexp-in-string
+                "\\." " dot "
+                (replace-regexp-in-string
+                 "\\+" " plus " str))))
          ;; Replace all characters except alphabets, numbers and
          ;; parentheses with spaces.
          (str (replace-regexp-in-string "[^[:alnum:]()]" " " str))

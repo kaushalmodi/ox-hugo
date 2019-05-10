@@ -82,7 +82,7 @@ NOTE
     Org link.
 
 
-### Same link with `#+name` specified {#same-link-with-name-specified}
+### Same link with `#+name` specified {#same-link-with-plus-name-specified}
 
 Here's the same link with `#+name` specified.. which should also be
 clickable.

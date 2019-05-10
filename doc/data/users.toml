@@ -315,13 +315,6 @@
   site = "https://rakhim.org/"
   org_dir = "content-org"
 
-[aminb]
-  author = "Amin Bandali"
-  source = "https://git.sr.ht/~bandali/aminb.org"
-  site = "https://aminb.org"
-  org_dir = "content-org"
-  api = "micro.json"
-
 [elbaulp]
   author = "Alejandro Alcalde"
   source = "https://github.com/elbaulp/algui91-hugo/"

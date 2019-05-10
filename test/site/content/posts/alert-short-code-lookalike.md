@@ -157,7 +157,7 @@ This can be multi-paragraph too.
 </div>
 
 
-## Alert using only `#+attr_html` {#alert-using-only-attr-html}
+## Alert using only `#+attr_html` {#alert-using-only-plus-attr-html}
 
 This will work only if the message is a single paragraph.
 

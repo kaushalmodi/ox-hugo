@@ -3532,7 +3532,8 @@ are \"toml\" and \"yaml\"."
                      "HUGO_SLUG" ;Useful for inheriting same slug to same posts in different languages
                      "HUGO_PANDOC_CITATIONS"
                      "BIBLIOGRAPHY"
-                     "HUGO_AUTO_SET_LASTMOD")))
+                     "HUGO_AUTO_SET_LASTMOD"
+                     "AUTHOR")))
     (mapcar (lambda (str)
               (concat "EXPORT_" str))
             prop-list)))

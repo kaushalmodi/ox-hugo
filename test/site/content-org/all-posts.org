@@ -5350,10 +5350,13 @@ auto-prefixed with the section for the current post.
 :EXPORT_HUGO_ALIASES: /alias-test/alias-g /alias-test/alias-h
 :END:
 ** Author                                                            :author:
-*** Single author
+*** Single author parent subtree
+:PROPERTIES:
+:EXPORT_AUTHOR: Foo Bar
+:END:
+**** Single author
 :PROPERTIES:
 :EXPORT_FILE_NAME: single-author
-:EXPORT_AUTHOR: Foo Bar
 :END:
 This post has 1 author set as a TOML list in front-matter.
 *** Single author as a custom parameter                           :custom_fm:

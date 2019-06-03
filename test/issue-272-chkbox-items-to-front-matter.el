@@ -33,9 +33,9 @@ list \\='((checked . (VALa VALb ..)) (not-checked . (VALx VALy
         (org-element-map hl-as-element 'item ;Map over headline's items
 	  (lambda (item)
 	    (let* ((checkbox-state (org-element-property :checkbox item)) ;Get checkbox value of item
-		   (item-text (string-trim (substring-no-properties
-                                            (org-element-interpret-data
-                                             (org-element-contents item))))))
+		   (item-text (org-trim (substring-no-properties
+                                         (org-element-interpret-data
+                                          (org-element-contents item))))))
               (cond
                ((eq checkbox-state 'on)
                 (push item-text checked))

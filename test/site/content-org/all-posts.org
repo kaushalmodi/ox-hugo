@@ -2010,6 +2010,35 @@ TOML front-matter.
 But the big integer "10040216507682529280" which would need more than
 64-bits to be stored as a signed integer is left as a string in the
 TOML front-matter.
+** Custom front matter value via Elisp                                :elisp:
+:PROPERTIES:
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :attendees (xeijin/conv-chkbox-items-to-front-matter "Attendees")
+:EXPORT_AUTHOR: xeijin
+:END:
+*** Meeting 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: custom-fm-convert-chkbox-list-to-fm-1
+:END:
+{{{oxhugoissue(272)}}}
+**** Attendees                                                     :noexport:
+- [X] Attendee 1
+- [-] Attendee 2
+- [ ] Attendee 3
+- Attendee 4
+**** Notes
+My notes
+*** Meeting 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: custom-fm-convert-chkbox-list-to-fm-2
+:END:
+{{{oxhugoissue(272)}}}
+**** Attendees                                                     :noexport:
+- [X] Attendee x
+- [-] Attendee y
+- [X] Attendee z
+- Attendee w
+**** Notes
+My notes
 * Resources                                                       :resources:
 ** TOML                                                                :toml:
 *** Post with resources in front-matter (TOML)

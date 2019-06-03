@@ -269,5 +269,10 @@ Fake current time: 2100/12/21 00:00:00 (arbitrary)."
   (advice-add 'current-time :override #'ox-hugo-test/current-time-override)
   ;; (advice-remove 'current-time #'ox-hugo-test/current-time-override)
 
+  ;; issue # 272
+  (load (expand-file-name "test/issue-272-chkbox-items-to-front-matter.el"
+                          ox-hugo-site-git-root)
+        nil :nomessage :nosuffix)
+
   (with-eval-after-load 'ox
     (add-to-list 'org-export-exclude-tags "dont_export_during_make_test")))

@@ -1,7 +1,7 @@
 +++
 title = "Meeting 2"
 author = ["xeijin"]
-tags = ["custom-fm", "elisp", "dont-export-during-make-test"]
+tags = ["custom-fm", "elisp"]
 draft = false
 [attendees]
   checked = ["Attendee x", "Attendee z"]

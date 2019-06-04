@@ -368,7 +368,20 @@ stop
 #+attr_html: :inlined t
 #+RESULTS:
 [[file:images/svg-with-hyperlinks.svg]]
+* Video                                                              :videos:
+** Embedded Video                                                  :embedded:
+:PROPERTIES:
+:EXPORT_FILE_NAME: embedded-video
+:END:
+[[https://www.w3schools.com/html/html5_video.asp][Using ~video~ HTML5 tag]]
 
+#+begin_export html
+ <video width="320" height="240" controls>
+  <source src="/videos/sample.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+#+end_export
+[[https://sample-videos.com/][Video source]]
 * Setting heading anchors
 :PROPERTIES:
 :EXPORT_FILE_NAME: setting-heading-anchors

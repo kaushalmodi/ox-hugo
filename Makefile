@@ -23,7 +23,7 @@ ifeq ("$(EMACS_exists)","")
 endif
 
 EMACS_BIN_SOURCE ?= https://github.com/npostavs/emacs-travis/releases/download/bins
-EMACS_BIN_VERSION ?= 26.1
+EMACS_BIN_VERSION ?= 26
 
 HUGO ?= hugo
 HUGO_exists := $(shell command -v $(HUGO) 2> /dev/null)

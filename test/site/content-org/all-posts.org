@@ -4694,6 +4694,8 @@ current subtree.
 abc
 def
 ghi
+这是一个测试
+文本
 ** Filling is not preserved
 :PROPERTIES:
 :EXPORT_FILE_NAME: filling-is-not-preserved
@@ -4702,6 +4704,8 @@ ghi
 abc
 def
 ghi
+这是一个测试
+文本
 * Section Inheritance                                   :section_inheritance:
 ** Section A
 :PROPERTIES:

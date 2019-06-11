@@ -2384,18 +2384,32 @@ communication channel."
                      (format "<a id=\"%s\"></a>\n\n" lbl)
                    "")))
         ret)
+
+    ;; (message "[org-hugo-paragraph DBG] para 1: %s" contents)
+    ;; Join consecutive Chinese lines into a single long line without
+    ;; unwanted space inbetween.
+    ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5
+    ;; Example: 这是一个测试     -> 这是一个测试文本 ("This is a test text")
+    ;;          文本
+    (setq contents (replace-regexp-in-string
+                    "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
+                    contents))
+    ;; (message "[org-hugo-paragraph DBG] para 2: %s" contents)
+
     (unless (org-hugo--plist-get-true-p info :hugo-preserve-filling)
       (setq contents (concat (mapconcat 'identity (split-string contents) " ") "\n")))
-    ;; Glue footnotes to the words before them using &nbsp; so that the
-    ;; footnote reference does not end up on a new line by itself.
+
     (setq contents (replace-regexp-in-string
+                    ;; Glue footnotes to the words before them using
+                    ;; &nbsp; so that the footnote reference does not
+                    ;; end up on a new line by itself.
                     ;; "something FN" -> "something&nbsp;FN"
                     "[[:blank:]]+\\(\\[\\^[^]]+\\]\\)" "&nbsp;\\1"
                     (replace-regexp-in-string
                      ;; "FN ." -> "FN."
                      "\\(\\[\\^[^]]+\\]\\)[[:blank:]]*\\([.]+\\)" "\\1\\2"
                      contents)))
-    ;; (message "[org-hugo-paragraph DBG] para: %s" contents)
+    ;; (message "[org-hugo-paragraph DBG] para 3: %s" contents)
     (setq ret (concat label
                       (org-md-paragraph paragraph contents info)))
 

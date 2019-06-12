@@ -3362,6 +3362,29 @@ Checklist showing progress in ratio.
 - Defn B :: Something B in red
 
 /The =red-text= style is defined in the first list above./
+** Source block following a list                                 :code_block:
+:PROPERTIES:
+:EXPORT_FILE_NAME: src-block-following-a-list
+:END:
+#+begin_description
+Test to verify rendering of a source block immediately following a
+plain list, and even a list following a heading following a source
+block.
+#+end_description
+
+[[https://discourse.gohugo.io/t/rendering-code-blocks-properly-from-md-files/19126][Ref]]
+
+- list item 1
+- list item 2
+#+begin_src nim
+echo "hello"
+#+end_src
+- another list item 1
+- another list item 2
+*** A heading in post
+#+begin_src nim
+echo "hello again"
+#+end_src
 * Quotes                                                             :quotes:
 ** Consecutive quotes
 :PROPERTIES:

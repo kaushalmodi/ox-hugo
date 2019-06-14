@@ -2231,7 +2231,11 @@ and rewrite link paths to make blogging more seamless."
                   (org-link-unescape desc)))
          ;; Only link description, but no link attributes.
          (desc
-          (format "[%s](%s)" desc path))
+          ;; If the description is a file name, it is copied to the Hugo static directory.
+          (if (string-prefix-p "file:" desc)
+              (let ((file (replace-regexp-in-string "\\`file:" "" desc)))
+                (format "[%s](%s)" (concat "file:" (org-hugo--attachment-rewrite-maybe file info)) path))
+            (format "[%s](%s)" desc path)))
          ;; Only link attributes, but no link description.
          (link-param-str
           (let ((path (org-html-encode-plain-text path)))

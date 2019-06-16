@@ -126,6 +126,16 @@ in the "link" portion of the Org link too shouldn't hurt./
 Click below image to jump to the unicorn image.
 
 [[file:/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+
+*** Clickable image copied to the Hugo =static= directory
+
+With the ~file:~ prefix in the description component of the link, the
+image is displayed inline and copied to the Hugo =static= directory.
+
+#+name: fig__clickable_image_that_opens_the_image
+#+caption: Click this image -- It's a hyperlink
+[[/images/org-mode-unicorn-logo.png][file:../files-to-be-copied-to-static/static/images/emacs.png]]
+
 *** Link to image outside of standard Hugo =static= directory
 :PROPERTIES:
 :CUSTOM_ID: path-containing-static

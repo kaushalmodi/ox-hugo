@@ -132,7 +132,7 @@ Click below image to jump to the unicorn image.
 With the ~file:~ prefix in the description component of the link, the
 image is displayed inline and copied to the Hugo =static= directory.
 
-#+name: fig__clickable_image_that_opens_the_image
+#+name: fig__clickable_image_that_is_copied_to_static
 #+caption: Click this image -- It's a hyperlink
 [[/images/org-mode-unicorn-logo.png][file:../files-to-be-copied-to-static/static/images/emacs.png]]
 

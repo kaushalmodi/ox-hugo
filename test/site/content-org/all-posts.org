@@ -108,12 +108,12 @@ Click below image to jump to the unicorn image.
 
 #+name: fig__clickable_image_that_opens_the_image
 #+caption: Click this image -- It's a hyperlink
-[[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+[[/images/org-mode-unicorn-logo.png][file:../files-to-be-copied-to-static/static/images/unicorn-logo-small.png]]
 
 - NOTE :: =file:= has to be used in the *Description component* of the
           Org link.
-**** Same link with =#+name= specified
-Here's the same link with =#+name= specified.. which should also be
+**** Similar link with =#+name= specified
+Here's a similar link with =#+name= specified.. which should also be
 clickable.
 
 #+name: fig__unicorn

@@ -101,9 +101,9 @@ Click below image to jump to the unicorn image.
 
 #+begin_src org
 # Org source
-,#+name: fig__clickable_image_that_opens_the_image
-,#+caption: Click this image -- It's a hyperlink
-[[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+#+name: fig__clickable_image_that_opens_the_image
+#+caption: Click this image -- It's a hyperlink
+[[/images/org-mode-unicorn-logo.png][file:../files-to-be-copied-to-static/static/images/unicorn-logo-small.png]]
 #+end_src
 
 #+name: fig__clickable_image_that_opens_the_image

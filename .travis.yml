@@ -1,5 +1,4 @@
 # Courtesy: https://github.com/magit/magit/blob/master/.travis.yml
-dist: trusty
 language: minimal
 
 env:

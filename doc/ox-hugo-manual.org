@@ -1192,6 +1192,8 @@ resolution image to its higher resolution version.
             component* of the Org link.
 - NOTE 2 :: The =file:= prefix can be used for the *Link component* of
             the Org link too --- it doesn't hurt.
+- NOTE 3 :: A space in the path in the *Description component* of the
+            Org link has to be encoded to "%20".
 ***** Regular link to an image
 [[/images/org-mode-unicorn-logo-200px.png][Click here to see org-mode-unicorn-logo-200px.png]]
 #+begin_src org

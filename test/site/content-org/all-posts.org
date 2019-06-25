@@ -194,6 +194,11 @@ This is an inline non-hyperlinked image with alt text:
 #+attr_html: :width 30
 This is an inline non-hyperlinked image with the width attribute:
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
+**** With space in the filename
+This is an inline hyperlinked image with a space in the filename:
+{{{oxhugoissue(277)}}}
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/unicorn%20logo.png]].
+
 *** Non-inline hyperlinked image
  [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
 ** Image captions

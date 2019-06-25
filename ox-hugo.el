@@ -2255,7 +2255,8 @@ PATH is the path to the image or any other attachment.
 INFO is a plist used as a communication channel."
   ;; (message "[ox-hugo attachment DBG] The Hugo section is: %s" (plist-get info :hugo-section))
   ;; (message "[ox-hugo attachment DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir))
-  (let* ((path-true (file-truename path))
+  (let* ((path-unhexified (org-link-unescape path))
+         (path-true (file-truename path-unhexified))
          (exportables org-hugo-external-file-extensions-allowed-for-copying)
          (bundle-dir (and (plist-get info :hugo-bundle)
                           (org-hugo--get-pub-dir info)))
@@ -2287,7 +2288,7 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-hugo DBG attch rewrite] default-dir: %s" default-directory)
     ;; (message "[ox-hugo DBG attch rewrite] dest-dir: %s" dest-dir)
     (if (and (file-exists-p path-true)
-             (member (file-name-extension path) exportables)
+             (member (file-name-extension path-unhexified) exportables)
              (file-directory-p dest-dir))
         (progn
           ;; Check if `path-true' is already inside `dest-dir'.
@@ -2331,7 +2332,7 @@ INFO is a plist used as a communication channel."
                         ;; "<ORG_FILE_DIR>/", `path-true' is
                         ;; "/foo/bar/baz.png", return "baz.png".
                         ;; (message "[ox-hugo DBG attch rewrite BUNDLE 3] attch neither in static nor in Org file dir")
-                        (file-name-nondirectory path))))
+                        (file-name-nondirectory path-unhexified))))
                      (t
                       ;; Else, `path-true' is "/foo/bar/baz.png",
                       ;; return "ox-hugo/baz.png".  "ox-hugo" is the
@@ -2340,7 +2341,7 @@ INFO is a plist used as a communication channel."
                       ;; (message "[ox-hugo DBG attch rewrite] neither BUNDLE nor contains static")
                       (concat
                        (file-name-as-directory org-hugo-default-static-subdirectory-for-externals)
-                       (file-name-nondirectory path)))))
+                       (file-name-nondirectory path-unhexified)))))
                    (dest-path (concat dest-dir file-name-relative-path))
                    (dest-path-dir (file-name-directory dest-path)))
               ;; The `dest-dir' would already exist.  But if

@@ -362,10 +362,10 @@
   site = "https://braindump.jethrokuan.com"
   org_dir = "org"
 
-[dkensinger]
-  author = "Dave Kensinger"
-  source = "https://github.com/dkensinger/my-hugo-blog"
-  site = "https://dave-2-1.netlify.com"
+# [dkensinger]
+#   author = "Dave Kensinger"
+#   source = "https://github.com/dkensinger/my-hugo-blog"
+#   site = "https://dave-2-1.netlify.com"
 
 [justinbarclay]
   author = "Justin Barclay"

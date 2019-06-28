@@ -562,7 +562,7 @@ patches accepted.
 As a bonus, once you have assigned your copyright to FSF, doors open up
 for your future contributions to Emacs too!
 *** Contribute to documentation
-*See {{{doc(requirements#doc_contributor_reqs,,Requirements for doc
+*See {{{doc(requirements,#doc_contributor_reqs,Requirements for doc
 contributor)}}}.*
 
 1. Clone this repo.
@@ -575,7 +575,7 @@ contributor)}}}.*
 5. Commit *only the .org files*, push branch and create PR.
    - The =.org= → =.md= conversion is done by =ox-hugo= on Netlify.
 *** Contribute to code
-*See {{{doc(requirements#code_contributor_reqs,,Requirements for code
+*See {{{doc(requirements,#code_contributor_reqs,Requirements for code
 contributor)}}}.*
 
 1. Clone this repo.

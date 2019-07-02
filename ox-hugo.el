@@ -3621,6 +3621,29 @@ So the value returned for Level C will be (2 . 3)."
                          scope)
         (cons level index)))))
 
+(defun ox-hugo--convert-links ()
+  "Convert internal links to other subtrees to links to external links in the current buffer.
+Return the org buffer with changed links as a string."
+  ;; Create an abstract syntax tree (AST) of the org document
+  (let* ((ast (org-element-parse-buffer))
+         (info (list :parse-tree ast)))
+    ;; Map over all link elements in the AST
+    (org-element-map ast 'link
+      (lambda (link)
+        (when (string= (org-element-property :type link) "custom-id")
+          (let* ((path (org-element-property :path link))
+                 (destination (org-export-resolve-id-link link info))
+                 (source-filename (org-export-get-node-property :EXPORT_FILE_NAME link t))
+                 (destination-filename (org-export-get-node-property :EXPORT_FILE_NAME destination t)))
+            ;; Change the link if it points to a valid destination outside the subtree
+            (unless (and destination-filename (equal source-filename destination-filename))
+              (let ((link-copy (org-element-copy link)))
+                (apply #'org-element-adopt-elements link-copy (org-element-contents link))
+                (org-element-put-property link-copy :type "file")
+                (org-element-put-property link-copy :path (concat destination-filename ".org"))
+                (org-element-set-element link link-copy)))))))
+    ;; turn the AST with updated links into an org document
+    (org-element-interpret-data ast)))
 
 ;;; Interactive functions
 
@@ -3920,10 +3943,18 @@ approach)."
           (cond
            ((not all-subtrees)
             ;; Export the current subtree to a Hugo post (one-post-per-subtree)
-            (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))
+            (let ((converted-buffer-string (ox-hugo--convert-links)))
+              (with-temp-buffer
+                (insert converted-buffer-string)
+                (org-mode)
+                (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))))
            ((and all-subtrees (org-map-entries (lambda () (org-entry-properties nil "EXPORT_FILE_NAME")) "EXPORT_FILE_NAME<>\"\""))
             ;; Export all valid subtrees to Hugo posts (one-post-per-subtree)
-            (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only noerror))
+            (let ((converted-buffer-string (ox-hugo--convert-links)))
+              (with-temp-buffer
+                (insert converted-buffer-string)
+                (org-mode)
+                (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only noerror))))
            (t
             ;; Export the org file as a whole (one-post-per-file)
             (org-hugo-export-file-to-md f-or-b-name async visible-only noerror))))))))

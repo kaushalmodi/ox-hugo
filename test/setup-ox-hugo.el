@@ -197,6 +197,7 @@ Emacs installation.  If Emacs is installed using
   ;; (message (list-load-path-shadows :stringp))
   )
 
+(require 'org-id)
 (require 'ox-hugo)
 (defun org-hugo-export-all-wim-to-md ()
   (org-hugo-export-wim-to-md :all-subtrees nil nil :noerror))

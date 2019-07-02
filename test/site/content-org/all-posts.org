@@ -3020,6 +3020,65 @@ C = W\log_{2} (1+\mathrm{SNR})
 \end{equation}
 
 *Here we refer to equation \ref{eq:1}.*
+** Links outside the same post
+:PROPERTIES:
+:EXPORT_FILE_NAME: links-outside-the-same-post
+:END:
+{{{oxhugoissue(30)}}}
+*** External links with search options                     :external_links:
+Links between documents can contain some search options. Only links
+to a heading with a *:CUSTOM_ID* property will be resolved to the
+appropriate location in the linked file. Links to headlines and
+links to targets will be resolved to the containing file.
+
+[[file:link-destination.org::#external-target][Link to CUSTOM_ID]]
+[[file:link-destination.org::*external-target][Link to a headline]]
+[[file:link-destination.org::external-target][Link to a target]]
+*** Internal links                                         :internal_links:
+Internal links point to targets in the current subtree that will be
+exported to the same Hugo post as the link source. To handle links to
+an *:ID* property, the =org-id= feature must first be loaded, either
+through =org-customize= or by adding =(require 'org-id)= in your Emacs
+init file.
+
+[[#internal-target][Link to CUSTOM_ID within the same post]]
+[[id:8e65ff86-3f9a-48ef-9b43-751a2e8a9372][Link to ID within the same post]]
+[[*Internal target][Link to headline within the same post]]
+[[internal-target][Link to target within the same post]]
+*** Cross-post links                                      :crosspost_links:
+Cross-post links are internal links pointing to targets in a different
+subtree that will be exported to another Hugo post than the link
+source in subtree-based exports. The Hugo's `ref` and `relref`
+shortcodes only supports anchors to headlines, so links to a heading,
+a *:CUSTOM_ID* property, or an *:ID* property will be resolved to the
+appropriate location in the linked file, but links to targets will be
+resolved to the containing post.
+
+[[#external-target][Link to CUSTOM_ID outside the same post]]
+[[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb][Link to ID outside the same post]]
+[[*External target][Link to headline outside current post]]
+[[external-target][Link to target outside the same post]]
+[[#link-destination][Link to subtree by CUSTOM_ID]]
+[[id:1e5e0bcd-caea-40ad-a75b-e488634c2678][Link to subtree by ID]]
+[[*Link destination][Link to subtree by headline]]
+*** Internal target
+:PROPERTIES:
+:CUSTOM_ID: internal-target
+:ID:       8e65ff86-3f9a-48ef-9b43-751a2e8a9372
+:END:
+<<internal-target>>
+*** Link destination
+:PROPERTIES:
+:CUSTOM_ID: link-destination
+:EXPORT_FILE_NAME: link-destination
+:ID:       1e5e0bcd-caea-40ad-a75b-e488634c2678
+:END:
+**** External target
+:PROPERTIES:
+:CUSTOM_ID: external-target
+:ID:       de0df718-f9b4-4449-bb0a-eb4402fa5fcb
+:END:
+<<external-target>>
 * Equations                                               :equations:mathjax:
 ** Inline equations
 :PROPERTIES:
@@ -4860,10 +4919,10 @@ Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
 
-See [[#citation-example-section-2]].
+See [[#citation-example-toml-section-2]].
 *** Section 2
 :PROPERTIES:
-:CUSTOM_ID: citation-example-section-2
+:CUSTOM_ID: citation-example-toml-section-2
 :END:
 Content in section 2.
 *** Testing random Hugo shortcode
@@ -4927,10 +4986,10 @@ Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
 
-See [[#citation-example-section-2]].
+See [[#citation-example-yaml-section-2]].
 *** Section 2
 :PROPERTIES:
-:CUSTOM_ID: citation-example-section-2
+:CUSTOM_ID: citation-example-yaml-section-2
 :END:
 Content in section 2.
 ** Citation Linking                                          :link_citations:

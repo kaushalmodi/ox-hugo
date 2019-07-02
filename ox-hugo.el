@@ -3790,6 +3790,117 @@ exporting all valid Hugo post subtrees from the current Org file.
           (message "Point is not in a valid Hugo post subtree; move to one and try again"))
         valid-subtree-found))))
 
+(defun org-hugo--get-element-path (element info)
+  "Return the section path of ELEMENT.
+INFO is a plist holding export options."
+  (let ((root (or (org-export-get-node-property :EXPORT_HUGO_SECTION element t)
+                  (plist-get info :hugo-section)))
+        (filename (org-export-get-node-property :EXPORT_FILE_NAME element t))
+        current-element
+        fragment
+        fragments)
+    (setq current-element element)
+    ;; Iterate over all parents of current-element, and collect section path fragments
+    (while (and current-element (not (org-export-get-node-property :EXPORT_HUGO_SECTION current-element nil)))
+      ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list
+      (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* current-element nil))
+        (push fragment fragments))
+      (setq current-element (org-element-property :parent current-element)))
+    ;; Return the root section, section fragments and filename concatenated
+    (concat
+     (file-name-as-directory root)
+     (mapconcat #'file-name-as-directory fragments "")
+     filename)))
+
+(defun org-hugo--preprocess-buffer ()
+  "Return a preprocessed copy of the current buffer.
+Internal links to other subtrees are converted to external
+links."
+  (let* ((buffer (generate-new-buffer (buffer-name)))
+         ;; Create an abstract syntax tree (AST) of the org document in the current buffer
+         (ast (org-element-parse-buffer))
+         (org-use-property-inheritance (org-hugo--selective-property-inheritance))
+         (info (org-combine-plists
+                (list :parse-tree ast)
+                (org-export--get-export-attributes 'hugo)
+                (org-export--get-buffer-attributes)
+                (org-export-get-environment 'hugo)))
+         (local-variables (buffer-local-variables))
+         (bound-variables (org-export--list-bound-variables))
+	 vars)
+    (with-current-buffer buffer
+      (let ((inhibit-modification-hooks t)
+            (org-mode-hook nil)
+            (org-inhibit-startup t))
+        (org-mode)
+        ;; Copy specific buffer local variables and variables set
+        ;; through BIND keywords.
+        (dolist (entry local-variables vars)
+          (when (consp entry)
+	    (let ((var (car entry))
+	          (val (cdr entry)))
+	      (and (not (memq var org-export-ignored-local-variables))
+	           (or (memq var
+			     '(default-directory
+			        buffer-file-name
+			        buffer-file-coding-system))
+		       (assq var bound-variables)
+		       (string-match "^\\(org-\\|orgtbl-\\)"
+				     (symbol-name var)))
+	           ;; Skip unreadable values, as they cannot be
+	           ;; sent to external process.
+	           (or (not val) (ignore-errors (read (format "%S" val))))
+	           (push (set (make-local-variable var) val) vars)))))
+        ;; Process all link elements in the AST
+        (org-element-map ast 'link
+          (lambda (link)
+            (let ((type (org-element-property :type link)))
+              (when (member type '("custom-id" "id" "fuzzy"))
+                (let* ((raw-link (org-element-property :raw-link link))
+                       (destination (if (string= type "fuzzy")
+                                        (org-export-resolve-fuzzy-link link info)
+                                      (org-export-resolve-id-link link info)))
+                       (source-path (org-hugo--get-element-path link info))
+                       (destination-path (org-hugo--get-element-path destination info)))
+                  ;; Change the link if it points to a valid destination outside the subtree
+                  (unless (equal source-path destination-path)
+                    (let ((link-copy (org-element-copy link)))
+                      (apply #'org-element-adopt-elements link-copy (org-element-contents link))
+                      (org-element-put-property link-copy :type "file")
+                      (org-element-put-property link-copy :path
+                                                (cond
+                                                 ;; If the destination is a heading with the :EXPORT_FILE_NAME
+                                                 ;; property defined, the link should point to the file (without
+                                                 ;; anchor)
+                                                 ((org-element-property :EXPORT_FILE_NAME destination)
+                                                  (concat destination-path ".org"))
+                                                 ;; Hugo only supports anchors to headlines, so if a "fuzzy" type
+                                                 ;; link points to anything else than a headline, it should point
+                                                 ;; to the file.
+                                                 ((and (string= type "fuzzy") (not (string-prefix-p "*" raw-link)))
+                                                  (concat destination-path ".org"))
+                                                 ;; In "custom-id" type links, the raw-link matches the anchor of
+                                                 ;; the destination.
+                                                 ((string= type "custom-id")
+                                                  (concat destination-path ".org::" raw-link))
+                                                 ;; In "id" and "fuzzy" type links, the anchor of the destination
+                                                 ;; is derived from the :CUSTOM_ID property or the title
+                                                 (t
+                                                  (let* ((custom-id (org-element-property :CUSTOM_ID destination))
+                                                         (title (org-element-property :raw-value destination))
+                                                         (anchor (or custom-id (org-hugo-slug title))))
+                                                    (concat destination-path ".org::#" anchor)))))
+                      (org-element-set-element link link-copy))))))))
+        ;; Workaround to prevent exporting of empty special blocks
+        (org-element-map ast 'special-block
+          (lambda (block)
+            (when (null (org-element-contents block))
+              (org-element-adopt-elements block ""))))
+        ;; Turn the AST with updated links into an org document
+        (insert (org-element-interpret-data ast))
+        (set-buffer-modified-p nil)))
+    buffer))
+
 
 
 ;;; Interactive functions
@@ -3923,13 +4034,17 @@ The optional argument NOERROR is passed to
           (if all-subtrees
               (progn
                 (setq org-hugo--subtree-count 0) ;Reset the subtree count
-                (setq ret (org-map-entries
-                           (lambda ()
-                             (org-hugo--export-subtree-to-md async visible-only :print-subtree-count))
-                           ;; Export only the subtrees where
-                           ;; EXPORT_FILE_NAME property is not
-                           ;; empty.
-                           "EXPORT_FILE_NAME<>\"\""))
+                (let ((buffer (org-hugo--preprocess-buffer)))
+                  (with-current-buffer buffer
+                    (setq ret (org-map-entries
+                               (lambda ()
+                                 (org-hugo--export-subtree-to-md async visible-only
+                                                                 :print-subtree-count))
+                               ;; Export only the subtrees where
+                               ;; EXPORT_FILE_NAME property is not
+                               ;; empty.
+                               "EXPORT_FILE_NAME<>\"\""))
+                    (kill-buffer buffer)))
                 (if ret
                     (message "[ox-hugo] Exported %d subtree%s from %s"
                              org-hugo--subtree-count
@@ -3942,7 +4057,12 @@ The optional argument NOERROR is passed to
                   (setq ret (org-hugo--export-file-to-md f-or-b-name async visible-only noerror))))
 
             ;; Publish only the current subtree.
-            (setq ret (org-hugo--export-subtree-to-md async visible-only))
+            (let ((buffer (org-hugo--preprocess-buffer))
+                  (outline-path (org-get-outline-path t)))
+              (with-current-buffer buffer
+                (goto-char (org-find-olp outline-path t))
+                (setq ret (org-hugo--export-subtree-to-md async visible-only)))
+              (kill-buffer buffer))
             (unless ret
               (setq ret (org-hugo--export-file-to-md f-or-b-name async visible-only noerror)))))))
     ret))

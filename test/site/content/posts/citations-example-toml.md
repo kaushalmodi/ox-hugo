@@ -17,9 +17,9 @@ Here is a test example file with an in-text citation where someone
 important says something important (e.g. Loncar (2016)). And here is
 another bit of blah with a footnote citation.[^fn:1]
 
-See [Section 2](#citation-example-section-2).
+See [Section 2](#citation-example-toml-section-2).
 
-## Section 2 {#citation-example-section-2}
+## Section 2 {#citation-example-toml-section-2}
 
 Content in section 2.
 

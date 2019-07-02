@@ -3943,10 +3943,17 @@ approach)."
           (cond
            ((not all-subtrees)
             ;; Export the current subtree to a Hugo post (one-post-per-subtree)
-            (let ((converted-buffer-string (ox-hugo--convert-links)))
+            ;; The subtree around point should be exported, but the
+            ;; value of point in the temporary buffer with converted
+            ;; links could be changed. However, the exact value of
+            ;; point doesn't matter, but the position in the outline
+            ;; path suffices to locate the correct subtree.
+            (let ((outline-path (org-get-outline-path t))
+                  (converted-buffer-string (ox-hugo--convert-links)))
               (with-temp-buffer
                 (insert converted-buffer-string)
                 (org-mode)
+                (goto-char (org-find-olp outline-path t))
                 (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))))
            ((and all-subtrees (org-map-entries (lambda () (org-entry-properties nil "EXPORT_FILE_NAME")) "EXPORT_FILE_NAME<>\"\""))
             ;; Export all valid subtrees to Hugo posts (one-post-per-subtree)

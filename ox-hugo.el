@@ -3767,6 +3767,19 @@ Return output file's name."
 
 ;;;###autoload
 (defun org-hugo-export-file-to-md (f-or-b-name &optional async visible-only noerror)
+  "Export the org file as a whole.
+Argument F-OR-B-NAME is the buffer-file-name or buffer-name to be
+exported.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously. The resulting file should be accessible through the
+`org-export-stack' interface.
+
+When optional argument VISIBLE-ONLY is non-nil, don't export
+contents of hidden elements.
+
+If NOERROR is non-nil, use `message' to display the error message
+instead of signaling a user error."
   ;; If not in a valid subtree, check if the Org file is
   ;; supposed to be exported as a whole, in which case
   ;; #+title has to be defined *and* there shouldn't be
@@ -3807,6 +3820,19 @@ Return output file's name."
 
 ;;;###autoload
 (defun org-hugo-export-subtree-to-md (f-or-b-name &optional async visible-only noerror)
+  "Export the current subtrees to a Hugo post.
+Argument F-OR-B-NAME is the buffer-file-name or buffer-name to be
+exported.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously. The resulting file should be accessible through the
+`org-export-stack' interface.
+
+When optional argument VISIBLE-ONLY is non-nil, don't export
+contents of hidden elements.
+
+If NOERROR is non-nil, use `message' to display the error message
+instead of signaling a user error."
   ;; Publish only the current subtree
   (ignore-errors
     (org-back-to-heading :invisible-ok))
@@ -3879,6 +3905,18 @@ Return output file's name."
 
 ;;;###autoload
 (defun org-hugo-export-all-subtrees-to-md (f-or-b-name &optional async visible-only noerror)
+  "Export all valid subtrees to Hugo posts.
+Argument F-OR-B-NAME is the buffer-file-name or buffer-name to be exported.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously.  The resulting file should be accessible through
+the `org-export-stack' interface.
+
+When optional argument VISIBLE-ONLY is non-nil, don't export
+contents of hidden elements.
+
+If NOERROR is non-nil, use `message' to display the error message
+instead of signaling a user error."
   (setq org-hugo--subtree-count 0)
   (org-map-entries
    (lambda ()

@@ -737,7 +737,7 @@ newer."
               (org-hugo-export-wim-to-md nil a v)))
         (?h "To file"
             (lambda (a s v _b)
-              (org-hugo-export-to-md a s v)))
+              (org-hugo-export-to-md nil a s v)))
         (?O "Subtree to file and open"
             (lambda (a _s v _b)
               (if a
@@ -745,8 +745,8 @@ newer."
                 (org-open-file (org-hugo-export-wim-to-md nil a v)))))
         (?o "To file and open"
             (lambda (a s v _b)
-              (if a (org-hugo-export-to-md t s v)
-                (org-open-file (org-hugo-export-to-md nil s v)))))
+              (if a (org-hugo-export-to-md nil t s v)
+                (org-open-file (org-hugo-export-to-md nil nil s v)))))
         (?A "All subtrees to files"
             (lambda (a _s v _b)
               (org-hugo-export-wim-to-md :all-subtrees a v)))
@@ -3664,7 +3664,7 @@ Return the buffer the export happened to."
       (org-hugo--after-export-function info nil))))
 
 ;;;###autoload
-(defun org-hugo-export-to-md (&optional async subtreep visible-only)
+(defun org-hugo-export-to-md (f-or-b-name &optional async subtreep visible-only)
   "Export current buffer to a Hugo-compatible Markdown file.
 
 If narrowing is active in the current buffer, only export its
@@ -3702,7 +3702,7 @@ Return output file's name."
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (unless subtreep
       ;; Below stuff applies only to *per-file* export flow.
-      (let* ((fname (file-name-nondirectory (buffer-file-name)))
+      (let* ((fname (or f-or-b-name (file-name-nondirectory (buffer-file-name))))
              (title (format "%s" (or (car (plist-get info :title)) "<EMPTY TITLE>")))
              (all-tags-1 (plist-get info :hugo-tags))
              (all-tags (when all-tags-1
@@ -3741,6 +3741,141 @@ Return output file's name."
 ;;     (prog1
 ;;         (org-publish-org-to 'hugo filename ".md" plist pub-dir)
 ;;       (org-hugo--after-export-function))))
+
+;;;###autoload
+(defun org-hugo-export-file-to-md (f-or-b-name &optional async visible-only noerror)
+  ;; If not in a valid subtree, check if the Org file is
+  ;; supposed to be exported as a whole, in which case
+  ;; #+title has to be defined *and* there shouldn't be
+  ;; any valid Hugo post subtree present.
+  (setq org-hugo--subtree-count nil) ;Also reset the subtree count
+  (let ((valid-subtree-found
+         (catch 'break
+           (org-map-entries
+            (lambda ()
+              (throw 'break t))
+            ;; Only map through subtrees where
+            ;; EXPORT_FILE_NAME property is not
+            ;; empty.
+            "EXPORT_FILE_NAME<>\"\"")))
+        err msg)
+    (if valid-subtree-found
+        (setq msg "Point is not in a valid Hugo post subtree;
+        move to one and try again")
+      (let ((title (save-excursion
+                     (goto-char (point-min))
+                     (let ((case-fold-search t))
+                       (re-search-forward "^#\\+title:" nil :noerror)))))
+        (if title
+            (setq do-export t)
+          (setq err t)
+          (setq msg (concat "The file neither contains a valid
+          Hugo post subtree, nor has the #+title keyword")))))
+    (unless do-export
+      (let ((error-fn (if (or (not err)
+                              noerror)
+                          #'message
+                        #'user-error)))
+        (apply error-fn
+               (list
+                (format "%s: %s" f-or-b-name msg))))))
+  (when do-export
+    (org-hugo-export-to-md f-or-b-name async nil visible-only)))
+
+;;;###autoload
+(defun org-hugo-export-subtree-to-md (f-or-b-name &optional async visible-only noerror)
+  ;; Publish only the current subtree
+  (ignore-errors
+    (org-back-to-heading :invisible-ok))
+  (let* ((subtree (org-hugo--get-valid-subtree))
+         (info (org-combine-plists
+                (org-export--get-export-attributes
+                 'hugo subtree visible-only)
+                (org-export--get-buffer-attributes)
+                (org-export-get-environment 'hugo subtree)))
+         (exclude-tags (plist-get info :exclude-tags))
+         is-commented is-excluded matched-exclude-tag do-export)
+    ;; (message "[org-hugo-export-subtree-to-md DBG] exclude-tags =
+    ;; %s" exclude-tags)
+    (when subtree
+      ;; If subtree is a valid Hugo post subtree, proceed ..
+      (setq is-commented (org-element-property :commentedp subtree))
+
+      (let ((all-tags (let ((org-use-tag-inheritance t))
+                        (org-hugo--get-tags))))
+        (when all-tags
+          (dolist (exclude-tag exclude-tags)
+            (when (member exclude-tag all-tags)
+              (setq matched-exclude-tag exclude-tag)
+              (setq is-excluded t)))))
+
+      ;; (message "[current subtree DBG] subtree: %S" subtree)
+      ;; (message "[current subtree DBG] is-commented:%S, tags:%S,
+      ;; is-excluded:%S" is-commented tags is-excluded)
+      (let ((title (org-element-property :title subtree)))
+        (cond
+         (is-commented
+          (message "[ox-hugo] `%s' was not exported as that
+                       subtree is commented" title))
+         (is-excluded
+          (message "[ox-hugo] `%s' was not exported as it is
+                       tagged with an exclude tag `%s'" title
+                       matched-exclude-tag))
+         (t
+          (if (numberp org-hugo--subtree-count)
+              (progn
+                (setq org-hugo--subtree-count (1+ org-hugo--subtree-count))
+                (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))
+            (message "[ox-hugo] Exporting `%s' .." title))
+          ;; Get the current subtree coordinates for
+          ;; auto-calculation of menu item weight, page
+          ;; or taxonomy weights.
+          (when (or
+                 ;; Check if the menu front-matter is specified.
+                 (or
+                  (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
+                  (save-excursion
+                    (goto-char (point-min))
+                    (let ((case-fold-search t))
+                      (re-search-forward "^#\\+hugo_menu:.*:menu" nil :noerror))))
+                 ;; Check if auto-calculation is needed
+                 ;; for page or taxonomy weights.
+                 (or
+                  (let ((page-or-taxonomy-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
+                    (and (stringp page-or-taxonomy-weight)
+                         (string-match-p "auto" page-or-taxonomy-weight)))
+                  (save-excursion
+                    (goto-char (point-min))
+                    (let ((case-fold-search t))
+                      (re-search-forward "^#\\+hugo_weight:.*auto" nil :noerror)))))
+            (setq org-hugo--subtree-coord
+                  (org-hugo--get-post-subtree-coordinates subtree)))
+          (setq do-export t)))))
+    (when do-export
+      (org-hugo-export-to-md f-or-b-name async subtree visible-only))))
+
+;;;###autoload
+(defun org-hugo-export-all-subtrees-to-md (f-or-b-name &optional async visible-only noerror)
+  (let (ret)
+    (setq org-hugo--subtree-count 0)
+    (setq ret (org-map-entries
+               (lambda ()
+                 (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))
+               ;; Export only the subtrees where
+               ;; EXPORT_FILE_NAME property is not empty.
+               "EXPORT_FILE_NAME<>\"\""))
+    (if ret
+        (message "[ox-hugo] Exported %d subtree%s from %s"
+                 org-hugo--subtree-count
+                 (if (= 1 org-hugo--subtree-count) "" "s")
+                 f-or-b-name)
+      ;; If `ret' is nil, no valid Hugo subtree was found.
+      ;; So call `org-hugo-export-file-to-md'.  In
+      ;; that function, it will be checked if the whole
+      ;; Org file can be exported.
+      (setq ret (org-hugo-export-file-to-md f-or-b-name async visible-only noerror)))
+    (setq org-hugo--subtree-count nil) ;Reset the variable
+    ret))
 
 ;;;###autoload
 (defun org-hugo-export-wim-to-md (&optional all-subtrees async visible-only noerror)
@@ -3791,129 +3926,8 @@ approach)."
         (widen)
         (save-excursion
           (if all-subtrees
-              (let (ret)
-                (setq org-hugo--subtree-count 0)
-                (setq ret (org-map-entries
-                           (lambda ()
-                             (org-hugo-export-wim-to-md nil async visible-only noerror))
-                           ;; Export only the subtrees where
-                           ;; EXPORT_FILE_NAME property is not
-                           ;; empty.
-                           "EXPORT_FILE_NAME<>\"\""))
-                (if ret
-                    (message "[ox-hugo] Exported %d subtree%s from %s"
-                             org-hugo--subtree-count
-                             (if (= 1 org-hugo--subtree-count) "" "s")
-                             f-or-b-name)
-                  ;; If `ret' is nil, no valid Hugo subtree was found.
-                  ;; So call `org-hugo-export-wim-to-md' directly.  In
-                  ;; that function, it will be checked if the whole
-                  ;; Org file can be exported.
-                  (setq ret (org-hugo-export-wim-to-md nil async visible-only noerror)))
-                (setq org-hugo--subtree-count nil) ;Reset the variable
-                ret)
-            ;; Publish only the current subtree
-            (ignore-errors
-              (org-back-to-heading :invisible-ok))
-            (let* ((subtree (org-hugo--get-valid-subtree))
-                   (info (org-combine-plists
-                          (org-export--get-export-attributes
-                           'hugo subtree visible-only)
-                          (org-export--get-buffer-attributes)
-                          (org-export-get-environment 'hugo subtree)))
-                   (exclude-tags (plist-get info :exclude-tags))
-                   is-commented is-excluded matched-exclude-tag do-export)
-              ;; (message "[org-hugo-export-wim-to-md DBG] exclude-tags = %s" exclude-tags)
-              (if subtree
-                  (progn
-                    ;; If subtree is a valid Hugo post subtree, proceed ..
-                    (setq is-commented (org-element-property :commentedp subtree))
-
-                    (let ((all-tags (let ((org-use-tag-inheritance t))
-                                      (org-hugo--get-tags))))
-                      (when all-tags
-                        (dolist (exclude-tag exclude-tags)
-                          (when (member exclude-tag all-tags)
-                            (setq matched-exclude-tag exclude-tag)
-                            (setq is-excluded t)))))
-
-                    ;; (message "[current subtree DBG] subtree: %S" subtree)
-                    ;; (message "[current subtree DBG] is-commented:%S, tags:%S, is-excluded:%S"
-                    ;;          is-commented tags is-excluded)
-                    (let ((title (org-element-property :title subtree)))
-                      (cond
-                       (is-commented
-                        (message "[ox-hugo] `%s' was not exported as that subtree is commented"
-                                 title))
-                       (is-excluded
-                        (message "[ox-hugo] `%s' was not exported as it is tagged with an exclude tag `%s'"
-                                 title matched-exclude-tag))
-                       (t
-                        (if (numberp org-hugo--subtree-count)
-                            (progn
-                              (setq org-hugo--subtree-count (1+ org-hugo--subtree-count))
-                              (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))
-                          (message "[ox-hugo] Exporting `%s' .." title))
-                        ;; Get the current subtree coordinates for
-                        ;; auto-calculation of menu item weight, page
-                        ;; or taxonomy weights.
-                        (when (or
-                               ;; Check if the menu front-matter is specified.
-                               (or
-                                (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
-                                (save-excursion
-                                  (goto-char (point-min))
-                                  (let ((case-fold-search t))
-                                    (re-search-forward "^#\\+hugo_menu:.*:menu" nil :noerror))))
-                               ;; Check if auto-calculation is needed
-                               ;; for page or taxonomy weights.
-                               (or
-                                (let ((page-or-taxonomy-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
-                                  (and (stringp page-or-taxonomy-weight)
-                                       (string-match-p "auto" page-or-taxonomy-weight)))
-                                (save-excursion
-                                  (goto-char (point-min))
-                                  (let ((case-fold-search t))
-                                    (re-search-forward "^#\\+hugo_weight:.*auto" nil :noerror)))))
-                          (setq org-hugo--subtree-coord
-                                (org-hugo--get-post-subtree-coordinates subtree)))
-                        (setq do-export t)))))
-                ;; If not in a valid subtree, check if the Org file is
-                ;; supposed to be exported as a whole, in which case
-                ;; #+title has to be defined *and* there shouldn't be
-                ;; any valid Hugo post subtree present.
-                (setq org-hugo--subtree-count nil) ;Also reset the subtree count
-                (let ((valid-subtree-found
-                       (catch 'break
-                         (org-map-entries
-                          (lambda ()
-                            (throw 'break t))
-                          ;; Only map through subtrees where
-                          ;; EXPORT_FILE_NAME property is not
-                          ;; empty.
-                          "EXPORT_FILE_NAME<>\"\"")))
-                      err msg)
-                  (if valid-subtree-found
-                      (setq msg "Point is not in a valid Hugo post subtree; move to one and try again")
-                    (let ((title (save-excursion
-                                   (goto-char (point-min))
-                                   (let ((case-fold-search t))
-                                     (re-search-forward "^#\\+title:" nil :noerror)))))
-                      (if title
-                          (setq do-export t)
-                        (setq err t)
-                        (setq msg (concat "The file neither contains a valid Hugo post subtree, "
-                                          "nor has the #+title keyword")))))
-                  (unless do-export
-                    (let ((error-fn (if (or (not err)
-                                            noerror)
-                                        #'message
-                                      #'user-error)))
-                      (apply error-fn
-                             (list
-                              (format "%s: %s" f-or-b-name msg)))))))
-              (when do-export
-                (org-hugo-export-to-md async subtree visible-only)))))))))
+              (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only noerror)
+            (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror)))))))
 
 ;;;###autoload
 (defun org-hugo-debug-info ()

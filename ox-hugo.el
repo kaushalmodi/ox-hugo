@@ -3856,26 +3856,18 @@ Return output file's name."
 
 ;;;###autoload
 (defun org-hugo-export-all-subtrees-to-md (f-or-b-name &optional async visible-only noerror)
-  (let (ret)
-    (setq org-hugo--subtree-count 0)
-    (setq ret (org-map-entries
-               (lambda ()
-                 (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))
-               ;; Export only the subtrees where
-               ;; EXPORT_FILE_NAME property is not empty.
-               "EXPORT_FILE_NAME<>\"\""))
-    (if ret
-        (message "[ox-hugo] Exported %d subtree%s from %s"
-                 org-hugo--subtree-count
-                 (if (= 1 org-hugo--subtree-count) "" "s")
-                 f-or-b-name)
-      ;; If `ret' is nil, no valid Hugo subtree was found.
-      ;; So call `org-hugo-export-file-to-md'.  In
-      ;; that function, it will be checked if the whole
-      ;; Org file can be exported.
-      (setq ret (org-hugo-export-file-to-md f-or-b-name async visible-only noerror)))
-    (setq org-hugo--subtree-count nil) ;Reset the variable
-    ret))
+  (setq org-hugo--subtree-count 0)
+  (org-map-entries
+   (lambda ()
+     (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))
+   ;; Export only the subtrees where
+   ;; EXPORT_FILE_NAME property is not empty.
+   "EXPORT_FILE_NAME<>\"\"")
+  (message "[ox-hugo] Exported %d subtree%s from %s"
+           org-hugo--subtree-count
+           (if (= 1 org-hugo--subtree-count) "" "s")
+           f-or-b-name)
+  (setq org-hugo--subtree-count nil))
 
 ;;;###autoload
 (defun org-hugo-export-wim-to-md (&optional all-subtrees async visible-only noerror)
@@ -3925,9 +3917,16 @@ approach)."
       (save-restriction
         (widen)
         (save-excursion
-          (if all-subtrees
-              (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only noerror)
-            (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror)))))))
+          (cond
+           ((not all-subtrees)
+            ;; Export the current subtree to a Hugo post (one-post-per-subtree)
+            (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))
+           ((and all-subtrees (org-map-entries (lambda () (org-entry-properties nil "EXPORT_FILE_NAME")) "EXPORT_FILE_NAME<>\"\""))
+            ;; Export all valid subtrees to Hugo posts (one-post-per-subtree)
+            (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only noerror))
+           (t
+            ;; Export the org file as a whole (one-post-per-file)
+            (org-hugo-export-file-to-md f-or-b-name async visible-only noerror))))))))
 
 ;;;###autoload
 (defun org-hugo-debug-info ()

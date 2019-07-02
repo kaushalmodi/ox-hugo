@@ -3784,39 +3784,29 @@ instead of signaling a user error."
   ;; supposed to be exported as a whole, in which case
   ;; #+title has to be defined *and* there shouldn't be
   ;; any valid Hugo post subtree present.
-  (setq org-hugo--subtree-count nil) ;Also reset the subtree count
-  (let ((valid-subtree-found
-         (catch 'break
-           (org-map-entries
-            (lambda ()
-              (throw 'break t))
-            ;; Only map through subtrees where
-            ;; EXPORT_FILE_NAME property is not
-            ;; empty.
-            "EXPORT_FILE_NAME<>\"\"")))
-        err msg)
-    (if valid-subtree-found
-        (setq msg "Point is not in a valid Hugo post subtree;
-        move to one and try again")
-      (let ((title (save-excursion
-                     (goto-char (point-min))
-                     (let ((case-fold-search t))
-                       (re-search-forward "^#\\+title:" nil :noerror)))))
-        (if title
-            (setq do-export t)
-          (setq err t)
-          (setq msg (concat "The file neither contains a valid
-          Hugo post subtree, nor has the #+title keyword")))))
-    (unless do-export
+  (let* ((info (org-combine-plists
+                (org-export--get-buffer-attributes)))
+         (exclude-tags (plist-get info :exclude-tags))
+         (title (save-excursion
+                  (goto-char (point-min))
+                  (let ((case-fold-search t))
+                    (re-search-forward "^#\\+title:" nil :noerror))))
+         is-commented is-excluded matched-exclude-tag do-export err msg)
+    (setq org-hugo--subtree-count nil)
+    (if title
+        (setq do-export t)
+      (setq err t)
+      (setq msg (concat "The file neither contains a valid
+          Hugo post subtree, nor has the #+title keyword")))
+    (if do-export
+        (org-hugo-export-to-md f-or-b-name async nil visible-only)
       (let ((error-fn (if (or (not err)
                               noerror)
                           #'message
                         #'user-error)))
         (apply error-fn
                (list
-                (format "%s: %s" f-or-b-name msg))))))
-  (when do-export
-    (org-hugo-export-to-md f-or-b-name async nil visible-only)))
+                (format "%s: %s" f-or-b-name msg)))))))
 
 ;;;###autoload
 (defun org-hugo-export-subtree-to-md (f-or-b-name &optional async visible-only noerror)

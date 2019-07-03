@@ -3642,6 +3642,11 @@ Return the org buffer with changed links as a string."
                 (org-element-put-property link-copy :type "file")
                 (org-element-put-property link-copy :path (concat destination-filename ".org"))
                 (org-element-set-element link link-copy)))))))
+    ;; Workaround to prevent exporting of empty special blocks
+    (org-element-map ast 'special-block
+      (lambda (block)
+        (when (null (org-element-contents block))
+          (org-element-adopt-elements block ""))))
     ;; turn the AST with updated links into an org document
     (org-element-interpret-data ast)))
 

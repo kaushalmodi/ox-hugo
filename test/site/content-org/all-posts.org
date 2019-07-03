@@ -3605,22 +3605,22 @@ non-blank line in a Verse block. Only that first =>= character is
 removed when translating to Markdown.
 *** More examples
 - More indentation than in the above example:
-  #+begin_verse
+#+begin_verse
 >        Text indented by 8 spaces
 #+end_verse
 - Leading blank line followed by indented text:
-  #+begin_verse
+#+begin_verse
 
 >    Text indented by 4 spaces
 #+end_verse
 - Indented text followed by a trailing blank line:
-  #+begin_verse
+#+begin_verse
 >    Text indented by 4 spaces
 
 #+end_verse
 - Using tab characters for indentation; each tab character still
   constitutes for one =&nbsp;= in HTML.
-  #+begin_verse
+#+begin_verse
 >				Text indented by 4 tab characters
 #+end_verse
 *** Corner cases

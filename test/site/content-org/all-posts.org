@@ -4849,10 +4849,10 @@ Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
 
-See [[#citation-example-section-2]].
+See [[#citation-example-toml-section-2]].
 *** Section 2
 :PROPERTIES:
-:CUSTOM_ID: citation-example-section-2
+:CUSTOM_ID: citation-example-toml-section-2
 :END:
 Content in section 2.
 *** Testing random Hugo shortcode
@@ -4916,10 +4916,10 @@ Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
 
-See [[#citation-example-section-2]].
+See [[#citation-example-yaml-section-2]].
 *** Section 2
 :PROPERTIES:
-:CUSTOM_ID: citation-example-section-2
+:CUSTOM_ID: citation-example-yaml-section-2
 :END:
 Content in section 2.
 ** Citation Linking                                          :link_citations:

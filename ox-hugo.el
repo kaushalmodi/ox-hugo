@@ -3789,8 +3789,12 @@ instead of signaling a user error."
   ;; supposed to be exported as a whole, in which case
   ;; #+title has to be defined *and* there shouldn't be
   ;; any valid Hugo post subtree present.
-  (let* ((info (org-combine-plists
-                (org-export--get-buffer-attributes)))
+  (let* ((subtree (org-hugo--get-valid-subtree))
+         (info (org-combine-plists
+                (org-export--get-export-attributes
+                 'hugo subtree visible-only)
+                (org-export--get-buffer-attributes)
+                (org-export-get-environment 'hugo subtree)))
          (exclude-tags (plist-get info :exclude-tags))
          (title (save-excursion
                   (goto-char (point-min))

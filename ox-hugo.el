@@ -3621,7 +3621,7 @@ So the value returned for Level C will be (2 . 3)."
                          scope)
         (cons level index)))))
 
-(defun org-hugo--convert-links ()
+(defun org-hugo--create-ast ()
   "Convert internal links to other subtrees to links to external links in the current buffer.
 Return the org buffer with changed links as a string."
   ;; Create an abstract syntax tree (AST) of the org document
@@ -3982,17 +3982,17 @@ approach)."
             ;; point doesn't matter, but the position in the outline
             ;; path suffices to locate the correct subtree.
             (let ((outline-path (org-get-outline-path t))
-                  (converted-buffer-string (org-hugo--convert-links)))
+                  (ast (org-hugo--create-ast)))
               (with-temp-buffer
-                (insert converted-buffer-string)
+                (insert ast)
                 (org-mode)
                 (goto-char (org-find-olp outline-path t))
                 (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))))
            ((and all-subtrees (org-map-entries (lambda () (org-entry-properties nil "EXPORT_FILE_NAME")) "EXPORT_FILE_NAME<>\"\""))
             ;; Export all valid subtrees to Hugo posts (one-post-per-subtree)
-            (let ((converted-buffer-string (org-hugo--convert-links)))
+            (let ((ast (org-hugo--create-ast)))
               (with-temp-buffer
-                (insert converted-buffer-string)
+                (insert ast)
                 (org-mode)
                 (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only noerror))))
            (t

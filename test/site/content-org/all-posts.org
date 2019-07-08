@@ -3020,24 +3020,6 @@ C = W\log_{2} (1+\mathrm{SNR})
 \end{equation}
 
 *Here we refer to equation \ref{eq:1}.*
-** Links outside the same post
-:PROPERTIES:
-:EXPORT_FILE_NAME: links-outside-the-same-post
-:END:
-[[#internal-link][Link within the same post]
-[[#external-link][Link outside the same post]
-
-*** Within the same post
-:PROPERTIES:
-:CUSTOM_ID: internal-link
-:END:
-
-*** Outside the same post
-:PROPERTIES:
-:EXPORT_FILE_NAME: outside-the-same-post
-:CUSTOM_ID: external-link
-:END:
-
 * Equations                                               :equations:mathjax:
 ** Inline equations
 :PROPERTIES:

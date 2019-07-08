@@ -3621,34 +3621,62 @@ So the value returned for Level C will be (2 . 3)."
                          scope)
         (cons level index)))))
 
-(defun org-hugo--create-ast ()
-  "Convert internal links to other subtrees to links to external links in the current buffer.
-Return the org buffer with changed links as a string."
-  ;; Create an abstract syntax tree (AST) of the org document
-  (let* ((ast (org-element-parse-buffer))
-         (info (list :parse-tree ast)))
-    ;; Map over all link elements in the AST
-    (org-element-map ast 'link
-      (lambda (link)
-        (when (string= (org-element-property :type link) "custom-id")
-          (let* ((path (org-element-property :path link))
-                 (destination (org-export-resolve-id-link link info))
-                 (source-filename (org-export-get-node-property :EXPORT_FILE_NAME link t))
-                 (destination-filename (org-export-get-node-property :EXPORT_FILE_NAME destination t)))
-            ;; Change the link if it points to a valid destination outside the subtree
-            (unless (and destination-filename (equal source-filename destination-filename))
-              (let ((link-copy (org-element-copy link)))
-                (apply #'org-element-adopt-elements link-copy (org-element-contents link))
-                (org-element-put-property link-copy :type "file")
-                (org-element-put-property link-copy :path (concat destination-filename ".org"))
-                (org-element-set-element link link-copy)))))))
-    ;; Workaround to prevent exporting of empty special blocks
-    (org-element-map ast 'special-block
-      (lambda (block)
-        (when (null (org-element-contents block))
-          (org-element-adopt-elements block ""))))
-    ;; turn the AST with updated links into an org document
-    (org-element-interpret-data ast)))
+(defun org-hugo--preprocess-buffer ()
+  "Return a preprocessed copy of the current buffer.
+Internal links to other subtrees are converted to external
+links."
+  (let* ((buffer (generate-new-buffer (buffer-name)))
+         ;; Create an abstract syntax tree (AST) of the org document in the current buffer
+         (ast (org-element-parse-buffer))
+         (info (list :parse-tree ast))
+         (local-variables (buffer-local-variables))
+         (bound-variables (org-export--list-bound-variables))
+	 vars)
+    (with-current-buffer buffer
+      (let ((org-mode-hook nil)
+            (org-inhibit-startup t))
+        (org-mode)
+        ;; Copy specific buffer local variables and variables set
+        ;; through BIND keywords.
+        (dolist (entry local-variables vars)
+          (when (consp entry)
+	    (let ((var (car entry))
+	          (val (cdr entry)))
+	      (and (not (memq var org-export-ignored-local-variables))
+	           (or (memq var
+			     '(default-directory
+			        buffer-file-name
+			        buffer-file-coding-system))
+		       (assq var bound-variables)
+		       (string-match "^\\(org-\\|orgtbl-\\)"
+				     (symbol-name var)))
+	           ;; Skip unreadable values, as they cannot be
+	           ;; sent to external process.
+	           (or (not val) (ignore-errors (read (format "%S" val))))
+	           (push (set (make-local-variable var) val) vars)))))
+        ;; Process all link elements in the AST
+        (org-element-map ast 'link
+          (lambda (link)
+            (when (string= (org-element-property :type link) "custom-id")
+              (let* ((path (org-element-property :path link))
+                     (destination (org-export-resolve-id-link link info))
+                     (source-filename (org-export-get-node-property :EXPORT_FILE_NAME link t))
+                     (destination-filename (org-export-get-node-property :EXPORT_FILE_NAME destination t)))
+                ;; Change the link if it points to a valid destination outside the subtree
+                (unless (and destination-filename (equal source-filename destination-filename))
+                  (let ((link-copy (org-element-copy link)))
+                    (apply #'org-element-adopt-elements link-copy (org-element-contents link))
+                    (org-element-put-property link-copy :type "file")
+                    (org-element-put-property link-copy :path (concat destination-filename ".org"))
+                    (org-element-set-element link link-copy)))))))
+        ;; Workaround to prevent exporting of empty special blocks
+        (org-element-map ast 'special-block
+          (lambda (block)
+            (when (null (org-element-contents block))
+              (org-element-adopt-elements block ""))))
+        ;; Turn the AST with updated links into an org document
+        (insert (org-element-interpret-data ast))))
+    buffer))
 
 ;;; Interactive functions
 
@@ -3985,20 +4013,14 @@ approach)."
             ;; links could be changed. However, the exact value of
             ;; point doesn't matter, but the position in the outline
             ;; path suffices to locate the correct subtree.
-            (let ((outline-path (org-get-outline-path t))
-                  (ast (org-hugo--create-ast)))
-              (with-temp-buffer
-                (insert ast)
-                (org-mode)
+            (let ((outline-path (org-get-outline-path t)))
+              (with-current-buffer (org-hugo--preprocess-buffer)
                 (goto-char (org-find-olp outline-path t))
                 (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))))
            ((and all-subtrees (org-map-entries (lambda () (org-entry-properties nil "EXPORT_FILE_NAME")) "EXPORT_FILE_NAME<>\"\""))
             ;; Export all valid subtrees to Hugo posts (one-post-per-subtree)
-            (let ((ast (org-hugo--create-ast)))
-              (with-temp-buffer
-                (insert ast)
-                (org-mode)
-                (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only noerror))))
+            (with-current-buffer (org-hugo--preprocess-buffer)
+              (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only noerror)))
            (t
             ;; Export the org file as a whole (one-post-per-file)
             (org-hugo-export-file-to-md f-or-b-name async visible-only noerror))))))))

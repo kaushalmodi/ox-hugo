@@ -19,19 +19,22 @@ removed when translating to Markdown.
 
 -   More indentation than in the above example:
 
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text indented by 8 spaces<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text indented by 8 spaces<br />
+
 -   Leading blank line followed by indented text:
 
-    <br />
-    &nbsp;&nbsp;&nbsp;&nbsp;Text indented by 4 spaces<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Text indented by 4 spaces<br />
+
 -   Indented text followed by a trailing blank line:
 
-    &nbsp;&nbsp;&nbsp;&nbsp;Text indented by 4 spaces<br />
-    <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Text indented by 4 spaces<br />
+<br />
+
 -   Using tab characters for indentation; each tab character still
     constitutes for one `&nbsp;` in HTML.
 
-    &nbsp;&nbsp;&nbsp;&nbsp;Text indented by 4 tab characters<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Text indented by 4 tab characters<br />
 
 
 ## Corner cases {#corner-cases}

@@ -3658,18 +3658,25 @@ links."
         ;; Process all link elements in the AST
         (org-element-map ast 'link
           (lambda (link)
-            (when (string= (org-element-property :type link) "custom-id")
-              (let* ((path (org-element-property :path link))
-                     (destination (org-export-resolve-id-link link info))
-                     (source-filename (org-export-get-node-property :EXPORT_FILE_NAME link t))
-                     (destination-filename (org-export-get-node-property :EXPORT_FILE_NAME destination t)))
-                ;; Change the link if it points to a valid destination outside the subtree
-                (unless (and destination-filename (equal source-filename destination-filename))
-                  (let ((link-copy (org-element-copy link)))
-                    (apply #'org-element-adopt-elements link-copy (org-element-contents link))
-                    (org-element-put-property link-copy :type "file")
-                    (org-element-put-property link-copy :path (concat destination-filename ".org"))
-                    (org-element-set-element link link-copy)))))))
+            (let ((type (org-element-property :type link)))
+              (when (member type '("custom-id" "id" "fuzzy"))
+                (let* ((path (org-element-property :path link))
+                       (raw-link (org-element-property :raw-link link))
+                       (destination (if (string= type "fuzzy")
+                                        (org-export-resolve-fuzzy-link link info)
+                                      (org-export-resolve-id-link link info)))
+                       (source-filename (org-export-get-node-property :EXPORT_FILE_NAME link t))
+                       (destination-filename (org-export-get-node-property :EXPORT_FILE_NAME destination t)))
+                  ;; Change the link if it points to a valid destination outside the subtree
+                  (unless (and destination-filename (equal source-filename destination-filename))
+                    (let ((link-copy (org-element-copy link)))
+                      (apply #'org-element-adopt-elements link-copy (org-element-contents link))
+                      (org-element-put-property link-copy :type "file")
+                      (org-element-put-property link-copy :path
+                                                (if (string= type "id")
+                                                    (concat destination-filename ".org")
+                                                  (concat destination-filename ".org::" raw-link)))
+                      (org-element-set-element link link-copy))))))))
         ;; Workaround to prevent exporting of empty special blocks
         (org-element-map ast 'special-block
           (lambda (block)

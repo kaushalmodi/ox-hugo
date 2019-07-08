@@ -3633,7 +3633,8 @@ links."
          (bound-variables (org-export--list-bound-variables))
 	 vars)
     (with-current-buffer buffer
-      (let ((org-mode-hook nil)
+      (let ((inhibit-modification-hooks t)
+            (org-mode-hook nil)
             (org-inhibit-startup t))
         (org-mode)
         ;; Copy specific buffer local variables and variables set
@@ -3675,7 +3676,8 @@ links."
             (when (null (org-element-contents block))
               (org-element-adopt-elements block ""))))
         ;; Turn the AST with updated links into an org document
-        (insert (org-element-interpret-data ast))))
+        (insert (org-element-interpret-data ast))
+        (set-buffer-modified-p nil)))
     buffer))
 
 ;;; Interactive functions

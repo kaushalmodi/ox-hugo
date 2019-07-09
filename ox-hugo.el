@@ -4022,14 +4022,18 @@ approach)."
             ;; links could be changed. However, the exact value of
             ;; point doesn't matter, but the position in the outline
             ;; path suffices to locate the correct subtree.
-            (let ((outline-path (org-get-outline-path t)))
-              (with-current-buffer (org-hugo--preprocess-buffer)
+            (let ((buffer (org-hugo--preprocess-buffer))
+                  (outline-path (org-get-outline-path t)))
+              (with-current-buffer buffer
                 (goto-char (org-find-olp outline-path t))
-                (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))))
+                (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))
+              (kill-buffer buffer)))
            ((and all-subtrees (org-map-entries (lambda () (org-entry-properties nil "EXPORT_FILE_NAME")) "EXPORT_FILE_NAME<>\"\""))
             ;; Export all valid subtrees to Hugo posts (one-post-per-subtree)
-            (with-current-buffer (org-hugo--preprocess-buffer)
-              (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only noerror)))
+            (let ((buffer (org-hugo--preprocess-buffer)))
+              (with-current-buffer buffer
+                (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only noerror))
+              (kill-buffer buffer)))
            (t
             ;; Export the org file as a whole (one-post-per-file)
             (org-hugo-export-file-to-md f-or-b-name async visible-only noerror))))))))

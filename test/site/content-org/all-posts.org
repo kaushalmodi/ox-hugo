@@ -3036,7 +3036,10 @@ links to targets will be resolved to the containing file.
 [[file:link-destination.org::external-target][Link to a target]]
 *** Internal links                                         :internal_links:
 Internal links point to targets in the current subtree that will be
-exported to the same Hugo post as the link source.
+exported to the same Hugo post as the link source. To handle links to
+an 'ID' property, the =org-id= feature must first be loaded, either
+through =org-customize= or by adding =(require 'org-id)= in your Emacs
+init file.
 
 [[#internal-target][Link to CUSTOM_ID within the same post]]
 [[*Internal target][Link to header within the same post]]

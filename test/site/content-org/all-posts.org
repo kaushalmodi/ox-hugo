@@ -3574,6 +3574,35 @@ This is a red quote.
 #+end_quote
 
 Some more text.
+** Quote blocks in numbered lists                                     :lists:
+:PROPERTIES:
+:EXPORT_FILE_NAME: quote-blocks-in-numbered-lists
+:END:
+#+begin_description
+Testing quote blocks in numbered lists, just because this came up on
+[[https://discourse.gohugo.io/t/put-a-blockquote-into-a-numbered-list/19339/1][Hugo Discourse]].
+#+end_description
+1. List item 1
+
+   Text before quote block.
+   #+begin_quote
+   Quote block in list item 1
+   #+end_quote
+   Text after quote block.
+2. List item 2
+
+   Text before quote block.
+   #+begin_quote
+   Quote block in list item 2
+   #+end_quote
+   Text after quote block.
+3. List item 3
+
+   Text before quote block.
+   #+begin_quote
+   Quote block in list item 3
+   #+end_quote
+   Text after quote block.
 * Verse                                                               :verse:
 ** One verse
 :PROPERTIES:

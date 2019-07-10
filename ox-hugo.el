@@ -3673,9 +3673,28 @@ links."
                       (apply #'org-element-adopt-elements link-copy (org-element-contents link))
                       (org-element-put-property link-copy :type "file")
                       (org-element-put-property link-copy :path
-                                                (if (string= type "id")
-                                                    (concat destination-filename ".org")
-                                                  (concat destination-filename ".org::" raw-link)))
+                                                (cond
+                                                 ;; If the destination is a heading with the :EXPORT_FILE_NAME
+                                                 ;; property defined, the link should point to the file (without
+                                                 ;; anchor)
+                                                 ((org-element-property :EXPORT_FILE_NAME destination)
+                                                  (concat destination-filename ".org"))
+                                                 ;; Hugo only supports anchors to headlines, so if a "fuzzy" type
+                                                 ;; link points to anything else than a headline, it should point
+                                                 ;; to the file.
+                                                 ((and (string= type "fuzzy") (not (string-prefix-p "*" raw-link)))
+                                                  (concat destination-filename ".org"))
+                                                 ;; In "custom-id" type links, the raw-link matches the anchor of
+                                                 ;; the destination.
+                                                 ((string= type "custom-id")
+                                                  (concat destination-filename ".org::" raw-link))
+                                                 ;; In "id" and "fuzzy" type links, the anchor of the destination
+                                                 ;; is derived from the :CUSTOM_ID property or the title
+                                                 (t
+                                                  (let* ((custom-id (org-element-property :CUSTOM_ID destination))
+                                                         (title (org-element-property :raw-value destination))
+                                                         (anchor (or custom-id (org-hugo-slug title))))
+                                                    (concat destination-filename ".org::#" anchor)))))
                       (org-element-set-element link link-copy))))))))
         ;; Workaround to prevent exporting of empty special blocks
         (org-element-map ast 'special-block

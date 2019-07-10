@@ -3668,7 +3668,7 @@ links."
                        (source-filename (org-export-get-node-property :EXPORT_FILE_NAME link t))
                        (destination-filename (org-export-get-node-property :EXPORT_FILE_NAME destination t)))
                   ;; Change the link if it points to a valid destination outside the subtree
-                  (unless (and destination-filename (equal source-filename destination-filename))
+                  (unless (equal source-filename destination-filename)
                     (let ((link-copy (org-element-copy link)))
                       (apply #'org-element-adopt-elements link-copy (org-element-contents link))
                       (org-element-put-property link-copy :type "file")

@@ -3621,43 +3621,25 @@ So the value returned for Level C will be (2 . 3)."
                          scope)
         (cons level index)))))
 
-(defun org-hugo--get-element-path (element)
+(defun org-hugo--get-element-path (element info)
   "Return the section path of ELEMENT.
 INFO is a plist holding export options."
-  (let ((filename (org-export-get-node-property :EXPORT_FILE_NAME element t))
+  (let ((root (or (org-export-get-node-property :EXPORT_HUGO_SECTION element t)
+                  (plist-get info :hugo-section)))
+        (filename (org-export-get-node-property :EXPORT_FILE_NAME element t))
         current-element
         fragment
         fragments)
     (setq current-element element)
     ;; Iterate over all parents of current-element, and collect section path fragments
-    (catch 'exit
-      (while current-element
-        (cond
-         ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list
-         ((setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* current-element nil))
-          (push fragment fragments))
-         ;; Add the :EXPORT_HUGO_SECTION value to the fragment list and exit, so no more fragments are collected
-         ((setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION current-element nil))
-          (push fragment fragments)
-          (throw 'exit t))
-         ;; Add the HUGO_SECTION value to the fragment list
-
-         ;; FIXME: HUGO_SECTION has to be retrieved from the parse
-         ;; tree, because the export options are not yet set. This
-         ;; function assumes the '#+hugo_section' keyword is placed
-         ;; above the first subtree. It is not detected when placed
-         ;; anywhere else in the file or included using '#+SETUPFILE:
-         ;; filename' syntax.
-         ((eq (org-element-type current-element) 'org-data)
-          (org-element-map current-element 'keyword
-            (lambda (keyword)
-              (let ((key (org-element-property :key keyword))
-                    (val (org-element-property :value keyword)))
-                (when (equal key "HUGO_SECTION")
-                  (push val fragments)))))))
-        (setq current-element (org-element-property :parent current-element))))
-    ;; Return the section fragments and filename concatenated
+    (while (and current-element (not (org-export-get-node-property :EXPORT_HUGO_SECTION current-element nil)))
+      ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list
+      (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* current-element nil))
+        (push fragment fragments))
+      (setq current-element (org-element-property :parent current-element)))
+    ;; Return the root section, section fragments and filename concatenated
     (concat
+     (file-name-as-directory root)
      (mapconcat #'file-name-as-directory fragments "")
      filename)))
 
@@ -3668,7 +3650,12 @@ links."
   (let* ((buffer (generate-new-buffer (buffer-name)))
          ;; Create an abstract syntax tree (AST) of the org document in the current buffer
          (ast (org-element-parse-buffer))
-         (info (list :parse-tree ast))
+         (org-use-property-inheritance (org-hugo--selective-property-inheritance))
+         (info (org-combine-plists
+                (list :parse-tree ast)
+                (org-export--get-export-attributes 'hugo)
+                (org-export--get-buffer-attributes)
+                (org-export-get-environment 'hugo)))
          (local-variables (buffer-local-variables))
          (bound-variables (org-export--list-bound-variables))
 	 vars)
@@ -3704,8 +3691,8 @@ links."
                        (destination (if (string= type "fuzzy")
                                         (org-export-resolve-fuzzy-link link info)
                                       (org-export-resolve-id-link link info)))
-                       (source-path (org-hugo--get-element-path link))
-                       (destination-path (org-hugo--get-element-path destination)))
+                       (source-path (org-hugo--get-element-path link info))
+                       (destination-path (org-hugo--get-element-path destination info)))
                   ;; Change the link if it points to a valid destination outside the subtree
                   (unless (equal source-path destination-path)
                     (let ((link-copy (org-element-copy link)))

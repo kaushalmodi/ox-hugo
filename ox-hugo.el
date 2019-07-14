@@ -3621,6 +3621,46 @@ So the value returned for Level C will be (2 . 3)."
                          scope)
         (cons level index)))))
 
+(defun org-hugo--get-element-path (element)
+  "Return the section path of ELEMENT.
+INFO is a plist holding export options."
+  (let ((filename (org-export-get-node-property :EXPORT_FILE_NAME element t))
+        current-element
+        fragment
+        fragments)
+    (setq current-element element)
+    ;; Iterate over all parents of current-element, and collect section path fragments
+    (catch 'exit
+      (while current-element
+        (cond
+         ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list
+         ((setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* current-element nil))
+          (push fragment fragments))
+         ;; Add the :EXPORT_HUGO_SECTION value to the fragment list and exit, so no more fragments are collected
+         ((setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION current-element nil))
+          (push fragment fragments)
+          (throw 'exit t))
+         ;; Add the HUGO_SECTION value to the fragment list
+
+         ;; FIXME: HUGO_SECTION has to be retrieved from the parse
+         ;; tree, because the export options are not yet set. This
+         ;; function assumes the '#+hugo_section' keyword is placed
+         ;; above the first subtree. It is not detected when placed
+         ;; anywhere else in the file or included using '#+SETUPFILE:
+         ;; filename' syntax.
+         ((eq (org-element-type current-element) 'org-data)
+          (org-element-map current-element 'keyword
+            (lambda (keyword)
+              (let ((key (org-element-property :key keyword))
+                    (val (org-element-property :value keyword)))
+                (when (equal key "HUGO_SECTION")
+                  (push val fragments)))))))
+        (setq current-element (org-element-property :parent current-element))))
+    ;; Return the section fragments and filename concatenated
+    (concat
+     (mapconcat #'file-name-as-directory fragments "")
+     filename)))
+
 (defun org-hugo--preprocess-buffer ()
   "Return a preprocessed copy of the current buffer.
 Internal links to other subtrees are converted to external
@@ -3664,10 +3704,10 @@ links."
                        (destination (if (string= type "fuzzy")
                                         (org-export-resolve-fuzzy-link link info)
                                       (org-export-resolve-id-link link info)))
-                       (source-filename (org-export-get-node-property :EXPORT_FILE_NAME link t))
-                       (destination-filename (org-export-get-node-property :EXPORT_FILE_NAME destination t)))
+                       (source-path (org-hugo--get-element-path link))
+                       (destination-path (org-hugo--get-element-path destination)))
                   ;; Change the link if it points to a valid destination outside the subtree
-                  (unless (equal source-filename destination-filename)
+                  (unless (equal source-path destination-path)
                     (let ((link-copy (org-element-copy link)))
                       (apply #'org-element-adopt-elements link-copy (org-element-contents link))
                       (org-element-put-property link-copy :type "file")
@@ -3677,23 +3717,23 @@ links."
                                                  ;; property defined, the link should point to the file (without
                                                  ;; anchor)
                                                  ((org-element-property :EXPORT_FILE_NAME destination)
-                                                  (concat destination-filename ".org"))
+                                                  (concat destination-path ".org"))
                                                  ;; Hugo only supports anchors to headlines, so if a "fuzzy" type
                                                  ;; link points to anything else than a headline, it should point
                                                  ;; to the file.
                                                  ((and (string= type "fuzzy") (not (string-prefix-p "*" raw-link)))
-                                                  (concat destination-filename ".org"))
+                                                  (concat destination-path ".org"))
                                                  ;; In "custom-id" type links, the raw-link matches the anchor of
                                                  ;; the destination.
                                                  ((string= type "custom-id")
-                                                  (concat destination-filename ".org::" raw-link))
+                                                  (concat destination-path ".org::" raw-link))
                                                  ;; In "id" and "fuzzy" type links, the anchor of the destination
                                                  ;; is derived from the :CUSTOM_ID property or the title
                                                  (t
                                                   (let* ((custom-id (org-element-property :CUSTOM_ID destination))
                                                          (title (org-element-property :raw-value destination))
                                                          (anchor (or custom-id (org-hugo-slug title))))
-                                                    (concat destination-filename ".org::#" anchor)))))
+                                                    (concat destination-path ".org::#" anchor)))))
                       (org-element-set-element link link-copy))))))))
         ;; Workaround to prevent exporting of empty special blocks
         (org-element-map ast 'special-block

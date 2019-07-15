@@ -1106,7 +1106,7 @@ contextual information."
          ;; Org removes all the leading whitespace only from the first
          ;; line.  So the trick is to use the ">" character before any
          ;; intended indentation on the first non-blank line.
-         (ret (replace-regexp-in-string "\\`\\([[:blank:]\n\r]*\\)>" "\\1" ret))
+         (ret (replace-regexp-in-string "\\`\\([[:blank:]\n\r]*?\\)[[:blank:]]*>" "\\1" ret))
          (br (org-html-close-tag "br" nil info))
          (re (format "\\(?:%s\\)?[ \t]*\n" (regexp-quote br)))
          ;; Replace each newline character with line break.  Also

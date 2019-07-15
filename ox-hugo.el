@@ -3761,11 +3761,14 @@ instead of signaling a user error."
   ;; supposed to be exported as a whole, in which case
   ;; #+title has to be defined *and* there shouldn't be
   ;; any valid Hugo post subtree present.
-  (let ((title (save-excursion
-                 (goto-char (point-min))
-                 (let ((case-fold-search t))
-                   (re-search-forward "^#\\+title:" nil :noerror))))
-        do-export err msg)
+  (let* ((info (org-combine-plists
+                (org-export--get-buffer-attributes)))
+         (exclude-tags (plist-get info :exclude-tags))
+         (title (save-excursion
+                  (goto-char (point-min))
+                  (let ((case-fold-search t))
+                    (re-search-forward "^#\\+title:" nil :noerror))))
+         is-commented is-excluded matched-exclude-tag do-export err msg)
     (setq org-hugo--subtree-count nil)
     (if title
         (setq do-export t)
@@ -3783,7 +3786,7 @@ instead of signaling a user error."
                 (format "%s: %s" f-or-b-name msg)))))))
 
 ;;;###autoload
-(defun org-hugo-export-subtree-to-md (f-or-b-name &optional async visible-only)
+(defun org-hugo-export-subtree-to-md (f-or-b-name &optional async visible-only noerror)
   "Export the current subtrees to a Hugo post.
 Argument F-OR-B-NAME is the buffer-file-name or buffer-name to be
 exported.
@@ -3793,7 +3796,10 @@ asynchronously. The resulting file should be accessible through the
 `org-export-stack' interface.
 
 When optional argument VISIBLE-ONLY is non-nil, don't export
-contents of hidden elements."
+contents of hidden elements.
+
+If NOERROR is non-nil, use `message' to display the error message
+instead of signaling a user error."
   ;; Publish only the current subtree
   (ignore-errors
     (org-back-to-heading :invisible-ok))
@@ -3865,7 +3871,7 @@ contents of hidden elements."
       (org-hugo-export-to-md f-or-b-name async subtree visible-only))))
 
 ;;;###autoload
-(defun org-hugo-export-all-subtrees-to-md (f-or-b-name &optional async visible-only)
+(defun org-hugo-export-all-subtrees-to-md (f-or-b-name &optional async visible-only noerror)
   "Export all valid subtrees to Hugo posts.
 Argument F-OR-B-NAME is the buffer-file-name or buffer-name to be exported.
 
@@ -3874,11 +3880,14 @@ asynchronously.  The resulting file should be accessible through
 the `org-export-stack' interface.
 
 When optional argument VISIBLE-ONLY is non-nil, don't export
-contents of hidden elements."
+contents of hidden elements.
+
+If NOERROR is non-nil, use `message' to display the error message
+instead of signaling a user error."
   (setq org-hugo--subtree-count 0)
   (org-map-entries
    (lambda ()
-     (org-hugo-export-subtree-to-md f-or-b-name async visible-only))
+     (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))
    ;; Export only the subtrees where
    ;; EXPORT_FILE_NAME property is not empty.
    "EXPORT_FILE_NAME<>\"\"")
@@ -3939,10 +3948,10 @@ approach)."
           (cond
            ((not all-subtrees)
             ;; Export the current subtree to a Hugo post (one-post-per-subtree)
-            (org-hugo-export-subtree-to-md f-or-b-name async visible-only))
+            (org-hugo-export-subtree-to-md f-or-b-name async visible-only noerror))
            ((and all-subtrees (org-map-entries (lambda () (org-entry-properties nil "EXPORT_FILE_NAME")) "EXPORT_FILE_NAME<>\"\""))
             ;; Export all valid subtrees to Hugo posts (one-post-per-subtree)
-            (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only))
+            (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only noerror))
            (t
             ;; Export the org file as a whole (one-post-per-file)
             (org-hugo-export-file-to-md f-or-b-name async visible-only noerror))))))))

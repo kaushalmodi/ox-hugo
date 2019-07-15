@@ -3672,6 +3672,9 @@ narrowed part.
 
 If a region is active, export that region.
 
+F-OR-B-NAME is the name of the file or buffer (if not a file
+buffer) to be exported.
+
 A non-nil optional argument ASYNC means the process should happen
 asynchronously.  The resulting file should be accessible through
 the `org-export-stack' interface.
@@ -3745,11 +3748,12 @@ Return output file's name."
 ;;;###autoload
 (defun org-hugo-export-file-to-md (f-or-b-name &optional async visible-only noerror)
   "Export the org file as a whole.
-Argument F-OR-B-NAME is the buffer-file-name or buffer-name to be
-exported.
+
+F-OR-B-NAME is the name of the file or buffer (if not a file
+buffer) to be exported.
 
 A non-nil optional argument ASYNC means the process should happen
-asynchronously. The resulting file should be accessible through the
+asynchronously.  The resulting file should be accessible through the
 `org-export-stack' interface.
 
 When optional argument VISIBLE-ONLY is non-nil, don't export
@@ -3785,11 +3789,12 @@ instead of signaling a user error."
 ;;;###autoload
 (defun org-hugo-export-subtree-to-md (f-or-b-name &optional async visible-only)
   "Export the current subtrees to a Hugo post.
-Argument F-OR-B-NAME is the buffer-file-name or buffer-name to be
-exported.
+
+F-OR-B-NAME is the name of the file or buffer (if not a file
+buffer) to be exported.
 
 A non-nil optional argument ASYNC means the process should happen
-asynchronously. The resulting file should be accessible through the
+asynchronously.  The resulting file should be accessible through the
 `org-export-stack' interface.
 
 When optional argument VISIBLE-ONLY is non-nil, don't export
@@ -3867,7 +3872,9 @@ contents of hidden elements."
 ;;;###autoload
 (defun org-hugo-export-all-subtrees-to-md (f-or-b-name &optional async visible-only)
   "Export all valid subtrees to Hugo posts.
-Argument F-OR-B-NAME is the buffer-file-name or buffer-name to be exported.
+
+F-OR-B-NAME is the name of the file or buffer (if not a file
+buffer) to be exported.
 
 A non-nil optional argument ASYNC means the process should happen
 asynchronously.  The resulting file should be accessible through
@@ -3938,13 +3945,18 @@ approach)."
         (save-excursion
           (cond
            ((not all-subtrees)
-            ;; Export the current subtree to a Hugo post (one-post-per-subtree)
+            ;; Export the current subtree to a Hugo post
+            ;; (one-post-per-subtree).
             (org-hugo-export-subtree-to-md f-or-b-name async visible-only))
-           ((and all-subtrees (org-map-entries (lambda () (org-entry-properties nil "EXPORT_FILE_NAME")) "EXPORT_FILE_NAME<>\"\""))
-            ;; Export all valid subtrees to Hugo posts (one-post-per-subtree)
+           ((and all-subtrees (org-map-entries
+                               (lambda ()
+                                 (org-entry-properties nil "EXPORT_FILE_NAME"))
+                               "EXPORT_FILE_NAME<>\"\""))
+            ;; Export all valid subtrees to Hugo posts
+            ;; (one-post-per-subtree).
             (org-hugo-export-all-subtrees-to-md f-or-b-name async visible-only))
            (t
-            ;; Export the org file as a whole (one-post-per-file)
+            ;; Export the org file as a whole (one-post-per-file).
             (org-hugo-export-file-to-md f-or-b-name async visible-only noerror))))))))
 
 ;;;###autoload

@@ -3705,8 +3705,7 @@ Return output file's name."
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (unless subtreep
       ;; Below stuff applies only to *per-file* export flow.
-      (let* ((fname (or f-or-b-name (file-name-nondirectory (buffer-file-name))))
-             (title (format "%s" (or (car (plist-get info :title)) "<EMPTY TITLE>")))
+      (let* ((title (format "%s" (or (car (plist-get info :title)) "<EMPTY TITLE>")))
              (all-tags-1 (plist-get info :hugo-tags))
              (all-tags (when all-tags-1
                          (split-string
@@ -3720,9 +3719,9 @@ Return output file's name."
               (setq matched-exclude-tag exclude-tag)
               (setq do-export nil))))
         (if do-export
-            (message "[ox-hugo] Exporting `%s' (%s)" title fname)
+            (message "[ox-hugo] Exporting `%s' (%s)" title f-or-b-name)
           (message "[ox-hugo] %s was not exported as it is tagged with an exclude tag `%s'"
-                   fname matched-exclude-tag))))
+                   f-or-b-name matched-exclude-tag))))
     (when do-export
       (prog1
           (org-export-to-file 'hugo outfile async subtreep visible-only)

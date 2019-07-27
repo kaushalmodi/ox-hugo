@@ -1775,10 +1775,12 @@ a communication channel."
           (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
-        (let ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
-                              (org-hugo--get-anchor headline info))))
-          (concat (org-hugo--headline-title style level loffset title todo-fmtd anchor numbers)
-                  contents)))))))
+        (let* ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
+                               (org-hugo--get-anchor headline info)))
+               (headline-title (org-hugo--headline-title style level loffset title
+                                                         todo-fmtd anchor numbers))
+               (content-str (or (org-string-nw-p contents) "")))
+          (format "%s%s" headline-title content-str)))))))
 
 ;;;;; Headline Helpers
 ;;;###autoload

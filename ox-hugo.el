@@ -3621,88 +3621,6 @@ So the value returned for Level C will be (2 . 3)."
                          scope)
         (cons level index)))))
 
-
-;;; Interactive functions
-
-;;;###autoload
-(defun org-hugo-export-as-md (&optional async subtreep visible-only)
-  "Export current buffer to a Hugo-compatible Markdown buffer.
-
-If narrowing is active in the current buffer, only export its
-narrowed part.
-
-If a region is active, export that region.
-
-A non-nil optional argument ASYNC means the process should happen
-asynchronously.  The resulting buffer should be accessible
-through the `org-export-stack' interface.
-
-When optional argument SUBTREEP is non-nil, export the sub-tree
-at point, extracting information from the headline properties
-first.
-
-When optional argument VISIBLE-ONLY is non-nil, don't export
-contents of hidden elements.
-
-Export is done in a buffer named \"*Org Hugo Export*\", which
-will be displayed when `org-export-show-temporary-export-buffer'
-is non-nil.
-
-Return the buffer the export happened to."
-  (interactive)
-  (org-hugo--before-export-function subtreep)
-  ;; Allow certain `ox-hugo' properties to be inherited.
-  (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance))
-        (info (org-combine-plists
-               (org-export--get-export-attributes
-                'hugo subtreep visible-only)
-               (org-export--get-buffer-attributes)
-               (org-export-get-environment 'hugo subtreep))))
-    (prog1
-        (org-export-to-buffer 'hugo "*Org Hugo Export*"
-          async subtreep visible-only nil nil (lambda () (text-mode)))
-      (org-hugo--after-export-function info nil))))
-
-;;;###autoload
-(defun org-hugo-export-to-md (&optional async subtreep visible-only)
-  "Export current buffer to a Hugo-compatible Markdown file.
-
-If narrowing is active in the current buffer, only export its
-narrowed part.
-
-If a region is active, export that region.
-
-A non-nil optional argument ASYNC means the process should happen
-asynchronously.  The resulting file should be accessible through
-the `org-export-stack' interface.
-
-When optional argument SUBTREEP is non-nil, export the sub-tree
-at point, extracting information from the headline properties
-first.
-
-When optional argument VISIBLE-ONLY is non-nil, don't export
-contents of hidden elements.
-
-Return output file's name."
-  (interactive)
-  (org-hugo--before-export-function subtreep)
-  ;; Allow certain `ox-hugo' properties to be inherited.  It is
-  ;; important to set the `org-use-property-inheritance' before
-  ;; setting the `info' var so that properties like
-  ;; EXPORT_HUGO_SECTION get inherited.
-  (let* ((org-use-property-inheritance (org-hugo--selective-property-inheritance))
-         (info (org-combine-plists
-                (org-export--get-export-attributes
-                 'hugo subtreep visible-only)
-                (org-export--get-buffer-attributes)
-                (org-export-get-environment 'hugo subtreep)))
-         (pub-dir (org-hugo--get-pub-dir info))
-         (outfile (org-export-output-file-name ".md" subtreep pub-dir)))
-    ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
-    (prog1
-        (org-export-to-file 'hugo outfile async subtreep visible-only)
-      (org-hugo--after-export-function info outfile))))
-
 (defun org-hugo--export-file-to-md (f-or-b-name &optional async visible-only noerror)
   "Export the Org file as a whole.
 
@@ -3872,6 +3790,89 @@ exporting all valid Hugo post subtrees from the current Org file.
           (message "Point is not in a valid Hugo post subtree; move to one and try again"))
         valid-subtree-found))))
 
+
+
+;;; Interactive functions
+
+;;;###autoload
+(defun org-hugo-export-as-md (&optional async subtreep visible-only)
+  "Export current buffer to a Hugo-compatible Markdown buffer.
+
+If narrowing is active in the current buffer, only export its
+narrowed part.
+
+If a region is active, export that region.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously.  The resulting buffer should be accessible
+through the `org-export-stack' interface.
+
+When optional argument SUBTREEP is non-nil, export the sub-tree
+at point, extracting information from the headline properties
+first.
+
+When optional argument VISIBLE-ONLY is non-nil, don't export
+contents of hidden elements.
+
+Export is done in a buffer named \"*Org Hugo Export*\", which
+will be displayed when `org-export-show-temporary-export-buffer'
+is non-nil.
+
+Return the buffer the export happened to."
+  (interactive)
+  (org-hugo--before-export-function subtreep)
+  ;; Allow certain `ox-hugo' properties to be inherited.
+  (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance))
+        (info (org-combine-plists
+               (org-export--get-export-attributes
+                'hugo subtreep visible-only)
+               (org-export--get-buffer-attributes)
+               (org-export-get-environment 'hugo subtreep))))
+    (prog1
+        (org-export-to-buffer 'hugo "*Org Hugo Export*"
+          async subtreep visible-only nil nil (lambda () (text-mode)))
+      (org-hugo--after-export-function info nil))))
+
+;;;###autoload
+(defun org-hugo-export-to-md (&optional async subtreep visible-only)
+  "Export current buffer to a Hugo-compatible Markdown file.
+
+If narrowing is active in the current buffer, only export its
+narrowed part.
+
+If a region is active, export that region.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously.  The resulting file should be accessible through
+the `org-export-stack' interface.
+
+When optional argument SUBTREEP is non-nil, export the sub-tree
+at point, extracting information from the headline properties
+first.
+
+When optional argument VISIBLE-ONLY is non-nil, don't export
+contents of hidden elements.
+
+Return output file's name."
+  (interactive)
+  (org-hugo--before-export-function subtreep)
+  ;; Allow certain `ox-hugo' properties to be inherited.  It is
+  ;; important to set the `org-use-property-inheritance' before
+  ;; setting the `info' var so that properties like
+  ;; EXPORT_HUGO_SECTION get inherited.
+  (let* ((org-use-property-inheritance (org-hugo--selective-property-inheritance))
+         (info (org-combine-plists
+                (org-export--get-export-attributes
+                 'hugo subtreep visible-only)
+                (org-export--get-buffer-attributes)
+                (org-export-get-environment 'hugo subtreep)))
+         (pub-dir (org-hugo--get-pub-dir info))
+         (outfile (org-export-output-file-name ".md" subtreep pub-dir)))
+    ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
+    (prog1
+        (org-export-to-file 'hugo outfile async subtreep visible-only)
+      (org-hugo--after-export-function info outfile))))
+
 ;;;###autoload
 (defun org-hugo-export-wim-to-md (&optional all-subtrees async visible-only noerror)
   "Export the current subtree/all subtrees/current file to a Hugo post.
@@ -3898,6 +3899,9 @@ the `org-export-stack' interface.
 
 When optional argument VISIBLE-ONLY is non-nil, don't export
 contents of hidden elements.
+
+The optional argument NOERROR is passed to
+`org-hugo--export-file-to-md'.
 
 - If ALL-SUBTREES is non-nil:
   - If valid subtrees are found, return the list of output files.

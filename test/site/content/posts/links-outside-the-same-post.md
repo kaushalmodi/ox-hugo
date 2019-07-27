@@ -30,14 +30,14 @@ init file.
 [Link to CUSTOM\_ID within the same post](#internal-target)
 [Link to ID within the same post](#internal-target)
 [Link to headline within the same post](#internal-target)
-[Link to target within the same post](#org2549435)
+[Link to target within the same post](#org14d7997)
 
 
 ## Cross-post links {#cross-post-links}
 
 Cross-post links are internal links pointing to targets in a different
 subtree that will be exported to another Hugo post than the link
-source in subtree-based exports. The Hugo's \`ref\` and \`relref\`
+source in subtree-based exports. The Hugo's `ref` and `relref`
 shortcodes only supports anchors to headlines, so links to a heading,
 a **:CUSTOM\_ID** property, or an **:ID** property will be resolved to the
 appropriate location in the linked file, but links to targets will be
@@ -54,7 +54,7 @@ resolved to the containing post.
 
 ## Internal target {#internal-target}
 
-<a id="org2549435"></a>
+<a id="org14d7997"></a>
 
 
 ## Link destination {#link-destination}
@@ -62,4 +62,4 @@ resolved to the containing post.
 
 ### External target {#external-target}
 
-<a id="org4f91ca4"></a>
+<a id="org488b019"></a>

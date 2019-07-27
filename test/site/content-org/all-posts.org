@@ -340,8 +340,8 @@ Rendered this:
 [[https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
 
 *NOTE*: We cannot use =:style= in =#+attr_html= because Hugo does not
- /yet/ support a =style= argument in the =figure= shortcode
- [[[https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template_embedded.go#L22-L37][Source]]].
+ /yet/ support a =style= argument in the =figure= shortcode [ [[https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template_embedded.go#L22-L37][Source]]
+ ].
 
 So using =#+html: <style>.foo img ... </style>= and =#+attr_html: :class
  foo= as shown in the workaround above.
@@ -834,8 +834,8 @@ demonstrated [[https://github.com/kaushalmodi/ox-hugo/issues/93#issue-270108567]
 -----
 
 HTML5 does not allow =align=, =width=, etc. attributes *within* the
-=table= tag [[[https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints][Ref]]]. So instead =ox-hugo= simply wraps the table with a
-=div= with a =class=. The table can then be customized using CSS,
+=table= tag [ [[https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints][Ref]] ]. So instead =ox-hugo= simply wraps the table with
+a =div= with a =class=. The table can then be customized using CSS,
 either via the =#+attr_css= attribute above the tables, or by putting
 verbatim CSS in =#+begin_export html= blocks. See below examples.
 *** Table with only the class specified
@@ -3048,7 +3048,7 @@ init file.
 *** Cross-post links                                      :crosspost_links:
 Cross-post links are internal links pointing to targets in a different
 subtree that will be exported to another Hugo post than the link
-source in subtree-based exports. The Hugo's `ref` and `relref`
+source in subtree-based exports. The Hugo's ~ref~ and ~relref~
 shortcodes only supports anchors to headlines, so links to a heading,
 a *:CUSTOM_ID* property, or an *:ID* property will be resolved to the
 appropriate location in the linked file, but links to targets will be

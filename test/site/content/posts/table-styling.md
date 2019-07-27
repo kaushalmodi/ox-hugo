@@ -16,8 +16,8 @@ demonstrated [here](https://github.com/kaushalmodi/ox-hugo/issues/93#issue-27010
 ---
 
 HTML5 does not allow `align`, `width`, etc. attributes **within** the
-`table` tag [[Ref](https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints)]. So instead `ox-hugo` simply wraps the table with a
-`div` with a `class`. The table can then be customized using CSS,
+`table` tag [ [Ref](https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints) ]. So instead `ox-hugo` simply wraps the table with
+a `div` with a `class`. The table can then be customized using CSS,
 either via the `#+attr_css` attribute above the tables, or by putting
 verbatim CSS in `#+begin_export html` blocks. See below examples.
 

@@ -3792,84 +3792,85 @@ exporting all valid Hugo post subtrees from the current Org file.
   ;; Publish only the current subtree
   (ignore-errors
     (org-back-to-heading :invisible-ok))
-  (if-let ((subtree (org-hugo--get-valid-subtree)))
-      ;; If subtree is a valid Hugo post subtree, proceed ..
-      (let* ((info (org-combine-plists
-                    (org-export--get-export-attributes
-                     'hugo subtree visible-only)
-                    (org-export--get-buffer-attributes)
-                    (org-export-get-environment 'hugo subtree)))
-             (exclude-tags (plist-get info :exclude-tags))
-             (is-commented (org-element-property :commentedp subtree))
-             is-excluded matched-exclude-tag do-export)
-        ;; (message "[org-hugo--export-subtree-to-md DBG] exclude-tags =
-        ;; %s" exclude-tags)
-        (let ((all-tags (let ((org-use-tag-inheritance t))
-                          (org-hugo--get-tags))))
-          (when all-tags
-            (dolist (exclude-tag exclude-tags)
-              (when (member exclude-tag all-tags)
-                (setq matched-exclude-tag exclude-tag)
-                (setq is-excluded t)))))
+  (let ((subtree (org-hugo--get-valid-subtree)))
+    (if subtree
+        ;; If subtree is a valid Hugo post subtree, proceed ..
+        (let* ((info (org-combine-plists
+                      (org-export--get-export-attributes
+                       'hugo subtree visible-only)
+                      (org-export--get-buffer-attributes)
+                      (org-export-get-environment 'hugo subtree)))
+               (exclude-tags (plist-get info :exclude-tags))
+               (is-commented (org-element-property :commentedp subtree))
+               is-excluded matched-exclude-tag do-export)
+          ;; (message "[org-hugo--export-subtree-to-md DBG] exclude-tags =
+          ;; %s" exclude-tags)
+          (let ((all-tags (let ((org-use-tag-inheritance t))
+                            (org-hugo--get-tags))))
+            (when all-tags
+              (dolist (exclude-tag exclude-tags)
+                (when (member exclude-tag all-tags)
+                  (setq matched-exclude-tag exclude-tag)
+                  (setq is-excluded t)))))
 
-        ;; (message "[current subtree DBG] subtree: %S" subtree)
-        ;; (message "[current subtree DBG] is-commented:%S, tags:%S,
-        ;; is-excluded:%S" is-commented tags is-excluded)
-        (let ((title (org-element-property :title subtree)))
-          (cond
-           (is-commented
-            (message "[ox-hugo] `%s' was not exported as that
+          ;; (message "[current subtree DBG] subtree: %S" subtree)
+          ;; (message "[current subtree DBG] is-commented:%S, tags:%S,
+          ;; is-excluded:%S" is-commented tags is-excluded)
+          (let ((title (org-element-property :title subtree)))
+            (cond
+             (is-commented
+              (message "[ox-hugo] `%s' was not exported as that
                        subtree is commented" title))
-           (is-excluded
-            (message "[ox-hugo] `%s' was not exported as it is
+             (is-excluded
+              (message "[ox-hugo] `%s' was not exported as it is
                        tagged with an exclude tag `%s'" title
                        matched-exclude-tag))
-           (t
-            (if print-subtree-count
-                (progn
-                  (setq org-hugo--subtree-count (1+ org-hugo--subtree-count))
-                  (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))
-              (message "[ox-hugo] Exporting `%s' .." title))
-            ;; Get the current subtree coordinates for
-            ;; auto-calculation of menu item weight, page or taxonomy
-            ;; weights.
-            (when (or
-                   ;; Check if the menu front-matter is specified.
-                   (or
-                    (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
-                    (save-excursion
-                      (goto-char (point-min))
-                      (let ((case-fold-search t))
-                        (re-search-forward "^#\\+hugo_menu:.*:menu" nil :noerror))))
-                   ;; Check if auto-calculation is needed for page or
-                   ;; taxonomy weights.
-                   (or
-                    (let ((page-or-taxonomy-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
-                      (and (stringp page-or-taxonomy-weight)
-                           (string-match-p "auto" page-or-taxonomy-weight)))
-                    (save-excursion
-                      (goto-char (point-min))
-                      (let ((case-fold-search t))
-                        (re-search-forward "^#\\+hugo_weight:.*auto" nil :noerror)))))
-              (setq org-hugo--subtree-coord
-                    (org-hugo--get-post-subtree-coordinates subtree)))
-            (setq do-export t))))
-        (when do-export
-          (org-hugo-export-to-md async subtree visible-only)))
+             (t
+              (if print-subtree-count
+                  (progn
+                    (setq org-hugo--subtree-count (1+ org-hugo--subtree-count))
+                    (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))
+                (message "[ox-hugo] Exporting `%s' .." title))
+              ;; Get the current subtree coordinates for
+              ;; auto-calculation of menu item weight, page or taxonomy
+              ;; weights.
+              (when (or
+                     ;; Check if the menu front-matter is specified.
+                     (or
+                      (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
+                      (save-excursion
+                        (goto-char (point-min))
+                        (let ((case-fold-search t))
+                          (re-search-forward "^#\\+hugo_menu:.*:menu" nil :noerror))))
+                     ;; Check if auto-calculation is needed for page or
+                     ;; taxonomy weights.
+                     (or
+                      (let ((page-or-taxonomy-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
+                        (and (stringp page-or-taxonomy-weight)
+                             (string-match-p "auto" page-or-taxonomy-weight)))
+                      (save-excursion
+                        (goto-char (point-min))
+                        (let ((case-fold-search t))
+                          (re-search-forward "^#\\+hugo_weight:.*auto" nil :noerror)))))
+                (setq org-hugo--subtree-coord
+                      (org-hugo--get-post-subtree-coordinates subtree)))
+              (setq do-export t))))
+          (when do-export
+            (org-hugo-export-to-md async subtree visible-only)))
 
-    ;; If the point is not in a valid subtree, check if there's a
-    ;; valid subtree elsewhere in the same Org file.
-    (let ((valid-subtree-found
-           (catch 'break
-             (org-map-entries
-              (lambda ()
-                (throw 'break t))
-              ;; Only map through subtrees where EXPORT_FILE_NAME
-              ;; property is not empty.
-              "EXPORT_FILE_NAME<>\"\""))))
-      (when valid-subtree-found
-        (message "Point is not in a valid Hugo post subtree; move to one and try again"))
-      valid-subtree-found)))
+      ;; If the point is not in a valid subtree, check if there's a
+      ;; valid subtree elsewhere in the same Org file.
+      (let ((valid-subtree-found
+             (catch 'break
+               (org-map-entries
+                (lambda ()
+                  (throw 'break t))
+                ;; Only map through subtrees where EXPORT_FILE_NAME
+                ;; property is not empty.
+                "EXPORT_FILE_NAME<>\"\""))))
+        (when valid-subtree-found
+          (message "Point is not in a valid Hugo post subtree; move to one and try again"))
+        valid-subtree-found))))
 
 ;;;###autoload
 (defun org-hugo-export-wim-to-md (&optional all-subtrees async visible-only noerror)

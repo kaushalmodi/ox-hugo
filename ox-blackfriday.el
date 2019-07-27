@@ -1118,7 +1118,10 @@ contextual information."
                "^[[:blank:]]+"
                (lambda (m)
                  (org-html--make-string (length m) "&nbsp;"))
-               ret)))
+               ret))
+         (ret (format "<p class=\"verse\">\n%s</p>" ;See footnote 1
+                      ret)))
+
     ret))
 
 

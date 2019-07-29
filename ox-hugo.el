@@ -1872,7 +1872,8 @@ output."
   (let ((ret (org-element-property :CUSTOM_ID element)))
     (unless ret
       (let ((title (or (org-string-nw-p title-str)
-                       (org-export-data (org-element-property :title element) info))))
+                       (org-hugo--sanitize-title
+                        info (org-element-property :title element)))))
         (setq ret (org-hugo-slug title))))
     ret))
 
@@ -2949,37 +2950,46 @@ to ((name . \"foo\") (weight . 80))."
           (push cell valid-menu-alist))))
     valid-menu-alist))
 
-(defun org-hugo--sanitize-title (info)
-  "Return sanitized version of the title string parsed from INFO.
+(defun org-hugo--sanitize-title (info &optional title)
+  "Return sanitized version of an Org headline TITLE.
 
-The title string is returned in a markup-free \"raw\" form.
+INFO is a plist used as a communication channel.
 
-If exporting title is disabled by setting `org-export-with-title'
-to nil or using the OPTIONS keyword e.g. \"title:nil\", return
-nil.
+If TITLE is nil, extract it from INFO (unless exporting title is
+disabled by setting `org-export-with-title' to nil or using the
+OPTIONS keyword e.g. \"title:nil\").
 
-INFO is a plist used as a communication channel."
-  (when (plist-get info :with-title)
-    ;; "Raw" backend that returns emphasis elements without any markup
-    ;; characters -- http://lists.gnu.org/r/emacs-orgmode/2017-12/msg00490.html
-    (let* ((raw-backend (let ((get-raw (lambda (object contents _)
-                                         (or contents
-                                             (org-element-property :value object)))))
-                          (org-export-create-backend
-                           :parent 'ascii
-                           :transcoders (mapcar (lambda (type)
-                                                  (cons type get-raw))
-                                                '(bold code italic strike-through underline verbatim)))))
-           (title (org-export-data-with-backend (plist-get info :title) raw-backend info))
-           ;; Hugo does not render Markdown in the titles and so the
-           ;; Blackfriday smartDashes conversion does not work there.  So
-           ;; do that here instead.  Convert "---" to EM DASH, "--" to EN
-           ;; DASH, and "..." to HORIZONTAL ELLIPSIS.
-           ;; Below two replacements are order sensitive!
-           (title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
-           (title (replace-regexp-in-string "--\\([^-]\\)" "–\\1" title)) ;EN DASH
-           (title (replace-regexp-in-string "\\.\\.\\." "…" title))) ;HORIZONTAL ELLIPSIS
-      title)))
+If TITLE is nil, and exporting the title is disabled, return nil.
+
+If TITLE is non-nil, ignore the value of
+`org-export-with-title'. When non-nil, TITLE is the object
+returned by `org-element-property'.
+
+The title string is returned in a markup-free \"raw\" form."
+  (unless title
+    (when (plist-get info :with-title)
+      (setq title (plist-get info :title))))
+
+  ;; "Raw" backend that returns emphasis elements without any markup
+  ;; characters -- http://lists.gnu.org/r/emacs-orgmode/2017-12/msg00490.html
+  (let* ((raw-backend (let ((get-raw (lambda (object contents _)
+                                       (or contents
+                                           (org-element-property :value object)))))
+                        (org-export-create-backend
+                         :parent 'ascii
+                         :transcoders (mapcar (lambda (type)
+                                                (cons type get-raw))
+                                              '(bold code italic strike-through underline verbatim)))))
+         (title (org-export-data-with-backend title raw-backend info))
+         ;; Hugo does not render Markdown in the titles and so the
+         ;; Blackfriday smartDashes conversion does not work there.  So
+         ;; do that here instead.  Convert "---" to EM DASH, "--" to EN
+         ;; DASH, and "..." to HORIZONTAL ELLIPSIS.
+         ;; Below two replacements are order sensitive!
+         (title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
+         (title (replace-regexp-in-string "--\\([^-]\\)" "–\\1" title)) ;EN DASH
+         (title (replace-regexp-in-string "\\.\\.\\." "…" title))) ;HORIZONTAL ELLIPSIS
+    title))
 
 (defun org-hugo--replace-underscores-with-spaces (str)
   "Replace double underscores in STR with single spaces.

@@ -2536,7 +2536,7 @@ channel."
                     ;; https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org
                     ;; So attempt to do below:
                     ;;   ```org
-                    ;;   # org comment
+                    ;;   # Org comment
                     ;;   ```
                     ;; will not result in a <code> tag wrapped block in HTML.
                     ;;
@@ -3555,7 +3555,7 @@ are \"toml\" and \"yaml\"."
             prop-list)))
 
 (defun org-hugo--get-valid-subtree ()
-  "Return the org element for a valid Hugo post subtree.
+  "Return the Org element for a valid Hugo post subtree.
 The condition to check validity is that the EXPORT_FILE_NAME
 property is defined for the subtree element.
 
@@ -3829,7 +3829,7 @@ INFO is a plist holding export options."
 Internal links to other subtrees are converted to external
 links."
   (let* ((buffer (generate-new-buffer (concat "*Ox-hugo Pre-processed " (buffer-name) " *")))
-         ;; Create an abstract syntax tree (AST) of the org document
+         ;; Create an abstract syntax tree (AST) of the Org document
          ;; in the current buffer.
          (ast (org-element-parse-buffer))
          (org-use-property-inheritance (org-hugo--selective-property-inheritance))

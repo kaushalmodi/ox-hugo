@@ -289,10 +289,10 @@ See the new section added to documentation:
 - Fix incorrectly inserted hard line-breaks {{{issue(72)}}}. Added a
   new option =HUGO_PRESERVE_FILLING=.
 - Fix error happening when a post title was set to an empty string
-  [[[https://github.com/kaushalmodi/ox-hugo/commit/ba9e8365f6ee42f030ed806bf5ec42d6acce4c76][ba9e8365]]].
+  [ [[https://github.com/kaushalmodi/ox-hugo/commit/ba9e8365f6ee42f030ed806bf5ec42d6acce4c76][ba9e8365]] ].
 *** Backward-incompatible changes
 - Switch the default value of =org-hugo-use-code-for-kbd= option to
-  =nil= [[[https://github.com/kaushalmodi/ox-hugo/commit/88ba15ae9bc809b0983315446c88fecfda3534e5][88ba15ae]]].
+  =nil= [ [[https://github.com/kaushalmodi/ox-hugo/commit/88ba15ae9bc809b0983315446c88fecfda3534e5][88ba15ae]] ].
 ** v0.1.3 <2017-09-13 Wed>
 - Now a HUGO key value set to ="nil"=, like =#+hugo_code_fence: nil=,
   will evaluate as /nil/ instead of /t/, as now
@@ -746,7 +746,7 @@ the auto-exporting on and off in an Org buffer.
 
 #+begin_note
 See the updated docs for {{{doc(usage,,~ox-hugo~ Usage)}}} and
-{{{doc(auto-export-on-saving,,Auto-export on Saving)}}}.
+[[*Auto-export on Saving][Auto-export on saving]].
 #+end_note
 
 For history behind this change, see {{{issue(247)}}}. \\
@@ -802,13 +802,12 @@ There are 2 major blogging flows that can be used with this package:
      translate to post =draft= state, auto weight calculation for
      pages, taxonomies and menu items, etc.
 
-See the {{{doc(org-capture-setup,,Org Capture Setup)}}} page to see how
-to quickly create new posts.
+See the [[*Org Capture Setup][Org Capture Setup]] page to see how to quickly create new posts.
 
-See the {{{doc(auto-export-on-saving,,Auto-export on Saving)}}} page to
-learn how to setup up seeing live-preview of the Hugo-rendered HTML
-each time you do =C-x C-s= in the Org file. That section explains how
-to set that up for either of the above two blogging flows.
+See the [[*Auto-export on Saving][Auto-export on saving]] page to learn how to setup up seeing
+live-preview of the Hugo-rendered HTML each time you do =C-x C-s= in
+the Org file. That section explains how to set that up for either of
+the above two blogging flows.
 ** Example
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "4.example"
@@ -931,8 +930,8 @@ set.
      keyword.
 - Precedence for =draft= parsing :: Org TODO state based /draft/ state
      /more than/ =EXPORT_HUGO_DRAFT= subtree property.
-- Custom front-matter parameters :: See
-     {{{doc(custom-front-matter,,Custom Front-matter Parameters)}}} section.
+- Custom front-matter parameters :: See the [[*Custom Front-matter Parameters][Custom Front-matter
+  Parameters]] section.
 **** For file-based exports
 #+caption: Hugo front-matter translation for file-based exports
 #+attr_html: :class sane-table
@@ -960,11 +959,10 @@ set.
   For the file-based exports, the weights have to be specified
   manually. Any /weight/ assignment to ="auto"= for file-based exports
   is ignored.
-- See {{{doc(dates,#org-hugo-date-format,=org-hugo-date-format=)}}} for
-  customizing the date formats for all /date/ front-matter parameters.
-- For setting custom front-matter parameters, see the
-  {{{doc(custom-front-matter,,Custom Front-matter Parameters)}}}
-  section.
+- See [[#org-hugo-date-format][~org-hugo-date-format~]] for customizing the date formats for all
+  /date/ front-matter parameters.
+- For setting custom front-matter parameters, see the [[*Custom Front-matter Parameters][Custom
+  Front-matter Parameters]] section.
 *** Formatting
 :PROPERTIES:
 :EXPORT_FILE_NAME: formatting
@@ -997,6 +995,9 @@ heading and how it exports to Markdown in [[https://raw.githubusercontent.com/ka
 :END:
 **** Defcustoms
 ***** =org-hugo-date-format=
+:PROPERTIES:
+:CUSTOM_ID: org-hugo-date-format
+:END:
 - Default value :: ="%Y-%m-%dT%T%z"=
 
 This variable sets the date format used for exporting /date/
@@ -1911,6 +1912,12 @@ My post summary.
 ,#+hugo: more
 My post content.
 #+end_src
+*** COMMENT Hyperlinks
+:PROPERTIES:
+:EXPORT_FILE_NAME: hyperlinks
+:END:
+**** External Links
+**** Internal Links
 ** Enhancements
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "6.enhancements"
@@ -2145,9 +2152,7 @@ accessed using the root prefix =/=. So a =static/foo.png= file can be
 accessed at =/foo.png=.
 
 More detail for this conventional approach can be found in the
-documentation for
-{{{doc(image-links,#references-to-files-in-the-static-directory,referencing
-files in static directory)}}}.
+documentation for [[#references-to-files-in-the-static-directory][referencing files in static directory]].
 **** But.. what about putting images along with the content?
 OK, so with that short intro out of the way, =ox-hugo= supports
 putting the /attachment files/ in the same directory as the source Org
@@ -2885,12 +2890,10 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 #+end_note
 
 - About Pandoc :: /While the end-user does not need Pandoc installed on
-                  their machine, a code contributor needs to have both
-                  ~pandoc~ and ~pandoc-citeproc~
-                  installed[fn:7]. These are needed for ~make md~ and
-                  ~make -j1 test~ steps to work as they use/test the
-                  {{{doc(pandoc-citations,,Pandoc Citations)}}}
-                  feature too./
+  their machine, a code contributor needs to have both ~pandoc~ and
+  ~pandoc-citeproc~ installed[fn:7]. These are needed for ~make md~
+  and ~make -j1 test~ steps to work as they use/test the [[*Pandoc Citations][Pandoc
+  Citations]] feature too./
 *** Contributing Guide
 :PROPERTIES:
 :EXPORT_FILE_NAME: contributing-guide

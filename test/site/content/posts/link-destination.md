@@ -6,4 +6,7 @@ draft = false
 
 ## External target {#external-target}
 
-<a id="org9e3fe16"></a>
+<a id="org371fa62"></a>
+
+
+## External target with **bold** and _italic_ {#external-target-with-bold-and-italic}

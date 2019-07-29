@@ -3057,6 +3057,7 @@ resolved to the containing post.
 - Link to CUSTOM_ID outside the same post: [[#external-target]]
 - Link to ID outside the same post: [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb]]
 - Link to target outside the same post: [[*External target]]
+- Another link to target outside the same post: [[* External target with *bold* and /italic/]]
 - Link to subtree by CUSTOM_ID: [[#link-destination]]
 - Link to subtree by ID: [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678]]
 - Link to subtree by headline: [[*Link destination]]
@@ -3064,6 +3065,7 @@ resolved to the containing post.
 - [[#external-target][Link to CUSTOM_ID outside the same post]]
 - [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb][Link to ID outside the same post]]
 - [[*External target][Link to target outside the same post]]
+- [[* External target with *bold* and /italic/][Another link to target outside the same post]]
 - [[#link-destination][Link to subtree by CUSTOM_ID]]
 - [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678][Link to subtree by ID]]
 - [[*Link destination][Link to subtree by headline]]
@@ -3085,6 +3087,7 @@ resolved to the containing post.
 :ID:       de0df718-f9b4-4449-bb0a-eb4402fa5fcb
 :END:
 <<external-target>>
+**** External target with *bold* and /italic/
 * Equations                                               :equations:mathjax:
 ** Inline equations
 :PROPERTIES:

@@ -30,7 +30,7 @@ init file.
 -   [Link to CUSTOM\_ID within the same post](#internal-target)
 -   [Link to ID within the same post](#internal-target)
 -   [Link to headline within the same post](#internal-target)
--   [Link to target within the same post](#orgc42fc68)
+-   [Link to target within the same post](#org5518ced)
 
 
 ## Cross-post links {#cross-post-links}
@@ -46,12 +46,13 @@ resolved to the containing post.
 
 ### Links without descriptions {#links-without-descriptions}
 
--   Link to CUSTOM\_ID outside the same post: [{{< relref "link-destination#external-target" >}}]({{< relref "link-destination#external-target" >}})
--   Link to ID outside the same post: [{{< relref "link-destination#external-target" >}}]({{< relref "link-destination#external-target" >}})
--   Link to target outside the same post: [{{< relref "link-destination#external-target" >}}]({{< relref "link-destination#external-target" >}})
--   Link to subtree by CUSTOM\_ID: [{{< relref "link-destination" >}}]({{< relref "link-destination" >}})
--   Link to subtree by ID: [{{< relref "link-destination" >}}]({{< relref "link-destination" >}})
--   Link to subtree by headline: [{{< relref "link-destination" >}}]({{< relref "link-destination" >}})
+-   Link to CUSTOM\_ID outside the same post: [External target]({{< relref "link-destination#external-target" >}})
+-   Link to ID outside the same post: [External target]({{< relref "link-destination#external-target" >}})
+-   Link to target outside the same post: [External target]({{< relref "link-destination#external-target" >}})
+-   Another link to target outside the same post: [External target with bold and italic]({{< relref "link-destination#external-target-with-bold-and-italic" >}})
+-   Link to subtree by CUSTOM\_ID: [Link destination]({{< relref "link-destination" >}})
+-   Link to subtree by ID: [Link destination]({{< relref "link-destination" >}})
+-   Link to subtree by headline: [Link destination]({{< relref "link-destination" >}})
 
 
 ### Links with descriptions {#links-with-descriptions}
@@ -59,6 +60,7 @@ resolved to the containing post.
 -   [Link to CUSTOM\_ID outside the same post]({{< relref "link-destination#external-target" >}})
 -   [Link to ID outside the same post]({{< relref "link-destination#external-target" >}})
 -   [Link to target outside the same post]({{< relref "link-destination#external-target" >}})
+-   [Another link to target outside the same post]({{< relref "link-destination#external-target-with-bold-and-italic" >}})
 -   [Link to subtree by CUSTOM\_ID]({{< relref "link-destination" >}})
 -   [Link to subtree by ID]({{< relref "link-destination" >}})
 -   [Link to subtree by headline]({{< relref "link-destination" >}})
@@ -66,7 +68,7 @@ resolved to the containing post.
 
 ## Internal target {#internal-target}
 
-<a id="orgc42fc68"></a>
+<a id="org5518ced"></a>
 
 
 ## Link destination {#link-destination}
@@ -74,4 +76,7 @@ resolved to the containing post.
 
 ### External target {#external-target}
 
-<a id="org1458efe"></a>
+<a id="org1b9b4fd"></a>
+
+
+### External target with **bold** and _italic_ {#external-target-with-bold-and-italic}

@@ -3904,12 +3904,17 @@ links."
                                         (org-export-resolve-fuzzy-link link info)
                                       (org-export-resolve-id-link link info)))
                        (source-path (org-hugo--get-element-path link info))
-                       (destination-path (org-hugo--get-element-path destination info)))
+                       (destination-path (org-hugo--get-element-path destination info))
+                       (destination-type (org-element-type destination)))
+                  ;; (message "[ox-hugo pre process DBG] destination type: %s" destination-type)
+
                   ;; Change the link if it points to a valid
                   ;; destination outside the subtree.
                   (unless (equal source-path destination-path)
-                    (let ((link-copy (org-element-copy link)))
-                      (apply #'org-element-adopt-elements link-copy (org-element-contents link))
+                    (let ((link-desc (org-element-contents link))
+                          (link-copy (org-element-copy link)))
+                      ;; (message "[ox-hugo pre process DBG] link desc: %s" link-desc)
+                      (apply #'org-element-adopt-elements link-copy link-desc)
                       (org-element-put-property link-copy :type "file")
                       (org-element-put-property
                        link-copy :path
@@ -3937,6 +3942,16 @@ links."
                         (t
                          (let ((anchor (org-hugo--get-anchor destination info)))
                            (concat destination-path ".org::#" anchor)))))
+                      ;; If the link destination is a heading and if
+                      ;; user hasn't set the link description, set the
+                      ;; description to the destination heading title.
+                      (when (and (null link-desc)
+                                 (equal 'headline destination-type))
+                        (let ((headline-title
+                               (org-hugo--sanitize-title
+                                info (org-element-property :title destination))))
+                          ;; (message "[ox-hugo pre process DBG] destination heading: %s" headline-title)
+                          (org-element-set-contents link-copy headline-title)))
                       (org-element-set-element link link-copy))))))))
 
         ;; Workaround to prevent exporting of empty special blocks.

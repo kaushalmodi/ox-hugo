@@ -3736,12 +3736,11 @@ exporting all valid Hugo post subtrees from the current Org file.
           (let ((title (org-element-property :title subtree)))
             (cond
              (is-commented
-              (message "[ox-hugo] `%s' was not exported as that
-                       subtree is commented" title))
+              (message "[ox-hugo] `%s' was not exported as that subtree is commented"
+                       title))
              (is-excluded
-              (message "[ox-hugo] `%s' was not exported as it is
-                       tagged with an exclude tag `%s'" title
-                       matched-exclude-tag))
+              (message "[ox-hugo] `%s' was not exported as it is tagged with an exclude tag `%s'"
+                       title matched-exclude-tag))
              (t
               (if print-subtree-count
                   (progn

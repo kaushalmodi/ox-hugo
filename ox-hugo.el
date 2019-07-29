@@ -1059,7 +1059,6 @@ contents according to the current headline."
                                 ;; (message "[ox-hugo TOC DBG] headline-num-list: %S" headline-num-list)
                                 (org-hugo--get-headline-number headline info :toc)
                               ""))
-                    (title (org-export-data (org-element-property :title headline) info))
                     (toc-entry
                      (format "[%s%s](#%s)"
                              todo-str
@@ -1067,8 +1066,7 @@ contents according to the current headline."
                               (org-export-get-alt-title headline info)
                               (org-export-toc-entry-backend 'hugo)
                               info)
-                             (or (org-element-property :CUSTOM_ID headline)
-                                 (org-hugo-slug title))))
+                             (org-hugo--get-anchor headline info)))
                     (tags (and (plist-get info :with-tags)
                                (not (eq 'not-in-toc (plist-get info :with-tags)))
                                (let ((tags (org-export-get-tags headline info)))
@@ -1778,8 +1776,7 @@ a communication channel."
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
         (let ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
-                              (or (org-element-property :CUSTOM_ID headline)
-                                  (org-hugo-slug title)))))
+                              (org-hugo--get-anchor headline info title))))
           (concat (org-hugo--headline-title style level loffset title todo-fmtd anchor numbers)
                   contents)))))))
 
@@ -1856,6 +1853,28 @@ The `slug' generated from that STR follows these rules:
          ;; Remove leading and trailing hyphens.
          (str (replace-regexp-in-string "\\(^[-]*\\|[-]*$\\)" "" str)))
     str))
+
+(defun org-hugo--get-anchor(element info &optional title-str)
+  "Return an Org headline's CUSTOM_ID or it's title's slug.
+
+If an Org ELEMENT has the CUSTOM_ID property defined, return
+that.
+
+INFO is a plist used as a communication channel.
+
+If the CUSTOM_ID property is not defined, and if TITLE-STR is
+nil, derive the title string from the INFO, pass that to
+`org-hugo-slug' and return its output.
+
+If the CUSTOM_ID property is not defined, and if TITLE-STR is a
+non-empty string, pass that to `org-hugo-slug' and return its
+output."
+  (let ((ret (org-element-property :CUSTOM_ID element)))
+    (unless ret
+      (let ((title (or (org-string-nw-p title-str)
+                       (org-export-data (org-element-property :title element) info))))
+        (setq ret (org-hugo-slug title))))
+    ret))
 
 (defun org-hugo--headline-title (style level loffset title &optional todo anchor numbers)
   "Generate a headline title in the preferred Markdown headline style.
@@ -1989,8 +2008,7 @@ and rewrite link paths to make blogging more seamless."
                     (t
                      title))
               ;; Reference
-              (or (org-element-property :CUSTOM_ID destination)
-                  (org-hugo-slug title)))))
+              (org-hugo--get-anchor destination info title))))
           (_
            (let ((description
                   (or (org-string-nw-p desc)
@@ -3907,9 +3925,7 @@ links."
                         ;; of the destination is derived from the
                         ;; :CUSTOM_ID property or the title.
                         (t
-                         (let* ((custom-id (org-element-property :CUSTOM_ID destination))
-                                (title (org-element-property :raw-value destination))
-                                (anchor (or custom-id (org-hugo-slug title))))
+                         (let ((anchor (org-hugo--get-anchor destination info)))
                            (concat destination-path ".org::#" anchor)))))
                       (org-element-set-element link link-copy))))))))
 

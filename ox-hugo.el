@@ -737,7 +737,7 @@ newer."
               (org-hugo-export-wim-to-md nil a v)))
         (?h "To file"
             (lambda (a s v _b)
-              (org-hugo-export-to-md nil a s v)))
+              (org-hugo-export-to-md a s v)))
         (?O "Subtree to file and open"
             (lambda (a _s v _b)
               (if a
@@ -745,8 +745,9 @@ newer."
                 (org-open-file (org-hugo-export-wim-to-md nil a v)))))
         (?o "To file and open"
             (lambda (a s v _b)
-              (if a (org-hugo-export-to-md nil t s v)
-                (org-open-file (org-hugo-export-to-md nil nil s v)))))
+              (if a
+                  (org-hugo-export-to-md :async s v)
+                (org-open-file (org-hugo-export-to-md nil s v)))))
         (?A "All subtrees to files"
             (lambda (a _s v _b)
               (org-hugo-export-wim-to-md :all-subtrees a v)))

@@ -3681,7 +3681,7 @@ user error."
                (list (format "[ox-hugo] %s: %s" f-or-b-name msg)))))
     ret))
 
-(defun org-hugo--export-subtree-to-md (&optional async visible-only print-subtree-count)
+(defun org-hugo--export-subtree-to-md (&optional async visible-only all-subtrees)
   "Export the current subtree to a Hugo post.
 
 Note: This is an internal function, use
@@ -3694,7 +3694,7 @@ asynchronously.  The resulting file should be accessible through the
 When optional argument VISIBLE-ONLY is non-nil, don't export
 contents of hidden elements.
 
-When optional argument PRINT-SUBTREE-COUNT is non-nil, print the
+When optional argument ALL-SUBTREES is non-nil, print the
 subtree-number being exported.  This would be the case when
 exporting all valid Hugo post subtrees from the current Org file.
 
@@ -3742,7 +3742,7 @@ exporting all valid Hugo post subtrees from the current Org file.
               (message "[ox-hugo] `%s' was not exported as it is tagged with an exclude tag `%s'"
                        title matched-exclude-tag))
              (t
-              (if print-subtree-count
+              (if all-subtrees
                   (progn
                     (setq org-hugo--subtree-count (1+ org-hugo--subtree-count))
                     (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))
@@ -4047,8 +4047,8 @@ The optional argument NOERROR is passed to
                   (with-current-buffer buffer
                     (setq ret (org-map-entries
                                (lambda ()
-                                 (org-hugo--export-subtree-to-md async visible-only
-                                                                 :print-subtree-count))
+                                 (org-hugo--export-subtree-to-md
+                                  async visible-only :all-subtrees))
                                ;; Export only the subtrees where
                                ;; EXPORT_FILE_NAME property is not
                                ;; empty.

@@ -1119,9 +1119,7 @@ contextual information."
                (lambda (m)
                  (org-html--make-string (length m) "&nbsp;"))
                ret))
-         (ret (format "<p class=\"verse\">\n%s</p>" ;See footnote 1
-                      ret)))
-
+         (ret (format "<p class=\"verse\">\n%s</p>" ret)))
     ret))
 
 

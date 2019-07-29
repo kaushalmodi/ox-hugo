@@ -3695,8 +3695,7 @@ When optional argument VISIBLE-ONLY is non-nil, don't export
 contents of hidden elements.
 
 When optional argument ALL-SUBTREES is non-nil, print the
-subtree-number being exported.  This would be the case when
-exporting all valid Hugo post subtrees from the current Org file.
+subtree-number being exported.
 
 - If point is under a valid Hugo post subtree, export it, and
   also return the exported file name.
@@ -3719,7 +3718,7 @@ exporting all valid Hugo post subtrees from the current Org file.
                       (org-export-get-environment 'hugo subtree)))
                (exclude-tags (plist-get info :exclude-tags))
                (is-commented (org-element-property :commentedp subtree))
-               is-excluded matched-exclude-tag)
+               is-excluded matched-exclude-tag ret)
           ;; (message "[org-hugo--export-subtree-to-md DBG] exclude-tags =
           ;; %s" exclude-tags)
           (let ((all-tags (let ((org-use-tag-inheritance t))
@@ -3770,7 +3769,22 @@ exporting all valid Hugo post subtrees from the current Org file.
                           (re-search-forward "^#\\+hugo_weight:.*auto" nil :noerror)))))
                 (setq org-hugo--subtree-coord
                       (org-hugo--get-post-subtree-coordinates subtree)))
-              (org-hugo-export-to-md async :subtreep visible-only)))))
+
+              ;; If `all-subtrees' is non-nil, the Org buffer would
+              ;; already be pre-processed in
+              ;; `org-hugo-export-wim-to-md', so do not do that again.
+              (if all-subtrees
+                  (setq ret (org-hugo-export-to-md async :subtreep visible-only))
+
+                ;; Do the buffer pre-processing only if the user is
+                ;; exporting only the current valid Hugo post subtree.
+                (let ((current-outline-path (org-get-outline-path :with-self))
+                      (buffer (org-hugo--get-pre-processed-buffer)))
+                  (with-current-buffer buffer
+                    (goto-char (org-find-olp current-outline-path :this-buffer))
+                    (setq ret (org-hugo-export-to-md async :subtreep visible-only)))
+                  (kill-buffer buffer))))))
+          ret)
 
       ;; If the point is not in a valid subtree, check if there's a
       ;; valid subtree elsewhere in the same Org file.
@@ -4062,12 +4076,7 @@ The optional argument NOERROR is passed to
                   (message "[ox-hugo] No valid Hugo post subtrees were found")))
 
             ;; Publish only the current valid Hugo post subtree.
-            (let ((current-outline-path (org-get-outline-path :with-self))
-                  (buffer (org-hugo--get-pre-processed-buffer)))
-              (with-current-buffer buffer
-                (goto-char (org-find-olp current-outline-path :this-buffer))
-                (setq ret (org-hugo--export-subtree-to-md async visible-only)))
-              (kill-buffer buffer)))
+            (setq ret (org-hugo--export-subtree-to-md async visible-only)))
 
           ;; If `ret' is nil, no valid Hugo subtree was found.  So
           ;; call `org-hugo--export-file-to-md' directly.  In that

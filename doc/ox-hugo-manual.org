@@ -11,7 +11,7 @@
 #+macro: imageclick [[file:./static/images/$1][file:/images/$1]]
 #+macro: doc [[/doc/$1/$2][$3]]
 
-* Changelog
+* Changelog [Reused Section]
 :PROPERTIES:
 :CUSTOM_ID: changelog
 :END:

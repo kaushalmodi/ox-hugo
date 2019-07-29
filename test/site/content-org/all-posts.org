@@ -3031,9 +3031,9 @@ to a heading with a *:CUSTOM_ID* property will be resolved to the
 appropriate location in the linked file. Links to headlines and
 links to targets will be resolved to the containing file.
 
-[[file:link-destination.org::#external-target][Link to CUSTOM_ID]]
-[[file:link-destination.org::*external-target][Link to a headline]]
-[[file:link-destination.org::external-target][Link to a target]]
+- [[file:link-destination.org::#external-target][Link to CUSTOM_ID]]
+- [[file:link-destination.org::*external-target][Link to a headline]]
+- [[file:link-destination.org::external-target][Link to a target]]
 *** Internal links                                         :internal_links:
 Internal links point to targets in the current subtree that will be
 exported to the same Hugo post as the link source. To handle links to
@@ -3041,10 +3041,10 @@ an *:ID* property, the =org-id= feature must first be loaded, either
 through =org-customize= or by adding =(require 'org-id)= in your Emacs
 init file.
 
-[[#internal-target][Link to CUSTOM_ID within the same post]]
-[[id:8e65ff86-3f9a-48ef-9b43-751a2e8a9372][Link to ID within the same post]]
-[[*Internal target][Link to headline within the same post]]
-[[internal-target][Link to target within the same post]]
+- [[#internal-target][Link to CUSTOM_ID within the same post]]
+- [[id:8e65ff86-3f9a-48ef-9b43-751a2e8a9372][Link to ID within the same post]]
+- [[*Internal target][Link to headline within the same post]]
+- [[internal-target][Link to target within the same post]]
 *** Cross-post links                                      :crosspost_links:
 Cross-post links are internal links pointing to targets in a different
 subtree that will be exported to another Hugo post than the link
@@ -3053,14 +3053,20 @@ shortcodes only supports anchors to headlines, so links to a heading,
 a *:CUSTOM_ID* property, or an *:ID* property will be resolved to the
 appropriate location in the linked file, but links to targets will be
 resolved to the containing post.
-
-[[#external-target][Link to CUSTOM_ID outside the same post]]
-[[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb][Link to ID outside the same post]]
-[[*External target][Link to headline outside current post]]
-[[external-target][Link to target outside the same post]]
-[[#link-destination][Link to subtree by CUSTOM_ID]]
-[[id:1e5e0bcd-caea-40ad-a75b-e488634c2678][Link to subtree by ID]]
-[[*Link destination][Link to subtree by headline]]
+**** Links without descriptions
+- Link to CUSTOM_ID outside the same post: [[#external-target]]
+- Link to ID outside the same post: [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb]]
+- Link to target outside the same post: [[*External target]]
+- Link to subtree by CUSTOM_ID: [[#link-destination]]
+- Link to subtree by ID: [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678]]
+- Link to subtree by headline: [[*Link destination]]
+**** Links with descriptions
+- [[#external-target][Link to CUSTOM_ID outside the same post]]
+- [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb][Link to ID outside the same post]]
+- [[*External target][Link to target outside the same post]]
+- [[#link-destination][Link to subtree by CUSTOM_ID]]
+- [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678][Link to subtree by ID]]
+- [[*Link destination][Link to subtree by headline]]
 *** Internal target
 :PROPERTIES:
 :CUSTOM_ID: internal-target

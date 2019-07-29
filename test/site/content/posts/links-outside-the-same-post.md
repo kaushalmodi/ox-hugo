@@ -14,9 +14,9 @@ to a heading with a **:CUSTOM\_ID** property will be resolved to the
 appropriate location in the linked file. Links to headlines and
 links to targets will be resolved to the containing file.
 
-[Link to CUSTOM\_ID]({{< relref "link-destination#external-target" >}})
-[Link to a headline]({{< relref "link-destination" >}})
-[Link to a target]({{< relref "link-destination" >}})
+-   [Link to CUSTOM\_ID]({{< relref "link-destination#external-target" >}})
+-   [Link to a headline]({{< relref "link-destination" >}})
+-   [Link to a target]({{< relref "link-destination" >}})
 
 
 ## Internal links {#internal-links}
@@ -27,10 +27,10 @@ an **:ID** property, the `org-id` feature must first be loaded, either
 through `org-customize` or by adding `(require 'org-id)` in your Emacs
 init file.
 
-[Link to CUSTOM\_ID within the same post](#internal-target)
-[Link to ID within the same post](#internal-target)
-[Link to headline within the same post](#internal-target)
-[Link to target within the same post](#org14d7997)
+-   [Link to CUSTOM\_ID within the same post](#internal-target)
+-   [Link to ID within the same post](#internal-target)
+-   [Link to headline within the same post](#internal-target)
+-   [Link to target within the same post](#orgc42fc68)
 
 
 ## Cross-post links {#cross-post-links}
@@ -43,18 +43,30 @@ a **:CUSTOM\_ID** property, or an **:ID** property will be resolved to the
 appropriate location in the linked file, but links to targets will be
 resolved to the containing post.
 
-[Link to CUSTOM\_ID outside the same post]({{< relref "link-destination#external-target" >}})
-[Link to ID outside the same post]({{< relref "link-destination#external-target" >}})
-[Link to headline outside current post]({{< relref "link-destination#external-target" >}})
-[Link to target outside the same post]({{< relref "link-destination" >}})
-[Link to subtree by CUSTOM\_ID]({{< relref "link-destination" >}})
-[Link to subtree by ID]({{< relref "link-destination" >}})
-[Link to subtree by headline]({{< relref "link-destination" >}})
+
+### Links without descriptions {#links-without-descriptions}
+
+-   Link to CUSTOM\_ID outside the same post: [{{< relref "link-destination#external-target" >}}]({{< relref "link-destination#external-target" >}})
+-   Link to ID outside the same post: [{{< relref "link-destination#external-target" >}}]({{< relref "link-destination#external-target" >}})
+-   Link to target outside the same post: [{{< relref "link-destination#external-target" >}}]({{< relref "link-destination#external-target" >}})
+-   Link to subtree by CUSTOM\_ID: [{{< relref "link-destination" >}}]({{< relref "link-destination" >}})
+-   Link to subtree by ID: [{{< relref "link-destination" >}}]({{< relref "link-destination" >}})
+-   Link to subtree by headline: [{{< relref "link-destination" >}}]({{< relref "link-destination" >}})
+
+
+### Links with descriptions {#links-with-descriptions}
+
+-   [Link to CUSTOM\_ID outside the same post]({{< relref "link-destination#external-target" >}})
+-   [Link to ID outside the same post]({{< relref "link-destination#external-target" >}})
+-   [Link to target outside the same post]({{< relref "link-destination#external-target" >}})
+-   [Link to subtree by CUSTOM\_ID]({{< relref "link-destination" >}})
+-   [Link to subtree by ID]({{< relref "link-destination" >}})
+-   [Link to subtree by headline]({{< relref "link-destination" >}})
 
 
 ## Internal target {#internal-target}
 
-<a id="org14d7997"></a>
+<a id="orgc42fc68"></a>
 
 
 ## Link destination {#link-destination}
@@ -62,4 +74,4 @@ resolved to the containing post.
 
 ### External target {#external-target}
 
-<a id="org488b019"></a>
+<a id="org1458efe"></a>

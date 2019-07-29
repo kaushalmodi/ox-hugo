@@ -3828,7 +3828,7 @@ INFO is a plist holding export options."
 
 Internal links to other subtrees are converted to external
 links."
-  (let* ((buffer (generate-new-buffer (buffer-name)))
+  (let* ((buffer (generate-new-buffer (concat "*Ox-hugo Pre-processed " (buffer-name) " *")))
          ;; Create an abstract syntax tree (AST) of the org document
          ;; in the current buffer.
          (ast (org-element-parse-buffer))

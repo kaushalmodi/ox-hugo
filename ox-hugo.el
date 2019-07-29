@@ -1776,7 +1776,7 @@ a communication channel."
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
         (let ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
-                              (org-hugo--get-anchor headline info title))))
+                              (org-hugo--get-anchor headline info))))
           (concat (org-hugo--headline-title style level loffset title todo-fmtd anchor numbers)
                   contents)))))))
 
@@ -1872,8 +1872,8 @@ output."
   (let ((ret (org-element-property :CUSTOM_ID element)))
     (unless ret
       (let ((title (or (org-string-nw-p title-str)
-                       (org-hugo--sanitize-title
-                        info (org-element-property :title element)))))
+                       (org-export-data-with-backend
+                        (org-element-property :title element) 'md info))))
         (setq ret (org-hugo-slug title))))
     ret))
 
@@ -1996,7 +1996,8 @@ and rewrite link paths to make blogging more seamless."
                  (format "[%s](%s)" desc path)
                (format "<%s>" path))))
           (`headline                 ;Links of type [[* Some heading]]
-           (let ((title (org-export-data (org-element-property :title destination) info)))
+           (let ((title (org-hugo--sanitize-title
+                         info (org-element-property :title destination))))
              ;; (message "[ox-hugo-link DBG] headline title: %s" title)
              (format
               "[%s](#%s)"

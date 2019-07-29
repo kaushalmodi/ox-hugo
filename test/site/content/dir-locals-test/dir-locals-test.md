@@ -17,7 +17,7 @@ creator: "Dummy creator string"
 
 <div class="heading">Table of Contents</div>
 
-- <span class="section-num">1</span> [Variables set in <kbd>.dir-locals.el</kbd>](#variables-set-in)
+- <span class="section-num">1</span> [Variables set in <kbd>.dir-locals.el</kbd>](#variables-set-in-dot-dir-locals-dot-el)
 - <span class="section-num">2</span> [Test text](#test-text)
 - <span class="section-num">3</span> [Local Variables](#local-variables):ARCHIVE:
 
@@ -26,7 +26,7 @@ creator: "Dummy creator string"
 
 
 
-## <span class="section-num">1</span> Variables set in <kbd>.dir-locals.el</kbd> {#variables-set-in}
+## <span class="section-num">1</span> Variables set in <kbd>.dir-locals.el</kbd> {#variables-set-in-dot-dir-locals-dot-el}
 
 <a id="table--vars-dir-locals"></a>
 <div class="table-caption">

@@ -5,7 +5,7 @@ description = """
   plain list, and even a list following a heading following a source
   block.
   """
-tags = ["lists", "code-block"]
+tags = ["lists", "src-block"]
 draft = false
 +++
 

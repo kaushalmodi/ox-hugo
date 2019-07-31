@@ -4,7 +4,7 @@ description = """
   Test that indented source blocks, and also the ones in lists export
   fine.
   """
-tags = ["src-block", "indented", "lists", "code-fence", "highlight", "code-block"]
+tags = ["src-block", "indented", "lists", "code-fence", "highlight"]
 categories = ["upstream"]
 draft = false
 +++

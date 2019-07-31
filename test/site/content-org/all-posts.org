@@ -1518,7 +1518,7 @@ print(str[1:])
 : 	bc
 
 The whitespace before "bc" in the results block above should be preserved.
-** Indented source block :indented:lists:code_fence:highlight:code_block:@upstream:
+** Indented source block :indented:lists:code_fence:highlight:src_block:@upstream:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-indented
 :END:
@@ -3435,7 +3435,8 @@ Checklist showing progress in ratio.
 - Defn B :: Something B in red
 
 /The =red-text= style is defined in the first list above./
-** Source block following a list                                 :code_block:
+** Source blocks and lists                                        :src_block:
+*** Source block following a list
 :PROPERTIES:
 :EXPORT_FILE_NAME: src-block-following-a-list
 :END:
@@ -3454,10 +3455,55 @@ echo "hello"
 #+end_src
 - another list item 1
 - another list item 2
-*** A heading in post
+**** A heading in post
 #+begin_src nim
 echo "hello again"
 #+end_src
+*** Source and example blocks in lists                        :example_block:
+:PROPERTIES:
+:EXPORT_FILE_NAME: src-and-example-blocks-in-lists
+:END:
+#+begin_description
+Test to verify rendering of source and example blocks in lists.
+#+end_description
+
+[[https://discourse.gohugo.io/t/blackfriday-not-handling-lists-and-code-blocks-the-right-way/19932][Ref]]
+
+- list item 1
+  #+begin_src nim
+  echo "hello from list item 1"
+  #+end_src
+  - list item 1.1
+    #+begin_example
+    echo "hello from list item 1.1"
+    #+end_example
+  -
+    #+begin_example
+    echo "hello from list item 1.2"
+    echo "there's not text before this example block in this list item"
+    #+end_example
+    - list item 1.2.1
+      #+begin_src nim
+      echo "hello from list item 1.2.1"
+      #+end_src
+    -
+      #+begin_src nim
+      echo "hello from list item 1.2.2"
+      echo "there's not text before this src block in this list item"
+      #+end_src
+      - list item 1.2.2.1
+        #+begin_example
+        echo "hello from list item 1.2.2.1"
+        #+end_example
+-
+  #+begin_src nim
+  echo "hello from list item 2"
+  echo "there's not text before this src block in this list item"
+  #+end_src
+- list item 3
+  #+begin_example
+  echo "hello from list item 3"
+  #+end_example
 * Quotes                                                             :quotes:
 ** Consecutive quotes
 :PROPERTIES:

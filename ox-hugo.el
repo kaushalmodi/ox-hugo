@@ -1996,11 +1996,7 @@ and rewrite link paths to make blogging more seamless."
                  (format "[%s](%s)" desc path)
                (format "<%s>" path))))
           (`headline                 ;Links of type [[* Some heading]]
-           (let ((title (org-export-data-with-backend
-                         (org-element-property :title destination) 'md info)))
-             ;; (message "[ox-hugo-link DBG] headline title pre sanitize: %s"
-             ;;          (org-export-data (org-element-property :title destination) info))
-             ;; (message "[ox-hugo-link DBG] headline title post sanitize: %s" title)
+           (let ((title (org-export-data (org-element-property :title destination) info)))
              (format
               "[%s](#%s)"
               ;; Description

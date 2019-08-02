@@ -1996,8 +1996,8 @@ and rewrite link paths to make blogging more seamless."
                  (format "[%s](%s)" desc path)
                (format "<%s>" path))))
           (`headline                 ;Links of type [[* Some heading]]
-           (let ((title (org-hugo--sanitize-title
-                         info (org-element-property :title destination) 'md)))
+           (let ((title (org-export-data-with-backend
+                         (org-element-property :title destination) 'md info)))
              ;; (message "[ox-hugo-link DBG] headline title pre sanitize: %s"
              ;;          (org-export-data (org-element-property :title destination) info))
              ;; (message "[ox-hugo-link DBG] headline title post sanitize: %s" title)
@@ -2953,49 +2953,48 @@ to ((name . \"foo\") (weight . 80))."
           (push cell valid-menu-alist))))
     valid-menu-alist))
 
-(defun org-hugo--sanitize-title (info &optional title backend)
+(defun org-hugo--get-sanitized-title (info)
   "Return sanitized version of an Org headline TITLE.
 
 INFO is a plist used as a communication channel.
 
-If TITLE is nil, extract it from INFO (unless exporting title is
+Extract the document title from INFO (unless exporting title is
 disabled by setting `org-export-with-title' to nil or using the
 OPTIONS keyword e.g. \"title:nil\").
 
-If TITLE is nil, and exporting the title is disabled, return nil.
+If the extracted document title is nil, and exporting the title
+is disabled, return nil.
 
-If TITLE is non-nil, ignore the value of
-`org-export-with-title'. When non-nil, TITLE is the object
-returned by `org-element-property'.
+If the extracted document title is non-nil, return it after
+removing all markup characters."
+  (let ((title (when (plist-get info :with-title)
+                 (plist-get info :title))))
+    (when title
+      ;; "Raw" backend that returns emphasis elements without any
+      ;; markup characters --
+      ;; http://lists.gnu.org/r/emacs-orgmode/2017-12/msg00490.html
+      (let* ((raw-backend
 
-If BACKEND is nil, return the TITLE without any markup
-characters, else export it using the BACKEND."
-  (unless title
-    (when (plist-get info :with-title)
-      (setq title (plist-get info :title))))
+              (let ((get-raw (lambda (object contents _)
+                               (or contents
+                                   (org-element-property :value object)))))
+                (org-export-create-backend
+                 :parent 'ascii
+                 :transcoders (mapcar (lambda (type)
+                                        (cons type get-raw))
+                                      '(bold code italic strike-through
+                                             underline verbatim))))))
+        (setq title (org-export-data-with-backend title raw-backend info))
+        ;; Hugo does not render Markdown in the titles and so the
+        ;; Blackfriday smartDashes conversion does not work there.  So
+        ;; do that here instead.  Convert "---" to EM DASH, "--" to EN
+        ;; DASH, and "..." to HORIZONTAL ELLIPSIS.
 
-  (let* ((backend (or backend
-                      ;; "Raw" backend that returns emphasis elements
-                      ;; without any markup characters --
-                      ;; http://lists.gnu.org/r/emacs-orgmode/2017-12/msg00490.html
-                      (let ((get-raw (lambda (object contents _)
-                                       (or contents
-                                           (org-element-property :value object)))))
-                        (org-export-create-backend
-                         :parent 'ascii
-                         :transcoders (mapcar (lambda (type)
-                                                (cons type get-raw))
-                                              '(bold code italic strike-through
-                                                     underline verbatim))))))
-         (title (org-export-data-with-backend title backend info))
-         ;; Hugo does not render Markdown in the titles and so the
-         ;; Blackfriday smartDashes conversion does not work there.  So
-         ;; do that here instead.  Convert "---" to EM DASH, "--" to EN
-         ;; DASH, and "..." to HORIZONTAL ELLIPSIS.
-         ;; Below two replacements are order sensitive!
-         (title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
-         (title (replace-regexp-in-string "--\\([^-]\\)" "–\\1" title)) ;EN DASH
-         (title (replace-regexp-in-string "\\.\\.\\." "…" title))) ;HORIZONTAL ELLIPSIS
+        ;; Below two replacements are order sensitive!
+        (setq title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
+        (setq title (replace-regexp-in-string "--\\([^-]\\)" "–\\1" title)) ;EN DASH
+
+        (setq title (replace-regexp-in-string "\\.\\.\\." "…" title)))) ;HORIZONTAL ELLIPSIS
     title))
 
 (defun org-hugo--replace-underscores-with-spaces (str)
@@ -3244,7 +3243,7 @@ INFO is a plist used as a communication channel."
          (blackfriday (org-hugo--parse-blackfriday-prop-to-alist (plist-get info :hugo-blackfriday)))
          (data `(;; The order of the elements below will be the order in which the front-matter
                  ;; variables will be ordered.
-                 (title . ,(org-hugo--sanitize-title info))
+                 (title . ,(org-hugo--get-sanitized-title info))
                  (audio . ,(plist-get info :hugo-audio))
                  (author . ,author-list)
                  (description . ,description)
@@ -3955,8 +3954,8 @@ links."
                       (when (and (null link-desc)
                                  (equal 'headline destination-type))
                         (let ((headline-title
-                               (org-hugo--sanitize-title
-                                info (org-element-property :title destination) 'ascii)))
+                               (org-export-data-with-backend
+                                (org-element-property :title destination) 'ascii info)))
                           ;; (message "[ox-hugo pre process DBG] destination heading: %s" headline-title)
                           (org-element-set-contents link-copy headline-title)))
                       (org-element-set-element link link-copy))))))))

@@ -1,11 +1,11 @@
 +++
-title = "Source block following a list"
+title = "Example block following a list"
 description = """
-  Test to verify rendering of a source block immediately following a
-  plain list, and even a list following a heading following a source
+  Test to verify rendering of a example block immediately following a
+  plain list, and even a list following a heading following a example
   block.
   """
-tags = ["lists", "src-block"]
+tags = ["lists", "example-block"]
 categories = ["upstream"]
 draft = false
 +++
@@ -21,8 +21,8 @@ draft = false
 
 <!--listend-->
 
-```nim
-echo "hello"
+```text
+something in example block
 ```
 
 -   another list item 1
@@ -31,6 +31,6 @@ echo "hello"
 
 ## A heading in post {#a-heading-in-post}
 
-```nim
-echo "hello again"
+```text
+another example block
 ```

@@ -3025,7 +3025,7 @@ C = W\log_{2} (1+\mathrm{SNR})
 :EXPORT_FILE_NAME: links-outside-the-same-post
 :END:
 {{{oxhugoissue(30)}}}
-*** External links with search options                     :external_links:
+*** External links with search options                       :external_links:
 Links between documents can contain some search options. Only links
 to a heading with a *:CUSTOM_ID* property will be resolved to the
 appropriate location in the linked file. Links to headlines and
@@ -3034,7 +3034,7 @@ links to targets will be resolved to the containing file.
 - [[file:link-destination.org::#external-target][Link to CUSTOM_ID]]
 - [[file:link-destination.org::*external-target][Link to a headline]]
 - [[file:link-destination.org::external-target][Link to a target]]
-*** Internal links                                         :internal_links:
+*** Internal links                                           :internal_links:
 Internal links point to targets in the current subtree that will be
 exported to the same Hugo post as the link source. To handle links to
 an *:ID* property, the =org-id= feature must first be loaded, either
@@ -3045,7 +3045,7 @@ init file.
 - [[id:8e65ff86-3f9a-48ef-9b43-751a2e8a9372][Link to ID within the same post]]
 - [[*Internal target][Link to headline within the same post]]
 - [[internal-target][Link to target within the same post]]
-*** Cross-post links                                      :crosspost_links:
+*** Cross-post links                                        :crosspost_links:
 Cross-post links are internal links pointing to targets in a different
 subtree that will be exported to another Hugo post than the link
 source in subtree-based exports. The Hugo's ~ref~ and ~relref~
@@ -3435,8 +3435,8 @@ Checklist showing progress in ratio.
 - Defn B :: Something B in red
 
 /The =red-text= style is defined in the first list above./
-** Source blocks and lists                                        :src_block:
-*** Source block following a list
+** Source blocks, example blocks and lists
+*** Source block following a list                       :src_block:@upstream:
 :PROPERTIES:
 :EXPORT_FILE_NAME: src-block-following-a-list
 :END:
@@ -3446,7 +3446,10 @@ plain list, and even a list following a heading following a source
 block.
 #+end_description
 
-[[https://discourse.gohugo.io/t/rendering-code-blocks-properly-from-md-files/19126][Ref]]
+- [[https://discourse.gohugo.io/t/rendering-code-blocks-properly-from-md-files/19126][Ref 1]]
+- [[https://discourse.gohugo.io/t/possible-regression-in-v0-55-5-regarding-lists-containing-code-blocks/18502/4?u=kaushalmodi][Ref 2]]
+- {{{bfissue(556)}}}
+
 
 - list item 1
 - list item 2
@@ -3459,7 +3462,33 @@ echo "hello"
 #+begin_src nim
 echo "hello again"
 #+end_src
-*** Source and example blocks in lists                        :example_block:
+*** Example block following a list                  :example_block:@upstream:
+:PROPERTIES:
+:EXPORT_FILE_NAME: example-block-following-a-list
+:END:
+#+begin_description
+Test to verify rendering of a example block immediately following a
+plain list, and even a list following a heading following a example
+block.
+#+end_description
+
+- [[https://discourse.gohugo.io/t/rendering-code-blocks-properly-from-md-files/19126][Ref 1]]
+- [[https://discourse.gohugo.io/t/possible-regression-in-v0-55-5-regarding-lists-containing-code-blocks/18502/4?u=kaushalmodi][Ref 2]]
+- {{{bfissue(556)}}}
+
+
+- list item 1
+- list item 2
+#+begin_example
+something in example block
+#+end_example
+- another list item 1
+- another list item 2
+**** A heading in post
+#+begin_example
+another example block
+#+end_example
+*** Source and example blocks in lists              :src_block:example_block:
 :PROPERTIES:
 :EXPORT_FILE_NAME: src-and-example-blocks-in-lists
 :END:

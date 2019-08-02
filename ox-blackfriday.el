@@ -722,14 +722,12 @@ communication channel."
                    (org-blackfriday--div-wrap-maybe plain-list nil)
                    (org-html-plain-list plain-list contents info)))
       (let* ((next (org-export-get-next-element plain-list info))
-             (next-type (org-element-type next))
-             (next-is-list (eq 'plain-list next-type)))
+             (next-type (org-element-type next)))
+        ;; (message "next type: %s" next-type)
         (setq ret (org-blackfriday--div-wrap-maybe plain-list contents))
-        (setq ret (concat ret
-                          ;; Two consecutive lists in Markdown can be
-                          ;; separated by a comment.
-                          (when next-is-list
-                            "\n<!--listend-->")))))
+        (when (member next-type '(plain-list
+                                  src-block example-block)) ;https://github.com/russross/blackfriday/issues/556
+          (setq ret (concat ret "\n<!--listend-->")))))
     ret))
 
 ;;;; Plain Text

@@ -2906,18 +2906,18 @@ Once that is evaluated, links like these will export fine i.e. no
 :END:
 - Link (with description) to a heading with section number: [[* Beta 102][Link to
   /Beta 102/ heading]]
-- Link (no description) to a heading without section number: [[* Zeta
-  103]].
+- Link (no description) to a heading without section number: [[* Zeta 103
+  which has *some markup*]].
 
   The space after that =*= in the link is optional.. so this also
-  works: [[*Zeta 103]].
+  works: [[*Zeta 103 which has *some markup*]].
 **** Beta 102
 - Link (with description) to a heading without section number: [[* Alpha 101][Link to
   /Alpha 101/ heading]]
 ***** Gamma 102.1
 ****** Delta 102.1.1
 ****** Epsilon 102.1.2
-**** Zeta 103
+**** Zeta 103 which has *some markup*
 :PROPERTIES:
 :UNNUMBERED: t
 :END:

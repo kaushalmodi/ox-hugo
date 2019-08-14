@@ -2265,6 +2265,32 @@ and rewrite link paths to make blogging more seamless."
             (format "<%s>" path)))))))))
 
 ;;;;; Helpers
+(defun org-hugo--maybe-copy-resources (info)
+  "Copy resources to the bundle directory if needed.
+
+INFO is a plist used as a communication channel."
+  (let* ((exportables org-hugo-external-file-extensions-allowed-for-copying)
+         (bundle-dir (and (plist-get info :hugo-bundle)
+                          (org-hugo--get-pub-dir info)))
+         (resources (org-hugo--parse-property-arguments (plist-get info :hugo-resources))))
+    (when (and bundle-dir resources)
+      (dolist (resource resources)
+        (let ((key (car resource)))
+          (when (equal key 'src)
+            (let* ((val (cdr resource))
+                   (sources (file-expand-wildcards val)))
+              (dolist (source sources)
+                (let ((src-path (file-truename source)))
+                  (when (and (file-exists-p src-path)
+                             (member (file-name-extension src-path) exportables))
+                    (let* ((dest-path (concat bundle-dir source))
+                           (dest-path-dir (file-name-directory dest-path)))
+                      (unless (file-exists-p dest-path-dir)
+                        (mkdir dest-path-dir :parents))
+                      (when (file-newer-than-file-p src-path dest-path)
+                        (message "[ox-hugo] Copied %S to %S" src-path dest-path)
+                        (copy-file src-path dest-path :ok-if-already-exists)))))))))))))
+
 (defun org-hugo--attachment-rewrite-maybe (path info)
   "Copy local images and pdfs to the static/bundle directory if needed.
 Also update the link paths to match those.
@@ -2698,6 +2724,8 @@ INFO is a plist holding export options."
 
 BODY is the result of the export.
 INFO is a plist holding export options."
+  ;; Copy the page resources to the bundle directory
+  (org-hugo--maybe-copy-resources info)
   ;; `org-md-plain-text' would have escaped all underscores in plain
   ;; text i.e. "_" would have been converted to "\_".
   ;; We need to undo that underscore escaping in Emoji codes for those

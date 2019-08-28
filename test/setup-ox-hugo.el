@@ -197,6 +197,7 @@ Emacs installation.  If Emacs is installed using
   ;; (message (list-load-path-shadows :stringp))
   )
 
+(require 'org-id)
 (require 'ox-hugo)
 (defun org-hugo-export-all-wim-to-md ()
   (org-hugo-export-wim-to-md :all-subtrees nil nil :noerror))
@@ -268,6 +269,11 @@ Fake current time: 2100/12/21 00:00:00 (arbitrary)."
     (encode-time 0 0 0 21 12 2100))
   (advice-add 'current-time :override #'ox-hugo-test/current-time-override)
   ;; (advice-remove 'current-time #'ox-hugo-test/current-time-override)
+
+  ;; issue # 272
+  (load (expand-file-name "test/issue-272-chkbox-items-to-front-matter.el"
+                          ox-hugo-site-git-root)
+        nil :nomessage :nosuffix)
 
   (with-eval-after-load 'ox
     (add-to-list 'org-export-exclude-tags "dont_export_during_make_test")))

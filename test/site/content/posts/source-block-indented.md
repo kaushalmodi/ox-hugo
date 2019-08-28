@@ -4,7 +4,7 @@ description = """
   Test that indented source blocks, and also the ones in lists export
   fine.
   """
-tags = ["src-block", "indented", "lists", "code-fence", "highlight", "code-block"]
+tags = ["src-block", "indented", "lists", "code-fence", "highlight"]
 categories = ["upstream"]
 draft = false
 +++
@@ -52,6 +52,8 @@ Reference: `hugo` Issue #[4006](https://github.com/gohugoio/hugo/issues/4006)
     ```emacs-lisp
     (message "I am in list back at level-1 indentation")
     ```
+
+<!--listend-->
 
 ```emacs-lisp
 (message "And now I am at level-0 indentation")
@@ -103,6 +105,8 @@ there.
     {{< highlight emacs-lisp "linenos=table, linenostart=1" >}}
     (message "I am in list back at level-1 indentation")
     {{< /highlight >}}
+
+<!--listend-->
 
 {{< highlight emacs-lisp "linenos=table, linenostart=1" >}}
 (message "And now I am at level-0 indentation")

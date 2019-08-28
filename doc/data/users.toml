@@ -72,25 +72,11 @@
   site = "https://www.shimmy1996.com/"
   org_dir = "org"
 
-# [isaaczhou]
-#  author = "Isaac Zhou"
-#  source = "https://github.com/isaaczhou/isaaczhou.github.io"
-#  site = "http://www.isaaczhou.com/"
-#  org_dir = "org"
-#  branch = "dev"
-
 [zzamboni]
   author = "Diego Zamboni"
   source = "https://github.com/zzamboni/zzamboni.org"
   site = "https://zzamboni.org/"
   org_dir = "content-org"
-
-[primerpy]
-  author = "Isaac Zhou"
-  source = "https://github.com/primerpy/primerpy.github.io"
-  site = "http://www.primerpy.com/"
-  org_dir = "org"
-  branch = "dev"
 
 [dmolina]
   author = "Daniel Molina"
@@ -142,21 +128,17 @@
   source = "https://github.com/jwiegley/use-package"
   site = "https://jwiegley.github.io/use-package/"
 
-[nicehiro]
-  author = "nicehiro"
-  source = "https://github.com/nicehiro/org-files"
-  site = "http://nicehiro.org/"
-
 [aaronbaugher]
   author = "Aaron Baugher"
   source = "https://aaron.baugher.biz/text/blog.org" # Site source not in a repo
   site = "https://aaron.baugher.biz/"
   org_src_desc = "Org file"
 
-[lakedenman]
-  author = "Lake Denman"
-  source = "https://github.com/ldenman/blog"
-  site = "https://lakedenman.com/blog/"
+# The domain was found unmaintained (expired certificate) as of today -- Fri Jun 28 09:03:07 EDT 2019 - kmodi
+# [lakedenman]
+#   author = "Lake Denman"
+#   source = "https://github.com/ldenman/blog"
+#   site = "https://lakedenman.com/blog/"
 
 [kengrimes]
   author = "Ken Grimes"
@@ -252,7 +234,7 @@
 [ryancummings]
   author = "Ryan Cummings"
   source = "https://github.com/ryancummings/blog"
-  site = "https://ryanwcummings.com/"
+  site = "http://blog.ryanwcummings.com/"
   org_dir = "content-org"
 
 [taipapamotohus]
@@ -270,7 +252,7 @@
   author = "junahan"
   source = "https://github.com/junahan/junahan-site"
   site = "https://junahan.netlify.com/"
-  org_dir = "draft"
+  org_dir = "org"
 
 [alexmurray]
   author = "Alex Murray"
@@ -324,7 +306,7 @@
 [amca01]
   author = "Alasdair McAndrew"
   source = "https://github.com/amca01/whats_this"
-  site = "https://blog.numbersandshapes.net/"
+  site = "https://numbersandshapes.net/"
   org_dir = "content-org"
 
 [BloggerBust]
@@ -350,22 +332,17 @@
   source = "https://github.com/jarss/TAONAW"
   site = "https://jarss.github.io/TAONAW/"
 
-[jubnzv]
-  author = "Georgy Komarov"
-  source = "https://github.com/jubnzv/jubnzv.github.io"
-  site = "https://idie.ru"
-  org_dir = "content-org"
-
 [jethrokuan]
   author = "Jethro Kuan"
   source = "https://github.com/jethrokuan/braindump"
-  site = "https://braindump.jethrokuan.com"
+  site = "https://braindump.jethro.dev/"
   org_dir = "org"
 
-[dkensinger]
-  author = "Dave Kensinger"
-  source = "https://github.com/dkensinger/my-hugo-blog"
-  site = "https://dave-2-1.netlify.com"
+# The github repo didn't exist as of today -- Fri Jun 28 09:00:12 EDT 2019 - kmodi
+# [dkensinger]
+#   author = "Dave Kensinger"
+#   source = "https://github.com/dkensinger/my-hugo-blog"
+#   site = "https://dave-2-1.netlify.com"
 
 [justinbarclay]
   author = "Justin Barclay"

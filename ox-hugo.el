@@ -99,7 +99,7 @@
 It holds the value returned by
 `org-hugo--get-post-subtree-coordinates'.")
 
-(defvar org-hugo--subtree-count nil
+(defvar org-hugo--subtree-count 0
   "Variable to count of number of subtrees getting exported.
 This variable is used when exporting all subtrees in a file.")
 
@@ -592,6 +592,7 @@ copied to this sub-directory inside the Hugo static directory."
 
 (defcustom org-hugo-external-file-extensions-allowed-for-copying
   '("jpg" "jpeg" "tiff" "png" "svg" "gif"
+    "mp4"
     "pdf" "odt"
     "doc" "ppt" "xls"
     "docx" "pptx" "xlsx")
@@ -741,10 +742,11 @@ newer."
             (lambda (a _s v _b)
               (if a
                   (org-hugo-export-wim-to-md nil :async v)
-                (org-open-file (org-hugo-export-wim-to-md nil a v)))))
+                (org-open-file (org-hugo-export-wim-to-md nil nil v)))))
         (?o "To file and open"
             (lambda (a s v _b)
-              (if a (org-hugo-export-to-md t s v)
+              (if a
+                  (org-hugo-export-to-md :async s v)
                 (org-open-file (org-hugo-export-to-md nil s v)))))
         (?A "All subtrees to files"
             (lambda (a _s v _b)
@@ -1058,7 +1060,6 @@ contents according to the current headline."
                                 ;; (message "[ox-hugo TOC DBG] headline-num-list: %S" headline-num-list)
                                 (org-hugo--get-headline-number headline info :toc)
                               ""))
-                    (title (org-export-data (org-element-property :title headline) info))
                     (toc-entry
                      (format "[%s%s](#%s)"
                              todo-str
@@ -1066,8 +1067,7 @@ contents according to the current headline."
                               (org-export-get-alt-title headline info)
                               (org-export-toc-entry-backend 'hugo)
                               info)
-                             (or (org-element-property :CUSTOM_ID headline)
-                                 (org-hugo-slug title))))
+                             (org-hugo--get-anchor headline info)))
                     (tags (and (plist-get info :with-tags)
                                (not (eq 'not-in-toc (plist-get info :with-tags)))
                                (let ((tags (org-export-get-tags headline info)))
@@ -1778,8 +1778,7 @@ a communication channel."
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
         (let ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
-                              (or (org-element-property :CUSTOM_ID headline)
-                                  (org-hugo-slug title)))))
+                              (org-hugo--get-anchor headline info))))
           (concat (org-hugo--headline-title style level loffset title todo-fmtd anchor numbers)
                   contents)))))))
 
@@ -1856,6 +1855,29 @@ The `slug' generated from that STR follows these rules:
          ;; Remove leading and trailing hyphens.
          (str (replace-regexp-in-string "\\(^[-]*\\|[-]*$\\)" "" str)))
     str))
+
+(defun org-hugo--get-anchor(element info &optional title-str)
+  "Return an Org headline's CUSTOM_ID or it's title's slug.
+
+If an Org ELEMENT has the CUSTOM_ID property defined, return
+that.
+
+INFO is a plist used as a communication channel.
+
+If the CUSTOM_ID property is not defined, and if TITLE-STR is
+nil, derive the title string from the INFO, pass that to
+`org-hugo-slug' and return its output.
+
+If the CUSTOM_ID property is not defined, and if TITLE-STR is a
+non-empty string, pass that to `org-hugo-slug' and return its
+output."
+  (let ((ret (org-element-property :CUSTOM_ID element)))
+    (unless ret
+      (let ((title (or (org-string-nw-p title-str)
+                       (org-export-data-with-backend
+                        (org-element-property :title element) 'md info))))
+        (setq ret (org-hugo-slug title))))
+    ret))
 
 (defun org-hugo--headline-title (style level loffset title &optional todo anchor numbers)
   "Generate a headline title in the preferred Markdown headline style.
@@ -1977,7 +1999,6 @@ and rewrite link paths to make blogging more seamless."
                (format "<%s>" path))))
           (`headline                 ;Links of type [[* Some heading]]
            (let ((title (org-export-data (org-element-property :title destination) info)))
-             ;; (message "[ox-hugo-link DBG] headline title: %s" title)
              (format
               "[%s](#%s)"
               ;; Description
@@ -1989,8 +2010,7 @@ and rewrite link paths to make blogging more seamless."
                     (t
                      title))
               ;; Reference
-              (or (org-element-property :CUSTOM_ID destination)
-                  (org-hugo-slug title)))))
+              (org-hugo--get-anchor destination info title))))
           (_
            (let ((description
                   (or (org-string-nw-p desc)
@@ -2256,7 +2276,8 @@ PATH is the path to the image or any other attachment.
 INFO is a plist used as a communication channel."
   ;; (message "[ox-hugo attachment DBG] The Hugo section is: %s" (plist-get info :hugo-section))
   ;; (message "[ox-hugo attachment DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir))
-  (let* ((path-true (file-truename path))
+  (let* ((path-unhexified (org-link-unescape path))
+         (path-true (file-truename path-unhexified))
          (exportables org-hugo-external-file-extensions-allowed-for-copying)
          (bundle-dir (and (plist-get info :hugo-bundle)
                           (org-hugo--get-pub-dir info)))
@@ -2288,7 +2309,7 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-hugo DBG attch rewrite] default-dir: %s" default-directory)
     ;; (message "[ox-hugo DBG attch rewrite] dest-dir: %s" dest-dir)
     (if (and (file-exists-p path-true)
-             (member (file-name-extension path) exportables)
+             (member (file-name-extension path-unhexified) exportables)
              (file-directory-p dest-dir))
         (progn
           ;; Check if `path-true' is already inside `dest-dir'.
@@ -2332,7 +2353,7 @@ INFO is a plist used as a communication channel."
                         ;; "<ORG_FILE_DIR>/", `path-true' is
                         ;; "/foo/bar/baz.png", return "baz.png".
                         ;; (message "[ox-hugo DBG attch rewrite BUNDLE 3] attch neither in static nor in Org file dir")
-                        (file-name-nondirectory path))))
+                        (file-name-nondirectory path-unhexified))))
                      (t
                       ;; Else, `path-true' is "/foo/bar/baz.png",
                       ;; return "ox-hugo/baz.png".  "ox-hugo" is the
@@ -2341,7 +2362,7 @@ INFO is a plist used as a communication channel."
                       ;; (message "[ox-hugo DBG attch rewrite] neither BUNDLE nor contains static")
                       (concat
                        (file-name-as-directory org-hugo-default-static-subdirectory-for-externals)
-                       (file-name-nondirectory path)))))
+                       (file-name-nondirectory path-unhexified)))))
                    (dest-path (concat dest-dir file-name-relative-path))
                    (dest-path-dir (file-name-directory dest-path)))
               ;; The `dest-dir' would already exist.  But if
@@ -2385,18 +2406,32 @@ communication channel."
                      (format "<a id=\"%s\"></a>\n\n" lbl)
                    "")))
         ret)
+
+    ;; (message "[org-hugo-paragraph DBG] para 1: %s" contents)
+    ;; Join consecutive Chinese lines into a single long line without
+    ;; unwanted space inbetween.
+    ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5
+    ;; Example: 这是一个测试     -> 这是一个测试文本 ("This is a test text")
+    ;;          文本
+    (setq contents (replace-regexp-in-string
+                    "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
+                    contents))
+    ;; (message "[org-hugo-paragraph DBG] para 2: %s" contents)
+
     (unless (org-hugo--plist-get-true-p info :hugo-preserve-filling)
       (setq contents (concat (mapconcat 'identity (split-string contents) " ") "\n")))
-    ;; Glue footnotes to the words before them using &nbsp; so that the
-    ;; footnote reference does not end up on a new line by itself.
+
     (setq contents (replace-regexp-in-string
+                    ;; Glue footnotes to the words before them using
+                    ;; &nbsp; so that the footnote reference does not
+                    ;; end up on a new line by itself.
                     ;; "something FN" -> "something&nbsp;FN"
                     "[[:blank:]]+\\(\\[\\^[^]]+\\]\\)" "&nbsp;\\1"
                     (replace-regexp-in-string
                      ;; "FN ." -> "FN."
                      "\\(\\[\\^[^]]+\\]\\)[[:blank:]]*\\([.]+\\)" "\\1\\2"
                      contents)))
-    ;; (message "[org-hugo-paragraph DBG] para: %s" contents)
+    ;; (message "[org-hugo-paragraph DBG] para 3: %s" contents)
     (setq ret (concat label
                       (org-md-paragraph paragraph contents info)))
 
@@ -2521,7 +2556,7 @@ channel."
                     ;; https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org
                     ;; So attempt to do below:
                     ;;   ```org
-                    ;;   # org comment
+                    ;;   # Org comment
                     ;;   ```
                     ;; will not result in a <code> tag wrapped block in HTML.
                     ;;
@@ -2916,37 +2951,49 @@ to ((name . \"foo\") (weight . 80))."
           (push cell valid-menu-alist))))
     valid-menu-alist))
 
-(defun org-hugo--sanitize-title (info)
-  "Return sanitized version of the title string parsed from INFO.
+(defun org-hugo--get-sanitized-title (info)
+  "Return sanitized version of an Org headline TITLE.
 
-The title string is returned in a markup-free \"raw\" form.
+INFO is a plist used as a communication channel.
 
-If exporting title is disabled by setting `org-export-with-title'
-to nil or using the OPTIONS keyword e.g. \"title:nil\", return
-nil.
+Extract the document title from INFO (unless exporting title is
+disabled by setting `org-export-with-title' to nil or using the
+OPTIONS keyword e.g. \"title:nil\").
 
-INFO is a plist used as a communication channel."
-  (when (plist-get info :with-title)
-    ;; "Raw" backend that returns emphasis elements without any markup
-    ;; characters -- http://lists.gnu.org/r/emacs-orgmode/2017-12/msg00490.html
-    (let* ((raw-backend (let ((get-raw (lambda (object contents _)
-                                         (or contents
-                                             (org-element-property :value object)))))
-                          (org-export-create-backend
-                           :parent 'ascii
-                           :transcoders (mapcar (lambda (type)
-                                                  (cons type get-raw))
-                                                '(bold code italic strike-through underline verbatim)))))
-           (title (org-export-data-with-backend (plist-get info :title) raw-backend info))
-           ;; Hugo does not render Markdown in the titles and so the
-           ;; Blackfriday smartDashes conversion does not work there.  So
-           ;; do that here instead.  Convert "---" to EM DASH, "--" to EN
-           ;; DASH, and "..." to HORIZONTAL ELLIPSIS.
-           ;; Below two replacements are order sensitive!
-           (title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
-           (title (replace-regexp-in-string "--\\([^-]\\)" "–\\1" title)) ;EN DASH
-           (title (replace-regexp-in-string "\\.\\.\\." "…" title))) ;HORIZONTAL ELLIPSIS
-      title)))
+If the extracted document title is nil, and exporting the title
+is disabled, return nil.
+
+If the extracted document title is non-nil, return it after
+removing all markup characters."
+  (let ((title (when (plist-get info :with-title)
+                 (plist-get info :title))))
+    (when title
+      ;; "Raw" backend that returns emphasis elements without any
+      ;; markup characters --
+      ;; http://lists.gnu.org/r/emacs-orgmode/2017-12/msg00490.html
+      (let* ((raw-backend
+
+              (let ((get-raw (lambda (object contents _)
+                               (or contents
+                                   (org-element-property :value object)))))
+                (org-export-create-backend
+                 :parent 'ascii
+                 :transcoders (mapcar (lambda (type)
+                                        (cons type get-raw))
+                                      '(bold code italic strike-through
+                                             underline verbatim))))))
+        (setq title (org-export-data-with-backend title raw-backend info))
+        ;; Hugo does not render Markdown in the titles and so the
+        ;; Blackfriday smartDashes conversion does not work there.  So
+        ;; do that here instead.  Convert "---" to EM DASH, "--" to EN
+        ;; DASH, and "..." to HORIZONTAL ELLIPSIS.
+
+        ;; Below two replacements are order sensitive!
+        (setq title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
+        (setq title (replace-regexp-in-string "--\\([^-]\\)" "–\\1" title)) ;EN DASH
+
+        (setq title (replace-regexp-in-string "\\.\\.\\." "…" title)))) ;HORIZONTAL ELLIPSIS
+    title))
 
 (defun org-hugo--replace-underscores-with-spaces (str)
   "Replace double underscores in STR with single spaces.
@@ -3194,7 +3241,7 @@ INFO is a plist used as a communication channel."
          (blackfriday (org-hugo--parse-blackfriday-prop-to-alist (plist-get info :hugo-blackfriday)))
          (data `(;; The order of the elements below will be the order in which the front-matter
                  ;; variables will be ordered.
-                 (title . ,(org-hugo--sanitize-title info))
+                 (title . ,(org-hugo--get-sanitized-title info))
                  (audio . ,(plist-get info :hugo-audio))
                  (author . ,author-list)
                  (description . ,description)
@@ -3534,13 +3581,15 @@ are \"toml\" and \"yaml\"."
                      "HUGO_PANDOC_CITATIONS"
                      "BIBLIOGRAPHY"
                      "HUGO_AUTO_SET_LASTMOD"
-                     "HUGO_EXPORT_RMARKDOWN")))
+                     "HUGO_EXPORT_RMARKDOWN"
+                     "AUTHOR")))
+
     (mapcar (lambda (str)
               (concat "EXPORT_" str))
             prop-list)))
 
 (defun org-hugo--get-valid-subtree ()
-  "Return the org element for a valid Hugo post subtree.
+  "Return the Org element for a valid Hugo post subtree.
 The condition to check validity is that the EXPORT_FILE_NAME
 property is defined for the subtree element.
 
@@ -3607,7 +3656,323 @@ So the value returned for Level C will be (2 . 3)."
                          scope)
         (cons level index)))))
 
+(defun org-hugo--export-file-to-md (f-or-b-name &optional async visible-only noerror)
+  "Export the Org file as a whole.
 
+Note: This is an internal function, use
+`org-hugo-export-wim-to-md' instead.
+
+F-OR-B-NAME is the name of the file or buffer (if not a file
+buffer) to be exported.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously.  The resulting file should be accessible through the
+`org-export-stack' interface.
+
+When optional argument VISIBLE-ONLY is non-nil, don't export
+contents of hidden elements.
+
+Return the exported file name if the file has the #+title
+keyword.
+
+Else return nil and throw a user error.  If NOERROR is non-nil,
+use `message' to display the error message instead of signaling a
+user error."
+  (let* ((info (org-combine-plists
+                (org-export--get-export-attributes
+                 'hugo nil visible-only)
+                (org-export--get-buffer-attributes)
+                (org-export-get-environment 'hugo)))
+         (title (car (plist-get info :title)))
+         ret)
+    (if title
+        (let* ((all-tags-1 (plist-get info :hugo-tags))
+               (all-tags (when all-tags-1
+                           (split-string
+                            (replace-regexp-in-string "\"" "" all-tags-1))))
+               (exclude-tags (plist-get info :exclude-tags))
+               is-excluded matched-exclude-tag)
+          (when all-tags
+            ;; (message "[org-hugo--export-file-to-md DBG] exclude-tags = %s" exclude-tags)
+            (dolist (exclude-tag exclude-tags)
+              (when (member exclude-tag all-tags)
+                (setq matched-exclude-tag exclude-tag)
+                (setq is-excluded t))))
+          (cond
+           (is-excluded
+            (message "[ox-hugo] %s was not exported as it is tagged with an exclude tag `%s'"
+                     f-or-b-name matched-exclude-tag))
+
+           (t
+            (message "[ox-hugo] Exporting `%s' (%s)" title f-or-b-name)
+            (setq ret (org-hugo-export-to-md async nil visible-only)))))
+
+      (let ((msg "The entire file is attempted to be exported, but it is missing the #+title keyword")
+            (error-fn (if noerror
+                          #'message
+                        #'user-error)))
+        (apply error-fn
+               (list (format "[ox-hugo] %s: %s" f-or-b-name msg)))))
+    ret))
+
+(defun org-hugo--export-subtree-to-md (&optional async visible-only all-subtrees)
+  "Export the current subtree to a Hugo post.
+
+Note: This is an internal function, use
+`org-hugo-export-wim-to-md' instead.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously.  The resulting file should be accessible through the
+`org-export-stack' interface.
+
+When optional argument VISIBLE-ONLY is non-nil, don't export
+contents of hidden elements.
+
+When optional argument ALL-SUBTREES is non-nil, print the
+subtree-number being exported.
+
+- If point is under a valid Hugo post subtree, export it, and
+  also return the exported file name.
+
+- If point is not under a valid Hugo post subtree, but one exists
+  elsewhere in the Org file, do not export anything, but still
+  return t.
+
+- Else, return nil."
+  ;; Publish only the current subtree
+  (ignore-errors
+    (org-back-to-heading :invisible-ok))
+  (let ((subtree (org-hugo--get-valid-subtree)))
+    (if subtree
+        ;; If subtree is a valid Hugo post subtree, proceed ..
+        (let* ((info (org-combine-plists
+                      (org-export--get-export-attributes
+                       'hugo subtree visible-only)
+                      (org-export--get-buffer-attributes)
+                      (org-export-get-environment 'hugo subtree)))
+               (exclude-tags (plist-get info :exclude-tags))
+               (is-commented (org-element-property :commentedp subtree))
+               is-excluded matched-exclude-tag ret)
+          ;; (message "[org-hugo--export-subtree-to-md DBG] exclude-tags =
+          ;; %s" exclude-tags)
+          (let ((all-tags (let ((org-use-tag-inheritance t))
+                            (org-hugo--get-tags))))
+            (when all-tags
+              (dolist (exclude-tag exclude-tags)
+                (when (member exclude-tag all-tags)
+                  (setq matched-exclude-tag exclude-tag)
+                  (setq is-excluded t)))))
+
+          ;; (message "[current subtree DBG] subtree: %S" subtree)
+          ;; (message "[current subtree DBG] is-commented:%S, tags:%S,
+          ;; is-excluded:%S" is-commented tags is-excluded)
+          (let ((title (org-element-property :title subtree)))
+            (cond
+             (is-commented
+              (message "[ox-hugo] `%s' was not exported as that subtree is commented"
+                       title))
+             (is-excluded
+              (message "[ox-hugo] `%s' was not exported as it is tagged with an exclude tag `%s'"
+                       title matched-exclude-tag))
+             (t
+              (if all-subtrees
+                  (progn
+                    (setq org-hugo--subtree-count (1+ org-hugo--subtree-count))
+                    (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))
+                (message "[ox-hugo] Exporting `%s' .." title))
+              ;; Get the current subtree coordinates for
+              ;; auto-calculation of menu item weight, page or
+              ;; taxonomy weights ..
+              (when (or
+                     ;; .. if the menu front-matter is specified.
+                     (or
+                      (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
+                      (save-excursion
+                        (goto-char (point-min))
+                        (let ((case-fold-search t))
+                          (re-search-forward "^#\\+hugo_menu:.*:menu" nil :noerror))))
+                     ;; .. or if auto-calculation is needed for page
+                     ;; or taxonomy weights.
+                     (or
+                      (let ((page-or-taxonomy-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
+                        (and (stringp page-or-taxonomy-weight)
+                             (string-match-p "auto" page-or-taxonomy-weight)))
+                      (save-excursion
+                        (goto-char (point-min))
+                        (let ((case-fold-search t))
+                          (re-search-forward "^#\\+hugo_weight:.*auto" nil :noerror)))))
+                (setq org-hugo--subtree-coord
+                      (org-hugo--get-post-subtree-coordinates subtree)))
+
+              ;; If `all-subtrees' is non-nil, the Org buffer would
+              ;; already be pre-processed in
+              ;; `org-hugo-export-wim-to-md', so do not do that again.
+              (if all-subtrees
+                  (setq ret (org-hugo-export-to-md async :subtreep visible-only))
+
+                ;; Do the buffer pre-processing only if the user is
+                ;; exporting only the current valid Hugo post subtree.
+                (let ((current-outline-path (org-get-outline-path :with-self))
+                      (buffer (org-hugo--get-pre-processed-buffer)))
+                  (with-current-buffer buffer
+                    (goto-char (org-find-olp current-outline-path :this-buffer))
+                    (setq ret (org-hugo-export-to-md async :subtreep visible-only)))
+                  (kill-buffer buffer))))))
+          ret)
+
+      ;; If the point is not in a valid subtree, check if there's a
+      ;; valid subtree elsewhere in the same Org file.
+      (let ((valid-subtree-found
+             (catch 'break
+               (org-map-entries
+                (lambda ()
+                  (throw 'break t))
+                ;; Only map through subtrees where EXPORT_FILE_NAME
+                ;; property is not empty.
+                "EXPORT_FILE_NAME<>\"\""))))
+        (when valid-subtree-found
+          (message "Point is not in a valid Hugo post subtree; move to one and try again"))
+        valid-subtree-found))))
+
+(defun org-hugo--get-element-path (element info)
+  "Return the section path of ELEMENT.
+INFO is a plist holding export options."
+  (let ((root (or (org-export-get-node-property :EXPORT_HUGO_SECTION element :inherited)
+                  (plist-get info :hugo-section)))
+        (filename (org-export-get-node-property :EXPORT_FILE_NAME element :inherited))
+        (current-element element)
+        fragment fragments)
+    ;; Iterate over all parents of current-element, and collect
+    ;; section path fragments.
+    (while (and current-element
+                (not (org-export-get-node-property :EXPORT_HUGO_SECTION current-element nil)))
+      ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list.
+      (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* current-element nil))
+        (push fragment fragments))
+      (setq current-element (org-element-property :parent current-element)))
+    ;; Return the root section, section fragments and filename
+    ;; concatenated.
+    (concat
+     (file-name-as-directory root)
+     (mapconcat #'file-name-as-directory fragments "")
+     filename)))
+
+(defun org-hugo--get-pre-processed-buffer ()
+  "Return a pre-processed copy of the current buffer.
+
+Internal links to other subtrees are converted to external
+links."
+  (let* ((buffer (generate-new-buffer (concat "*Ox-hugo Pre-processed " (buffer-name) " *")))
+         ;; Create an abstract syntax tree (AST) of the Org document
+         ;; in the current buffer.
+         (ast (org-element-parse-buffer))
+         (org-use-property-inheritance (org-hugo--selective-property-inheritance))
+         (info (org-combine-plists
+                (list :parse-tree ast)
+                (org-export--get-export-attributes 'hugo)
+                (org-export--get-buffer-attributes)
+                (org-export-get-environment 'hugo)))
+         (local-variables (buffer-local-variables))
+         (bound-variables (org-export--list-bound-variables))
+	 vars)
+    (with-current-buffer buffer
+      (let ((inhibit-modification-hooks t)
+            (org-mode-hook nil)
+            (org-inhibit-startup t))
+
+        (org-mode)
+        ;; Copy specific buffer local variables and variables set
+        ;; through BIND keywords.
+        (dolist (entry local-variables vars)
+          (when (consp entry)
+	    (let ((var (car entry))
+	          (val (cdr entry)))
+	      (and (not (memq var org-export-ignored-local-variables))
+	           (or (memq var
+			     '(default-directory
+			        buffer-file-name
+			        buffer-file-coding-system))
+		       (assq var bound-variables)
+		       (string-match "^\\(org-\\|orgtbl-\\)"
+				     (symbol-name var)))
+	           ;; Skip unreadable values, as they cannot be
+	           ;; sent to external process.
+	           (or (not val) (ignore-errors (read (format "%S" val))))
+	           (push (set (make-local-variable var) val) vars)))))
+
+        ;; Process all link elements in the AST.
+        (org-element-map ast 'link
+          (lambda (link)
+            (let ((type (org-element-property :type link)))
+              (when (member type '("custom-id" "id" "fuzzy"))
+                (let* ((raw-link (org-element-property :raw-link link))
+                       (destination (if (string= type "fuzzy")
+                                        (org-export-resolve-fuzzy-link link info)
+                                      (org-export-resolve-id-link link info)))
+                       (source-path (org-hugo--get-element-path link info))
+                       (destination-path (org-hugo--get-element-path destination info))
+                       (destination-type (org-element-type destination)))
+                  ;; (message "[ox-hugo pre process DBG] destination type: %s" destination-type)
+
+                  ;; Change the link if it points to a valid
+                  ;; destination outside the subtree.
+                  (unless (equal source-path destination-path)
+                    (let ((link-desc (org-element-contents link))
+                          (link-copy (org-element-copy link)))
+                      ;; (message "[ox-hugo pre process DBG] link desc: %s" link-desc)
+                      (apply #'org-element-adopt-elements link-copy link-desc)
+                      (org-element-put-property link-copy :type "file")
+                      (org-element-put-property
+                       link-copy :path
+                       (cond
+                        ;; If the destination is a heading with the
+                        ;; :EXPORT_FILE_NAME property defined, the
+                        ;; link should point to the file (without
+                        ;; anchor).
+                        ((org-element-property :EXPORT_FILE_NAME destination)
+                         (concat destination-path ".org"))
+                        ;; Hugo only supports anchors to headlines, so
+                        ;; if a "fuzzy" type link points to anything
+                        ;; else than a headline, it should point to
+                        ;; the file.
+                        ((and (string= type "fuzzy")
+                              (not (string-prefix-p "*" raw-link)))
+                         (concat destination-path ".org"))
+                        ;; In "custom-id" type links, the raw-link
+                        ;; matches the anchor of the destination.
+                        ((string= type "custom-id")
+                         (concat destination-path ".org::" raw-link))
+                        ;; In "id" and "fuzzy" type links, the anchor
+                        ;; of the destination is derived from the
+                        ;; :CUSTOM_ID property or the title.
+                        (t
+                         (let ((anchor (org-hugo--get-anchor destination info)))
+                           (concat destination-path ".org::#" anchor)))))
+                      ;; If the link destination is a heading and if
+                      ;; user hasn't set the link description, set the
+                      ;; description to the destination heading title.
+                      (when (and (null link-desc)
+                                 (equal 'headline destination-type))
+                        (let ((headline-title
+                               (org-export-data-with-backend
+                                (org-element-property :title destination) 'ascii info)))
+                          ;; (message "[ox-hugo pre process DBG] destination heading: %s" headline-title)
+                          (org-element-set-contents link-copy headline-title)))
+                      (org-element-set-element link link-copy))))))))
+
+        ;; Workaround to prevent exporting of empty special blocks.
+        (org-element-map ast 'special-block
+          (lambda (block)
+            (when (null (org-element-contents block))
+              (org-element-adopt-elements block ""))))
+
+        ;; Turn the AST with updated links into an Org document.
+        (insert (org-element-interpret-data ast))
+        (set-buffer-modified-p nil)))
+    buffer))
+
+
+
 ;;; Interactive functions
 
 ;;;###autoload
@@ -3684,50 +4049,12 @@ Return output file's name."
                 (org-export-get-environment 'hugo subtreep)))
          (pub-dir (org-hugo--get-pub-dir info))
          (outfile (org-export-output-file-name (if (org-hugo--plist-get-true-p info :hugo-export-rmarkdown)
-                                                   ".rmarkdown" ".md") subtreep pub-dir))
-         (do-export t))
+                                                   ".rmarkdown" ".md") subtreep pub-dir)))
+
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
-    (unless subtreep
-      ;; Below stuff applies only to *per-file* export flow.
-      (let* ((fname (file-name-nondirectory (buffer-file-name)))
-             (title (format "%s" (or (car (plist-get info :title)) "<EMPTY TITLE>")))
-             (all-tags-1 (plist-get info :hugo-tags))
-             (all-tags (when all-tags-1
-                         (split-string
-                          (replace-regexp-in-string "\"" "" all-tags-1))))
-             (exclude-tags (plist-get info :exclude-tags))
-             matched-exclude-tag)
-        (when all-tags
-          ;; (message "[org-hugo-export-to-md DBG] exclude-tags = %s" exclude-tags)
-          (dolist (exclude-tag exclude-tags)
-            (when (member exclude-tag all-tags)
-              (setq matched-exclude-tag exclude-tag)
-              (setq do-export nil))))
-        (if do-export
-            (message "[ox-hugo] Exporting `%s' (%s)" title fname)
-          (message "[ox-hugo] %s was not exported as it is tagged with an exclude tag `%s'"
-                   fname matched-exclude-tag))))
-    (when do-export
-      (prog1
-          (org-export-to-file 'hugo outfile async subtreep visible-only)
-        (org-hugo--after-export-function info outfile)))))
-
-;; FIXME: org-publish based exporting is not yet supported.
-;; ;;;###autoload
-;; (defun org-hugo-publish-to-md (plist filename pub-dir)
-;;   "Publish an Org file to Hugo-compatible Markdown file.
-
-;; PLIST is the property list for the given project.  FILENAME is
-;; the filename of the Org file to be published.  PUB-DIR is the
-;; publishing directory.
-
-;; Return output file name."
-;;   (org-hugo--before-export-function subtreep)
-;;   ;; Allow certain `ox-hugo' properties to be inherited.
-;;   (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance)))
-;;     (prog1
-;;         (org-publish-org-to 'hugo filename ".md" plist pub-dir)
-;;       (org-hugo--after-export-function))))
+    (prog1
+        (org-export-to-file 'hugo outfile async subtreep visible-only)
+      (org-hugo--after-export-function info outfile))))
 
 ;;;###autoload
 (defun org-hugo-export-wim-to-md (&optional all-subtrees async visible-only noerror)
@@ -3740,21 +4067,14 @@ This is an Export \"What I Mean\" function:
 - If the current subtree doesn't have that property, but one of its
   parent subtrees has, then export from that subtree's scope.
 - If none of the subtrees have that property (or if there are no Org
-  subtrees at all), but the Org #+title keyword is present,
-  export the whole Org file as a post with that title (calls
-  `org-hugo-export-to-md' with its SUBTREEP argument set to nil).
+  subtrees at all), call `org-hugo--export-file-to-md'.
 
 - If ALL-SUBTREES is non-nil, export all valid Hugo post subtrees
   \(that have the \"EXPORT_FILE_NAME\" property) in the current file
   to multiple Markdown posts.
 - If ALL-SUBTREES is non-nil, and again if none of the subtrees have
-  that property (or if there are no Org subtrees), but the Org #+title
-  keyword is present, export the whole Org file.
-
-- If the file neither has valid Hugo post subtrees, nor has the
-  #+title present, throw a user error.  If NOERROR is non-nil, use
-  `message' to display the error message instead of signaling a user
-  error.
+  that property (or if there are no Org subtrees), call
+  `org-hugo--export-file-to-md'.
 
 A non-nil optional argument ASYNC means the process should happen
 asynchronously.  The resulting file should be accessible through
@@ -3763,144 +4083,57 @@ the `org-export-stack' interface.
 When optional argument VISIBLE-ONLY is non-nil, don't export
 contents of hidden elements.
 
-If ALL-SUBTREES is nil, return output file's name.
-If ALL-SUBTREES is non-nil, and valid subtrees are found, return
-a list of output files.
-If ALL-SUBTREES is non-nil, and valid subtrees are not found,
-return the output file's name (exported using file-based
-approach)."
+The optional argument NOERROR is passed to
+`org-hugo--export-file-to-md'.
+
+- If ALL-SUBTREES is non-nil:
+  - If valid subtrees are found, return the list of output files.
+  - If no valid subtrees are found, return value is the same as
+    that of `org-hugo--export-file-to-md'.
+
+- If ALL-SUBTREES is nil:
+  - If `org-hugo--export-subtree-to-md' returns a non-nil value, return that.
+  - Else return the value of `org-hugo--export-file-to-md'."
   (interactive "P")
   (let ((f-or-b-name (if (buffer-file-name)
                          (file-name-nondirectory (buffer-file-name))
-                       (buffer-name))))
+                       (buffer-name)))
+        ret)
     (save-window-excursion
       (save-restriction
         (widen)
         (save-excursion
           (if all-subtrees
-              (let (ret)
-                (setq org-hugo--subtree-count 0)
-                (setq ret (org-map-entries
-                           (lambda ()
-                             (org-hugo-export-wim-to-md nil async visible-only noerror))
-                           ;; Export only the subtrees where
-                           ;; EXPORT_FILE_NAME property is not
-                           ;; empty.
-                           "EXPORT_FILE_NAME<>\"\""))
+              (progn ;Publish all valid Hugo post subtrees in the file.
+                (setq org-hugo--subtree-count 0) ;Reset the subtree count
+                (let ((buffer (org-hugo--get-pre-processed-buffer)))
+                  (with-current-buffer buffer
+                    (setq ret (org-map-entries
+                               (lambda ()
+                                 (org-hugo--export-subtree-to-md
+                                  async visible-only :all-subtrees))
+                               ;; Export only the subtrees where
+                               ;; EXPORT_FILE_NAME property is not
+                               ;; empty.
+                               "EXPORT_FILE_NAME<>\"\""))
+                    (kill-buffer buffer)))
                 (if ret
                     (message "[ox-hugo] Exported %d subtree%s from %s"
                              org-hugo--subtree-count
                              (if (= 1 org-hugo--subtree-count) "" "s")
                              f-or-b-name)
-                  ;; If `ret' is nil, no valid Hugo subtree was found.
-                  ;; So call `org-hugo-export-wim-to-md' directly.  In
-                  ;; that function, it will be checked if the whole
-                  ;; Org file can be exported.
-                  (setq ret (org-hugo-export-wim-to-md nil async visible-only noerror)))
-                (setq org-hugo--subtree-count nil) ;Reset the variable
-                ret)
-            ;; Publish only the current subtree
-            (ignore-errors
-              (org-back-to-heading :invisible-ok))
-            (let* ((subtree (org-hugo--get-valid-subtree))
-                   (info (org-combine-plists
-                          (org-export--get-export-attributes
-                           'hugo subtree visible-only)
-                          (org-export--get-buffer-attributes)
-                          (org-export-get-environment 'hugo subtree)))
-                   (exclude-tags (plist-get info :exclude-tags))
-                   is-commented is-excluded matched-exclude-tag do-export)
-              ;; (message "[org-hugo-export-wim-to-md DBG] exclude-tags = %s" exclude-tags)
-              (if subtree
-                  (progn
-                    ;; If subtree is a valid Hugo post subtree, proceed ..
-                    (setq is-commented (org-element-property :commentedp subtree))
+                  (message "[ox-hugo] No valid Hugo post subtrees were found")))
 
-                    (let ((all-tags (let ((org-use-tag-inheritance t))
-                                      (org-hugo--get-tags))))
-                      (when all-tags
-                        (dolist (exclude-tag exclude-tags)
-                          (when (member exclude-tag all-tags)
-                            (setq matched-exclude-tag exclude-tag)
-                            (setq is-excluded t)))))
+            ;; Publish only the current valid Hugo post subtree.
+            (setq ret (org-hugo--export-subtree-to-md async visible-only)))
 
-                    ;; (message "[current subtree DBG] subtree: %S" subtree)
-                    ;; (message "[current subtree DBG] is-commented:%S, tags:%S, is-excluded:%S"
-                    ;;          is-commented tags is-excluded)
-                    (let ((title (org-element-property :title subtree)))
-                      (cond
-                       (is-commented
-                        (message "[ox-hugo] `%s' was not exported as that subtree is commented"
-                                 title))
-                       (is-excluded
-                        (message "[ox-hugo] `%s' was not exported as it is tagged with an exclude tag `%s'"
-                                 title matched-exclude-tag))
-                       (t
-                        (if (numberp org-hugo--subtree-count)
-                            (progn
-                              (setq org-hugo--subtree-count (1+ org-hugo--subtree-count))
-                              (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))
-                          (message "[ox-hugo] Exporting `%s' .." title))
-                        ;; Get the current subtree coordinates for
-                        ;; auto-calculation of menu item weight, page
-                        ;; or taxonomy weights.
-                        (when (or
-                               ;; Check if the menu front-matter is specified.
-                               (or
-                                (org-entry-get nil "EXPORT_HUGO_MENU" :inherit)
-                                (save-excursion
-                                  (goto-char (point-min))
-                                  (let ((case-fold-search t))
-                                    (re-search-forward "^#\\+hugo_menu:.*:menu" nil :noerror))))
-                               ;; Check if auto-calculation is needed
-                               ;; for page or taxonomy weights.
-                               (or
-                                (let ((page-or-taxonomy-weight (org-entry-get nil "EXPORT_HUGO_WEIGHT" :inherit)))
-                                  (and (stringp page-or-taxonomy-weight)
-                                       (string-match-p "auto" page-or-taxonomy-weight)))
-                                (save-excursion
-                                  (goto-char (point-min))
-                                  (let ((case-fold-search t))
-                                    (re-search-forward "^#\\+hugo_weight:.*auto" nil :noerror)))))
-                          (setq org-hugo--subtree-coord
-                                (org-hugo--get-post-subtree-coordinates subtree)))
-                        (setq do-export t)))))
-                ;; If not in a valid subtree, check if the Org file is
-                ;; supposed to be exported as a whole, in which case
-                ;; #+title has to be defined *and* there shouldn't be
-                ;; any valid Hugo post subtree present.
-                (setq org-hugo--subtree-count nil) ;Also reset the subtree count
-                (let ((valid-subtree-found
-                       (catch 'break
-                         (org-map-entries
-                          (lambda ()
-                            (throw 'break t))
-                          ;; Only map through subtrees where
-                          ;; EXPORT_FILE_NAME property is not
-                          ;; empty.
-                          "EXPORT_FILE_NAME<>\"\"")))
-                      err msg)
-                  (if valid-subtree-found
-                      (setq msg "Point is not in a valid Hugo post subtree; move to one and try again")
-                    (let ((title (save-excursion
-                                   (goto-char (point-min))
-                                   (let ((case-fold-search t))
-                                     (re-search-forward "^#\\+title:" nil :noerror)))))
-                      (if title
-                          (setq do-export t)
-                        (setq err t)
-                        (setq msg (concat "The file neither contains a valid Hugo post subtree, "
-                                          "nor has the #+title keyword")))))
-                  (unless do-export
-                    (let ((error-fn (if (or (not err)
-                                            noerror)
-                                        #'message
-                                      #'user-error)))
-                      (apply error-fn
-                             (list
-                              (format "%s: %s" f-or-b-name msg)))))))
-              (when do-export
-                (org-hugo-export-to-md async subtree visible-only)))))))))
+          ;; If `ret' is nil, no valid Hugo subtree was found.  So
+          ;; call `org-hugo--export-file-to-md' directly.  In that
+          ;; function, it will be checked if the whole Org file can be
+          ;; exported.
+          (unless ret
+            (setq ret (org-hugo--export-file-to-md f-or-b-name async visible-only noerror))))))
+    ret))
 
 ;;;###autoload
 (defun org-hugo-debug-info ()

@@ -101,19 +101,19 @@ Click below image to jump to the unicorn image.
 
 #+begin_src org
 # Org source
-,#+name: fig__clickable_image_that_opens_the_image
-,#+caption: Click this image -- It's a hyperlink
-[[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+#+name: fig__clickable_image_that_opens_the_image
+#+caption: Click this image -- It's a hyperlink
+[[/images/org-mode-unicorn-logo.png][file:../files-to-be-copied-to-static/static/images/unicorn-logo-small.png]]
 #+end_src
 
 #+name: fig__clickable_image_that_opens_the_image
 #+caption: Click this image -- It's a hyperlink
-[[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+[[/images/org-mode-unicorn-logo.png][file:../files-to-be-copied-to-static/static/images/unicorn-logo-small.png]]
 
 - NOTE :: =file:= has to be used in the *Description component* of the
           Org link.
-**** Same link with =#+name= specified
-Here's the same link with =#+name= specified.. which should also be
+**** Similar link with =#+name= specified
+Here's a similar link with =#+name= specified.. which should also be
 clickable.
 
 #+name: fig__unicorn
@@ -194,6 +194,11 @@ This is an inline non-hyperlinked image with alt text:
 #+attr_html: :width 30
 This is an inline non-hyperlinked image with the width attribute:
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
+**** With space in the filename
+This is an inline hyperlinked image with a space in the filename:
+{{{oxhugoissue(277)}}}
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/unicorn%20logo.png]].
+
 *** Non-inline hyperlinked image
  [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
 ** Image captions
@@ -335,8 +340,8 @@ Rendered this:
 [[https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
 
 *NOTE*: We cannot use =:style= in =#+attr_html= because Hugo does not
- /yet/ support a =style= argument in the =figure= shortcode
- [[[https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template_embedded.go#L22-L37][Source]]].
+ /yet/ support a =style= argument in the =figure= shortcode [ [[https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template_embedded.go#L22-L37][Source]]
+ ].
 
 So using =#+html: <style>.foo img ... </style>= and =#+attr_html: :class
  foo= as shown in the workaround above.
@@ -368,7 +373,20 @@ stop
 #+attr_html: :inlined t
 #+RESULTS:
 [[file:images/svg-with-hyperlinks.svg]]
+* Video                                                              :videos:
+** Embedded Video                                                  :embedded:
+:PROPERTIES:
+:EXPORT_FILE_NAME: embedded-video
+:END:
+[[https://www.w3schools.com/html/html5_video.asp][Using ~video~ HTML5 tag]]
 
+#+begin_export html
+ <video width="320" height="240" controls>
+  <source src="/videos/sample.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+#+end_export
+[[https://sample-videos.com/][Video source]]
 * Setting heading anchors
 :PROPERTIES:
 :EXPORT_FILE_NAME: setting-heading-anchors
@@ -816,8 +834,8 @@ demonstrated [[https://github.com/kaushalmodi/ox-hugo/issues/93#issue-270108567]
 -----
 
 HTML5 does not allow =align=, =width=, etc. attributes *within* the
-=table= tag [[[https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints][Ref]]]. So instead =ox-hugo= simply wraps the table with a
-=div= with a =class=. The table can then be customized using CSS,
+=table= tag [ [[https://www.w3.org/TR/2011/WD-html-markup-20110113/table.html#table-constraints][Ref]] ]. So instead =ox-hugo= simply wraps the table with
+a =div= with a =class=. The table can then be customized using CSS,
 either via the =#+attr_css= attribute above the tables, or by putting
 verbatim CSS in =#+begin_export html= blocks. See below examples.
 *** Table with only the class specified
@@ -1500,7 +1518,7 @@ print(str[1:])
 : 	bc
 
 The whitespace before "bc" in the results block above should be preserved.
-** Indented source block :indented:lists:code_fence:highlight:code_block:@upstream:
+** Indented source block :indented:lists:code_fence:highlight:src_block:@upstream:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-indented
 :END:
@@ -2010,6 +2028,35 @@ TOML front-matter.
 But the big integer "10040216507682529280" which would need more than
 64-bits to be stored as a signed integer is left as a string in the
 TOML front-matter.
+** Custom front matter value via Elisp                                :elisp:
+:PROPERTIES:
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :attendees (xeijin/conv-chkbox-items-to-front-matter "Attendees")
+:EXPORT_AUTHOR: xeijin
+:END:
+*** Meeting 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: custom-fm-convert-chkbox-list-to-fm-1
+:END:
+{{{oxhugoissue(272)}}}
+**** Attendees                                                     :noexport:
+- [X] Attendee 1
+- [-] Attendee 2
+- [ ] Attendee 3
+- Attendee 4
+**** Notes
+My notes
+*** Meeting 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: custom-fm-convert-chkbox-list-to-fm-2
+:END:
+{{{oxhugoissue(272)}}}
+**** Attendees                                                     :noexport:
+- [X] Attendee x
+- [-] Attendee y
+- [X] Attendee z
+- Attendee w
+**** Notes
+My notes
 * Resources                                                       :resources:
 ** TOML                                                                :toml:
 *** Post with resources in front-matter (TOML)
@@ -2859,18 +2906,18 @@ Once that is evaluated, links like these will export fine i.e. no
 :END:
 - Link (with description) to a heading with section number: [[* Beta 102][Link to
   /Beta 102/ heading]]
-- Link (no description) to a heading without section number: [[* Zeta
-  103]].
+- Link (no description) to a heading without section number: [[* Zeta 103
+  which has *some* /markup/]].
 
   The space after that =*= in the link is optional.. so this also
-  works: [[*Zeta 103]].
+  works: [[*Zeta 103 which has *some* /markup/]].
 **** Beta 102
 - Link (with description) to a heading without section number: [[* Alpha 101][Link to
   /Alpha 101/ heading]]
 ***** Gamma 102.1
 ****** Delta 102.1.1
 ****** Epsilon 102.1.2
-**** Zeta 103
+**** Zeta 103 which has *some* /markup/
 :PROPERTIES:
 :UNNUMBERED: t
 :END:
@@ -2973,6 +3020,74 @@ C = W\log_{2} (1+\mathrm{SNR})
 \end{equation}
 
 *Here we refer to equation \ref{eq:1}.*
+** Links outside the same post
+:PROPERTIES:
+:EXPORT_FILE_NAME: links-outside-the-same-post
+:END:
+{{{oxhugoissue(30)}}}
+*** External links with search options                       :external_links:
+Links between documents can contain some search options. Only links
+to a heading with a *:CUSTOM_ID* property will be resolved to the
+appropriate location in the linked file. Links to headlines and
+links to targets will be resolved to the containing file.
+
+- [[file:link-destination.org::#external-target][Link to CUSTOM_ID]]
+- [[file:link-destination.org::*external-target][Link to a headline]]
+- [[file:link-destination.org::external-target][Link to a target]]
+*** Internal links                                           :internal_links:
+Internal links point to targets in the current subtree that will be
+exported to the same Hugo post as the link source. To handle links to
+an *:ID* property, the =org-id= feature must first be loaded, either
+through =org-customize= or by adding =(require 'org-id)= in your Emacs
+init file.
+
+- [[#internal-target][Link to CUSTOM_ID within the same post]]
+- [[id:8e65ff86-3f9a-48ef-9b43-751a2e8a9372][Link to ID within the same post]]
+- [[*Internal target][Link to headline within the same post]]
+- [[internal-target][Link to target within the same post]]
+*** Cross-post links                                        :crosspost_links:
+Cross-post links are internal links pointing to targets in a different
+subtree that will be exported to another Hugo post than the link
+source in subtree-based exports. The Hugo's ~ref~ and ~relref~
+shortcodes only supports anchors to headlines, so links to a heading,
+a *:CUSTOM_ID* property, or an *:ID* property will be resolved to the
+appropriate location in the linked file, but links to targets will be
+resolved to the containing post.
+**** Links without descriptions
+- Link to CUSTOM_ID outside the same post: [[#external-target]]
+- Link to ID outside the same post: [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb]]
+- Link to target outside the same post: [[*External target]]
+- Another link to target outside the same post: [[* External target with *bold* and /italic/]]
+- Link to subtree by CUSTOM_ID: [[#link-destination]]
+- Link to subtree by ID: [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678]]
+- Link to subtree by headline: [[*Link destination]]
+**** Links with descriptions
+- [[#external-target][Link to CUSTOM_ID outside the same post]]
+- [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb][Link to ID outside the same post]]
+- [[*External target][Link to target outside the same post]]
+- [[* External target with *bold* and /italic/][Another link to target outside the same post]]
+- [[#link-destination][Link to subtree by CUSTOM_ID]]
+- [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678][Link to subtree by ID]]
+- [[*Link destination][Link to subtree by headline]]
+*** Internal target
+:PROPERTIES:
+:CUSTOM_ID: internal-target
+:ID:       8e65ff86-3f9a-48ef-9b43-751a2e8a9372
+:END:
+<<internal-target>>
+*** Link destination
+:PROPERTIES:
+:CUSTOM_ID: link-destination
+:EXPORT_FILE_NAME: link-destination
+:ID:       1e5e0bcd-caea-40ad-a75b-e488634c2678
+:END:
+**** External target
+:PROPERTIES:
+:CUSTOM_ID: external-target
+:ID:       de0df718-f9b4-4449-bb0a-eb4402fa5fcb
+:END:
+<<external-target>>
+**** External target with *bold* and /italic/
 * Equations                                               :equations:mathjax:
 ** Inline equations
 :PROPERTIES:
@@ -3320,6 +3435,104 @@ Checklist showing progress in ratio.
 - Defn B :: Something B in red
 
 /The =red-text= style is defined in the first list above./
+** Source blocks, example blocks and lists
+*** Source block following a list                       :src_block:@upstream:
+:PROPERTIES:
+:EXPORT_FILE_NAME: src-block-following-a-list
+:END:
+#+begin_description
+Test to verify rendering of a source block immediately following a
+plain list, and even a list following a heading following a source
+block.
+#+end_description
+
+- [[https://discourse.gohugo.io/t/rendering-code-blocks-properly-from-md-files/19126][Ref 1]]
+- [[https://discourse.gohugo.io/t/possible-regression-in-v0-55-5-regarding-lists-containing-code-blocks/18502/4?u=kaushalmodi][Ref 2]]
+- {{{bfissue(556)}}}
+
+
+- list item 1
+- list item 2
+#+begin_src nim
+echo "hello"
+#+end_src
+- another list item 1
+- another list item 2
+**** A heading in post
+#+begin_src nim
+echo "hello again"
+#+end_src
+*** Example block following a list                  :example_block:@upstream:
+:PROPERTIES:
+:EXPORT_FILE_NAME: example-block-following-a-list
+:END:
+#+begin_description
+Test to verify rendering of a example block immediately following a
+plain list, and even a list following a heading following a example
+block.
+#+end_description
+
+- [[https://discourse.gohugo.io/t/rendering-code-blocks-properly-from-md-files/19126][Ref 1]]
+- [[https://discourse.gohugo.io/t/possible-regression-in-v0-55-5-regarding-lists-containing-code-blocks/18502/4?u=kaushalmodi][Ref 2]]
+- {{{bfissue(556)}}}
+
+
+- list item 1
+- list item 2
+#+begin_example
+something in example block
+#+end_example
+- another list item 1
+- another list item 2
+**** A heading in post
+#+begin_example
+another example block
+#+end_example
+*** Source and example blocks in lists              :src_block:example_block:
+:PROPERTIES:
+:EXPORT_FILE_NAME: src-and-example-blocks-in-lists
+:END:
+#+begin_description
+Test to verify rendering of source and example blocks in lists.
+#+end_description
+
+[[https://discourse.gohugo.io/t/blackfriday-not-handling-lists-and-code-blocks-the-right-way/19932][Ref]]
+
+- list item 1
+  #+begin_src nim
+  echo "hello from list item 1"
+  #+end_src
+  - list item 1.1
+    #+begin_example
+    echo "hello from list item 1.1"
+    #+end_example
+  -
+    #+begin_example
+    echo "hello from list item 1.2"
+    echo "there's not text before this example block in this list item"
+    #+end_example
+    - list item 1.2.1
+      #+begin_src nim
+      echo "hello from list item 1.2.1"
+      #+end_src
+    -
+      #+begin_src nim
+      echo "hello from list item 1.2.2"
+      echo "there's not text before this src block in this list item"
+      #+end_src
+      - list item 1.2.2.1
+        #+begin_example
+        echo "hello from list item 1.2.2.1"
+        #+end_example
+-
+  #+begin_src nim
+  echo "hello from list item 2"
+  echo "there's not text before this src block in this list item"
+  #+end_src
+- list item 3
+  #+begin_example
+  echo "hello from list item 3"
+  #+end_example
 * Quotes                                                             :quotes:
 ** Consecutive quotes
 :PROPERTIES:
@@ -3451,6 +3664,35 @@ This is a red quote.
 #+end_quote
 
 Some more text.
+** Quote blocks in numbered lists                                     :lists:
+:PROPERTIES:
+:EXPORT_FILE_NAME: quote-blocks-in-numbered-lists
+:END:
+#+begin_description
+Testing quote blocks in numbered lists, just because this came up on
+[[https://discourse.gohugo.io/t/put-a-blockquote-into-a-numbered-list/19339/1][Hugo Discourse]].
+#+end_description
+1. List item 1
+
+   Text before quote block.
+   #+begin_quote
+   Quote block in list item 1
+   #+end_quote
+   Text after quote block.
+2. List item 2
+
+   Text before quote block.
+   #+begin_quote
+   Quote block in list item 2
+   #+end_quote
+   Text after quote block.
+3. List item 3
+
+   Text before quote block.
+   #+begin_quote
+   Quote block in list item 3
+   #+end_quote
+   Text after quote block.
 * Verse                                                               :verse:
 ** One verse
 :PROPERTIES:
@@ -3518,23 +3760,23 @@ removed when translating to Markdown.
 *** More examples
 - More indentation than in the above example:
   #+begin_verse
->        Text indented by 8 spaces
-#+end_verse
+  >        Text indented by 8 spaces
+  #+end_verse
 - Leading blank line followed by indented text:
   #+begin_verse
 
->    Text indented by 4 spaces
-#+end_verse
+  >    Text indented by 4 spaces
+  #+end_verse
 - Indented text followed by a trailing blank line:
   #+begin_verse
->    Text indented by 4 spaces
+  >    Text indented by 4 spaces
 
-#+end_verse
+  #+end_verse
 - Using tab characters for indentation; each tab character still
   constitutes for one =&nbsp;= in HTML.
   #+begin_verse
->				Text indented by 4 tab characters
-#+end_verse
+  >				Text indented by 4 tab characters
+  #+end_verse
 *** Corner cases
 Only the *first* =>= character immediately following spaces and empty
 lines will be removed:
@@ -4652,6 +4894,8 @@ current subtree.
 abc
 def
 ghi
+这是一个测试
+文本
 ** Filling is not preserved
 :PROPERTIES:
 :EXPORT_FILE_NAME: filling-is-not-preserved
@@ -4660,6 +4904,8 @@ ghi
 abc
 def
 ghi
+这是一个测试
+文本
 * Section Inheritance                                   :section_inheritance:
 ** Section A
 :PROPERTIES:
@@ -4757,10 +5003,10 @@ Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
 
-See [[#citation-example-section-2]].
+See [[#citation-example-toml-section-2]].
 *** Section 2
 :PROPERTIES:
-:CUSTOM_ID: citation-example-section-2
+:CUSTOM_ID: citation-example-toml-section-2
 :END:
 Content in section 2.
 *** Testing random Hugo shortcode
@@ -4824,10 +5070,10 @@ Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
 
-See [[#citation-example-section-2]].
+See [[#citation-example-yaml-section-2]].
 *** Section 2
 :PROPERTIES:
-:CUSTOM_ID: citation-example-section-2
+:CUSTOM_ID: citation-example-yaml-section-2
 :END:
 Content in section 2.
 ** Citation Linking                                          :link_citations:
@@ -5350,10 +5596,13 @@ auto-prefixed with the section for the current post.
 :EXPORT_HUGO_ALIASES: /alias-test/alias-g /alias-test/alias-h
 :END:
 ** Author                                                            :author:
-*** Single author
+*** Single author parent subtree
+:PROPERTIES:
+:EXPORT_AUTHOR: Foo Bar
+:END:
+**** Single author
 :PROPERTIES:
 :EXPORT_FILE_NAME: single-author
-:EXPORT_AUTHOR: Foo Bar
 :END:
 This post has 1 author set as a TOML list in front-matter.
 *** Single author as a custom parameter                           :custom_fm:

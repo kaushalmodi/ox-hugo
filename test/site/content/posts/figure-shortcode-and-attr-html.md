@@ -136,8 +136,8 @@ Rendered this:
 {{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" alt="Org mode logo" class="foo" width="300" >}}
 
 **NOTE**: We cannot use `:style` in `#+attr_html` because Hugo does not
- _yet_ support a `style` argument in the `figure` shortcode
- [[Source](https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template%5Fembedded.go#L22-L37)].
+ _yet_ support a `style` argument in the `figure` shortcode [ [Source](https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template%5Fembedded.go#L22-L37)
+ ].
 
 So using `#+html: <style>.foo img ... </style>` and `#+attr_html: :class
  foo` as shown in the workaround above.

@@ -723,14 +723,12 @@ communication channel."
                    (org-blackfriday--div-wrap-maybe plain-list nil)
                    (org-html-plain-list plain-list contents info)))
       (let* ((next (org-export-get-next-element plain-list info))
-             (next-type (org-element-type next))
-             (next-is-list (eq 'plain-list next-type)))
+             (next-type (org-element-type next)))
+        ;; (message "next type: %s" next-type)
         (setq ret (org-blackfriday--div-wrap-maybe plain-list contents))
-        (setq ret (concat ret
-                          ;; Two consecutive lists in Markdown can be
-                          ;; separated by a comment.
-                          (when next-is-list
-                            "\n<!--listend-->")))))
+        (when (member next-type '(plain-list
+                                  src-block example-block)) ;https://github.com/russross/blackfriday/issues/556
+          (setq ret (concat ret "\n<!--listend-->")))))
     ret))
 
 ;;;; Plain Text
@@ -1141,7 +1139,7 @@ contextual information."
          ;; Org removes all the leading whitespace only from the first
          ;; line.  So the trick is to use the ">" character before any
          ;; intended indentation on the first non-blank line.
-         (ret (replace-regexp-in-string "\\`\\([[:blank:]\n\r]*\\)>" "\\1" ret))
+         (ret (replace-regexp-in-string "\\`\\([[:blank:]\n\r]*?\\)[[:blank:]]*>" "\\1" ret))
          (br (org-html-close-tag "br" nil info))
          (re (format "\\(?:%s\\)?[ \t]*\n" (regexp-quote br)))
          ;; Replace each newline character with line break.  Also
@@ -1153,7 +1151,8 @@ contextual information."
                "^[[:blank:]]+"
                (lambda (m)
                  (org-html--make-string (length m) "&nbsp;"))
-               ret)))
+               ret))
+         (ret (format "<p class=\"verse\">\n%s</p>" ret)))
     ret))
 
 

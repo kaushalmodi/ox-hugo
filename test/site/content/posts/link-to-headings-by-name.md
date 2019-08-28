@@ -19,7 +19,7 @@ draft = false
     - <span class="section-num">1.1</span> [Gamma 102.1](#gamma-102-dot-1)
         - <span class="section-num">1.1.1</span> [Delta 102.1.1](#delta-102-dot-1-dot-1)
         - <span class="section-num">1.1.2</span> [Epsilon 102.1.2](#epsilon-102-dot-1-dot-2)
-- [Zeta 103](#zeta-103)
+- [Zeta 103 which has **some** _markup_](#zeta-103-which-has-some-markup)
     - [Links (no descriptions) to headings with section numbers](#links--no-descriptions--to-headings-with-section-numbers)
 
 </div>
@@ -30,10 +30,10 @@ draft = false
 
 -   Link (with description) to a heading with section number: [Link to
     _Beta 102_ heading](#beta-102)
--   Link (no description) to a heading without section number: [Zeta 103](#zeta-103).
+-   Link (no description) to a heading without section number: [Zeta 103 which has **some** _markup_](#zeta-103-which-has-some-markup).
 
     The space after that `*` in the link is optional.. so this also
-    works: [Zeta 103](#zeta-103).
+    works: [Zeta 103 which has **some** _markup_](#zeta-103-which-has-some-markup).
 
 
 ## <span class="section-num">1</span> Beta 102 {#beta-102}
@@ -51,7 +51,7 @@ draft = false
 #### <span class="section-num">1.1.2</span> Epsilon 102.1.2 {#epsilon-102-dot-1-dot-2}
 
 
-## Zeta 103 {#zeta-103}
+## Zeta 103 which has **some** _markup_ {#zeta-103-which-has-some-markup}
 
 
 ### Links (no descriptions) to headings with section numbers {#links--no-descriptions--to-headings-with-section-numbers}

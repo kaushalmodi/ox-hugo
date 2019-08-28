@@ -17,7 +17,7 @@ This is some text before the first heading of this post.
 [[/images/org-mode-unicorn-logo.png]]
 ```
 
-<a id="orga3633e1"></a>
+<a id="org438f8e5"></a>
 
 {{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 1: Don't click this image -- It's not a hyperlink" >}}
 
@@ -52,7 +52,7 @@ tag and look the same size.
 
 Do **not** use `file:` prefix in the Description if you want the image
 link to show up as-is i.e. not be replaced by the image-at-link like
-in [2](#org54fce47):
+in [2](#org39c5252):
 
 ```org
 # Org source
@@ -70,24 +70,24 @@ Click below image to jump to the unicorn image.
 # Org source
 #+name: fig__clickable_image_that_opens_the_image
 #+caption: Click this image -- It's a hyperlink
-[[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+[[/images/org-mode-unicorn-logo.png][file:../files-to-be-copied-to-static/static/images/unicorn-logo-small.png]]
 ```
 
-<a id="org54fce47"></a>
+<a id="org39c5252"></a>
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: Click this image -- It's a hyperlink" link="/images/org-mode-unicorn-logo.png" >}}
+{{< figure src="/images/unicorn-logo-small.png" caption="Figure 2: Click this image -- It's a hyperlink" link="/images/org-mode-unicorn-logo.png" >}}
 
 NOTE
 : `file:` has to be used in the **Description component** of the
     Org link.
 
 
-### Same link with `#+name` specified {#same-link-with-plus-name-specified}
+### Similar link with `#+name` specified {#similar-link-with-plus-name-specified}
 
-Here's the same link with `#+name` specified.. which should also be
+Here's a similar link with `#+name` specified.. which should also be
 clickable.
 
-<a id="orgd697346"></a>
+<a id="org7a66995"></a>
 
 {{< figure src="/images/org-mode-unicorn-logo.png" link="/images/org-mode-unicorn-logo.png" >}}
 

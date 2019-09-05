@@ -20,7 +20,7 @@ Some text.
 
 <div class="table-caption">
   <span class="table-number">Table 2</span>:
-  <i>Another</i> <b>awesome</b> table
+  <i>Another</i> <b>awesome</b> table with <a href="https://ox-hugo.scripter.co">a link</a>
 </div>
 
 | h1  | h2  | h3  |

@@ -276,4 +276,28 @@ Fake current time: 2100/12/21 00:00:00 (arbitrary)."
         nil :nomessage :nosuffix)
 
   (with-eval-after-load 'ox
-    (add-to-list 'org-export-exclude-tags "dont_export_during_make_test")))
+    (add-to-list 'org-export-exclude-tags "dont_export_during_make_test"))
+
+  ;; Wed Sep 04 22:23:03 EDT 2019 - kmodi
+  ;; The ox-hugo tests were failing on Travis only on Emacs 24.4 and
+  ;; 24.5 because the "/" got auto-appended to links without them:
+  ;; https://travis-ci.org/kaushalmodi/ox-hugo/jobs/580990010#L3740
+  ;; So when the https://ox-hugo.scripter.co link got exported via
+  ;; `org-html-link' internally, it got converted to
+  ;; https://ox-hugo.scripter.co/! As it turns out, this behavior got
+  ;; fixed in Emacs 25+ in:
+  ;; https://git.savannah.gnu.org/cgit/emacs.git/commit/?id=b792ecea1715e080ad8e232d3d154b8a25d2edfb
+  (with-eval-after-load 'url-parse
+    (defun url-path-and-query (urlobj)
+      "Return the path and query components of URLOBJ.
+These two components are stored together in the FILENAME slot of
+the object.  The return value of this function is (PATH . QUERY),
+where each of PATH and QUERY are strings or nil."
+      (let ((name (url-filename urlobj))
+	    path query)
+        (when name
+          (if (string-match "\\?" name)
+	      (setq path  (substring name 0 (match-beginning 0))
+		    query (substring name (match-end 0)))
+	    (setq path name)))
+        (cons path query)))))

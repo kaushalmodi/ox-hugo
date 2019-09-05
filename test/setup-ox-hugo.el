@@ -287,17 +287,18 @@ Fake current time: 2100/12/21 00:00:00 (arbitrary)."
   ;; https://ox-hugo.scripter.co/! As it turns out, this behavior got
   ;; fixed in Emacs 25+ in:
   ;; https://git.savannah.gnu.org/cgit/emacs.git/commit/?id=b792ecea1715e080ad8e232d3d154b8a25d2edfb
-  (with-eval-after-load 'url-parse
-    (defun url-path-and-query (urlobj)
-      "Return the path and query components of URLOBJ.
+  (unless (version<= "25.0" emacs-version)
+    (with-eval-after-load 'url-parse
+      (defun url-path-and-query (urlobj)
+        "Return the path and query components of URLOBJ.
 These two components are stored together in the FILENAME slot of
 the object.  The return value of this function is (PATH . QUERY),
 where each of PATH and QUERY are strings or nil."
-      (let ((name (url-filename urlobj))
-	    path query)
-        (when name
-          (if (string-match "\\?" name)
-	      (setq path  (substring name 0 (match-beginning 0))
-		    query (substring name (match-end 0)))
-	    (setq path name)))
-        (cons path query)))))
+        (let ((name (url-filename urlobj))
+	      path query)
+          (when name
+            (if (string-match "\\?" name)
+	        (setq path  (substring name 0 (match-beginning 0))
+		      query (substring name (match-end 0)))
+	      (setq path name)))
+          (cons path query))))))

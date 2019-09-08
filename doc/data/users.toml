@@ -378,9 +378,9 @@
 
 [ctanas]
   author = "Claudiu Tănăselia"
-  source = "https://github.com/ctanas/parsec-source"
+  source = "https://github.com/ctanas/parsec.ro"
   site = "https://www.parsec.ro"
-  org_dir = ""
+  org_dir = "content-org"
 
 # []
 #   author = ""

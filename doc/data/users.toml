@@ -376,11 +376,11 @@
   source = "https://github.com/drdavis/ddavis.io"
   site = "https://ddavis.io/"
 
-# []
-#   author = ""
-#   source = ""
-#   site = ""
-#   org_dir = "content-org"
+[ctanas]
+  author = "Claudiu Tănăselia"
+  source = "https://github.com/ctanas/parsec-source"
+  site = "https://www.parsec.ro"
+  org_dir = ""
 
 # []
 #   author = ""

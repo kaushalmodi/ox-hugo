@@ -382,6 +382,12 @@
   site = "https://www.parsec.ro"
   org_dir = "content-org"
 
+[oolon-coloophid-ox-hugo-blog]
+  author = "Ian Hocking"
+  source = "https://github.com/OolonColoophid/blog"
+  site = "http://ianhocking.com"
+  org_dir = ""
+
 # []
 #   author = ""
 #   source = ""

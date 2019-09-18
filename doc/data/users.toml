@@ -371,22 +371,22 @@
   site = "https://notfound.cn/"
   org_dir = "content-org"
 
-[inzkyk]
-  author = "yuki"
-  source = "https://github.com/inzkyk/inzkyk.github.io"
-  site = "https://inzkyk.github.io/"
-  org_dir = "src"
-
 [drdavis]
   author = "Doug Davis"
   source = "https://github.com/drdavis/ddavis.io"
   site = "https://ddavis.io/"
 
-# []
-#   author = ""
-#   source = ""
-#   site = ""
-#   org_dir = "content-org"
+[ctanas]
+  author = "Claudiu Tănăselia"
+  source = "https://github.com/ctanas/parsec.ro"
+  site = "https://www.parsec.ro"
+  org_dir = "content-org"
+
+[oolon-coloophid-ox-hugo-blog]
+  author = "Ian Hocking"
+  source = "https://github.com/OolonColoophid/blog"
+  site = "https://ianhocking.com"
+  org_dir = ""
 
 # []
 #   author = ""

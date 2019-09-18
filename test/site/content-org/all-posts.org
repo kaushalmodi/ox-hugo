@@ -207,12 +207,20 @@ This is an inline hyperlinked image with a space in the filename:
 :EXPORT_FILE_NAME: image-captions
 :CUSTOM_ID: image-captions
 :END:
+#+begin_description
+Figure captions with markup.
+#+end_description
+
 Some text before image.
 
 #+caption: A unicorn! "Something in double quotes"
 [[/images/org-mode-unicorn-logo.png]]
 
 Some more text, after image.
+
+#+caption: The /same/ figure *again*, testing [[https://ox-hugo.scripter.co][a link]] too!
+[[/images/org-mode-unicorn-logo.png]]
+
 ** Image with Hugo =figure= shortcode parameters set using =ATTR_HTML=
 :PROPERTIES:
 :EXPORT_FILE_NAME: figure-shortcode-and-attr-html
@@ -807,7 +815,7 @@ characters too.
 
 Some text.
 
-#+caption: /Another/ *awesome* table
+#+caption: /Another/ *awesome* table with [[https://ox-hugo.scripter.co][a link]]
 | h1  | h2  | h3  |
 |-----+-----+-----|
 | jkl | mno | pqr |

@@ -732,26 +732,26 @@ newer."
 (org-export-define-derived-backend 'hugo 'blackfriday ;hugo < blackfriday < md < html
   :menu-entry
   '(?H "Export to Hugo-compatible Markdown"
-       ((?H "Subtree to file"
+       ((?H "Subtree or File to Md file"
             (lambda (a _s v _b)
               (org-hugo-export-wim-to-md nil a v)))
-        (?h "To file"
+        (?h "File to Md file"
             (lambda (a s v _b)
               (org-hugo-export-to-md a s v)))
-        (?O "Subtree to file and open"
+        (?O "Subtree or File to Md file and open"
             (lambda (a _s v _b)
               (if a
                   (org-hugo-export-wim-to-md nil :async v)
                 (org-open-file (org-hugo-export-wim-to-md nil nil v)))))
-        (?o "To file and open"
+        (?o "File to Md file and open"
             (lambda (a s v _b)
               (if a
                   (org-hugo-export-to-md :async s v)
                 (org-open-file (org-hugo-export-to-md nil s v)))))
-        (?A "All subtrees to files"
+        (?A "All subtrees (or File) to Md file(s)"
             (lambda (a _s v _b)
               (org-hugo-export-wim-to-md :all-subtrees a v)))
-        (?t "To temporary buffer"
+        (?t "File to a temporary Md buffer"
             (lambda (a s v _b)
               (org-hugo-export-as-md a s v)))))
 ;;;; translate-alist
@@ -1777,10 +1777,12 @@ a communication channel."
           (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
-        (let ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
-                              (org-hugo--get-anchor headline info))))
-          (concat (org-hugo--headline-title style level loffset title todo-fmtd anchor numbers)
-                  contents)))))))
+        (let* ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
+                               (org-hugo--get-anchor headline info)))
+               (headline-title (org-hugo--headline-title style level loffset title
+                                                         todo-fmtd anchor numbers))
+               (content-str (or (org-string-nw-p contents) "")))
+          (format "%s%s" headline-title content-str)))))))
 
 ;;;;; Headline Helpers
 ;;;###autoload
@@ -2267,6 +2269,32 @@ and rewrite link paths to make blogging more seamless."
             (format "<%s>" path)))))))))
 
 ;;;;; Helpers
+(defun org-hugo--maybe-copy-resources (info)
+  "Copy resources to the bundle directory if needed.
+
+INFO is a plist used as a communication channel."
+  (let* ((exportables org-hugo-external-file-extensions-allowed-for-copying)
+         (bundle-dir (and (plist-get info :hugo-bundle)
+                          (org-hugo--get-pub-dir info)))
+         (resources (org-hugo--parse-property-arguments (plist-get info :hugo-resources))))
+    (when (and bundle-dir resources)
+      (dolist (resource resources)
+        (let ((key (car resource)))
+          (when (equal key 'src)
+            (let* ((val (cdr resource))
+                   (sources (file-expand-wildcards val)))
+              (dolist (source sources)
+                (let ((src-path (file-truename source)))
+                  (when (and (file-exists-p src-path)
+                             (member (file-name-extension src-path) exportables))
+                    (let* ((dest-path (concat bundle-dir source))
+                           (dest-path-dir (file-name-directory dest-path)))
+                      (unless (file-exists-p dest-path-dir)
+                        (mkdir dest-path-dir :parents))
+                      (when (file-newer-than-file-p src-path dest-path)
+                        (message "[ox-hugo] Copied resource %S to %S" src-path dest-path)
+                        (copy-file src-path dest-path :ok-if-already-exists)))))))))))))
+
 (defun org-hugo--attachment-rewrite-maybe (path info)
   "Copy local images and pdfs to the static/bundle directory if needed.
 Also update the link paths to match those.
@@ -2700,6 +2728,8 @@ INFO is a plist holding export options."
 
 BODY is the result of the export.
 INFO is a plist holding export options."
+  ;; Copy the page resources to the bundle directory.
+  (org-hugo--maybe-copy-resources info)
   ;; `org-md-plain-text' would have escaped all underscores in plain
   ;; text i.e. "_" would have been converted to "\_".
   ;; We need to undo that underscore escaping in Emoji codes for those

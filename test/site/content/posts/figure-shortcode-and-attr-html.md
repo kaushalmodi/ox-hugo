@@ -1,5 +1,6 @@
 +++
 title = "Image with Hugo figure shortcode parameters set using ATTR_HTML"
+description = "Figure captions with markup."
 tags = ["image"]
 draft = false
 +++
@@ -42,11 +43,13 @@ Some text before image.
 
 Some more text, after image.
 
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: The _same_ figure **again**, testing [a link](https://ox-hugo.scripter.co) too!" >}}
+
 Below, the same caption is set using the `#+attr_html` method instead:
 
 Some text before image.
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: A unicorn!" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 3: A unicorn!" >}}
 
 _Enter a new line after the image link so that it's in an "Org
 paragraph" that contains just that image. That tells Org that that

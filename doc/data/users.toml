@@ -382,6 +382,11 @@
   site = "https://ianhocking.com"
   org_dir = ""
 
+[slow_djinn]
+  author = "Michael Howard"
+  source = "https://git.sr.ht/~slow_djinn/fumbling-blog"
+  site = "https://fumbling.it"
+
 # []
 #   author = ""
 #   source = ""

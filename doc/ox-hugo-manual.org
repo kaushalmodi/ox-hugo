@@ -864,13 +864,15 @@ exported Markdown files.
    #+end_example
 4. Above command will mention the localhost where the site is
    served. Open that in your browser.
-5. In emacs, =(require  'ox-hugo)= or evaluate the =ox-hugo.el= from the
-   cloned repo.
-6. Open the {{{ox-hugo-test-file}}} file.
-7. =C-c C-e H A= -- That will export *all* subtrees in the file to
+5. In emacs, ~(require 'ox-hugo)~ or evaluate the ~ox-hugo.el~ from
+   the cloned repo.
+6. Do ~(require 'org-id)~ too because some tests in the below test
+   file rely on that Org feature.
+7. Open the {{{ox-hugo-test-file}}} file.
+8. ~C-c C-e H A~ -- That will export *all* subtrees in the file to
    Markdown files.
-8. In few seconds, hundreds of test posts will get created, with the
-   =hugo server= aided preview in the browser zapping through each new
+9. In few seconds, hundreds of test posts will get created, with the
+   ~hugo server~ aided preview in the browser zapping through each new
    created post.
 *** Real World Examples
 :PROPERTIES:

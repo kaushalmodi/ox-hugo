@@ -1017,7 +1017,7 @@ contextual information."
          (no-header (= (length rows) 1)) ;No header if table has just 1 row
          (table-ref (org-blackfriday--get-reference table))
          (table-anchor (if table-ref
-                           (format "<a id=\"%s\"></a>\n" table-ref)
+                           (format "<a id=\"%s\"></a>\n\n" table-ref)
                          ""))
          (caption (org-export-get-caption table))
          table-num

@@ -801,6 +801,27 @@ sense. But hey, a test is a test./
 | <l> |   | <c> | <r> |
 
 You should see *no* table exported above.
+** Table name
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-name
+:END:
+#+begin_description
+Testing ~#+name~ and table.
+#+end_description
+#+name: tab__only_name
+|-----+-----|
+| h1  | h2  |
+|-----+-----|
+| abc | def |
+|-----+-----|
+
+#+name: tab__name_and_caption
+#+caption: An Org table with both ~#+name~ and ~#+caption~
+|-----+-----|
+| h1  | h2  |
+|-----+-----|
+| abc | def |
+|-----+-----|
 ** Table caption                                                    :caption:
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-caption

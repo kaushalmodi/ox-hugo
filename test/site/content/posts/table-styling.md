@@ -79,7 +79,6 @@ specified CSS attribute is auto-set for `.my-table-2 table`.
 
 <div class="ox-hugo-table table-1">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 1</span>:
   Table with caption, with left-aligned text
@@ -99,7 +98,6 @@ specified CSS attribute is auto-set for `.table-1 table`.
 
 <div class="ox-hugo-table table-2">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 2</span>:
   Table with caption, with right-aligned text
@@ -115,7 +113,6 @@ specified CSS attribute is auto-set for `.table-1 table`.
 
 <div class="ox-hugo-table table-3">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 3</span>:
   Table with caption, with center-aligned text
@@ -134,7 +131,6 @@ specified CSS attribute is auto-set for `.table-1 table`.
 
 <div class="ox-hugo-table my-red-bordered-table">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 4</span>:
   Table with caption, class and CSS attributes specified
@@ -182,7 +178,6 @@ block.
 
 <div class="ox-hugo-table tab4">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 5</span>:
   Table with verbatim CSS
@@ -215,7 +210,6 @@ block.
 
 <div class="ox-hugo-table basic-styling">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 6</span>:
   Table with uncollapsed borders
@@ -240,7 +234,6 @@ block.
 
 <div class="ox-hugo-table collapsed basic-styling">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 7</span>:
   Table with collapsed borders
@@ -278,7 +271,6 @@ block.
 
 <div class="ox-hugo-table two-axis-table">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 8</span>:
   Table with 1st row and 1st column highlighted
@@ -313,7 +305,6 @@ block.
 
 <div class="ox-hugo-table sane-table">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 9</span>:
   Sane Table &#x2014; with minimal styling
@@ -338,7 +329,6 @@ block.
 
 <div class="ox-hugo-table zebra-striping sane-table">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 10</span>:
   Table with zebra striping
@@ -367,7 +357,6 @@ block.
 
 <div class="ox-hugo-table hl-table-cell sane-table">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 11</span>:
   Table where the hovered-upon cell highlights
@@ -393,7 +382,6 @@ block.
 
 <div class="ox-hugo-table hl-table-row sane-table">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 12</span>:
   Table where the hovered-upon row highlights
@@ -523,7 +511,6 @@ _Let's-go-ballistic-with-CSS_ Edition :smile:
 
 <div class="ox-hugo-table blur-non-hovered">
 <div></div>
-
 <div class="table-caption">
   <span class="table-number">Table 13</span>:
   Table where rows except the hovered-upon get blurred

@@ -1021,6 +1021,7 @@ contextual information."
                          ""))
          (caption (org-export-get-caption table))
          table-num
+         (blank-line-before-table "")
          (caption-html (if (not caption)
                            ""
                          (let ((caption-prefix (org-blackfriday--translate 'table info))
@@ -1033,7 +1034,7 @@ contextual information."
                            (format (concat "<div class=\"table-caption\">\n"
                                            "  <span class=\"table-number\">%s</span>:\n"
                                            "  %s\n"
-                                           "</div>\n\n")
+                                           "</div>\n")
                                    (if table-ref ;Hyperlink the table prefix + number
                                        (format "<a href=\"#%s\">%s %s</a>"
                                                table-ref caption-prefix table-num)
@@ -1069,7 +1070,7 @@ contextual information."
               (org-string-nw-p css-props-str))
       (setq table-pre (concat table-pre
                               (format "<div class=\"ox-hugo-table %s\">\n" table-class)
-                              "<div></div>\n\n"))) ;See footnote 1
+                              "<div></div>\n"))) ;See footnote 1
     (when (org-string-nw-p table-pre)
       (setq table-post (concat "\n"
                                "</div>\n")))
@@ -1093,7 +1094,14 @@ contextual information."
              (dummy-header (replace-regexp-in-string "[-:]" " " hrule)))
         (setq tbl (concat dummy-header "\n" hrule "\n" row-1))))
     ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
-    (concat table-pre table-anchor caption-html tbl table-post)))
+
+    ;; A blank line is needed to separate the Markdown table and
+    ;; the table anchor/caption HTML.
+    (unless (string= (concat table-pre table-anchor caption-html) "")
+      (setq blank-line-before-table "\n"))
+
+    (concat table-pre table-anchor caption-html
+            blank-line-before-table tbl table-post)))
 
 ;;;; Verse Block
 (defun org-blackfriday-verse-block (_verse-block contents info)

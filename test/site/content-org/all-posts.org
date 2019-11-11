@@ -16,6 +16,7 @@
 
 # https://scripter.co/latex-in-html/
 #+macro: latex @@html:<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>@@
+#+macro: youtube @@html:<div class="org-youtube"><iframe src="https://www.youtube-nocookie.com/embed/$1" allowfullscreen title="YouTube Video"></iframe></div>@@
 
 #+author:
 
@@ -4299,6 +4300,20 @@ In the below example, ="foo"= will be the /arg1/ argument, and
 Content is rendered <b>like HTML</b>. The Markdown /emphasis/
 characters are !! NOT !! rendered.
 #+end_myshortcode-named
+** Using Org macros in lieu of Hugo shortcodes
+:PROPERTIES:
+:EXPORT_FILE_NAME: using-org-macros-in-lieu-of-hugo-shortcodes
+:END:
+#+begin_description
+Using Org macros in place of Hugo shortcodes to make the Org content
+reusable across more export backends.
+#+end_description
+{{{oxhugoissue(303)}}}
+
+The ~youtube~ Org macros used here kind of mimics the Hugo shortcode
+[[https://github.com/gohugoio/hugo/blob/00297085db48cbb7949c9867012f6df38817fc29/tpl/tplimpl/embedded/templates/shortcodes/youtube.html][*youtube*]].
+
+{{{youtube(v_jDFgS2AqE)}}}
 * Paragraphs                                                      :paragraph:
 ** Paragraphs with ATTR_HTML                         :attr___html:attr___css:
 :PROPERTIES:

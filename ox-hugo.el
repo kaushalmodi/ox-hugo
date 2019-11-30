@@ -2466,15 +2466,17 @@ communication channel."
 
     ;; Join consecutive Chinese lines into a single long line without
     ;; unwanted space inbetween.
-    (when (member (org-hugo--get-lang info) '("zh"))
-      ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5
-      ;; Example: 这是一个测试     -> 这是一个测试文本 ("This is a test text")
-      ;;          文本
-      (setq contents (replace-regexp-in-string
-                      "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
-                      contents))
-      ;; (message "[org-hugo-paragraph DBG] para 2: %s" contents)
-      )
+    (let ((lang (org-hugo--get-lang info)))
+      (when (and lang
+                 (string-prefix-p "zh" lang)) ;"zh", "zh_CH", ..
+        ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5
+        ;; Example: 这是一个测试     -> 这是一个测试文本 ("This is a test text")
+        ;;          文本
+        (setq contents (replace-regexp-in-string
+                        "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
+                        contents))
+        ;; (message "[org-hugo-paragraph DBG] para 2: %s" contents)
+        ))
 
     (unless (org-hugo--plist-get-true-p info :hugo-preserve-filling)
       (setq contents (concat (mapconcat 'identity (split-string contents) " ") "\n")))

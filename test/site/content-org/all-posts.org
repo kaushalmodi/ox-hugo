@@ -4952,7 +4952,7 @@ def
 ghi
 ** Chinese locale                                            :chinese:locale:
 :PROPERTIES:
-:EXPORT_HUGO_LOCALE: zh
+:EXPORT_HUGO_LOCALE: zh_CH
 :END:
 *** Filling automatically not preserved for Chinese characters (preserve filling on)
 :PROPERTIES:

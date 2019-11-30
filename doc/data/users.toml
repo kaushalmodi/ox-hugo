@@ -248,12 +248,6 @@
   site = "https://grugrut.github.io/til/"
   org_dir = "draft"
 
-[junahan]
-  author = "junahan"
-  source = "https://github.com/junahan/junahan-site"
-  site = "https://junahan.netlify.com/"
-  org_dir = "org"
-
 [alexmurray]
   author = "Alex Murray"
   source = "https://github.com/alexmurray/ubuntu-security-podcast"

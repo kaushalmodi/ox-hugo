@@ -3245,7 +3245,7 @@ a^2  &=  σ(W^2a^1 + b^2) \\
 a^3  &=  σ(W^3a^2 + b^3) \\
 ⋯ \\
 a^L  &= σ(W^La^{L-1} + b^L) \\
-y  &= a^L \\
+y  &= a^L
 \end{align}
 **** Same as above, but without space before the =\\= at EOL
 \begin{align}
@@ -3254,7 +3254,7 @@ a^2  &=  σ(W^2a^1 + b^2)\\
 a^3  &=  σ(W^3a^2 + b^3)\\
 ⋯\\
 a^L  &= σ(W^La^{L-1} + b^L)\\
-y  &= a^L\\
+y  &= a^L
 \end{align}
 *** =\{= → =\\{=, =\}= → =\\}=
 {{{oxhugoissue(258)}}}

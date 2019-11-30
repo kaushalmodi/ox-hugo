@@ -480,7 +480,7 @@ get escaped.. =foo_bar= must not become =foo\_bar=.
 :END:
 This post will be exported without =title= in the front-matter because
 it is explicitly set to /empty/ using =:EXPORT_TITLE:=.
-** En dash --, Em dash ---, Horizontal ellipsis ... in titles     :@upstream:
+** En dash --, Em dash ---, Horizontal ellipsis ... in titles          :@upstream:
 :PROPERTIES:
 :EXPORT_FILE_NAME: en-dash-em-dash-hellip-in-titles
 :END:
@@ -4938,8 +4938,10 @@ current subtree.
 abc
 def
 ghi
-这是一个测试
-文本
+
+{{{oxhugoissue(300)}}} --
+Тест
+Тест
 ** Filling is not preserved
 :PROPERTIES:
 :EXPORT_FILE_NAME: filling-is-not-preserved
@@ -4948,8 +4950,43 @@ ghi
 abc
 def
 ghi
+** Chinese locale                                            :chinese:locale:
+:PROPERTIES:
+:EXPORT_HUGO_LOCALE: zh
+:END:
+*** Filling automatically not preserved for Chinese characters (preserve filling on)
+:PROPERTIES:
+:EXPORT_FILE_NAME: filling-not-preserved-for-chinese-characters--preserve-filling-on
+:EXPORT_HUGO_PRESERVE_FILLING: t
+:END:
+#+begin_description
+Ensure that multi-byte characters are force-unwrapped if the locale is
+manually set or auto-detected as Chinese.
+#+end_description
+abc
+def
+ghi
 这是一个测试
 文本
+
+[[https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5][Reference]]
+*** Filling automatically not preserved for Chinese characters (preserve filling off)
+:PROPERTIES:
+:EXPORT_FILE_NAME: filling-not-preserved-for-chinese-characters--preserve-filling-off
+:EXPORT_HUGO_PRESERVE_FILLING:
+:END:
+#+begin_description
+Ensure that even when auto-unwrapping is enabled, no space is kept
+between the unwrapped multi-byte characters if the locale is manually
+set or auto-detected as Chinese.
+#+end_description
+abc
+def
+ghi
+这是一个测试
+文本
+
+[[https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5][Reference]]
 * Section Inheritance                                   :section_inheritance:
 ** Section A
 :PROPERTIES:
@@ -6360,6 +6397,7 @@ y slug para múltiples publicaciones, pero en diferentes idiomas.
 :EXPORT_AUTHOR: Feng Ruohang
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :source https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md
 :EXPORT_DATE: 2017-11-29
+:EXPORT_HUGO_LOCALE: zh
 :END:
 - Disclaimer :: This post is from the [[https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md][link]] posted by GitHub user
                 [[https://github.com/Vonng][*Vonng*]] in [[https://github.com/gohugoio/hugo/issues/234#issuecomment-347725391][this comment]]. All credit for this post

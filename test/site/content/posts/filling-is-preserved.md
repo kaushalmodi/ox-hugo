@@ -7,4 +7,7 @@ draft = false
 abc
 def
 ghi
-这是一个测试文本
+
+`ox-hugo` Issue #[300](https://github.com/kaushalmodi/ox-hugo/issues/300) --
+Тест
+Тест

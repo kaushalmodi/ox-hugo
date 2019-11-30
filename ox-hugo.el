@@ -1635,6 +1635,35 @@ INFO is a plist used as a communication channel."
     ;; (message "[ox-hugo section-path DBG] section path: %S" section-path)
     section-path))
 
+;;;; Get Language
+(defun org-hugo--get-lang (info)
+  "Return the language used for the content.
+
+The returned value is a string that can consist of only English
+alphabets and an underscore.
+
+The first 2 characters of this string is a language codes as per
+ISO 639-1 standard.  See
+https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes.
+
+INFO is a plist used as a communication channel."
+  (let ((lang (plist-get info :lang-iso-code)))
+    (unless lang
+      (setq lang
+            (or (plist-get info :hugo-locale)
+                ;; https://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html
+                (getenv "LANGUAGE")
+                (getenv "LC_ALL")
+                (getenv "LANG")))
+      (when (stringp lang)
+        (setq lang
+              (replace-regexp-in-string "\\`\\([a-z]+_[A-Z]+\\).*\\'" "\\1" lang)))
+      (setq lang (org-string-nw-p lang))
+      (when lang
+        ;; (message "[org-hugo--get-lang DBG] language: %s" lang)
+        (plist-put info :lang-iso-code lang)))
+    lang))
+
 
 
 ;;; Transcode Functions
@@ -2434,15 +2463,18 @@ communication channel."
         ret)
 
     ;; (message "[org-hugo-paragraph DBG] para 1: %s" contents)
+
     ;; Join consecutive Chinese lines into a single long line without
     ;; unwanted space inbetween.
-    ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5
-    ;; Example: 这是一个测试     -> 这是一个测试文本 ("This is a test text")
-    ;;          文本
-    (setq contents (replace-regexp-in-string
-                    "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
-                    contents))
-    ;; (message "[org-hugo-paragraph DBG] para 2: %s" contents)
+    (when (member (org-hugo--get-lang info) '("zh"))
+      ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5
+      ;; Example: 这是一个测试     -> 这是一个测试文本 ("This is a test text")
+      ;;          文本
+      (setq contents (replace-regexp-in-string
+                      "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
+                      contents))
+      ;; (message "[org-hugo-paragraph DBG] para 2: %s" contents)
+      )
 
     (unless (org-hugo--plist-get-true-p info :hugo-preserve-filling)
       (setq contents (concat (mapconcat 'identity (split-string contents) " ") "\n")))
@@ -3154,14 +3186,7 @@ INFO is a plist used as a communication channel."
          (creator (and (plist-get info :with-creator)
                        (plist-get info :creator)))
          (locale (and (plist-get info :hugo-with-locale)
-                      (let* ((lang (or (plist-get info :hugo-locale)
-                                       ;; https://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html
-                                       (getenv "LANGUAGE")
-                                       (getenv "LC_ALL")
-                                       (getenv "LANG")))
-                             (lang (when (stringp lang)
-                                     (replace-regexp-in-string "\\`\\([a-z]+_[A-Z]+\\).*\\'" "\\1" lang))))
-                        lang)))
+                      (org-hugo--get-lang info)))
          (description (org-string-nw-p (plist-get info :description)))
          (aliases-raw (let ((aliases-raw-1 (org-string-nw-p (plist-get info :hugo-aliases))))
                         (when aliases-raw-1

@@ -3118,6 +3118,17 @@ resolved to the containing post.
 :END:
 <<external-target>>
 **** External target with *bold* and /italic/
+** Url encoding in links                              :escaping:url:encoding:
+:PROPERTIES:
+:EXPORT_FILE_NAME: url-encoding-in-links
+:END:
+#+begin_description
+Encoding of non-URL characters in links
+#+end_description
+Below links are invalid, they are there just for test purpose.
+
+- [[https://jira.example.com/issues/?jql=(project=MYPRJ)AND(assignee=currentUser())][A dummy Jira JQL link]]
+- [[https://jira.example.com/issues/?jql=(project=MYPRJ)AND(assignee=currentUser())AND(labels in (foo))][A dummy Jira JQL link with spaces]]
 * Equations                                               :equations:mathjax:
 ** Inline equations
 :PROPERTIES:

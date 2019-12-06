@@ -894,6 +894,24 @@ source of your site public, feel free to open a PR (updating just
 :EXPORT_FILE_NAME: org-meta-data-to-hugo-front-matter
 :EXPORT_HUGO_MENU_OVERRIDE: :title "Org→Hugo front-matter"
 :END:
+**** Front-matter format
+~ox-hugo~ supports exporting the front-matter in [[https://github.com/toml-lang/toml][TOML]] (default) or
+YAML.
+
+To change the default to YAML for your exports, add this to the top of
+your Org files:
+#+begin_src org
+,#+hugo_front_matter_format: yaml
+#+end_src
+
+- Subtree-based exports only :: If you want only specific subtrees to
+  have the front-matter exported to YAML format, add this to that
+  subtree's property drawer:
+  #+begin_src org
+  :PROPERTIES:
+  :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
+  :END:
+  #+end_src
 **** For subtree-based exports
 When organizing the posts as Org *subtrees*, many Hugo front-matter
 variables get set implicitly using the meta-data parsed from the posts

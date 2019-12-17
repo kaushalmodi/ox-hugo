@@ -2212,7 +2212,8 @@ and rewrite link paths to make blogging more seamless."
         (format (org-export-get-coderef-format ref desc)
                 (org-export-resolve-coderef ref info))))
      ((equal type "radio")
-      desc)
+      (let ((destination (org-export-resolve-radio-link link info)))
+        (format "[%s](#%s)" desc (org-export-get-reference destination info))))
      (t
       (let* ((link-param-str "")
              (path (cond

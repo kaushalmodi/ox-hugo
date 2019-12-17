@@ -3050,6 +3050,24 @@ C = W\log_{2} (1+\mathrm{SNR})
 \end{equation}
 
 *Here we refer to equation \ref{eq:1}.*
+*** Radio targets                                             :radio_targets:
+:PROPERTIES:
+:EXPORT_FILE_NAME: radio-targets
+:END:
+#+begin_description
+Testing [[https://orgmode.org/manual/Radio-targets.html][Radio targets]]
+#+end_description
+Here I am referencing to asdf123 that I talk about later.
+
+#+include: "./misc/common.org::#lorem-ipsum" :only-contents t
+#+include: "./misc/common.org::#lorem-ipsum" :only-contents t
+
+Here I talk about the asdf123 topic again.
+
+#+include: "./misc/common.org::#lorem-ipsum" :only-contents t
+#+include: "./misc/common.org::#lorem-ipsum" :only-contents t
+
+Here I talk about <<<asdf123>>>.
 ** Links outside the same post
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-outside-the-same-post

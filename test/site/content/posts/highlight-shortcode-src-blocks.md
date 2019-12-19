@@ -67,3 +67,19 @@ Here's an example of an `emacs-lisp` block:
   "A variable to store the current emacs versions as <MAJORVER>_<MINORVER>.
 So, for emacs version 25.0.50.1, this variable will be 25_0.")
 {{< /highlight >}}
+
+Here's an example of a `python` block (`ox-hugo` Issue #[314](https://github.com/kaushalmodi/ox-hugo/issues/314)):
+
+{{< highlight python >}}
+import itertools as it
+import numpy as np
+
+def permanent(m):
+    nr,nc = np.shape(m)
+    if nr != nc:
+        raise ValueError("Matrix must be square")
+    pm = 0
+    for p in it.permutations(range(nr)):
+        pm += np.product([m[i,p[i]] for i in range(nr)])
+   return pm
+{{< /highlight >}}

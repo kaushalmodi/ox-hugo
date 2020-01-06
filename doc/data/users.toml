@@ -231,12 +231,6 @@
   site = "https://pxaka.tokyo/blog/"
   org_dir = "entries"
 
-[ryancummings]
-  author = "Ryan Cummings"
-  source = "https://github.com/ryancummings/blog"
-  site = "http://blog.ryanwcummings.com/"
-  org_dir = "content-org"
-
 [taipapamotohus]
   author = "taipapamotohus"
   source = "https://github.com/taipapamotohus/Taipapablog"

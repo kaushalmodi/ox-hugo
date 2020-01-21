@@ -1664,6 +1664,20 @@ INFO is a plist used as a communication channel."
         (plist-put info :lang-iso-code lang)))
     lang))
 
+;;;; Check if lang is CJ(K)
+(defun org-hugo--lang-cjk-p (info)
+  "Return non-nil is the language is Chinese or Japanese.
+
+(Check for Korean language has not been added as no `ox-hugo'
+user has requested for it.)"
+  (let* ((lang (org-hugo--get-lang info))
+         (lang-2chars (when (and (stringp lang)
+                                 (>= (length lang) 2))
+                        (substring lang 0 2))))
+    (and lang-2chars
+         (member lang-2chars '("zh"      ;"zh", "zh_CH", ..
+                               "ja"))))) ;"ja", ..
+
 
 
 ;;; Transcode Functions
@@ -2468,20 +2482,15 @@ communication channel."
 
     ;; Join consecutive Chinese, Japanese lines into a single long
     ;; line without unwanted space inbetween.
-    (let* ((lang (org-hugo--get-lang info))
-           (lang-2chars (when (and (stringp lang)
-                                   (>= (length lang) 2))
-                          (substring lang 0 2))))
-      (when (and lang-2chars
-                 (member lang-2chars '("zh" "ja"))) ;"zh", "zh_CH", "ja", ..
-        ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5
-        ;; Example: 这是一个测试     -> 这是一个测试文本 ("This is a test text")
-        ;;          文本
-        (setq contents (replace-regexp-in-string
-                        "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
-                        contents))
-        ;; (message "[org-hugo-paragraph DBG] para 2: %s" contents)
-        ))
+    (when (org-hugo--lang-cjk-p info)
+      ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5
+      ;; Example: 这是一个测试     -> 这是一个测试文本 ("This is a test text")
+      ;;          文本
+      (setq contents (replace-regexp-in-string
+                      "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
+                      contents))
+      ;; (message "[org-hugo-paragraph DBG] para 2: %s" contents)
+      )
 
     (unless (org-hugo--plist-get-true-p info :hugo-preserve-filling)
       (setq contents (concat (mapconcat 'identity (split-string contents) " ") "\n")))

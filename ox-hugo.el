@@ -1975,7 +1975,7 @@ holding export options."
                ;; Make sure CONTENTS is separated from table of contents
                ;; and footnotes with at least a blank line.
                "\n"
-               (org-blackfriday-footnote-section info)))))
+               (org-blackfriday-footnote-section info (org-hugo--lang-cjk-p info))))))
 
 ;;;; Keyword
 (defun org-hugo-keyword (keyword contents info)

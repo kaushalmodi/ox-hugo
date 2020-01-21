@@ -121,9 +121,12 @@ INFO is a plist used as a communication channel."
     (concat indent "- [" title "]" "(#" anchor ")")))
 
 ;;;; Footnote section
-(defun org-blackfriday-footnote-section (info)
+(defun org-blackfriday-footnote-section (info &optional is-cjk)
   "Format the footnote section.
-INFO is a plist used as a communication channel."
+
+INFO is a plist used as a communication channel.
+IS-CJK should be set to non-nil if the language is Chinese,
+Japanese or Korean."
   (let ((fn-alist (org-export-collect-footnote-definitions info))
         ;; Fri Jul 21 14:33:25 EDT 2017 - kmodi
         ;; TODO: Need to learn using cl-loop
@@ -142,7 +145,12 @@ INFO is a plist used as a communication channel."
         ;; Support multi-line footnote definitions by folding all
         ;; footnote definition lines into a single line as Blackfriday
         ;; does not support that.
-        (setq def (replace-regexp-in-string "\n" " " def))
+        (setq def (replace-regexp-in-string
+                   "\n"
+                   ;; Do not insert spaces when joining newlines for
+                   ;; CJK languages.
+                   (if is-cjk "" " ")
+                   def))
         ;; Replace multiple consecutive spaces with a single space.
         (setq def (replace-regexp-in-string "[[:blank:]]+" " " def))
         (push (cons n def) fn-alist-stripped)

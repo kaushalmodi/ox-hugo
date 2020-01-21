@@ -2600,6 +2600,12 @@ This is some text[fn:1].
 :EXPORT_FILE_NAME: multi-line-footnote
 :END:
 This is some text[fn:3].
+** Multi-line footnote Japanese
+:PROPERTIES:
+:EXPORT_FILE_NAME: multi-line-footnote-japanese
+:EXPORT_HUGO_LOCALE: ja
+:END:
+This is some text[fn:6].
 ** Bind footnotes to the preceding word
 :PROPERTIES:
 :EXPORT_FILE_NAME: footnotes-bind-to-preceding-word
@@ -7527,6 +7533,9 @@ def permanent(m):
 Results from static site search implemented using /Fusejs/, /jquery/
 and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1cb41ae][Source]]
 * Footnotes
+
+[fn:6] これは
+テストです.
 
 [fn:5] See [@thompson2016].
 [fn:4] Even if the user has set the =HUGO_CODE_FENCE= value to =t=

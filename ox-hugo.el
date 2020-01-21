@@ -1,6 +1,6 @@
 ;;; ox-hugo.el --- Hugo Markdown Back-End for Org Export Engine  -*- lexical-binding: t -*-
 
-;; Authors: Kaushal Modi <kaushal.mod@gmail.com>
+;; Authors: Kaushal Modi <kaushal.modi@gmail.com>
 ;;          Matt Price <moptop99@gmail.com>
 ;; URL: https://ox-hugo.scripter.co
 ;; Package-Requires: ((emacs "24.4") (org "9.0"))
@@ -2466,11 +2466,14 @@ communication channel."
 
     ;; (message "[org-hugo-paragraph DBG] para 1: %s" contents)
 
-    ;; Join consecutive Chinese lines into a single long line without
-    ;; unwanted space inbetween.
-    (let ((lang (org-hugo--get-lang info)))
-      (when (and lang
-                 (string-prefix-p "zh" lang)) ;"zh", "zh_CH", ..
+    ;; Join consecutive Chinese, Japanese lines into a single long
+    ;; line without unwanted space inbetween.
+    (let* ((lang (org-hugo--get-lang info))
+           (lang-2chars (when (and (stringp lang)
+                                   (>= (length lang) 2))
+                          (substring lang 0 2))))
+      (when (and lang-2chars
+                 (member lang-2chars '("zh" "ja"))) ;"zh", "zh_CH", "ja", ..
         ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5
         ;; Example: 这是一个测试     -> 这是一个测试文本 ("This is a test text")
         ;;          文本

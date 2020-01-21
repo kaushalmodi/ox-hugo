@@ -2846,9 +2846,10 @@ Here's an example of inlining an SVG:
 #+caption: An SVG with hyperlink
 #+attr_html: :inlined t
 [[file:../test/site/content-org/images/svg-with-hyperlinks.svg]]
-*** Chinese Support
+*** CJK Support
 :PROPERTIES:
-:EXPORT_FILE_NAME: chinese-support
+:EXPORT_FILE_NAME: cjk-support
+:EXPORT_HUGO_ALIASES: chinese-support japanese-support
 :END:
 **** Auto-unwrapping of lines with multi-byte characters
 This issue came up on this [[https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547][emacs-china thread]] .. the issue was that
@@ -2865,10 +2866,11 @@ other languages with multi-byte characters (few examples: Hindi,
 Gujarati).
 
 So that line-unwrapping _with space removal_ is done *only if*,
-1. The /locale/ is [[https://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html][auto-detected]] to be Chinese via environment
-   variables /LANGUAGE/, /LC_ALL/ or /LANG/, or
-2. The /locale/ is *manually set* to Chinese by setting it to *zh*
-   using ~#+hugo_locale:~ keyword (or ~EXPORT_HUGO_LOCALE~ property).
+1. The /locale/ is [[https://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html][auto-detected]] to be Chinese or Japanese via
+   environment variables /LANGUAGE/, /LC_ALL/ or /LANG/, or
+2. The /locale/ is *manually set* to Chinese or Japanese by setting it
+   to *zh* or *ja* using ~#+hugo_locale:~ keyword (or
+   ~EXPORT_HUGO_LOCALE~ property).
 *** COMMENT Hugo Bundle
 :PROPERTIES:
 :EXPORT_FILE_NAME: hugo-bundle

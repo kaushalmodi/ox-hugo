@@ -1535,10 +1535,14 @@ blocks:
     + List item 2.2 in code block
   #+end_example
 - List item 3
-** Org Babel Results
+** Org Babel Results    :babel:results:indentation:example_block:fixed_block:
 :PROPERTIES:
-:EXPORT_FILE_NAME: org-babel-results-preserve-indent
+:EXPORT_FILE_NAME: org-babel-results
 :END:
+*** Small Results block
+Below also tests that the indentation in *results* blocks is
+preserved.
+
 #+begin_src python :exports both :results output
 str = 'a\tbc'
 print(str[1:])
@@ -1547,7 +1551,29 @@ print(str[1:])
 #+results:
 : 	bc
 
-The whitespace before "bc" in the results block above should be preserved.
+The whitespace before "bc" in the results block above should be
+preserved.
+*** Big Results block
+#+begin_src nim :exports both :results output
+echo "abc\ndef\nghi\njkl\nmno\npqr\nstu\nvwx\nyz0\n123\n456\n789"
+#+end_src
+
+#+RESULTS:
+#+begin_example
+abc
+def
+ghi
+jkl
+mno
+pqr
+stu
+vwx
+yz0
+123
+456
+789
+#+end_example
+
 ** Indented source block :indented:lists:code_fence:highlight:src_block:@upstream:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-indented

@@ -147,10 +147,12 @@ Japanese or Korean."
         ;; does not support that.
         (setq def (if is-cjk
                       (replace-regexp-in-string
-                       ;; Do not insert spaces when joining newlines for
-                       ;; CJK languages.
-                       "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
-                       def)
+                       "\n" " " ;If the footnote still has newlines, replace them with spaces
+                       (replace-regexp-in-string
+                        ;; Do not insert spaces when joining newlines for
+                        ;; CJK languages.
+                        "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
+                        def))
                     (replace-regexp-in-string "\n" " " def)))
 
         ;; Replace multiple consecutive spaces with a single space.

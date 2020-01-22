@@ -556,13 +556,15 @@ information."
          (parent-type (car parent-element))
          (backticks (make-string org-blackfriday--code-block-num-backticks ?`)))
     (prog1
-        (format "%stext\n%s%s"
-                backticks
-                (let ((org-src-preserve-indentation t))
-                  ;; Preserve leading whitespace in the Org Babel Results
-                  ;; blocks.
-                  (org-export-format-code-default fixed-width info))
-                backticks)
+        (org-blackfriday--div-wrap-maybe
+         fixed-width
+         (format "%stext\n%s%s"
+                 backticks
+                 (let ((org-src-preserve-indentation t))
+                   ;; Preserve leading whitespace in the Org Babel Results
+                   ;; blocks.
+                   (org-export-format-code-default fixed-width info))
+                 backticks))
       (when (equal 'quote-block parent-type)
         ;; If the current example block is inside a quote block,
         ;; future example/code blocks (especially the ones outside

@@ -1539,7 +1539,11 @@ blocks:
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-babel-results
 :END:
-*** Small Results block
+#+begin_description
+Testing the export of Org Babel ~#+results:~ blocks with and without
+wrapping with HTML attributes.
+#+end_description
+*** "Fixed block" Results block
 Below also tests that the indentation in *results* blocks is
 preserved.
 
@@ -1553,12 +1557,24 @@ print(str[1:])
 
 The whitespace before "bc" in the results block above should be
 preserved.
-*** Big Results block
+**** "Fixed block" Results block with ~#+attr_html~
+#+begin_src python :exports both :results output
+str = 'd\tef'
+print(str[1:])
+#+end_src
+
+#+attr_html: :class results-fixed-block
+#+attr_css: :color blue
+#+results:
+: 	ef
+
+Above results block will be in _blue_ text.
+*** "Example block" Results block
 #+begin_src nim :exports both :results output
 echo "abc\ndef\nghi\njkl\nmno\npqr\nstu\nvwx\nyz0\n123\n456\n789"
 #+end_src
 
-#+RESULTS:
+#+results:
 #+begin_example
 abc
 def
@@ -1573,7 +1589,30 @@ yz0
 456
 789
 #+end_example
+**** "Example block" Results block with ~#+attr_html~
+#+begin_src nim :exports both :results output
+echo "ABC\nDEF\nGHI\nJKL\nMNO\nPQR\nSTU\nVWX\nYZ0\n123\n456\n789"
+#+end_src
 
+#+attr_html: :class results-example-block
+#+attr_css: :color green
+#+results:
+#+begin_example
+ABC
+DEF
+GHI
+JKL
+MNO
+PQR
+STU
+VWX
+YZ0
+123
+456
+789
+#+end_example
+
+Above results block will be in _green_ text.
 ** Indented source block :indented:lists:code_fence:highlight:src_block:@upstream:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-indented

@@ -2605,7 +2605,13 @@ This is some text[fn:3].
 :EXPORT_FILE_NAME: multi-line-footnote-japanese
 :EXPORT_HUGO_LOCALE: ja
 :END:
-This is some text[fn:6].
+Here is a footnote where it originally had Japanese text on both
+lines[fn:6].
+
+Here is a footnote where originally the first line ended in English
+but next line started with Japanese[fn:7].
+
+Here is a footnote entirely in English[fn:3].
 ** Bind footnotes to the preceding word
 :PROPERTIES:
 :EXPORT_FILE_NAME: footnotes-bind-to-preceding-word
@@ -7534,10 +7540,14 @@ Results from static site search implemented using /Fusejs/, /jquery/
 and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1cb41ae][Source]]
 * Footnotes
 
+[fn:7] English on line 1
+の Japanese on line 2
+
 [fn:6] これは
 テストです.
 
 [fn:5] See [@thompson2016].
+
 [fn:4] Even if the user has set the =HUGO_CODE_FENCE= value to =t=
 (via variable, keyword or subtree property), the Hugo =highlight=
 shortcode will be used automatically instead of code fences if either

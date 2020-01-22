@@ -145,12 +145,14 @@ Japanese or Korean."
         ;; Support multi-line footnote definitions by folding all
         ;; footnote definition lines into a single line as Blackfriday
         ;; does not support that.
-        (setq def (replace-regexp-in-string
-                   "\n"
-                   ;; Do not insert spaces when joining newlines for
-                   ;; CJK languages.
-                   (if is-cjk "" " ")
-                   def))
+        (setq def (if is-cjk
+                      (replace-regexp-in-string
+                       ;; Do not insert spaces when joining newlines for
+                       ;; CJK languages.
+                       "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
+                       def)
+                    (replace-regexp-in-string "\n" " " def)))
+
         ;; Replace multiple consecutive spaces with a single space.
         (setq def (replace-regexp-in-string "[[:blank:]]+" " " def))
         (push (cons n def) fn-alist-stripped)

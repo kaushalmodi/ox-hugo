@@ -6231,18 +6231,19 @@ in YAML):
 - Note :: The state change notes are intentionally put in this test
           LOGBOOK, because we want to ensure that they don't seep into
           the ~notes~ front-matter.
-** Extra Front-matter                              :extra:verbatim:src_block:
+** Extra Front-matter tests                        :extra:verbatim:src_block:
+*** Extra Front-matter
 :PROPERTIES:
 :EXPORT_HUGO_WEIGHT: 5
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :widget "about"
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :active "true"
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :interests '((interests . ("Artificial Intelligence" "Computational Linguistics" "Information Retrieval")))
 :END:
-*** TOML Front-matter                                                  :toml:
+**** TOML Front-matter                                                 :toml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: toml
 :END:
-**** Extra Front-matter (TOML, TOML extra)                       :toml_extra:
+***** Extra Front-matter (TOML, TOML extra)                      :toml_extra:
 :PROPERTIES:
 :EXPORT_FILE_NAME: front-matter-toml-toml-extra
 :END:
@@ -6271,7 +6272,7 @@ appended to the TOML front-matter.
 #+begin_src toml
 # this TOML block will export to the Markdown body
 #+end_src
-**** Extra Front-matter (TOML, YAML extra)                       :yaml_extra:
+***** Extra Front-matter (TOML, YAML extra)                      :yaml_extra:
 :PROPERTIES:
 :EXPORT_FILE_NAME: front-matter-toml-yaml-extra
 :END:
@@ -6296,11 +6297,57 @@ education:
 #+begin_src toml
 # this TOML block will export to the Markdown body
 #+end_src
-*** YAML Front-matter                                                  :yaml:
+***** ox-hugo Issue 325 test                                     :toml_extra:
+:PROPERTIES:
+:EXPORT_FILE_NAME: index
+:EXPORT_HUGO_SECTION: issues
+:EXPORT_HUGO_BUNDLE: 325
+:LATEX_TITLE: test 2
+:EXPORT_DESCRIPTION: summary of this test.
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :url_pdf "#"
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :url_code "#"
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :url_dataset "#"
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :url_video "#"
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :external_link "/courses/example/"
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :projects '("signals and systems")
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :image '((caption . " [**Watch**](https://youtube.com)") (preview_only . "true"))
+:END:
+:LOGBOOK:
+CLOCK: [2020-01-29 Wed 16:39]--[2020-01-29 Wed 16:50] =>  0:11
+:END:
+ <2020-01-29 Wed 16:39>
+
+#+begin_src toml :front_matter_extra t
+
+[[links]]
+icon = "youtube"
+icon_pack = "fab"
+name = "Watch It"
+url = "/courses/example/"
+
+[[links]]
+icon = "instagram"
+icon_pack = "fab"
+name = "Inst"
+url = "/courses/example/"
+
+[[links]]
+icon = "weibo"
+icon_pack = "fab"
+name = "Weibo"
+url = "/courses/example/"
+
+[[links]]
+icon = "wechat"
+icon_pack = "fab"
+name = "Wechat"
+url = "/courses/example/"
+#+end_src
+**** YAML Front-matter                                                 :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
 :END:
-**** Extra Front-matter (YAML, YAML extra)                       :yaml_extra:
+***** Extra Front-matter (YAML, YAML extra)                      :yaml_extra:
 :PROPERTIES:
 :EXPORT_FILE_NAME: front-matter-yaml-yaml-extra
 :END:
@@ -6325,7 +6372,7 @@ education:
 #+begin_src toml
 # this TOML block will export to the Markdown body
 #+end_src
-**** Extra Front-matter (YAML, TOML extra)                       :toml_extra:
+***** Extra Front-matter (YAML, TOML extra)                      :toml_extra:
 :PROPERTIES:
 :EXPORT_FILE_NAME: front-matter-yaml-toml-extra
 :END:

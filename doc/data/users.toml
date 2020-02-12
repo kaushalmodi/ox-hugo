@@ -380,6 +380,13 @@
   author = "Michael Howard"
   source = "https://git.sr.ht/~slow_djinn/fumbling-blog"
   site = "https://fumbling.it"
+  
+[rg0swami]
+  author = "Rohit Goswami"
+  source = "https://github.com/HaoZeke/haozeke.github.io"
+  site = "https://haozeke.github.io"
+  org_dir = "content-org"
+  branch = "src"
 
 # []
 #   author = ""

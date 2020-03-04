@@ -388,6 +388,12 @@
   org_dir = "content-org"
   branch = "src"
 
+[RobinWils]
+  author = "Robin Wils"
+  source = "https://gitlab.com/RobinWils/robinwils.gitlab.io"
+  site = "https://robinwils.gitlab.io"
+  org_dir = "content-org"
+
 # []
 #   author = ""
 #   source = ""

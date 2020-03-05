@@ -955,6 +955,19 @@ is in progress.  See `org-hugo--before-export-function' and
     ;; (message "[ox-hugo ob-exp] ret: %S" ret)
     ret))
 
+
+;;;; Workaround to fix the regression in the behavior of `org-babel--string-to-number'.
+;; https://lists.gnu.org/r/emacs-orgmode/2020-02/msg00931.html
+(defun org-hugo--org-babel--string-to-number (string)
+  "If STRING represents a number return its value.
+Otherwise return nil.
+
+This function restores the behavior of
+`org-babel--string-to-number' to that of before
+https://code.orgmode.org/bzg/org-mode/commit/6b2a7cb20b357e730de151522fe4204c96615f98."
+  (and (string-match-p "\\`-?\\([0-9]\\|\\([1-9]\\|[0-9]*\\.\\)[0-9]*\\)\\'" string)
+       (string-to-number string)))
+
 (defun org-hugo--before-export-function (subtreep)
   "Function to be run before an ox-hugo export.
 
@@ -968,7 +981,8 @@ This is an internal function."
   (unless subtreep
     ;; Reset the variables that are used only for subtree exports.
     (setq org-hugo--subtree-coord nil))
-  (advice-add 'org-babel-exp-code :around #'org-hugo--org-babel-exp-code))
+  (advice-add 'org-babel-exp-code :around #'org-hugo--org-babel-exp-code)
+  (advice-add 'org-babel--string-to-number :override #'org-hugo--org-babel--string-to-number))
 
 (defun org-hugo--after-export-function (info outfile)
   "Function to be run after an ox-hugo export.
@@ -982,6 +996,7 @@ INFO is a plist used as a communication channel.
 OUTFILE is the Org exported file name.
 
 This is an internal function."
+  (advice-remove 'org-babel--string-to-number #'org-hugo--org-babel--string-to-number)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
   (when (and outfile
              (org-hugo--pandoc-citations-enabled-p info))
@@ -2564,6 +2579,7 @@ channel."
          (fm-format (plist-get info :hugo-front-matter-format)))
     ;; (message "ox-hugo src [dbg] lang: %S" lang)
     ;; (message "ox-hugo src [dbg] is-fm-extra: %S" is-fm-extra)
+    ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
     (if (and is-fm-extra
              (member lang '("toml" "yaml")))
         (progn

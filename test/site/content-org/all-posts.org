@@ -6424,6 +6424,20 @@ La herencia de fecha y slug es útil cuando desea usar los mismos datos
 y slug para múltiples publicaciones, pero en diferentes idiomas.
 
 [[/posts/en/data-and-slug-inheritance][English version]]
+* Issues                                                            :@issues:
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: issues
+:END:
+** Issue 335                                                :taxonomy_weight:
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: 335
+:EXPORT_HUGO_WEIGHT: :tags 123
+:EXPORT_FILE_NAME: index
+:END:
+#+begin_description
+Test the exporting of taxonomy weight parameters like ~tags_weight~.
+#+end_description
+{{{oxhugoissue(335)}}}
 * Real Examples                                               :real_examples:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: real-examples

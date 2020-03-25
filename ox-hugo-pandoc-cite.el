@@ -63,7 +63,7 @@ arguments.")
   "Buffer to contain the `pandoc' run output and errors.")
 
 (defvar org-hugo-pandoc-cite--references-header-regexp
-  "^<div id=\"refs\" class=\"references\">$"
+  "^<div id=\"refs\" class=\"references hanging-indent\">$"
   "Regexp to match the Pandoc-inserted references header string.
 
 This string is present only if Pandoc has resolved one or more

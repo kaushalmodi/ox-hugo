@@ -46,8 +46,8 @@ endif
 HUGO_BIN_SOURCE ?= https://gitlab.com/kaushalmodi/unofficial-hugo-dev-builds.git
 HUGO_VERSION ?= DEV
 
-PANDOC_BIN_VERSION ?= 2.9.2
-PANDOC_ARCHIVE_NAME ?= pandoc-$(PANDOC_BIN_VERSION)-linux.tar.gz
+PANDOC_BIN_VERSION ?= 2.9.2.1
+PANDOC_ARCHIVE_NAME ?= pandoc-$(PANDOC_BIN_VERSION)-linux-amd64.tar.gz
 PANDOC_BIN_SOURCE ?= https://github.com/jgm/pandoc/releases/download/$(PANDOC_BIN_VERSION)
 
 # baseURL value set via environment variable HUGO_BASEURL

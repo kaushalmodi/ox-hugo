@@ -17,6 +17,7 @@
     "-t" ,(concat "markdown-citations"
                   "-simple_tables"
                   "+pipe_tables"
+                  "-raw_attribute"
                   "-fenced_divs"
                   "-fenced_code_attributes"
                   "-bracketed_spans")

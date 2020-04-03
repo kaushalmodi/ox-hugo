@@ -454,10 +454,10 @@ See the new section added to documentation:
 - Fix incorrectly inserted hard line-breaks #[[https://github.com/kaushalmodi/ox-hugo/issues/72][72]]. Added a
   new option =HUGO_PRESERVE_FILLING=.
 - Fix error happening when a post title was set to an empty string
-  [[[https://github.com/kaushalmodi/ox-hugo/commit/ba9e8365f6ee42f030ed806bf5ec42d6acce4c76][ba9e8365]]].
+  [ [[https://github.com/kaushalmodi/ox-hugo/commit/ba9e8365f6ee42f030ed806bf5ec42d6acce4c76][ba9e8365]] ].
 *** Backward-incompatible changes
 - Switch the default value of =org-hugo-use-code-for-kbd= option to
-  =nil= [[[https://github.com/kaushalmodi/ox-hugo/commit/88ba15ae9bc809b0983315446c88fecfda3534e5][88ba15ae]]].
+  =nil= [ [[https://github.com/kaushalmodi/ox-hugo/commit/88ba15ae9bc809b0983315446c88fecfda3534e5][88ba15ae]] ].
 ** v0.1.3 <2017-09-13 Wed>
 - Now a HUGO key value set to ="nil"=, like =#+hugo_code_fence: nil=,
   will evaluate as /nil/ instead of /t/, as now

@@ -62,7 +62,7 @@ Citations," [n.d.](#ref-rmdCitations)) for more.
 
 ## References {#references}
 
-<div id="refs" class="references">
+<div id="refs" class="references hanging-indent">
   <div></div>
 
 

@@ -41,7 +41,7 @@ Snippet 1</a></span>: Nested Boxes using PlantUML
 
 ## References {#references}
 
-<div id="refs" class="references">
+<div id="refs" class="references hanging-indent">
   <div></div>
 
 

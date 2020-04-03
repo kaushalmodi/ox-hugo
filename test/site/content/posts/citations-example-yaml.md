@@ -24,7 +24,7 @@ Content in section 2.
 
 ## References {#references}
 
-<div id="refs" class="references">
+<div id="refs" class="references hanging-indent">
   <div></div>
 
 

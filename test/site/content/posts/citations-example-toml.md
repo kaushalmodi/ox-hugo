@@ -84,7 +84,7 @@ Some text.
 
 ## References {#references}
 
-<div id="refs" class="references">
+<div id="refs" class="references hanging-indent">
   <div></div>
 
 

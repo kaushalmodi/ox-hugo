@@ -12,7 +12,7 @@ patches accepted.
 As a bonus, once you have assigned your copyright to FSF, doors open up
 for your future contributions to Emacs too!
 * Contribute to documentation
-*See [[https://ox-hugo.scripter.co/doc/requirements#doc_contributor_reqs/][Requirements for doc contributor]].*
+*See [[https://ox-hugo.scripter.co/doc/requirements/#doc_contributor_reqs][Requirements for doc contributor]].*
 
 1. Clone this repo.
 2. Add/edit documentation to =doc/ox-hugo-manual.org=.
@@ -24,7 +24,7 @@ for your future contributions to Emacs too!
 5. Commit *only the .org files*, push branch and create PR.
    - The =.org= → =.md= conversion is done by =ox-hugo= on Netlify.
 * Contribute to code
-*See [[https://ox-hugo.scripter.co/doc/requirements#code_contributor_reqs/][Requirements for code contributor]].*
+*See [[https://ox-hugo.scripter.co/doc/requirements/#code_contributor_reqs][Requirements for code contributor]].*
 
 1. Clone this repo.
 2. Add/edit the .el files, *tests* in =test/site/content-org/=, and
@@ -54,5 +54,6 @@ error backtrace,
 * Test
 1. Clone this repo.
 2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
-   [[https://github.com/jgm/pandoc/releases/tag/2.9.2.1][*2.9.2.1*]]) are installed (more info [[https://ox-hugo.scripter.co/doc/contributing-guide/#contribute-to-code][here]]).
+   [[https://github.com/jgm/pandoc/releases/tag/2.9.2.1][*2.9.2.1*]]) are installed (more info
+   [[https://ox-hugo.scripter.co/doc/contributing-guide/#contribute-to-code][here]]).
 3. Run =make -j1 test=.

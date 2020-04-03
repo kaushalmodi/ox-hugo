@@ -15,7 +15,7 @@ footnote citation.[^fn:1]
 
 ## References {#references}
 
-<div id="refs" class="references">
+<div id="refs" class="references hanging-indent">
   <div></div>
 
 

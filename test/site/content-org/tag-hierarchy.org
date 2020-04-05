@@ -1,0 +1,67 @@
+#+hugo_base_dir: ../
+
+#+seq_todo: TODO DRAFT DONE
+
+#+property: header-args :eval never-export
+
+#+startup: indent
+
+#+macro: doc [[https://ox-hugo.scripter.co/doc/$1][$2]]
+#+macro: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+
+#+author:
+
+#+tags: [ @GTD : Control Persp ]
+#+tags: [ Control : Context Task ]
+#+tags: [ Persp : Vision Goal AOF Project ]
+
+#+tags: [ @food : @fruit @vegetable @has__seeds ]
+#+tags: [ @fruit : apple banana ]
+#+tags: [ apple : pink_lady granny_smith ]
+#+tags: [ @vegetable : potato squash ]
+#+tags: [ @has__seeds : apple squash ]
+
+#+filetags: tag-groups tag-hierarchy
+
+* Body
+{{{oxhugoissue(341)}}}
+
+https://orgmode.org/manual/Tag-Hierarchy.html
+* Tag Hierarchy: Basic                                               :Vision:
+:PROPERTIES:
+:EXPORT_FILE_NAME: tag-hierarchy-basic
+:END:
+#+begin_description
+Test the example tag groups from
+https://orgmode.org/manual/Tag-Hierarchy.html.
+#+end_description
+#+include: "./tag-hierarchy.org::*Body" :only-contents t
+* Tag Hierarchy: Multiple Tags from Groups         :Vision:AOF:Persp:Context:
+:PROPERTIES:
+:EXPORT_FILE_NAME: tag-hierarchy-multiple-tags
+:END:
+#+begin_description
+Test multiple tags from tag groups -- including adding tags which are
+already group tags of some other tags.
+#+end_description
+#+include: "./tag-hierarchy.org::*Body" :only-contents t
+
+Here, ~Persp~ tag is added manually, but it is also the group head for
+~Vision~ and ~AOF~ tags.
+* Tag Hierarchy: Tags with Multiple Groups                           :squash:
+:PROPERTIES:
+:EXPORT_FILE_NAME: tag-hierarchy-tags-with-multiple-group-heads
+:END:
+#+begin_description
+Test tags which belong in multiple groups and so they have multiple
+group head tags.
+#+end_description
+#+include: "./tag-hierarchy.org::*Body" :only-contents t
+* Tag Hierarchy: Tags with hyphens and spaces                     :pink_lady:
+:PROPERTIES:
+:EXPORT_FILE_NAME: tag-hierarchy-tags-with-hyphens-and-spaces
+:END:
+#+begin_description
+Test tags containing hyphens and spaces
+#+end_description
+#+include: "./tag-hierarchy.org::*Body" :only-contents t

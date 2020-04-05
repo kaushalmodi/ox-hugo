@@ -3537,6 +3537,56 @@ INFO is a plist used as a communication channel."
     ;; (message "[fm tags DBG] %S" tags)
     ;; (message "[fm categories DBG] %S" categories)
     ;; (message "[fm keywords DBG] %S" keywords)
+
+    ;; Append group tags to user-set tags if tag groups are defined in
+    ;; the buffer.
+    (when (and org-group-tags org-tag-groups-alist)
+      (let (tag-groups-alist-mod)
+
+        ;; Copy `org-tag-groups-alist' to `tag-groups-alist-mod' while
+        ;; modifying the tags and categories as defined by
+        ;; `org-hugo-tag-processing-functions'.
+        (dolist (group org-tag-groups-alist)
+          (let ((group-mod group))
+            (dolist (fn org-hugo-tag-processing-functions group-mod)
+              (setq group-mod (funcall fn group-mod info)))
+            (push group-mod tag-groups-alist-mod)))
+
+        (dolist (t-or-c (append tags categories))
+          (let ((to-be-searched `(,t-or-c)))
+            (while (> (length to-be-searched) 0)
+              ;; (message "[tag group DBG] t and c to search: %S" to-be-searched)
+              (let ((tc (pop to-be-searched)))
+                (dolist (group tag-groups-alist-mod)
+                  ;; (message "[tag group DBG]   Searching %s in %S" tc group)
+                  (when (member tc group)
+                    (let ((head-tag (car group)))
+                      (if (org-hugo--category-p head-tag)
+                          (let ((head-cat (replace-regexp-in-string "\\`@" "" head-tag)))
+                            (unless (member head-cat categories)
+                              (push head-cat categories)
+                              ;; (message "[tag group DBG] .... Adding cat %s" head-cat)
+                              ))
+                        (unless (member head-tag tags)
+                          (push head-tag tags)
+                          ;; (message "[tag group DBG] .... Adding tag %s" head-tag)
+                          ))
+                      ;; Add the current `head-tag' as the new tag to
+                      ;; search if current tag or category (`tc') is not
+                      ;; the `head-tag', and if it's not already in the
+                      ;; search list.
+                      (unless (or (string= tc head-tag)
+                                  (member head-tag to-be-searched))
+                        (push head-tag to-be-searched))))))))))
+      ;; (message "[tag group DBG] updated tags: %S" tags)
+      ;; (message "[tag group DBG] updated categories: %S" categories)
+
+      ;; Overwrite the 'tags and 'categories key values in `data' with
+      ;; the updated values.
+      ;; https://stackoverflow.com/a/40815365/1219634
+      (setf (alist-get 'tags data) tags)
+      (setf (alist-get 'categories data) categories))
+
     (setq data (org-hugo--replace-keys-maybe data info))
     (setq ret (org-hugo--gen-front-matter data fm-format))
     (if (and (string= "toml" fm-format)

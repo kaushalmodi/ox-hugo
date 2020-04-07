@@ -1833,7 +1833,7 @@ a communication channel."
                                       headline info))))
                          ".")))
               (heading (concat todo-fmtd " " priority title))) ;Headline text without tags
-          (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags "\n\n"
+          (concat bullet " " heading tags "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
         (let* ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/

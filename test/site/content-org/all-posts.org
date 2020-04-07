@@ -4520,9 +4520,17 @@ with spaces was added in {{{commit(7691f0453b)}}}.
 :PROPERTIES:
 :EXPORT_FILE_NAME: level-offset-default
 :END:
-*** Heading 1
-**** Heading 1.1
-*** Heading 2
+*** Heading 1 Level 1
+**** Heading 1 Level 2
+***** Heading 1 Level 3
+****** Heading 1 Level 4
+******* Heading 1 Level 5
+******** Heading 1 Level 6
+********* Heading 1 Level 7
+********** Heading 1 Level 8
+*********** Heading 1 Level 9
+************ Heading 1 Level 10
+*** Heading 2 Level 1
 ** Level offset unset
 :PROPERTIES:
 :EXPORT_FILE_NAME: level-offset-unset

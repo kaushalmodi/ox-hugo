@@ -43,6 +43,11 @@ disableFastRender = true        # Hugo 0.30
 
 disableKinds = ["taxonomy", "taxonomyTerm"]
 
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
 [caches]
   [caches.getjson]
     dir = ":cacheDir/:project"

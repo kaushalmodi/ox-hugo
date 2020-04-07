@@ -25,6 +25,8 @@ endif
 EMACS_BIN_SOURCE ?= https://github.com/npostavs/emacs-travis/releases/download/bins
 EMACS_BIN_VERSION ?= 26
 
+# In Netlify, set HUGO env var to something like "/tmp/me/ox-hugo-dev/hugo/bin/hugo"
+# to use the custom-built hugo dev binary.
 HUGO ?= hugo
 HUGO_exists := $(shell command -v $(HUGO) 2> /dev/null)
 ifeq ("$(HUGO_exists)","")
@@ -179,7 +181,7 @@ hugo_doc:
 	@$(MAKE_) hugo HUGO_BASE_DIR=./doc HUGO_BASEURL=https://ox-hugo.scripter.co/
 
 hugo_test:
-	@$(MAKE_) hugo HUGO=$(ox_hugo_tmp_dir)/hugo/bin/hugo HUGO_BASE_DIR=./test/site HUGO_BASEURL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
+	@$(MAKE_) hugo HUGO_BASE_DIR=./test/site HUGO_BASEURL=https://ox-hugo.scripter.co/test/ HUGO_ARGS=--buildDrafts
 
 serve server: vcheck_hugo
 	@echo "Serving the site on $(HUGO_BASEURL):$(PORT) .."

@@ -20,6 +20,11 @@ disableFastRender = true        # Hugo 0.30
 pygmentsCodeFences = true       # This applies to Chroma too.
 pygmentsUseClasses = true       # This applies to Chroma too.
 
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true # This is *necessary* for ox-hugo to work well with Hugo 0.60.0+
+
 [Taxonomies]
   category = "categories" # SINGULAR = "PLURAL"
   tag = "tags"

@@ -4520,6 +4520,10 @@ with spaces was added in {{{commit(7691f0453b)}}}.
 :PROPERTIES:
 :EXPORT_FILE_NAME: level-offset-default
 :END:
+#+begin_description
+Test for multiple levels of headings that could even go beyond the max
+~<h6>~ heading level supported by HTML.
+#+end_description
 *** Heading 1 Level 1
 **** Heading 1 Level 2
 ***** Heading 1 Level 3
@@ -4528,9 +4532,45 @@ with spaces was added in {{{commit(7691f0453b)}}}.
 ******** Heading 1 Level 6
 ********* Heading 1 Level 7
 ********** Heading 1 Level 8
-*********** Heading 1 Level 9
-************ Heading 1 Level 10
 *** Heading 2 Level 1
+H2 L1 Content
+**** Heading 2 Level 2
+H2 L2 Content
+
+- H2 L2 item 1
+- H2 L2 item 2
+***** Heading 2 Level 3
+- H2 L3 item 1
+- H2 L3 item 2
+
+H2 L3 Content
+****** Heading 2 Level 4
+H2 L4 Content
+
+- H2 L4 item 1
+- H2 L4 item 2
+
+H2 L4 Content
+******* Heading 2 Level 5
+H2 L5 Content
+******** Heading 2 Level 6
+H2 L6 Content
+
+- H2 L6 item 1
+- H2 L6 item 2
+********* Heading 2 Level 7
+- H2 L7 item 1
+- H2 L7 item 2
+
+H2 L7 Content
+********** Heading 2 Level 8
+H2 L8 Content
+
+- H2 L8 item 1
+- H2 L8 item 2
+
+H2 L8 Content
+*** Heading 3 Level 1
 ** Level offset unset
 :PROPERTIES:
 :EXPORT_FILE_NAME: level-offset-unset

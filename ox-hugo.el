@@ -1833,7 +1833,12 @@ a communication channel."
                                       headline info))))
                          ".")))
               (heading (concat todo-fmtd " " priority title))) ;Headline text without tags
-          (concat bullet " " heading tags "\n\n"
+          (concat "<!--list-separator-->\n\n"
+                  ;; Above is needed just in case the body of the
+                  ;; section above is ending with a plain list. That
+                  ;; HTML comment will force-end the <ul> or <ol> tag
+                  ;; of that preceding list.
+                  bullet " " heading tags "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
         (let* ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/

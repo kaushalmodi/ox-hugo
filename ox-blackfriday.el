@@ -737,7 +737,7 @@ communication channel."
                    (org-html-plain-list plain-list contents info)))
       (let* ((next (org-export-get-next-element plain-list info))
              (next-type (org-element-type next)))
-        ;; (message "next type: %s" next-type)
+        ;; (message "content: `%s', next type: %s" contents next-type)
         (setq ret (org-blackfriday--div-wrap-maybe plain-list contents))
         (when (member next-type '(plain-list
                                   src-block example-block)) ;https://github.com/russross/blackfriday/issues/556

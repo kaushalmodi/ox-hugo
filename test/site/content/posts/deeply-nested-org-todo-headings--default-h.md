@@ -18,8 +18,14 @@ draft = false
 
 ##### <span class="org-todo todo TODO">TODO</span> Level 4 {#level-4}
 
+<!--list-separator-->
+
 - <span class="org-todo todo TODO">TODO</span>  Level 5
 
+    <!--list-separator-->
+
     - <span class="org-todo todo TODO">TODO</span>  Level 6
+
+        <!--list-separator-->
 
         - <span class="org-todo todo TODO">TODO</span>  Level 7

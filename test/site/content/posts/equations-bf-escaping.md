@@ -47,3 +47,29 @@ y  &= a^L
 \begin{equation}
 \phi\_j(x) = \mathrm{exp}\left\\{ - \frac{(x - \mu\_j)^2}{2s^2} \right\\}
 \end{equation}
+
+
+## `x <0 \\` {#x-0}
+
+`ox-hugo` Issue #[348](https://github.com/kaushalmodi/ox-hugo/issues/348)
+
+\begin{equation}
+\begin{cases}
+u\_t = ku\_{xx} \\\\\\
+u(x,0) = T\_1 , & x <0 \\\\\\
+u(x,0) = T\_2 , & x > 0
+\end{cases}
+\end{equation}
+
+
+## `[ .. ]( .. )` in a LaTeX equation {#dot-dot--dot-dot--in-a-latex-equation}
+
+`ox-hugo` Issue #[349](https://github.com/kaushalmodi/ox-hugo/issues/349)
+
+In the below equation, without the escaping hack, the Markdown parser
+gets fooled into thinking that `[ e^{at} \right](z)` is a Markdown
+link!
+
+\begin{equation}
+\mathcal{L}\left[ e^{at} \right\]\(z) = \frac{1}{z-a}
+\end{equation}

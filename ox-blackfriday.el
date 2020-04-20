@@ -314,6 +314,8 @@ Blackfriday happy.  So:
   \"\\\\=}\" -> \"\\\\\\=}\"
   \"\\|\" -> \"\\\\|\"
 
+  \"](\" -> \"\\]\\(\"
+
 and finally:
 
   \"\\\\\" -> \"\\\\\\\\\\\\\"."
@@ -323,6 +325,8 @@ and finally:
          (escaped-str (replace-regexp-in-string "(\\(c\\|r\\|tm\\))" "( \\1)" escaped-str))
          ;; \( -> \\(, \) -> \\), \[ -> \\[, \] -> \\], \{ -> \\{, \} -> \\}, \| -> \\|
          (escaped-str (replace-regexp-in-string "\\(\\\\[](){}[|]\\)" "\\\\\\1" escaped-str))
+         ;; ]( -> \]\(
+         (escaped-str (replace-regexp-in-string "](" "\\\\]\\\\(" escaped-str))
          (escaped-str (replace-regexp-in-string
                        "\\([^\\]\\)\\\\\\{2\\}[[:blank:]]*$" ;Replace "\\" at EOL with:
                        "\\1\\\\\\\\\\\\\\\\\\\\\\\\"             ;"\\\\\\"

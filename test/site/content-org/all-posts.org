@@ -520,6 +520,15 @@ happen in post titles ({{{hugoissue(4175)}}}).
 :END:
 - All the Org markup characters are removed.
 - The "markup characters" not doing actual markup are retained.
+** 2020-04-19
+:PROPERTIES:
+:EXPORT_FILE_NAME: title-with-just-date-chars
+:END:
+#+begin_description
+Test the case where the title contains only the date, making it look
+like a Hugo TOML date field.
+#+end_description
+{{{oxhugoissue(350)}}}
 * Excluded post                                                    :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: excluded-post

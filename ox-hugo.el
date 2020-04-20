@@ -3052,7 +3052,7 @@ to ((name . \"foo\") (weight . 80))."
     valid-menu-alist))
 
 (defun org-hugo--get-sanitized-title (info)
-  "Return sanitized version of an Org headline TITLE.
+  "Return sanitized version of an Org headline TITLE as a string.
 
 INFO is a plist used as a communication channel.
 
@@ -3064,7 +3064,10 @@ If the extracted document title is nil, and exporting the title
 is disabled, return nil.
 
 If the extracted document title is non-nil, return it after
-removing all markup characters."
+removing all markup characters.
+
+Also double-quote the title if it doesn't already contain any
+double-quotes."
   (let ((title (when (plist-get info :with-title)
                  (plist-get info :title))))
     (when title
@@ -3092,7 +3095,14 @@ removing all markup characters."
         (setq title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
         (setq title (replace-regexp-in-string "--\\([^-]\\)" "–\\1" title)) ;EN DASH
 
-        (setq title (replace-regexp-in-string "\\.\\.\\." "…" title)))) ;HORIZONTAL ELLIPSIS
+        (setq title (replace-regexp-in-string "\\.\\.\\." "…" title)) ;HORIZONTAL ELLIPSIS
+
+        ;; Double-quote the title so that even if the title contains
+        ;; just numbers or a date, it still gets rendered as a string
+        ;; type in Hugo. Do this only if the title doesn't already
+        ;; contain double-quotes.
+        (unless (string-match "\"" title)
+          (setq title (format "\"%s\"" title)))))
     title))
 
 (defun org-hugo--replace-underscores-with-spaces (str)

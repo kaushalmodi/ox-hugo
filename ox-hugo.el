@@ -2800,6 +2800,10 @@ BODY is the result of the export.
 INFO is a plist holding export options."
   ;; Copy the page resources to the bundle directory.
   (org-hugo--maybe-copy-resources info)
+  ;; (message "[ox-hugo body filter] ITEM %S" (org-entry-get (point) "ITEM"))
+  ;; (message "[ox-hugo body filter] TAGS: %S" (org-entry-get (point) "TAGS"))
+  ;; (message "[ox-hugo body filter] ALLTAGS: %S" (org-entry-get (point) "ALLTAGS"))
+
   ;; `org-md-plain-text' would have escaped all underscores in plain
   ;; text i.e. "_" would have been converted to "\_".
   ;; We need to undo that underscore escaping in Emoji codes for those
@@ -2807,13 +2811,11 @@ INFO is a plist holding export options."
   ;; Example: Convert ":raised\_hands:" back to ":raised_hands:".
   ;; More Emoji codes: https://www.emoji.codes/
   ;; (Requires setting "enableEmoji = true" in config.toml.)
-  ;; (message "[ox-hugo body filter] ITEM %S" (org-entry-get (point) "ITEM"))
-  ;; (message "[ox-hugo body filter] TAGS: %S" (org-entry-get (point) "TAGS"))
-  ;; (message "[ox-hugo body filter] ALLTAGS: %S" (org-entry-get (point) "ALLTAGS"))
   (setq body (replace-regexp-in-string
               "\\(:[a-z0-9]+\\)[\\]\\(_[a-z0-9]+:\\)"
               "\\1\\2"
               body))
+
   (when (and (org-hugo--plist-get-true-p info :hugo-delete-trailing-ws)
              (not (org-hugo--plist-get-true-p info :preserve-breaks)))
     (setq body (with-temp-buffer

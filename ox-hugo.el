@@ -735,13 +735,13 @@ newer."
 (org-export-define-derived-backend 'hugo 'blackfriday ;hugo < blackfriday < md < html
   :menu-entry
   '(?H "Export to Hugo-compatible Markdown"
-       ((?H "Subtree or File to Md file"
+       ((?H "Subtree or File to Md file            "
             (lambda (a _s v _b)
               (org-hugo-export-wim-to-md nil a v)))
         (?h "File to Md file"
             (lambda (a s v _b)
               (org-hugo-export-to-md a s v)))
-        (?O "Subtree or File to Md file and open"
+        (?O "Subtree or File to Md file and open   "
             (lambda (a _s v _b)
               (if a
                   (org-hugo-export-wim-to-md nil :async v)
@@ -751,7 +751,7 @@ newer."
               (if a
                   (org-hugo-export-to-md :async s v)
                 (org-open-file (org-hugo-export-to-md nil s v)))))
-        (?A "All subtrees (or File) to Md file(s)"
+        (?A "All subtrees (or File) to Md file(s)  "
             (lambda (a _s v _b)
               (org-hugo-export-wim-to-md :all-subtrees a v)))
         (?t "File to a temporary Md buffer"

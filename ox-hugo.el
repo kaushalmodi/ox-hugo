@@ -728,6 +728,11 @@ newer."
   :group 'org-export-hugo
   :type '(repeat symbol))
 
+(defcustom org-hugo-base-dir nil
+  "Base directory of hugo project."
+  :group 'org-export-hugo
+  :type 'directory)
+;;;###autoload (put 'org-hugo-base-dir 'safe-local-variable 'stringp)
 
 
 ;;; Define Back-End
@@ -787,7 +792,7 @@ newer."
                    (:hugo-delete-trailing-ws "HUGO_DELETE_TRAILING_WS" nil org-hugo-delete-trailing-ws)
                    (:hugo-section "HUGO_SECTION" nil org-hugo-section)
                    (:hugo-bundle "HUGO_BUNDLE" nil nil)
-                   (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
+                   (:hugo-base-dir "HUGO_BASE_DIR" nil org-hugo-base-dir)
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil t) ;Prefer to generate triple-backquoted Markdown code blocks by default.
                    (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
                    (:hugo-prefer-hyphen-in-tags "HUGO_PREFER_HYPHEN_IN_TAGS" nil org-hugo-prefer-hyphen-in-tags)

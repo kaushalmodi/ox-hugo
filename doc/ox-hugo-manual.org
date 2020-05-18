@@ -2883,7 +2883,7 @@ So that line-unwrapping _with space removal_ is done *only if*,
 2. The /locale/ is *manually set* to Chinese or Japanese by setting it
    to *zh* or *ja* using ~#+hugo_locale:~ keyword (or
    ~EXPORT_HUGO_LOCALE~ property).
-*** COMMENT Hugo Bundle
+*** Hugo Bundle
 :PROPERTIES:
 :EXPORT_FILE_NAME: hugo-bundle
 :END:
@@ -2892,6 +2892,45 @@ Specifying the [[https://gohugo.io/content-management/page-bundles/][Hugo Page B
 ~_index.md~ (/branch/ bundle index file) or ~index.md~ (/page/ bundle
 index file).
 #+end_description
+To make an ~ox-hugo~ export happen to a Hugo Page Bundle, set the
+~:EXPORT_HUGO_BUNDLE:~ property to the "name of the bundle". For
+example, if the bundle needs to be generated as
+~https://example.com/xyz/~, set ~:EXPORT_HUGO_BUNDLE: xyz~.
+
+- Leaf Bundle :: Set ~:EXPORT_FILE_NAME: index~
+- Branch Bundle :: Set ~:EXPORT_FILE_NAME: _index~
+
+#+begin_note
+For file-based flow, use ~#+hugo_bundle~ and ~#+export_file_name~
+keywords instead.
+#+end_note
+**** Examples
+***** Leaf Bundle
+:PROPERTIES:
+:CUSTOM_ID: leaf-bundle-example
+:END:
+Below will export to ~content/xyz/index.md~.
+#+begin_src org
+,* Page title
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: xyz
+:EXPORT_FILE_NAME: index
+:END:
+Content
+#+end_src
+***** Branch Bundle
+:PROPERTIES:
+:CUSTOM_ID: branch-bundle-example
+:END:
+Below will export to ~content/uvw/_index.md~.
+#+begin_src org
+,* Page title
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: uvw
+:EXPORT_FILE_NAME: _index
+:END:
+Content
+#+end_src
 **** More Reading
 - [[https://scripter.co/hugo-leaf-and-branch-bundles/][scripter.co -- Hugo: Leaf and Branch Bundles]]
 ** Meta

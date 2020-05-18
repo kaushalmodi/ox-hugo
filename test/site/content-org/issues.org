@@ -31,3 +31,17 @@ Link to image using ~file:~ in a Regular page.
 {{{issue(360)}}}
 
 [[file:images/issues/360-bundle/org.png]]
+* ox-hugo Issue 333 test
+:PROPERTIES:
+:EXPORT_FILE_NAME: 333
+:END:
+#+begin_description
+Description-less link an ~https~ image link.
+#+end_description
+
+{{{issue(333)}}}
+
+[[https://ox-hugo.scripter.co/test/ox-hugo/org.png]]
+** COMMENT A comment block
+Testing an /https/ image link inside a comment block.
+[[https://ox-hugo.scripter.co/test/ox-hugo/org.png]]

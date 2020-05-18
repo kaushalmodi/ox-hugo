@@ -1012,7 +1012,19 @@ heading and how it exports to Markdown in [[https://raw.githubusercontent.com/ka
 *** Dates
 :PROPERTIES:
 :EXPORT_FILE_NAME: dates
+:EXPORT_HUGO_USE_CODE_FOR_KBD: t
 :END:
+**** Date Formats
+The =EXPORT_DATE= and other date-type properties support date in
+either the [[https://tools.ietf.org/html/rfc3339#section-5.8][RFC3339 date-time format]][fn:8] or the in-built Org
+time-stamp (default binding ~C-c .~).
+- RFC3339 date-time examples ::
+  - =2017-09-12=
+  - =2017-09-12T16:10:10= (data and time are separated by *T*)
+  - =2017-09-12T16:10:10Z= (UTC time zone)
+  - =2017-09-12T16:10:10-04:00= (UTC-04:00 time zone)
+- Org time stamp example ::
+  - =<2020-05-17 Sun>=
 **** Defcustoms
 ***** =org-hugo-date-format=
 :PROPERTIES:
@@ -2955,6 +2967,8 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 :END:
 #+include: "./ox-hugo-manual.org::#test" :only-contents t
 * Footnotes
+
+[fn:8] The [[https://github.com/toml-lang/toml#local-date-time][TOML date-time]] uses the same RFC3339 format.
 
 [fn:7] The Pandoc Citations feature was last tested on
 <2019-01-03 Thu> with Pandoc version {{{pandoc_version}}}. If you are

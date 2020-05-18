@@ -2185,7 +2185,7 @@ accessed at =/foo.png=.
 
 More detail for this conventional approach can be found in the
 documentation for [[#references-to-files-in-the-static-directory][referencing files in static directory]].
-**** But.. what about putting images along with the content?
+**** Images and Regular Pages
 OK, so with that short intro out of the way, =ox-hugo= supports
 putting the /attachment files/ in the same directory as the source Org
 files!
@@ -2230,12 +2230,70 @@ can see those images inline too!
 
 #+attr_html: :alt Screenshot of an Org mode buffer showing image in content
 [[file:/images/images-in-content-screenshot.png]]
-**** Examples
+***** Examples
+:PROPERTIES:
+:CUSTOM_ID: images-and-regular-bundles-examples
+:END:
 Whether you prefer the subtree-based approach or file-based approach
 for writing your posts in Org, there are examples for both in the
 =ox-hugo= test suite:
 - [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org/images-in-content][Org source]]
 - [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content/images-in-content][Exported Markdown]]
+**** Images and Page Bundles
+/See [[*Hugo Bundle][Hugo Bundle]] section on how to define those via ~ox-hugo~./
+
+*Only for page bundles*, when a link points to a local attachment, and
+the image path contains the hugo bundle name, following attachment
+copying rules apply:
+- Assume that the bundle is a /Leaf Bundle/ and its name is ~bundle-1~
+  (~:EXPORT_HUGO_BUNDLE: bundle-1~) and that the image (attachment)
+  path relative to the Org file is
+  ~some-dir-1/bundle-1/some-dir-2/image.png~.
+- The attachment's path relative to "bundle-1" is retained and copied
+  to the "bundle-1" directory in the content dir. The /path before/
+  the "bundle-1" in the attachment path is ignored.
+- So after the export, we will see a directory structure like this in
+  the content dir:
+  #+begin_example
+  ./content
+  ..
+   └── bundle-1
+      ├── index.md
+      └── some-dir-2/image.png
+  #+end_example
+
+#+begin_note
+If the attachment path does _not_ contain the bundle name, it will be
+copied as usual to the ~static/~ directory (See the documentation for
+[[#references-to-files-in-the-static-directory][referencing files in static directory]]).
+#+end_note
+***** Examples
+:PROPERTIES:
+:CUSTOM_ID: images-and-page-bundles-examples
+:END:
+#+begin_example
+./content-org
+├── posts.org
+│    * Bundle 1 (Org subtree)    →  ./content/bundle-1/index.md
+│      [[file:bundle-1/image1.png]]
+│      [[file:images/bundle-1/image.png]]
+│
+│    * Bundle 2 (Org subtree)    →  ./content/bundle-2/index.md
+│      [[file:images/bundle-2/some-dir/image.png]]
+│
+├── bundle-1
+│  └── image1.png                →  ./content/bundle-1/image1.png
+└── images/
+   ├── bundle-1
+   │  └── image2.png             →  ./content/bundle-1/image2.png
+   └── bundle-2
+      └── some-dir
+         └── image.png           →  ./content/bundle-2/some-dir/image.png
+#+end_example
+
+Another example from the test suite:
+- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/images-in-content/images-in-content.org][~images-in-content.org::* Page Bundle with images in the same dir~]] |
+  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/images-in-content/page-bundle-images-in-same-dir/index.md][Exported Markdown]] | [[https://ox-hugo.scripter.co/test/images-in-content/page-bundle-images-in-same-dir/][HTML]]
 *** Replace Front-matter Keys
 :PROPERTIES:
 :EXPORT_FILE_NAME: replace-front-matter-keys

@@ -765,6 +765,36 @@ For history behind this change, see {{{issue(247)}}}. \\
 :EXPORT_FILE_NAME: usage
 :END:
 #+include: "./ox-hugo-manual.org::#usage" :only-contents t
+*** Goldmark (Hugo v0.60+)
+:PROPERTIES:
+:EXPORT_FILE_NAME: goldmark
+:END:
+Since Hugo v0.60.0, the default Markdown-parser has switched to the
+[[https://commonmark.org/][CommonMark]]-compliant [[https://github.com/yuin/goldmark][Goldmark]]. The previously default Markdown-parser
+[[https://github.com/russross/blackfriday][Blackfriday]] is not compliant with any spec, and has many bugs (for
+which ~ox-hugo~ needs to keep adding workarounds).
+
+See [[https://gohugo.io/news/0.60.0-relnotes/][these Hugo v0.60.0 release notes]] to learn more.
+
+So unless there's a strong reason for an ~ox-hugo~ user to keep on
+using Blackfriday, _please switch to Goldmark_. You will need to start
+using Hugo v0.60.0 or newer for that.
+**** Enable "unsafe" HTML
+Having said that, Goldmark/Hugo come with their own set of issues or
+regressions in the way the Markdown parsing happens when compared to
+Blackfriday, but they are not as bad compared to supporting
+Blackfriday.
+
+For ~ox-hugo~ to keep working well with Goldmark or Hugo v0.60+, it is
+_necessary_ to add this to your Hugo site's ~config.toml~:
+
+#+begin_src toml
+[markup.goldmark.renderer]
+  unsafe = true
+#+end_src
+
+/While that setting sounds scary, all that does is allow have inline
+HTML in your Markdown, *as CommonMark allows!*/
 *** How do I try =ox-hugo= on my site?
 :PROPERTIES:
 :EXPORT_FILE_NAME: how-do-I-try-it

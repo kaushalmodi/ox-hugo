@@ -1,0 +1,27 @@
+#+hugo_base_dir: ../
+#+hugo_section: issues
+
+#+options: author:nil
+
+#+filetags: issues
+
+* Issue 360                                                   :images:figure:
+** ox-hugo Issue 360 test (Bundle)                                   :bundle:
+:PROPERTIES:
+:EXPORT_FILE_NAME: index
+:EXPORT_HUGO_BUNDLE: 360-bundle
+:END:
+#+begin_description
+Link to image using ~file:~ in a Leaf Bundle.
+#+end_description
+
+[[file:images/issues/360-bundle/org.png]]
+** ox-hugo Issue 360 test (Regular)
+:PROPERTIES:
+:EXPORT_FILE_NAME: 360
+:END:
+#+begin_description
+Link to image using ~file:~ in a Regular page.
+#+end_description
+
+[[file:images/issues/360-bundle/org.png]]

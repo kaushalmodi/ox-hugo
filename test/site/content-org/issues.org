@@ -1,6 +1,8 @@
 #+hugo_base_dir: ../
 #+hugo_section: issues
 
+#+macro: issue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+
 #+options: author:nil
 
 #+filetags: issues
@@ -15,6 +17,8 @@
 Link to image using ~file:~ in a Leaf Bundle.
 #+end_description
 
+{{{issue(360)}}}
+
 [[file:images/issues/360-bundle/org.png]]
 ** ox-hugo Issue 360 test (Regular)
 :PROPERTIES:
@@ -23,5 +27,7 @@ Link to image using ~file:~ in a Leaf Bundle.
 #+begin_description
 Link to image using ~file:~ in a Regular page.
 #+end_description
+
+{{{issue(360)}}}
 
 [[file:images/issues/360-bundle/org.png]]

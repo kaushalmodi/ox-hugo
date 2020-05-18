@@ -2370,17 +2370,16 @@ PATH is the path to the image or any other attachment.
 INFO is a plist used as a communication channel."
   ;; (message "[ox-hugo attachment DBG] The Hugo section is: %s" (plist-get info :hugo-section))
   ;; (message "[ox-hugo attachment DBG] The Hugo base dir is: %s" (plist-get info :hugo-base-dir))
-  (let* ((path-unhexified (url-unhex-string path))
+  (let* ((pub-dir (org-hugo--get-pub-dir info)) ;This needs to happen first so that the check for HUGO_BASE_DIR happens.
+         (hugo-base-dir (file-name-as-directory (plist-get info :hugo-base-dir)))
+         (path-unhexified (url-unhex-string path))
          (path-true (file-truename path-unhexified))
          (exportables org-hugo-external-file-extensions-allowed-for-copying)
-         (bundle-dir (and (plist-get info :hugo-bundle)
-                          (org-hugo--get-pub-dir info)))
+         (bundle-dir (and (plist-get info :hugo-bundle) pub-dir))
          (bundle-name (when bundle-dir
                         (let* ((content-dir (file-truename
-                                             (file-name-as-directory (expand-file-name
-                                                                      "content"
-                                                                      (file-name-as-directory
-                                                                       (plist-get info :hugo-base-dir))))))
+                                             (file-name-as-directory
+                                              (expand-file-name "content" hugo-base-dir))))
                                (is-home-branch-bundle (string= bundle-dir content-dir)))
                           (cond
                            (is-home-branch-bundle
@@ -2388,9 +2387,8 @@ INFO is a plist used as a communication channel."
                            (t ;`bundle-dir'="/foo/bar/" -> `bundle-name'="bar"
                             (file-name-base (directory-file-name bundle-dir)))))))
          (static-dir (file-truename
-                      (concat
-                       (file-name-as-directory (plist-get info :hugo-base-dir))
-                       "static/")))
+                      (file-name-as-directory
+                       (expand-file-name "static" hugo-base-dir))))
          (dest-dir (or bundle-dir static-dir))
          ret)
     (unless (file-directory-p static-dir)

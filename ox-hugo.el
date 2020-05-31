@@ -3684,6 +3684,7 @@ are \"toml\" and \"yaml\"."
                      "HUGO_PANDOC_CITATIONS"
                      "BIBLIOGRAPHY"
                      "HUGO_AUTO_SET_LASTMOD"
+                     "LANGUAGE"
                      "AUTHOR")))
     (mapcar (lambda (str)
               (concat "EXPORT_" str))

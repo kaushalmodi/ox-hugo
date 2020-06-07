@@ -404,6 +404,12 @@
   source = "https://github.com/wych42/wych42.github.io"
   site = "https://yuchi.me/en"
   branch = "source"
+  
+[mrprofessor]
+  author = "Rudra Narayan"
+  source = "https://github.com/mrprofessor/rudra.dev"
+  site = "https://rudra.dev"
+
 
 # []
 #   author = ""

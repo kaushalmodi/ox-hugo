@@ -194,10 +194,21 @@ Required fixes:
                               "\\\\>}}")))
           (while (re-search-forward regexp nil :noerror)
             (let* ((sc-body (match-string-no-properties 1))
-                   (sc-body-no-newlines (replace-regexp-in-string
-                                         "\n" " " sc-body)))
-              (replace-match (format "{{< %s >}}" sc-body-no-newlines)
-                             :fixedcase)))))
+                   (sc-body-no-newlines (replace-regexp-in-string "\n" " " sc-body))
+                   (sc-body-no-backlash (replace-regexp-in-string
+                                         (rx "\\" (group anything)) "\\1" sc-body-no-newlines)))
+              (replace-match (format "{{< %s >}}" sc-body-no-backlash) :fixedcase)))))
+
+      ;; Fix square bracket. \[ abc \] -> [ abc ]
+      (save-excursion
+        (let ((regexp (concat
+                       "\\\\\\["
+                       "\\(.+\\)"
+                       "\\\\\\]")))
+          (while (re-search-forward regexp nil :noerror)
+            (let* ((sc-body (match-string-no-properties 1)))
+              ;; (message "square bracket [%s]" sc-body)
+              (replace-match (format "[%s]" sc-body) :fixedcase)))))
 
       (buffer-substring-no-properties (point-min) (point-max)))))
 

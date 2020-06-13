@@ -45,3 +45,19 @@ Description-less link an ~https~ image link.
 ** COMMENT A comment block
 Testing an /https/ image link inside a comment block.
 [[https://ox-hugo.scripter.co/test/ox-hugo/org.png]]
+
+* Issue 336
+:PROPERTIES:
+:EXPORT_FILE_NAME: 336_test
+:EXPORT_HUGO_PANDOC_CITATIONS: t
+:EXPORT_BIBLIOGRAPHY: cite/bib/bib1.bib, cite/bib/bib2.bib
+:END:
+{{{issue(336)}}}
+
+This issue only appears when there is a citation @giovanelli2016
+
+[[file:root-level-content-empty-section.org][Tag]]
+
+[[file:336_test.org][Exclude tag]]
+
+ 

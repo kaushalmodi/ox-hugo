@@ -410,6 +410,12 @@
   source = "https://github.com/mrprofessor/rudra.dev"
   site = "https://rudra.dev"
 
+[panchoh]
+  author = "pancho horrillo"
+  source = "https://github.com/panchoh/panchoh.github.io"
+  site = "https://blog.pancho.name"
+  branch = "source"
+
 
 # []
 #   author = ""

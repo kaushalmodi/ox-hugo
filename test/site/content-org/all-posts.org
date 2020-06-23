@@ -162,6 +162,10 @@ even when inside page bundle pages.
           =org-hugo-default-static-subdirectory-for-externals=.
 ***** Same image, but hyperlinked to itself
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
+*** Link to an image with space in filename
+This is a link to a file with a space in the filename:
+{{{oxhugoissue(376)}}}
+[[file:../files-to-be-copied-to-static/foo/unicorn logo.png][Link to ~unicorn logo.png~]]
 ** Inline hyperlinked and non-hyperlinked images                     :inline:
 :PROPERTIES:
 :EXPORT_FILE_NAME: inline-images

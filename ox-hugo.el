@@ -2320,7 +2320,15 @@ and rewrite link paths to make blogging more seamless."
                   (org-link-unescape desc)))
          ;; Only link description, but no link attributes.
          (desc
-          (format "[%s](%s)" desc path))
+          (let* ((path-has-space (and
+                                  (not (string-prefix-p "{{< relref " path))
+                                  (string-match-p "\\s-" path)))
+                 (path (if path-has-space
+                           ;; https://github.com/kaushalmodi/ox-hugo/issues/376
+                           ;; https://github.com/gohugoio/hugo/issues/6742#issuecomment-573924706
+                           (format "<%s>" path)
+                         path)))
+            (format "[%s](%s)" desc path)))
          ;; Only link attributes, but no link description.
          (link-param-str
           (let ((path (org-html-encode-plain-text path)))

@@ -142,3 +142,10 @@ Note
 #### Same image, but hyperlinked to itself {#same-image-but-hyperlinked-to-itself}
 
 {{< figure src="/ox-hugo/copy-2-of-unicorn-logo.png" link="/ox-hugo/copy-2-of-unicorn-logo.png" >}}
+
+
+## Link to an image with space in filename {#link-to-an-image-with-space-in-filename}
+
+This is a link to a file with a space in the filename:
+`ox-hugo` Issue #[376](https://github.com/kaushalmodi/ox-hugo/issues/376)
+[Link to `unicorn logo.png`](</ox-hugo/unicorn logo.png>)

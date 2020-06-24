@@ -2564,6 +2564,21 @@ be fixed.
 
 (Of course, open an issue whenever any ~ox-hugo~ export does not do
 things as you expect :smile:)
+*** Org-ref Citations
+
+[[https://github.com/jkitchin/org-ref][Org-ref]] citations can be exported to Hugo-compatible markdown via the
+[[https://github.com/andras-simonyi/citeproc-org][citeproc-org]] package. To enable this, simply install ~citeproc-org~
+from MELPA, and run the setup hook. With ~use-package~, this looks
+like:
+
+#+BEGIN_SRC emacs-lisp
+(use-package citeproc-org
+  :ensure t
+  :after ox-hugo
+  :config
+  (citeproc-org-setup))
+#+END_SRC
+
 *** Custom Front-matter Parameters
 :PROPERTIES:
 :EXPORT_FILE_NAME: custom-front-matter

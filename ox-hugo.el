@@ -2581,6 +2581,7 @@ Hugo \"highlight\" shortcode features:
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
   (let* ((lang (org-element-property :language src-block))
+         (lang (or (cdr (assoc lang org-src-lang-modes)) lang))
          (parameters-str (org-element-property :parameters src-block))
          (parameters (org-babel-parse-header-arguments parameters-str))
          (is-fm-extra (cdr (assoc :front_matter_extra parameters)))

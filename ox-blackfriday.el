@@ -885,6 +885,7 @@ This function is adapted from `org-html-special-block'."
 
 INFO is a plist used as a communication channel."
   (let* ((lang (org-element-property :language src-block))
+         (lang (or (cdr (assoc lang org-src-lang-modes)) lang))
          (code (org-export-format-code-default src-block info))
          (parent-element (org-export-get-parent src-block))
          (parent-type (car parent-element))

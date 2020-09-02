@@ -390,8 +390,8 @@
 
 [RobinWils]
   author = "Robin Wils"
-  source = "https://codeberg.org/RobinWils/hugo-source-pages"
-  site = "https://robinwils.gitlab.io"
+  source = "https://gitlab.com/RobinWils/robinwils.com"
+  site = "https://robinwils.com"
   org_dir = "content-org"
 
 [mikeyobrien]

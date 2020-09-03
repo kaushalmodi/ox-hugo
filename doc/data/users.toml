@@ -390,8 +390,8 @@
 
 [RobinWils]
   author = "Robin Wils"
-  source = "https://gitlab.com/RobinWils/robinwils.gitlab.io"
-  site = "https://robinwils.gitlab.io"
+  source = "https://gitlab.com/RobinWils/robinwils.com"
+  site = "https://robinwils.com"
   org_dir = "content-org"
 
 [mikeyobrien]

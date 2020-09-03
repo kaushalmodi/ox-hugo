@@ -4,7 +4,7 @@ description = """
   Test that indented source blocks, and also the ones in lists export
   fine.
   """
-tags = ["src-block", "indented", "lists", "code-fence", "highlight"]
+tags = ["indented", "lists", "code-fence", "highlight", "src-block"]
 categories = ["upstream"]
 draft = false
 +++
@@ -13,11 +13,11 @@ Some content.
 
 ```emacs-lisp
 (defun small-shell ()
-    (interactive)
-    (split-window-vertically)
-    (other-window 1)
-    (shrink-window (- (window-height) 12))
-(ansi-term))
+  (interactive)
+  (split-window-vertically)
+  (other-window 1)
+  (shrink-window (- (window-height) 12))
+  (ansi-term))
 ```
 
 

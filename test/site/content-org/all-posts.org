@@ -1637,14 +1637,14 @@ fine.
 
 Some content.
 
-    #+begin_src emacs-lisp
-    (defun small-shell ()
-	(interactive)
-	(split-window-vertically)
-	(other-window 1)
-	(shrink-window (- (window-height) 12))
-    (ansi-term))
-    #+end_src
+#+begin_src emacs-lisp
+(defun small-shell ()
+  (interactive)
+  (split-window-vertically)
+  (other-window 1)
+  (shrink-window (- (window-height) 12))
+  (ansi-term))
+#+end_src
 *** Code blocks in list using code fences
 Reference: {{{hugoissue(4006)}}}
 

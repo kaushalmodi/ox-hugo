@@ -1031,7 +1031,7 @@ disabled."
         (format "<span class=\"section-num\">%s</span> " number-str)))))
 
 ;;;; Build TOC
-(defun org-hugo--build-toc (info &optional n keyword local)
+(defun org-hugo--build-toc (info &optional n scope local)
   "Return table of contents as a string.
 
 INFO is a plist used as a communication channel.
@@ -1039,8 +1039,8 @@ INFO is a plist used as a communication channel.
 Optional argument N, when non-nil, is a positive integer
 specifying the depth of the table.
 
-Optional argument KEYWORD specifies the TOC keyword, if any, from
-which the table of contents generation has been initiated.
+When optional argument SCOPE is non-nil, build a table of
+contents according to the specified element.
 
 When optional argument LOCAL is non-nil, build a table of
 contents according to the current headline."
@@ -1053,7 +1053,7 @@ contents according to the current headline."
           (mapconcat
            (lambda (headline)
              (let* ((level-raw (org-export-get-relative-level headline info))
-                    (level (if local
+                    (level (if scope
                                (let* ((current-level-inner
                                        (progn
                                          (unless current-level
@@ -1095,7 +1095,7 @@ contents according to the current headline."
                ;; (message "[ox-hugo build-toc DBG] indentation: %S" indentation)
                ;; (message "[ox-hugo build-toc DBG] todo: %s | %s" todo todo-str)
                (concat indentation "- " number toc-entry tags)))
-           (org-export-collect-headlines info n (and local keyword))
+           (org-export-collect-headlines info n scope)
            "\n"))                       ;Newline between TOC items
          ;; Remove blank lines from in-between TOC items, which can
          ;; get introduced when using the "UNNUMBERED: t" headline
@@ -2015,13 +2015,19 @@ channel."
       "<!--more-->")
      ((and (equal "TOC" kwd)
            (string-match-p "\\<headlines\\>" value))
-      (let ((depth (and (string-match "\\<[0-9]+\\>" value)
-                        (string-to-number (match-string 0 value))))
-            (local? (string-match-p "\\<local\\>" value)))
+      (let* ((depth (and (string-match "\\<[0-9]+\\>" value)
+                         (string-to-number (match-string 0 value))))
+             (local? (string-match-p "\\<local\\>" value))
+             (scope                     ;From `org-md-keyword'
+              (cond
+               ((string-match ":target +\\(\".+?\"\\|\\S-+\\)" value) ;link
+                (org-export-resolve-link
+                 (org-strip-quotes (match-string 1 value)) info))
+               (local? keyword))))
         (when (and depth
                    (> depth 0))
           (org-remove-indentation
-           (org-hugo--build-toc info depth keyword local?)))))
+           (org-hugo--build-toc info depth scope local?)))))
      (t
       (org-md-keyword keyword contents info)))))
 

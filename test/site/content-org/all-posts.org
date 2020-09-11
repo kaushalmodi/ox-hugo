@@ -5250,6 +5250,32 @@ Below, TOC is exported with only level-1 headings *relative to* this
 ******* Post sub-heading 2.2.3.2
 **** Post sub-heading 3
 ***** Post sub-heading 3.1
+*** TOC :target                                                      :target:
+:PROPERTIES:
+:EXPORT_FILE_NAME: toc-target
+:END:
+#+begin_description
+Test the ~#+toc~ keyword with ~:target~ attribute
+#+end_description
+{{{oxhugoissue(393)}}}
+**** Reading
+:PROPERTIES:
+:EXPORT_OPTIONS: toc:3 num:3
+:CUSTOM_ID: reading-material
+:END:
+***** landing page
+#+toc: headlines 3 :target #reading-material
+***** first subsection in Reading
+**** Example from Org Manual
+[[https://orgmode.org/manual/Table-of-Contents.html][Reference]]
+***** Target
+:PROPERTIES:
+:CUSTOM_ID: TargetSection
+:END:
+****** Heading A
+****** Heading B
+***** Another section
+#+toc: headlines 1 :target #TargetSection
 * Pandoc Citations                                         :pandoc:citations:
 :PROPERTIES:
 :EXPORT_HUGO_PANDOC_CITATIONS: t

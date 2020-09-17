@@ -1,6 +1,6 @@
 +++
 title = "Inheriting tags"
-tags = ["tag with lot of words", "hyphened-tag", "alpha", "beta", "super", "gamma", "delta", "two words"]
+tags = ["alpha", "beta", "hyphened-tag", "tag with lot of words", "super", "gamma", "delta", "two words"]
 categories = ["cat1", "cat2"]
 draft = false
 +++

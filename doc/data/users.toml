@@ -60,12 +60,6 @@
   site = "https://thatteidlikaalsoup.team/"
   org_dir = "content-org"
 
-[lambdaloop]
-  author = "Pierre Karashchuk"
-  source = "https://github.com/lambdaloop/blog"
-  site = "http://lambdaloop.com/"
-  org_dir = "blog-org"
-
 [shimmy]
   author = "Shimmy Xu"
   source = "https://github.com/shimmy1996/blog"
@@ -380,7 +374,7 @@
   author = "Michael Howard"
   source = "https://git.sr.ht/~slow_djinn/fumbling-blog"
   site = "https://fumbling.it"
-  
+
 [rg0swami]
   author = "Rohit Goswami"
   source = "https://github.com/HaoZeke/haozeke.github.io"
@@ -404,7 +398,7 @@
   source = "https://github.com/wych42/wych42.github.io"
   site = "https://yuchi.me/en"
   branch = "source"
-  
+
 [mrprofessor]
   author = "Rudra Narayan"
   source = "https://github.com/mrprofessor/rudra.dev"

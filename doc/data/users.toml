@@ -410,7 +410,12 @@
   site = "https://blog.pancho.name"
   branch = "source"
 
-
+[ruborcalor]
+  author = "Cole Killian"
+  source = "https://github.com/ruborcalor/cole-website"
+  site = "https://colekillian.com"
+  org_dir = "org-content"
+  
 # []
 #   author = ""
 #   source = ""

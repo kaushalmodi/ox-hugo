@@ -399,6 +399,11 @@ Examples:
   :version "25.2")
 
 (define-obsolete-variable-alias 'org-hugo-default-section-directory 'org-hugo-section "Oct 31, 2018")
+
+(defvar-local org-hugo-base-dir nil
+  "Base directory for Hugo.
+Set either this value, or the HUGO_BASE_DIR global property for export.")
+
 (defcustom org-hugo-section "posts"
   "Default section for Hugo posts.
 
@@ -787,7 +792,7 @@ newer."
                    (:hugo-delete-trailing-ws "HUGO_DELETE_TRAILING_WS" nil org-hugo-delete-trailing-ws)
                    (:hugo-section "HUGO_SECTION" nil org-hugo-section)
                    (:hugo-bundle "HUGO_BUNDLE" nil nil)
-                   (:hugo-base-dir "HUGO_BASE_DIR" nil nil)
+                   (:hugo-base-dir "HUGO_BASE_DIR" nil org-hugo-base-dir)
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil t) ;Prefer to generate triple-backquoted Markdown code blocks by default.
                    (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
                    (:hugo-prefer-hyphen-in-tags "HUGO_PREFER_HYPHEN_IN_TAGS" nil org-hugo-prefer-hyphen-in-tags)
@@ -1276,7 +1281,7 @@ The publication directory is created if it does not exist.
 INFO is a plist used as a communication channel."
   (let* ((base-dir (if (plist-get info :hugo-base-dir)
                        (file-name-as-directory (plist-get info :hugo-base-dir))
-                     (user-error "It is mandatory to set the HUGO_BASE_DIR property")))
+                     (user-error "It is mandatory to set the HUGO_BASE_DIR property or the org-hugo-base-dir local variable")))
          (content-dir "content/")
          (section-path (org-hugo--get-section-path info))
          (bundle-dir (let ((bundle-path (or ;Hugo bundle set in the post subtree gets higher precedence

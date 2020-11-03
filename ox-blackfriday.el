@@ -408,13 +408,15 @@ style tag."
     ret))
 
 ;;;; Sanitize URL
-(defun org-blackfriday--url-sanitize (url)
+(defun org-blackfriday--url-sanitize (url org-hugo-link-url-asis)
   "Sanitize the URL by replace certain characters with their hex encoding.
 
 Replaces \"_\" with \"%5F\".
 
 Workaround for Blackfriday bug https://github.com/russross/blackfriday/issues/278."
-  (replace-regexp-in-string "_" "%5F" url))
+  (if (not org-hugo-link-url-asis)
+      (replace-regexp-in-string "_" "%5F" url)
+    url))
 
 ;;;; Blackfriday Issue 239 Workaround
 (defun org-blackfriday--issue-239-workaround (code parent-type)

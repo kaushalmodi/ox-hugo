@@ -701,6 +701,11 @@ specified for them):
   :group 'org-export-hugo
   :type 'boolean)
 ;;;###autoload (put 'org-hugo-link-desc-insert-type 'safe-local-variable 'booleanp)
+(defcustom org-hugo-link-url-asis nil
+  "Export url link as-is to avoid 404 error
+ caused by the sanitizing of underscore by \"%5F\""
+  :group 'org-export-hugo
+  :type 'boolean)
 
 (defcustom org-hugo-langs-no-descr-in-code-fences '()
   "List of languages whose descriptors should not be exported to Markdown.
@@ -2047,7 +2052,8 @@ and rewrite link paths to make blogging more seamless."
     (when (and (stringp raw-path)
                link-is-url)
       (setq raw-path (org-blackfriday--url-sanitize
-                      (url-encode-url raw-path))))
+                      (url-encode-url raw-path)
+                      org-hugo-link-url-asis)))
     ;; (message "[ox-hugo-link DBG] link: %S" link)
     ;; (message "[ox-hugo-link DBG] link path: %s" (org-element-property :path link))
     ;; (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))

@@ -19,6 +19,7 @@
 
 (require 'ox-md)
 (require 'ox-publish)
+(require 'table)         ;To support tables written in table.el format
 
 
 ;;; Variables
@@ -1031,95 +1032,99 @@ communication channel."
 CONTENTS is contents of the table.  INFO is a plist holding
 contextual information."
   ;; (message "[ox-bf-table DBG] In contents: %s" contents)
-  (let* ((rows (org-element-map table 'table-row 'identity info))
-         (no-header (= (length rows) 1)) ;No header if table has just 1 row
-         (table-ref (org-blackfriday--get-reference table))
-         (table-anchor (if table-ref
-                           (format "<a id=\"%s\"></a>\n" table-ref)
-                         ""))
-         (caption (org-export-get-caption table))
-         table-num
-         (blank-line-before-table "")
-         (caption-html (if (not caption)
-                           ""
-                         (let ((caption-prefix (org-blackfriday--translate 'table info))
-                               (caption-str
-                                (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
-                                 (org-export-data-with-backend caption 'html info))))
-                           (setq table-num (org-export-get-ordinal
-                                            table info
-                                            nil #'org-html--has-caption-p))
-                           (format (concat "<div class=\"table-caption\">\n"
-                                           "  <span class=\"table-number\">%s</span>:\n"
-                                           "  %s\n"
-                                           "</div>\n")
-                                   (if table-ref ;Hyperlink the table prefix + number
-                                       (format "<a href=\"#%s\">%s %s</a>"
-                                               table-ref caption-prefix table-num)
-                                     (format "%s %s"
-                                             caption-prefix table-num))
-                                   caption-str))))
-         (attr (org-export-read-attribute :attr_html table))
-         ;; At the moment only the `class' attribute is supported in
-         ;; #+attr_html above tables.
-         (table-class-user (plist-get attr :class))
-         (table-class-auto (concat "table-"
-                                   (if table-num
-                                       (format "%d" table-num)
-                                     "nocaption")))
-         (table-class (or table-class-user
-                          table-class-auto))
-         ;; If user has specified multiple classes for the table
-         ;; (space-separated), use only the first class in that list
-         ;; to specifying the styling in the <style> tag.
-         (table-class-this (car (split-string table-class)))
-         ;; https://www.w3schools.com/css/css_table.asp
-         (css-props (org-export-read-attribute :attr_css table))
-         (css-props-str (org-blackfriday--make-css-property-string css-props))
-         (table-pre "")
-         (table-post "")
-         (tbl (replace-regexp-in-string "\n\n" "\n" contents)))
+  (if (eq (org-element-property :type table) 'table.el)
+      ;; "table.el" table.  Convert it using appropriate tools.
+      (org-html-table--table.el-table table info)
+    ;; Standard table.
+    (let* ((rows (org-element-map table 'table-row 'identity info))
+           (no-header (= (length rows) 1)) ;No header if table has just 1 row
+           (table-ref (org-blackfriday--get-reference table))
+           (table-anchor (if table-ref
+                             (format "<a id=\"%s\"></a>\n" table-ref)
+                           ""))
+           (caption (org-export-get-caption table))
+           table-num
+           (blank-line-before-table "")
+           (caption-html (if (not caption)
+                             ""
+                           (let ((caption-prefix (org-blackfriday--translate 'table info))
+                                 (caption-str
+                                  (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
+                                   (org-export-data-with-backend caption 'html info))))
+                             (setq table-num (org-export-get-ordinal
+                                              table info
+                                              nil #'org-html--has-caption-p))
+                             (format (concat "<div class=\"table-caption\">\n"
+                                             "  <span class=\"table-number\">%s</span>:\n"
+                                             "  %s\n"
+                                             "</div>\n")
+                                     (if table-ref ;Hyperlink the table prefix + number
+                                         (format "<a href=\"#%s\">%s %s</a>"
+                                                 table-ref caption-prefix table-num)
+                                       (format "%s %s"
+                                               caption-prefix table-num))
+                                     caption-str))))
+           (attr (org-export-read-attribute :attr_html table))
+           ;; At the moment only the `class' attribute is supported in
+           ;; #+attr_html above tables.
+           (table-class-user (plist-get attr :class))
+           (table-class-auto (concat "table-"
+                                     (if table-num
+                                         (format "%d" table-num)
+                                       "nocaption")))
+           (table-class (or table-class-user
+                            table-class-auto))
+           ;; If user has specified multiple classes for the table
+           ;; (space-separated), use only the first class in that list
+           ;; to specifying the styling in the <style> tag.
+           (table-class-this (car (split-string table-class)))
+           ;; https://www.w3schools.com/css/css_table.asp
+           (css-props (org-export-read-attribute :attr_css table))
+           (css-props-str (org-blackfriday--make-css-property-string css-props))
+           (table-pre "")
+           (table-post "")
+           (tbl (replace-regexp-in-string "\n\n" "\n" contents)))
 
-    (when (org-string-nw-p css-props-str)
-      (setq table-pre (format "<style>.%s table { %s }</style>\n\n"
-                              table-class-this css-props-str)))
-    ;; Export user-specified table class explicitly.
-    (when (or (org-string-nw-p table-class-user)
-              (org-string-nw-p css-props-str))
-      (setq table-pre (concat table-pre
-                              (format "<div class=\"ox-hugo-table %s\">\n" table-class)
-                              "<div></div>\n"))) ;See footnote 1
-    (when (org-string-nw-p table-pre)
-      (setq table-post (concat "\n"
-                               "</div>\n")))
+      (when (org-string-nw-p css-props-str)
+        (setq table-pre (format "<style>.%s table { %s }</style>\n\n"
+                                table-class-this css-props-str)))
+      ;; Export user-specified table class explicitly.
+      (when (or (org-string-nw-p table-class-user)
+                (org-string-nw-p css-props-str))
+        (setq table-pre (concat table-pre
+                                (format "<div class=\"ox-hugo-table %s\">\n" table-class)
+                                "<div></div>\n"))) ;See footnote 1
+      (when (org-string-nw-p table-pre)
+        (setq table-post (concat "\n"
+                                 "</div>\n")))
 
-    ;; If the table has only 1 row, do *not* make it a header row..
-    ;; instead create an empty header row.
-    ;; For 1-row, tbl would look like this at this point:
-    ;;
-    ;;   | a | b |
-    ;;   |---|---|
-    ;;
-    ;; Below will convert that to:
-    ;;
-    ;;   |   |   |
-    ;;   |---|---|
-    ;;   | a | b |
-    (when no-header
-      (string-match "\\`\\(.*\\)\n\\(.*\\)\n\\'" tbl)
-      (let* ((row-1 (match-string-no-properties 1 tbl))
-             (hrule (match-string-no-properties 2 tbl))
-             (dummy-header (replace-regexp-in-string "[-:]" " " hrule)))
-        (setq tbl (concat dummy-header "\n" hrule "\n" row-1))))
-    ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
+      ;; If the table has only 1 row, do *not* make it a header row..
+      ;; instead create an empty header row.
+      ;; For 1-row, tbl would look like this at this point:
+      ;;
+      ;;   | a | b |
+      ;;   |---|---|
+      ;;
+      ;; Below will convert that to:
+      ;;
+      ;;   |   |   |
+      ;;   |---|---|
+      ;;   | a | b |
+      (when no-header
+        (string-match "\\`\\(.*\\)\n\\(.*\\)\n\\'" tbl)
+        (let* ((row-1 (match-string-no-properties 1 tbl))
+               (hrule (match-string-no-properties 2 tbl))
+               (dummy-header (replace-regexp-in-string "[-:]" " " hrule)))
+          (setq tbl (concat dummy-header "\n" hrule "\n" row-1))))
+      ;; (message "[ox-bf-table DBG] Tbl:\n%s" tbl)
 
-    ;; A blank line is needed to separate the Markdown table and
-    ;; the table anchor/caption HTML.
-    (unless (string= (concat table-pre table-anchor caption-html) "")
-      (setq blank-line-before-table "\n"))
+      ;; A blank line is needed to separate the Markdown table and
+      ;; the table anchor/caption HTML.
+      (unless (string= (concat table-pre table-anchor caption-html) "")
+        (setq blank-line-before-table "\n"))
 
-    (concat table-pre table-anchor caption-html
-            blank-line-before-table tbl table-post)))
+      (concat table-pre table-anchor caption-html
+              blank-line-before-table tbl table-post))))
 
 ;;;; Verse Block
 (defun org-blackfriday-verse-block (_verse-block contents info)

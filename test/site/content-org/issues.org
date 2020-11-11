@@ -59,5 +59,19 @@ This issue only appears when there is a citation @giovanelli2016
 [[file:root-level-content-empty-section.org][Tag]]
 
 [[file:336_test.org][Exclude tag]]
+* Issue 374 -- Tables written in ~table.el~ format           :table:table_el:
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-dot-el-format-tables
+:END:
+#+begin_description
+Support tables written in table.el format
+#+end_description
+{{{issue(374)}}}
 
- 
++----------+----------+----------+
+| Header 1 | Header 2 | Header 3 |
++----------+----------+----------+
+| a        | b        | c        |
++----------+----------+----------+
+| d        | e        | f        |
++----------+----------+----------+

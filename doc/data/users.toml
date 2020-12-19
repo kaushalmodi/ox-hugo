@@ -68,7 +68,7 @@
 
 [zzamboni]
   author = "Diego Zamboni"
-  source = "https://github.com/zzamboni/zzamboni.org"
+  source = "https://gitlab.com/zzamboni/zzamboni.org"
   site = "https://zzamboni.org/"
   org_dir = "content-org"
 

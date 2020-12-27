@@ -21,8 +21,9 @@
                   "-fenced_divs"
                   "-fenced_code_attributes"
                   "-bracketed_spans")
-    "--atx-headers"
-    "--id-prefix=fn:")
+    "--markdown-headings=atx"
+    "--id-prefix=fn:"
+    "--citeproc")
   "Pandoc arguments used in `org-hugo-pandoc-cite--run-pandoc'.
 
 -f markdown : Convert *from* Markdown

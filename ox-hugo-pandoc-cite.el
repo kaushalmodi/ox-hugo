@@ -175,9 +175,7 @@ Required fixes:
         ;; There should be at max only one replacement needed for
         ;; this.
         (when (re-search-forward org-hugo-pandoc-cite--references-header-regexp nil :noerror)
-          (replace-match (concat level-mark
-                                 " References {#references}\n\n"
-                                 "\\&\n  <div></div>\n")))) ;See footnote 1
+          (replace-match "\n\n\\&\n  <div></div>\n"))) ;See footnote 1
 
       ;; Add the Blackfriday required hack to Pandoc ref divs.
       (save-excursion

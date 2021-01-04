@@ -14,7 +14,7 @@
 :END:
 {{{travis}}} {{{melpa}}} {{{GPLv3}}}
 
-{{{gitter}}} {{{saythanks}}}
+{{{gitter}}}
 
 #+include: "./ox-hugo-manual.org::#introduction" :only-contents t
 

@@ -19,4 +19,3 @@
 #+macro: melpa [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]]
 #+macro: GPLv3 [[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPL%20v3-blue.svg]]
 #+macro: gitter [[https://gitter.im/KaushalModi/Lobby][https://badges.gitter.im/KaushalModi/Lobby.svg]]
-#+macro: saythanks [[https://saythanks.io/to/kaushalmodi][https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg]]

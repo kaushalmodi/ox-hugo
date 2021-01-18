@@ -34,8 +34,8 @@
   - Similarly, support =#+attr_html= and =#+attr_css= for paragraphs,
     example blocks, source blocks, plain lists and quote blocks too --
     {{{issue(113)}}}.
-- Now =publishDate= and =expiryDate= front-matter properties get
-  auto-derived from =SCHEDULED= and =DEADLINE= special properties if
+- Now =publishDate= front-matter property gets
+  auto-derived from the =SCHEDULED= special property if
   associated with the valid Hugo post subtree --
   {{{commit(0807f42d)}}}.
   - Date values can now be easily set using the =C-c .= binding in the
@@ -960,7 +960,6 @@ set.
 | =date = 2017-07-24=                | =:EXPORT_DATE: 2017-07-24=             | Subtree property                                                           |
 | =publishDate = 2018-01-26=         | =SCHEDULED: <2018-01-26 Fri>=           | Auto-inserted =SCHEDULED= subtree property using default =C-c C-s= binding |
 | =publishDate = 2018-01-26=         | =:EXPORT_HUGO_PUBLISHDATE: 2018-01-26:= | Subtree property                                                           |
-| =expiryDate = 2999-01-01=          | =DEADLINE: <2999-01-01 Tue>=            | Auto-inserted =DEADLINE= subtree property using default =C-c C-d= binding  |
 | =expiryDate = 2999-01-01=          | =:EXPORT_HUGO_EXPIRYDATE: 2999-01-01:=  | Subtree property                                                           |
 | =lastmod = <current date>=          | =:EXPORT_HUGO_AUTO_SET_LASTMOD: t=     | Subtree property                                                           |
 | =lastmod = <current date>=          | =#+hugo_auto_set_lastmod: t=           | Org keyword                                                                |
@@ -1177,23 +1176,7 @@ front-matter (TOML).
 /You do not then need to explicitly set the =:EXPORT_HUGO_PUBLISHDATE:=
 property./
 ***** Expiry Date
-This is interpreted from the Org Special Property =DEADLINE=. The idea
-is that just as you /ideally/ don't plan to work on a task after a set
-deadline, you don't plan to keep a post published after a set expiry
-date. This property is set using the default ~C-c C-d~ binding in Org.
-
-Here's an example:
-#+begin_src org
-,* My short-lived post
-DEADLINE: <2018-02-06 Tue>
-Post content.
-#+end_src
-
-Above gets translated to =expiryDate = 2018-02-06T00:00:00-05:00= in
-front-matter (TOML).
-
-/You do not then need to explicitly set the =:EXPORT_HUGO_EXPIRYDATE:=
-property./
+This is set using the =:EXPORT_HUGO_EXPIRYDATE:= property.
 ***** Last modified
 Like any other front-matter property, you can explicitly set the /last
 modified/ date too, using the =:EXPORT_HUGO_LASTMOD:= property.

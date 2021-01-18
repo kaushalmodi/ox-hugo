@@ -201,8 +201,8 @@ available customization options for this package.
   - Similarly, support =#+attr_html= and =#+attr_css= for paragraphs,
     example blocks, source blocks, plain lists and quote blocks too --
     #[[https://github.com/kaushalmodi/ox-hugo/issues/113][113]].
-- Now =publishDate= and =expiryDate= front-matter properties get
-  auto-derived from =SCHEDULED= and =DEADLINE= special properties if
+- Now =publishDate= front-matter property gets
+  auto-derived from the =SCHEDULED= special property if
   associated with the valid Hugo post subtree --
   commit [[https://github.com/kaushalmodi/ox-hugo/commit/0807f42d][0807f42d]].
   - Date values can now be easily set using the =C-c .= binding in the

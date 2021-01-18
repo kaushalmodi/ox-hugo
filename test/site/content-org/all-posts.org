@@ -5088,16 +5088,6 @@ binding.
 :END:
 The =expirydate= for this post is Hugo-compatible
 i.e. [[https://tools.ietf.org/html/rfc3339#section-5.8][RFC3339-compliant]].
-*** Expiry date set using DEADLINE                                 :deadline:
-DEADLINE: <2999-01-01 Tue>
-:PROPERTIES:
-:EXPORT_FILE_NAME: expiry-date-deadline
-:END:
-If a subtree has the =DEADLINE= [[https://orgmode.org/manual/Special-properties.html][Special Property]] set, set the
-=expirydate= front-matter to the deadline date.
-
-By default, =C-c C-d= in Org adds the =DEADLINE= property to the
-current subtree.
 ** Customizing date format                                      :date_format:
 *** Date with time and time-zone (default)                   :time_zone:time:
 :PROPERTIES:

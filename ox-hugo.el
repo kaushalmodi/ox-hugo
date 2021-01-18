@@ -1335,10 +1335,6 @@ cannot be formatted in Hugo-compatible format."
                           (org-entry-get (point) "SCHEDULED"))
                      ;; Get the date from the "SCHEDULED" property.
                      (org-entry-get (point) "SCHEDULED"))
-                    ((and (equal date-key :hugo-expirydate)
-                          (org-entry-get (point) "DEADLINE"))
-                     ;; Get the date from the "DEADLINE" property.
-                     (org-entry-get (point) "DEADLINE"))
                     (t ;:hugo-lastmod, :hugo-publishdate, :hugo-expirydate
                      (org-string-nw-p (plist-get info date-key)))))
          (date-nocolon (cond

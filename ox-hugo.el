@@ -3122,7 +3122,11 @@ For example, \"some__thing\" would get converted to \"some
 thing\"."
   ;; It is safe to assume that no one would want leading/trailing
   ;; spaces in `str'.. so not checking for "__a" or "a__" cases.
-  (replace-regexp-in-string "\\([^_]\\)__\\([^_]\\)" "\\1 \\2" str)) ;"a__b"  -> "a b"
+  (let ((ret str)
+        (rgx "\\([^_]\\)__\\([^_]\\)"))
+    (while (string-match-p rgx ret)
+      (setq ret (replace-regexp-in-string rgx "\\1 \\2" ret))) ;"a__b"  -> "a b"
+    ret))
 
 (defun org-hugo--tag-processing-fn-replace-with-spaces-maybe (tag-list info)
   "Replace double underscores in TAG-LIST elements with single spaces.

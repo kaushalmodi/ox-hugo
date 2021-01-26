@@ -2839,7 +2839,7 @@ Testing tags set using Org tags in headings.
 :EXPORT_HUGO_PREFER_HYPHEN_IN_TAGS: t
 :EXPORT_HUGO_ALLOW_SPACES_IN_TAGS: t
 :END:
-*** Hyphens and spaces in tags      :an_apple__a___pear:good__bad__and__ugly:
+*** Hyphens and spaces in tags      :an_apple__a___pear:good__bad__and__ugly:a__b__c:
 :PROPERTIES:
 :EXPORT_FILE_NAME: hyphens-and-spaces-in-tags
 :END:

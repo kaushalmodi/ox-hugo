@@ -63,9 +63,9 @@ for more.
 
 ## References {#references}
 
-<div id="refs" class="references
+<div id="refs" class="references csl-bib-body hanging-indent">
   <div></div>
- csl-bib-body hanging-indent">
+
 
 <div id="ref-rmdCitations" class="csl-entry">
   <div></div>

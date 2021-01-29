@@ -15,9 +15,9 @@ This issue only appears when there is a citation Giovanelli (2016)
 
 ## References {#references}
 
-<div id="refs" class="references
+<div id="refs" class="references csl-bib-body hanging-indent">
   <div></div>
- csl-bib-body hanging-indent">
+
 
 <div id="ref-giovanelli2016" class="csl-entry">
   <div></div>

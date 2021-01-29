@@ -186,6 +186,15 @@ The common =ox-hugo= export bindings are:
 ** Customization Options
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
+*** =org-hugo-pandoc-cite-references-heading=
+- Default value :: ="References {#references}"=
+
+This is the Markdown heading that gets inserted before the section of
+references inserted by Pandoc inserted (See
+[[https://ox-hugo.scripter.co/doc/pandoc-citations/][Pandoc Citations]]) at the end of the post.
+
+To prevent the insertion of that Markdown heading, set this variable
+to an empty string (=""=).
 * Changelog
 ** v0.8 <2018-01-26 Fri>
 *** Features

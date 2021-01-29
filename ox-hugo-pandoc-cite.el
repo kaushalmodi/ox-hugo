@@ -11,7 +11,13 @@
 
 ;;; Code:
 
-;; TODO: Change the defconst to defvar
+(defcustom org-hugo-pandoc-cite-references-heading "References {#references}"
+  "Markdown title for Pandoc inserted references section."
+  :group 'org-export-hugo
+  :type 'string)
+
+(defvar org-hugo--fm-yaml)              ;Silence byte-compiler
+
 (defvar org-hugo-pandoc-cite-pandoc-args-list
   `("-f" "markdown"
     "-t" ,(concat "markdown-citations"
@@ -163,9 +169,8 @@ The list of Pandoc specific meta-data is defined in
 
 Required fixes:
 
-- Prepend Pandoc inserted \"references\" class div with Markdown
-  heading \"## References\" where the number of hashes depends on
-  LOFFSET.  LOFFSET = 1 will insert 2 hashes.
+- Prepend Pandoc inserted \"references\" class div with
+  `org-hugo-pandoc-cite-references-heading'.
 
 - Add the Blackfriday required \"<div></div>\" hack to Pandoc
   divs with \"ref\" id's.
@@ -174,19 +179,20 @@ Required fixes:
   \"{{< shortcode >}}\"."
   (with-temp-buffer
     (insert content)
-    (let ((case-fold-search nil)
-          (level-mark (make-string (+ loffset 1) ?#)))
+    (let ((case-fold-search nil))
       (goto-char (point-min))
 
       ;; Prepend the Pandoc inserted "references" class div with
-      ;; "References" heading in Markdown.
+      ;; `org-hugo-pandoc-cite-references-heading' heading in Markdown.
       (save-excursion
         ;; There should be at max only one replacement needed for
         ;; this.
         (when (re-search-forward org-hugo-pandoc-cite--references-header-regexp nil :noerror)
-          (replace-match (concat level-mark
-                                 " References {#references}\n\n"
-                                 "\\&\n  <div></div>\n")))) ;See footnote 1
+          (let ((references-heading ""))
+            (when (org-string-nw-p org-hugo-pandoc-cite-references-heading)
+              (let ((level-mark (make-string (+ loffset 1) ?#)))
+                (setq references-heading (concat level-mark " " org-hugo-pandoc-cite-references-heading))))
+            (replace-match (concat references-heading "\n\n\\&\n  <div></div>\n"))))) ;See footnote 1
 
       ;; Add the Blackfriday required hack to Pandoc ref divs.
       (save-excursion

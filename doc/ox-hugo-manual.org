@@ -496,6 +496,15 @@ The common =ox-hugo= export bindings are:
 *** Customization Options
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
+**** =org-hugo-pandoc-cite-references-heading=
+ - Default value :: ="References {#references}"=
+
+This is the Markdown heading that gets inserted before the section of
+references inserted by Pandoc inserted (See
+{{{doc(pandoc-citations,,Pandoc Citations)}}}) at the end of the post.
+
+To prevent the insertion of that Markdown heading, set this variable
+to an empty string (=""=).
 ** Screenshots Intro
 :PROPERTIES:
 :CUSTOM_ID: screenshots_intro
@@ -1106,7 +1115,6 @@ In such case, you can suppress =lastmod= in the front-matter if you set
 Note that this variable is effective only if auto-setting of the
 =lastmod= parameter is enabled i.e. if =org-hugo-auto-set-lastmod= or
 =EXPORT_HUGO_AUTO_SET_LASTMOD= is non-nil.
-
 **** File-based Exports
 :PROPERTIES:
 :CUSTOM_ID: dates-file-based-exports

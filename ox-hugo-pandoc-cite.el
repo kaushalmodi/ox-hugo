@@ -65,11 +65,19 @@ arguments.")
   "Buffer to contain the `pandoc' run output and errors.")
 
 (defvar org-hugo-pandoc-cite--references-header-regexp
-  "^<div id=\"refs\" .*>$"
+  "^<div id=\"refs\" class=\"references"
   "Regexp to match the Pandoc-inserted references header string.
 
 This string is present only if Pandoc has resolved one or more
-references.")
+references.
+
+Pandoc 2.11.4.")
+
+(defvar org-hugo-pandoc-cite--reference-entry-regexp
+  "^<div id=\"ref-[^\"]+\" .*csl-entry.*"
+  "Regexp to match the Pandoc-inserted reference entry strings.
+
+Pandoc 2.11.4.")
 
 (defun org-hugo-pandoc-cite--restore-fm-in-orig-outfile (orig-outfile fm &optional orig-full-contents)
   "Restore the intended front-matter format in ORIG-OUTFILE.
@@ -182,9 +190,8 @@ Required fixes:
 
       ;; Add the Blackfriday required hack to Pandoc ref divs.
       (save-excursion
-        (let ((regexp "^<div id=\"ref-[^\"]+\">$"))
-          (while (re-search-forward regexp nil :noerror)
-            (replace-match "\\&\n  <div></div>")))) ;See footnote 1
+        (while (re-search-forward org-hugo-pandoc-cite--reference-entry-regexp nil :noerror)
+          (replace-match "\\&\n  <div></div>"))) ;See footnote 1
 
       ;; Fix Hugo shortcodes.
       (save-excursion

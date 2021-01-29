@@ -14,20 +14,20 @@ parentheses.
 Blah blah [see @doe99, pp. 33-35; also @smith04, ch. 1].
 ```
 
-Blah blah (see Doe, [1999](#ref-doe99), pp. 33--35; also Smith,
-[2004](#ref-smith04), ch. 1).
+Blah blah (see [Doe, 1999, pp. 33--35](#ref-doe99); also [Smith,
+2004](#ref-smith04), ch. 1).
 
 ``` org
 Blah blah [@doe99, pp. 33-35, 38-39].
 ```
 
-Blah blah (Doe, [1999](#ref-doe99), pp. 33--35, 38--39).
+Blah blah ([Doe, 1999, pp. 33--35, 38--39](#ref-doe99)).
 
 ``` org
 Blah blah [@smith04; @doe99].
 ```
 
-Blah blah (Doe, [1999](#ref-doe99); Smith, [2004](#ref-smith04)).
+Blah blah ([Doe, 1999](#ref-doe99); [Smith, 2004](#ref-smith04)).
 
 ## Citations with author name suppressed
 
@@ -47,30 +47,31 @@ Smith says blah ([2004](#ref-smith04)).
 @smith04 says blah.
 ```
 
-Smith ([2004](#ref-smith04)) says blah.
+[Smith](#ref-smith04) ([2004](#ref-smith04)) says blah.
 
 ``` org
 @smith04 [p. 33] says blah.
 ```
 
-Smith ([2004](#ref-smith04), p. 33) says blah.
+[Smith](#ref-smith04) ([2004, p. 33](#ref-smith04)) says blah.
 
 ## Actual citations for this test post :)
 
-See Xie ([2017](#ref-addCite17)); ("Bibliographies and citations /
-citations," [n.d.](#ref-rmdCitations)) for more.
+See [Xie](#ref-addCite17) ([2017](#ref-addCite17)); ["Bibliographies and
+citations / citations"](#ref-rmdCitations) ([n.d.](#ref-rmdCitations))
+for more.
 
 **Compare the References section below with
 [that](/posts/citation-forms/#references) when using the default CSL.**
 
 ## References {#references}
 
-<div id="refs" class="references hanging-indent">
+<div id="refs" class="references
   <div></div>
+ csl-bib-body hanging-indent"
+line-spacing="2">
 
-
-<div id="ref-rmdCitations">
-  <div></div>
+<div id="ref-rmdCitations" class="csl-entry">
 
 Bibliographies and citations / citations. (n.d.). In *RMarkdown*.
 RStudio. Retrieved from
@@ -78,24 +79,21 @@ RStudio. Retrieved from
 
 </div>
 
-<div id="ref-doe99">
-  <div></div>
+<div id="ref-doe99" class="csl-entry">
 
 Doe, J. (1999). *An awesome revelation* (3rd ed., Vol. 4). The address:
 Publisher Foo.
 
 </div>
 
-<div id="ref-smith04">
-  <div></div>
+<div id="ref-smith04" class="csl-entry">
 
 Smith, A. (2004). *The book on life* (1st ed., Vol. 7). The address:
 Publisher Bar.
 
 </div>
 
-<div id="ref-addCite17">
-  <div></div>
+<div id="ref-addCite17" class="csl-entry">
 
 Xie, Y. (2017). Adding citations to posts. Retrieved from
 <https://blogdown-demo.rbind.io/2017/08/28/adding-citations-to-posts/>

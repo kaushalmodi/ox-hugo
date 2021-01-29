@@ -54,6 +54,6 @@ error backtrace,
 * Test
 1. Clone this repo.
 2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
-   [[https://github.com/jgm/pandoc/releases/tag/2.9.2.1][*2.9.2.1*]]) are installed (more info
+   [[https://github.com/jgm/pandoc/releases/tag/2.11.4][*2.11.4*]]) are installed (more info
    [[https://ox-hugo.scripter.co/doc/contributing-guide/#contribute-to-code][here]]).
 3. Run =make -j1 test=.

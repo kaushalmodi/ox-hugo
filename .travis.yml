@@ -6,7 +6,7 @@ env:
   global:
     - CURL="curl -fsSkL --retry 9 --retry-delay 9"
     - OX_HUGO_TMP_DIR="/tmp/${USER}/ox-hugo-dev"
-    - PANDOC_VERSION=2.5
+    - PANDOC_VERSION=2.11.4
   matrix:
     # https://github.com/npostavs/emacs-travis/releases
     - EMACS_VERSION=27.1

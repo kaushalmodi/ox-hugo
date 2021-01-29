@@ -41,22 +41,22 @@ Snippet 1</a></span>: Nested Boxes using PlantUML
 
 ## References {#references}
 
-<div id="refs" class="references hanging-indent">
+<div id="refs" class="references
   <div></div>
+ csl-bib-body hanging-indent">
 
-
-<div id="ref-eilan2016">
+<div id="ref-eilan2016" class="csl-entry">
   <div></div>
 
 Eilan, Naomi. 2016. "You Me and the World." *Analysis* 76 (3): 311--24.
 
 </div>
 
-<div id="ref-giovanelli2016">
+<div id="ref-giovanelli2016" class="csl-entry">
   <div></div>
 
 Giovanelli, Marco. 2016. "\"\...But I Still Can't Get Rid of a Sense of
-Artificiality\" the Reichenbach--Einstein Debate on the Geometrization
+Artificiality\" The Reichenbach--Einstein Debate on the Geometrization
 of the Electromagnetic Field." *Studies in History and Philosophy of
 Science* 54: 35--51.
 

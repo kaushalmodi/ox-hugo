@@ -14,20 +14,20 @@ parentheses.
 Blah blah [see @doe99, pp. 33-35; also @smith04, ch. 1].
 ```
 
-Blah blah (see Doe [1999](#ref-doe99), 4:33--35; also Smith
-[2004](#ref-smith04), ch. 1).
+Blah blah (see [Doe 1999, 4:33--35](#ref-doe99); also [Smith
+2004](#ref-smith04), ch. 1).
 
 ``` org
 Blah blah [@doe99, pp. 33-35, 38-39].
 ```
 
-Blah blah (Doe [1999](#ref-doe99), 4:33--35, 38--39).
+Blah blah ([Doe 1999, 4:33--35, 38--39](#ref-doe99)).
 
 ``` org
 Blah blah [@smith04; @doe99].
 ```
 
-Blah blah (Smith [2004](#ref-smith04); Doe [1999](#ref-doe99)).
+Blah blah ([Smith 2004](#ref-smith04); [Doe 1999](#ref-doe99)).
 
 ## Citations with author name suppressed
 
@@ -47,26 +47,27 @@ Smith says blah ([2004](#ref-smith04)).
 @smith04 says blah.
 ```
 
-Smith ([2004](#ref-smith04)) says blah.
+[Smith](#ref-smith04) ([2004](#ref-smith04)) says blah.
 
 ``` org
 @smith04 [p. 33] says blah.
 ```
 
-Smith ([2004](#ref-smith04), 7:33) says blah.
+[Smith](#ref-smith04) ([2004, 7:33](#ref-smith04)) says blah.
 
 ## Actual citations for this test post :)
 
-See Xie ([2017](#ref-addCite17)); ("Bibliographies and Citations /
-Citations," [n.d.](#ref-rmdCitations)) for more.
+See [Xie](#ref-addCite17) ([2017](#ref-addCite17)); ["Bibliographies and
+Citations / Citations"](#ref-rmdCitations) ([n.d.](#ref-rmdCitations))
+for more.
 
 ## References {#references}
 
-<div id="refs" class="references hanging-indent">
+<div id="refs" class="references
   <div></div>
+ csl-bib-body hanging-indent">
 
-
-<div id="ref-rmdCitations">
+<div id="ref-rmdCitations" class="csl-entry">
   <div></div>
 
 "Bibliographies and Citations / Citations." n.d. In *RMarkdown*.
@@ -75,23 +76,23 @@ RStudio.
 
 </div>
 
-<div id="ref-doe99">
+<div id="ref-doe99" class="csl-entry">
   <div></div>
 
-Doe, John. 1999. *An Awesome Revelation*. 3rd ed. Vol. 4. 10th Ser. The
-address: Publisher Foo.
+Doe, John. 1999. *An Awesome Revelation*. 3rd ed. Vol. 4. 10th Series.
+The address: Publisher Foo.
 
 </div>
 
-<div id="ref-smith04">
+<div id="ref-smith04" class="csl-entry">
   <div></div>
 
-Smith, Adam. 2004. *The Book on Life*. 1st ed. Vol. 7. 99th Ser. The
+Smith, Adam. 2004. *The Book on Life*. 1st ed. Vol. 7. 99th Series. The
 address: Publisher Bar.
 
 </div>
 
-<div id="ref-addCite17">
+<div id="ref-addCite17" class="csl-entry">
   <div></div>
 
 Xie, Yihui. 2017. "Adding Citations to Posts."

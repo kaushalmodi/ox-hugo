@@ -72,6 +72,7 @@ for more.
 line-spacing="2">
 
 <div id="ref-rmdCitations" class="csl-entry">
+  <div></div>
 
 Bibliographies and citations / citations. (n.d.). In *RMarkdown*.
 RStudio. Retrieved from
@@ -80,6 +81,7 @@ RStudio. Retrieved from
 </div>
 
 <div id="ref-doe99" class="csl-entry">
+  <div></div>
 
 Doe, J. (1999). *An awesome revelation* (3rd ed., Vol. 4). The address:
 Publisher Foo.
@@ -87,6 +89,7 @@ Publisher Foo.
 </div>
 
 <div id="ref-smith04" class="csl-entry">
+  <div></div>
 
 Smith, A. (2004). *The book on life* (1st ed., Vol. 7). The address:
 Publisher Bar.
@@ -94,6 +97,7 @@ Publisher Bar.
 </div>
 
 <div id="ref-addCite17" class="csl-entry">
+  <div></div>
 
 Xie, Y. (2017). Adding citations to posts. Retrieved from
 <https://blogdown-demo.rbind.io/2017/08/28/adding-citations-to-posts/>

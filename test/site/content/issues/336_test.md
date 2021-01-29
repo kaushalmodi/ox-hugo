@@ -15,15 +15,15 @@ This issue only appears when there is a citation Giovanelli (2016)
 
 ## References {#references}
 
-<div id="refs" class="references hanging-indent">
+<div id="refs" class="references
   <div></div>
+ csl-bib-body hanging-indent">
 
-
-<div id="ref-giovanelli2016">
+<div id="ref-giovanelli2016" class="csl-entry">
   <div></div>
 
 Giovanelli, Marco. 2016. "\"\...But I Still Can't Get Rid of a Sense of
-Artificiality\" the Reichenbach--Einstein Debate on the Geometrization
+Artificiality\" The Reichenbach--Einstein Debate on the Geometrization
 of the Electromagnetic Field." *Studies in History and Philosophy of
 Science* 54: 35--51.
 

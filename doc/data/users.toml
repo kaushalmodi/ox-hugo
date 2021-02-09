@@ -420,7 +420,8 @@
   author = "James Hood-Smith"
   source = "https://github.com/jhoodsmith/blog-source"
   site = "https://www.hood-smith.me.uk"
-  
+  branch = "main"
+
 # []
 #   author = ""
 #   source = ""
@@ -432,4 +433,4 @@
 #   source = ""
 #   site = ""
 #   org_dir = "specify this if Org file not directly in repo root dir"
-#   branch = "specify this if not master"
+#   branch = "specify this if not master, e.g. main"

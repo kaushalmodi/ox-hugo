@@ -415,6 +415,11 @@
   source = "https://github.com/ruborcalor/cole-website"
   site = "https://colekillian.com"
   org_dir = "org-content"
+
+[jhoodsmith]
+  author = "James Hood-Smith"
+  source = "https://github.com/jhoodsmith/blog-source"
+  site = "https://www.hood-smith.me.uk"
   
 # []
 #   author = ""

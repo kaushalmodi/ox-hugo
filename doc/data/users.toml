@@ -421,6 +421,12 @@
   source = "https://github.com/jhoodsmith/blog-source"
   site = "https://www.hood-smith.me.uk"
   branch = "main"
+  
+[soham]
+  author = "Soham Pal"
+  source = "https://gitlab.com/e-eight/e-eight.gitlab.io"
+  site = "https://soham.dev"
+  
 
 # []
 #   author = ""

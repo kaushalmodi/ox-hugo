@@ -230,12 +230,6 @@
   source = "https://github.com/taipapamotohus/Taipapablog"
   site = "https://taipapamotohus.com/"
 
-[grugrut]
-  author = "grugrut"
-  source = "https://github.com/grugrut/til"
-  site = "https://grugrut.github.io/til/"
-  org_dir = "draft"
-
 [alexmurray]
   author = "Alex Murray"
   source = "https://github.com/alexmurray/ubuntu-security-podcast"

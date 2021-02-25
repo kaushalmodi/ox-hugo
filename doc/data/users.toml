@@ -421,7 +421,12 @@
   source = "https://gitlab.com/e-eight/e-eight.gitlab.io"
   site = "https://soham.dev"
   
-
+[martinbaillie]
+  author = "Martin Baillie"
+  source = "https://github.com/martinbaillie/martinbaillie"
+  site = "https://martin.baillie.id"
+  branch = "main"
+  
 # []
 #   author = ""
 #   source = ""

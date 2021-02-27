@@ -382,11 +382,6 @@
   site = "https://www.robinwils.com"
   org_dir = "content-org"
 
-[mikeyobrien]
-  author = "Mikey O'Brien"
-  source = "https://github.com/mikeyobrien/blog"
-  site = "https://www.mikeyobrien.com"
-
 [wych42]
   author = "chi"
   source = "https://github.com/wych42/wych42.github.io"

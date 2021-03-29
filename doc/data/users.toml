@@ -149,6 +149,7 @@
   author = "Göktuğ Kayaalp"
   source = "https://github.com/cadadr/elisp"
   site = "https://cadadr.github.io/elisp/index.html"
+  branch = "stable"
 
 [jackbaty]
   author = "Jack Baty"

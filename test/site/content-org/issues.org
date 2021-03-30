@@ -134,6 +134,20 @@ gets exported as below in the Markdown footnote:
 #+begin_src md
 [^fn:1]: ```elisp (emacs-version) ```
 #+end_src
+* Issue 430 -- Disabling exporting of code blocks      :babel:export:disable:
+:PROPERTIES:
+:EXPORT_FILE_NAME: 430-disabling-exporting-of-code-blocks
+:END:
+#+begin_description
+Testing the use of ~:eval never-export~
+#+end_description
+
+#+begin_src bash :exports results :eval never-export
+echo "testing"
+#+end_src
+
+#+RESULTS:
+: testing
 
 * Footnotes
 [fn:1]

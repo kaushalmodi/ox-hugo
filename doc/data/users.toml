@@ -418,6 +418,12 @@
   site = "https://martin.baillie.id"
   branch = "main"
 
+[carlhenrikek]
+  author = "Carl Henrik Ek"
+  source = "https://github.com/mlatcl/mlaccelerate"
+  site = "https://mlatcl.github.io/mlaccelerate/"
+  branch = "master"
+
 # []
 #   author = ""
 #   source = ""

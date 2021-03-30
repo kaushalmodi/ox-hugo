@@ -5,8 +5,9 @@ tags = ["issues", "footnote", "src-block"]
 draft = false
 +++
 
-`ox-hugo` Issue #[433](https://github.com/kaushalmodi/ox-hugo/issues/433) Testing code in a footnote with a `begin_src`
-directive.[^fn:1].
+`ox-hugo` Issue #[433](https://github.com/kaushalmodi/ox-hugo/issues/433)
+
+Testing code in a footnote with a `begin_src` directive.[^fn:1].
 
 **This doesn't work because Hugo does not support having multi-line
 content in footnotes.**

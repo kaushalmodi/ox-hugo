@@ -114,8 +114,9 @@ rendering correctly at the moment --- {{{issue(382)}}}
 #+begin_description
 Source block in an Org footnote
 #+end_description
-{{{issue(433)}}} Testing code in a footnote with a ~begin_src~
-directive.[fn:1].
+{{{issue(433)}}}
+
+Testing code in a footnote with a ~begin_src~ directive.[fn:1].
 
 *This doesn't work because Hugo does not support having multi-line
 content in footnotes.*
@@ -141,6 +142,8 @@ gets exported as below in the Markdown footnote:
 #+begin_description
 Testing the use of ~:eval never-export~
 #+end_description
+
+{{{issue(430)}}}
 
 #+begin_src bash :exports results :eval never-export
 echo "testing"

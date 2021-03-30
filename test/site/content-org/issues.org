@@ -107,3 +107,36 @@ rendering correctly at the moment --- {{{issue(382)}}}
   \dot{z} & = -\beta z + xy
   \end{align}
 \right.\]
+* Issue 433 -- Source block in a footnote                :footnote:src_block:
+:PROPERTIES:
+:EXPORT_FILE_NAME: 443-src-block-in-footnote
+:END:
+#+begin_description
+Source block in an Org footnote
+#+end_description
+{{{issue(433)}}} Testing code in a footnote with a ~begin_src~
+directive.[fn:1].
+
+*This doesn't work because Hugo does not support having multi-line
+content in footnotes.*
+
+Due to that limitation, ~ox-hugo~ folds all footnote content onto a
+single line.. and so the below Org footnote:
+
+#+begin_src org
+[fn:1]
+,#+begin_src elisp
+(emacs-version)
+,#+end_src
+#+end_src
+
+gets exported as below in the Markdown footnote:
+#+begin_src md
+[^fn:1]: ```elisp (emacs-version) ```
+#+end_src
+
+* Footnotes
+[fn:1]
+#+begin_src elisp
+(emacs-version)
+#+end_src

@@ -28,6 +28,7 @@ for epoch in range(epochs):
     print(f"Epoch: {epoch + 1:02}/{epochs} Loss: {running_loss:.5e}")
 #+end_src
 
+#+RESULTS:
 #+begin_example
 Epoch: 01/20 Loss: 1.35205e+03
 Epoch: 02/20 Loss: 1.33684e+03

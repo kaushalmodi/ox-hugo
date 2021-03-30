@@ -151,6 +151,20 @@ echo "testing"
 
 #+RESULTS:
 : testing
+* Issue 424 -- Exporting Results blocks from Included Org files :include:results:
+:PROPERTIES:
+:EXPORT_FILE_NAME: 424-exporting-results-blocks-from-included-org-files
+:END:
+#+begin_description
+Example of using ~#+include~ to export code block *and* results
+block from that included file.
+#+end_description
+
+- Note :: By default, Org will export only the code block. So if you
+  want to export the ~#+results~ block as well, you need to add
+  ~:exports both~ to the source block header.
+
+#+include: "misc/issue-424-external.org"
 
 * Footnotes
 [fn:1]

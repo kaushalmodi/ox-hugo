@@ -27,6 +27,7 @@ using =ox-hugo= and their Org sources.
 - [[#demo][Demo]]
 - [[#installation][Installation]]
 - [[#usage][Usage]]
+  - [[#spacemacs][Spacemacs]]
   - [[#before-you-export][Before you export]]
   - [[#export-bindings][Export bindings]]
   - [[#customization-options][Customization Options]]
@@ -105,34 +106,16 @@ If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can d
 #+end_src
 
 Also see the [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto Exporting]] section.
-
-*Spacemacs*
-
-Spacemacs users can choose to add this snippet to their
-=dotspacemacs/user-config= function in =.spacemacs=:
+** Spacemacs
+Spacemacs users can use =ox-hugo= by setting the variable
+=org-enable-hugo-support=.
 
 #+begin_src emacs-lisp
-(defun dotspacemacs/user-config ()
-  ;; Other stuff
-  ;; ..
-
-  ;; ox-hugo config
-  (use-package ox-hugo
-    :ensure t          ;Auto-install the package from Melpa (optional)
-    :after ox))
+(setq-default dotspacemacs-configuration-layers
+              '((org :variables
+                  org-enable-hugo-support t)))
 #+end_src
-
-#+begin_note
-You do have _have_ to use the =use-package= version when using
-Spacemacs. That version was used because =use-package= is installed by
-default in Spacemacs.
-#+end_note
-If you do so, you *also need to* add =ox-hugo= to
-=dotspacemacs-additional-packages=.
-
-/This was verified to work on Spacemacs =develop= branch with
-=spacemacs-base= distribution, =emacs= editing style. --
-<2017-10-09 Mon>/
+/This was verified to work on Spacemacs =develop= branch ([[https://github.com/kaushalmodi/ox-hugo/pull/440][ref]])./
 ** Before you export
 Before you export check that these properties are set as you need:
 - HUGO_SECTION :: The default Hugo section name for all the posts.  See

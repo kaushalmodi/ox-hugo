@@ -118,24 +118,28 @@ Spacemacs users can use =ox-hugo= by setting the variable
 /This was verified to work on Spacemacs =develop= branch ([[https://github.com/kaushalmodi/ox-hugo/pull/440][ref]])./
 ** Before you export
 Before you export check that these properties are set as you need:
-- HUGO_SECTION :: The default Hugo section name for all the posts.  See
-     [[https://gohugo.io/content-management/sections/][here]] for more information on Hugo sections.  It is
-     common for this property to be set to =posts= or
-     =blog=.  The default value is set using
-     =org-hugo-default-section-directory=. See
-     [[https://ox-hugo.scripter.co/doc/hugo-section/][Hugo Section]] for details.
 - HUGO_BASE_DIR :: Root directory of the source for the Hugo site. If
-     this is set to =~/hugo/=, the exported Markdown
-     files will be saved to
-     =~/hugo/content/<HUGO_SECTION>/=
-     directory[fn:-1-section_more].  By default, the
-     Markdown files reside in a hierarchy under the
-     =content/= directory in the site root directory
-     ([[https://gohugo.io/content-management/organization/][ref]]). If you try to export without setting this
-     property, you will get this error:
+     this is set to =~/hugo/=, the exported Markdown files will be saved
+     to =~/hugo/content/<HUGO_SECTION>/= directory[fn:-1-section_more].  By
+     default, the Markdown files reside in a hierarchy under the
+     =content/= directory in the site root directory ([[https://gohugo.io/content-management/organization/][ref]]).
+
+     If you try to export without setting this property, you will get
+     this error:
      #+begin_example
        user-error: It is mandatory to set the HUGO_BASE_DIR property
+                   or the `org-hugo-base-dir' local variable
      #+end_example
+     This property can be set by one of two ways:
+  1. Setting the ~#+hugo_base_dir:~ keyword in the Org file.
+  2. Setting the ~org-hugo-base-dir~ variable in a ~.dir-locals.el~ or
+     File Local Variables.
+
+- HUGO_SECTION :: The default Hugo section name for all the posts.
+     See [[https://gohugo.io/content-management/sections/][here]] for more information on Hugo sections.  It is common for
+     this property to be set to =posts= or =blog=.  The default value is
+     set using =org-hugo-default-section-directory=. See
+     [[https://ox-hugo.scripter.co/doc/hugo-section/][Hugo Section]] for details.
 
 *Important*: If you choose to export an Org subtree as a post, you
  need to set the =EXPORT_FILE_NAME= subtree property. That property is

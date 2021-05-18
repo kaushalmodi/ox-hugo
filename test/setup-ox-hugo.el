@@ -138,6 +138,15 @@ Emacs installation.  If Emacs is installed using
       ;; Below require will auto-create `package-user-dir' it doesn't exist.
       (require 'package)
 
+      ;; Only for 25.x versions
+      ;; Workaround for these failures on Travis CI when installing Org
+      ;;    Contacting host: elpa.gnu.org:80
+      ;;    Debugger entered--Lisp error: (bad-signature "archive-contents.sig")
+      ;;      signal(bad-signature ("archive-contents.sig"))
+      (when (and (version< emacs-version "26.0")
+                 (version<= "25.0" emacs-version))
+        (setq package-check-signature nil))
+
       ;; Note: Org stable is now fetched from the GNU Elpa.
       (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                           (not (gnutls-available-p))))

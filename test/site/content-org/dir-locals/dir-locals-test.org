@@ -1,5 +1,3 @@
-#+hugo_base_dir: ../../.
-
 #+title: .dir-locals.el test
 #+date: <2018-10-31 Wed>
 
@@ -16,6 +14,7 @@ Test setting of few Org Hugo variables via =.dir-locals.el=.
 |----------------------------------------+-------------------------------------------------------------------------|
 | Variable                               | Value                                                                   |
 |----------------------------------------+-------------------------------------------------------------------------|
+| =org-hugo-base-dir=                    | ="../../."=                                                             |
 | =org-hugo-section=                     | ="dir-locals-test"=                                                     |
 | =org-hugo-front-matter-format=         | ="yaml"=                                                                |
 | =org-hugo-footer=                      | ="\n\nThis text is auto inserted at the end of the exported Markdown."= |

@@ -36,6 +36,7 @@ creator: "Dummy creator string"
 
 | Variable                               | Value                                                                   |
 |----------------------------------------|-------------------------------------------------------------------------|
+| `org-hugo-base-dir`                    | `"../../."`                                                             |
 | `org-hugo-section`                     | `"dir-locals-test"`                                                     |
 | `org-hugo-front-matter-format`         | `"yaml"`                                                                |
 | `org-hugo-footer`                      | `"\n\nThis text is auto inserted at the end of the exported Markdown."` |

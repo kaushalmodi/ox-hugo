@@ -2,6 +2,7 @@
          (fill-column . 70)
          (sentence-end-double-space . t)))
  (org-mode . ((mode . auto-fill)
+              (org-hugo-base-dir . "../../.")
               (org-hugo-section . "dir-locals-test")
               (org-hugo-front-matter-format . "yaml")
               (org-hugo-footer . "\n\nThis text is auto inserted at the end of the exported Markdown.")

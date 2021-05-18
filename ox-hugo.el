@@ -400,9 +400,14 @@ Examples:
 
 (define-obsolete-variable-alias 'org-hugo-default-section-directory 'org-hugo-section "Oct 31, 2018")
 
-(defvar-local org-hugo-base-dir nil
+(defcustom org-hugo-base-dir nil
   "Base directory for Hugo.
-Set either this value, or the HUGO_BASE_DIR global property for export.")
+
+Set either this value, or the HUGO_BASE_DIR global property for
+export."
+  :group 'org-export-hugo
+  :type 'directory)
+;;;###autoload (put 'org-hugo-base-dir 'safe-local-variable 'stringp)
 
 (defcustom org-hugo-section "posts"
   "Default section for Hugo posts.
@@ -1281,7 +1286,7 @@ The publication directory is created if it does not exist.
 INFO is a plist used as a communication channel."
   (let* ((base-dir (if (plist-get info :hugo-base-dir)
                        (file-name-as-directory (plist-get info :hugo-base-dir))
-                     (user-error "It is mandatory to set the HUGO_BASE_DIR property or the org-hugo-base-dir local variable")))
+                     (user-error "It is mandatory to set the HUGO_BASE_DIR property or the `org-hugo-base-dir' local variable")))
          (content-dir "content/")
          (section-path (org-hugo--get-section-path info))
          (bundle-dir (let ((bundle-path (or ;Hugo bundle set in the post subtree gets higher precedence

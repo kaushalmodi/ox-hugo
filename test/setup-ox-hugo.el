@@ -110,12 +110,15 @@ Emacs installation.  If Emacs is installed using
 (when ox-hugo-test-setup-verbose
   (message "ox-hugo-tmp-dir: %s" ox-hugo-tmp-dir))
 
-;; Install the packages in the specified order. We do not want
-;; `toc-org' to be installed first. If that happens, `org' will be
-;; required before the newer version of Org gets installed and we will
-;; end up with mixed Org version.  So put `org' at the beginning of
-;; `ox-hugo-packages'.
-(defvar ox-hugo-packages '(org toc-org))
+(defvar ox-hugo-packages '(toc-org))
+(when ox-hugo-install-org-from-elpa
+  ;; Fri Sep 22 18:24:19 EDT 2017 - kmodi
+  ;; Install the packages in the specified order. We do not want
+  ;; `toc-org' to be installed first. If that happens, `org' will be
+  ;; required before the newer version of Org gets installed and we
+  ;; will end up with mixed Org version.  So put `org' at the
+  ;; beginning of `ox-hugo-packages'.
+  (add-to-list 'ox-hugo-packages 'org))
 
 (defvar ox-hugo-site-git-root (progn
                                 (require 'vc-git)

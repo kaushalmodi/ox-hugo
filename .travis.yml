@@ -13,10 +13,8 @@ env:
     - EMACS_VERSION=26.3
     - EMACS_VERSION=25.3
     - EMACS_VERSION=25.1
-    # Disable tests on emacs 24.x until 2020/09/22
-    # Ref: https://lists.gnu.org/r/emacs-orgmode/2020-09/msg00763.html
-    # - EMACS_VERSION=24.5
-    # - EMACS_VERSION=24.4
+    - EMACS_VERSION=24.5
+    - EMACS_VERSION=24.4
     # Disabling test on master branch emacs build for now
     # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25061#144
     # - EMACS_VERSION=master # master branch

@@ -423,6 +423,13 @@
   source = "https://github.com/mlatcl/mlaccelerate"
   site = "https://mlatcl.github.io/mlaccelerate/"
   branch = "master"
+  
+[arnes-notes]
+  author = "Arne Bahlo"
+  source = "https://github.com/bahlo/arnes-notes"
+  site = "https://notes.arne.me"
+  branch = "main"
+  org_dir = "org"
 
 # []
 #   author = ""

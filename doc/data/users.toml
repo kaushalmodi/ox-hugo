@@ -430,6 +430,13 @@
   site = "https://notes.arne.me"
   branch = "main"
   org_dir = "org"
+  
+[jhilker]
+   author = "Jacob Hilker"
+   source = "https://gitlab.com/jhilker/jhilker.gitlab.io/"
+   site = "https://jhilker.com"
+   org_dir = "content-org"
+   branch = "main"
 
 # []
 #   author = ""

@@ -1,0 +1,47 @@
+name: RunTests
+
+on:
+  pull_request:
+    types:
+      - '*'
+  push:
+    branches:
+      - main
+      - master
+  schedule:
+    # Every week: https://crontab.guru/#0_0_*_*_0
+    - cron: '0 0 * * 0'
+
+jobs:
+  run_tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - 'ubuntu-latest'
+        emacs_version:
+          - 'snapshot'
+          - '27.2'
+          - '26.3'
+          - '25.3'
+          - '24.5'
+    # runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.emacs_version == 'snapshot' }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker://pandoc/core:2.11.4
+      - uses: purcell/setup-emacs@master
+        with:
+          version: ${{ matrix.emacs_version }}
+      # Don't run "make doc"; it's finicky as it could fail on running the getJSON command in hugo.
+      # - name: make doc
+      #   run: make --no-print-directory doc # Just ensure that "make doc" doesn't fail for any reason.. this is *not* used to do Org->Markdown doc conversion
+      - name: Version checks
+        run: |
+          export PATH="/tmp/${USER}/ox-hugo-dev/pandoc/bin:${PATH}"
+          make --no-print-directory vcheck
+      - name: Run tests
+        run: |
+          export PATH="/tmp/${USER}/ox-hugo-dev/pandoc/bin:${PATH}"
+          make --no-print-directory -j1 test

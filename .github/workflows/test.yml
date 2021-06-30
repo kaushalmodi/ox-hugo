@@ -30,7 +30,6 @@ jobs:
     continue-on-error: ${{ matrix.emacs_version == 'snapshot' }}
     steps:
       - uses: actions/checkout@v2
-      - uses: docker://pandoc/core:2.11.4
       - uses: purcell/setup-emacs@master
         with:
           version: ${{ matrix.emacs_version }}

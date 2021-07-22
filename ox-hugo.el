@@ -2077,9 +2077,10 @@ and rewrite link paths to make blogging more seamless."
              ;; Treat links as a normal post if the markdown file exists in hugo publish directory
              (if (and (string= ".md" (downcase (file-name-extension path ".")))
                       (file-exists-p (concat (org-hugo--get-pub-dir info) path)))
-                 (if desc
-                     (format "[%s]({{<relref \"%s\" >}})" desc path)
-                   (format "[%s]({{<relref \"%s\">}})" path path))
+                 (let ((anchor (org-hugo-link--headline-anchor-maybe link destination)))
+                   (if desc
+                       (format "[%s]({{<relref \"%s#%s\" >}})" desc path anchor)
+                     (format "[%s]({{<relref \"%s#%s\">}})" path path anchor)))
                (if desc
                    (format "[%s](%s)" desc path)
                  (format "<%s>" path)))))
@@ -2360,6 +2361,16 @@ and rewrite link paths to make blogging more seamless."
           (if (string-prefix-p "{{< relref " path)
               (format "[%s](%s)" path path)
             (format "<%s>" path)))))))))
+
+
+(defun org-hugo-link--headline-anchor-maybe (link path)
+  "Return headline of LINK in PATH if it point to."
+  (with-temp-buffer
+    (org-id-goto (org-element-property :path link))
+    (let ((headline (org-find-top-headline)))
+      (if headline
+          (org-hugo-slug headline)
+        ""))))
 
 ;;;;; Helpers
 (defun org-hugo--maybe-copy-resources (info)

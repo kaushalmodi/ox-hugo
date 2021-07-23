@@ -78,6 +78,8 @@
 ;; `org-refile.el' is new in Org 9.4
 ;; https://code.orgmode.org/bzg/org-mode/commit/f636cf91b6cbe322eca56e23283f4614548c9d65
 (require 'org-refile nil :noerror)      ;For `org-get-outline-path'
+(require 'org-id nil :noerror)          ;For `org-id-goto'
+
 (declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
@@ -2050,6 +2052,7 @@ and rewrite link paths to make blogging more seamless."
          (raw-path (org-element-property :path link))
          (type (org-element-property :type link))
          (link-is-url (member type '("http" "https" "ftp" "mailto"))))
+
     (when (and (stringp raw-path)
                link-is-url)
       (setq raw-path (org-blackfriday--url-sanitize
@@ -4011,11 +4014,11 @@ links."
          ;; in the current buffer.
          (ast (org-element-parse-buffer))
          (org-use-property-inheritance (org-hugo--selective-property-inheritance))
-         (info (org-combine-plists
-                (list :parse-tree ast)
-                (org-export--get-export-attributes 'hugo)
-                (org-export--get-buffer-attributes)
-                (org-export-get-environment 'hugo)))
+         (info (org-export--collect-tree-properties ast (org-combine-plists
+                                                         (list :parse-tree ast)
+                                                         (org-export--get-export-attributes 'hugo)
+                                                         (org-export--get-buffer-attributes)
+                                                         (org-export-get-environment 'hugo))))
          (local-variables (buffer-local-variables))
          (bound-variables (org-export--list-bound-variables))
 	 vars)

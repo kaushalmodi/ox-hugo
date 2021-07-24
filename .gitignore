@@ -5,3 +5,4 @@ ox-hugo-autoloads.el
 test/site/resources/
 test/site/content-golden/
 test/site/content-modified/
+test/.emacs.d/

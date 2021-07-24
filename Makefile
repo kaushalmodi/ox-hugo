@@ -124,7 +124,7 @@ help:
 emacs-batch:
 	@echo ""
 	@echo "$(ORG_FILE) ::"
-	@$(EMACS) --batch --eval "(progn\
+	@env HOME=$(shell pwd)/test $(EMACS) --batch --eval "(progn\
 	(setenv \"OX_HUGO_TMP_DIR\" \"$(ox_hugo_tmp_dir)\")\
 	(setenv \"TEST_ENABLED\" \"$(TEST_ENABLED)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\

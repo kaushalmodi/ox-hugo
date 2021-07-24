@@ -78,6 +78,7 @@
 ;; `org-refile.el' is new in Org 9.4
 ;; https://code.orgmode.org/bzg/org-mode/commit/f636cf91b6cbe322eca56e23283f4614548c9d65
 (require 'org-refile nil :noerror)      ;For `org-get-outline-path'
+
 (require 'org-id nil :noerror)          ;For `org-id-goto'
 
 (declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
@@ -4014,11 +4015,11 @@ links."
          ;; in the current buffer.
          (ast (org-element-parse-buffer))
          (org-use-property-inheritance (org-hugo--selective-property-inheritance))
-         (info (org-export--collect-tree-properties ast (org-combine-plists
-                                                         (list :parse-tree ast)
-                                                         (org-export--get-export-attributes 'hugo)
-                                                         (org-export--get-buffer-attributes)
-                                                         (org-export-get-environment 'hugo))))
+         (info (org-combine-plists
+                (list :parse-tree ast)
+                (org-export--get-export-attributes 'hugo)
+                (org-export--get-buffer-attributes)
+                (org-export-get-environment 'hugo)))
          (local-variables (buffer-local-variables))
          (bound-variables (org-export--list-bound-variables))
 	 vars)
@@ -4053,9 +4054,15 @@ links."
             (let ((type (org-element-property :type link)))
               (when (member type '("custom-id" "id" "fuzzy"))
                 (let* ((raw-link (org-element-property :raw-link link))
+
                        (destination (if (string= type "fuzzy")
                                         (org-export-resolve-fuzzy-link link info)
-                                      (org-export-resolve-id-link link info)))
+                                      (progn
+                                        ;; update `org-id-locations' if it's nil or empty hash table
+                                        ;; to avoid broken link
+                                        (if (or (eq org-id-locations nil) (zerop (hash-table-count org-id-locations)))
+                                            (org-id-update-id-locations (directory-files "." t "\.org\$" t)))
+                                        (org-export-resolve-id-link link (org-export--collect-tree-properties ast info)))))
                        (source-path (org-hugo--get-element-path link info))
                        (destination-path (org-hugo--get-element-path destination info))
                        (destination-type (org-element-type destination)))

@@ -2079,8 +2079,7 @@ and rewrite link paths to make blogging more seamless."
                            destination))))
              ;; (message "[org-hugo-link DBG] markdown path: %s" (concat (org-hugo--get-pub-dir info) path))
              ;; Treat links as a normal post if the markdown file exists in hugo publish directory
-             (if (and (string= ".md" (downcase (file-name-extension path ".")))
-                      (file-exists-p (concat (org-hugo--get-pub-dir info) path)))
+             (if (org-id-find-id-file raw-path)
                  (let ((anchor (org-hugo-link--headline-anchor-maybe link destination)))
                    (if desc
                        (format "[%s]({{<relref \"%s#%s\" >}})" desc path anchor)

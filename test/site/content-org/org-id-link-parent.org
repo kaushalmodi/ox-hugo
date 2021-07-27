@@ -1,0 +1,11 @@
+#+title: Org-mode ID links parent
+#+hugo_base_dir: ../.
+#+hugo_section: org-id-links
+#+author:
+
+This is a parent page that link other page via Org-mode id links:
+
+- Point to a org file [[id:FAADA682-B553-48BE-AC15-F80BDEE5A962][Org-mode id links child]]
+- Point to a section in org file [[id:E34A55C5-0F05-437E-B3F1-23B2A32743A2][Section]]
+- Point to a org file that belongs another hugo_section [[id:094C3D7B-5AE7-45A7-8AD6-D0B45C50A8FE][Org-mode ID links in other section]]
+- Point to a section in org file that belongs another hugo_section [[id:3608A1C7-A570-4BAC-8C1C-8EB6329D42C7][Section]]

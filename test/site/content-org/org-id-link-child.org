@@ -1,0 +1,86 @@
+:PROPERTIES:
+:ID:       FAADA682-B553-48BE-AC15-F80BDEE5A962
+:END:
+#+title: Org-mode ID links child
+#+hugo_base_dir: ../.
+#+hugo_section: org-id-links
+#+author:
+
+This is page with org-id created, and other pages can link this post
+via org-id.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+
+* Section
+:PROPERTIES:
+:ID:       E34A55C5-0F05-437E-B3F1-23B2A32743A2
+:END:
+In this section, we also created a org-id. That is supported to link
+via org-id too.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.
+
+balala.

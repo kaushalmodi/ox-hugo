@@ -78,6 +78,9 @@
 ;; `org-refile.el' is new in Org 9.4
 ;; https://code.orgmode.org/bzg/org-mode/commit/f636cf91b6cbe322eca56e23283f4614548c9d65
 (require 'org-refile nil :noerror)      ;For `org-get-outline-path'
+
+(require 'org-id nil :noerror)          ;For `org-id-goto'
+
 (declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
@@ -2050,6 +2053,7 @@ and rewrite link paths to make blogging more seamless."
          (raw-path (org-element-property :path link))
          (type (org-element-property :type link))
          (link-is-url (member type '("http" "https" "ftp" "mailto"))))
+
     (when (and (stringp raw-path)
                link-is-url)
       (setq raw-path (org-blackfriday--url-sanitize
@@ -2073,9 +2077,16 @@ and rewrite link paths to make blogging more seamless."
                          (if (string= ".org" (downcase (file-name-extension destination ".")))
                              (concat (file-name-sans-extension destination) ".md")
                            destination))))
-             (if desc
-                 (format "[%s](%s)" desc path)
-               (format "<%s>" path))))
+             ;; (message "[org-hugo-link DBG] markdown path: %s" (concat (org-hugo--get-pub-dir info) path))
+             ;; Treat links as a normal post if the markdown file exists in hugo publish directory
+             (if (org-id-find-id-file raw-path)
+                 (let ((anchor (org-hugo-link--headline-anchor-maybe link destination)))
+                   (if desc
+                       (format "[%s]({{<relref \"%s#%s\" >}})" desc path anchor)
+                     (format "[%s]({{<relref \"%s#%s\">}})" path path anchor)))
+               (if desc
+                   (format "[%s](%s)" desc path)
+                 (format "<%s>" path)))))
           (`headline                 ;Links of type [[* Some heading]]
            (let ((title (org-export-data (org-element-property :title destination) info)))
              (format
@@ -2353,6 +2364,17 @@ and rewrite link paths to make blogging more seamless."
           (if (string-prefix-p "{{< relref " path)
               (format "[%s](%s)" path path)
             (format "<%s>" path)))))))))
+
+
+(defun org-hugo-link--headline-anchor-maybe (link path)
+  "Return headline of LINK in PATH if it point to."
+  (with-temp-buffer
+    (org-id-goto (org-element-property :path link))
+    (let ((headline (org-find-top-headline)))
+      (kill-buffer (current-buffer))
+      (if headline
+          (org-hugo-slug headline)
+        ""))))
 
 ;;;;; Helpers
 (defun org-hugo--maybe-copy-resources (info)
@@ -4032,9 +4054,15 @@ links."
             (let ((type (org-element-property :type link)))
               (when (member type '("custom-id" "id" "fuzzy"))
                 (let* ((raw-link (org-element-property :raw-link link))
+
                        (destination (if (string= type "fuzzy")
                                         (org-export-resolve-fuzzy-link link info)
-                                      (org-export-resolve-id-link link info)))
+                                      (progn
+                                        ;; update `org-id-locations' if it's nil or empty hash table
+                                        ;; to avoid broken link
+                                        (if (or (eq org-id-locations nil) (zerop (hash-table-count org-id-locations)))
+                                            (org-id-update-id-locations (directory-files "." t "\.org\$" t)))
+                                        (org-export-resolve-id-link link (org-export--collect-tree-properties ast info)))))
                        (source-path (org-hugo--get-element-path link info))
                        (destination-path (org-hugo--get-element-path destination info))
                        (destination-type (org-element-type destination)))

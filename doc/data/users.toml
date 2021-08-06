@@ -342,12 +342,6 @@
   source = "https://github.com/cdodev/commandodev.com"
   site = "https://commandodev.com/"
 
-[lowkey2046]
-  author = "lowkey2046"
-  source = "https://github.com/lowkey2046/notfound.cn"
-  site = "https://notfound.cn/"
-  org_dir = "content-org"
-
 [ctanas]
   author = "Claudiu Tănăselia"
   source = "https://github.com/ctanas/parsec.ro"
@@ -423,7 +417,7 @@
   source = "https://github.com/mlatcl/mlaccelerate"
   site = "https://mlatcl.github.io/mlaccelerate/"
   branch = "master"
-  
+
 [arnes-notes]
   author = "Arne Bahlo"
   source = "https://github.com/bahlo/arnes-notes"

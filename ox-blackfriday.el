@@ -280,12 +280,13 @@ same column as TABLE-CELL.  If no such cookie is found, return
 (defun org-blackfriday-escape-chars-in-equation (str)
   "Escape few characters in STR so that Blackfriday doesn't parse them.
 
-Do not interpret underscores and asterisks in equations as
+Do not interpret underscores, asterisks and backquotes in equations as
 Markdown formatting
 characters (https://gohugo.io/content-management/formats#solution):
 
   \"_\" -> \"\\=\\_\"
   \"*\" -> \"\\=\\*\"
+  \"`\" -> \"\\=\\`\"
 
 https://github.com/kaushalmodi/ox-hugo/issues/104
 
@@ -304,8 +305,11 @@ doesn't matter in equations.
 https://gohugo.io/content-management/formats#solution
 https://github.com/kaushalmodi/ox-hugo/issues/138
 
-Need to escape the backslash in \"\\(\", \"\\)\", .. to make
-Blackfriday happy.  So:
+Need to escape the backslash before any ASCII punctuation character:
+
+  !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~
+
+For example:
 
   \"\\(\" -> \"\\\\(\"
   \"\\)\" -> \"\\\\)\"
@@ -317,21 +321,20 @@ Blackfriday happy.  So:
 
   \"](\" -> \"\\]\\(\"
 
-and finally:
-
-  \"\\\\\" -> \"\\\\\\\\\\\\\"."
-  (let* (;; _ -> \_, * -> \*
-         (escaped-str (replace-regexp-in-string "[_*]" "\\\\\\&" str))
+Also escape the backslash at the end of the line, otherwise
+it will be interpreted as a hard line break."
+  (let* (
+         ;; Escape the backslash before punctuation characters, e.g.,
+         ;; \( -> \\(, \) -> \\), \[ -> \\[, \] -> \\], \{ -> \\{, \} -> \\}, \| -> \\|
+         (escaped-str (replace-regexp-in-string "\\(\\\\[][(){}!\"#$%&'*+,./:;<=>?@\\^_`|~-]\\)" "\\\\\\1" str))
+         ;; _ -> \_, * -> \*, ` -> \`
+         (escaped-str (replace-regexp-in-string "[_*`]" "\\\\\\&" escaped-str))
          ;; (c) -> ( c), (r) -> ( r), (tm) -> ( tm)
          (escaped-str (replace-regexp-in-string "(\\(c\\|r\\|tm\\))" "( \\1)" escaped-str))
-         ;; \( -> \\(, \) -> \\), \[ -> \\[, \] -> \\], \{ -> \\{, \} -> \\}, \| -> \\|
-         (escaped-str (replace-regexp-in-string "\\(\\\\[](){}[|]\\)" "\\\\\\1" escaped-str))
          ;; ]( -> \]\(
          (escaped-str (replace-regexp-in-string "](" "\\\\]\\\\(" escaped-str))
-         (escaped-str (replace-regexp-in-string
-                       "\\([^\\]\\)\\\\\\{2\\}[[:blank:]]*$" ;Replace "\\" at EOL with:
-                       "\\1\\\\\\\\\\\\\\\\\\\\\\\\"             ;"\\\\\\"
-                       escaped-str)))
+         ;; Replace "\" at EOL with "\\"
+         (escaped-str (replace-regexp-in-string "\\\\[[:blank:]]*$" "\\\\\\\\" escaped-str)))
     escaped-str))
 
 ;;;; Reset org-blackfriday--code-block-num-backticks

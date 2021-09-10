@@ -268,12 +268,6 @@
   site = "https://emacscast.org/"
   org_dir = "content-org"
 
-[rakhim]
-  author = "Rakhim Davletkaliyev"
-  source = "https://github.com/freetonik/rakhim.org"
-  site = "https://rakhim.org/"
-  org_dir = "content-org"
-
 [elbaulp]
   author = "Alejandro Alcalde"
   source = "https://github.com/elbaulp/algui91-hugo/"
@@ -424,7 +418,7 @@
   site = "https://notes.arne.me"
   branch = "main"
   org_dir = "org"
-  
+
 [jhilker]
    author = "Jacob Hilker"
    source = "https://gitlab.com/jhilker/jhilker.gitlab.io/"

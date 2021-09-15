@@ -3357,7 +3357,7 @@ Test to check that the backslashes are correctly escaped.
 $$
 C(w,b) = \frac{1}{2n} \sum_x{{\|y(x)-a\|}^2}
 $$
-*** =\\= at EOL → =\\\\\\=
+*** =\\= at EOL → =\\\\=
 \begin{align}
 a^1  &= x \\
 a^2  &=  σ(W^2a^1 + b^2) \\
@@ -3401,6 +3401,23 @@ link!
 \begin{equation}
 \mathcal{L}\left[ e^{at} \right](z) = \frac{1}{z-a}
 \end{equation}
+
+*** Backslashes within a LaTeX equation
+{{{oxhugoissue(458)}}}
+
+Double backslashes (~\\~) should be escaped:
+\[\sum_{\substack{0<i<m\\0<j<n}}\]
+
+A backslash before any ASCII punctuation character should be escaped,
+for example, ~\,~, ~\;~, ~\:~, ~\!~ are used to control the width of
+spacing:
+  \[ab\]
+  \[a\ b\]
+  \[a\,b\]
+  \[a\;b\]
+  \[a\:b\]
+  \[a\!b\]
+
 * Lists                                                               :lists:
 ** List following a list
 :PROPERTIES:

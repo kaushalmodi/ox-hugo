@@ -44,9 +44,9 @@ Disclaimer
 a
 = \sigma(
     \left[ \begin{matrix}
-        w\_{1} & ⋯  & w\_{n} \\\\\\
+        w\_{1} & ⋯  & w\_{n} \\\\
     \end{matrix}\right]  ·
-    \left[ \begin{array}{x} x\_1 \\ ⋮ \\ ⋮ \\ x\_n \end{array}\right] +
+    \left[ \begin{array}{x} x\_1 \\\ ⋮ \\\ ⋮ \\\ x\_n \end{array}\right] +
     b
 )
 \\]
@@ -83,15 +83,15 @@ a
 ##### 激活函数向量表达式 {#激活函数向量表达式}
 
 \\[
-\left[ \begin{array}{a} a\_1 \\ ⋮ \\ a\_s \end{array}\right]
+\left[ \begin{array}{a} a\_1 \\\ ⋮ \\\ a\_s \end{array}\right]
 = \sigma(
     \left[ \begin{matrix}
-        w\_{1,1} & ⋯  & w\_{1,n} \\\\\\
-        ⋮ & ⋱  & ⋮  \\\\\\
-        w\_{s,1} & ⋯  & w\_{s,n} \\\\\\
+        w\_{1,1} & ⋯  & w\_{1,n} \\\\
+        ⋮ & ⋱  & ⋮  \\\\
+        w\_{s,1} & ⋯  & w\_{s,n} \\\\
     \end{matrix}\right]  ·
-    \left[ \begin{array}{x} x\_1 \\ ⋮ \\ ⋮ \\ x\_n \end{array}\right] +
-    \left[ \begin{array}{b} b\_1 \\ ⋮ \\ b\_s \end{array}\right]
+    \left[ \begin{array}{x} x\_1 \\\ ⋮ \\\ ⋮ \\\ x\_n \end{array}\right] +
+    \left[ \begin{array}{b} b\_1 \\\ ⋮ \\\ b\_s \end{array}\right]
 )
 \\]
 
@@ -121,15 +121,15 @@ a
 ##### 激活函数矩阵表达式 {#激活函数矩阵表达式}
 
 \\[
-\left[ \begin{array}{a} a^l\_1 \\ ⋮ \\ a^l\_{d\_l} \end{array}\right]
+\left[ \begin{array}{a} a^l\_1 \\\ ⋮ \\\ a^l\_{d\_l} \end{array}\right]
 = \sigma(
     \left[ \begin{matrix}
-        w^l\_{1,1} & ⋯  & w^l\_{1,d\_{l-1}} \\\\\\
-        ⋮ & ⋱  & ⋮  \\\\\\
-        w^l\_{d\_l,1} & ⋯  & w^l\_{d\_l,d\_{l-1}} \\\\\\
+        w^l\_{1,1} & ⋯  & w^l\_{1,d\_{l-1}} \\\\
+        ⋮ & ⋱  & ⋮  \\\\
+        w^l\_{d\_l,1} & ⋯  & w^l\_{d\_l,d\_{l-1}} \\\\
     \end{matrix}\right]  ·
-    \left[ \begin{array}{x} a^{l-1}\_1 \\ ⋮ \\ ⋮ \\ a^{l-1}\_{d\_{l-1}} \end{array}\right] +
-    \left[ \begin{array}{b} b^l\_1 \\ ⋮ \\ b^l\_{d\_l} \end{array}\right])
+    \left[ \begin{array}{x} a^{l-1}\_1 \\\ ⋮ \\\ ⋮ \\\ a^{l-1}\_{d\_{l-1}} \end{array}\right] +
+    \left[ \begin{array}{b} b^l\_1 \\\ ⋮ \\\ b^l\_{d\_l} \end{array}\right])
 \\]
 
 
@@ -159,12 +159,12 @@ a
 计算过程如下：
 
 \begin{align}
-a^1  &= x \\\\\\
-a^2  &=  σ(W^2a^1 + b^2) \\\\\\
-a^3  &=  σ(W^3a^2 + b^3) \\\\\\
-⋯ \\\\\\
-a^L  &= σ(W^La^{L-1} + b^L) \\\\\\
-y  &= a^L \\\\\\
+a^1  &= x \\\\
+a^2  &=  σ(W^2a^1 + b^2) \\\\
+a^3  &=  σ(W^3a^2 + b^3) \\\\
+⋯ \\\\
+a^L  &= σ(W^La^{L-1} + b^L) \\\\
+y  &= a^L \\\\
 \end{align}
 
 推断实际上就是一系列矩阵乘法与向量运算，一个训练好的神经网络可以高效地使用各种语言实现。神经网络的功能是通过推断而体现的。推断实现起来很简单，但如何 **训练神经网络** 才是真正的难点。
@@ -228,9 +228,9 @@ MSE，而不是诸如"正确分类图像个数"的指标，是因为只有一个
 ΔC ≈ \frac{∂C}{∂v\_1} Δv\_1 + \frac{∂C}{∂v\_2} Δv\_2
 \\]
 
-这里 \\(Δv\\) 是向量： \\(Δv = \left[ \begin{array}{v} Δv\_1 \\ Δv\_2
+这里 \\(Δv\\) 是向量： \\(Δv = \left[ \begin{array}{v} Δv\_1 \\\ Δv\_2
 \end{array}\right]\\) ， \\(∇C\\)  是梯度向量 \\(\left[ \begin{array}{C}
-\frac{∂C}{∂v\_1} \\ \frac{∂C}{∂v\_2} \end{array} \right]\\) ，于是上式可重写为
+\frac{∂C}{∂v\_1} \\\ \frac{∂C}{∂v\_2} \end{array} \right]\\) ，于是上式可重写为
 
 \\[
 ΔC ≈ ∇C·Δv
@@ -246,7 +246,7 @@ MSE，而不是诸如"正确分类图像个数"的指标，是因为只有一个
  \\(w,b\\) 数目非常巨大
 
 \\[
-w →w' = w-η\frac{∂C}{∂w} \\\\\\
+w →w' = w-η\frac{∂C}{∂w} \\\\
 b → b' = b-η\frac{∂C}{∂b}
 \\]
 
@@ -373,10 +373,10 @@ z^{l+1}\_k = W^{l+1}\_{k,\*} ·a^l + b^{l+1}\_{k}  =   W^{l+1}\_{k,\*} · σ(z^{
 回代则有：
 
 \begin{align}
-δ^l\_j & = \sum\_{k=1}^{d\_{l+1}}  (δ^{l+1}\_k  \frac{∂z^{l+1}\_k}{∂z^{l}\_j})  \\\\\\
-& = σ'(z^l)   \sum\_{k=1}^{d\_{l+1}}     (δ^{l+1}\_k  w^{l+1}\_{kj}) \\\\\\
-& = σ'(z^l) ⊙  [(δ^{l+1}) · W^{l+1}\_{\*.j}] \\\\\\
-& = σ'(z^l) ⊙ [(W^{l+1})^T\_{j,\*} ·  (δ^{l+1}) ]\\\\\\
+δ^l\_j & = \sum\_{k=1}^{d\_{l+1}}  (δ^{l+1}\_k  \frac{∂z^{l+1}\_k}{∂z^{l}\_j})  \\\\
+& = σ'(z^l)   \sum\_{k=1}^{d\_{l+1}}     (δ^{l+1}\_k  w^{l+1}\_{kj}) \\\\
+& = σ'(z^l) ⊙  [(δ^{l+1}) · W^{l+1}\_{\*.j}] \\\\
+& = σ'(z^l) ⊙ [(W^{l+1})^T\_{j,\*} ·  (δ^{l+1}) ]\\\\
 \end{align}
 
 这里，对后一层所有神经元的误差权值之积求和，可以改写为两个向量的点积：

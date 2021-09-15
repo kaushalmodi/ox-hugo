@@ -16,14 +16,14 @@ C(w,b) = \frac{1}{2n} \sum\_x{{\\|y(x)-a\\|}^2}
 \\]
 
 
-## `\\` at EOL → `\\\\\\` {#at-eol}
+## `\\` at EOL → `\\\\` {#at-eol}
 
 \begin{align}
-a^1  &= x \\\\\\
-a^2  &=  σ(W^2a^1 + b^2) \\\\\\
-a^3  &=  σ(W^3a^2 + b^3) \\\\\\
-⋯ \\\\\\
-a^L  &= σ(W^La^{L-1} + b^L) \\\\\\
+a^1  &= x \\\\
+a^2  &=  σ(W^2a^1 + b^2) \\\\
+a^3  &=  σ(W^3a^2 + b^3) \\\\
+⋯ \\\\
+a^L  &= σ(W^La^{L-1} + b^L) \\\\
 y  &= a^L
 \end{align}
 
@@ -31,11 +31,11 @@ y  &= a^L
 ### Same as above, but without space before the `\\` at EOL {#same-as-above-but-without-space-before-the-at-eol}
 
 \begin{align}
-a^1  &= x\\\\\\
-a^2  &=  σ(W^2a^1 + b^2)\\\\\\
-a^3  &=  σ(W^3a^2 + b^3)\\\\\\
-⋯\\\\\\
-a^L  &= σ(W^La^{L-1} + b^L)\\\\\\
+a^1  &= x\\\\
+a^2  &=  σ(W^2a^1 + b^2)\\\\
+a^3  &=  σ(W^3a^2 + b^3)\\\\
+⋯\\\\
+a^L  &= σ(W^La^{L-1} + b^L)\\\\
 y  &= a^L
 \end{align}
 
@@ -55,8 +55,8 @@ y  &= a^L
 
 \begin{equation}
 \begin{cases}
-u\_t = ku\_{xx} \\\\\\
-u(x,0) = T\_1 , & x <0 \\\\\\
+u\_t = ku\_{xx} \\\\
+u(x,0) = T\_1 , & x <0 \\\\
 u(x,0) = T\_2 , & x > 0
 \end{cases}
 \end{equation}
@@ -73,3 +73,21 @@ link!
 \begin{equation}
 \mathcal{L}\left[ e^{at} \right\]\(z) = \frac{1}{z-a}
 \end{equation}
+
+
+## Backslashes within a LaTeX equation {#backslashes-within-a-latex-equation}
+
+`ox-hugo` Issue #[458](https://github.com/kaushalmodi/ox-hugo/issues/458)
+
+Double backslashes (`\\`) should be escaped:
+\\[\sum\_{\substack{0<i<m\\\0<j<n}}\\]
+
+A backslash before any ASCII punctuation character should be escaped,
+for example, `\,`, `\;`, `\:`, `\!` are used to control the width of
+spacing:
+  \\[ab\\]
+  \\[a\ b\\]
+  \\[a\\,b\\]
+  \\[a\\;b\\]
+  \\[a\\:b\\]
+  \\[a\\!b\\]

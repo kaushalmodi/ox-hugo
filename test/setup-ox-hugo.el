@@ -160,6 +160,9 @@ Emacs installation.  If Emacs is installed using
         (add-to-list 'package-archives (cons "melpa" melpa-url) :append) ;For `toc-org'
         )
 
+      ;; Delete element with "nongnu" car from `package-archives'.
+      (setq package-archives (delq (assoc "nongnu" package-archives) package-archives))
+
       ;; Generate/update and load the autoloads for ox-hugo.el and co.
       (let ((generated-autoload-file ox-hugo-autoloads-file))
         (update-directory-autoloads ox-hugo-site-git-root)

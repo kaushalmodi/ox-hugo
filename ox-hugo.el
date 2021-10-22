@@ -2080,7 +2080,7 @@ and rewrite link paths to make blogging more seamless."
              ;; (message "[org-hugo-link DBG] markdown path: %s" (concat (org-hugo--get-pub-dir info) path))
              ;; Treat links as a normal post if the markdown file exists in hugo publish directory
              (if (org-id-find-id-file raw-path)
-                 (let ((anchor (org-hugo-link--headline-anchor-maybe link destination)))
+                 (let ((anchor (org-hugo-link--headline-anchor-maybe link)))
                    (if desc
                        (format "[%s]({{<relref \"%s#%s\" >}})" desc path anchor)
                      (format "[%s]({{<relref \"%s#%s\">}})" path path anchor)))
@@ -2366,10 +2366,16 @@ and rewrite link paths to make blogging more seamless."
             (format "<%s>" path)))))))))
 
 
-(defun org-hugo-link--headline-anchor-maybe (link path)
-  "Return headline of LINK in PATH if it point to."
+(defun org-hugo-link--headline-anchor-maybe (link)
+  "Return headline pointed to by LINK."
   (with-temp-buffer
     (org-id-goto (org-element-property :path link))
+    ;; Thu Oct 21 21:29:17 EDT 2021 - kmodi
+    ;; It was necessary to set the major mode to `org-mode' after the
+    ;; `org-id-goto' jump. Otherwise, the temp buffer would remain
+    ;; in fundamental mode, and so the `org-find-top-headline'
+    ;; always returned nil.
+    (org-mode)
     (let ((headline (org-find-top-headline)))
       (kill-buffer (current-buffer))
       (if headline

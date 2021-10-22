@@ -148,4 +148,4 @@ Disclaimer
 
 1.  Kellner JR, Asner GP (2009) Convergent structural responses of
     tropical forests to diverse disturbance regimes. Ecology Letters 12:
-    887--897. <10.1111/j.1461-0248.2009.01345.x>.
+    887--897. https://doi.org/10.1111/j.1461-0248.2009.01345.x.

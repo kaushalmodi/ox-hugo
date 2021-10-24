@@ -519,6 +519,24 @@ Else return an empty string."
           (org-html--translate str info)
         ""))))
 
+;;;; Convert Org string to HTML
+(defun org-blackfriday--org-string-to-html (string)
+  "Convert Org string STRING to an HTMLized string.
+Credit: https://emacs.stackexchange.com/a/53433/115."
+  (let ((ret-val ""))
+    (when (org-string-nw-p string)
+      (org-export-with-buffer-copy
+       (let ((start (goto-char (point-max))))
+         (insert string)
+         (narrow-to-region start (point-max))
+         (with-current-buffer
+             (org-html-export-as-html nil nil :visible-only :body-only)
+           ;; Return the string without the initial "<p>\n" and trailing
+           ;; "</p>".
+           (setq ret-val (substring (buffer-string) 4 -5)))
+         (kill-buffer "*Org HTML Export*"))))
+    ret-val))
+
 
 
 ;;; Transcode Functions
@@ -859,23 +877,32 @@ This function is adapted from `org-html-special-block'."
             (when (string-match "\\(?1:open\\(?2:=\"\\(?3:t\\)\"\\)\\)" attr-str)
               (if (match-string 3 attr-str) ;if attr-str contains `open="t"'
                   (setq attr-str (replace-match "" nil nil attr-str 2))
-                (setq attr-str (replace-match "" nil nil attr-str 1)))))))
-        ;; Insert a newline before and after the `contents' to handle
-        ;; the cases where that could begin or end with a Markdown
-        ;; blocks like:
-        ;;   ```emacs-lisp
-        ;;   (message "foo")
-        ;;   ```
-        ;; An example scenario would be where such content could be
-        ;; present in the "inline" <details> or <summary> Special
-        ;; Blocks.
-        ;; Without those newlines, the Markdown converted content will
-        ;; look like below, and Blackfriday won't parse it correctly.
-        ;;   <details>```emacs-lisp
-        ;;   (message "foo")
-        ;;   ```</details>
-        (format "<%s%s>\n%s\n</%s>"
-                block-type attr-str contents block-type))
+                (setq attr-str (replace-match "" nil nil attr-str 1)))))
+          ;; Insert a newline before and after the `contents' to handle
+          ;; the cases where that could begin or end with a Markdown
+          ;; blocks like:
+          ;;   ```emacs-lisp
+          ;;   (message "foo")
+          ;;   ```
+          ;; An example scenario would be where such content could be
+          ;; present in the "inline" <details> or <summary> Special
+          ;; Blocks.
+          ;; Without those newlines, the Markdown converted content will
+          ;; look like below, and Blackfriday won't parse it correctly.
+          ;;   <details>```emacs-lisp
+          ;;   (message "foo")
+          ;;   ```</details>
+          (format "<%s%s>\n%s\n</%s>"
+                  block-type attr-str contents block-type))
+         ((string= block-type "summary")
+          (format "<%s%s>\n%s\n</%s>"
+                  block-type attr-str contents block-type))
+         (t
+          ;; Correctly render Org markup in inline HTML tags like
+          ;; `mark' by simply exporting those contents as HTML.
+          (setq contents (org-blackfriday--org-string-to-html contents))
+          (format "<%s%s>%s</%s>"
+                  block-type attr-str contents block-type))))
        (html5-block-fancy
         (format "<%s%s>\n  <%s></%s>\n\n%s\n\n</%s>" ;See footnote 1
                 block-type attr-str block-type block-type contents block-type))

@@ -49,9 +49,7 @@ _Some_ **text** --- 2
 
 Unmarked.
 
-<mark>
-_Some_ **marked** text --- 2.5.
-</mark>
+<mark><span class="underline">Some</span> <b><b>marked</b></b> text &#x2014; 2.5.</mark>
 
 Unmarked again.
 

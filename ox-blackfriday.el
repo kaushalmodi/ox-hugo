@@ -848,10 +848,10 @@ This function is adapted from `org-html-special-block'."
                    ;; portion using "details .details".
                    (if (string-match "\\(?1:<summary>\\(?:.\\|\n\\)*</summary>\\)" contents) ;If summary exists
                        (replace-match (format "\\1\n%s" p-open) nil nil contents 1)
-                     (concat p-open contents))
-                   ;; A newline is inserted before the closing </p>
-                   ;; tag for the reason explained below using the
-                   ;; emacs-lisp Markdown code block.
+                     (concat p-open "\n\n" contents))
+                   ;; Newlines are inserted after `p-open' and before
+                   ;; the closing </p> tag for the reason explained
+                   ;; below using the emacs-lisp Markdown code block.
                    "\n</p>")))
           ;; Insert the "open" attribute only if user has ":open t" in
           ;; "#+attr_html".

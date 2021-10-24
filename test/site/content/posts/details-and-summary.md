@@ -55,7 +55,9 @@ hasn't provided a summary, the browser will use a default summary
 string (usually "Details").
 
 <details>
-<p class="details">Here are some _details_.
+<p class="details">
+
+Here are some _details_.
 
 -   list element 1
 -   list element 2
@@ -168,7 +170,9 @@ And another paragraph.
 ### No summary, only details (Open) {#no-summary-only-details--open}
 
 <details open>
-<p class="details">Here are some _details_.
+<p class="details">
+
+Here are some _details_.
 
 -   list element 1
 -   list element 2

@@ -5,6 +5,10 @@ tags = ["special-block", "details", "summary", "disclosure"]
 draft = false
 +++
 
+<style>details summary { color: green; }</style>
+
+<style>details .details { color: blue; }</style>
+
 These can be conveniently created using the Org Special Block
 `#+begin_details` .. `#+end_details`.
 
@@ -19,18 +23,13 @@ in a "summary" Org Special block `#+begin_summary` .. `#+end_summary`.
 
 <details>
 <summary>
-Here is the **summary**.
+Here is the summary.
 
-While normally summaries wouldn't be across multiple paragraphs, we
-are testing it that way as HTML supports that.
-
-```emacs-lisp
-(message
- (concat "This is part of the summary too.. "
-         "just click anywhere in the summary to expand it."))
-```
+_Due to the limitations of how interleaved HTML and Markdown get
+parsed by Hugo+Goldmark, the first line of the summary **cannot**
+contain any markup (like bold, italics, links, etc.)._
 </summary>
-<p class="details">
+<div class="details">
 
 Here are some _details_.
 
@@ -44,7 +43,7 @@ And another paragraph.
 ```emacs-lisp
 (message "a code block")
 ```
-</p>
+</div>
 </details>
 
 
@@ -55,7 +54,7 @@ hasn't provided a summary, the browser will use a default summary
 string (usually "Details").
 
 <details>
-<p class="details">
+<div class="details">
 
 Here are some _details_.
 
@@ -69,7 +68,7 @@ And another paragraph.
 ```emacs-lisp
 (message "a code block")
 ```
-</p>
+</div>
 </details>
 
 
@@ -81,19 +80,14 @@ uncollapse it.. _as there are no details_.
 
 <details>
 <summary>
-Here is the **summary**.
+Here is the summary.
 
-While normally summaries wouldn't be across multiple paragraphs, we
-are testing it that way as HTML supports that.
-
-```emacs-lisp
-(message
- (concat "This is part of the summary too.. "
-         "just click anywhere in the summary to expand it."))
-```
+_Due to the limitations of how interleaved HTML and Markdown get
+parsed by Hugo+Goldmark, the first line of the summary **cannot**
+contain any markup (like bold, italics, links, etc.)._
 </summary>
-<p class="details">
-</p>
+<div class="details">
+</div>
 </details>
 
 
@@ -101,29 +95,14 @@ are testing it that way as HTML supports that.
 
 <details>
 <summary>
-This is **Summary**.
+This is Summary.
 </summary>
-<p class="details">
+<div class="details">
 
 ```emacs-lisp
 (message "This is in details")
 ```
-</p>
-</details>
-
-
-### Summary containing only code block {#summary-containing-only-code-block}
-
-<details>
-<summary>
-```emacs-lisp
-(message "This is in summary")
-```
-</summary>
-<p class="details">
-
-Here are the _details_. This is obviously a pathological test case.
-</p>
+</div>
 </details>
 
 
@@ -138,18 +117,13 @@ by default.
 
 <details open>
 <summary>
-Here is the **summary**.
+Here is the summary.
 
-While normally summaries wouldn't be across multiple paragraphs, we
-are testing it that way as HTML supports that.
-
-```emacs-lisp
-(message
- (concat "This is part of the summary too.. "
-         "just click anywhere in the summary to expand it."))
-```
+_Due to the limitations of how interleaved HTML and Markdown get
+parsed by Hugo+Goldmark, the first line of the summary **cannot**
+contain any markup (like bold, italics, links, etc.)._
 </summary>
-<p class="details">
+<div class="details">
 
 Here are some _details_.
 
@@ -163,14 +137,14 @@ And another paragraph.
 ```emacs-lisp
 (message "a code block")
 ```
-</p>
+</div>
 </details>
 
 
 ### No summary, only details (Open) {#no-summary-only-details--open}
 
 <details open>
-<p class="details">
+<div class="details">
 
 Here are some _details_.
 
@@ -184,7 +158,7 @@ And another paragraph.
 ```emacs-lisp
 (message "a code block")
 ```
-</p>
+</div>
 </details>
 
 
@@ -192,19 +166,14 @@ And another paragraph.
 
 <details open>
 <summary>
-Here is the **summary**.
+Here is the summary.
 
-While normally summaries wouldn't be across multiple paragraphs, we
-are testing it that way as HTML supports that.
-
-```emacs-lisp
-(message
- (concat "This is part of the summary too.. "
-         "just click anywhere in the summary to expand it."))
-```
+_Due to the limitations of how interleaved HTML and Markdown get
+parsed by Hugo+Goldmark, the first line of the summary **cannot**
+contain any markup (like bold, italics, links, etc.)._
 </summary>
-<p class="details">
-</p>
+<div class="details">
+</div>
 </details>
 
 
@@ -214,12 +183,12 @@ Test that other attributes, if present along with `:open t`, are also retained.
 
 <details open class="foo">
 <summary>
-This is **summary**.
+This is Summary.
 </summary>
-<p class="details">
+<div class="details">
 
 Here are the _details_.
-</p>
+</div>
 </details>
 
 
@@ -230,10 +199,10 @@ be inserted in the `details` element.
 
 <details class="foo">
 <summary>
-This is **summary**.
+This is Summary.
 </summary>
-<p class="details">
+<div class="details">
 
 Here are the _details_.
-</p>
+</div>
 </details>

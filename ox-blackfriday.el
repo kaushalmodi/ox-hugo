@@ -857,20 +857,20 @@ This function is adapted from `org-html-special-block'."
           ;;   #+end_summary
           ;;   Here are the details.
           ;;   #+end_details
-          (let ((p-open "<p class=\"details\">"))
+          (let ((div-open "<div class=\"details\">"))
             (setq contents
                   (concat
                    ;; Wrap the "details" portion in the <details> tag
-                   ;; with '<p class="details"> .. </p>'.  With that,
-                   ;; CSS rules can be set specific to that details
-                   ;; portion using "details .details".
+                   ;; with '<div class="details"> .. </div>'.  With
+                   ;; that, CSS rules can be set specific to that
+                   ;; details portion using "details .details".
                    (if (string-match "\\(?1:<summary>\\(?:.\\|\n\\)*</summary>\\)" contents) ;If summary exists
-                       (replace-match (format "\\1\n%s" p-open) nil nil contents 1)
-                     (concat p-open "\n\n" contents))
-                   ;; Newlines are inserted after `p-open' and before
-                   ;; the closing </p> tag for the reason explained
-                   ;; below using the emacs-lisp Markdown code block.
-                   "\n</p>")))
+                       (replace-match (format "\\1\n%s" div-open) nil nil contents 1)
+                     (concat div-open "\n\n" contents))
+                   ;; Newline is inserted before the closing </div>
+                   ;; tag for the reason explained below using the
+                   ;; emacs-lisp Markdown code block.
+                   "\n</div>")))
           ;; Insert the "open" attribute only if user has ":open t" in
           ;; "#+attr_html".
           (when (org-string-nw-p attr-str)

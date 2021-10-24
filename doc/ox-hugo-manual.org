@@ -1741,11 +1741,19 @@ and ~<summary>~.
 The summaries nested in these "details" Org Special blocks are created
 using the "summary" Org Special block ~#+begin_summary~
 .. ~#+end_summary~.
+
+#+begin_note
+Due to the limitations of how interleaved HTML and Markdown get parsed
+by Hugo + Goldmark, the first line of the summary cannot contain any
+markup (like bold, italics, links, etc.). See [[https://github.com/kaushalmodi/ox-hugo/issues/464#issuecomment-950241055][this issue]] for
+reference.
+#+end_note
+
 **** Regular details disclosure
 #+begin_src org
 #+begin_details
 #+begin_summary
-Why is this in *green*?
+Why is this in green?
 #+end_summary
 You will learn that later below in [[#details-css][CSS]] section.
 #+end_details
@@ -1753,7 +1761,7 @@ You will learn that later below in [[#details-css][CSS]] section.
 will render like below:
 #+begin_details
 #+begin_summary
-Why is this in *green*?
+Why is this in green?
 #+end_summary
 You will learn that later below in [[#details-css][CSS]] section.
 #+end_details
@@ -1778,14 +1786,14 @@ You will learn that later below in [[#details-css][CSS]] section.
   #+begin_src org
   #+begin_details
   #+begin_summary
-  Some *Summary*
+  Some Summary
   #+end_summary
   #+end_details
   #+end_src
   will render like below:
   #+begin_details
   #+begin_summary
-  Some *Summary*
+  Some Summary
   #+end_summary
   #+end_details
   #+begin_note
@@ -1793,7 +1801,7 @@ You will learn that later below in [[#details-css][CSS]] section.
   still be rendered. But nothing will show up when that triangle is
   uncollapsed.. /as the details portion is not there/.
   #+end_note
-**** Open by default disclosure widget
+**** Disclosure widget open by default
 The ~<details>~ disclosure widget is initially closed by default. But
 it can be made to show up opened by default by adding the ~:open t~
 attribute like this:
@@ -1801,7 +1809,7 @@ attribute like this:
 #+attr_html: :open t
 #+begin_details
 #+begin_summary
-Some *Summary*
+Some Summary
 #+end_summary
 Here are the /details/.
 #+end_details
@@ -1810,7 +1818,7 @@ will render like below:
 #+attr_html: :open t
 #+begin_details
 #+begin_summary
-Some *Summary*
+Some Summary
 #+end_summary
 Here are the /details/.
 #+end_details

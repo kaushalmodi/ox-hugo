@@ -4070,6 +4070,9 @@ line).
 Details disclosure elements [[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details][~<details>~]] and ~<summary>~.
 #+end_description
 
+#+html: <style>details summary { color: green; }</style>
+#+html: <style>details .details { color: blue; }</style>
+
 These can be conveniently created using the Org Special Block
 ~#+begin_details~ .. ~#+end_details~.
 
@@ -4102,20 +4105,11 @@ uncollapse it.. /as there are no details/.
 **** Details containing only code block
 #+begin_details
 #+begin_summary
-This is *Summary*.
+This is Summary.
 #+end_summary
 #+begin_src emacs-lisp
 (message "This is in details")
 #+end_src
-#+end_details
-**** Summary containing only code block
-#+begin_details
-#+begin_summary
-#+begin_src emacs-lisp
-(message "This is in summary")
-#+end_src
-#+end_summary
-Here are the /details/. This is obviously a pathological test case.
 #+end_details
 *** Open by default disclosure widget
 The details disclosures are closed by default, add ~#+attr_html: :open
@@ -4146,7 +4140,7 @@ Test that other attributes, if present along with ~:open t~, are also retained.
 #+attr_html: :open t :class foo
 #+begin_details
 #+begin_summary
-This is *summary*.
+This is Summary.
 #+end_summary
 Here are the /details/.
 #+end_details
@@ -4156,7 +4150,7 @@ be inserted in the ~details~ element.
 #+attr_html: :open nil :class foo
 #+begin_details
 #+begin_summary
-This is *summary*.
+This is Summary.
 #+end_summary
 Here are the /details/.
 #+end_details
@@ -7617,16 +7611,11 @@ Some quoted text.
 :PROPERTIES:
 :CUSTOM_ID: details-disclosure-summary
 :END:
-Here is the *summary*.
+Here is the summary.
 
-While normally summaries wouldn't be across multiple paragraphs, we
-are testing it that way as HTML supports that.
-
-#+begin_src emacs-lisp
-(message
- (concat "This is part of the summary too.. "
-         "just click anywhere in the summary to expand it."))
-#+end_src
+/Due to the limitations of how interleaved HTML and Markdown get
+parsed by Hugo+Goldmark, the first line of the summary *cannot*
+contain any markup (like bold, italics, links, etc.)./
 ** Details portion in <details> element
 :PROPERTIES:
 :CUSTOM_ID: details-disclosure-details

@@ -249,12 +249,6 @@
   site = "https://babbagefiles.xyz"
   org_dir = "content-org"
 
-[emacsomancer2]
-  author = "Benjamin Slade"
-  source = "https://gitlab.com/emacsomancer/academic-bslade"
-  site = "https://slade.jnanam.net/"
-  org_dir = "content-org"
-
 [flowsta]
   author = "Adolfo Antón Bravo"
   source = "https://git.fsfe.org/adolflow/infotics.es"

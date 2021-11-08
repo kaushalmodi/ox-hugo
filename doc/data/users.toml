@@ -151,12 +151,6 @@
   site = "https://cadadr.github.io/elisp/index.html"
   branch = "stable"
 
-[jackbaty]
-  author = "Jack Baty"
-  source = "https://github.com/jackbaty/baty.net-hugo"
-  site = "https://www.baty.net/"
-  org_dir = "org-content"
-
 [tsdye1]
   author = "Thomas S. Dye"
   source = "https://github.com/tsdye/online-web-sites"

@@ -18,8 +18,8 @@ With the `DOCTYPE` tag removed, the browser doesn't throw any error
 (below is the SVG from that issue.. seems like it's just blank. But
 you will be able to see when you view this page's source).
 
-<svg
-width="100%" height="100%" viewBox="0 0 1485 440" version="1.1"
+<svg width="100%"
+height="100%" viewBox="0 0 1485 440" version="1.1"
 xmlns="http://www.w3.org/2000/svg"
 xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"
 xmlns:serif="http://www.serif.com/"

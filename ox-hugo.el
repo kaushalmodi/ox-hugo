@@ -2190,7 +2190,10 @@ and rewrite link paths to make blogging more seamless."
                                              ;; Remove the xml document tag as that cannot be inlined in-between
                                              ;; a Markdown (or even an HTML) file.
                                              "<\\?xml version=\"1\\.0\" encoding=\"UTF-8\" standalone=\"no\"\\?>" ""
-                                             svg-contents)))
+                                             ;; Remove !DOCTYPE tag from the inlined SVG.
+                                             (replace-regexp-in-string
+                                              "<!DOCTYPE svg[^>]+>" ""
+                                              svg-contents))))
                    (caption-html (if (not caption)
                                      ""
                                    (format (concat "\n\n<div class=\"figure-caption\">\n"

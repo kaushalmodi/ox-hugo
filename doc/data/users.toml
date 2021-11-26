@@ -413,7 +413,11 @@
    site = "https://jhilker.com"
    org_dir = "content-org"
    branch = "main"
-
+[spcbfr]
+   author = "Youssef Bouzekri"
+   source = "https://gitlab.com/spcbfr/blog/"
+   site = "https://spcbfr.vercel.app"
+   branch = "main"
 # []
 #   author = ""
 #   source = ""

@@ -6578,6 +6578,29 @@ y slug para múltiples publicaciones, pero en diferentes idiomas.
 Test the exporting of taxonomy weight parameters like ~tags_weight~.
 #+end_description
 {{{oxhugoissue(335)}}}
+** Issue 470 -- Fill region on inlined SVG files                        :svg:
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: 470
+:EXPORT_FILE_NAME: index
+:END:
+#+begin_description
+Test to check inlining + fill region of SVG from Issue 470
+#+end_description
+{{{oxhugoissue(470)}}}
+
+This test shows that it's OK to do fill-region on inlined SVG. In the
+referenced issue, the issue author was inlining an SVG file containing
+the ~DOCTYPE~ tag and that was causing the problem:
+
+[[https://github.com/kaushalmodi/ox-hugo/issues/470#issuecomment-980385275][https://user-images.githubusercontent.com/3578197/143625834-4548e998-0d45-4c9f-85bb-3d56456d3200.png]]
+
+With the ~DOCTYPE~ tag removed, the browser doesn't throw any error
+(below is the SVG from that issue.. seems like it's just blank. But
+you will be able to see when you view this page's source).
+
+#+caption: SVG from Issue 470
+#+attr_html: :inlined t
+[[file:images/svg-from-issue-470.svg]]
 * Real Examples                                               :real_examples:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: real-examples

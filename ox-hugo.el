@@ -2171,9 +2171,9 @@ and rewrite link paths to make blogging more seamless."
                                 " "     ;" </span>"
                                 ;; Escape the double-quotes, if any.
                                 (replace-regexp-in-string "\"" "\\\\\"" caption))))
-             (extension (downcase (file-name-extension raw-path)))
+             (extension (file-name-extension raw-path))
              (inlined-svg (and (stringp extension)
-                               (string= "svg" extension)
+                               (string= "svg" (downcase extension))
                                (plist-get attr :inlined))))
         ;; (message "[ox-hugo-link DBG] Inline image: %s, extension: %s" raw-path extension)
         ;; (message "[ox-hugo-link DBG] inlined svg? %S" inlined-svg)

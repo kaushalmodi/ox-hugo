@@ -1,5 +1,6 @@
 +++
 title = "Paired shortcodes using special blocks (Positional Arguments)"
+description = "Tests for paired shortcodes with positional arguments."
 tags = ["shortcode", "paired", "special-block", "positional", "arguments"]
 draft = false
 +++
@@ -79,8 +80,6 @@ The `alert` shortcode takes 1 positional argument.
 
 {{% alert note %}}
 Content **with** _emphasis_ characters is rendered.
-
-The HTML <b>markup</b> will also get rendered.
 {{% /alert %}}
 
 ---
@@ -90,8 +89,6 @@ Below is the about same as above, except that `warning` attribute
 
 {{% alert warning %}}
 Content **with** _emphasis_ characters is rendered.
-
-The HTML <b>markup</b> will also get rendered.
 {{% /alert %}}
 
 
@@ -102,6 +99,5 @@ example, the double-quoted `"foo bar"` will be the _first_ argument,
 and `"zoo"` will be the _second_.
 
 {{< myshortcode-pos "foo bar" zoo >}}
-Content is rendered <b>like HTML</b>. The Markdown _emphasis_
-characters are !! NOT !! rendered.
+The Markdown _emphasis_ characters are !! NOT !! rendered.
 {{< /myshortcode-pos >}}

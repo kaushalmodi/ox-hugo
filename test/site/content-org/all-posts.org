@@ -2390,7 +2390,7 @@ matter of the post because HTML does not allow markup in the =<title>=
 section.
 
 So the title of this post should read as "ndash and mdash".
-** Escaping hashes and exclamations correctly in body
+** Escaping hashes and exclamations correctly in body              :escaping:
 :PROPERTIES:
 :EXPORT_FILE_NAME: escaping-hashes-and-exclamations-in-body
 :END:
@@ -2419,6 +2419,30 @@ Hash char at beginning of a continued line
 Markdown]
 
 This ! does not need to be escaped as there is no ambiguity.
+** Escaping angle brackets                          :escaping:angle_brackets:
+:PROPERTIES:
+:EXPORT_FILE_NAME: escaping-angle-brackets
+:END:
+#+begin_description
+Test the escaping of angle brackets because they are used in HTML tags.
+#+end_description
+- some <text>
+- some < /italic text/ > (spaces are required between the italics
+  formatting chars and ~<~ / ~>~)
+
+If you really need to put verbatim HTML in Org source, use
+~#+begin_export html~ block:
+
+#+begin_export html
+<ul>
+  <li><b>This is in bold</b></li>
+  <li><i>This is in italics</i></li>
+</ul>
+#+end_export
+
+This also works if you /desperately need/ to inline HTML within your
+Org source: @@html:<b>This is bold</b>@@ .. But why@@html:<span
+style="color:red;">‽</span>@@.
 ** Force line break / Center align                         :force:line_break:
 *** Force line break
 :PROPERTIES:
@@ -4348,35 +4372,61 @@ Here's a warning!
 :EXPORT_FILE_NAME: paired-shortcodes-special-blocks-no-arguments
 :EXPORT_HUGO_PAIRED_SHORTCODES: %mdshortcode myshortcode
 :END:
+#+begin_description
+Tests for paired shortcodes with no arguments.
+#+end_description
 Test case for feature requested in {{{oxhugoissue(119)}}}.
 **** Paired markdown shortcode
+#+begin_src org
+,#+begin_mdshortcode
+Content *with* /emphasis/ characters is rendered.
+,#+end_mdshortcode
+#+end_src
+
+Above will export as:
+
+#+begin_src md
+{{% mdshortcode %}}
+Content *with* /emphasis/ characters is rendered.
+{{% /mdshortcode %}}
+#+end_src
+
+and render as:
+
 #+begin_mdshortcode
 Content *with* /emphasis/ characters is rendered.
-
-The HTML <b>markup</b> will also get rendered.
 #+end_mdshortcode
-
-This will export as:
-
-#+begin_src md
-{{% mdshortcode %}} Content rendered as Markdown {{% /mdshortcode %}}
-#+end_src
 **** Paired non-markdown (default) shortcode
-#+begin_myshortcode
-Content is rendered <b>like HTML</b>. The Markdown /emphasis/
-characters are !! NOT !! rendered.
+Markdown is !! NOT !! rendered in non-markdown shortcodes.
+
+#+begin_src org
+,#+begin_myshortcode
+The Markdown /emphasis/ characters are !! NOT !! rendered.
 
 So a blank line before this sentence in the Markdown source will
-<b>not</b> result in a new paragraph in HTML. <p>But this will be a
-new paragraph as it is wrapped in HTML <code>&lt;p&gt;</code>
-tags.</p>
-#+end_myshortcode
+not result in a new paragraph in HTML.
+,#+end_myshortcode
+#+end_src
 
-This will export as:
+Above will export as:
 
 #+begin_src md
-{{< myshortcode >}} Content NOT rendered as Markdown {{< /myshortcode >}}
+{{< myshortcode >}}
+The Markdown /emphasis/ characters are !! NOT !! rendered.
+
+So a blank line before this sentence in the Markdown source will
+not result in a new paragraph in HTML.
+{{< /myshortcode >}}
 #+end_src
+
+and render as:
+
+#+begin_myshortcode
+The Markdown /emphasis/ characters are !! NOT !! rendered.
+
+So a blank line before this sentence in the Markdown source will
+not result in a new paragraph in HTML.
+#+end_myshortcode
 **** Not a recognized paired shortcode
 #+begin_foo
 Content *with* Markdown /emphasis/ characters is rendered fine in the
@@ -4390,6 +4440,10 @@ tags or HTML5-recognized tags.
 :EXPORT_FILE_NAME: paired-shortcodes-special-blocks-positional-arguments
 :EXPORT_HUGO_PAIRED_SHORTCODES: %alert myshortcode-pos
 :END:
+#+begin_description
+Tests for paired shortcodes with positional arguments.
+#+end_description
+
 Test case for feature requested in {{{oxhugoissue(119)}}}.
 **** Paired markdown shortcode
 The =alert= shortcode takes 1 positional argument.
@@ -4400,8 +4454,6 @@ The =alert= shortcode takes 1 positional argument.
 #+attr_shortcode: note
 #+begin_alert
 Content *with* /emphasis/ characters is rendered.
-
-The HTML <b>markup</b> will also get rendered.
 #+end_alert
 
 -----
@@ -4412,8 +4464,6 @@ Below is the about same as above, except that =warning= attribute
 #+attr_shortcode: warning
 #+begin_alert
 Content *with* /emphasis/ characters is rendered.
-
-The HTML <b>markup</b> will also get rendered.
 #+end_alert
 **** Paired non-markdown (default) shortcode
 The =myshortcode-pos= takes 2 positional arguments. In the below
@@ -4422,14 +4472,17 @@ and ="zoo"= will be the /second/.
 
 #+attr_shortcode: "foo bar" zoo
 #+begin_myshortcode-pos
-Content is rendered <b>like HTML</b>. The Markdown /emphasis/
-characters are !! NOT !! rendered.
+The Markdown /emphasis/ characters are !! NOT !! rendered.
 #+end_myshortcode-pos
 *** Paired shortcodes using special blocks (Named Arguments) :arguments:named:
 :PROPERTIES:
 :EXPORT_FILE_NAME: paired-shortcodes-special-blocks-named-arguments
 :EXPORT_HUGO_PAIRED_SHORTCODES: %mdshortcode-named myshortcode-named
 :END:
+#+begin_description
+Tests for paired shortcodes with named arguments.
+#+end_description
+
 Test case for feature requested in {{{oxhugoissue(119)}}}.
 **** Paired markdown shortcode
 In the below example, ="foo bar"= will be the /arg1/ argument, and
@@ -4438,8 +4491,6 @@ In the below example, ="foo bar"= will be the /arg1/ argument, and
 #+attr_shortcode: :arg1 foo bar :arg2 color: red; text-align: center;
 #+begin_mdshortcode-named
 Content *with* /emphasis/ characters is rendered.
-
-The HTML <b>markup</b> will also get rendered.
 #+end_mdshortcode-named
 **** Paired non-markdown (default) shortcode
 In the below example, ="foo"= will be the /arg1/ argument, and
@@ -4447,8 +4498,7 @@ In the below example, ="foo"= will be the /arg1/ argument, and
 
 #+attr_shortcode: :arg1 foo :arg2 color:green;
 #+begin_myshortcode-named
-Content is rendered <b>like HTML</b>. The Markdown /emphasis/
-characters are !! NOT !! rendered.
+The Markdown /emphasis/ characters are !! NOT !! rendered.
 #+end_myshortcode-named
 ** Using Org macros in lieu of Hugo shortcodes
 :PROPERTIES:

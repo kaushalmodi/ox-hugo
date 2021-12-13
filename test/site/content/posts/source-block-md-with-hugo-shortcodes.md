@@ -9,7 +9,7 @@ draft = false
 The `figure` shortcodes in the two Markdown source code blocks below
 should **not** be expanded.. they should be visible verbatim.
 
--   {&lbrace;< .. >}&rbrace; --- [Shortcodes without Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown)
+-   {&lbrace;&lt; .. >}&rbrace; --- [Shortcodes without Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown)
 -   {&lbrace;% .. %}&rbrace; --- [Shortcodes with Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown)
 
 

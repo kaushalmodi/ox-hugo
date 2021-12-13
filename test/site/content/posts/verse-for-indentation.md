@@ -53,8 +53,8 @@ lines will be removed:
 <br />
 Line 1 above was empty. So the first `>` seen on this line is removed.<br />
 Line 3 had no `>` char.<br />
-> ← See that this `>` on line 4 is retained even at the beginning of the line.<br />
-Line 5 has this > charcter in-between and is retained.<br />
+&gt; ← See that this `>` on line 4 is retained even at the beginning of the line.<br />
+Line 5 has this &gt; charcter in-between and is retained.<br />
 </p>
 
 If someone really wants to have `>` as the first non-blank character
@@ -66,6 +66,6 @@ first `>` is retained in the final output.
 <br />
 >Line 1 above was empty. So **only** the first `>` seen on this line is removed.<br />
 Line 3 had no `>` char.<br />
-> ← See that this `>` on line 4 is retained even at the beginning of the line.<br />
-Line 5 has this > charcter in-between and is retained.<br />
+&gt; ← See that this `>` on line 4 is retained even at the beginning of the line.<br />
+Line 5 has this &gt; charcter in-between and is retained.<br />
 </p>

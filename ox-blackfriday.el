@@ -784,14 +784,12 @@ matches with \"\\\" as needed."
   ;; The below series of replacements in `text' is order sensitive.
   ;; Protect `, *, _ and \
   (setq text (replace-regexp-in-string "[`*_\\]" "\\\\\\&" text))
-  ;; Encode `<' as `&lt;' except when it's present as part of a Hugo
-  ;; shortcode (`{{< .. >}}').
-  ;;              ^^
-  (setq text (replace-regexp-in-string "\\([^{]\\)\\(<\\)" "\\1&lt;" text))
-  ;; Encode `>' as `&gt;' except when it's present as part of a Hugo
-  ;; shortcode (`{{< .. >}}').
-  ;;                    ^^
-  (setq text (replace-regexp-in-string "\\(>\\)\\([^}]\\)" "&gt;\\2" text))
+  ;; Protect the characters in `org-html-protect-char-alist' (`<',
+  ;; `>', `&').
+  (setq text (org-html-encode-plain-text text))
+  ;; Protect braces when verbatim shortcode mentions are detected.
+  (setq text (replace-regexp-in-string "{{%" "{&lbrace;%" text))
+  (setq text (replace-regexp-in-string "%}}" "%&rbrace;}" text))
   ;; Protect ambiguous #.  This will protect # at the beginning of
   ;; a line, but not at the beginning of a paragraph.  See
   ;; `org-md-paragraph'.

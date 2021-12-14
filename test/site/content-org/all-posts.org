@@ -1722,8 +1722,8 @@ there.
 The =figure= shortcodes in the two Markdown source code blocks below
 should *not* be expanded.. they should be visible verbatim.
 
-- {&lbrace;< .. >}&rbrace; --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown][Shortcodes without Markdown]]
-- {&lbrace;% .. %}&rbrace; --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown][Shortcodes with Markdown]]
+- {{< .. >}} --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown][Shortcodes without Markdown]]
+- {{% .. %}} --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown][Shortcodes with Markdown]]
 **** Code block using code fences
 #+begin_src md
 {{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
@@ -1737,16 +1737,27 @@ auto-enable[fn:4] using the =highlight= shortcode.
 {{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
 #+end_src
 *** Shortcodes *not* escaped
-The =figure= shortcodes in the below example block *should* be
-expanded.. you should be seeing little unicorns below.
+The =figure= shortcode in the below example block *should* be
+expanded.. you should be seeing a little unicorn below.
 #+begin_example
 {{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
-{{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
 #+end_example
+
 Above a =#+begin_example= .. =#+end_example= block is chosen
 arbitrarily. The Hugo shortcodes will remain unescaped in *any*
 source/example block except for _Markdown source blocks_ (annotated
 with =md= language).
+
+Below, the same ~figure~ shortcode is called with the ~%~ syntax.
+
+- Note :: If you are using Hugo 0.55.0 or newer, you will just see the
+  raw HTML from this shortcode (unrendered HTML) because the behavior
+  of {{% .. %}} shortcodes [[https://gohugo.io/news/0.55.0-relnotes/#shortcodes-revised][changed in Hugo v0.55.0]].
+
+#+begin_example
+{{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
+#+end_example
+
 -----
 *It is necessary to set the Hugo site config variable
 =pygmentsCodeFences= to =true= for syntax highlighting to work for
@@ -3314,14 +3325,13 @@ $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \]
 :EXPORT_FILE_NAME: equations-with-r-c
 :END:
 #+begin_description
-Test to check that &reg;, &copy; and &trade; don't get interpreted
-within equations.
+Test to check that \reg, \copy and \trade don't get interpreted within equations.
 #+end_description
 {{{oxhugoissue(104)}}}
 
-Below, =(r)= or =(R)= should not get converted to &reg;, =(c)= or
-=(C)= should not get converted to &copy;, and =(tm)= or =(TM)= should
-not get converted to &trade;:
+Below, =(r)= or =(R)= should not get converted to \reg, =(c)= or =(C)=
+should not get converted to \copy, and =(tm)= or =(TM)= should not get
+converted to \trade:
 
 - $(r)$ $(R)$
 - $(c)$ $(C)$
@@ -3988,6 +3998,16 @@ removed when translating to Markdown.
   >				Text indented by 4 tab characters
   #+end_verse
 *** Corner cases
+#+begin_src org -n 0
+,#+begin_verse
+
+>Line 1 above was empty. So the first =>= seen on this line is removed.
+Line 3 had no =>= char.
+> ← See that this =>= on line 4 is retained even at the beginning of the line.
+Line 5 has this > charcter in-between and is retained.
+,#+end_verse
+#+end_src
+
 Only the *first* =>= character immediately following spaces and empty
 lines will be removed:
 #+begin_verse
@@ -4002,6 +4022,17 @@ If someone really wants to have =>= as the first non-blank character
 in the final output, they can use =>>= instead.. *only for that first
 instance*. The below Verse block is same as above except that the
 first =>= is retained in the final output.
+
+#+begin_src org -n 0
+,#+begin_verse
+
+>>Line 1 above was empty. So *only* the first =>= seen on this line is removed.
+Line 3 had no =>= char.
+> ← See that this =>= on line 4 is retained even at the beginning of the line.
+Line 5 has this > charcter in-between and is retained.
+,#+end_verse
+#+end_src
+
 #+begin_verse
 
 >>Line 1 above was empty. So *only* the first =>= seen on this line is removed.

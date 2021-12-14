@@ -7,6 +7,7 @@
 #+hugo_tags: "cross-link"
 #+description: Test post to test another ox-hugo test.
 
-This test post is created to test [{{< relref
-"italicize-links-with-underscores" >}}]({{< relref
-"italicize-links-with-underscores" >}}).
+#+macro: relref @@md:[$1]({{< relref "$2" >}})@@
+
+This test post is created to test {{{relref(Italicize links with
+underscores,italicize-links-with-underscores)}}}.

@@ -1,5 +1,5 @@
 #+macro: min_hugo_version [[https://github.com/gohugoio/hugo/releases/tag/v0.48][*0.48*]]
-#+macro: org_mode_version [[https://code.orgmode.org/bzg/org-mode/commits/master][*9.4.4*]]
+#+macro: org_mode_version [[https://git.savannah.gnu.org/cgit/emacs/org-mode.git/log/?h=bugfix][*9.5.1*]]
 #+macro: pandoc_version [[https://github.com/jgm/pandoc/releases/tag/2.11.4][*2.11.4*]]
 
 #+macro: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]

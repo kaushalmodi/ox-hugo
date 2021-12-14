@@ -76,7 +76,7 @@
 (require 'ffap)                         ;For `ffap-url-regexp'
 (require 'ob-core)                      ;For `org-babel-parse-header-arguments'
 ;; `org-refile.el' is new in Org 9.4
-;; https://code.orgmode.org/bzg/org-mode/commit/f636cf91b6cbe322eca56e23283f4614548c9d65
+;; https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=f636cf91b6cbe322eca56e23283f4614548c9d65
 (require 'org-refile nil :noerror)      ;For `org-get-outline-path'
 
 (require 'org-id nil :noerror)          ;For `org-id-goto'
@@ -90,7 +90,7 @@
 ;; Starting Org 9.2, `org-get-tags' returns all the inherited tags
 ;; instead of returning only the local tags i.e. only the current
 ;; headline tags.
-;; https://code.orgmode.org/bzg/org-mode/commit/fbe56f89f75a8979e0ba48001a822518df2c66fe
+;; https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=fbe56f89f75a8979e0ba48001a822518df2c66fe
 
 ;; For Org <= 9.1, `org-get-tags' returned a list of tags *only* at
 ;; the current heading, while `org-get-tags-at' returned inherited
@@ -980,7 +980,7 @@ Otherwise return nil.
 
 This function restores the behavior of
 `org-babel--string-to-number' to that of before
-https://code.orgmode.org/bzg/org-mode/commit/6b2a7cb20b357e730de151522fe4204c96615f98."
+https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=6b2a7cb20b357e730de151522fe4204c96615f98."
   (and (string-match-p "\\`-?\\([0-9]\\|\\([1-9]\\|[0-9]*\\.\\)[0-9]*\\)\\'" string)
        (string-to-number string)))
 

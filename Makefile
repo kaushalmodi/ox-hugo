@@ -23,7 +23,7 @@ ifeq ("$(EMACS_exists)","")
 endif
 
 EMACS_BIN_SOURCE ?= https://github.com/npostavs/emacs-travis/releases/download/bins
-EMACS_BIN_VERSION ?= 26
+EMACS_BIN_VERSION ?= 27
 
 # In Netlify, set HUGO env var to something like "/tmp/me/ox-hugo-dev/hugo/bin/hugo"
 # to use the custom-built hugo dev binary.

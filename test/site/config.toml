@@ -49,5 +49,6 @@ This is the test site for the <a href="https://github.com/kaushalmodi/ox-hugo">
   custom_css = ["css/style.css"]
   [Params.source]
     url = "https://github.com/kaushalmodi/ox-hugo" # Mandatory, used in hugo-bare-min-theme single.html, baseof.html
+    default_branch = "main"
     org_dir = "test/site/content-org"
     md_dir = "test/site/content"

@@ -1,6 +1,6 @@
-#+TITLE: Ox-Hugo: A carefully crafted Org exporter back-end for Hugo
-#+AUTHOR: Kaushal Modi
-[[https://travis-ci.org/kaushalmodi/ox-hugo][https://travis-ci.org/kaushalmodi/ox-hugo.svg?branch=master]] [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]] [[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPL%20v3-blue.svg]]
+#+title: Ox-Hugo: A carefully crafted Org exporter back-end for Hugo
+#+author: Kaushal Modi
+[[https://travis-ci.org/kaushalmodi/ox-hugo][https://travis-ci.org/kaushalmodi/ox-hugo.svg?branch=main]] [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]] [[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPL%20v3-blue.svg]]
 
 [[https://gitter.im/KaushalModi/Lobby][https://badges.gitter.im/KaushalModi/Lobby.svg]]
 
@@ -39,11 +39,11 @@ Before you read further, you can see below how =ox-hugo= translates
 Org to Markdown (Org on the left; exported Markdown with Hugo
 front-matter on the right).
 ** One post per Org subtree (preferred)
-[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-subtree.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-subtree.png]]
-- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
+[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/doc/static/images/one-post-per-subtree.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/doc/static/images/one-post-per-subtree.png]]
+- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
 ** One post per Org file
-[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-file.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/one-post-per-file.png]]
-- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
+[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/doc/static/images/one-post-per-file.png][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/doc/static/images/one-post-per-file.png]]
+- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
 ** Editorial
 The preferred way to organize the posts is as Org subtrees (also the
 main reason to write this package, as nothing like that was out there)
@@ -69,13 +69,13 @@ doc_md=.
 - [[https://ox-hugo.scripter.co/doc/org-capture-setup/][Using Org Capture to start a new blog post]]
 - .. and many more topics and examples
 ** Source of the Documentation site
-- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/ox-hugo-manual.org][Org source]]
+- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/doc/ox-hugo-manual.org][Org source]]
 
 The documentation site is published by first using =ox-hugo= to
 export from Org to Markdown, and then finally =hugo=.
 /So no Markdown files are committed in the =doc/content/= directory./
 * Demo
-[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content][=ox-hugo= Exported Markdown]] → https://ox-hugo.scripter.co/test
+[[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content][=ox-hugo= Exported Markdown]] → https://ox-hugo.scripter.co/test
 
 The test site uses a [[https://github.com/kaushalmodi/hugo-bare-min-theme][minimal]] theme written just for debug purposes
 (not extra aesthetics). The test site is designed to verify if all the

@@ -2677,7 +2677,7 @@ There are many use cases of such headless page bundles:
 :END:
 This is a regular page. Below content is fetched from the *headless
 page bundle* =headless-page-bundle-x=.
- - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/bundles/headless-page-bundle-x/index.md][Source (~index.md~)]] of the referenced headless bundle.
+ - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/bundles/headless-page-bundle-x/index.md][Source (~index.md~)]] of the referenced headless bundle.
 * Footnotes Test                                                   :footnote:
 ** Footnotes 1
 :PROPERTIES:

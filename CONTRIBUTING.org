@@ -1,5 +1,5 @@
-#+TITLE: Contributing Guide
-#+AUTHOR: Kaushal Modi
+#+title: Contributing Guide
+#+author: Kaushal Modi
 NOTE TO FUTURE CONTRIBUTORS: I plan to merge this package into GNU
 Elpa or Org source at some point.
 

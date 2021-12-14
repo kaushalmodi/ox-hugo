@@ -3,7 +3,7 @@
 
 #+setupfile: doc-setupfile.org
 
-#+macro: imageclick [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/static/images/$1]]
+#+macro: imageclick [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/doc/static/images/$1][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/doc/static/images/$1]]
 #+macro: doc [[https://ox-hugo.scripter.co/doc/$1/$2][$3]]
 
 
@@ -41,7 +41,7 @@ doc_md=.
 - {{{doc(org-capture-setup,,Using Org Capture to start a new blog post)}}}
 - .. and many more topics and examples
 *** Source of the Documentation site
-- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/doc/ox-hugo-manual.org][Org source]]
+- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/doc/ox-hugo-manual.org][Org source]]
 
 The documentation site is published by first using =ox-hugo= to
 export from Org to Markdown, and then finally =hugo=.

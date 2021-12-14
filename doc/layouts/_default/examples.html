@@ -36,7 +36,7 @@
             <tbody>
                 {{ range $key, $val := . }}
                     {{ $org_dir := $val.org_dir | default "" | replaceRE "/$" "" }}
-                    {{ $branch := $val.branch | default "master" | replaceRE "/" "%2F" }}
+                    {{ $branch := $val.branch | default "main" | replaceRE "/" "%2F" }}
 
                     <!-- Setting $hosting and $api -->
                     {{ $hosting := $val.hosting }}
@@ -63,7 +63,7 @@
                         {{ if (eq "github" $api) }}
                             {{ $repo := replaceRE "^.*github\\.com/([^/]+/[^/]+).*" "${1}" $val.source }}
                             <!-- https://developer.github.com/v3/repos/commits/#list-commits-on-a-repository -->
-                            <!-- https://api.github.com/repos/kaushalmodi/ox-hugo/commits?path=doc&sha=master -->
+                            <!-- https://api.github.com/repos/kaushalmodi/ox-hugo/commits?path=doc&sha=main -->
                             {{ $repo_json := getJSON (printf "https://api.github.com/repos/%s/commits?path=%s&sha=%s" $repo $org_dir $branch) }}
                             {{ with $repo_json }}
                                 {{ $last_updated = (index (index (index (index . 0) "commit") "committer") "date") }}

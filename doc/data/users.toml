@@ -4,7 +4,7 @@
 #   site = "https://your.site/" (*mandatory*)
 #
 #   org_dir = "Dir in the repo containing Org source" (default to "" if not set i.e. Org source file is directly in your repo root)
-#   branch = "git branch containing Org source" (defaults to "master" if not set)
+#   branch = "git branch containing Org source" (defaults to "main" if not set)
 #
 # Misc other keys:
 #
@@ -42,46 +42,54 @@
   source = "https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io"
   site = "https://scripter.co/"
   org_dir = "content-org"
+  branch = "master"
 
 [oscarnajera]
   author = "Óscar Nájera"
   source = "https://gitlab.com/Titan-C/titan-c.gitlab.io"
   site = "https://blog.oscarnajera.com/"
+  branch = "master"
 
 [punchagan]
   author = "Puneeth Chaganti"
   source = "https://github.com/punchagan/punchagan.muse-amuse.in"
   site = "https://punchagan.muse-amuse.in/"
   org_dir = "content-org"
+  branch = "master"
 
 [thatteidlikaalsoup]
   author = "Puneeth Chaganti"
   source = "https://github.com/thatte-idli-kaal-soup/thatteidlikaalsoup.team"
   site = "https://thatteidlikaalsoup.team/"
   org_dir = "content-org"
+  branch = "master"
 
 [shimmy]
   author = "Shimmy Xu"
   source = "https://github.com/shimmy1996/blog"
   site = "https://www.shimmy1996.com/"
   org_dir = "org"
+  branch = "master"
 
 [zzamboni]
   author = "Diego Zamboni"
   source = "https://gitlab.com/zzamboni/zzamboni.org"
   site = "https://zzamboni.org/"
   org_dir = "content-org"
+  branch = "master"
 
 [dmolina]
   author = "Daniel Molina"
   source = "https://github.com/dmolina/my-blog"
   site = "https://dmolina.github.io/"
   org_dir = "content_org"
+  branch = "master"
 
 [shanesveller]
   author = "Shane Sveller"
   source = "https://github.com/shanesveller/shanesveller-dot-com"
   site = "https://www.shanesveller.com/"
+  branch = "master"
 
 [edkolev]
   author = "Evgeni Kolev"
@@ -102,48 +110,40 @@
   source = "https://github.com/zzamboni/cf-learn.info"
   site = "https://cf-learn.info/"
   org_dir = "content-org"
+  branch = "master"
 
 [xianmin]
   author = "Xianmin Chen"
   source = "https://github.com/xianmin/xianmin.org"
   site = "https://www.xianmin.org/"
   org_dir = "orgpost"
-
-# Mon Feb 25 22:40:44 EST 2019 - kmodi
-# http://en.xianmin.org/ found to be inactive as of today.
-# [xianmin-en]
-#   author = "Xianmin Chen"
-#   source = "https://coding.net/u/xianmin/p/en.xianmin.org/git"
-#   site = "http://en.xianmin.org/"
-#   org_dir = "orgpost"
+  branch = "master"
 
 [use-package]
   author = "John Wiegley"
   source = "https://github.com/jwiegley/use-package"
   site = "https://jwiegley.github.io/use-package/"
+  branch = "master"
 
 [aaronbaugher]
   author = "Aaron Baugher"
   source = "https://aaron.baugher.biz/text/blog.org" # Site source not in a repo
   site = "https://aaron.baugher.biz/"
   org_src_desc = "Org file"
-
-# The domain was found unmaintained (expired certificate) as of today -- Fri Jun 28 09:03:07 EDT 2019 - kmodi
-# [lakedenman]
-#   author = "Lake Denman"
-#   source = "https://github.com/ldenman/blog"
-#   site = "https://lakedenman.com/blog/"
+  branch = "master"
 
 [kengrimes]
   author = "Ken Grimes"
   source = "https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git"
   site = "https://www.kengrimes.com/"
+  branch = "master"
 
 [emacsun]
   author = "emacsun"
   source = "https://github.com/emacsun/ZHugo"
   site = "https://www.zcl.space/"
   org_dir = "content_org"
+  branch = "master"
 
 [cadadr]
   author = "Göktuğ Kayaalp"
@@ -156,97 +156,114 @@
   source = "https://github.com/tsdye/online-web-sites"
   site = "http://www.tsdye.online/an-archaeologist-reads/"
   org_dir = "an-archaeologist-reads"
+  branch = "master"
 
 [dschrempf]
   author = "Dominik Schrempf"
   source = "https://github.com/dschrempf/blog"
   site = "https://dschrempf.github.io/"
   org_dir = "org"
+  branch = "master"
 
 [colelyman]
   author = "Cole Lyman"
   source = "https://github.com/Colelyman/colelyman-hugo"
   site = "https://colelyman.com"
   org_dir = "site/content-org"
+  branch = "master"
 
 [zmaas]
   author = "Zachary Maas"
   source = "https://github.com/zmaas/zmaas.github.io"
   site = "https://abstractlambda.com/"
   org_dir = "hugo"
+  branch = "master"
 
 [maciejkula]
   author = "Maciej Kula"
   source = "https://github.com/maciejkula/hugo-blog"
   site = "https://maciejkula.github.io"
+  branch = "master"
 
 [petercheng00]
   author = "Peter Cheng"
   source = "https://github.com/petercheng00/personal"
   site = "http://petercheng.net/"
   org_dir = "website/v2/petercheng"
+  branch = "master"
 
 [somssi]
   author = "Somssi"
   source = "https://github.com/somssi/hugo-somssi"
   site = "https://somssi.github.io/"
   org_dir = "content-org"
+  branch = "master"
 
 [palikar]
   author = "Stanislav Arnaudov"
   source = "https://github.com/palikar/blog-hugo-files"
   site = "https://palikar.github.io/"
   org_dir = "org"
+  branch = "master"
 
 [stingh711]
   author = "stingh711"
   source = "https://github.com/stingh711/blog-hugo"
   site = "https://stingh711.github.io/"
+  branch = "master"
 
 [mclearc]
   author = "Colin McLear"
   source = "https://github.com/mclearc/colinmclear.net"
   site = "https://www.colinmclear.net/"
+  branch = "master"
 
 [steventammen]
   author = "Steven Tammen"
   source = "https://github.com/StevenTammen/steventammen.com"
   site = "https://www.steventammen.com/"
   org_dir = "org"
+  branch = "master"
 
 [takaxp]
   author = "Takaaki Ishikawa"
   source = "https://github.com/takaxp/blog"
   site = "https://pxaka.tokyo/blog/"
   org_dir = "entries"
+  branch = "master"
 
 [taipapamotohus]
   author = "taipapamotohus"
   source = "https://github.com/taipapamotohus/Taipapablog"
   site = "https://taipapamotohus.com/"
+  branch = "master"
 
 [alexmurray]
   author = "Alex Murray"
   source = "https://github.com/alexmurray/ubuntu-security-podcast"
   site = "https://ubuntusecuritypodcast.org/"
   org_dir = "org"
+  branch = "master"
 
 [vdemeester]
   author = "Vincent Demeester"
   source = "https://github.com/vdemeester/blog"
   site = "https://vincent.demeester.fr/"
   org_dir = "content-org"
+  branch = "master"
 
 [emacsomancer1]
   author = "Benjamin Slade"
   source = "https://gitlab.com/emacsomancer/neobabbage_files"
   site = "https://babbagefiles.xyz"
   org_dir = "content-org"
+  branch = "master"
 
 [flowsta]
   author = "Adolfo Antón Bravo"
   source = "https://git.fsfe.org/adolflow/infotics.es"
   site = "https://infotics.es"
+  branch = "master"
   hosting = "gitea"
   api = "gitea"
 
@@ -255,91 +272,100 @@
   source = "https://github.com/freetonik/emacscast.org"
   site = "https://emacscast.org/"
   org_dir = "content-org"
+  branch = "master"
 
 [elbaulp]
   author = "Alejandro Alcalde"
   source = "https://github.com/elbaulp/algui91-hugo/"
   site = "https://elbauldelprogramador.com/en/"
   org_dir = "content-org"
+  branch = "master"
 
 [amca01]
   author = "Alasdair McAndrew"
   source = "https://github.com/amca01/whats_this"
   site = "https://numbersandshapes.net/"
   org_dir = "content-org"
+  branch = "master"
 
 [BloggerBust]
   author = "BloggerBust"
   source = "https://github.com/BloggerBust/bloggerbust.ca"
   site = "https://bloggerbust.ca/"
   org_dir = "content-org"
+  branch = "master"
 
 [semgilo]
   author = "semgilo"
   source = "https://github.com/semgilo/blog"
   site = "http://www.lanhuzi.com/"
   org_dir = "content-org"
+  branch = "master"
 
 [derui]
   author = "derui"
   source = "https://github.com/derui/blog"
   site = "https://blog.deltabox.site/"
   org_dir = "content_org"
+  branch = "master"
 
 [jarss]
   author = "jarss"
   source = "https://github.com/jarss/TAONAW"
   site = "https://jarss.github.io/TAONAW/"
+  branch = "master"
 
 [jethrokuan]
   author = "Jethro Kuan"
   source = "https://github.com/jethrokuan/braindump"
   site = "https://braindump.jethro.dev/"
   org_dir = "org"
-
-# The github repo didn't exist as of today -- Fri Jun 28 09:00:12 EDT 2019 - kmodi
-# [dkensinger]
-#   author = "Dave Kensinger"
-#   source = "https://github.com/dkensinger/my-hugo-blog"
-#   site = "https://dave-2-1.netlify.com"
+  branch = "master"
 
 [justinbarclay]
   author = "Justin Barclay"
   source = "https://github.com/justinbarclay/-_-"
   site = "https://justinbarclay.me"
+  branch = "master"
 
 [bebound]
   author = "KK"
   source = "https://github.com/bebound/hugo_blog"
   site = "https://blog.fromkk.com/"
+  branch = "master"
 
 [emilioj]
   author = "Emilio J. Padrón González"
   source = "https://github.com/emilioj/homepage"
   site = "http://gac.udc.es/~emilioj/"
   org_dir = "content_org"
+  branch = "master"
 
 [cdodev]
   author = "Ben Ford"
   source = "https://github.com/cdodev/commandodev.com"
   site = "https://commandodev.com/"
+  branch = "master"
 
 [ctanas]
   author = "Claudiu Tănăselia"
   source = "https://github.com/ctanas/parsec.ro"
   site = "https://www.parsec.ro"
   org_dir = "content-org"
+  branch = "master"
 
 [oolon-coloophid-ox-hugo-blog]
   author = "Ian Hocking"
   source = "https://github.com/OolonColoophid/blog"
   site = "https://ianhocking.com"
   org_dir = ""
+  branch = "master"
 
 [slow_djinn]
   author = "Michael Howard"
   source = "https://git.sr.ht/~slow_djinn/fumbling-blog"
   site = "https://fumbling.it"
+  branch = "master"
 
 [rg0swami]
   author = "Rohit Goswami"
@@ -353,6 +379,7 @@
   source = "https://gitlab.com/RobinWils/robinwils.com"
   site = "https://www.robinwils.com"
   org_dir = "content-org"
+  branch = "master"
 
 [wych42]
   author = "chi"
@@ -364,6 +391,7 @@
   author = "Rudra Narayan"
   source = "https://github.com/mrprofessor/rudra.dev"
   site = "https://rudra.dev"
+  branch = "master"
 
 [panchoh]
   author = "pancho horrillo"
@@ -376,23 +404,23 @@
   source = "https://github.com/ruborcalor/cole-website"
   site = "https://colekillian.com"
   org_dir = "org-content"
+  branch = "master"
 
 [jhoodsmith]
   author = "James Hood-Smith"
   source = "https://github.com/jhoodsmith/blog-source"
   site = "https://www.hood-smith.me.uk"
-  branch = "main"
 
 [soham]
   author = "Soham Pal"
   source = "https://gitlab.com/e-eight/e-eight.gitlab.io"
   site = "https://soham.dev"
+  branch = "main"
 
 [martinbaillie]
   author = "Martin Baillie"
   source = "https://github.com/martinbaillie/martinbaillie"
   site = "https://martin.baillie.id"
-  branch = "main"
 
 [carlhenrikek]
   author = "Carl Henrik Ek"
@@ -404,7 +432,6 @@
   author = "Arne Bahlo"
   source = "https://github.com/bahlo/arnes-notes"
   site = "https://notes.arne.me"
-  branch = "main"
   org_dir = "org"
 
 [jhilker]
@@ -412,21 +439,15 @@
    source = "https://gitlab.com/jhilker/jhilker.gitlab.io/"
    site = "https://jhilker.com"
    org_dir = "content-org"
-   branch = "main"
+
 [spcbfr]
    author = "Youssef Bouzekri"
    source = "https://gitlab.com/spcbfr/blog/"
    site = "https://spcbfr.vercel.app"
-   branch = "main"
-# []
-#   author = ""
-#   source = ""
-#   site = ""
-#   org_dir = "content-org"
 
 # []
 #   author = ""
 #   source = ""
 #   site = ""
 #   org_dir = "specify this if Org file not directly in repo root dir"
-#   branch = "specify this if not master, e.g. main"
+#   branch = "specify this if not 'main'"

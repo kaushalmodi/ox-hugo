@@ -507,13 +507,13 @@ front-matter on the right).
 :CUSTOM_ID: screenshot-one-post-per-subtree
 :END:
 {{{imageclick(one-post-per-subtree.png)}}}
-- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
+- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/screenshot-subtree-export-example.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/writing-hugo-blog-in-org-subtree-export.md][Markdown]]
 *** One post per Org file
 :PROPERTIES:
 :CUSTOM_ID: screenshot-one-post-per-file
 :END:
 {{{imageclick(one-post-per-file.png)}}}
-- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
+- Files in above screenshot :: [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/writing-hugo-blog-in-org-file-export.org][Org]] -> [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/writing-hugo-blog-in-org-file-export.md][Markdown]]
 *** Editorial
 :PROPERTIES:
 :CUSTOM_ID: org-blogging-flow-editorial
@@ -532,7 +532,7 @@ comparison.
 :PROPERTIES:
 :CUSTOM_ID: demo
 :END:
-[[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content][=ox-hugo= Exported Markdown]] → https://ox-hugo.scripter.co/test
+[[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content][=ox-hugo= Exported Markdown]] → https://ox-hugo.scripter.co/test
 
 The test site uses a [[https://github.com/kaushalmodi/hugo-bare-min-theme][minimal]] theme written just for debug purposes
 (not extra aesthetics). The test site is designed to verify if all the
@@ -808,8 +808,8 @@ HTML in your Markdown, *as CommonMark allows!*/
    =content-org=
 
    Examples ---
-   - [[https://github.com/kaushalmodi/ox-hugo/tree/master/doc][=ox-hugo= documentation site (you're reading it)]]
-   - [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][=ox-hugo= test site]]
+   - [[https://github.com/kaushalmodi/ox-hugo/tree/main/doc][=ox-hugo= documentation site (you're reading it)]]
+   - [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site][=ox-hugo= test site]]
    - [[https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io][/scripter.co/ -- My blog]]
 5. Create an Org file in there and follow the {{{doc(usage,,*Usage*)}}}
    section to export it.
@@ -847,12 +847,12 @@ the above two blogging flows.
 :EXPORT_FILE_NAME: tests-site
 :EXPORT_HUGO_MENU_OVERRIDE: :title "Try the test site"
 :END:
-A [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site][site]] with bare-bones Hugo "theme" is used to live-test the
+A [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site][site]] with bare-bones Hugo "theme" is used to live-test the
 package --- you'll know why theme is double-quoted once you try out the
 site on =hugo=.
 
-Check out the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][example single Org file]]. That is created for testing various
-Org->Hugo content and meta-data translation features. [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content/posts][Here]] are the
+Check out the [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/all-posts.org][example single Org file]]. That is created for testing various
+Org->Hugo content and meta-data translation features. [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content/posts][Here]] are the
 exported Markdown files.
 **** How to try =ox-hugo= on that site?
 1. Clone this repo:
@@ -909,7 +909,7 @@ Here are some examples of sites generated using *=ox-hugo= + Hugo*.
 
 If you too have a site generated using this package, and have the Org
 source of your site public, feel free to open a PR (updating just
-[[https://github.com/kaushalmodi/ox-hugo/blob/master/doc/data/users.toml][=users.toml=]]) to add yourself here, or open an issue.
+[[https://github.com/kaushalmodi/ox-hugo/blob/main/doc/data/users.toml][=users.toml=]]) to add yourself here, or open an issue.
 ** Org to Hugo
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "5.org_to_hugo"
@@ -1014,8 +1014,8 @@ set.
 Below table shows the translation of Org markup to Markdown markup in
 the exported =.md= files.
 
-See the Org source in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/all-posts.org][=all-posts.org=]] under /Formatting/ -> /General/
-heading and how it exports to Markdown in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/general-formatting.md][=general-formatting.md=]].
+See the Org source in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/all-posts.org][=all-posts.org=]] under /Formatting/ -> /General/
+heading and how it exports to Markdown in [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/posts/general-formatting.md][=general-formatting.md=]].
 #+caption: Org markup to Markdown markup
 #+attr_html: :class sane-table
 |--------------------+--------------------------------------------------------------------|
@@ -1547,8 +1547,8 @@ property forms), because Org keywords and properties allow using the
 hyphen and space (/in "double-quoted strings"/) characters. So the
 underscores in these keywords remain untransformed on export.
 **** Examples
-- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/tags-and-categories.org][Org source]]
-- Exported Markdown -- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/inheriting-tags.md][=inheriting-tags.md=]], [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/overriding-tags.md][=overriding-tags.md=]]
+- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/tags-and-categories.org][Org source]]
+- Exported Markdown -- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/posts/inheriting-tags.md][=inheriting-tags.md=]], [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/posts/overriding-tags.md][=overriding-tags.md=]]
 - Hugo-generated HTML -- [[https://ox-hugo.scripter.co/test/posts/inheriting-tags/][Inheriting tags]], [[https://ox-hugo.scripter.co/test/posts/overriding-tags/][Overriding tags]]
 *** Table of Contents
 :PROPERTIES:
@@ -1725,7 +1725,7 @@ You can find many examples of table styling here:
 #+attr_html: :class sane-table
 | Org Source                                                                                   | Exported Markdown | Hugo HTML   |
 |----------------------------------------------------------------------------------------------+-------------------+-------------|
-| {{{ox-hugo-test-file}}} -- search for =* Table Styling= or =:EXPORT_FILE_NAME: table-styling= | [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/posts/table-styling.md][table-styling.md]]  | [[https://ox-hugo.scripter.co/test/posts/table-styling/][Hugo output]] |
+| {{{ox-hugo-test-file}}} -- search for =* Table Styling= or =:EXPORT_FILE_NAME: table-styling= | [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/posts/table-styling.md][table-styling.md]]  | [[https://ox-hugo.scripter.co/test/posts/table-styling/][Hugo output]] |
 
 -----
 
@@ -2231,7 +2231,7 @@ discussed above) directories.
 #+end_example
 
 Have a look at the
-[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/images-in-content/images-in-content.org][=content-org/images-in-content/images-in-content.org=]] file for an
+[[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/images-in-content/images-in-content.org][=content-org/images-in-content/images-in-content.org=]] file for an
 example of how to reference same-directory files (=gnu.png= and
 =org.png= in this example) in an Org file (/Hint: Just as you would do
 in a normal Org file/).
@@ -2255,8 +2255,8 @@ can see those images inline too!
 Whether you prefer the subtree-based approach or file-based approach
 for writing your posts in Org, there are examples for both in the
 =ox-hugo= test suite:
-- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org/images-in-content][Org source]]
-- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content/images-in-content][Exported Markdown]]
+- [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content-org/images-in-content][Org source]]
+- [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content/images-in-content][Exported Markdown]]
 **** Images and Page Bundles
 /See [[*Hugo Bundle][Hugo Bundle]] section on how to define those via ~ox-hugo~./
 
@@ -2310,8 +2310,8 @@ copied as usual to the ~static/~ directory (See the documentation for
 #+end_example
 
 Another example from the test suite:
-- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content-org/images-in-content/images-in-content.org][~images-in-content.org::* Page Bundle with images in the same dir~]] |
-  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/master/test/site/content/images-in-content/page-bundle-images-in-same-dir/index.md][Exported Markdown]] | [[https://ox-hugo.scripter.co/test/images-in-content/page-bundle-images-in-same-dir/][HTML]]
+- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/images-in-content/images-in-content.org][~images-in-content.org::* Page Bundle with images in the same dir~]] |
+  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/images-in-content/page-bundle-images-in-same-dir/index.md][Exported Markdown]] | [[https://ox-hugo.scripter.co/test/images-in-content/page-bundle-images-in-same-dir/][HTML]]
 *** Replace Front-matter Keys
 :PROPERTIES:
 :EXPORT_FILE_NAME: replace-front-matter-keys
@@ -3304,12 +3304,12 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 :PROPERTIES:
 :EXPORT_FILE_NAME: meta-features
 :END:
-- [X] Extensive tests! -- [[https://github.com/kaushalmodi/ox-hugo/tree/master/test/site/content-org][test/site/content-org]] (=make test=)
+- [X] Extensive tests! -- [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content-org][test/site/content-org]] (=make test=)
 - [X] Travis CI Integration -- Checks with emacs versions starting from
   24.4->25.2, with the latest stable version of =org-plus-contrib=.
 - [X] [[https://ox-hugo.scripter.co][Documentation site]] -- Generated using =ox-hugo= itself (=make
   doc_md hugo_doc=).
-- [X] GitHub repo files: [[https://github.com/kaushalmodi/ox-hugo/blob/master/README.org][~README.org~]] and [[https://github.com/kaushalmodi/ox-hugo/blob/master/CONTRIBUTING.org][~CONTRIBUTING.org~]] --
+- [X] GitHub repo files: [[https://github.com/kaushalmodi/ox-hugo/blob/main/README.org][~README.org~]] and [[https://github.com/kaushalmodi/ox-hugo/blob/main/CONTRIBUTING.org][~CONTRIBUTING.org~]] --
   Generated using =ox-org= (=make doc_gh=).
 - [X] [[../test/][Test site]] -- Regenerated after each commit to this repo (=make
   test=).

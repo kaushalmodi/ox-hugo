@@ -94,6 +94,7 @@ disableKinds = ["taxonomy", "taxonomyTerm"]
 
   [Params.source]
     url = "https://github.com/kaushalmodi/ox-hugo"
+    default_branch = "main"
     org_dir = "doc"
     org_file = "doc/ox-hugo-manual.org"
 

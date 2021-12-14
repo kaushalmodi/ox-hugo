@@ -4335,7 +4335,7 @@ Markdown contains HTML that resembles the [[https://github.com/gcushen/hugo-acad
 </div>
 #+end_src
 
-There are few days to mimic that.
+There are few ways to mimic that.
 *** CSS
 [[https://github.com/gcushen/hugo-academic/blob/66b71fa2f6a41f26d6c3b202fef212fab151112e/layouts/partials/css/academic.css#L1370-L1426][Source for *alert* CSS]]
 

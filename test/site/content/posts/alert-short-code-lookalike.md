@@ -16,7 +16,7 @@ Markdown contains HTML that resembles the [shortcode code](https://github.com/gc
 </div>
 ```
 
-There are few days to mimic that.
+There are few ways to mimic that.
 
 
 ## CSS {#css}

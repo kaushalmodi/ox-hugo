@@ -10,7 +10,7 @@ draft = false
 ## Foo ( Bar ) Baz {#foo--bar--baz}
 
 
-## (Foo)Bar.Baz&Zoo {#foo--bar-dot-baz-and-zoo}
+## (Foo)Bar.Baz&amp;Zoo {#foo--bar-dot-baz-and-zoo}
 
 -   `.` → `dot`
 -   `&` → `and`

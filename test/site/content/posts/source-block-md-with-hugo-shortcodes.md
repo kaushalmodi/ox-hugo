@@ -9,8 +9,8 @@ draft = false
 The `figure` shortcodes in the two Markdown source code blocks below
 should **not** be expanded.. they should be visible verbatim.
 
--   {&lbrace;< .. >}&rbrace; --- [Shortcodes without Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown)
--   {&lbrace;% .. %}&rbrace; --- [Shortcodes with Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown)
+-   {{&lt; .. &gt;}} --- [Shortcodes without Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown)
+-   {&lbrace;% .. %&rbrace;} --- [Shortcodes with Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown)
 
 
 ### Code block using code fences {#code-block-using-code-fences}
@@ -34,18 +34,30 @@ auto-enable[^fn:1] using the `highlight` shortcode.
 
 ## Shortcodes **not** escaped {#shortcodes-not-escaped}
 
-The `figure` shortcodes in the below example block **should** be
-expanded.. you should be seeing little unicorns below.
+The `figure` shortcode in the below example block **should** be
+expanded.. you should be seeing a little unicorn below.
 
 ```text
 {{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
-{{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
 ```
 
 Above a `#+begin_example` .. `#+end_example` block is chosen
 arbitrarily. The Hugo shortcodes will remain unescaped in **any**
 source/example block except for <span class="underline">Markdown source blocks</span> (annotated
 with `md` language).
+
+Below, the same `figure` shortcode is called with the `%` syntax.
+
+Note
+: If you are using Hugo 0.55.0 or newer, you will just see the
+    raw HTML from this shortcode (unrendered HTML) because the behavior
+    of {&lbrace;% .. %&rbrace;} shortcodes [changed in Hugo v0.55.0](https://gohugo.io/news/0.55.0-relnotes/#shortcodes-revised).
+
+<!--listend-->
+
+```text
+{{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
+```
 
 ---
 

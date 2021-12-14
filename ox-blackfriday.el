@@ -782,8 +782,14 @@ matches with \"\\\" as needed."
   (when (plist-get info :with-smart-quotes)
     (setq text (org-export-activate-smart-quotes text :html info)))
   ;; The below series of replacements in `text' is order sensitive.
-  ;; Protect `, *, _, and \
+  ;; Protect `, *, _ and \
   (setq text (replace-regexp-in-string "[`*_\\]" "\\\\\\&" text))
+  ;; Protect the characters in `org-html-protect-char-alist' (`<',
+  ;; `>', `&').
+  (setq text (org-html-encode-plain-text text))
+  ;; Protect braces when verbatim shortcode mentions are detected.
+  (setq text (replace-regexp-in-string "{{%" "{&lbrace;%" text))
+  (setq text (replace-regexp-in-string "%}}" "%&rbrace;}" text))
   ;; Protect ambiguous #.  This will protect # at the beginning of
   ;; a line, but not at the beginning of a paragraph.  See
   ;; `org-md-paragraph'.
@@ -1167,7 +1173,7 @@ contextual information."
          ;; Org removes all the leading whitespace only from the first
          ;; line.  So the trick is to use the ">" character before any
          ;; intended indentation on the first non-blank line.
-         (ret (replace-regexp-in-string "\\`\\([[:blank:]\n\r]*?\\)[[:blank:]]*>" "\\1" ret))
+         (ret (replace-regexp-in-string "\\`\\([[:blank:]\n\r]*?\\)[[:blank:]]*&gt;" "\\1" ret))
          (br (org-html-close-tag "br" nil info))
          (re (format "\\(?:%s\\)?[ \t]*\n" (regexp-quote br)))
          ;; Replace each newline character with line break.  Also

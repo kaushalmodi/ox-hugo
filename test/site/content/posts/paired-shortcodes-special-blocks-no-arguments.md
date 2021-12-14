@@ -1,5 +1,6 @@
 +++
 title = "Paired Shortcodes using special blocks (No Arguments)"
+description = "Tests for paired shortcodes with no arguments."
 tags = ["shortcode", "paired", "special-block", "no-arguments"]
 draft = false
 +++
@@ -9,36 +10,59 @@ Test case for feature requested in `ox-hugo` Issue #[119](https://github.com/kau
 
 ## Paired markdown shortcode {#paired-markdown-shortcode}
 
-{{% mdshortcode %}}
-Content **with** _emphasis_ characters is rendered.
+```org
+#+begin_mdshortcode
+Content *with* /emphasis/ characters is rendered.
+#+end_mdshortcode
+```
 
-The HTML <b>markup</b> will also get rendered.
-{{% /mdshortcode %}}
-
-This will export as:
+Above will export as:
 
 ```md
-{{%/* mdshortcode */%}} Content rendered as Markdown {{%/* /mdshortcode */%}}
+{{%/* mdshortcode */%}}
+Content *with* /emphasis/ characters is rendered.
+{{%/* /mdshortcode */%}}
 ```
+
+and render as:
+
+{{% mdshortcode %}}
+Content **with** _emphasis_ characters is rendered.
+{{% /mdshortcode %}}
 
 
 ## Paired non-markdown (default) shortcode {#paired-non-markdown--default--shortcode}
 
-{{< myshortcode >}}
-Content is rendered <b>like HTML</b>. The Markdown _emphasis_
-characters are !! NOT !! rendered.
+Markdown is !! NOT !! rendered in non-markdown shortcodes.
+
+```org
+#+begin_myshortcode
+The Markdown /emphasis/ characters are !! NOT !! rendered.
 
 So a blank line before this sentence in the Markdown source will
-<b>not</b> result in a new paragraph in HTML. <p>But this will be a
-new paragraph as it is wrapped in HTML <code>&lt;p&gt;</code>
-tags.</p>
-{{< /myshortcode >}}
+not result in a new paragraph in HTML.
+#+end_myshortcode
+```
 
-This will export as:
+Above will export as:
 
 ```md
-{{</* myshortcode */>}} Content NOT rendered as Markdown {{</* /myshortcode */>}}
+{{</* myshortcode */>}}
+The Markdown /emphasis/ characters are !! NOT !! rendered.
+
+So a blank line before this sentence in the Markdown source will
+not result in a new paragraph in HTML.
+{{</* /myshortcode */>}}
 ```
+
+and render as:
+
+{{< myshortcode >}}
+The Markdown _emphasis_ characters are !! NOT !! rendered.
+
+So a blank line before this sentence in the Markdown source will
+not result in a new paragraph in HTML.
+{{< /myshortcode >}}
 
 
 ## Not a recognized paired shortcode {#not-a-recognized-paired-shortcode}

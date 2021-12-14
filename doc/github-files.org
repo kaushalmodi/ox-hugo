@@ -12,7 +12,7 @@
 :EXPORT_TITLE: Ox-Hugo: A carefully crafted Org exporter back-end for Hugo
 :EXPORT_FILE_NAME: README
 :END:
-{{{travis}}} {{{melpa}}} {{{GPLv3}}}
+{{{ci}}} {{{melpa}}} {{{GPLv3}}}
 
 {{{gitter}}}
 

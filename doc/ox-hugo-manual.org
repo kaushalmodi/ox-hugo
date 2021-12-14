@@ -3305,8 +3305,8 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 :EXPORT_FILE_NAME: meta-features
 :END:
 - [X] Extensive tests! -- [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content-org][test/site/content-org]] (=make test=)
-- [X] Travis CI Integration -- Checks with emacs versions starting from
-  24.4->25.2, with the latest stable version of =org-plus-contrib=.
+- [X] GitHub Actions Integration -- Checks with emacs versions
+  starting from 25.3, with the latest stable version of Org mode.
 - [X] [[https://ox-hugo.scripter.co][Documentation site]] -- Generated using =ox-hugo= itself (=make
   doc_md hugo_doc=).
 - [X] GitHub repo files: [[https://github.com/kaushalmodi/ox-hugo/blob/main/README.org][~README.org~]] and [[https://github.com/kaushalmodi/ox-hugo/blob/main/CONTRIBUTING.org][~CONTRIBUTING.org~]] --

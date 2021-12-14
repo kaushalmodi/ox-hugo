@@ -73,6 +73,7 @@ disableKinds = ["taxonomy", "taxonomyTerm"]
 
   github_user = "kaushalmodi"
   github_repo = "ox-hugo"
+  github_workflow_file = "test.yml"
   github_banner = true
 
   images = ["/favicon-196x196.png"] # Used in twitter_cards.html partial
@@ -102,7 +103,7 @@ disableKinds = ["taxonomy", "taxonomyTerm"]
     logo = "favicon.ico"
 
     github_button  = true
-    travis_button  = true
+    gha_button  = true
     codecov_button = false
     gratipay = ""
 

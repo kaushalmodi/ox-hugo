@@ -2372,7 +2372,8 @@ and then use ~description~ to do the same:
 :EXPORT_DESCRIPTION: Here is my post summary.
 #+end_src
 
-It gets even better if you use the *description* Org Special Block:
+It gets even better if you use the {{{relref(**description** Org Special
+Block,org-special-blocks#description)}}}:
 
 #+begin_src org
 ,#+begin_description
@@ -3026,6 +3027,264 @@ Content
 #+end_src
 **** More Reading
 - [[https://scripter.co/hugo-leaf-and-branch-bundles/][scripter.co -- Hugo: Leaf and Branch Bundles]]
+*** Org Special Blocks
+:PROPERTIES:
+:EXPORT_FILE_NAME: org-special-blocks
+:EXPORT_OPTIONS: num:t
+:END:
+#+begin_description
+Special ~#+begin_..~ .. ~#+end_..~ constructs recognized by Ox-hugo.
+#+end_description
+
+**** HTML5 inline elements
+Org special blocks created using the HTML tags defined in
+~org-blackfriday-html5-inline-elements~ will export as inline HTML.
+
+#+begin_src org
+,#+begin_INLINETAG
+something
+,#+end_INLINETAG
+#+end_src
+
+will export as:
+
+#+begin_src html
+<INLINETAG>something</INLINETAG>
+#+end_src
+
+For example, ~mark~ is one of those inline elements. So,
+
+#+begin_src org
+,#+begin_mark
+This sentence is marked.
+,#+end_mark
+#+end_src
+
+will export as:
+
+#+begin_src html
+<mark>This sentence is marked.</mark>
+#+end_src
+
+and render as:
+
+#+begin_mark
+This sentence is marked.
+#+end_mark
+**** HTML5 block elements
+Org special blocks created using the HTML tags defined in
+~org-html-html5-elements~ will export as HTML blocks wrapped by those
+tags.
+
+#+begin_src org
+,#+begin_BLOCKTAG
+something
+,#+end_BLOCKTAG
+#+end_src
+
+will export as:
+
+#+begin_src html
+<BLOCKTAG>
+
+  something
+
+</BLOCKTAG>
+#+end_src
+
+For example, [[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/aside][~aside~]] is one of those HTML5 block elements. So,
+
+#+begin_src org
+,#+begin_aside
+Some content for the ~aside~ block.
+,#+end_aside
+We can even make the ~aside~ block /aside-like/ with
+[[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/aside][this little CSS]].
+#+end_src
+
+will export as:
+
+#+begin_src html
+<aside>
+  <aside></aside>
+
+Some content for the `aside` block.
+
+</aside>
+We can even make the `aside` block _aside-like_ with
+[this little CSS](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/aside).
+#+end_src
+
+and render as:
+
+#+begin_export html
+<style>
+  aside {
+      width: 40%;
+      padding-left: .5rem;
+      margin-left: .5rem;
+      float: right;
+      box-shadow: inset 5px 0 5px -5px #29627e;
+      font-style: italic;
+      color: #29627e;
+  }
+
+  aside > p {
+      margin: .5rem;
+  }
+</style>
+#+end_export
+
+#+begin_aside
+Some content for the ~aside~ block.
+#+end_aside
+We can even make the ~aside~ block /aside-like/ with [[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/aside][this little CSS]].
+
+#+begin_note
+The ~<aside></aside>~ part in the exported Markdown is a hack that was
+added to get around a [[https://github.com/kaushalmodi/ox-hugo/issues/93][Blackfriday (Hugo's old Markdown parser)
+limitation]]. That workaround doesn't hurt the newer GoldMark parser, so
+it is left there for now.
+#+end_note
+**** Details and Summary
+~details~ is one of the HTML5 block elements, but it is treated
+as a separate case because we also need to support the nested inline
+~summary~ tag in there.
+
+#+begin_src org
+,#+begin_details
+,#+begin_summary
+This is summary.
+,#+end_summary
+Here are the details.
+,#+end_details
+#+end_src
+See {{{relref(Details and Summary,details-and-summary)}}}.
+**** HTML Attributes
+HTML attributes can be added to the first /tag/ of any of the above
+Special Blocks using the ~#+attr_html~ syntax. The ~class~ attribute,
+for instance, is very handy.
+
+For example, if we want the marked text to have red foreground color,
+we can do:
+
+#+begin_src org
+,#+begin_export html
+<style>
+  .red {
+    color: red;
+  }
+</style>
+,#+end_export
+,#+attr_html: :class red
+,#+begin_mark
+This marked text's foreground is red.
+,#+end_mark
+#+end_src
+
+#+begin_note
+You may choose to have a CSS snippet like above either inline in the
+exported Markdown, or in your website's CSS file.
+#+end_note
+
+and that will render as:
+#+begin_export html
+<style>
+  .red {
+    color: red;
+  }
+</style>
+#+end_export
+#+attr_html: :class red
+#+begin_mark
+This marked text's foreground is red.
+#+end_mark
+**** Description
+The ~#+begin_description~ .. ~#+end_description~ special block can be
+used to set the ~description~ front-matter variable.
+
+This allows the description to be written in a well-formatted fashion
+with Org markup and it can be multi-line too.
+
+As an example:
+
+#+begin_src org
+,#+begin_description
+Here is my *post summary*.
+
+And this can be over /multiple lines/ too!
+,#+end_description
+#+end_src
+
+Above will export as this in the TOML front matter:
+#+begin_src toml
+description = """
+  Here is my **post summary**.
+
+  And this can be over _multiple lines_ too!
+  """
+#+end_src
+**** Other Special Blocks (~div~ tags)
+If the Special Block /tag/ used isn't found in
+~org-blackfriday-html5-inline-elements~ or ~org-html-html5-elements~,
+that block exports just as an HTML ~div~ block.
+
+#+begin_src org
+,#+begin_SOMETHING
+Content inside something.
+,#+end_SOMETHING
+#+end_src
+
+exports as:
+
+#+begin_src html
+<div class="SOMETHING">
+  <div></div>
+
+Content inside something.
+
+</div>
+#+end_src
+
+and renders as:
+
+#+begin_something
+Content inside something.
+#+end_something
+
+If we want to reuse the ~.red~ CSS rule defined [[*HTML Attributes][above]], we can type:
+
+#+begin_src org
+,#+begin_red
+This text will be in red.
+,#+end_red
+#+end_src
+
+which will render as:
+
+#+begin_red
+This text will be in red.
+#+end_red
+*** COMMENT Shortcodes
+:PROPERTIES:
+:EXPORT_FILE_NAME: shortcodes
+:END:
+#+begin_description
+Support for Hugo Shortcodes in Org source
+#+end_description
+
+#+begin_note
+Do _not_ use Hugo shortcodes verbatim in Org source. *{{< .. >}}* and
+*{{% .. %}}* is not legal Org syntax.
+#+end_note
+
+Ox-hugo will not officially support verbatim use of Hugo shortcodes in
+Org source, but there are few ways to use shortcodes indirectly.
+**** Org Special Blocks
+
+**** ~HUGO_PAIRED_SHORTCODES~
+**** Org Macros
+**** Raw HTML
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"

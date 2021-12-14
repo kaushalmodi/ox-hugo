@@ -2346,12 +2346,12 @@ Starting with *v0.55.0*, Hugo now supports ~summary~ as an inbuilt
 front-matter variable to directly specify the post /summary/. See Hugo
 commit [[https://github.com/gohugoio/hugo/commit/3a62d54745e2cbfda6772390830042908d725c71][3a62d547]] for details.
 
-#+begin_description
+#+begin_note
 ~ox-hugo~ has also been supporting the ~description~ front-matter
 variable. So support for the new ~summary~ front-matter variable,
 which is essentially a duplicate of ~description~, is not added
 explicitly.
-#+end_description
+#+end_note
 
 As the ~summary~ parameter does not have explicit support in
 ~ox-hugo~, you would need to set it using the following property:

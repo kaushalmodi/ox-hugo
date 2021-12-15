@@ -1704,7 +1704,7 @@ page, with the help of =#+attr_html= and =#+attr_css= (*introduced in
   Example:
 
   #+begin_src org
-  ,#+begin_export html
+  ,#+begin_export hugo
   <style>
   .my-table th,
   .my-table td {
@@ -2372,7 +2372,7 @@ and then use ~description~ to do the same:
 :EXPORT_DESCRIPTION: Here is my post summary.
 #+end_src
 
-It gets even better if you use the {{{relref(**description** Org Special
+It gets even better if you use the {{{relref(*description* Org Special
 Block,org-special-blocks#description)}}}:
 
 #+begin_src org
@@ -3226,7 +3226,7 @@ description = """
 #+end_src
 **** Hugo Paired Shortcodes
 See
-{{{relref(`HUGO_PAIRED_SHORTCODES`,shortcodes/#hugo-paired-shortcodes)}}}.
+{{{relref(~HUGO_PAIRED_SHORTCODES~,shortcodes/#hugo-paired-shortcodes)}}}.
 **** Other Special Blocks (~div~ tags)
 If the Special Block /tag/ used isn't found in
 ~org-blackfriday-html5-inline-elements~ or ~org-html-html5-elements~,
@@ -3491,7 +3491,7 @@ This is a warning.
 
 /You might notice that the same [[alert-css][Alert CSS]] from the previous section is
 applied here too./
-**** Quoting Md/HTML exports
+**** Quoting Hugo-specific exports
 The Org source should contain only Org syntax text which could be
 parsed in general by any of the in-built Org exporters.
 
@@ -3508,38 +3508,39 @@ This is a warning.
 But many times, one might also want to use one of the unpaired Hugo
 shortcodes like [[https://gohugo.io/content-management/cross-references/#use-ref-and-relref][~relref~]]. These too, you cannot directly inline them
 but you can use one of these methods.
-***** ~@@md:@@~ or ~@@html:@@~
+***** ~@@hugo:..@@~
 :PROPERTIES:
 :CUSTOM_ID: inline-syntax
 :END:
 #+begin_src org
-This links to the @@md:[Org Special Blocks]({​{< relref "org-special-blocks" >}})@@ page.
+This links to the @@hugo:[Org Special Blocks]({​{< relref "org-special-blocks" >}})@@ page.
 #+end_src
 
 Above renders to:
 
-This links to the @@md:[Org Special Blocks]({{< relref
+This links to the @@hugo:[Org Special Blocks]({{< relref
 "org-special-blocks" >}})@@ page.
 
 See the [[https://orgmode.org/org.html#Quoting-HTML-tags][HTML Export inline syntax]] for reference.
 
-/Using ~@@html:..@@~ will also export the same way./
-***** ~#+md:~ or ~#+html:~
+/Using ~@@md:..@@~ or ~@@html:..@@~ will also export the same way./
+***** ~#+hugo:~ Keyword
 Sometimes, it might also be possible to export the whole line in the
 specified backend like so:
 
 #+begin_src org
-,#+md: This links to the [Org Special Blocks]({​{< relref "org-special-blocks" >}}) page.
+,#+hugo: This links to the [Org Special Blocks]({​{< relref "org-special-blocks" >}}) page.
 #+end_src
 
 Above renders to:
 
-#+md: This links to the [Org Special Blocks]({{< relref "org-special-blocks" >}}) page.
+#+hugo: This links to the [Org Special Blocks]({{< relref "org-special-blocks" >}}) page.
 
-/Using ~#+html:..~ will also export the same way./
-***** ~#+begin_export md~ or ~#+begin_export html~
+/Using ~#+md:..~ or ~#+html:..~ will also export the same way./
+***** ~#+begin_export hugo~
 #+begin_note
-This method is discouraged.
+This method is discouraged because we would then end up with Org text
+with a lot of content which can be exported for only Hugo consumption!
 #+end_note
 
 The earlier sections {{{relref(Org Special
@@ -3551,7 +3552,7 @@ Even though discouraged, this method is being documented for the sake
 of completeness.
 
 #+begin_src md
-,#+begin_export md
+,#+begin_export hugo
 {{< alert2 warning >}}
 This is a warning.
 {{< /alert2 >}}
@@ -3560,23 +3561,23 @@ This is a warning.
 
 renders as:
 
-#+begin_export md
+#+begin_export hugo
 {{< alert2 warning >}}
 This is a warning.
 {{< /alert2 >}}
 #+end_export
 **** Org Macros
-If you find yourself using the [[#inline-syntax][Inline Syntax]] a lot, you might benefit
-from using the power of [[https://orgmode.org/manual/Macro-Replacement.html][Org Macros]].
+If you find yourself using the [[#inline-syntax][~@@hugo:..@@~ Inline Syntax]] a lot, you
+might appreciate the power of [[https://orgmode.org/manual/Macro-Replacement.html][Org Macros]].
 
 This is best shown using the same ~relref~ shortcode example ..
 
-Instead of always typing ~@@md:[Org Special Blocks]({​{< relref
+Instead of always typing ~@@hugo:[Org Special Blocks]({​{< relref
 "org-special-blocks" >}})@@~, you can define an Org macro called
 ~relref~ like so:
 
 #+begin_src md
-,#+macro: relref @@md:[$1]({{< relref "$2" >}})@@
+,#+macro: relref @@hugo:[@@ $1 @@hugo:]({{< relref "$2" >}})@@
 #+end_src
 
 And then,

@@ -6,4 +6,4 @@ tags = ["cross-link"]
 draft = false
 +++
 
-This test post is created to test [Italicize links with underscores]({{< relref "italicize-links-with-underscores" >}}).
+This test post is created to test [ Italicize links with underscores ]({{< relref "italicize-links-with-underscores" >}}).

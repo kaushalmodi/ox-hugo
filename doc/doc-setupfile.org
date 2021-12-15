@@ -11,7 +11,7 @@
 #+macro: testtag tests tagged [[https://ox-hugo.scripter.co/test/tags/$1][$1]]
 #+macro: test-search Search the ~ox-hugo~ test site for [[https://ox-hugo.scripter.co/test/search/?q=$1]["$1"]] examples.
 
-#+macro: relref @@md:[$1]({{< relref "$2" >}})@@
+#+macro: relref @@hugo:[@@ $1 @@hugo:]({{< relref "$2" >}})@@
 
 # https://scripter.co/latex-in-html/
 #+macro: latex @@html:<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>@@

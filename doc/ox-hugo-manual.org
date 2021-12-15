@@ -3224,6 +3224,9 @@ description = """
   And this can be over _multiple lines_ too!
   """
 #+end_src
+**** Hugo Paired Shortcodes
+See
+{{{relref(`HUGO_PAIRED_SHORTCODES`,shortcodes/#hugo-paired-shortcodes)}}}.
 **** Other Special Blocks (~div~ tags)
 If the Special Block /tag/ used isn't found in
 ~org-blackfriday-html5-inline-elements~ or ~org-html-html5-elements~,
@@ -3265,26 +3268,326 @@ which will render as:
 #+begin_red
 This text will be in red.
 #+end_red
-*** COMMENT Shortcodes
+*** Shortcodes
 :PROPERTIES:
 :EXPORT_FILE_NAME: shortcodes
+:EXPORT_OPTIONS: num:t
+:EXPORT_HUGO_PAIRED_SHORTCODES: alert2
 :END:
 #+begin_description
 Support for Hugo Shortcodes in Org source
 #+end_description
 
 #+begin_note
-Do _not_ use Hugo shortcodes verbatim in Org source. *{{< .. >}}* and
-*{{% .. %}}* is not legal Org syntax.
+- Do _not_ use raw Hugo shortcodes in Org source.
+- *{{< .. >}}* and *{{% .. %}}* are not legal Org syntax.
 #+end_note
 
 Ox-hugo will not officially support verbatim use of Hugo shortcodes in
-Org source, but there are few ways to use shortcodes indirectly.
-**** Org Special Blocks
+Org source, like you would do in Hugo Markdown source. But here are
+few ways how you can either mimic them or include them indirectly.
 
+**** Org Special Blocks
+With a little bit of CSS and {{{relref(Org Special
+Blocks,org-special-blocks#other-special-blocks--div-tags)}}}, we can
+mimic some of the Hugo Shortcodes in Org itself.
+
+Here is some CSS inspired from the [[https://www.docsy.dev/docs/adding-content/shortcodes/#alert][Docsy theme's]] ~alert~ shortcode:
+
+<<alert-css>>
+#+begin_details
+#+begin_summary
+CSS for alert shortcode from Docsy theme
+#+end_summary
+#+begin_src css
+.alert {
+  position: relative;
+  padding: 0rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+}
+
+.alert-warning {
+  border-style: solid;
+  border-color: #ed6a5a;
+  border-width: 0 0 0 4px;
+}
+
+.alert-heading {
+  font-family: sans-serif;
+  font-size: 1.5rem;
+  color: #ed6a5a;
+  weight: bold;
+}
+#+end_src
+#+end_details
+
+#+begin_export html
+<style>
+  .alert {
+    position: relative;
+    padding: 0rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+  }
+
+  .alert-warning {
+    border-style: solid;
+    border-color: #ed6a5a;
+    border-width: 0 0 0 4px;
+  }
+
+  .alert-heading {
+    font-family: sans-serif;
+    font-size: 1.5rem;
+    color: #ed6a5a;
+    weight: bold;
+  }
+</style>
+#+end_export
+
+With that CSS, and the below Org snippet:
+
+#+begin_src org
+,#+attr_html: :class alert-warning
+,#+begin_alert
+,#+begin_alert-heading
+Warning
+,#+end_alert-heading
+This is a warning.
+,#+end_alert
+#+end_src
+
+we get this:
+
+#+attr_html: :class alert-warning
+#+begin_alert
+#+begin_alert-heading
+Warning
+#+end_alert-heading
+This is a warning.
+#+end_alert
 **** ~HUGO_PAIRED_SHORTCODES~
+The Org Special Blocks export paired Hugo Shortcodes for a special
+block /tag/ that's added to the ~HUGO_PAIRED_SHORTCODES~ keyword.
+***** Non-Markdown Shortcodes ({{< .. >}})
+:PROPERTIES:
+:CUSTOM_ID: non-markdown-shortcodes
+:END:
+The content within these shortcodes is not parsed by the Hugo Markdown
+parser. See [[https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown][Hugo Doc -- Shortcodes Without Markdown]].
+
+1. Use ~:EXPORT_HUGO_PAIRED_SHORTCODES: myshortcode~ property or
+   ~#+hugo_paired_shortcodes: myshortcode~ keyword to let the Org
+   Special Block parsing logic know that "myshortcode" tag needs to be
+   exported as a paired shortcode.
+2. Use the Org Special Block:
+   #+begin_src org
+   ,#+begin_myshortcode
+   Something
+   ,#+end_myshortcode
+   #+end_src
+
+Above will export as:
+#+begin_src md
+{{< myshortcode >}}
+Something
+{{< /myshortcode >}}
+#+end_src
+****** Shortcodes with positional arguments
+If the Hugo shortcode accepts positional arguments, they need to be
+specified using the ~#+attr_shortcode~ keyword.
+
+For example,
+
+#+begin_src org
+,#+attr_shortcode argval1 "arg val 2"
+,#+begin_myshortcode
+Something
+,#+end_myshortcode
+#+end_src
+
+will export as:
+
+#+begin_src md
+{{< myshortcode argval1 "arg val 2" >}}
+Something
+{{< /myshortcode >}}
+#+end_src
+****** Shortcodes with named arguments
+~#+attr_shortcode~ keyword can be used to also specify a shortcode's
+/named/ arguments.
+
+For example,
+
+#+begin_src org
+,#+attr_shortcode :arg1 foo bar :arg2 color: red; text-align: center;
+,#+begin_myshortcode
+Something
+,#+end_myshortcode
+#+end_src
+
+will export as:
+
+#+begin_src md
+{{< myshortcode arg1="foo bar" arg2="color: red; text-align: center;" >}}
+Something
+{{< /myshortcode >}}
+#+end_src
+***** Markdown Shortcodes ({{% .. %}})
+:PROPERTIES:
+:CUSTOM_ID: markdown-shortcodes
+:END:
+#+begin_note
+All of the above applies to Markdown Shortcodes as well.
+#+end_note
+
+The content within these shortcodes *is* parsed by the Hugo Markdown
+parser. See [[https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown][Hugo Doc -- Shortcodes With Markdown]].
+
+Only the syntax for specifying these shortcodes is different --- You
+need to prefix the shortcode with ~%~.
+
+Example: ~:EXPORT_HUGO_PAIRED_SHORTCODES: %myshortcode~ in the
+post subtree's property drawer or ~#+hugo_paired_shortcodes:
+%myshortcode~ as a keyword.
+***** ~alert2~ shortcode example
+An ~alert2~ shortcode definition is saved to this site's
+~layouts/shortcodes/alert2.html~ which looks like this:
+#+begin_src html
+<div class="alert alert-{{ .Get 0 }}">
+    {{ .Inner }}
+</div>
+#+end_src
+
+~:EXPORT_HUGO_PAIRED_SHORTCODES: alert2~ is added to this post's
+subtree in Org source so that the Org Special Block parser knows to
+treat that /tag/ differently (i.e. export as a non-Markdown Hugo
+shortcode).
+
+With that, this Org snippet:
+
+#+begin_src org
+,#+attr_shortcode: warning
+,#+begin_alert2
+This is a warning.
+,#+end_alert2
+#+end_src
+
+exports as:
+
+#+begin_src md
+{{< alert2 warning >}}
+This is a warning.
+{{< /alert2 >}}
+#+end_src
+
+and renders as this:
+
+#+attr_shortcode: warning
+#+begin_alert2
+This is a warning.
+#+end_alert2
+
+/You might notice that the same [[alert-css][Alert CSS]] from the previous section is
+applied here too./
+**** Quoting Md/HTML exports
+The Org source should contain only Org syntax text which could be
+parsed in general by any of the in-built Org exporters.
+
+So ~ox-hugo~ does not recommend or support using raw Hugo shortcodes
+directly in Org source as shown below:
+
+#+begin_src md
+# Bad !!
+{{< alert2 warning >}}
+This is a warning.
+{{< /alert2 >}}
+#+end_src
+
+But many times, one might also want to use one of the unpaired Hugo
+shortcodes like [[https://gohugo.io/content-management/cross-references/#use-ref-and-relref][~relref~]]. These too, you cannot directly inline them
+but you can use one of these methods.
+***** ~@@md:@@~ or ~@@html:@@~
+:PROPERTIES:
+:CUSTOM_ID: inline-syntax
+:END:
+#+begin_src org
+This links to the @@md:[Org Special Blocks]({​{< relref "org-special-blocks" >}})@@ page.
+#+end_src
+
+Above renders to:
+
+This links to the @@md:[Org Special Blocks]({{< relref
+"org-special-blocks" >}})@@ page.
+
+See the [[https://orgmode.org/org.html#Quoting-HTML-tags][HTML Export inline syntax]] for reference.
+
+/Using ~@@html:..@@~ will also export the same way./
+***** ~#+md:~ or ~#+html:~
+Sometimes, it might also be possible to export the whole line in the
+specified backend like so:
+
+#+begin_src org
+,#+md: This links to the [Org Special Blocks]({​{< relref "org-special-blocks" >}}) page.
+#+end_src
+
+Above renders to:
+
+#+md: This links to the [Org Special Blocks]({{< relref "org-special-blocks" >}}) page.
+
+/Using ~#+html:..~ will also export the same way./
+***** ~#+begin_export md~ or ~#+begin_export html~
+#+begin_note
+This method is discouraged.
+#+end_note
+
+The earlier sections {{{relref(Org Special
+Blocks,#org-special-blocks)}}} and {{{relref(Hugo Paired
+Shortcodes,#hugo-paired-shortcodes)}}} are the recommended methods if
+you really want to blend Hugo shortcodes with your Org source.
+
+Even though discouraged, this method is being documented for the sake
+of completeness.
+
+#+begin_src md
+,#+begin_export md
+{{< alert2 warning >}}
+This is a warning.
+{{< /alert2 >}}
+,#+end_export
+#+end_src
+
+renders as:
+
+#+begin_export md
+{{< alert2 warning >}}
+This is a warning.
+{{< /alert2 >}}
+#+end_export
 **** Org Macros
-**** Raw HTML
+If you find yourself using the [[#inline-syntax][Inline Syntax]] a lot, you might benefit
+from using the power of [[https://orgmode.org/manual/Macro-Replacement.html][Org Macros]].
+
+This is best shown using the same ~relref~ shortcode example ..
+
+Instead of always typing ~@@md:[Org Special Blocks]({​{< relref
+"org-special-blocks" >}})@@~, you can define an Org macro called
+~relref~ like so:
+
+#+begin_src md
+,#+macro: relref @@md:[$1]({{< relref "$2" >}})@@
+#+end_src
+
+And then,
+
+#+begin_src org
+This links to the {{{relref(Org Special Blocks,org-special-blocks)}}} page.
+#+end_src
+
+will also render to:
+
+This links to the {{{relref(Org Special Blocks,org-special-blocks)}}} page.
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"

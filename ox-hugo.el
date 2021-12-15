@@ -2017,11 +2017,14 @@ channel."
   (let ((kwd (org-element-property :key keyword))
         (value (org-element-property :value keyword)))
     (cond
-     ((and (equal "HUGO" kwd)           ;Hugo summary splitting
-           (stringp value)
-           (string-match-p "\\`\\s-*more\\s-*\\'" value))
-      ;; https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting
-      "<!--more-->")
+     ((and (equal "HUGO" kwd))
+      (if (and (stringp value)          ;Hugo summary splitting
+               (string-match-p "\\`\\s-*more\\s-*\\'" value))
+          (progn
+            ;; https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting
+            "<!--more-->")
+        (progn
+          value)))
      ((and (equal "TOC" kwd)
            (string-match-p "\\<headlines\\>" value))
       (let* ((depth (and (string-match "\\<[0-9]+\\>" value)
@@ -4031,7 +4034,7 @@ links."
                 (org-export-get-environment 'hugo)))
          (local-variables (buffer-local-variables))
          (bound-variables (org-export--list-bound-variables))
-	 vars)
+	     vars)
     (with-current-buffer buffer
       (let ((inhibit-modification-hooks t)
             (org-mode-hook nil)
@@ -4042,20 +4045,20 @@ links."
         ;; through BIND keywords.
         (dolist (entry local-variables vars)
           (when (consp entry)
-	    (let ((var (car entry))
-	          (val (cdr entry)))
-	      (and (not (memq var org-export-ignored-local-variables))
-	           (or (memq var
-			     '(default-directory
-			        buffer-file-name
-			        buffer-file-coding-system))
-		       (assq var bound-variables)
-		       (string-match "^\\(org-\\|orgtbl-\\)"
-				     (symbol-name var)))
-	           ;; Skip unreadable values, as they cannot be
-	           ;; sent to external process.
-	           (or (not val) (ignore-errors (read (format "%S" val))))
-	           (push (set (make-local-variable var) val) vars)))))
+	        (let ((var (car entry))
+	              (val (cdr entry)))
+	          (and (not (memq var org-export-ignored-local-variables))
+	               (or (memq var
+			                 '(default-directory
+			                    buffer-file-name
+			                    buffer-file-coding-system))
+		               (assq var bound-variables)
+		               (string-match "^\\(org-\\|orgtbl-\\)"
+				                     (symbol-name var)))
+	               ;; Skip unreadable values, as they cannot be
+	               ;; sent to external process.
+	               (or (not val) (ignore-errors (read (format "%S" val))))
+	               (push (set (make-local-variable var) val) vars)))))
 
         ;; Process all link elements in the AST.
         (org-element-map ast 'link

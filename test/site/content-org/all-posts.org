@@ -2300,8 +2300,9 @@ If the =EXPORT_HUGO_OUTPUTS= property is left empty/unset, =ox-hugo=
 will not set the =outputs= variable in the front-matter at all. So
 only the HTML output will be created (default).
 * Post body                                                            :body:
-** Summary Splitter                                   :summary_splitter:more:
-*** Summary Splitter
+** ~#+hugo~ keyword                                            :keyword:hugo:
+*** Summary Splitter                                  :summary_splitter:more:
+**** Summary Splitter
 :PROPERTIES:
 :EXPORT_FILE_NAME: summary-splitter
 :EXPORT_DATE: 2017-07-21
@@ -2309,7 +2310,7 @@ only the HTML output will be created (default).
 Here is the summary.
 #+hugo: more
 Here is text after the [[https://gohugo.io/content-management/summaries#user-defined-manual-summary-splitting][summary splitter]].
-*** COMMENT Summary Splitter at EOF                                     :eof:
+**** COMMENT Summary Splitter at EOF                                    :eof:
 :PROPERTIES:
 :EXPORT_FILE_NAME: summary-splitter-at-eof
 :END:
@@ -2323,6 +2324,27 @@ Summary splitter at the end of post
 
 Here more summary.
 #+hugo: more
+*** Hugo keyword
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-keyword
+:END:
+#+begin_description
+Stuff followed the ~#+hugo:~ exports as-is except when it is "more"
+#+end_description
+
+As the content following ~#+hugo:~ exports as-is to the Markdown, that
+content should be what Hugo can parse (i.e. Markdown, shortcodes,
+etc).
+
+This Org snippet:
+
+#+begin_src org
+,#+hugo: This `relref` links to [this same page]({​{< relref "hugo-keyword" >}}).
+#+end_src
+
+renders as below:
+
+#+hugo: This `relref` links to [this same page]({{< relref "hugo-keyword" >}}).
 ** Dealing with underscores
 :PROPERTIES:
 :EXPORT_FILE_NAME: dealing-with-underscores

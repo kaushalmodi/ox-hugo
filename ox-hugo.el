@@ -4066,7 +4066,6 @@ links."
             (let ((type (org-element-property :type link)))
               (when (member type '("custom-id" "id" "fuzzy"))
                 (let* ((raw-link (org-element-property :raw-link link))
-
                        (destination (if (string= type "fuzzy")
                                         (org-export-resolve-fuzzy-link link info)
                                       (progn
@@ -4134,6 +4133,9 @@ links."
 
         ;; Turn the AST with updated links into an Org document.
         (insert (org-element-interpret-data ast))
+        ;; Make org-element-cache not complain about changed buffer
+        ;; state.
+        (org-element-cache-reset)
         (set-buffer-modified-p nil)))
     buffer))
 

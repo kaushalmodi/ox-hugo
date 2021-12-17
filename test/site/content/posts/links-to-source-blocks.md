@@ -5,7 +5,7 @@ tags = ["links", "internal-links", "src-block"]
 draft = false
 +++
 
-From [(org) Internal links](https://orgmode.org/manual/Internal-links.html),
+From [(org) Internal Links](https://orgmode.org/manual/Internal-Links.html),
 
 >    If no dedicated target exists, the link will then try to match the
 > exact name of an element within the buffer.  Naming is done with the

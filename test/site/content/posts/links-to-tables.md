@@ -112,4 +112,4 @@ Here's another table:
 
 ---
 
-Reference: [(org) Images and tables](https://orgmode.org/manual/Images-and-tables.html).
+Reference: [(org) Internal Links](https://orgmode.org/manual/Internal-Links.html).

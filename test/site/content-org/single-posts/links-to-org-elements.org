@@ -22,7 +22,7 @@ Org element strings.
 :PROPERTIES:
 :CUSTOM_ID: links-to-source-blocks
 :END:
-From [[https://orgmode.org/manual/Internal-links.html][(org) Internal links]],
+From [[https://orgmode.org/manual/Internal-Links.html][(org) Internal Links]],
 
 #+begin_quote
    If no dedicated target exists, the link will then try to match the
@@ -131,7 +131,7 @@ Here's another table:
 
 *Here we refer to [[tab__simple1]].*
 -----
-Reference: [[https://orgmode.org/manual/Images-and-tables.html][(org) Images and tables]].
+Reference: [[https://orgmode.org/manual/Internal-Links.html][(org) Internal Links]].
 * Links to images
 :PROPERTIES:
 :CUSTOM_ID: links-to-images

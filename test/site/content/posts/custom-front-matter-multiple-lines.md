@@ -10,7 +10,7 @@ beta = "two words"
 gamma = 10
 +++
 
-From [**(org) Property syntax**](https://orgmode.org/manual/Property-syntax.html):
+From [**(org) Property Syntax**](https://orgmode.org/manual/Property-Syntax.html):
 
 >    It is also possible to add to the values of inherited properties.
 > The following results in the 'genres' property having the value

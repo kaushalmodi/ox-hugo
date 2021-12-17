@@ -57,13 +57,6 @@
   org_dir = "content-org"
   branch = "master"
 
-[thatteidlikaalsoup]
-  author = "Puneeth Chaganti"
-  source = "https://github.com/thatte-idli-kaal-soup/thatteidlikaalsoup.team"
-  site = "https://thatteidlikaalsoup.team/"
-  org_dir = "content-org"
-  branch = "master"
-
 [shimmy]
   author = "Shimmy Xu"
   source = "https://github.com/shimmy1996/blog"
@@ -137,19 +130,6 @@
   source = "https://www.kengrimes.com/gitweb/?p=kengrimes.com/content.git"
   site = "https://www.kengrimes.com/"
   branch = "master"
-
-[emacsun]
-  author = "emacsun"
-  source = "https://github.com/emacsun/ZHugo"
-  site = "https://www.zcl.space/"
-  org_dir = "content_org"
-  branch = "master"
-
-[cadadr]
-  author = "Göktuğ Kayaalp"
-  source = "https://github.com/cadadr/elisp"
-  site = "https://cadadr.github.io/elisp/index.html"
-  branch = "stable"
 
 [tsdye1]
   author = "Thomas S. Dye"
@@ -281,13 +261,6 @@
   org_dir = "content-org"
   branch = "master"
 
-[amca01]
-  author = "Alasdair McAndrew"
-  source = "https://github.com/amca01/whats_this"
-  site = "https://numbersandshapes.net/"
-  org_dir = "content-org"
-  branch = "master"
-
 [BloggerBust]
   author = "BloggerBust"
   source = "https://github.com/BloggerBust/bloggerbust.ca"
@@ -309,12 +282,6 @@
   org_dir = "content_org"
   branch = "master"
 
-[jarss]
-  author = "jarss"
-  source = "https://github.com/jarss/TAONAW"
-  site = "https://jarss.github.io/TAONAW/"
-  branch = "master"
-
 [jethrokuan]
   author = "Jethro Kuan"
   source = "https://github.com/jethrokuan/braindump"
@@ -331,7 +298,7 @@
 [bebound]
   author = "KK"
   source = "https://github.com/bebound/hugo_blog"
-  site = "https://blog.fromkk.com/"
+  site = "https://www.fromkk.com/"
   branch = "master"
 
 [emilioj]
@@ -339,12 +306,6 @@
   source = "https://github.com/emilioj/homepage"
   site = "http://gac.udc.es/~emilioj/"
   org_dir = "content_org"
-  branch = "master"
-
-[cdodev]
-  author = "Ben Ford"
-  source = "https://github.com/cdodev/commandodev.com"
-  site = "https://commandodev.com/"
   branch = "master"
 
 [ctanas]
@@ -415,7 +376,7 @@
   author = "Soham Pal"
   source = "https://gitlab.com/e-eight/e-eight.gitlab.io"
   site = "https://soham.dev"
-  branch = "main"
+  branch = "master"
 
 [martinbaillie]
   author = "Martin Baillie"

@@ -334,12 +334,12 @@ block.
   Table with zebra striping
 </div>
 
-| Last Name | First Name | Email                 | Due     | Web Site                   |
-|-----------|------------|-----------------------|---------|----------------------------|
-| Smith     | John       | jsmith@gmail.com      | $50.00  | <http://www.jsmith.com>    |
-| Bach      | Frank      | fbach@yahoo.com       | $50.00  | <http://www.frank.com>     |
-| Doe       | Jason      | jdoe@hotmail.com      | $100.00 | <http://www.jdoe.com>      |
-| Conway    | Tim        | tconway@earthlink.net | $50.00  | <http://www.timconway.com> |
+| Last Name | First Name | Email                 | Due     | Web Site                |
+|-----------|------------|-----------------------|---------|-------------------------|
+| Smith     | John       | jsmith@gmail.com      | $50.00  | <http://www.jsmith.com> |
+| Bach      | Frank      | fbach@yahoo.com       | $50.00  | <http://www.frank.com>  |
+| Doe       | Jason      | jdoe@hotmail.com      | $100.00 | <http://www.jdoe.com>   |
+| Conway    | Tim        | tconway@earthlink.net | $50.00  | <http://www.conway.com> |
 
 </div>
 
@@ -362,12 +362,12 @@ block.
   Table where the hovered-upon cell highlights
 </div>
 
-| Last Name | First Name | Email                 | Due     | Web Site                   |
-|-----------|------------|-----------------------|---------|----------------------------|
-| Smith     | John       | jsmith@gmail.com      | $50.00  | <http://www.jsmith.com>    |
-| Bach      | Frank      | fbach@yahoo.com       | $50.00  | <http://www.frank.com>     |
-| Doe       | Jason      | jdoe@hotmail.com      | $100.00 | <http://www.jdoe.com>      |
-| Conway    | Tim        | tconway@earthlink.net | $50.00  | <http://www.timconway.com> |
+| Last Name | First Name | Email                 | Due     | Web Site                |
+|-----------|------------|-----------------------|---------|-------------------------|
+| Smith     | John       | jsmith@gmail.com      | $50.00  | <http://www.jsmith.com> |
+| Bach      | Frank      | fbach@yahoo.com       | $50.00  | <http://www.frank.com>  |
+| Doe       | Jason      | jdoe@hotmail.com      | $100.00 | <http://www.jdoe.com>   |
+| Conway    | Tim        | tconway@earthlink.net | $50.00  | <http://www.conway.com> |
 
 </div>
 
@@ -387,12 +387,12 @@ block.
   Table where the hovered-upon row highlights
 </div>
 
-| Last Name | First Name | Email                 | Due     | Web Site                   |
-|-----------|------------|-----------------------|---------|----------------------------|
-| Smith     | John       | jsmith@gmail.com      | $50.00  | <http://www.jsmith.com>    |
-| Bach      | Frank      | fbach@yahoo.com       | $50.00  | <http://www.frank.com>     |
-| Doe       | Jason      | jdoe@hotmail.com      | $100.00 | <http://www.jdoe.com>      |
-| Conway    | Tim        | tconway@earthlink.net | $50.00  | <http://www.timconway.com> |
+| Last Name | First Name | Email                 | Due     | Web Site                |
+|-----------|------------|-----------------------|---------|-------------------------|
+| Smith     | John       | jsmith@gmail.com      | $50.00  | <http://www.jsmith.com> |
+| Bach      | Frank      | fbach@yahoo.com       | $50.00  | <http://www.frank.com>  |
+| Doe       | Jason      | jdoe@hotmail.com      | $100.00 | <http://www.jdoe.com>   |
+| Conway    | Tim        | tconway@earthlink.net | $50.00  | <http://www.conway.com> |
 
 </div>
 
@@ -516,11 +516,11 @@ _Let's-go-ballistic-with-CSS_ Edition :smile:
   Table where rows except the hovered-upon get blurred
 </div>
 
-| Last Name | First Name | Email                 | Due     | Web Site                   |
-|-----------|------------|-----------------------|---------|----------------------------|
-| Smith     | John       | jsmith@gmail.com      | $50.00  | <http://www.jsmith.com>    |
-| Bach      | Frank      | fbach@yahoo.com       | $50.00  | <http://www.frank.com>     |
-| Doe       | Jason      | jdoe@hotmail.com      | $100.00 | <http://www.jdoe.com>      |
-| Conway    | Tim        | tconway@earthlink.net | $50.00  | <http://www.timconway.com> |
+| Last Name | First Name | Email                 | Due     | Web Site                |
+|-----------|------------|-----------------------|---------|-------------------------|
+| Smith     | John       | jsmith@gmail.com      | $50.00  | <http://www.jsmith.com> |
+| Bach      | Frank      | fbach@yahoo.com       | $50.00  | <http://www.frank.com>  |
+| Doe       | Jason      | jdoe@hotmail.com      | $100.00 | <http://www.jdoe.com>   |
+| Conway    | Tim        | tconway@earthlink.net | $50.00  | <http://www.conway.com> |
 
 </div>

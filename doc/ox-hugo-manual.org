@@ -532,7 +532,7 @@ comparison.
 :PROPERTIES:
 :CUSTOM_ID: demo
 :END:
-[[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content][=ox-hugo= Exported Markdown]] → https://ox-hugo.scripter.co/test
+[[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content][=ox-hugo= Exported Markdown]] → [[https://ox-hugo.scripter.co/test/]]
 
 The test site uses a [[https://github.com/kaushalmodi/hugo-bare-min-theme][minimal]] theme written just for debug purposes
 (not extra aesthetics). The test site is designed to verify if all the
@@ -1337,7 +1337,7 @@ Set the =HUGO_CODE_FENCE= property to =nil= if you want to *always*
 use the Hugo =highlight= shortcode.
 **** Line numbers
 Line numbers can be enabled/configured using the Org =-n= / =+n=
-syntax. See the Info node [[https://orgmode.org/manual/Literal-examples.html][=(org) Literal examples=]] for more
+syntax. See the Info node [[https://orgmode.org/manual/Literal-Examples.html][=(org) Literal Examples=]] for more
 information.
 
 Here are some examples fetched from the "Source blocks with line
@@ -1482,9 +1482,9 @@ the special tag =dont_export_during_make_test= that is used to mark
 few Org files to not be exported when running the
 {{{doc(test,,tests)}}}.
 ****** Why use =#+filetags= and not =#+tags=?
-- About =#+filetags= -- [[https://orgmode.org/manual/Tag-inheritance.html][Tag Inheritance]] or =C-h i g (org) Tag
+- About =#+filetags= -- [[https://orgmode.org/manual/Tag-Inheritance.html][Tag Inheritance]] or =C-h i g (org) Tag
   inheritance=
-- About =#+tags= -- [[https://orgmode.org/manual/Setting-tags.html][Setting Tags]] or =C-h i g (org) Setting tags=
+- About =#+tags= -- [[https://orgmode.org/manual/Setting-Tags.html][Setting Tags]] or =C-h i g (org) Setting Tags=
 ***** Categories
 For subtree-based exports, the Hugo front-matter =categories= values
 are derived from Org tags set for the post subtree headline, but only
@@ -1593,7 +1593,7 @@ one, do one of the following:
    anywhere else in the post, you can do it using the =#+toc=
    keyword.. Example: =#+toc: headlines 2=.
 
-See the [[https://orgmode.org/manual/Table-of-contents.html][Table of Contents]] section in the Org manual for more info.
+See the [[https://orgmode.org/manual/Table-of-Contents.html][Table of Contents]] section in the Org manual for more info.
 
 /Note that =ox-hugo= does not support =#+toc: listings= and =#+toc:
 tables=./
@@ -2129,7 +2129,7 @@ See `org-capture-templates' for more information."
 
 Above capture will auto-insert a heading prefixed with =TODO=. With
 =org-log-done= set to ='time=, on changing the =TODO= state to the
-=DONE= state (=C-c C-t=), a [[https://orgmode.org/manual/Special-properties.html][/Special Property/]] called =CLOSED= will be
+=DONE= state (=C-c C-t=), a [[https://orgmode.org/manual/Special-Properties.html][/Special Property/]] called =CLOSED= will be
 auto-inserted below the heading. Below is an example.
 #+begin_example
 ,*** DONE Narrowing the Author column in Magit                       :org:log:

@@ -996,12 +996,12 @@ block.
 :PROPERTIES:
 :CUSTOM_ID: css-tricks-example-table-3
 :END:
-| Last Name | First Name | Email                 | Due     | Web Site                 |
-|-----------+------------+-----------------------+---------+--------------------------|
-| Smith     | John       | jsmith@gmail.com      | $50.00  | http://www.jsmith.com    |
-| Bach      | Frank      | fbach@yahoo.com       | $50.00  | http://www.frank.com     |
-| Doe       | Jason      | jdoe@hotmail.com      | $100.00 | http://www.jdoe.com      |
-| Conway    | Tim        | tconway@earthlink.net | $50.00  | http://www.timconway.com |
+| Last Name | First Name | Email                 | Due     | Web Site              |
+|-----------+------------+-----------------------+---------+-----------------------|
+| Smith     | John       | jsmith@gmail.com      | $50.00  | http://www.jsmith.com |
+| Bach      | Frank      | fbach@yahoo.com       | $50.00  | http://www.frank.com  |
+| Doe       | Jason      | jdoe@hotmail.com      | $100.00 | http://www.jdoe.com   |
+| Conway    | Tim        | tconway@earthlink.net | $50.00  | http://www.conway.com |
 **** Basic styling
 ***** Uncollapsed borders
 #+begin_export html
@@ -2060,7 +2060,7 @@ Here there is white space in menu name property.
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :gamma 10
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :empty_string ""
 :END:
-From [[https://orgmode.org/manual/Property-syntax.html][*(org) Property syntax*]]:
+From [[https://orgmode.org/manual/Property-Syntax.html][*(org) Property Syntax*]]:
 #+begin_quote
    It is also possible to add to the values of inherited properties.
 The following results in the 'genres' property having the value
@@ -2390,14 +2390,14 @@ Test that links with underscores can be italicized/emboldened/both.
 :EXPORT_DATE: 2017-07-22
 :END:
 The strings in these two columns should look the exact same.
-|   | Rendered Actual             | Rendered Expection          |
-|---+-----------------------------+-----------------------------|
-| 1 | 'This'                      | ‘This’                      |
-| 2 | "This"                      | “This”                      |
-| 3 | "It's"                      | “It’s”                      |
-| 4 | 'It's'                      | ‘It’s’                      |
-| 5 | "<http://localhost:1111/>"  | “<http://localhost:1111/>”  |
-| 6 | "<http://localhost:1111/>". | “<http://localhost:1111/>”. |
+|   | Rendered Actual                  | Rendered Expection               |
+|---+----------------------------------+----------------------------------|
+| 1 | 'This'                           | ‘This’                           |
+| 2 | "This"                           | “This”                           |
+| 3 | "It's"                           | “It’s”                           |
+| 4 | 'It's'                           | ‘It’s’                           |
+| 5 | "<http://ox-hugo.scripter.co/>"  | “<http://ox-hugo.scripter.co/>”  |
+| 6 | "<http://ox-hugo.scripter.co/>". | “<http://ox-hugo.scripter.co/>”. |
 #+tblfm: $1=@#-1
 
 *Note:* There is a rendering issue is Row 5 above. That seems to be a
@@ -3202,7 +3202,7 @@ C = W\log_{2} (1+\mathrm{SNR})
 :EXPORT_FILE_NAME: radio-targets
 :END:
 #+begin_description
-Testing [[https://orgmode.org/manual/Radio-targets.html][Radio targets]]
+Testing [[https://orgmode.org/manual/Radio-Targets.html][Radio Targets]]
 #+end_description
 Here I am referencing to asdf123 that I talk about later.
 
@@ -3621,7 +3621,7 @@ Another example:
 1. [@7] This will be 7!
 1. [@100] This will be 100!
 
-See [[https://orgmode.org/manual/Plain-lists.html][(org) Plain lists]] to read more about plain lists in Org.
+See [[https://orgmode.org/manual/Plain-Lists.html][(org) Plain Lists]] to read more about plain lists in Org.
 ** Checklist
 :PROPERTIES:
 :EXPORT_FILE_NAME: checklist
@@ -6657,7 +6657,7 @@ discarded because the front-matter type is YAML.
 Date and slug inheritance is useful when you want to use the same data
 and slug for multiple posts, but in different languages.
 
-[[/posts/es/data-and-slug-inheritance][Spanish version]]
+[[/posts/es/date-and-slug-inheritance][Spanish version]]
 ** Date and slug inheritance (Spanish)
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: posts/es
@@ -6666,7 +6666,7 @@ and slug for multiple posts, but in different languages.
 La herencia de fecha y slug es útil cuando desea usar los mismos datos
 y slug para múltiples publicaciones, pero en diferentes idiomas.
 
-[[/posts/en/data-and-slug-inheritance][English version]]
+[[/posts/en/date-and-slug-inheritance][English version]]
 * Issues                                                            :@issues:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: issues

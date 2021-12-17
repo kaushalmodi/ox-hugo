@@ -1,6 +1,6 @@
 +++
 title = "Radio targets"
-description = "Testing [Radio targets](https://orgmode.org/manual/Radio-targets.html)"
+description = "Testing [Radio Targets](https://orgmode.org/manual/Radio-Targets.html)"
 tags = ["links", "internal-links", "radio-targets"]
 draft = false
 +++

@@ -9,4 +9,4 @@ draft = false
 Date and slug inheritance is useful when you want to use the same data
 and slug for multiple posts, but in different languages.
 
-[Spanish version](/posts/es/data-and-slug-inheritance)
+[Spanish version](/posts/es/date-and-slug-inheritance)

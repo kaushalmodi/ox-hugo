@@ -75,7 +75,7 @@ The documentation site is published by first using =ox-hugo= to
 export from Org to Markdown, and then finally =hugo=.
 /So no Markdown files are committed in the =doc/content/= directory./
 * Demo
-[[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content][=ox-hugo= Exported Markdown]] → https://ox-hugo.scripter.co/test
+[[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content-org][Org source]] → [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content][=ox-hugo= Exported Markdown]] → [[https://ox-hugo.scripter.co/test/]]
 
 The test site uses a [[https://github.com/kaushalmodi/hugo-bare-min-theme][minimal]] theme written just for debug purposes
 (not extra aesthetics). The test site is designed to verify if all the

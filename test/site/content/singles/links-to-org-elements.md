@@ -15,7 +15,7 @@ draft = false
 
 ## Links to source blocks {#links-to-source-blocks}
 
-From [(org) Internal links](https://orgmode.org/manual/Internal-links.html),
+From [(org) Internal Links](https://orgmode.org/manual/Internal-Links.html),
 
 >    If no dedicated target exists, the link will then try to match the
 > exact name of an element within the buffer.  Naming is done with the
@@ -244,7 +244,7 @@ Here's another table:
 
 ---
 
-Reference: [(org) Images and tables](https://orgmode.org/manual/Images-and-tables.html).
+Reference: [(org) Internal Links](https://orgmode.org/manual/Internal-Links.html).
 
 
 ## Links to images {#links-to-images}

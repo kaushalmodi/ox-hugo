@@ -9,4 +9,4 @@ draft = false
 La herencia de fecha y slug es útil cuando desea usar los mismos datos
 y slug para múltiples publicaciones, pero en diferentes idiomas.
 
-[English version](/posts/en/data-and-slug-inheritance)
+[English version](/posts/en/date-and-slug-inheritance)

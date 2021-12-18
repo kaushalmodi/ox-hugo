@@ -1,6 +1,6 @@
 +++
-title = "Multi-line footnote"
-tags = ["footnote"]
+title = "Multi-line footnote (Blackfriday)"
+tags = ["footnote", "multi-line", "blackfriday"]
 draft = false
 +++
 

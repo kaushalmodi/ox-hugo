@@ -2754,6 +2754,11 @@ This is some text[fn:3].
 :PROPERTIES:
 :EXPORT_FILE_NAME: footnote-with-src-block
 :END:
+#+begin_description
+Exporting footnote with source block
+#+end_description
+{{{oxhugoissue(433)}}}
+
 Testing code in a footnote with a ~#+begin_src~ directive.[fn:8]
 ** Multi-line footnote Japanese
 :PROPERTIES:

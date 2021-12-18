@@ -2730,11 +2730,31 @@ This is some text[fn:1][fn:2].
 This is some text[fn:1].
 This is some text[fn:1].
 This is some text[fn:1].
-** Multi-line footnote
+** Multi-line footnote                                           :multi_line:
+*** Blackfriday                                                 :blackfriday:
 :PROPERTIES:
-:EXPORT_FILE_NAME: multi-line-footnote
+:EXPORT_HUGO_GOLDMARK:
+:END:
+**** Multi-line footnote (Blackfriday)
+:PROPERTIES:
+:EXPORT_FILE_NAME: multi-line-footnote-blackfriday
 :END:
 This is some text[fn:3].
+*** Goldmark                                                       :goldmark:
+:PROPERTIES:
+:EXPORT_HUGO_GOLDMARK: t
+:END:
+**** Multi-line footnote (Goldmark)
+:PROPERTIES:
+:EXPORT_FILE_NAME: multi-line-footnote-goldmark
+:EXPORT_HUGO_ALIASES: multi-line-footnote
+:END:
+This is some text[fn:3].
+**** Footnote with source block                                   :src_block:
+:PROPERTIES:
+:EXPORT_FILE_NAME: footnote-with-src-block
+:END:
+Testing code in a footnote with a ~#+begin_src~ directive.[fn:8]
 ** Multi-line footnote Japanese
 :PROPERTIES:
 :EXPORT_FILE_NAME: multi-line-footnote-japanese
@@ -7926,6 +7946,12 @@ def permanent(m):
 Results from static site search implemented using /Fusejs/, /jquery/
 and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1cb41ae][Source]]
 * Footnotes
+
+[fn:8]
+#+begin_src elisp
+(emacs-version)
+(org-version)
+#+end_src
 
 [fn:7] English on line 1
 の Japanese on line 2

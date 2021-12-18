@@ -122,10 +122,14 @@ INFO is a plist used as a communication channel."
     (concat indent "- [" title "]" "(#" anchor ")")))
 
 ;;;; Footnote section
-(defun org-blackfriday-footnote-section (info &optional is-cjk)
+(defun org-blackfriday-footnote-section (info multi-line-footnote &optional is-cjk)
   "Format the footnote section.
 
 INFO is a plist used as a communication channel.
+
+If MULTI-LINE-FOOTNOTE is non-nil, the footnote definition is not
+collapsed into a single line.
+
 IS-CJK should be set to non-nil if the language is Chinese,
 Japanese or Korean."
   (let ((fn-alist (org-export-collect-footnote-definitions info))
@@ -143,21 +147,30 @@ Japanese or Korean."
         ;; (message "fn: %s" (org-export-data fn info)) ;This gives error
         ;; (message "fn nth 2 car: %s" (org-export-data (nth 2 fn) info))
         (setq def (org-trim (org-export-data (nth 2 fn) info)))
-        ;; Support multi-line footnote definitions by folding all
-        ;; footnote definition lines into a single line as Blackfriday
-        ;; does not support that.
-        (setq def (if is-cjk
-                      (replace-regexp-in-string
-                       "\n" " " ;If the footnote still has newlines, replace them with spaces
-                       (replace-regexp-in-string
-                        ;; Do not insert spaces when joining newlines for
-                        ;; CJK languages.
-                        "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
-                        def))
-                    (replace-regexp-in-string "\n" " " def)))
+        (if multi-line-footnote
+            (progn                      ;Goldmark
+              ;; Goldmark's "PHP Markdown Extra: Footnotes" extension
+              ;; supports multi-line footnotes --
+              ;; https://github.com/yuin/goldmark/#footnotes-extension.
+              ;; 2nd and further lines in a multi-line footnote need to
+              ;; be indented by 4 spaces.
+              (setq def (replace-regexp-in-string "\n" "\n    " def)))
+          (progn                        ;Blackfriday
+            ;; Support multi-line footnote definitions by folding all
+            ;; footnote definition lines into a single line as Blackfriday
+            ;; does not support that.
+            (setq def (if is-cjk
+                          (replace-regexp-in-string
+                           "\n" " " ;If the footnote still has newlines, replace them with spaces
+                           (replace-regexp-in-string
+                            ;; Do not insert spaces when joining newlines for
+                            ;; CJK languages.
+                            "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
+                            def))
+                        (replace-regexp-in-string "\n" " " def)))
 
-        ;; Replace multiple consecutive spaces with a single space.
-        (setq def (replace-regexp-in-string "[[:blank:]]+" " " def))
+            ;; Replace multiple consecutive spaces with a single space.
+            (setq def (replace-regexp-in-string "[[:blank:]]+" " " def))))
         (push (cons n def) fn-alist-stripped)
         (setq n (1+ n))))
     (when fn-alist-stripped

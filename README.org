@@ -143,7 +143,11 @@ Before you export check that these properties are set as you need:
 
 *Important*: If you choose to export an Org subtree as a post, you
  need to set the =EXPORT_FILE_NAME= subtree property. That property is
- used by this package to figure out where the current post starts.
+ used by this package to figure out where the current post starts. For
+ that reason, *a subtree with =EXPORT_FILE_NAME= property cannot nest
+ another subtree with that property*. If you can analogize with the
+ [[https://en.wikipedia.org/wiki/Tree_(data_structure)][branch/leaf data structure terminlogy]], then the subtrees with
+ =EXPORT_FILE_NAME= property need to be /leaf nodes/.
 
 [fn:-1-section_more] The ~HUGO_SECTION~ is the bare-minimum requirement
 to specify the destination path. That path can be further tweaked
@@ -158,7 +162,11 @@ The common =ox-hugo= export bindings are:
     subtree to a Hugo post in Markdown.
 
     A /valid Hugo post subtree/ is an Org subtree that has the
-    =EXPORT_FILE_NAME= property set.
+    =EXPORT_FILE_NAME= property set. *Note that a subtree with
+    =EXPORT_FILE_NAME= property cannot nest a subtree with the same
+    property set.* If you can analogize with the [[https://en.wikipedia.org/wiki/Tree_(data_structure)][branch/leaf data
+    structure terminlogy]], then the subtrees with =EXPORT_FILE_NAME=
+    property need to be /leaf nodes/.
   - If the file is intended to be exported as a whole (i.e. has the
     =#+title= keyword), export the whole Org file to a Hugo post in
     Markdown.

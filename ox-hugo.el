@@ -412,6 +412,16 @@ export."
   :type 'directory)
 ;;;###autoload (put 'org-hugo-base-dir 'safe-local-variable 'stringp)
 
+(defcustom org-hugo-goldmark t
+  "When nil, enable the hacks necessary for Blackfriday Markdown
+processing.
+
+If using Hugo v0.60.0 (released Nov 2019), keep the default
+value."
+  :group 'org-export-hugo
+  :type 'boolean)
+;;;###autoload (put 'org-hugo-goldmark 'safe-local-variable 'booleanp)
+
 (defcustom org-hugo-section "posts"
   "Default section for Hugo posts.
 
@@ -801,6 +811,7 @@ newer."
                    (:hugo-section "HUGO_SECTION" nil org-hugo-section)
                    (:hugo-bundle "HUGO_BUNDLE" nil nil)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil org-hugo-base-dir)
+                   (:hugo-goldmark "HUGO_GOLDMARK" nil org-hugo-goldmark)
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil t) ;Prefer to generate triple-backquoted Markdown code blocks by default.
                    (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
                    (:hugo-prefer-hyphen-in-tags "HUGO_PREFER_HYPHEN_IN_TAGS" nil org-hugo-prefer-hyphen-in-tags)
@@ -3714,6 +3725,7 @@ are \"toml\" and \"yaml\"."
                      "HUGO_SECTION*"
                      "HUGO_BUNDLE"
                      "HUGO_BASE_DIR"
+                     "HUGO_GOLDMARK"
                      "HUGO_CODE_FENCE"
                      "HUGO_MENU"
                      "HUGO_CUSTOM_FRONT_MATTER"

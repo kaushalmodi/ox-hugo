@@ -14,7 +14,8 @@
 :END:
 {{{ci}}} {{{melpa}}} {{{GPLv3}}}
 
-{{{gitter}}}
+/If you have any questions or if you have anything interesting to
+share related to ox-hugo, feel free to do so on [[https://github.com/kaushalmodi/ox-hugo/discussions][Discussions]]!/
 
 #+include: "./ox-hugo-manual.org::#introduction" :only-contents t
 

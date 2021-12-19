@@ -2,7 +2,8 @@
 #+author: Kaushal Modi
 [[https://github.com/kaushalmodi/ox-hugo/actions][https://github.com/kaushalmodi/ox-hugo/actions/workflows/test.yml/badge.svg]] [[https://melpa.org/#/ox-hugo][file:https://melpa.org/packages/ox-hugo-badge.svg]] [[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPL%20v3-blue.svg]]
 
-[[https://gitter.im/KaushalModi/Lobby][https://badges.gitter.im/KaushalModi/Lobby.svg]]
+/If you have any questions or if you have anything interesting to
+share related to ox-hugo, feel free to do so on [[https://github.com/kaushalmodi/ox-hugo/discussions][Discussions]]!/
 
 =ox-hugo= is an Org exporter backend that exports Org to
 [[https://gohugo.io/][Hugo]]-compatible Markdown ([[https://github.com/russross/blackfriday][Blackfriday]]) and also generates the

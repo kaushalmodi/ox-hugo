@@ -17,10 +17,11 @@ enableGitInfo = true
 
 disableFastRender = true        # Hugo 0.30
 
-pygmentsCodeFences = true       # This applies to Chroma too.
-pygmentsUseClasses = true       # This applies to Chroma too.
-
 [markup]
+  [markup.highlight]
+    codeFences = true # default = true
+    noClasses = false # default = true
+
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true # This is *necessary* for ox-hugo to work well with Hugo 0.60.0+

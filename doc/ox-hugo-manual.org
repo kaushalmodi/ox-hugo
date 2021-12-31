@@ -1331,8 +1331,9 @@ Example:
 #+end_src
 
 - Note :: It is necessary to set the Hugo site config variable
-          =pygmentsCodeFences= to =true= for syntax highlighting to
-          work for fenced code blocks.
+  =markup.highlight.codeFences= to =true= (which is the default at
+  least as of [[https://github.com/gohugoio/hugo/commit/bfb9613a14ab2d93a4474e5486d22e52a9d5e2b3][Hugo v0.60.0]]) for syntax highlighting to work for fenced
+  code blocks.
 
 The Hugo =highlight= shortcode is automatically used instead of code
 fences (even with this property at a non-nil value) if:

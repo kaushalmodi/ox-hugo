@@ -62,8 +62,8 @@ Note
 ---
 
 **It is necessary to set the Hugo site config variable
-`pygmentsCodeFences` to `true` for syntax highlighting to work for
-fenced code blocks.**
+`markup.highlight.codeFences` to `true` (default) for syntax
+highlighting to work for fenced code blocks.**
 
 [^fn:1]: Even if the user has set the `HUGO_CODE_FENCE` value to `t`
     (via variable, keyword or subtree property), the Hugo `highlight`

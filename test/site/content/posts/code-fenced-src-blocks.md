@@ -81,5 +81,5 @@ def permanent(m):
 ---
 
 **It is necessary to set the Hugo site config variable
-`pygmentsCodeFences` to `true` for syntax highlighting to work for
-fenced code blocks.**
+`markup.highlight.codeFences` to `true` (default) for syntax
+highlighting to work for fenced code blocks.**

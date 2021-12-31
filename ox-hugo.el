@@ -2646,10 +2646,15 @@ The code block is wrapped in Hugo \"highlight\" shortcode (See
 https://gohugo.io/content-management/syntax-highlighting) if one
 of the above conditions is false.
 
-Note that even with the default non-nil value of HUGO_CODE_FENCE,
-the user *needs* to set the `pygmentsCodeFences' variable to
-`true' in their Hugo site's config, otherwise syntax highlighting
-will not work in the generated fenced code blocks!
+If using a Hugo version older than v0.60.0, note that even with
+the default non-nil value of HUGO_CODE_FENCE, the user *needs* to
+set the `pygmentsCodeFences' variable to `true' in their Hugo
+site's config.  Otherwise syntax highlighting will not work in
+the generated fenced code blocks!
+
+Hugo v0.60.0 onwards, the `markup.highlight.codeFences' (new name
+for the old `pygmentsCodeFences') config variable defaults to
+true.
 
 Hugo \"highlight\" shortcode features:
   - Code blocks with line numbers (if the -n or +n switch is used)

@@ -1775,7 +1775,7 @@ information."
           ;; line as the Hugo highlight shortcode will be used instead
           ;; of literally inserting the line numbers.
           (setq text (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" text))
-          (setq text (format "{{< highlight text \"%s\">}}\n%s{{< /highlight >}}\n" linenos-str text))
+          (setq text (format "{{< highlight text \"%s\" >}}\n%s{{< /highlight >}}\n" linenos-str text))
           (setq ret (org-blackfriday--div-wrap-maybe example-block text)))
       (setq ret (org-blackfriday-example-block example-block nil info)))
     ret))

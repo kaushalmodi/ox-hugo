@@ -4060,9 +4060,11 @@ INFO is a plist holding export options."
 Internal links to other subtrees are converted to external
 links."
   (let ((pre-processed-buffer-prefix "*Ox-hugo Pre-processed "))
-    ;; First kill all the old pre-processed buffers if still left open
-    ;; for any reason.
-    (kill-matching-buffers (regexp-quote pre-processed-buffer-prefix) :internal-too :no-ask)
+    (when (version< "25.99" emacs-version) ;`kill-matching-buffers' got `:no-ask' arg in emacs 26.1
+      ;; https://git.savannah.gnu.org/cgit/emacs.git/commit/?id=70d01daceddeb4e4c49c79473c81420f65ffd290
+      ;; First kill all the old pre-processed buffers if still left open
+      ;; for any reason.
+      (kill-matching-buffers (regexp-quote pre-processed-buffer-prefix) :internal-too :no-ask))
     (let* ((buffer (generate-new-buffer (concat pre-processed-buffer-prefix (buffer-name) " *")))
            ;; Create an abstract syntax tree (AST) of the Org document
            ;; in the current buffer.

@@ -8,8 +8,8 @@ draft = false
 
 Some text before image.
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 1: A unicorn! \"Something in double quotes\"" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="<span class=\"figure-number\">Figure 1: </span>A unicorn! \"Something in double quotes\"" >}}
 
 Some more text, after image.
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: The _same_ figure **again**, testing [a link](https://ox-hugo.scripter.co) too!" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="<span class=\"figure-number\">Figure 2: </span>The _same_ figure **again**, testing [a link](https://ox-hugo.scripter.co) too!" >}}

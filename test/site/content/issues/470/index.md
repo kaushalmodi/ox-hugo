@@ -28,5 +28,5 @@ style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:
 
 
 <div class="figure-caption">
-  Figure 1: SVG from Issue 470
+  <span class=\"figure-number\">Figure 1: </span>SVG from Issue 470
 </div>

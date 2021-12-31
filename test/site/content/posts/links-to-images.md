@@ -32,7 +32,7 @@ that the link jump is evident):
 
 <a id="org93b5383"></a>
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 1: Org Logo" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="<span class=\"figure-number\">Figure 1: </span>Org Logo" >}}
 
 **Here we refer to [2](#org6beb2f2).**
 
@@ -92,7 +92,7 @@ Here's the same image again, but with a different Org link ID:
 
 <a id="org6beb2f2"></a>
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: Same Org Logo" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="<span class=\"figure-number\">Figure 2: </span>Same Org Logo" >}}
 
 **Here we refer to [1](#org93b5383).**
 

@@ -39,17 +39,17 @@ below image, caption is set using that:
 
 Some text before image.
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 1: A unicorn! \"Something in double quotes\"" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="<span class=\"figure-number\">Figure 1: </span>A unicorn! \"Something in double quotes\"" >}}
 
 Some more text, after image.
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 2: The _same_ figure **again**, testing [a link](https://ox-hugo.scripter.co) too!" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="<span class=\"figure-number\">Figure 2: </span>The _same_ figure **again**, testing [a link](https://ox-hugo.scripter.co) too!" >}}
 
 Below, the same caption is set using the `#+attr_html` method instead:
 
 Some text before image.
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 3: A unicorn!" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="<span class=\"figure-number\">Figure 3: </span>A unicorn!" >}}
 
 _Enter a new line after the image link so that it's in an "Org
 paragraph" that contains just that image. That tells Org that that

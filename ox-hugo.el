@@ -2184,11 +2184,7 @@ and rewrite link paths to make blogging more seamless."
                        (plist-get attr :caption)))
              (caption (when (org-string-nw-p caption)
                         (format "%s%s%s%s"
-                                ;; Tue Feb 13 11:32:45 EST 2018 - kmodi
-                                ;; Add the span tag once
-                                ;; https://github.com/gohugoio/hugo/issues/4406
-                                ;; gets resolved.
-                                "" ;"<span class=\\\"figure-number\\\">"
+                                "<span class=\\\"figure-number\\\">"
                                 (format (org-html--translate
                                          (concat
                                           (cdr (assoc 'figure org-blackfriday--org-element-string))
@@ -2197,7 +2193,7 @@ and rewrite link paths to make blogging more seamless."
                                         (org-export-get-ordinal
                                          useful-parent info
                                          nil #'org-html--has-caption-p))
-                                " "     ;" </span>"
+                                " </span>"
                                 ;; Escape the double-quotes, if any.
                                 (replace-regexp-in-string "\"" "\\\\\"" caption))))
              (extension (file-name-extension raw-path))
@@ -2229,7 +2225,7 @@ and rewrite link paths to make blogging more seamless."
                                                    "  %s\n"
                                                    "</div>")
                                            (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
-                                            (org-export-data-with-backend caption 'html info))))))
+                                            (org-export-data-with-backend caption 'ascii info))))))
               ;; (message "[ox-hugo-link DBG] svg contents: %s" svg-contents)
               ;; (message "[ox-hugo-link DBG] svg contents sanitized: %s" svg-contents-sanitized)
               (concat svg-contents-sanitized caption-html))

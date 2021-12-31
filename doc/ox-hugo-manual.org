@@ -1310,6 +1310,15 @@ This auto-copying behavior can be disabled completely by setting
 =org-hugo-external-file-extensions-allowed-for-copying= to /nil/.. but
 you might not want that if you keep your files *outside* the Hugo
 static directory.
+**** Hiding figure caption numbers
+The "Figure <number>:" part of the figure captions can be hidden by
+adding this to the CSS:
+
+#+begin_src css
+.figure-number {
+  display: none;
+}
+#+end_src
 *** Source blocks
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-blocks
@@ -1413,6 +1422,15 @@ by adding =:linenos false= to their headers.
 #+end_src
 
 /The same =:linenos= header arg works for example blocks too./
+**** Hiding source block caption numbers
+The "Code Snippet <number>:" part of the source block captions can be
+hidden by adding this to the CSS:
+
+#+begin_src css
+.src-block-number {
+  display: none;
+}
+#+end_src
 *** Equations
 :PROPERTIES:
 :EXPORT_FILE_NAME: equations
@@ -1769,6 +1787,15 @@ You can find many examples of table styling here:
 -----
 
 /Credit: [[https://css-tricks.com/complete-guide-table-element/][Guide to styling tables in HTML5-friendly manner]]/ --- /css-tricks.com/
+**** Hiding table caption numbers
+The "Table <number>:" part of the table captions can be hidden by
+adding this to the CSS:
+
+#+begin_src css
+.table-number {
+  display: none;
+}
+#+end_src
 *** Details and summary
 :PROPERTIES:
 :EXPORT_FILE_NAME: details-and-summary

@@ -37,7 +37,7 @@ Snippet 1</a></span>: Nested Boxes using PlantUML
 
 </div>
 
-{{< figure src="nested-boxes.svg" caption="Figure 1: PlantUML generated figure showing nested boxes" >}}
+{{< figure src="nested-boxes.svg" caption="<span class=\"figure-number\">Figure 1: </span>PlantUML generated figure showing nested boxes" >}}
 
 ## References {#references}
 

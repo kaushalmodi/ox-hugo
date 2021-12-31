@@ -209,8 +209,14 @@ Required fixes:
           (while (re-search-forward regexp nil :noerror)
             (let* ((sc-body (match-string-no-properties 1))
                    (sc-body-no-newlines (replace-regexp-in-string "\n" " " sc-body))
+                   ;; Remove all backslashes except for the one
+                   ;; preceding double-quotes, like in:
+                   ;;   {{< figure src="nested-boxes.svg" caption="<span class=\"figure-number\">Figure 1: </span>
+                   ;;   PlantUML generated figure showing nested boxes" >}}
                    (sc-body-no-backlash (replace-regexp-in-string
-                                         (rx "\\" (group anything)) "\\1" sc-body-no-newlines)))
+                                         "\"\"" "\\\\\\\\\""
+                                         (replace-regexp-in-string
+                                          (rx "\\" (group anything)) "\\1" sc-body-no-newlines))))
               (replace-match (format "{{< %s >}}" sc-body-no-backlash) :fixedcase)))))
 
       ;; Fix square bracket. \[ abc \] -> [ abc ]

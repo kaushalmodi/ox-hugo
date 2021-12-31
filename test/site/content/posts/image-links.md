@@ -19,7 +19,7 @@ This is some text before the first heading of this post.
 
 <a id="org438f8e5"></a>
 
-{{< figure src="/images/org-mode-unicorn-logo.png" caption="Figure 1: Don't click this image -- It's not a hyperlink" >}}
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="<span class=\"figure-number\">Figure 1: </span>Don't click this image -- It's not a hyperlink" >}}
 
 ---
 
@@ -75,7 +75,7 @@ Click below image to jump to the unicorn image.
 
 <a id="org39c5252"></a>
 
-{{< figure src="/images/unicorn-logo-small.png" caption="Figure 2: Click this image -- It's a hyperlink" link="/images/org-mode-unicorn-logo.png" >}}
+{{< figure src="/images/unicorn-logo-small.png" caption="<span class=\"figure-number\">Figure 2: </span>Click this image -- It's a hyperlink" link="/images/org-mode-unicorn-logo.png" >}}
 
 NOTE
 : `file:` has to be used in the **Description component** of the

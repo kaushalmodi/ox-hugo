@@ -391,6 +391,12 @@ Examples:
   2017-07-31T17:05:38+04:00
   2017-07-31T17:05:38-04:00.")
 
+(defconst org-hugo--preprocess-buffer t
+  "Enable pre-processing of the current Org buffer.
+
+This variable needs to be non-nil for the support of
+cross-subtree Org internal links when using the subtree-based
+export flow.")
 
 
 ;;; User-Configurable Variables
@@ -3999,12 +4005,16 @@ subtree-number being exported.
 
                 ;; Do the buffer pre-processing only if the user is
                 ;; exporting only the current valid Hugo post subtree.
-                (let ((current-outline-path (org-get-outline-path :with-self))
-                      (buffer (org-hugo--get-pre-processed-buffer)))
-                  (with-current-buffer buffer
-                    (goto-char (org-find-olp current-outline-path :this-buffer))
-                    (setq ret (org-hugo-export-to-md async :subtreep visible-only)))
-                  (kill-buffer buffer))))))
+                (let ((current-outline-path (org-get-outline-path :with-self)))
+                  (if org-hugo--preprocess-buffer
+                      (let ((buffer (org-hugo--get-pre-processed-buffer)))
+                        (with-current-buffer buffer
+                          (goto-char (org-find-olp current-outline-path :this-buffer))
+                          (setq ret (org-hugo-export-to-md async :subtreep visible-only)))
+                        (kill-buffer buffer))
+                    (progn
+                      (goto-char (org-find-olp current-outline-path :this-buffer))
+                      (setq ret (org-hugo-export-to-md async :subtreep visible-only)))))))))
           ret)
 
       ;; If the point is not in a valid subtree, check if there's a
@@ -4297,17 +4307,26 @@ The optional argument NOERROR is passed to
           (if all-subtrees
               (progn ;Publish all valid Hugo post subtrees in the file.
                 (setq org-hugo--subtree-count 0) ;Reset the subtree count
-                (let ((buffer (org-hugo--get-pre-processed-buffer)))
-                  (with-current-buffer buffer
-                    (setq ret (org-map-entries
-                               (lambda ()
-                                 (org-hugo--export-subtree-to-md
-                                  async visible-only :all-subtrees))
-                               ;; Export only the subtrees where
-                               ;; EXPORT_FILE_NAME property is not
-                               ;; empty.
-                               "EXPORT_FILE_NAME<>\"\""))
-                    (kill-buffer buffer)))
+                (if org-hugo--preprocess-buffer
+                    (let ((buffer (org-hugo--get-pre-processed-buffer)))
+                      (with-current-buffer buffer
+                        (setq ret (org-map-entries
+                                   (lambda ()
+                                     (org-hugo--export-subtree-to-md
+                                      async visible-only :all-subtrees))
+                                   ;; Export only the subtrees where
+                                   ;; EXPORT_FILE_NAME property is not
+                                   ;; empty.
+                                   "EXPORT_FILE_NAME<>\"\""))
+                        (kill-buffer buffer)))
+                  (setq ret (org-map-entries
+                             (lambda ()
+                               (org-hugo--export-subtree-to-md
+                                async visible-only :all-subtrees))
+                             ;; Export only the subtrees where
+                             ;; EXPORT_FILE_NAME property is not
+                             ;; empty.
+                             "EXPORT_FILE_NAME<>\"\"")))
                 (if ret
                     (message "[ox-hugo] Exported %d subtree%s from %s"
                              org-hugo--subtree-count

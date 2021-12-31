@@ -93,3 +93,18 @@ draft = false
 ;; This will be listed as line 33
 (message "This is line 34")
 {{< /highlight >}}
+
+
+## Specifying `linenos` parameter {#specifying-linenos-parameter}
+
+{{< highlight emacs-lisp "linenos=false" >}}
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+{{< /highlight >}}
+
+{{< highlight emacs-lisp "linenos=inline, linenostart=30" >}}
+(message "This is line 30")
+(message "This is line 31")
+(message "This is line 32")
+{{< /highlight >}}

@@ -943,14 +943,14 @@ ORIG-FUN is the original function `org-babel-exp-code' that this
 function is designed to advice using `:around'.  ARGS are the
 arguments of the ORIG-FUN.
 
-This advice retains the `:hl_lines' and `:front_matter_extra'
-parameters, if added to any source block.  This parameter is used
-in `org-hugo-src-block'.
+This advice retains the `:hl_lines', `linenos' and
+`:front_matter_extra' parameters, if added to any source block.
+This parameter is used in `org-hugo-src-block'.
 
 This advice is added to the ORIG-FUN only while an ox-hugo export
 is in progress.  See `org-hugo--before-export-function' and
 `org-hugo--after-export-function'."
-  (let* ((param-keys-to-be-retained '(:hl_lines :front_matter_extra))
+  (let* ((param-keys-to-be-retained '(:hl_lines :linenos :front_matter_extra))
          (info (car args))
          (parameters (nth 2 info))
          (ox-hugo-params-str (let ((str ""))
@@ -1747,21 +1747,29 @@ created.
 
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
-  (let (;; See `org-element-example-block-parser' for all EXAMPLE-BLOCK properties.
-        (number-lines (org-element-property :number-lines example-block)) ;Non-nil if -n or +n switch is used
-        ret)
-    (if number-lines
-        (let* ((text (org-export-format-code-default example-block info))
-               (linenostart-str (progn
-                                  ;; Extract the start line number of the example block.
+  (let* (;; See `org-element-example-block-parser' for all EXAMPLE-BLOCK properties.
+         (number-lines (org-element-property :number-lines example-block)) ;Non-nil if -n or +n switch is used
+         (switches-str (org-element-property :switches example-block))
+         (linenos-style (and (org-string-nw-p switches-str)
+                             (string-match ":linenos\\s-+\\([^ ]+\\)\\b" switches-str)
+                             (match-string-no-properties 1 switches-str)))
+         linenos-str
+         ret)
+    (if (or number-lines linenos-style)
+        (let ((linenos-style (or linenos-style "table"))
+              (text (org-export-format-code-default example-block info)))
+          (setq linenos-str (format "linenos=%s" linenos-style))
+          (let ((linenostart-str (and ;Extract the start line number of the example block.
                                   (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" text)
-                                  (match-string-no-properties 1 text)))
-               (linenos-str (format "\"linenos=table, linenostart=%s\"" linenostart-str)))
+                                  (match-string-no-properties 1 text))))
+            (when linenostart-str
+              (setq linenos-str (format "%s, linenostart=%s" linenos-str linenostart-str))))
+
           ;; Remove Org-inserted numbers from the beginning of each
           ;; line as the Hugo highlight shortcode will be used instead
           ;; of literally inserting the line numbers.
           (setq text (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" text))
-          (setq text (format "{{< highlight text %s>}}\n%s{{< /highlight >}}\n" linenos-str text))
+          (setq text (format "{{< highlight text \"%s\">}}\n%s{{< /highlight >}}\n" linenos-str text))
           (setq ret (org-blackfriday--div-wrap-maybe example-block text)))
       (setq ret (org-blackfriday-example-block example-block nil info)))
     ret))
@@ -2641,6 +2649,8 @@ Hugo \"highlight\" shortcode features:
   - Code blocks with line numbers (if the -n or +n switch is used)
   - Highlight certains lines in the code block (if the :hl_lines
     parameter is used)
+  - Set the `linenos' argument to the value passed by :linenos
+    (defaults to `table')
 
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
@@ -2667,6 +2677,7 @@ channel."
       (let* (;; See `org-element-src-block-parser' for all SRC-BLOCK properties.
              (number-lines (org-element-property :number-lines src-block)) ;Non-nil if -n or +n switch is used
              (hl-lines (cdr (assoc :hl_lines parameters)))
+             (linenos-style (cdr (assoc :linenos parameters)))
              (hl-lines (cond
                         ((stringp hl-lines)
                          (replace-regexp-in-string "," " " hl-lines)) ;"1,3-4" -> "1 3-4"
@@ -2702,10 +2713,11 @@ channel."
         ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
         (setq content
               (cond
-               ;; If both number-lines and hl-lines are nil
+               ;; If all: number-lines, hl-lines and linenos-style are nil
                ;; , AND if :hugo-code-fence is non-nil (which is, by default).
                ((and (null number-lines)
                      (null hl-lines)
+                     (null linenos-style)
                      (org-hugo--plist-get-true-p info :hugo-code-fence))
                 (let ((content1 (org-blackfriday-src-block src-block nil info)))
                   (when (and org-hugo-langs-no-descr-in-code-fences
@@ -2732,6 +2744,7 @@ channel."
                   content1))
                ;; If number-lines is non-nil
                ;; , or if hl-lines is non-nil
+               ;; , or if linenos-style is non-nil
                ;; , or if :hugo-code-fence is nil
                (t
                 (let ((code (org-export-format-code-default src-block info))
@@ -2740,15 +2753,16 @@ channel."
                       ;; Formatter string where the first arg si linenos-str and
                       ;; second is hllines-str.
                       (highlight-args-str "%s%s"))
-                  (when (or number-lines
-                            hl-lines)
+                  (when (or number-lines hl-lines linenos-style)
                     (setq highlight-args-str " \"%s%s\""))
-                  (when number-lines
-                    (let ((linenostart-str (progn
-                                             ;; Extract the start line number of the code block
-                                             (string-match "\\`\\s-*\\([0-9]+\\)\\s-\\{2\\}" code)
-                                             (match-string-no-properties 1 code))))
-                      (setq linenos-str (format "linenos=table, linenostart=%s" linenostart-str)))
+                  (when (or number-lines linenos-style)
+                    (let ((linenos-style (or linenos-style "table")))
+                      (setq linenos-str (format "linenos=%s" linenos-style))
+                      (let ((linenostart-str (and ;Extract the start line number of the code block
+                                              (string-match "\\`\\s-*\\([0-9]+\\)\\s-\\{2\\}" code)
+                                              (match-string-no-properties 1 code))))
+                        (when linenostart-str
+                          (setq linenos-str (format "%s, linenostart=%s" linenos-str linenostart-str)))))
                     ;; Remove Org-inserted numbers from the beginning of each
                     ;; line as the Hugo highlight shortcode will be used instead
                     ;; of literally inserting the line numbers.

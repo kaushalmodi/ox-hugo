@@ -1339,7 +1339,9 @@ fences (even with this property at a non-nil value) if:
 - Line numbers are enabled using the Org =-n= / =+n= syntax (see
   below), or
 - Line highlighting is enabled using the =:hl_lines= parameter in the
-  source block header (see below).
+  source block header (see below), or
+- =:linenos= parameter is specified in the source block header (see
+  below).
 
 Set the =HUGO_CODE_FENCE= property to =nil= if you want to *always*
 use the Hugo =highlight= shortcode.
@@ -1382,6 +1384,34 @@ The Org source for the below is similar to the above, except that the
 =-n= switch is also added to enable the line numbers.
 
 #+include: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-with-linenums-not-starting-from-1" :only-contents t
+**** Line number Style (*linenos*)
+When line numbers are enabled, by default the "table" style is used
+for line numbers. This is specified using the [[https://gohugo.io/content-management/syntax-highlighting/#highlight-shortcode][=linenos= argument to
+the =highlight= shortcode]].
+
+This default can be overridden using the =:linenos= parameter in the
+source block header.
+
+*Example usage*: If a user has enabled the line numbers by default by
+using something like this in the site's =config.toml=:
+
+#+begin_src toml
+[markup]
+  [markup.highlight]
+    lineNos = true
+#+end_src
+
+, they can disable printing of line numbers for selected source blocks
+by adding =:linenos false= to their headers.
+
+#+begin_src org
+,#+begin_src emacs-lisp :linenos false
+(message "hello")
+(message "bye")
+,#+end_src
+#+end_src
+
+/The same =:linenos= header arg works for example blocks too./
 *** Equations
 :PROPERTIES:
 :EXPORT_FILE_NAME: equations

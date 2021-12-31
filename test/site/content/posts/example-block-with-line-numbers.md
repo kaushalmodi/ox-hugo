@@ -38,3 +38,12 @@ line 23
 line 33
 line 34
 {{< /highlight >}}
+
+
+## Specifying `linenos` parameter {#specifying-linenos-parameter}
+
+{{< highlight text "linenos=false">}}
+This is line 1
+This is line 2
+This is line 3
+{{< /highlight >}}

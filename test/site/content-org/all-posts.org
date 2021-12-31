@@ -1373,6 +1373,18 @@ property needs to be left *empty* instead of setting to =nil=!
 #+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-n-custom-continue>>
 #+end_src
+**** Specifying ~linenos~ parameter
+#+begin_src emacs-lisp :linenos false
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+#+end_src
+
+#+begin_src emacs-lisp -n 30 :linenos inline
+(message "This is line 30")
+(message "This is line 31")
+(message "This is line 32")
+#+end_src
 *** Source blocks with highlighting
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-with-highlighting
@@ -1936,6 +1948,12 @@ line 23
 #+begin_example +n 10
 line 33
 line 34
+#+end_example
+*** Specifying ~linenos~ parameter
+#+begin_example :linenos false
+This is line 1
+This is line 2
+This is line 3
 #+end_example
 ** Example blocks with ATTR_HTML                     :attr___html:attr___css:
 :PROPERTIES:

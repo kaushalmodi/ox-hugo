@@ -2157,11 +2157,21 @@ and rewrite link paths to make blogging more seamless."
                               num-str)))))))
              ;; (message "[ox-hugo-link DBG] link description: %s" description)
              (when description
-               (format "[%s](#%s)"
-                       description
-                       (if (memq (org-element-type destination) '(src-block table))
-                           (org-blackfriday--get-reference destination)
-                         (org-export-get-reference destination info)))))))))
+               (let ((dest-link (cond
+                                 ;; Ref to a source block or table.
+                                 ((memq (org-element-type destination) '(src-block table))
+                                  (org-blackfriday--get-reference destination))
+                                 ;; Ref to a standalone figure.
+                                 ((and (org-html-standalone-image-p destination info)
+                                       (eq (org-element-type destination) 'paragraph))
+                                  (let ((figure-ref (org-blackfriday--get-reference destination)))
+                                    (if (org-string-nw-p figure-ref)
+                                        (replace-regexp-in-string "\\`org-paragraph--" "figure--" figure-ref)
+                                      (org-export-get-reference destination info))))
+                                 ;; Ref to all other link destinations.
+                                 (t
+                                  (org-export-get-reference destination info)))))
+                 (format "[%s](#%s)" description dest-link))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
       ;; (message "[org-hugo-link DBG] processing an image: %s" desc)
       (let* ((parent (org-export-get-parent link))
@@ -2562,71 +2572,101 @@ INFO is a plist used as a communication channel."
     ret))
 
 ;;;; Paragraph
-(defun org-hugo-paragraph (paragraph contents info)
-  "Transcode PARAGRAPH element into Hugo Markdown format.
-CONTENTS is the paragraph contents.  INFO is a plist used as a
-communication channel."
-  (let (;; The label is mainly for paragraphs that are standalone
-        ;; images with #+name keyword.
-        (label (let ((lbl (and (org-element-property :name paragraph)
-                               (org-export-get-reference paragraph info))))
-                 (if lbl
-                     (format "<a id=\"%s\"></a>\n\n" lbl)
-                   "")))
-        ret)
+(defun org-hugo-paragraph--process-content (paragraph contents info)
+  "Process the content of paragraphs.
 
-    ;; (message "[org-hugo-paragraph DBG] para 1: %s" contents)
+- Prevent unwanted spaces when joining Chinese/Japanese lines.
+- Join all lines in a paragraph into a single line if
+  `:hugo-preserve-filling' plist property is nil.
+- Add \"&nbsp;\" HTML entity before footnote anchors so that the
+  anchors won't be on a separate line by themselves.
 
+Returns the processed CONTENTS string from the PARAGRAPH element.
+INFO is a plist used as a communication channel."
+  (let ((ret contents))
     ;; Join consecutive Chinese, Japanese lines into a single long
     ;; line without unwanted space inbetween.
     (when (org-hugo--lang-cjk-p info)
       ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5
       ;; Example: 这是一个测试     -> 这是一个测试文本 ("This is a test text")
       ;;          文本
-      (setq contents (replace-regexp-in-string
-                      "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
-                      contents))
-      ;; (message "[org-hugo-paragraph DBG] para 2: %s" contents)
+      (setq ret (replace-regexp-in-string
+                 "\\([[:multibyte:]]\\)[[:blank:]]*\n[[:blank:]]*\\([[:multibyte:]]\\)" "\\1\\2"
+                 ret))
+      ;; (message "[org-hugo-paragraph--process-content DBG] contents 1: %s" contents)
       )
 
+    ;; Join all content into a single line (followed by a newline)
+    ;; if :hugo-preserve-filling is nil.
     (unless (org-hugo--plist-get-true-p info :hugo-preserve-filling)
-      (setq contents (concat (mapconcat 'identity (split-string contents) " ") "\n")))
+      (setq ret (concat (mapconcat 'identity (split-string ret) " ") "\n")))
 
-    (setq contents (replace-regexp-in-string
-                    ;; Glue footnotes to the words before them using
-                    ;; &nbsp; so that the footnote reference does not
-                    ;; end up on a new line by itself.
-                    ;; "something FN" -> "something&nbsp;FN"
-                    "[[:blank:]]+\\(\\[\\^[^]]+\\]\\)" "&nbsp;\\1"
-                    (replace-regexp-in-string
-                     ;; "FN ." -> "FN."
-                     "\\(\\[\\^[^]]+\\]\\)[[:blank:]]*\\([.]+\\)" "\\1\\2"
-                     contents)))
-    ;; (message "[org-hugo-paragraph DBG] para 3: %s" contents)
-    (setq ret (concat label
-                      (org-md-paragraph paragraph contents info)))
+    ;; Special processing for footnotes.
+    (setq ret (replace-regexp-in-string
+               ;; Glue footnotes to the words before them using &nbsp;
+               ;; so that the footnote reference does not end up on a
+               ;; new line by itself.
+               ;; "something FN" -> "something&nbsp;FN"
+               "[[:blank:]]+\\(\\[\\^[^]]+\\]\\)" "&nbsp;\\1"
+               (replace-regexp-in-string
+                ;; "FN ." -> "FN."
+                "\\(\\[\\^[^]]+\\]\\)[[:blank:]]*\\([.]+\\)" "\\1\\2"
+                ret)))
 
-    ;; Wrap the paragraph with HTML div tag with user-specified
-    ;; attributes, unless the paragraph is a standalone image (or few
-    ;; other conditions as shown below).  These conditions are taken
-    ;; from `org-html-paragraph'.
-    (let* ((parent (org-export-get-parent paragraph))
-           (parent-type (org-element-type parent)))
-      ;; (message "[ox-hugo-para DBG] standalone image? %s\ncontents: %s"
-      ;;          (org-html-standalone-image-p paragraph info)
-      ;;          contents)
-      (unless (or
-               ;; First paragraph in an item has no tag if it is alone
-               ;; or followed, at most, by a sub-list.
-               (and (eq parent-type 'item)
-                    (not (org-export-get-previous-element paragraph info))
-                    (let ((followers (org-export-get-next-element paragraph info 2)))
-                      (and (not (cdr followers))
-                           (memq (org-element-type (car followers)) '(nil plain-list)))))
-               ;; Standalone image.
-               (org-html-standalone-image-p paragraph info))
-        (setq ret (org-blackfriday--div-wrap-maybe paragraph ret))))
+    ;; Escape any lines starting with `#' which is the markup for
+    ;; headings in Markdown.
+    (setq ret (org-md-paragraph paragraph ret info))
+
+    ;; (message "[org-hugo-paragraph--process-content DBG] contents 2: %s" contents)
     ret))
+
+(defun org-hugo-paragraph (paragraph contents info)
+  "Transcode PARAGRAPH element into Hugo Markdown format.
+CONTENTS is the paragraph contents.  INFO is a plist used as a
+communication channel."
+  (let* ((parent (org-export-get-parent paragraph))
+         (parent-type (org-element-type parent)))
+
+    ;; (message "[ox-hugo-para DBG] standalone image? %s\ncontents: %s"
+    ;;          (org-html-standalone-image-p paragraph info)
+    ;;          contents)
+
+    (cond
+     ;; First paragraph in an item has no tag if it is alone or
+     ;; followed, at most, by a sub-list. (Below condition is taken
+     ;; as-is from `org-html-paragraph').
+     ((and (eq parent-type 'item)
+           (not (org-export-get-previous-element paragraph info))
+           (let ((followers (org-export-get-next-element paragraph info 2)))
+             (and (not (cdr followers))
+                  (memq (org-element-type (car followers)) '(nil plain-list)))))
+      (org-hugo-paragraph--process-content paragraph contents info))
+
+     ;; Standalone image.
+     ((org-html-standalone-image-p paragraph info)
+      (let ((figure-ref (org-blackfriday--get-reference paragraph))
+            label)
+        (when (org-string-nw-p figure-ref)
+          (setq figure-ref (replace-regexp-in-string "\\`org-paragraph--" "figure--" figure-ref)))
+        (setq label (if figure-ref
+                        (format "<a id=\"%s\"></a>\n\n" figure-ref)
+                      ""))
+        (concat label contents)))
+
+     ;; Normal paragraph.
+     (t
+      (let ((label (let ((paragraph-ref (and (org-element-property :name paragraph)
+                                             (org-export-get-reference paragraph info))))
+                     (if paragraph-ref
+                         (format "<a id=\"%s\"></a>\n\n" paragraph-ref)
+                       ""))))
+
+        ;; Wrap the paragraph with HTML div tag with user-specified
+        ;; attributes.
+        (org-blackfriday--div-wrap-maybe
+         paragraph
+         (concat label
+                 (org-hugo-paragraph--process-content paragraph contents info))))))))
 
 ;;;; Source Blocks
 (defun org-hugo-src-block (src-block _contents info)

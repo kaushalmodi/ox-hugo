@@ -6716,6 +6716,46 @@ you will be able to see when you view this page's source).
 #+caption: SVG from Issue 470
 #+attr_html: :inlined t
 [[file:images/svg-from-issue-470.svg]]
+** Issue 393 -- TOC target outside scope                         :toc:target:
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: issues/393
+:END:
+*** Chapter One
+:PROPERTIES:
+:CUSTOM_ID: issue-393-chapter-1
+:EXPORT_FILE_NAME: chapter1
+:END:
+{{{oxhugoissue(393)}}}
+
+some front matter for Ch1
+**** Section 1.1
+now we get into it
+**** Section 1.2
+some more stuff
+*** Chapter Two
+:PROPERTIES:
+:CUSTOM_ID: issue-393-chapter-2
+:EXPORT_FILE_NAME: chapter2
+:END:
+{{{oxhugoissue(393)}}}
+
+#+begin_note
+Attempting to export this subtree will give this error:
+
+#+begin_quote
+org-export-data: Unable to resolve link: "issue-393-chapter-1"
+#+end_quote
+
+It is expected because the ~#issue-393-chapter-1~ id is outside of the
+current subtree's export scope.
+#+end_note
+#+toc: headlines 3 :target #issue-393-chapter-1
+
+some front matter for Ch2
+**** Section 2.1
+now we get into it
+**** Section 2.2
+some more stuff
 * Real Examples                                               :real_examples:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: real-examples

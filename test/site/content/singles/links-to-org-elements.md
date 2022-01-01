@@ -274,11 +274,11 @@ Here's the same image again, but with a different Org link ID:
 will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
-<a id="org2f8d647"></a>
+<a id="figure--org-logo1"></a>
 
 {{< figure src="/images/org-mode-unicorn-logo.png" caption="<span class=\"figure-number\">Abbildung 1: </span>Org Logo" >}}
 
-**Here we refer to [Abbildung 2](#orgf9db9d2).**
+**Here we refer to [Abbildung 2](#figure--org-logo2).**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -334,11 +334,11 @@ blandit in.
 
 Here's the same image again, but with a different Org link ID:
 
-<a id="orgf9db9d2"></a>
+<a id="figure--org-logo2"></a>
 
 {{< figure src="/images/org-mode-unicorn-logo.png" caption="<span class=\"figure-number\">Abbildung 2: </span>Same Org Logo" >}}
 
-**Here we refer to [Abbildung 1](#org2f8d647).**
+**Here we refer to [Abbildung 1](#figure--org-logo1).**
 
 ---
 

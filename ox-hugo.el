@@ -2157,11 +2157,21 @@ and rewrite link paths to make blogging more seamless."
                               num-str)))))))
              ;; (message "[ox-hugo-link DBG] link description: %s" description)
              (when description
-               (format "[%s](#%s)"
-                       description
-                       (if (memq (org-element-type destination) '(src-block table))
-                           (org-blackfriday--get-reference destination)
-                         (org-export-get-reference destination info)))))))))
+               (let ((dest-link (cond
+                                 ;; Ref to a source block or table.
+                                 ((memq (org-element-type destination) '(src-block table))
+                                  (org-blackfriday--get-reference destination))
+                                 ;; Ref to a standalone figure.
+                                 ((and (org-html-standalone-image-p destination info)
+                                       (eq (org-element-type destination) 'paragraph))
+                                  (let ((figure-ref (org-blackfriday--get-reference destination)))
+                                    (if (org-string-nw-p figure-ref)
+                                        (replace-regexp-in-string "\\`org-paragraph--" "figure--" figure-ref)
+                                      (org-export-get-reference destination info))))
+                                 ;; Ref to all other link destinations.
+                                 (t
+                                  (org-export-get-reference destination info)))))
+                 (format "[%s](#%s)" description dest-link))))))))
      ((org-export-inline-image-p link org-html-inline-image-rules)
       ;; (message "[org-hugo-link DBG] processing an image: %s" desc)
       (let* ((parent (org-export-get-parent link))
@@ -2634,11 +2644,13 @@ communication channel."
 
      ;; Standalone image.
      ((org-html-standalone-image-p paragraph info)
-      (let ((label (let ((paragraph-ref (and (org-element-property :name paragraph)
-                                             (org-export-get-reference paragraph info))))
-                     (if paragraph-ref
-                         (format "<a id=\"%s\"></a>\n\n" paragraph-ref)
-                       ""))))
+      (let ((figure-ref (org-blackfriday--get-reference paragraph))
+            label)
+        (when (org-string-nw-p figure-ref)
+          (setq figure-ref (replace-regexp-in-string "\\`org-paragraph--" "figure--" figure-ref)))
+        (setq label (if figure-ref
+                        (format "<a id=\"%s\"></a>\n\n" figure-ref)
+                      ""))
         (concat label contents)))
 
      ;; Normal paragraph.

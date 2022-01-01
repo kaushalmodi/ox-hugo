@@ -465,8 +465,8 @@ Details: https://github.com/kaushalmodi/ox-hugo/issues/57."
 If the ELEM has its `name' defined, the anchor is derived from it:
 
 - If the `name' begins with \"code__\", \"tab__\", \"table__\",
-  \"fig__\" or \"figure__\", that prefix is removed as this
-  function adds its own appropriate prefix.
+  \"img__\", \"fig__\" or \"figure__\", that prefix is removed as
+  this function adds its own appropriate prefix.
 - Underscores and forward slashes in the `name' get replaced with
   hyphens.
 
@@ -489,7 +489,7 @@ The return value, if non-nil, is a string."
              (name1 (let* ((tmp name)
                            ;; Remove commonly used code/table/figure
                            ;; prefixes in the #+name itself.
-                           (tmp (replace-regexp-in-string "\\`\\(code\\|tab\\|table\\|fig\\|figure\\|\\)__" "" tmp))
+                           (tmp (replace-regexp-in-string "\\`\\(code\\|tab\\|table\\|img\\|fig\\|figure\\|\\)__" "" tmp))
                            ;; Prefer to use hyphens instead of
                            ;; underscores in anchors.  Also replace /
                            ;; chars with hyphens.

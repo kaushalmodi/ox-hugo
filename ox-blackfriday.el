@@ -69,6 +69,26 @@ Note that this variable is *only* for internal use.")
   :tag "Org Export Blackfriday"
   :group 'org-export)
 
+(defcustom org-blackfriday-syntax-highlighting-langs
+  '(("ipython" . "python")
+    ("jupyter-python" . "python"))
+  "Alist mapping src block languages to their syntax highlighting languages.
+
+The key is the src block language name.  The value is the
+language name to be used in the exported Markdown.  The value
+language name would be one that Hugo's Chroma syntax highlighter
+would understand.
+
+For most src languages, this variable will not need to be
+customized.  But there are some src block \"languages\" like
+`ipython' and `jupyter-python' for which, the exported language
+tag needs to be `python'."
+  :group 'org-export-blackfriday
+  :type '(repeat
+	  (cons
+	   (string "Src Block language")
+	   (string "Syntax highlighting language"))))
+
 
 
 ;;; Define Back-End
@@ -935,6 +955,7 @@ This function is adapted from `org-html-special-block'."
 
 INFO is a plist used as a communication channel."
   (let* ((lang (org-element-property :language src-block))
+         (lang (or (cdr (assoc lang org-blackfriday-syntax-highlighting-langs)) lang))
          (code (org-export-format-code-default src-block info))
          (parent-element (org-export-get-parent src-block))
          (parent-type (car parent-element))

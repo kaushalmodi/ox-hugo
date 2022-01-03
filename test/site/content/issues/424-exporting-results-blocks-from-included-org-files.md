@@ -15,7 +15,7 @@ Note
 
 <!--listend-->
 
-```jupyter-python
+```python
 lm_adam = LinearModel()
 lm_adam.to(device)
 optimizer = Adam(lm_adam.parameters(), weight_decay=0.0001)

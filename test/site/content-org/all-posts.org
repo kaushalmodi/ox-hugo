@@ -1789,6 +1789,17 @@ Some text.
 #+end_src
 
 Some more text.
+** Source blocks with langs that need to be replaced in Markdown :lang:syntax_highlighting:
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-replace-langs-in-exported-md
+:END:
+#+begin_src ipython
+(print "hello")
+#+end_src
+
+#+begin_src jupyter-python
+(print "hello")
+#+end_src
 * Formatting                                                     :formatting:
 ** General
 :PROPERTIES:

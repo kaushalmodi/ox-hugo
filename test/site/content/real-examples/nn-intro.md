@@ -773,7 +773,7 @@ Round {30}: {9802}/{10000}
 修改Size为 `[784,128,64,10]` 添加一层隐藏层，可以进一步提升测试集准确率至98.33%，验证集至98.24%。
 
 对于MNIST数字分类任务，目前最好的准确率为99.79%，那些识别错误的case，恐怕人类想要正确识别也很困难。神经网络的分类效果最新进展可以参看这里：
-[classification\\\_datasets\\\_results](http://rodrigob.github.io/are%5Fwe%5Fthere%5Fyet/build/classification%5Fdatasets%5Fresults.html)。
+[classification_datasets_results](http://rodrigob.github.io/are%5Fwe%5Fthere%5Fyet/build/classification%5Fdatasets%5Fresults.html)。
 
 本文是tensorflow官方推荐教程：[Neural Networks and Deep Learning](http://neuralnetworksanddeeplearning.com/)的笔记整理，原文
 [Github Page](https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md)。

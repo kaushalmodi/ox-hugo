@@ -2348,14 +2348,20 @@ renders as below:
 :EXPORT_FILE_NAME: dealing-with-underscores
 :EXPORT_DATE: 2017-07-21
 :END:
-This underscore should appear escaped in Markdown: _
+*** Cases where the underscores should be escaped
+_something
 
-This underscore is in a verbatim block, so it should not be escaped:
-=_=
+foo bar _something foo bar
 
-These underscores also shouldn't be escaped as they are in emoji
-codes: :raised_hands:, :white_check_mark:.
+something_
 
+foo bar something_ foo bar
+*** Cases when the underscores should not be escaped
+- By itself :: _
+- In a verbatim block :: =_=
+- In an emoji :: :raised_hands:, :white_check_mark:
+- In a citation :: @abc_def
+*** Cases where the underscores are removed                        :noexport:
 And these ones should be eventually removed and _underline_ the text
 (/Requires CSS to do so./) -- *Org syntax*.
 ** Nested bold and italics
@@ -2439,7 +2445,8 @@ blah # This isn't an Org comment either
 
 This * will be escaped just once i.e. show up as =\*= in Markdown.
 
-This _ will be escaped just once i.e. show up as =\_= in Markdown.
+This _ will not be escaped as it's a solo underscore character. But
+the following underscore will be escaped: something_.
 
 This \ will be escaped just once i.e. show up as =\\= in Markdown.
 
@@ -5406,7 +5413,7 @@ Test the ~#+toc~ keyword with ~:target~ attribute
 * Pandoc Citations                                         :pandoc:citations:
 :PROPERTIES:
 :EXPORT_HUGO_PANDOC_CITATIONS: t
-:EXPORT_BIBLIOGRAPHY: cite/bib/bib1.bib, cite/bib/bib2.bib
+:EXPORT_BIBLIOGRAPHY: cite/bib/bib1.bib, cite/bib/bib2.bib, cite/bib/bib3.bib
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@giovanelli2016 @eilan2016)
 :EXPORT_HUGO_PAIRED_SHORTCODES: %mdshortcode myshortcode
 :END:
@@ -5476,6 +5483,8 @@ Text not containing *Markdown*
   - L2 -- bar2
 - L1 -- foo1
 - L1 -- foo2
+*** Citation key with underscore
+Ox-hugo manual (@ox_hugo_man)
 ** Citations Example (YAML)                                            :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
@@ -7624,7 +7633,7 @@ Round {30}: {9802}/{10000}
 
 对于MNIST数字分类任务，目前最好的准确率为99.79%，那些识别错误的case，恐怕人类想
 要正确识别也很困难。神经网络的分类效果最新进展可以参看这里：
-[[http://rodrigob.github.io/are_we_there_yet/build/classification_datasets_results.html][classification\_datasets\_results]]。
+[[http://rodrigob.github.io/are_we_there_yet/build/classification_datasets_results.html][classification_datasets_results]]。
 
 本文是tensorflow官方推荐教程：[[http://neuralnetworksanddeeplearning.com/][Neural Networks and Deep Learning]]的笔记整理，原文
 [[https://github.com/Vonng/Math/blob/master/nndl/nn-intro.md][Github Page]]。

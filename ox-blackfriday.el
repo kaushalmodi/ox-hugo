@@ -660,7 +660,8 @@ holding export options."
         (setq toc-string (concat toc-string
                                  (org-blackfriday-format-toc headline info)
                                  "\n"))))
-    (org-trim (concat toc-string toc-tail contents "\n" (org-blackfriday-footnote-section info)))))
+    (org-trim (concat toc-string toc-tail contents "\n"
+                      (org-blackfriday-footnote-section nil info)))))
 
 ;;;; Italic
 (defun org-blackfriday-italic (_italic contents _info)

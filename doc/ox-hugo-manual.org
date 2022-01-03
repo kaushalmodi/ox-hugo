@@ -1507,23 +1507,38 @@ You can find many examples by looking at {{{testtag(equations)}}}.
 :END:
 **** Subtree-based Export
 ***** Tags
-For subtree-based exports, the Hugo front-matter =tags= values are
-derived from Org tags set for the post subtree headline.
+:PROPERTIES:
+:CUSTOM_ID: tags--subtree-based-export
+:END:
+Tags for subtree-based exports can be set using the =EXPORT_HUGO_TAGS=
+property or the usual Org tags in the post subtree heading.
 
-Example:
+#+name: tab__subtree_based_export_tag_precedence
+#+caption: Subtree-based export Tag parsing precedence
+|------------+----------------------------------------------------------------|
+| Precedence | Location of tags                                               |
+|------------+----------------------------------------------------------------|
+|          1 | =EXPORT_HUGO_TAGS= property                                    |
+|          2 | Tags in =#+filetags= + headings without =@= prefix (preferred) |
+|------------+----------------------------------------------------------------|
+
+By default, Org tags from parent headings, and the tags set in the
+=#+filetags= keyword get inherited (as the default value of
+=org-use-tag-inheritance= is =t=).
+
+#+begin_note
+If the tag inheritance doesn't work as expected, check the value of
+=org-use-tag-inheritance=.
+#+end_note
+****** Example
+:PROPERTIES:
+:CUSTOM_ID: tags--subtree-based-export--example
+:END:
+#+name: code__tags_in_headings
+#+caption: Example of tags in headings
 #+begin_src org
 ,* My post                                                         :tag1:tag2:
 #+end_src
-
-By default, Org tags from parent headlines, and the tags set in the
-=#+filetags= keyword get inherited (as the default value of
-=org-use-tag-inheritance= is =t=). If the tag inheritance doesn't work
-as expected, check that the value of that variable is set as required.
-
-If the =EXPORT_HUGO_TAGS= property is set for a valid Hugo post
-subtree, the value of that property will *completely override* the Org
-tags set even on that subtree, the inherited values of Org-style tags
-from parent headlines and even =#+filetags=.
 ****** Marking files to not be exported
 Note that if you want to prevent a file from getting exported, you can
 assign a special tag to the whole file (example: =no_no_dont_export=).
@@ -1543,35 +1558,99 @@ few Org files to not be exported when running the
   inheritance=
 - About =#+tags= -- [[https://orgmode.org/manual/Setting-Tags.html][Setting Tags]] or =C-h i g (org) Setting Tags=
 ***** Categories
-For subtree-based exports, the Hugo front-matter =categories= values
-are derived from Org tags set for the post subtree headline, but only
-the ones prefixed with *@*.
+:PROPERTIES:
+:CUSTOM_ID: categories--subtree-based-export
+:END:
+Categories for subtree-based exports can be set using the
+=EXPORT_HUGO_CATEGORIES= property or the usual Org tags in the post
+subtree heading (but tags with =@= prefix).
 
-Example:
+#+name: tab__subtree_based_export_category_precedence
+#+caption: Subtree-based export Category parsing precedence
+|------------+-------------------------------------------------------------|
+| Precedence | Location of categories                                      |
+|------------+-------------------------------------------------------------|
+|          1 | =EXPORT_HUGO_CATEGORIES= property                           |
+|          2 | Tags in =#+filetags= + headings with =@= prefix (preferred) |
+|------------+-------------------------------------------------------------|
+
+For subtree-based exports, the Hugo front-matter =categories= values
+are derived from Org tags set for the post subtree heading (if
+=EXPORT_HUGO_CATEGORIES= is not set), but only the ones prefixed with
+*@*.
+
+As with the tags, by default, the categories (Org tags with "@"
+prefix) from parent headings, and the ones set in the =#+filetags=
+keyword too get inherited (as the default value of
+=org-use-tag-inheritance= is =t=).
+
+#+begin_note
+If the tag inheritance doesn't work as expected, check the value of
+=org-use-tag-inheritance=.
+#+end_note
+****** Example
+:PROPERTIES:
+:CUSTOM_ID: categories--subtree-based-export--example
+:END:
+#+name: code__categories_in_headings
+#+caption: Example of categories in headings
 #+begin_src org
 ,* My post                                                       :@cat1:@cat2:
 #+end_src
 
-As with the tags, by default, the categories (Org tags with "@"
-prefix) from parent headlines, and the ones set in the =#+filetags=
-keyword too get inherited (as the default value of
-=org-use-tag-inheritance= is =t=). If the tag inheritance doesn't work
-as expected, check that the value of that variable is set as required.
-
-If the =EXPORT_HUGO_CATEGORIES= property is set for a valid Hugo post
-subtree, the value of that property will *completely override* the
-categories set even on that subtree, the inherited values of
-categories from parent headlines and even =#+filetags=.
+#+name: code__tags_and_categories_in_subtree_based_export
+#+caption: Example of tags and categories in =#+filetags= + headings
+#+begin_src org
+,#+filetags: tag1 tag2 @cat1 @cat2
+,* My post                                                       :tag3:@cat3:
+#+end_src
+Above, the "My post" will end up have all tags ("tag1", "tag2",
+"tag3") and all categories ("cat1", "cat2", "cat3") if
+=org-use-tag-inheritance= is =t=.
 **** File-based Export
-The tag (and category) inheritance does not apply to the file-based
-export flow. So =#+filetags= will have no effect in this flow.
+***** Tags
+:PROPERTIES:
+:CUSTOM_ID: tags--file-based-export
+:END:
+Tags for file-based exports can be set using the =#+hugo_tags= or
+=#+filetags= keyword.
 
-- To set tags, use =#+hugo_tags=.
-- To set categories, use =#+hugo_categories=.
+#+name: tab__file_based_export_tag_precedence
+#+caption: File-based export Tag parsing precedence
+|------------+-----------------------------------------|
+| Precedence | Location of tags                        |
+|------------+-----------------------------------------|
+|          1 | =#+hugo_tags= keyword                   |
+|          2 | Tags in =#+filetags= without =@= prefix |
+|------------+-----------------------------------------|
+***** Categories
+:PROPERTIES:
+:CUSTOM_ID: categories--file-based-export
+:END:
+Categories for file-based exports can be set using the
+=#+hugo_categories= or =#+filetags= keyword.
 
 #+begin_note
-=#+filetags= will have no effect in *file-based* export flow.
+Tags with =@= in =#+filetags= are parsed as Categories by =ox-hugo=.
 #+end_note
+
+#+name: tab__file_based_export_category_precedence
+#+caption: File-based export Category parsing precedence
+|------------+--------------------------------------|
+| Precedence | Location of categories               |
+|------------+--------------------------------------|
+|          1 | =#+hugo_categories= keyword          |
+|          2 | Tags in =#+filetags= with =@= prefix |
+|------------+--------------------------------------|
+****** Example
+:PROPERTIES:
+:CUSTOM_ID: tags-categories--file-based-export--example
+:END:
+#+name: code__tags_and_categories_in_filetags_file_based_export
+#+caption: Example of tags and categories in =#+filetags=
+#+begin_src org
+,#+filetags: tag1 tag2 @cat1 @cat2
+#+end_src
 **** Hyphens and Spaces in Org tags (and categories)
 Hyphens and spaces are not allowed in Org tags (=* Heading :TAG:=).
 
@@ -1594,16 +1673,17 @@ underscores. So an Org tag *abc___def* will be exported as /tag/
 always export /single underscores/ as underscores, set
 =org-hugo-prefer-hyphen-in-tags= to nil.
 
-- NOTE :: These two variables *also affect* the tags set via
-          =#+filetags= keyword (which is used only in subtree-based
-          exported Org files).
+#+begin_note
+These two variables *also affect* the tags set via =#+filetags=
+keyword.
+#+end_note
 
 These variables do not affect the tags set via keywords =#+hugo_tags=,
 =#+hugo_categories= or =#+keywords= (or their respective subtree
 property forms), because Org keywords and properties allow using the
 hyphen and space (/in "double-quoted strings"/) characters. So the
 underscores in these keywords remain untransformed on export.
-**** Examples
+**** More Examples
 - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/tags-and-categories.org][Org source]]
 - Exported Markdown -- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/posts/inheriting-tags.md][=inheriting-tags.md=]], [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/posts/overriding-tags.md][=overriding-tags.md=]]
 - Hugo-generated HTML -- [[https://ox-hugo.scripter.co/test/posts/inheriting-tags/][Inheriting tags]], [[https://ox-hugo.scripter.co/test/posts/overriding-tags/][Overriding tags]]

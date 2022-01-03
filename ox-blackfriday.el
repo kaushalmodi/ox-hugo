@@ -831,14 +831,24 @@ communication channel."
 TEXT is the string to transcode.  INFO is a plist used as a
 communication channel.
 
+TEXT would contain the text from one paragraph i.e. the content
+separated by blank lines.
+
 This function is almost same as `org-md-plain-text' except it
 first escapes any existing \"\\\", and then escapes other string
 matches with \"\\\" as needed."
   (when (plist-get info :with-smart-quotes)
     (setq text (org-export-activate-smart-quotes text :html info)))
   ;; The below series of replacements in `text' is order sensitive.
-  ;; Protect `, *, _ and \
-  (setq text (replace-regexp-in-string "[`*_\\]" "\\\\\\&" text))
+  ;; Protect `, * and \
+  (setq text (replace-regexp-in-string "[`*\\]" "\\\\\\&" text))
+  ;; Protect _ only if it is preceded or followed by a word boundary
+  ;; ("\b" doesn't work because _ itself is considered to be a word
+  ;; boundary).
+  ;; "foo_ bar" -> "foo\_ bar"
+  (setq text (replace-regexp-in-string "\\([[:graph:]]\\)\\([_]\\)\\([[:space:].!?]\\|\\'\\)" "\\1\\\\\\2\\3" text))
+  ;; "foo _bar" -> "foo \_bar"
+  (setq text (replace-regexp-in-string "\\([[:space:]]\\|\\`\\)\\([_]\\)\\([[:graph:]]\\)" "\\1\\\\\\2\\3" text))
   ;; Protect the characters in `org-html-protect-char-alist' (`<',
   ;; `>', `&').
   (setq text (org-html-encode-plain-text text))

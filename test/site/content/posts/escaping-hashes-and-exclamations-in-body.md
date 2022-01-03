@@ -16,7 +16,8 @@ blah # This isn't an Org comment either
 
 This \* will be escaped just once i.e. show up as `\*` in Markdown.
 
-This \_ will be escaped just once i.e. show up as `\_` in Markdown.
+This _ will not be escaped as it's a solo underscore character. But
+the following underscore will be escaped: something\_.
 
 This \\ will be escaped just once i.e. show up as `\\` in Markdown.
 

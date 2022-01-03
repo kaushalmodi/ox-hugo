@@ -82,6 +82,10 @@ Some text.
 -   L1 -- foo1
 -   L1 -- foo2
 
+## Citation key with underscore
+
+Ox-hugo manual (Modi, Kaushal (2018))
+
 ## References {#references}
 
 <div id="refs" class="references csl-bib-body hanging-indent">
@@ -110,6 +114,14 @@ Science* 54: 35--51.
 
 Loncar, Samuel. 2016. "Why Listen to Philosophers? A Constructive
 Critique of Disciplinary Philosophy." *Metaphilosophy* 47 (1): 3--25.
+
+</div>
+
+<div id="ref-ox_hugo_man" class="csl-entry">
+  <div></div>
+
+Modi, Kaushal. 2018. *Ox-Hugo: A Carefully Crafted Org Exporter Back-End
+for Hugo*. North Carolina, USA. <https://ox-hugo.scripter.co/>.
 
 </div>
 

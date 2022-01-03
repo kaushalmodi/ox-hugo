@@ -5,13 +5,27 @@ tags = ["body"]
 draft = false
 +++
 
-This underscore should appear escaped in Markdown: \_
+## Cases where the underscores should be escaped {#cases-where-the-underscores-should-be-escaped}
 
-This underscore is in a verbatim block, so it should not be escaped:
-`_`
+\_something
 
-These underscores also shouldn't be escaped as they are in emoji
-codes: :raised_hands:, :white_check_mark:.
+foo bar \_something foo bar
 
-And these ones should be eventually removed and <span class="underline">underline</span> the text
-(_Requires CSS to do so._) -- **Org syntax**.
+something\_
+
+foo bar something\_ foo bar
+
+
+## Cases when the underscores should not be escaped {#cases-when-the-underscores-should-not-be-escaped}
+
+By itself
+: _
+
+In a verbatim block
+: `_`
+
+In an emoji
+: :raised_hands:, :white_check_mark:
+
+In a citation
+: @abc_def

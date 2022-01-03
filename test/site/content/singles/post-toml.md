@@ -60,7 +60,7 @@ the Markdown file name to the actual link/slug.
 [{{< relref "post-with-slug" >}}]({{< relref "post-with-slug" >}})
 
 
-### Link to the CUSTOM\_ID of a different file {#link-to-the-custom-id-of-a-different-file}
+### Link to the CUSTOM_ID of a different file {#link-to-the-custom-id-of-a-different-file}
 
 [{{< relref "post-yaml#first-heading" >}}]({{< relref "post-yaml#first-heading" >}})
 

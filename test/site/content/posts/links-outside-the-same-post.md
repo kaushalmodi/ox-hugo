@@ -10,11 +10,11 @@ draft = false
 ## External links with search options {#external-links-with-search-options}
 
 Links between documents can contain some search options. Only links
-to a heading with a **:CUSTOM\_ID** property will be resolved to the
+to a heading with a **:CUSTOM_ID** property will be resolved to the
 appropriate location in the linked file. Links to headings and
 links to targets will be resolved to the containing file.
 
--   [Link to CUSTOM\_ID]({{< relref "link-destination#external-target" >}})
+-   [Link to CUSTOM_ID]({{< relref "link-destination#external-target" >}})
 -   [Link to a heading]({{< relref "link-destination" >}})
 -   [Link to a target]({{< relref "link-destination" >}})
 
@@ -27,10 +27,10 @@ an **:ID** property, the `org-id` feature must first be loaded, either
 through `org-customize` or by adding `(require 'org-id)` in your Emacs
 init file.
 
--   [Link to CUSTOM\_ID within the same post](#internal-target)
+-   [Link to CUSTOM_ID within the same post](#internal-target)
 -   [Link to ID within the same post](#internal-target)
 -   [Link to heading within the same post](#internal-target)
--   [Link to target within the same post](#orgf6fbbfc)
+-   [Link to target within the same post](#orgac7640c)
 
 
 ## Cross-post links {#cross-post-links}
@@ -39,36 +39,36 @@ Cross-post links are internal links pointing to targets in a different
 subtree that will be exported to another Hugo post than the link
 source in subtree-based exports. The Hugo's `ref` and `relref`
 shortcodes only supports anchors to headings, so links to a heading,
-a **:CUSTOM\_ID** property, or an **:ID** property will be resolved to the
+a **:CUSTOM_ID** property, or an **:ID** property will be resolved to the
 appropriate location in the linked file, but links to targets will be
 resolved to the containing post.
 
 
 ### Links without descriptions {#links-without-descriptions}
 
--   Link to CUSTOM\_ID outside the same post: [External target]({{< relref "link-destination#external-target" >}})
+-   Link to CUSTOM_ID outside the same post: [External target]({{< relref "link-destination#external-target" >}})
 -   Link to ID outside the same post: [External target]({{< relref "link-destination#external-target" >}})
 -   Link to target outside the same post: [External target]({{< relref "link-destination#external-target" >}})
 -   Another link to target outside the same post: [External target with **bold** and _italic_]({{< relref "link-destination#external-target-with-bold-and-italic" >}})
--   Link to subtree by CUSTOM\_ID: [Link destination]({{< relref "link-destination" >}})
+-   Link to subtree by CUSTOM_ID: [Link destination]({{< relref "link-destination" >}})
 -   Link to subtree by ID: [Link destination]({{< relref "link-destination" >}})
 -   Link to subtree by heading: [Link destination]({{< relref "link-destination" >}})
 
 
 ### Links with descriptions {#links-with-descriptions}
 
--   [Link to CUSTOM\_ID outside the same post]({{< relref "link-destination#external-target" >}})
+-   [Link to CUSTOM_ID outside the same post]({{< relref "link-destination#external-target" >}})
 -   [Link to ID outside the same post]({{< relref "link-destination#external-target" >}})
 -   [Link to target outside the same post]({{< relref "link-destination#external-target" >}})
 -   [Another link to target outside the same post]({{< relref "link-destination#external-target-with-bold-and-italic" >}})
--   [Link to subtree by CUSTOM\_ID]({{< relref "link-destination" >}})
+-   [Link to subtree by CUSTOM_ID]({{< relref "link-destination" >}})
 -   [Link to subtree by ID]({{< relref "link-destination" >}})
 -   [Link to subtree by heading]({{< relref "link-destination" >}})
 
 
 ## Internal target {#internal-target}
 
-<a id="orgf6fbbfc"></a>
+<a id="orgac7640c"></a>
 
 
 ## Link destination {#link-destination}
@@ -76,7 +76,7 @@ resolved to the containing post.
 
 ### External target {#external-target}
 
-<a id="orgcb4bfd6"></a>
+<a id="org15cb7d5"></a>
 
 
 ### External target with **bold** and _italic_ {#external-target-with-bold-and-italic}

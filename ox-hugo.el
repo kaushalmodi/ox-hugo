@@ -4279,6 +4279,11 @@ Return the buffer the export happened to."
 (defun org-hugo-export-to-md (&optional async subtreep visible-only)
   "Export current buffer to a Hugo-compatible Markdown file.
 
+This is the main exporting function which is called by both
+`org-hugo--export-file-to-md' and
+`org-hugo--export-subtree-to-md', and thus
+`org-hugo-export-wim-to-md' too.
+
 If narrowing is active in the current buffer, only export its
 narrowed part.
 

@@ -129,6 +129,30 @@ tag needs to be `python'."
 
 ;;; Miscellaneous Helper Functions
 
+;;;; Check if a boolean plist value is non-nil
+(defun org-blackfriday--plist-get-true-p (info key)
+  "Return non-nil if KEY in INFO is non-nil.
+Return nil if the value of KEY in INFO is nil, \"nil\" or \"\".
+
+This is a special version of `plist-get' used only for keys that
+are expected to hold a boolean value.
+
+INFO is a plist used as a communication channel."
+  (let ((value (plist-get info key)))
+    (cond
+     ((or (equal t value)
+          (equal nil value))
+      value)
+     ((and (stringp value)
+           (string= value "nil"))
+      nil)
+     (t
+      ;; "" -> nil
+      ;; "t" -> "t"
+      ;; "anything else" -> "anything else"
+      ;; 123 -> nil
+      (org-string-nw-p value)))))
+
 ;;;; Table of contents
 (defun org-blackfriday-format-toc (heading info)
   "Return an appropriate table of contents entry for HEADING.
@@ -142,13 +166,10 @@ INFO is a plist used as a communication channel."
     (concat indent "- [" title "]" "(#" anchor ")")))
 
 ;;;; Footnote section
-(defun org-blackfriday-footnote-section (info multi-line-footnote &optional is-cjk)
+(defun org-blackfriday-footnote-section (info &optional is-cjk)
   "Format the footnote section.
 
 INFO is a plist used as a communication channel.
-
-If MULTI-LINE-FOOTNOTE is non-nil, the footnote definition is not
-collapsed into a single line.
 
 IS-CJK should be set to non-nil if the language is Chinese,
 Japanese or Korean."
@@ -167,7 +188,7 @@ Japanese or Korean."
         ;; (message "fn: %s" (org-export-data fn info)) ;This gives error
         ;; (message "fn nth 2 car: %s" (org-export-data (nth 2 fn) info))
         (setq def (org-trim (org-export-data (nth 2 fn) info)))
-        (if multi-line-footnote
+        (if (org-blackfriday--plist-get-true-p info :hugo-goldmark)
             (progn                      ;Goldmark
               ;; Goldmark's "PHP Markdown Extra: Footnotes" extension
               ;; supports multi-line footnotes --
@@ -661,7 +682,7 @@ holding export options."
                                  (org-blackfriday-format-toc heading info)
                                  "\n"))))
     (org-trim (concat toc-string toc-tail contents "\n"
-                      (org-blackfriday-footnote-section nil info)))))
+                      (org-blackfriday-footnote-section info)))))
 
 ;;;; Italic
 (defun org-blackfriday-italic (_italic contents _info)

@@ -2020,8 +2020,7 @@ containing the TITLE's number."
   "Return body of document after converting it to Hugo-compatible Markdown.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
-  (let* ((goldmarkp (org-hugo--plist-get-true-p info :hugo-goldmark))
-         (toc-level (plist-get info :with-toc))
+  (let* ((toc-level (plist-get info :with-toc))
          (toc-level (if (and toc-level
                              (not (wholenump toc-level)))
                         (plist-get info :headline-levels)
@@ -2038,7 +2037,7 @@ holding export options."
                ;; Make sure CONTENTS is separated from table of contents
                ;; and footnotes with at least a blank line.
                "\n"
-               (org-blackfriday-footnote-section info goldmarkp (org-hugo--lang-cjk-p info))))))
+               (org-blackfriday-footnote-section info (org-hugo--lang-cjk-p info))))))
 
 ;;;; Keyword
 (defun org-hugo-keyword (keyword contents info)

@@ -3339,6 +3339,10 @@ the Hugo front-matter."
   (and (stringp tag)
        (string-match-p "\\`@" tag)))
 
+(defun org-hugo--subtree-export-p (info)
+  "Return non-nil if the current export is subtree based."
+  (memq 'subtree (plist-get info :export-options)))
+
 (defun org-hugo--get-front-matter (info)
   "Return the Hugo front-matter string.
 
@@ -3386,9 +3390,11 @@ INFO is a plist used as a communication channel."
          (draft (org-hugo--parse-draft-state info))
          (headless (when (org-hugo--plist-get-true-p info :hugo-headless)
                      (org-hugo--front-matter-value-booleanize (org-hugo--plist-get-true-p info :hugo-headless))))
-         (all-t-and-c-str (org-entry-get (point) "ALLTAGS"))
-         (all-t-and-c (when (stringp all-t-and-c-str)
-                        (org-split-string all-t-and-c-str ":")))
+         (all-t-and-c-str (org-entry-get (point) "ALLTAGS")) ;Includes tags inherited from #+filetags: too.
+         (all-t-and-c (or (when (stringp all-t-and-c-str)    ;tags/categories from `all-t-and-c' are used
+                            (org-split-string all-t-and-c-str ":")) ;only if HUGO_TAGS or HUGO_CATEGORIES are not set.
+                          (and (null (org-hugo--subtree-export-p info)) ;Use #+filetags: for file-based exports if #+hugo_tags are not set.
+                               org-file-tags)))
          (tags (or
                 ;; Look for tags set using HUGO_TAGS keyword, or
                 ;; EXPORT_HUGO_TAGS property if available.

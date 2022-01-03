@@ -1,5 +1,5 @@
 +++
-title = "Don't number headlines or TOC"
+title = "Don't number headings or TOC"
 tags = ["export-option", "toc", "num"]
 draft = false
 +++

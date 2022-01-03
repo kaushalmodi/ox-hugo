@@ -1,5 +1,5 @@
 +++
-title = "Draft state with other headlines"
+title = "Draft state with other headings"
 date = 2017-07-12T13:46:16-04:00
 tags = ["draft", "post-heading-followed-soon-with-subheading"]
 draft = true

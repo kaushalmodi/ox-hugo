@@ -1,5 +1,5 @@
 (defun xeijin/conv-chkbox-items-to-front-matter (hl)
-  "Find the headline exactly matching HL.
+  "Find the heading exactly matching HL.
 
 Then find all plain list items under HL and return as a
 list \\='((checked . (VALa VALb ..)) (not-checked . (VALx VALy
@@ -27,10 +27,10 @@ list \\='((checked . (VALa VALb ..)) (not-checked . (VALx VALy
 	   (format org-complex-heading-regexp-format (regexp-quote hl)) nil :noerror))
         ;; (message "dbg z: pt: %d" (point))
         (save-restriction
-          (org-narrow-to-subtree) ;Narrow to the `hl' headline
+          (org-narrow-to-subtree) ;Narrow to the `hl' heading
 	  (setq hl-as-element (org-element-parse-buffer)))
         ;; (message "dbg: %S" hl-as-element)
-        (org-element-map hl-as-element 'item ;Map over headline's items
+        (org-element-map hl-as-element 'item ;Map over heading's items
 	  (lambda (item)
 	    (let* ((checkbox-state (org-element-property :checkbox item)) ;Get checkbox value of item
 		   (item-text (org-trim (substring-no-properties

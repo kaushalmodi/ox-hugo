@@ -130,15 +130,15 @@ tag needs to be `python'."
 ;;; Miscellaneous Helper Functions
 
 ;;;; Table of contents
-(defun org-blackfriday-format-toc (headline info)
-  "Return an appropriate table of contents entry for HEADLINE.
+(defun org-blackfriday-format-toc (heading info)
+  "Return an appropriate table of contents entry for HEADING.
 
 INFO is a plist used as a communication channel."
-  (let* ((title (org-export-data (org-export-get-alt-title headline info) info))
-         (level (1- (org-element-property :level headline)))
+  (let* ((title (org-export-data (org-export-get-alt-title heading info) info))
+         (level (1- (org-element-property :level heading)))
          (indent (concat (make-string (* level 2) ? )))
-         (anchor (or (org-element-property :CUSTOM_ID headline)
-                     (org-export-get-reference headline info))))
+         (anchor (or (org-element-property :CUSTOM_ID heading)
+                     (org-export-get-reference heading info))))
     (concat indent "- [" title "]" "(#" anchor ")")))
 
 ;;;; Footnote section
@@ -651,14 +651,14 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
   (let* ((depth (plist-get info :with-toc))
-         (headlines (and depth (org-export-collect-headlines info depth)))
-         (toc-tail (if headlines "\n\n" ""))
+         (headings (and depth (org-export-collect-headlines info depth)))
+         (toc-tail (if headings "\n\n" ""))
          (toc-string ""))
 
-    (when headlines
-      (dolist (headline headlines)
+    (when headings
+      (dolist (heading headings)
         (setq toc-string (concat toc-string
-                                 (org-blackfriday-format-toc headline info)
+                                 (org-blackfriday-format-toc heading info)
                                  "\n"))))
     (org-trim (concat toc-string toc-tail contents "\n"
                       (org-blackfriday-footnote-section nil info)))))
@@ -1242,7 +1242,7 @@ asynchronously.  The resulting buffer should be accessible
 through the `org-export-stack' interface.
 
 When optional argument SUBTREEP is non-nil, export the sub-tree
-at point, extracting information from the headline properties
+at point, extracting information from the heading properties
 first.
 
 When optional argument VISIBLE-ONLY is non-nil, don't export
@@ -1280,7 +1280,7 @@ asynchronously.  The resulting file should be accessible through
 the `org-export-stack' interface.
 
 When optional argument SUBTREEP is non-nil, export the sub-tree
-at point, extracting information from the headline properties
+at point, extracting information from the heading properties
 first.
 
 When optional argument VISIBLE-ONLY is non-nil, don't export

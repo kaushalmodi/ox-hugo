@@ -46,7 +46,7 @@ Here are few variables that you might like to change in the `local.mk`:
     ```makefile
     # Define if you want to include some (or all) files from contrib/lisp
     # just the filename please (no path prefix, no .el suffix), maybe with globbing
-    #   org-eldoc - Headline breadcrumb trail in minibuffer
+    #   org-eldoc - Heading breadcrumb trail in minibuffer
     #   ox-extra - Allow ignoring just the heading, but still export the body of those headings
     #   org-mime - Convert org buffer to htmlized format for email
     ORG_ADD_CONTRIB = org-eldoc ox-extra org-mime

@@ -89,7 +89,7 @@
 ;; Using the correct function for getting inherited Org tags.
 ;; Starting Org 9.2, `org-get-tags' returns all the inherited tags
 ;; instead of returning only the local tags i.e. only the current
-;; headline tags.
+;; heading tags.
 ;; https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=fbe56f89f75a8979e0ba48001a822518df2c66fe
 
 ;; For Org <= 9.1, `org-get-tags' returned a list of tags *only* at
@@ -340,7 +340,7 @@ titleblock
 
 autoHeaderIds
 - default: enabled
-- Purpose: When enabled, auto-create the header ID's from the headline
+- Purpose: When enabled, auto-create the header ID's from the heading
            text.
 
 backslashLineBreak
@@ -399,6 +399,13 @@ cross-subtree Org internal links when using the subtree-based
 export flow.")
 
 
+;;; Obsoletions
+
+(define-obsolete-variable-alias 'org-hugo-default-section-directory 'org-hugo-section "Oct 31, 2018")
+(define-obsolete-function-alias 'org-hugo-headline 'org-hugo-heading "Jan 3, 2022")
+
+
+
 ;;; User-Configurable Variables
 
 (defgroup org-export-hugo nil
@@ -406,8 +413,6 @@ export flow.")
   :tag "Org Export Hugo"
   :group 'org-export
   :version "25.2")
-
-(define-obsolete-variable-alias 'org-hugo-default-section-directory 'org-hugo-section "Oct 31, 2018")
 
 (defcustom org-hugo-base-dir nil
   "Base directory for Hugo.
@@ -573,11 +578,11 @@ non-nil."
 (defcustom org-hugo-export-with-toc nil
   "When non-nil, Markdown format TOC will be inserted.
 
-The TOC contains headlines with levels up
+The TOC contains headings with levels up
 to`org-export-headline-levels'.  When an integer, include levels
 up to N in the toc, this may then be different from
 `org-export-headline-levels', but it will not be allowed to be
-larger than the number of headline levels.  When nil, no table of
+larger than the number of heading levels.  When nil, no table of
 contents is made.
 
 This option can also be set with the OPTIONS keyword,
@@ -590,25 +595,25 @@ e.g. \"toc:nil\", \"toc:t\" or \"toc:3\"."
 ;;;###autoload (put 'org-hugo-export-with-toc 'safe-local-variable (lambda (x) (or (booleanp x) (integerp x))))
 
 (defcustom org-hugo-export-with-section-numbers nil
-  "Configuration for adding section numbers to headlines.
+  "Configuration for adding section numbers to headings.
 
-When set to `onlytoc', none of the headlines will be numbered in
+When set to `onlytoc', none of the headings will be numbered in
 the exported post body, but TOC generation will use the section
 numbers.
 
 When set to an integer N, numbering will only happen for
-headlines whose relative level is higher or equal to N.
+headings whose relative level is higher or equal to N.
 
 When set to any other non-nil value, numbering will happen for
-all the headlines.
+all the headings.
 
 This option can also be set with the OPTIONS keyword,
 e.g. \"num:onlytoc\", \"num:nil\", \"num:t\" or \"num:3\"."
   :group 'org-export-hugo
   :type '(choice
           (const :tag "Don't number only in body" 'onlytoc)
-          (const :tag "Don't number any headline" nil)
-          (const :tag "Number all headlines" t)
+          (const :tag "Don't number any heading" nil)
+          (const :tag "Number all headings" t)
           (integer :tag "Number to level")))
 ;;;###autoload (put 'org-hugo-export-with-section-numbers 'safe-local-variable (lambda (x) (or (booleanp x) (equal 'onlytoc x) (integerp x))))
 
@@ -791,7 +796,7 @@ newer."
                      (example-block . org-hugo-example-block)
                      (export-block . org-hugo-export-block)
                      (export-snippet . org-hugo-export-snippet)
-                     (headline . org-hugo-headline)
+                     (headline . org-hugo-heading)
                      (inner-template . org-hugo-inner-template)
                      (keyword . org-hugo-keyword)
                      (link . org-hugo-link)
@@ -1040,24 +1045,24 @@ This is an internal function."
   (setq org-hugo--fm nil)
   (setq org-hugo--fm-yaml nil))
 
-;;;; HTMLized section number for headline
-(defun org-hugo--get-headline-number (headline info &optional toc)
-  "Return htmlized section number for the HEADLINE.
+;;;; HTMLized section number for heading
+(defun org-hugo--get-heading-number (heading info &optional toc)
+  "Return htmlized section number for the HEADING.
 INFO is a plist used as a communication channel.
 
-When the \"num\" export option is `onlytoc', headline number is
+When the \"num\" export option is `onlytoc', heading number is
 returned only if the optional argument TOC is non-nil.
 
-Return nil if there is no headline number, or if it has been
+Return nil if there is no heading number, or if it has been
 disabled."
   (let ((onlytoc (equal 'onlytoc (plist-get info :section-numbers))))
     (when (and (if toc
                    t
                  (not onlytoc)) ;If `toc' is nil, but `onlytoc' is non-nil, return nil
-               (org-export-numbered-headline-p headline info))
+               (org-export-numbered-headline-p heading info))
       (let ((number-str (mapconcat
                          'number-to-string
-                         (org-export-get-headline-number headline info) ".")))
+                         (org-export-get-headline-number heading info) ".")))
         (format "<span class=\"section-num\">%s</span> " number-str)))))
 
 ;;;; Build TOC
@@ -1073,16 +1078,16 @@ When optional argument SCOPE is non-nil, build a table of
 contents according to the specified element.
 
 When optional argument LOCAL is non-nil, build a table of
-contents according to the current headline."
-  (let* ((toc-headline
+contents according to the current heading."
+  (let* ((toc-heading
           (unless local
             (format "\n<div class=\"heading\">%s</div>\n"
                     (org-html--translate "Table of Contents" info))))
          (current-level nil)
          (toc-items
           (mapconcat
-           (lambda (headline)
-             (let* ((level-raw (org-export-get-relative-level headline info))
+           (lambda (heading)
+             (let* ((level-raw (org-export-get-relative-level heading info))
                     (level (if scope
                                (let* ((current-level-inner
                                        (progn
@@ -1098,26 +1103,26 @@ contents according to the current headline."
                              level-raw))
                     (indentation (make-string (* 4 (1- level)) ?\s))
                     (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
-                               (org-element-property :todo-keyword headline)))
+                               (org-element-property :todo-keyword heading)))
                     (todo-str (if todo
                                   (concat (org-hugo--todo todo info) " ")
                                 ""))
-                    (headline-num-list (org-export-get-headline-number headline info))
-                    (number (if headline-num-list
-                                ;; (message "[ox-hugo TOC DBG] headline-num-list: %S" headline-num-list)
-                                (org-hugo--get-headline-number headline info :toc)
+                    (heading-num-list (org-export-get-headline-number heading info))
+                    (number (if heading-num-list
+                                ;; (message "[ox-hugo TOC DBG] heading-num-list: %S" heading-num-list)
+                                (org-hugo--get-heading-number heading info :toc)
                               ""))
                     (toc-entry
                      (format "[%s%s](#%s)"
                              todo-str
                              (org-export-data-with-backend
-                              (org-export-get-alt-title headline info)
+                              (org-export-get-alt-title heading info)
                               (org-export-toc-entry-backend 'hugo)
                               info)
-                             (org-hugo--get-anchor headline info)))
+                             (org-hugo--get-anchor heading info)))
                     (tags (and (plist-get info :with-tags)
                                (not (eq 'not-in-toc (plist-get info :with-tags)))
-                               (let ((tags (org-export-get-tags headline info)))
+                               (let ((tags (org-export-get-tags heading info)))
                                  (and tags
                                       (format ":%s:"
                                               (mapconcat #'identity tags ":")))))))
@@ -1128,7 +1133,7 @@ contents according to the current headline."
            (org-export-collect-headlines info n scope)
            "\n"))                       ;Newline between TOC items
          ;; Remove blank lines from in-between TOC items, which can
-         ;; get introduced when using the "UNNUMBERED: t" headline
+         ;; get introduced when using the "UNNUMBERED: t" heading
          ;; property.
          (toc-items (org-string-nw-p
                      (replace-regexp-in-string "\n\\{2,\\}" "\n" toc-items))))
@@ -1147,7 +1152,7 @@ contents according to the current headline."
                           " local"
                         ""))
               "<div></div>\n" ;This is a nasty workaround till Hugo/Blackfriday support
-              toc-headline    ;wrapping Markdown in HTML div's.
+              toc-heading    ;wrapping Markdown in HTML div's.
               "\n"
               toc-items ;https://github.com/kaushalmodi/ox-hugo/issues/93
               "\n\n"
@@ -1325,7 +1330,7 @@ INFO is a plist used as a communication channel."
   "Return current post's publish date as a string.
 
 1. If the point is in an Org subtree which has the `CLOSED' property
-   set (usually generated automatically when switching a headline's
+   set (usually generated automatically when switching a heading's
    TODO state to \"DONE\"), get the `CLOSED' time stamp.
 
 2. If that's not the case, but the subtree has the `EXPORT_DATE'
@@ -1828,45 +1833,45 @@ of those blocks falls back to the respective exporters."
    (t
     (org-export-with-backend 'md export-block nil nil))))
 
-;;;; Headline
-(defun org-hugo-headline (headline contents info)
-  "Transcode HEADLINE element into Markdown format.
-CONTENTS is the headline contents.  INFO is a plist used as
+;;;; Heading
+(defun org-hugo-heading (heading contents info)
+  "Transcode HEADING element into Markdown format.
+CONTENTS is the heading contents.  INFO is a plist used as
 a communication channel."
-  (unless (org-element-property :footnote-section-p headline)
-    (let* ((numbers (org-hugo--get-headline-number headline info nil))
+  (unless (org-element-property :footnote-section-p heading)
+    (let* ((numbers (org-hugo--get-heading-number heading info nil))
            (loffset (string-to-number (plist-get info :hugo-level-offset))) ;"" -> 0, "0" -> 0, "1" -> 1, ..
-           (level (org-export-get-relative-level headline info))
+           (level (org-export-get-relative-level heading info))
            (level-effective (+ loffset level))
-           (title (org-export-data (org-element-property :title headline) info)) ;`org-export-data' required
+           (title (org-export-data (org-element-property :title heading) info)) ;`org-export-data' required
            (todo (and (org-hugo--plist-get-true-p info :with-todo-keywords)
-                      (org-element-property :todo-keyword headline)))
+                      (org-element-property :todo-keyword heading)))
            (todo-fmtd (when todo
                         (concat (org-hugo--todo todo info) " ")))
            (tags (and (org-hugo--plist-get-true-p info :with-tags)
-                      (let ((tag-list (org-export-get-tags headline info)))
+                      (let ((tag-list (org-export-get-tags heading info)))
                         (and tag-list
                              (format "     :%s:"
                                      (mapconcat #'identity tag-list ":"))))))
            (priority
             (and (org-hugo--plist-get-true-p info :with-priority)
-                 (let ((char (org-element-property :priority headline)))
+                 (let ((char (org-element-property :priority heading)))
                    (and char (format "[#%c] " char)))))
            (style (plist-get info :md-headline-style)))
-      ;; (message "[ox-hugo-headline DBG] num: %s" numbers)
+      ;; (message "[ox-hugo-heading DBG] num: %s" numbers)
       (cond
-       ;; Cannot create a headline.  Fall-back to a list.
-       ((or (org-export-low-level-p headline info)
+       ;; Cannot create a heading.  Fall-back to a list.
+       ((or (org-export-low-level-p heading info)
             (not (memq style '(atx setext)))
             (and (eq style 'atx) (> level-effective 6))
             (and (eq style 'setext) (> level-effective 2)))
         (let ((bullet
-               (if (not (org-export-numbered-headline-p headline info)) "-"
+               (if (not (org-export-numbered-headline-p heading info)) "-"
                  (concat (number-to-string
                           (car (last (org-export-get-headline-number
-                                      headline info))))
+                                      heading info))))
                          ".")))
-              (heading (concat todo-fmtd " " priority title))) ;Headline text without tags
+              (heading (concat todo-fmtd " " priority title))) ;Heading text without tags
           (concat "<!--list-separator-->\n\n"
                   ;; Above is needed just in case the body of the
                   ;; section above is ending with a plain list. That
@@ -1876,13 +1881,13 @@ a communication channel."
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
         (let* ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
-                               (org-hugo--get-anchor headline info)))
-               (headline-title (org-hugo--headline-title style level loffset title
-                                                         todo-fmtd anchor numbers))
+                               (org-hugo--get-anchor heading info)))
+               (heading-title (org-hugo--heading-title style level loffset title
+                                                       todo-fmtd anchor numbers))
                (content-str (or (org-string-nw-p contents) "")))
-          (format "%s%s" headline-title content-str)))))))
+          (format "%s%s" heading-title content-str)))))))
 
-;;;;; Headline Helpers
+;;;;; Heading Helpers
 ;;;###autoload
 (defun org-hugo-slug (str)
   "Convert string STR to a `slug' and return that string.
@@ -1957,7 +1962,7 @@ The `slug' generated from that STR follows these rules:
     str))
 
 (defun org-hugo--get-anchor(element info &optional title-str)
-  "Return an Org headline's CUSTOM_ID or it's title's slug.
+  "Return an Org heading's CUSTOM_ID or it's title's slug.
 
 If an Org ELEMENT has the CUSTOM_ID property defined, return
 that.
@@ -1979,14 +1984,14 @@ output."
         (setq ret (org-hugo-slug title))))
     ret))
 
-(defun org-hugo--headline-title (style level loffset title &optional todo anchor numbers)
-  "Generate a headline title in the preferred Markdown headline style.
+(defun org-hugo--heading-title (style level loffset title &optional todo anchor numbers)
+  "Generate a heading title in the preferred Markdown heading style.
 
 STYLE is the preferred style (`atx' or `setext').
 LEVEL is the header level.
 LOFFSET is the offset (a non-negative number) that is added to the
 Markdown heading level for `atx' style.
-TITLE is the headline title.
+TITLE is the heading title.
 
 Optional argument TODO is the Org TODO string.
 
@@ -1995,20 +2000,20 @@ string.
 
 Optional argument NUMBERS, if non-nil, is an htmlized string
 containing the TITLE's number."
-  (let ((headline (concat todo numbers title " " anchor "\n")))
+  (let ((heading (concat todo numbers title " " anchor "\n")))
     ;; Use "Setext" style
     (if (and (eq style 'setext) (< level 3))
         (let* ((underline-char (if (= level 1) ?= ?-))
-               (underline (concat (make-string (length headline) underline-char)
+               (underline (concat (make-string (length heading) underline-char)
                                   "\n")))
-          (concat "\n" headline underline "\n"))
+          (concat "\n" heading underline "\n"))
       ;; Use "Atx" style
-      ;; Always translate level N Org headline to level N+1 Markdown
-      ;; headline because Markdown level 1 headline and HTML title both
+      ;; Always translate level N Org heading to level N+1 Markdown
+      ;; heading because Markdown level 1 heading and HTML title both
       ;; get the HTML <h1> tag, and we do not want the top-most heading
       ;; of a post to look the exact same as the post's title.
       (let ((level-mark (make-string (+ loffset level) ?#)))
-        (concat "\n" level-mark " " headline "\n")))))
+        (concat "\n" level-mark " " heading "\n")))))
 
 ;;;; Inner Template
 (defun org-hugo-inner-template (contents info)
@@ -2109,7 +2114,7 @@ and rewrite link paths to make blogging more seamless."
              ;; (message "[org-hugo-link DBG] markdown path: %s" (concat (org-hugo--get-pub-dir info) path))
              ;; Treat links as a normal post if the markdown file exists in hugo publish directory
              (if (org-id-find-id-file raw-path)
-                 (let ((anchor (org-hugo-link--headline-anchor-maybe link)))
+                 (let ((anchor (org-hugo-link--heading-anchor-maybe link)))
                    (if desc
                        (format "[%s]({{<relref \"%s#%s\" >}})" desc path anchor)
                      (format "[%s]({{<relref \"%s#%s\">}})" path path anchor)))
@@ -2404,8 +2409,8 @@ and rewrite link paths to make blogging more seamless."
             (format "<%s>" path)))))))))
 
 
-(defun org-hugo-link--headline-anchor-maybe (link)
-  "Return headline pointed to by LINK."
+(defun org-hugo-link--heading-anchor-maybe (link)
+  "Return heading pointed to by LINK."
   (with-temp-buffer
     (org-id-goto (org-element-property :path link))
     ;; Thu Oct 21 21:29:17 EDT 2021 - kmodi
@@ -2414,10 +2419,10 @@ and rewrite link paths to make blogging more seamless."
     ;; in fundamental mode, and so the `org-find-top-headline'
     ;; always returned nil.
     (org-mode)
-    (let ((headline (org-find-top-headline)))
+    (let ((heading (org-find-top-headline)))
       (kill-buffer (current-buffer))
-      (if headline
-          (org-hugo-slug headline)
+      (if heading
+          (org-hugo-slug heading)
         ""))))
 
 ;;;;; Helpers
@@ -2951,7 +2956,7 @@ INFO is a plist holding export options."
               (save-restriction
                 ;; The point is at the beginning of the heading body
                 ;; in this function! So move the point back by 1 char
-                ;; to bring it into the Org headline before calling
+                ;; to bring it into the Org heading before calling
                 ;; `org-hugo--get-front-matter', because in there we
                 ;; use `org-entry-get' at (point) to retrieve certain
                 ;; property values.
@@ -3179,7 +3184,7 @@ to ((name . \"foo\") (weight . 80))."
     valid-menu-alist))
 
 (defun org-hugo--get-sanitized-title (info)
-  "Return sanitized version of an Org headline TITLE as a string.
+  "Return sanitized version of an Org heading TITLE as a string.
 
 INFO is a plist used as a communication channel.
 
@@ -3399,7 +3404,7 @@ INFO is a plist used as a communication channel."
                 ;; Look for tags set using HUGO_TAGS keyword, or
                 ;; EXPORT_HUGO_TAGS property if available.
                 (org-hugo--delim-str-to-list (plist-get info :hugo-tags))
-                ;; Else use Org tags (the ones set in headlines
+                ;; Else use Org tags (the ones set in headings
                 ;; and/or inherited) if any.
                 (let* ((tags-list (cl-remove-if #'org-hugo--category-p all-t-and-c))
                        (tags-list (dolist (fn org-hugo-tag-processing-functions tags-list)
@@ -3412,7 +3417,7 @@ INFO is a plist used as a communication channel."
                       ;; if available.
                       (org-hugo--delim-str-to-list (plist-get info :hugo-categories))
                       ;; Else use categories set using Org tags with
-                      ;; "@" prefix (the ones set in headlines and/or
+                      ;; "@" prefix (the ones set in headings and/or
                       ;; inherited) if any.
                       (let* ((categories-list (cl-remove-if-not #'org-hugo--category-p all-t-and-c))
                              (categories-list (dolist (fn org-hugo-tag-processing-functions categories-list)
@@ -4187,9 +4192,9 @@ links."
                           ;; anchor).
                           ((org-element-property :EXPORT_FILE_NAME destination)
                            (concat destination-path ".org"))
-                          ;; Hugo only supports anchors to headlines, so
+                          ;; Hugo only supports anchors to headings, so
                           ;; if a "fuzzy" type link points to anything
-                          ;; else than a headline, it should point to
+                          ;; else than a heading, it should point to
                           ;; the file.
                           ((and (string= type "fuzzy")
                                 (not (string-prefix-p "*" raw-link)))
@@ -4209,11 +4214,11 @@ links."
                         ;; description to the destination heading title.
                         (when (and (null link-desc)
                                    (equal 'headline destination-type))
-                          (let ((headline-title
+                          (let ((heading-title
                                  (org-export-data-with-backend
                                   (org-element-property :title destination) 'ascii info)))
-                            ;; (message "[ox-hugo pre process DBG] destination heading: %s" headline-title)
-                            (org-element-set-contents link-copy headline-title)))
+                            ;; (message "[ox-hugo pre process DBG] destination heading: %s" heading-title)
+                            (org-element-set-contents link-copy heading-title)))
                         (org-element-set-element link link-copy))))))))
 
           ;; Workaround to prevent exporting of empty special blocks.
@@ -4245,7 +4250,7 @@ asynchronously.  The resulting buffer should be accessible
 through the `org-export-stack' interface.
 
 When optional argument SUBTREEP is non-nil, export the sub-tree
-at point, extracting information from the headline properties
+at point, extracting information from the heading properties
 first.
 
 When optional argument VISIBLE-ONLY is non-nil, don't export
@@ -4284,7 +4289,7 @@ asynchronously.  The resulting file should be accessible through
 the `org-export-stack' interface.
 
 When optional argument SUBTREEP is non-nil, export the sub-tree
-at point, extracting information from the headline properties
+at point, extracting information from the heading properties
 first.
 
 When optional argument VISIBLE-ONLY is non-nil, don't export

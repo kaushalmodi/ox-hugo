@@ -2,7 +2,7 @@
 title = "TOC Local"
 description = """
   Test the `#+toc: headlines N local` syntax where a TOC is exported
-  containing headlines only up to level-N relative to the headline in
+  containing headings only up to level-N relative to the heading in
   which that keyword is used.
   """
 tags = ["keyword", "toc", "local"]

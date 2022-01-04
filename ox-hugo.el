@@ -2087,12 +2087,14 @@ and rewrite link paths to make blogging more seamless."
          (type (org-element-property :type link))
          (link-is-url (member type '("http" "https" "ftp" "mailto"))))
 
+    ;; (message "[ox-hugo-link DBG] raw-path 1: %s" raw-path)
+
     (when (and (stringp raw-path)
                link-is-url)
       (setq raw-path (org-blackfriday--url-sanitize-maybe
                       info (url-encode-url raw-path))))
+    ;; (message "[ox-hugo-link DBG] raw-path 2: %s" raw-path)
     ;; (message "[ox-hugo-link DBG] link: %S" link)
-    ;; (message "[ox-hugo-link DBG] link path: %s" (org-element-property :path link))
     ;; (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
     ;; (message "[ox-hugo-link DBG] link type: %s" type)
     (cond
@@ -2102,7 +2104,10 @@ and rewrite link paths to make blogging more seamless."
       (let ((destination (if (string= type "fuzzy")
                              (org-export-resolve-fuzzy-link link info)
                            (org-export-resolve-id-link link info))))
-        ;; (message "[org-hugo-link DBG] link destination elem type: %S" (org-element-type destination))
+        (message "[ox-hugo-link DBG] link type: %s" type)
+        (message "[ox-hugo-link DBG] destination: %s" destination)
+        (message "[ox-hugo-link DBG] link: %S" link)
+        (message "[org-hugo-link DBG] link destination elem type: %S" (org-element-type destination))
         (pcase (org-element-type destination)
           (`plain-text                  ;External file
            (let ((path (progn
@@ -2110,10 +2115,10 @@ and rewrite link paths to make blogging more seamless."
                          (if (string= ".org" (downcase (file-name-extension destination ".")))
                              (concat (file-name-sans-extension destination) ".md")
                            destination))))
-             ;; (message "[org-hugo-link DBG] markdown path: %s" (concat (org-hugo--get-pub-dir info) path))
-             ;; Treat links as a normal post if the markdown file exists in hugo publish directory
+             (message "[ox-hugo-link DBG] plain-text path: %s" path)
              (if (org-id-find-id-file raw-path)
                  (let ((anchor (org-hugo-link--heading-anchor-maybe link)))
+                   (message "[ox-hugo-link DBG] plain-text org-id anchor: %S" anchor)
                    (if desc
                        (format "[%s]({{<relref \"%s#%s\" >}})" desc path anchor)
                      (format "[%s]({{<relref \"%s#%s\">}})" path path anchor)))

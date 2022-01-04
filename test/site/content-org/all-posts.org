@@ -4535,6 +4535,14 @@ default Special Blocks.
 
 This will export as [[/posts/special-blocks][Special Blocks]] --- either wrapped with =<div>=
 tags or HTML5-recognized tags.
+
+{{{oxhugoissue(377)}}}
+
+#+begin_export hugo
+{{< katex display >}}
+E = -J \sum\_{i=1}^N s\_i s\_{i+1}
+{{< /katex >}}
+#+end_export
 *** Paired shortcodes using special blocks (Positional Arguments) :positional:arguments:
 :PROPERTIES:
 :EXPORT_FILE_NAME: paired-shortcodes-special-blocks-positional-arguments

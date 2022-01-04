@@ -77,3 +77,9 @@ default Special Blocks.
 
 This will export as [Special Blocks](/posts/special-blocks) --- either wrapped with `<div>`
 tags or HTML5-recognized tags.
+
+`ox-hugo` Issue #[377](https://github.com/kaushalmodi/ox-hugo/issues/377)
+
+{{< katex display >}}
+E = -J \sum\_{i=1}^N s\_i s\_{i+1}
+{{< /katex >}}

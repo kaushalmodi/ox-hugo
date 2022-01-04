@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       1e8ccec9-735d-41d0-b0cf-143d9c3e965d
+:END:
+#+hugo_base_dir: ../
+#+hugo_section: org-roam
+#+author:
+#+title: A
+#+filetags: org-roam @org-id
+
+https://github.com/kaushalmodi/ox-hugo/issues/500
+
+[[id:01579e8c-a90b-4c53-af58-e18ff7877d00][B]]
+
+#+begin_src emacs-lisp :eval never-export :exports none
+(setq org-id-extra-files (directory-files-recursively default-directory "\.org$"))
+#+end_src

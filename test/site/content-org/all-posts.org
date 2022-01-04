@@ -3341,8 +3341,9 @@ Below links are invalid, they are there just for test purpose.
 
 - [[https://jira.example.com/issues/?jql=(project=MYPRJ)AND(assignee=currentUser())][A dummy Jira JQL link]]
 - [[https://jira.example.com/issues/?jql=(project=MYPRJ)AND(assignee=currentUser())AND(labels in (foo))][A dummy Jira JQL link with spaces]]
-* Equations                                               :equations:mathjax:
-** Inline equations
+* Equations                                                       :equations:
+** MathJax                                                          :mathjax:
+*** Inline equations
 :PROPERTIES:
 :EXPORT_FILE_NAME: equation-latex-frag
 :EXPORT_DATE: 2017-07-31
@@ -3389,7 +3390,7 @@ If $a^2=b$ and \( b=2 \), then the solution must be either
 $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \]
 
 (Note that the last two equations show up on their own lines.)
-** Equations with (r), (c), ..                                    :@upstream:
+*** Equations with (r), (c), ..                                   :@upstream:
 :PROPERTIES:
 :EXPORT_FILE_NAME: equations-with-r-c
 :END:
@@ -3420,19 +3421,19 @@ $$ (tm) (TM) $$
 \[ (r) (R) \]
 \[ (c) (C) \]
 \[ (tm) (TM) \]
-** Indented equations block                                        :indented:
+*** Indented equations block                                       :indented:
 :PROPERTIES:
 :EXPORT_FILE_NAME: indented-equations
 :END:
 #+begin_description
 Testing equations with mathjax --- indented or not.
 #+end_description
-*** No indentation
+**** No indentation
 \begin{equation}
 \label{eq:1}
 C = W\log_{2} (1+\mathrm{SNR})
 \end{equation}
-*** With indentation
+**** With indentation
 {{{oxhugoissue(128)}}}
 
     \begin{equation}
@@ -3448,7 +3449,7 @@ one, but:
   exported Markdown file./
 - It has a different label (=\label{eq:2}= instead of =\label{eq:1}=);
   Mathjax *requires the equation labels to be unique*.
-** Blackfriday-specific escaping in equations :escaping:@upstream:blackfriday:
+*** Blackfriday-specific escaping in equations :escaping:@upstream:blackfriday:
 :PROPERTIES:
 :EXPORT_FILE_NAME: equations-bf-escaping
 :END:
@@ -3456,11 +3457,11 @@ one, but:
 Test to check that the backslashes are correctly escaped.
 #+end_description
 {{{oxhugoissue(138)}}}
-*** =\|= → =\\|=
+**** =\|= → =\\|=
 $$
 C(w,b) = \frac{1}{2n} \sum_x{{\|y(x)-a\|}^2}
 $$
-*** =\\= at EOL → =\\\\=
+**** =\\= at EOL → =\\\\=
 \begin{align}
 a^1  &= x \\
 a^2  &=  σ(W^2a^1 + b^2) \\
@@ -3469,7 +3470,7 @@ a^3  &=  σ(W^3a^2 + b^3) \\
 a^L  &= σ(W^La^{L-1} + b^L) \\
 y  &= a^L
 \end{align}
-**** Same as above, but without space before the =\\= at EOL
+***** Same as above, but without space before the =\\= at EOL
 \begin{align}
 a^1  &= x\\
 a^2  &=  σ(W^2a^1 + b^2)\\
@@ -3478,13 +3479,13 @@ a^3  &=  σ(W^3a^2 + b^3)\\
 a^L  &= σ(W^La^{L-1} + b^L)\\
 y  &= a^L
 \end{align}
-*** =\{= → =\\{=, =\}= → =\\}=
+**** =\{= → =\\{=, =\}= → =\\}=
 {{{oxhugoissue(258)}}}
 
 \begin{equation}
 \phi_j(x) = \mathrm{exp}\left\{ - \frac{(x - \mu_j)^2}{2s^2} \right\}
 \end{equation}
-*** ~x <0 \\~
+**** ~x <0 \\~
 {{{oxhugoissue(348)}}}
 
 \begin{equation}
@@ -3494,7 +3495,7 @@ u(x,0) = T_1 , & x <0 \\
 u(x,0) = T_2 , & x > 0
 \end{cases}
 \end{equation}
-*** ~[ .. ]( .. )~ in a LaTeX equation
+**** ~[ .. ]( .. )~ in a LaTeX equation
 {{{oxhugoissue(349)}}}
 
 In the below equation, without the escaping hack, the Markdown parser
@@ -3505,7 +3506,7 @@ link!
 \mathcal{L}\left[ e^{at} \right](z) = \frac{1}{z-a}
 \end{equation}
 
-*** Backslashes within a LaTeX equation
+**** Backslashes within a LaTeX equation
 {{{oxhugoissue(458)}}}
 
 Double backslashes (~\\~) should be escaped:

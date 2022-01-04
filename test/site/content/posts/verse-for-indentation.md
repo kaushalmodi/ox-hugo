@@ -46,7 +46,7 @@ removed when translating to Markdown.
 
 ## Corner cases {#corner-cases}
 
-{{< highlight org "linenos=table, linenostart=0" >}}
+```org { linenos=table, linenostart=0 }
 #+begin_verse
 
 >Line 1 above was empty. So the first =>= seen on this line is removed.
@@ -54,7 +54,7 @@ Line 3 had no =>= char.
 > ← See that this =>= on line 4 is retained even at the beginning of the line.
 Line 5 has this > charcter in-between and is retained.
 #+end_verse
-{{< /highlight >}}
+```
 
 Only the **first** `>` character immediately following spaces and empty
 lines will be removed:
@@ -72,7 +72,7 @@ in the final output, they can use `>>` instead.. **only for that first
 instance**. The below Verse block is same as above except that the
 first `>` is retained in the final output.
 
-{{< highlight org "linenos=table, linenostart=0" >}}
+```org { linenos=table, linenostart=0 }
 #+begin_verse
 
 >>Line 1 above was empty. So *only* the first =>= seen on this line is removed.
@@ -80,7 +80,7 @@ Line 3 had no =>= char.
 > ← See that this =>= on line 4 is retained even at the beginning of the line.
 Line 5 has this > charcter in-between and is retained.
 #+end_verse
-{{< /highlight >}}
+```
 
 <p class="verse">
 <br />

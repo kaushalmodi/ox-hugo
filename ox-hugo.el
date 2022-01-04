@@ -2748,19 +2748,33 @@ nil and,
       (let* (;; See `org-element-src-block-parser' for all SRC-BLOCK properties.
              (number-lines (org-element-property :number-lines src-block)) ;Non-nil if -n or +n switch is used
              (linenos-style (cdr (assoc :linenos parameters)))
-             (hl-lines (cdr (assoc :hl_lines parameters)))
-             (hl-lines (cond
-                        ((stringp hl-lines)
-                         (replace-regexp-in-string "," " " hl-lines)) ;"1,3-4" -> "1 3-4"
-                        ((numberp hl-lines)
-                         (number-to-string hl-lines))))
-             ;; Use the `highlight' shortcode if any of the line
-             ;; numbering or highlighting option is set or if
-             ;; HUGO_CODE_FENCE is nil.
-             (use-highlight-sc (or number-lines
-                                   hl-lines
-                                   linenos-style
-                                   (null (org-hugo--plist-get-true-p info :hugo-code-fence))))
+             ;; Convert `hl-lines' to string.  If it's not a number,
+             ;; it's already a string, or nil.
+             (hl-lines (let* ((hl-lines-param (cdr (assoc :hl_lines parameters))))
+                         ;; (message "ox-hugo src [dbg] hl-lines-param: %S" hl-lines-param)
+                         (if (numberp hl-lines-param)
+                             (number-to-string hl-lines-param)
+                           hl-lines-param)))
+             ;; Use the `highlight' shortcode only if ..
+             (use-highlight-sc (or ;; HUGO_CODE_FENCE is nil, or ..
+                                (null (org-hugo--plist-get-true-p info :hugo-code-fence))
+                                ;; "Blackfriday mode" is enabled and line numbering
+                                ;; or highlighting is needed.
+                                (and (or number-lines hl-lines linenos-style)
+                                     (not (org-hugo--plist-get-true-p info :hugo-goldmark)))))
+             (hl-lines (when (stringp hl-lines)
+                         (if use-highlight-sc
+                             (progn
+                               ;; Syntax of hl_lines in `highlight' shortcode:
+                               ;;   {{< highlight emacs-lisp "hl_lines=1 3-5" >}} ..
+                               (replace-regexp-in-string "," " " hl-lines)) ;"1,3-5" -> "1 3-5"
+                           ;; Fenced code blocks
+                           ;; Syntax of hl_lines in fenced code attributes:
+                           ;;   ```emacs-lisp { hl_lines=["1","3-5"] } ..
+                           (format "[%s]"
+                                   (mapconcat
+                                    (lambda(el) (format "%S" el))
+                                    (split-string hl-lines ",") ","))))) ;"1,3-5" -> "[\"1\",\"3-5\"]"
              (src-ref (org-blackfriday--get-reference src-block))
              (src-anchor (if src-ref
                              (format "<a id=\"%s\"></a>\n" src-ref)
@@ -2811,6 +2825,7 @@ nil and,
             ;; literally inserting the line numbers.
             (setq src-code (replace-regexp-in-string "^\\s-*[0-9]+\\s-\\{2\\}" "" src-code))))
 
+        ;; (message "ox-hugo src [dbg] hl-lines: %S" hl-lines)
         (when hl-lines
           (if (org-string-nw-p code-attr-str)
               (setq code-attr-str (format "%s, hl_lines=%s" code-attr-str hl-lines))

@@ -26,10 +26,10 @@ should **not** be expanded.. they should be visible verbatim.
 Here, the `-n` switch is added to the Org source block to
 auto-enable[^fn:1] using the `highlight` shortcode.
 
-{{< highlight md "linenos=table, linenostart=1" >}}
+```md { linenos=table, linenostart=1 }
 {{</* figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" */>}}
 {{%/* figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" */%}}
-{{< /highlight >}}
+```
 
 
 ## Shortcodes **not** escaped {#shortcodes-not-escaped}

@@ -4,8 +4,7 @@ description = """
   Test that indented source blocks, and also the ones in lists export
   fine.
   """
-tags = ["indented", "lists", "code-fence", "highlight", "src-block"]
-categories = ["upstream"]
+tags = ["indented", "lists", "code-fence", "src-block"]
 draft = false
 +++
 
@@ -64,7 +63,17 @@ Reference: `hugo` Issue #[4006](https://github.com/gohugoio/hugo/issues/4006)
 
 Reference: `hugo` Issue #[4717](https://github.com/gohugoio/hugo/issues/4717), `ox-hugo` Issue #[161](https://github.com/kaushalmodi/ox-hugo/issues/161)
 
-This is an **upstream** bug in `hugo` as of 2018-05-12. The issues is
+<style> .red { color: red; }</style>
+
+<div class="red note">
+
+Switched from exporting the `highlight` shortcode to exporting the
+code fenced blocks with attributes. These code fences are support by
+Hugo + Goldmark since v0.60.0.
+
+</div>
+
+This is an **upstream** bug in `hugo` as of 2018-05-12. The issue is
 that when the code blocks in `highlight` shortcodes are inserted at
 the required indentation levels in lists.. so that they get rendered
 **in** the list at **that** indentation level, those indentations are not
@@ -80,34 +89,34 @@ there.
 
 -   List item 1
 
-    {{< highlight emacs-lisp "linenos=table, linenostart=1" >}}
+    ```emacs-lisp { linenos=table, linenostart=1 }
     (message "I am in list at level-1 indentation")
-    {{< /highlight >}}
+    ```
 
     -   List item 1.1
 
-        {{< highlight emacs-lisp "linenos=table, linenostart=1" >}}
+        ```emacs-lisp { linenos=table, linenostart=1 }
         (message "I am in list at level-2 indentation")
-        {{< /highlight >}}
+        ```
 
         -   List item 1.1.1
 
-            {{< highlight emacs-lisp "linenos=table, linenostart=1" >}}
+            ```emacs-lisp { linenos=table, linenostart=1 }
             (message "I am in list at level-3 indentation")
-            {{< /highlight >}}
+            ```
     -   List item 2.1
 
-        {{< highlight emacs-lisp "linenos=table, linenostart=1" >}}
+        ```emacs-lisp { linenos=table, linenostart=1 }
         (message "I am in list back at level-2 indentation")
-        {{< /highlight >}}
+        ```
 -   List item 2
 
-    {{< highlight emacs-lisp "linenos=table, linenostart=1" >}}
+    ```emacs-lisp { linenos=table, linenostart=1 }
     (message "I am in list back at level-1 indentation")
-    {{< /highlight >}}
+    ```
 
 <!--listend-->
 
-{{< highlight emacs-lisp "linenos=table, linenostart=1" >}}
+```emacs-lisp { linenos=table, linenostart=1 }
 (message "And now I am at level-0 indentation")
-{{< /highlight >}}
+```

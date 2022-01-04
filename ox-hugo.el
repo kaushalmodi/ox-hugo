@@ -2425,7 +2425,7 @@ and rewrite link paths to make blogging more seamless."
         ""))))
 
 ;;;;; Helpers
-(defun org-hugo--maybe-copy-resources (info)
+(defun org-hugo--copy-resources-maybe (info)
   "Copy resources to the bundle directory if needed.
 
 INFO is a plist used as a communication channel."
@@ -2450,6 +2450,22 @@ INFO is a plist used as a communication channel."
                       (when (file-newer-than-file-p src-path dest-path)
                         (message "[ox-hugo] Copied resource %S to %S" src-path dest-path)
                         (copy-file src-path dest-path :ok-if-already-exists)))))))))))))
+
+(defun org-hugo--copy-ltximg-maybe (info)
+  "Copy `org-preview-latex-image-directory' contents into site's ltximg directory.
+
+INFO is a plist used as a communication channel."
+  (when (file-exists-p org-preview-latex-image-directory)
+    (let* ((hugo-base-dir (file-name-as-directory (plist-get info :hugo-base-dir)))
+           (static-ltximg-dir (file-truename
+                               (file-name-as-directory
+                                (expand-file-name
+                                 org-blackfriday--ltximg-directory
+                                 (expand-file-name "static" hugo-base-dir))))))
+      (copy-directory org-preview-latex-image-directory static-ltximg-dir
+                      nil :parents :copy-contents)
+      (message "[ox-hugo] Copied contents of %S into %S"
+               org-preview-latex-image-directory static-ltximg-dir))))
 
 (defun org-hugo--attachment-rewrite-maybe (path info)
   "Copy local images and pdfs to the static/bundle directory if needed.
@@ -2929,7 +2945,8 @@ INFO is a plist holding export options."
 BODY is the result of the export.
 INFO is a plist holding export options."
   ;; Copy the page resources to the bundle directory.
-  (org-hugo--maybe-copy-resources info)
+  (org-hugo--copy-resources-maybe info)
+  (org-hugo--copy-ltximg-maybe info)
   ;; (message "[ox-hugo body filter] ITEM %S" (org-entry-get (point) "ITEM"))
   ;; (message "[ox-hugo body filter] TAGS: %S" (org-entry-get (point) "TAGS"))
   ;; (message "[ox-hugo body filter] ALLTAGS: %S" (org-entry-get (point) "ALLTAGS"))

@@ -3521,7 +3521,28 @@ spacing:
   \[a\;b\]
   \[a\:b\]
   \[a\!b\]
+** Equations exported to SVG (dvisvgm) :dvisvgm:dont_export_during_make_test:
+:PROPERTIES:
+:EXPORT_FILE_NAME: equations-exported-to-svg
+:EXPORT_OPTIONS: tex:dvisvgm
+:END:
+#+begin_description
+Exporting {{{latex}}} equations as SVG images.
+#+end_description
+{{{oxhugoissue(327)}}}
 
+Example of an inline equation: \[ a + b \]
+
+Example of a block equation:
+
+\begin{equation}
+C = W\log_{2} (1+\mathrm{SNR})
+\end{equation}
+
+#+begin_note
+Referencing to equation labels does not work when {{{latex}}}
+equations are exported as images.
+#+end_note
 * Lists                                                               :lists:
 ** List following a list
 :PROPERTIES:

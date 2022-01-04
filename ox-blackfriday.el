@@ -60,6 +60,11 @@ Note that this variable is *only* for internal use.")
                                               (figure . "Figure")) ;Note that `figure' is not an actual Org element
   "Alist of strings used to represent various Org elements.")
 
+(defvar org-blackfriday--ltximg-directory "ltximg/"
+  "Sub directory created inside the site's static directory for LaTeX images.
+
+This sub directory is created when an export option like
+`tex:dvisvgm' is used.")
 
 
 ;;; User-Configurable Variables
@@ -798,6 +803,35 @@ exported instead:
                      (org-trim (replace-regexp-in-string "^" "    " contents))))))))
 
 ;;;; Latex Environment
+(defun org-blackfriday--update-ltximg-path (html-str)
+  "Update the path to latex exported images directory.
+
+For example, this function converts
+
+  <img src=\"foo/bar/xyz.svg\" ..
+
+to
+
+  <img src=\"/ltximg/xyz.svg\" ..
+
+where \"ltximg/\" is the default value of
+`org-blackfriday--ltximg-directory'.
+
+Return the updated HTML string."
+  ;; (message "dbg html-str: %S" html-str)
+  (if (and (stringp html-str)
+           (string-match "\\(.*?<img src=\"\\)\\([^\"]+\\)\\(\"\\(.\\|\n\\)*\\)" html-str))
+      (let ((updated-img-path (format "/%s%s"
+                                      org-blackfriday--ltximg-directory
+                                      (file-name-nondirectory
+                                       (match-string-no-properties 2 html-str)))))
+        ;; (message "dbg updated-img-path: %S" updated-img-path)
+        (format "%s%s%s"
+                (match-string-no-properties 1 html-str)
+                updated-img-path
+                (match-string-no-properties 3 html-str)))
+    html-str))
+
 (defun org-blackfriday-latex-environment (latex-environment _contents info)
   "Transcode a LATEX-ENVIRONMENT object into Blackfriday Markdown format.
 INFO is a plist holding contextual information."
@@ -813,7 +847,8 @@ INFO is a plist holding contextual information."
         ;; (message "[ox-bf-latex-env DBG] env: %s" env)
         env))
      (t
-      (org-html-latex-environment latex-environment nil info)))))
+      (org-blackfriday--update-ltximg-path
+       (org-html-latex-environment latex-environment nil info))))))
 
 ;;;; Latex Fragment
 (defun org-blackfriday-latex-fragment (latex-fragment _contents info)
@@ -828,7 +863,8 @@ INFO is a plist holding contextual information."
         ;; (message "[ox-bf-latex-frag DBG] frag: %s" frag)
         frag))
      (t
-      (org-html-latex-fragment latex-fragment nil info)))))
+      (org-blackfriday--update-ltximg-path
+       (org-html-latex-fragment latex-fragment nil info))))))
 
 ;;;; Plain List
 (defun org-blackfriday-plain-list (plain-list contents info)

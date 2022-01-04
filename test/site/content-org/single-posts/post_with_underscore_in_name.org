@@ -10,4 +10,4 @@
 #+macro: relref @@hugo:[@@ $1 @@hugo:]({{< relref "$2" >}})@@
 
 This test post is created to test {{{relref(Italicize links with
-underscores,italicize-links-with-underscores)}}}.
+underscores,italicize-links-with-underscores-goldmark)}}}.

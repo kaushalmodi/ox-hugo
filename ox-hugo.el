@@ -1758,10 +1758,12 @@ information."
         ;; Remove Org-inserted numbers from the beginning of each line
         ;; as the Hugo highlight shortcode will be used instead of
         ;; literally inserting the line numbers.
-        (setq example-code (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" example-code)))
-      (unless use-highlight-sc
-        (plist-put info :md-code example-code)
-        (plist-put info :md-code-attr code-attr-str)))
+        (setq example-code (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" example-code))))
+
+    (unless use-highlight-sc
+      (plist-put info :md-code example-code)
+      (plist-put info :md-code-attr code-attr-str))
+
     (if use-highlight-sc
         (setq ret (org-blackfriday--div-wrap-maybe
                    example-block

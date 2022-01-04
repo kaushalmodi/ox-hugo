@@ -2089,8 +2089,8 @@ and rewrite link paths to make blogging more seamless."
 
     (when (and (stringp raw-path)
                link-is-url)
-      (setq raw-path (org-blackfriday--url-sanitize-maybe info
-                      (url-encode-url raw-path))))
+      (setq raw-path (org-blackfriday--url-sanitize-maybe
+                      info (url-encode-url raw-path))))
     ;; (message "[ox-hugo-link DBG] link: %S" link)
     ;; (message "[ox-hugo-link DBG] link path: %s" (org-element-property :path link))
     ;; (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
@@ -2462,10 +2462,12 @@ INFO is a plist used as a communication channel."
                                 (expand-file-name
                                  org-blackfriday--ltximg-directory
                                  (expand-file-name "static" hugo-base-dir))))))
-      (copy-directory org-preview-latex-image-directory static-ltximg-dir
-                      nil :parents :copy-contents)
-      (message "[ox-hugo] Copied contents of %S into %S"
-               org-preview-latex-image-directory static-ltximg-dir))))
+      (when (file-newer-than-file-p
+             org-preview-latex-image-directory static-ltximg-dir)
+        (copy-directory org-preview-latex-image-directory static-ltximg-dir
+                        nil :parents :copy-contents)
+        (message "[ox-hugo] Copied contents of %S into %S"
+                 org-preview-latex-image-directory static-ltximg-dir)))))
 
 (defun org-hugo--attachment-rewrite-maybe (path info)
   "Copy local images and pdfs to the static/bundle directory if needed.

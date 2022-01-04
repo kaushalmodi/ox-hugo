@@ -85,9 +85,9 @@ customized.  But there are some src block \"languages\" like
 tag needs to be `python'."
   :group 'org-export-blackfriday
   :type '(repeat
-	  (cons
-	   (string "Src Block language")
-	   (string "Syntax highlighting language"))))
+          (cons
+           (string "Src Block language")
+           (string "Syntax highlighting language"))))
 
 
 

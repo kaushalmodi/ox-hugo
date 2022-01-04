@@ -30,7 +30,10 @@ jobs:
       image: ghcr.io/xu-cheng/texlive-full:latest
     continue-on-error: ${{ matrix.emacs_version == 'snapshot' }}
     steps:
+      # Below run commands are to install some basic utils in the texlive
+      # docker container.
       - run: |
+          export USER="gha" # USER needs to be set for purcell/setup-emacs@master to work
           apk add git make
       - uses: actions/checkout@v2
       - uses: purcell/setup-emacs@master

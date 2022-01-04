@@ -5454,7 +5454,7 @@ See [[#citation-example-toml-section-2]].
 :CUSTOM_ID: citation-example-toml-section-2
 :END:
 Content in section 2.
-*** Testing random Hugo shortcode
+*** Testing random Hugo shortcodes
 #+begin_mdshortcode
 Text containing *Markdown*
 #+end_mdshortcode
@@ -5462,6 +5462,9 @@ Some text.
 #+begin_myshortcode
 Text not containing *Markdown*
 #+end_myshortcode
+
+This link will generate a ~relref~ shortcode: Here's a link to an
+arbitrarily picked post: [[*Citation Linking][Citation Linking]].
 *** Testing ox-hugo inserted HTML div tags
 #+begin_foo
 *bold* /italics/

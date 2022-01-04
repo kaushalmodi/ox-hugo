@@ -23,13 +23,16 @@ See [Section 2](#citation-example-toml-section-2).
 
 Content in section 2.
 
-## Testing random Hugo shortcode
+## Testing random Hugo shortcodes
 
 {{% mdshortcode %}} Text containing **Markdown** {{% /mdshortcode %}}
 
 Some text.
 
 {{< myshortcode >}} Text not containing **Markdown** {{< /myshortcode >}}
+
+This link will generate a `relref` shortcode: Here's a link to an
+arbitrarily picked post: [Citation Linking]({{< relref "citation-linking" >}}).
 
 ## Testing ox-hugo inserted HTML div tags
 

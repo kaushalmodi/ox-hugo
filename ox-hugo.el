@@ -1738,29 +1738,34 @@ information."
          (linenos-style (and (org-string-nw-p switches-str)
                              (string-match ":linenos\\s-+\\([^ ]+\\)\\b" switches-str)
                              (match-string-no-properties 1 switches-str)))
+         (use-highlight-sc (and (or number-lines linenos-style) ;Use `highlight' shortcode only for Blackfriday if linenos is non-nil
+                                (not (org-hugo--plist-get-true-p info :hugo-goldmark))))
+         (example-code (org-export-format-code-default example-block info))
          code-attr-str
          ret)
-    (if (or number-lines linenos-style)
-        (let ((linenos-style (or linenos-style "table"))
-              (text (org-export-format-code-default example-block info)))
-          (setq code-attr-str (format "linenos=%s" linenos-style))
-          (let ((linenostart-str (and ;Extract the start line number of the example block.
-                                  (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" text)
-                                  (match-string-no-properties 1 text))))
-            (when linenostart-str
-              (setq code-attr-str (format "%s, linenostart=%s" code-attr-str linenostart-str))))
+    (when (or number-lines linenos-style)
+      ;; Default "linenos" style set to "table" if only number-lines
+      ;; is non-nil.
+      (setq linenos-style (or linenos-style "table"))
+      (setq code-attr-str (format "linenos=%s" linenos-style))
+      (let ((linenostart-str (and ;Extract the start line number of the example block.
+                              (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" example-code)
+                              (match-string-no-properties 1 example-code))))
+        (when linenostart-str
+          (setq code-attr-str (format "%s, linenostart=%s" code-attr-str linenostart-str))))
 
-          ;; Remove Org-inserted numbers from the beginning of each
-          ;; line as the Hugo highlight shortcode will be used instead
-          ;; of literally inserting the line numbers.
-          (setq text (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" text))
-          (if (org-hugo--plist-get-true-p info :hugo-goldmark)
-              (progn
-                (plist-put info :md-code text)
-                (plist-put info :md-code-attr code-attr-str)
-                (setq text (org-blackfriday-example-block example-block nil info)))
-            (setq text (format "```{{< highlight text \"%s\" >}}\n%s{{< /highlight >}}\n" code-attr-str text)))
-          (setq ret (org-blackfriday--div-wrap-maybe example-block text info)))
+      ;; Remove Org-inserted numbers from the beginning of each line
+      ;; as the Hugo highlight shortcode will be used instead of
+      ;; literally inserting the line numbers.
+      (setq example-code (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" example-code))
+      (unless use-highlight-sc
+        (plist-put info :md-code example-code)
+        (plist-put info :md-code-attr code-attr-str)))
+    (if use-highlight-sc
+        (setq ret (org-blackfriday--div-wrap-maybe
+                   example-block
+                   (format "{{< highlight text \"%s\" >}}\n%s{{< /highlight >}}\n" code-attr-str example-code)
+                   info))
       (setq ret (org-blackfriday-example-block example-block nil info)))
     ret))
 

@@ -1945,6 +1945,7 @@ This is line 2
 This is line 3
 #+end_example
 ** Example blocks with ATTR_HTML                     :attr___html:attr___css:
+*** Example blocks with ATTR_HTML (Goldmark)                       :goldmark:
 :PROPERTIES:
 :EXPORT_FILE_NAME: example-blocks-with-attr-html
 :END:
@@ -1959,6 +1960,38 @@ Line 3
 #+end_example
 
 Some more text.
+
+#+attr_html: :class heavy
+#+attr_css: :font-weight bold
+#+begin_example -n
+This is an example
+Line 2
+Line 3
+#+end_example
+*** Example blocks with ATTR_HTML (Blackfriday)                       :blackfriday:
+:PROPERTIES:
+:EXPORT_FILE_NAME: example-blocks-with-attr-html-blackfriday
+:EXPORT_HUGO_GOLDMARK:
+:END:
+Some text.
+
+#+attr_html: :class indent-block
+#+attr_css: :padding-left 50px
+#+begin_example
+This is an example
+Line 2
+Line 3
+#+end_example
+
+Some more text.
+
+#+attr_html: :class heavy
+#+attr_css: :font-weight bold
+#+begin_example -n
+This is an example
+Line 2
+Line 3
+#+end_example
 * Menu in front matter                                                 :menu:
 ** Menu Meta Data in TOML Front Matter
 :PROPERTIES:

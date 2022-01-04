@@ -1916,6 +1916,13 @@ This is an example
 line 1
  line 2
 #+end_example
+
+An example without ~-n~:
+
+#+begin_example
+foo
+bar
+#+end_example
 *** Specify new line number start
 #+begin_example -n 20
 line 20

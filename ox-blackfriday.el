@@ -641,12 +641,16 @@ information."
   (let* ((parent-element (org-export-get-parent example-block))
          (parent-type (car parent-element))
          (backticks (make-string org-blackfriday--code-block-num-backticks ?`))
-         (example (org-export-format-code-default example-block info))
+         (example (or (plist-get info :md-code) ;if set in `org-hugo-example-block'
+                      (org-export-format-code-default example-block info)))
+         (code-attr (if (plist-get info :md-code-attr) ;if set in `org-hugo-example-block'
+                        (format " { %s }" (plist-get info :md-code-attr))
+                      ""))
          ret)
     ;; (message "[ox-bf example-block DBG]")
     ;; (message "[ox-bf example-block DBG] parent type: %S" parent-type)
     (setq ret (org-blackfriday--issue-239-workaround example parent-type))
-    (setq ret (format "%stext\n%s%s" backticks ret backticks))
+    (setq ret (format "%stext%s\n%s%s" backticks code-attr ret backticks))
     (setq ret (org-blackfriday--div-wrap-maybe example-block ret info))
     (when (equal 'quote-block parent-type)
       ;; If the current example block is inside a quote block, future
@@ -655,6 +659,9 @@ information."
       ;; for https://github.com/russross/blackfriday/issues/407.
       (setq org-blackfriday--code-block-num-backticks
             (1+ org-blackfriday--code-block-num-backticks)))
+    ;; Reset the temp info in the `info' plist
+    (plist-put info :md-code nil)
+    (plist-put info :md-code-attr nil)
     ret))
 
 ;;;; Fixed Width

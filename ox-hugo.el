@@ -1720,15 +1720,15 @@ channel."
 (defun org-hugo-example-block (example-block _contents info)
   "Transcode an EXAMPLE-BLOCK element into Markdown format.
 
-If the example blocks are *not* set to be exported with line
-numbers (See (org) Literal examples), Markdown style
-triple-backquoted code blocks with \"text\" \\='language\\=' are
-created.
+Markdown style triple-backquoted code blocks with \"text\"
+\\='language\\=' are created.
 
-Otherwise, a \"text\" \\='language\\=' code block wrapped in Hugo
-\"highlight\" shortcode (See
-https://gohugo.io/content-management/syntax-highlighting) is
-created.
+If `org-hugo-goldmark' is nil and if the example blocks are *not*
+set to be exported with line numbers (See (org) Literal
+examples), a \"text\" \\='language\\=' code block wrapped in Hugo
+\"highlight\" shortcode is created.
+
+See https://gohugo.io/content-management/syntax-highlighting#highlighting-in-code-fences.
 
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
@@ -1738,23 +1738,28 @@ information."
          (linenos-style (and (org-string-nw-p switches-str)
                              (string-match ":linenos\\s-+\\([^ ]+\\)\\b" switches-str)
                              (match-string-no-properties 1 switches-str)))
-         linenos-str
+         code-attr-str
          ret)
     (if (or number-lines linenos-style)
         (let ((linenos-style (or linenos-style "table"))
               (text (org-export-format-code-default example-block info)))
-          (setq linenos-str (format "linenos=%s" linenos-style))
+          (setq code-attr-str (format "linenos=%s" linenos-style))
           (let ((linenostart-str (and ;Extract the start line number of the example block.
                                   (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" text)
                                   (match-string-no-properties 1 text))))
             (when linenostart-str
-              (setq linenos-str (format "%s, linenostart=%s" linenos-str linenostart-str))))
+              (setq code-attr-str (format "%s, linenostart=%s" code-attr-str linenostart-str))))
 
           ;; Remove Org-inserted numbers from the beginning of each
           ;; line as the Hugo highlight shortcode will be used instead
           ;; of literally inserting the line numbers.
           (setq text (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" text))
-          (setq text (format "{{< highlight text \"%s\" >}}\n%s{{< /highlight >}}\n" linenos-str text))
+          (if (org-hugo--plist-get-true-p info :hugo-goldmark)
+              (progn
+                (plist-put info :md-code text)
+                (plist-put info :md-code-attr code-attr-str)
+                (setq text (org-blackfriday-example-block example-block nil info)))
+            (setq text (format "```{{< highlight text \"%s\" >}}\n%s{{< /highlight >}}\n" code-attr-str text)))
           (setq ret (org-blackfriday--div-wrap-maybe example-block text info)))
       (setq ret (org-blackfriday-example-block example-block nil info)))
     ret))

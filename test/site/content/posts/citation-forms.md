@@ -47,19 +47,18 @@ Smith says blah ([2004](#ref-smith04)).
 @smith04 says blah.
 ```
 
-[Smith](#ref-smith04) ([2004](#ref-smith04)) says blah.
+Smith ([2004](#ref-smith04)) says blah.
 
 ``` org
 @smith04 [p. 33] says blah.
 ```
 
-[Smith](#ref-smith04) ([2004, 7:33](#ref-smith04)) says blah.
+Smith ([2004, 7:33](#ref-smith04)) says blah.
 
 ## Actual citations for this test post :)
 
-See [Xie](#ref-addCite17) ([2017](#ref-addCite17)); ["Bibliographies and
-Citations / Citations"](#ref-rmdCitations) ([n.d.](#ref-rmdCitations))
-for more.
+See Xie ([2017](#ref-addCite17)); "Bibliographies and Citations /
+Citations" ([n.d.](#ref-rmdCitations)) for more.
 
 ## References {#references}
 

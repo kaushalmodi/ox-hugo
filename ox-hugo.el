@@ -736,32 +736,6 @@ specified for them):
   :type 'boolean)
 ;;;###autoload (put 'org-hugo-link-desc-insert-type 'safe-local-variable 'booleanp)
 
-(defcustom org-hugo-langs-no-descr-in-code-fences '()
-  "List of languages whose descriptors should not be exported to Markdown.
-
-This variable is effective only if the HUGO_CODE_FENCE option is
-non-nil (default), AND if none of the Hugo \"highlight\"
-shortcode features are needed (see `org-hugo-src-block' for more
-information).
-
-If `pygmentsCodeFences' in the Hugo site's config is `true', and
-if a language is not supported by Pygments, the HTML of that
-fenced code block is not rendered correctly by Hugo.  In such
-cases, it is better to leave out the language descriptor and
-allow the code block to render as an Org example block.
-
-This variable helps get around the above issue which is present
-only when using the Pygments syntax highlighter.  This issue does
-not exist when using the Chroma syntax highlighter.  So, setting
-this variable to something like (org) is useful only if using the
-Pygments syntax highlighter.
-
-It is suggested to instead leave this value at its default value
-and use the Chroma syntax highlighter (default) in Hugo v0.28 and
-newer."
-  :group 'org-export-hugo
-  :type '(repeat symbol))
-
 
 
 ;;; Define Back-End
@@ -2798,26 +2772,6 @@ channel."
                      (null linenos-style)
                      (org-hugo--plist-get-true-p info :hugo-code-fence))
                 (let ((content1 (org-blackfriday-src-block src-block nil info)))
-                  (when (and org-hugo-langs-no-descr-in-code-fences
-                             (member (intern lang) org-hugo-langs-no-descr-in-code-fences))
-                    ;; When using Pygments, with the pygmentsCodeFences
-                    ;; options enabled in Hugo, `org' is not recognized as a
-                    ;; "language", because Pygments does not have a lexer for
-                    ;; Org.
-                    ;; Issue on Pygments repo:
-                    ;; https://bitbucket.org/birkenfeld/pygments-main/issues/719/wishlist-support-org
-                    ;; So attempt to do below:
-                    ;;   ```org
-                    ;;   # Org comment
-                    ;;   ```
-                    ;; will not result in a <code> tag wrapped block in HTML.
-                    ;;
-                    ;; So override the language to be an empty string in such cases.
-                    ;;
-                    ;; *Note* that this issue does NOT exist if using Chroma,
-                    ;; which is the default syntax highlighter after Hugo
-                    ;; v0.28.
-                    (setq content1 (replace-regexp-in-string (concat "\\`\\(```+\\)" lang) "\\1" content1)))
                   (setq content1 (org-hugo--escape-hugo-shortcode content1 lang))
                   content1))
                ;; If number-lines is non-nil
@@ -4486,7 +4440,6 @@ buffer and returned as a string in Org format."
                                 ,(format "|org-hugo-external-file-extensions-allowed-for-copying |%S|" org-hugo-external-file-extensions-allowed-for-copying)
                                 ,(format "|org-hugo-date-format                                  |%S|" org-hugo-date-format)
                                 ,(format "|org-hugo-paired-shortcodes                            |%S|" org-hugo-paired-shortcodes)
-                                ,(format "|org-hugo-langs-no-descr-in-code-fences                |%S|" org-hugo-langs-no-descr-in-code-fences)
                                 ,(format "|org-hugo-suppress-lastmod-period                      |%S|" org-hugo-suppress-lastmod-period)
                                 ,(format "|org-hugo-front-matter-format                          |%S|" org-hugo-front-matter-format))
                               "\n"))

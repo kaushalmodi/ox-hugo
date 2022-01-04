@@ -32,11 +32,7 @@ jobs:
         with:
           version: ${{ matrix.emacs_version }}
       # https://github.com/xu-cheng/texlive-action#example
-      - uses: xu-cheng/texlive-action/small@v1 # For Org tests with `tex:dvisvgm` export option
-        with:
-          run: |
-            apk add make
-            make
+      - uses: xu-cheng/texlive-action/full@v1 # For Org tests with `tex:dvisvgm` export option
       # Don't run "make doc"; it's finicky as it could fail on running the getJSON command in hugo.
       # - name: make doc
       #   run: make --no-print-directory doc # Just ensure that "make doc" doesn't fail for any reason.. this is *not* used to do Org->Markdown doc conversion

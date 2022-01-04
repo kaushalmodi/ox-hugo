@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       01579e8c-a90b-4c53-af58-e18ff7877d00
+:END:
+#+hugo_base_dir: ../
+#+hugo_section: org-roam
+#+author:
+#+title: B
+
+https://github.com/kaushalmodi/ox-hugo/issues/500

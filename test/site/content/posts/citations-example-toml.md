@@ -38,10 +38,6 @@ arbitrarily picked post: [Citation Linking]({{< relref "citation-linking" >}}).
 
 <div class="foo">
 
-<div>
-
-</div>
-
 **bold** *italics*
 
 </div>

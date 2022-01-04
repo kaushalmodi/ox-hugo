@@ -25,7 +25,6 @@ verbatim CSS in `#+begin_export html` blocks. See below examples.
 ## Table with only the class specified {#table-with-only-the-class-specified}
 
 <div class="ox-hugo-table my-table">
-<div></div>
 
 | h1  | h2  | h3  |
 |-----|-----|-----|
@@ -43,7 +42,6 @@ CSS that customizes `.my-table table`.
 <style>.table-nocaption table { width: 50%;  }</style>
 
 <div class="ox-hugo-table table-nocaption">
-<div></div>
 
 | h1  | h2  | h3  |
 |-----|-----|-----|
@@ -61,7 +59,6 @@ Above table get wrapped in the auto-generated class
 <style>.my-table-2 table { width: 80%;  }</style>
 
 <div class="ox-hugo-table my-table-2">
-<div></div>
 
 | h1  | h2  | h3  |
 |-----|-----|-----|
@@ -78,7 +75,6 @@ specified CSS attribute is auto-set for `.my-table-2 table`.
 <style>.table-1 table { text-align: left;  }</style>
 
 <div class="ox-hugo-table table-1">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 1</span>:
   Table with caption, with left-aligned text
@@ -97,7 +93,6 @@ specified CSS attribute is auto-set for `.table-1 table`.
 <style>.table-2 table { text-align: right;  }</style>
 
 <div class="ox-hugo-table table-2">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 2</span>:
   Table with caption, with right-aligned text
@@ -112,7 +107,6 @@ specified CSS attribute is auto-set for `.table-1 table`.
 <style>.table-3 table { text-align: center;  }</style>
 
 <div class="ox-hugo-table table-3">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 3</span>:
   Table with caption, with center-aligned text
@@ -130,7 +124,6 @@ specified CSS attribute is auto-set for `.table-1 table`.
 <style>.my-red-bordered-table table { border: 2px solid red;  }</style>
 
 <div class="ox-hugo-table my-red-bordered-table">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 4</span>:
   Table with caption, class and CSS attributes specified
@@ -152,7 +145,6 @@ table. So the CSS properties do not need to be specified again.
 Below table will also show up with a red border.
 
 <div class="ox-hugo-table my-red-bordered-table">
-<div></div>
 
 | h1  | h2  | h3  |
 |-----|-----|-----|
@@ -177,7 +169,6 @@ block.
 </style>
 
 <div class="ox-hugo-table tab4">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 5</span>:
   Table with verbatim CSS
@@ -209,7 +200,6 @@ block.
 </style>
 
 <div class="ox-hugo-table basic-styling">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 6</span>:
   Table with uncollapsed borders
@@ -233,7 +223,6 @@ block.
 </style>
 
 <div class="ox-hugo-table collapsed basic-styling">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 7</span>:
   Table with collapsed borders
@@ -270,7 +259,6 @@ block.
 </style>
 
 <div class="ox-hugo-table two-axis-table">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 8</span>:
   Table with 1st row and 1st column highlighted
@@ -304,7 +292,6 @@ block.
 </style>
 
 <div class="ox-hugo-table sane-table">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 9</span>:
   Sane Table &#x2014; with minimal styling
@@ -328,7 +315,6 @@ block.
 </style>
 
 <div class="ox-hugo-table zebra-striping sane-table">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 10</span>:
   Table with zebra striping
@@ -356,7 +342,6 @@ block.
 </style>
 
 <div class="ox-hugo-table hl-table-cell sane-table">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 11</span>:
   Table where the hovered-upon cell highlights
@@ -381,7 +366,6 @@ block.
 </style>
 
 <div class="ox-hugo-table hl-table-row sane-table">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 12</span>:
   Table where the hovered-upon row highlights
@@ -510,7 +494,6 @@ _Let's-go-ballistic-with-CSS_ Edition :smile:
 </style>
 
 <div class="ox-hugo-table blur-non-hovered">
-<div></div>
 <div class="table-caption">
   <span class="table-number">Table 13</span>:
   Table where rows except the hovered-upon get blurred

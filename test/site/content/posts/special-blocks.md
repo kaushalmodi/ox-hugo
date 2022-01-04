@@ -10,7 +10,6 @@ draft = false
 ### Block without NAME, class or id {#block-without-name-class-or-id}
 
 <article>
-  <article></article>
 
 This is _an article_.
 
@@ -20,7 +19,6 @@ This is _an article_.
 ### Block with NAME {#block-with-name}
 
 <aside id="Aside-A">
-  <aside></aside>
 
 _Some_ **text** --- 1
 
@@ -34,7 +32,6 @@ _Some_ **text** --- 1
 ### Block with class and id {#block-with-class-and-id}
 
 <section class="my-section" id="section-a">
-  <section></section>
 
 _Some_ **text** --- 2
 
@@ -60,7 +57,6 @@ Unmarked again.
 ### DIV without NAME, class or id {#div-without-name-class-or-id}
 
 <div class="something">
-  <div></div>
 
 This is _some text_ wrapped in a `div` block with class `something`.
 
@@ -70,7 +66,6 @@ This is _some text_ wrapped in a `div` block with class `something`.
 ### DIV with NAME {#div-with-name}
 
 <div class="foo" id="Foo-A">
-  <div></div>
 
 _Some_ **text** --- 3
 
@@ -84,7 +79,6 @@ _Some_ **text** --- 3
 ### DIV with class and id {#div-with-class-and-id}
 
 <div class="my-bar bar" id="bar-a">
-  <div></div>
 
 _Some_ **text** --- 4
 

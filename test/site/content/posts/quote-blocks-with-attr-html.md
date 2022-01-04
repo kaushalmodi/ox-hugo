@@ -9,7 +9,6 @@ Some text.
 <style>.red-text { color: red;  }</style>
 
 <div class="red-text">
-  <div></div>
 
 > This is a red quote.
 </div>

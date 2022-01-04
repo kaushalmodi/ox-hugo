@@ -18,7 +18,6 @@ From [`C-h i g (org) Paragraphs`](https://orgmode.org/manual/Paragraphs.html):
 <style>.org-center { margin-left: auto; margin-right: auto; text-align: center; }</style>
 
 <div class="org-center">
-  <div></div>
 
 Everything should be made as simple as possible, <br />
 but not any simpler
@@ -31,7 +30,6 @@ but not any simpler
 <style>.org-center { margin-left: auto; margin-right: auto; text-align: center; }</style>
 
 <div class="org-center">
-  <div></div>
 
 **bold** <br />
 _italics_ <br />

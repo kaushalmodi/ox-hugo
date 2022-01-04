@@ -1781,7 +1781,7 @@ information."
           ;; of literally inserting the line numbers.
           (setq text (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" text))
           (setq text (format "{{< highlight text \"%s\" >}}\n%s{{< /highlight >}}\n" linenos-str text))
-          (setq ret (org-blackfriday--div-wrap-maybe example-block text)))
+          (setq ret (org-blackfriday--div-wrap-maybe example-block text info)))
       (setq ret (org-blackfriday-example-block example-block nil info)))
     ret))
 
@@ -2670,7 +2670,8 @@ communication channel."
         (org-blackfriday--div-wrap-maybe
          paragraph
          (concat label
-                 (org-hugo-paragraph--process-content paragraph contents info))))))))
+                 (org-hugo-paragraph--process-content paragraph contents info))
+         info))))))
 
 ;;;; Source Blocks
 (defun org-hugo-src-block (src-block _contents info)
@@ -2828,7 +2829,7 @@ channel."
                           (format highlight-args-str linenos-str hllines-str)
                           code)))))
         (setq ret (concat src-anchor content caption-html))
-        (setq ret (org-blackfriday--div-wrap-maybe src-block ret))
+        (setq ret (org-blackfriday--div-wrap-maybe src-block ret info))
         ret))))
 
 ;;;; Special Block
@@ -2915,7 +2916,7 @@ INFO is a plist holding export options."
           (format "%s\n%s\n%s"
                   sc-begin contents sc-end)))
        (t
-        (org-blackfriday-special-block special-block contents nil))))))
+        (org-blackfriday-special-block special-block contents info))))))
 
 
 

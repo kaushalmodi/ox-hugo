@@ -165,6 +165,23 @@ INFO is a plist used as a communication channel."
                      (org-export-get-reference heading info))))
     (concat indent "- [" title "]" "(#" anchor ")")))
 
+;;;; Extra div hack
+(defun org-blackfriday--extra-div-hack (info &optional tag)
+  "Return string for the \"extra div hack\".
+
+The empty HTML element tags like \"<div></div>\" is a hack to get
+around a Blackfriday limitation.
+
+See https://github.com/kaushalmodi/ox-hugo/issues/93.
+
+INFO is a plist used as a communication channel.
+
+If TAG is not specified, it defaults to \"div\"."
+  (let ((tag (or tag "div")))
+    (if (org-blackfriday--plist-get-true-p info :hugo-goldmark)
+        ""
+      (format "\n  <%s></%s>" tag tag))))
+
 ;;;; Footnote section
 (defun org-blackfriday-footnote-section (info &optional is-cjk)
   "Format the footnote section.
@@ -417,8 +434,10 @@ This function is adapted from `org-html--make-attribute-string'."
                (setcar ret (format "%s: %s; " key value))))))))
 
 ;;;; Wrap with HTML attributes
-(defun org-blackfriday--div-wrap-maybe (elem contents)
+(defun org-blackfriday--div-wrap-maybe (elem contents info)
   "Wrap the CONTENTS with HTML div tags.
+
+INFO is a plist used as a communication channel.
 
 The div wrapping is done only if HTML attributes are set for the
 ELEM Org element using #+attr_html.
@@ -460,9 +479,9 @@ style tag."
 
         (setq ret (concat style-str
                           (if contents
-                              (format "<div %s>\n  <div></div>\n\n%s\n</div>" ;See footnote 1
-                                      attr-str contents)
-                            "")))))
+                              (format "<div %s>%s\n\n%s\n</div>"
+                                      attr-str (org-blackfriday--extra-div-hack info) contents))
+                          ""))))
     ret))
 
 ;;;; Sanitize URL
@@ -600,12 +619,14 @@ Credit: https://emacs.stackexchange.com/a/53433/115."
 ;;; Transcode Functions
 
 ;;;; Center Block
-(defun org-blackfriday-center-block (_center-block contents _info)
-  "Center-align the text in CONTENTS using CSS."
+(defun org-blackfriday-center-block (_center-block contents info)
+  "Center-align the text in CONTENTS using CSS.
+
+INFO is a plist used as a communication channel."
   (let* ((class "org-center")
          (style (format ".%s { margin-left: auto; margin-right: auto; text-align: center; }" class)))
-    (format "<style>%s</style>\n\n<div class=\"%s\">\n  <div></div>\n\n%s\n</div>" ;See footnote 1
-            style class contents)))
+    (format "<style>%s</style>\n\n<div class=\"%s\">%s\n\n%s\n</div>"
+            style class (org-blackfriday--extra-div-hack info) contents)))
 
 ;;;; Example Block
 (defun org-blackfriday-example-block (example-block _contents info)
@@ -621,7 +642,7 @@ information."
     ;; (message "[ox-bf example-block DBG] parent type: %S" parent-type)
     (setq ret (org-blackfriday--issue-239-workaround example parent-type))
     (setq ret (format "%stext\n%s%s" backticks ret backticks))
-    (setq ret (org-blackfriday--div-wrap-maybe example-block ret))
+    (setq ret (org-blackfriday--div-wrap-maybe example-block ret info))
     (when (equal 'quote-block parent-type)
       ;; If the current example block is inside a quote block, future
       ;; example/code blocks (especially the ones outside this quote
@@ -648,7 +669,8 @@ information."
                    ;; Preserve leading whitespace in the Org Babel Results
                    ;; blocks.
                    (org-export-format-code-default fixed-width info))
-                 backticks))
+                 backticks)
+         info)
       (when (equal 'quote-block parent-type)
         ;; If the current example block is inside a quote block,
         ;; future example/code blocks (especially the ones outside
@@ -818,12 +840,12 @@ communication channel."
         ;; If this is an ordered list and if any item in this list is
         ;; using a custom counter, export this list in HTML.
         (setq ret (concat
-                   (org-blackfriday--div-wrap-maybe plain-list nil)
+                   (org-blackfriday--div-wrap-maybe plain-list nil info)
                    (org-html-plain-list plain-list contents info)))
       (let* ((next (org-export-get-next-element plain-list info))
              (next-type (org-element-type next)))
         ;; (message "content: `%s', next type: %s" contents next-type)
-        (setq ret (org-blackfriday--div-wrap-maybe plain-list contents))
+        (setq ret (org-blackfriday--div-wrap-maybe plain-list contents info))
         (when (member next-type '(plain-list
                                   src-block example-block)) ;https://github.com/russross/blackfriday/issues/556
           (setq ret (concat ret "\n<!--listend-->")))))
@@ -885,7 +907,7 @@ communication channel."
          (contents (org-md-quote-block quote-block contents info))
          ret)
     ;; (message "[ox-bf quote-block DBG]")
-    (setq ret (org-blackfriday--div-wrap-maybe quote-block contents))
+    (setq ret (org-blackfriday--div-wrap-maybe quote-block contents info))
     (setq ret (concat ret
                       ;; Two consecutive blockquotes in Markdown can be
                       ;; separated by a comment.
@@ -894,9 +916,11 @@ communication channel."
     ret))
 
 ;;;; Special Block
-(defun org-blackfriday-special-block (special-block contents _info)
+(defun org-blackfriday-special-block (special-block contents info)
   "Transcode a SPECIAL-BLOCK element from Org to HTML.
 CONTENTS holds the contents of the block.
+
+INFO is a plist used as a communication channel.
 
 This function is adapted from `org-html-special-block'."
   (let* ((block-type (org-element-property :type special-block))
@@ -979,11 +1003,13 @@ This function is adapted from `org-html-special-block'."
           (format "<%s%s>%s</%s>"
                   block-type attr-str contents block-type))))
        (html5-block-fancy
-        (format "<%s%s>\n  <%s></%s>\n\n%s\n\n</%s>" ;See footnote 1
-                block-type attr-str block-type block-type contents block-type))
+        (format "<%s%s>%s\n\n%s\n\n</%s>"
+                block-type attr-str
+                (org-blackfriday--extra-div-hack info block-type)
+                contents block-type))
        (t
-        (format "<div%s>\n  <div></div>\n\n%s\n\n</div>" ;See footnote 1
-                attr-str contents))))))
+        (format "<div%s>%s\n\n%s\n\n</div>"
+                attr-str (org-blackfriday--extra-div-hack info) contents))))))
 
 ;;;; Src Block
 (defun org-blackfriday-src-block (src-block _contents info)
@@ -1200,8 +1226,9 @@ contextual information."
       (when (or (org-string-nw-p table-class-user)
                 (org-string-nw-p css-props-str))
         (setq table-pre (concat table-pre
-                                (format "<div class=\"ox-hugo-table %s\">\n" table-class)
-                                "<div></div>\n"))) ;See footnote 1
+                                (format "<div class=\"ox-hugo-table %s\">%s\n"
+                                        table-class
+                                        (org-blackfriday--extra-div-hack info)))))
       (when (org-string-nw-p table-pre)
         (setq table-post (concat "\n"
                                  "</div>\n")))
@@ -1340,13 +1367,5 @@ Return output file name."
 
 (provide 'ox-blackfriday)
 
-
-
-;;; Footnotes
-
-;;;; Footnote 1
-;; The empty HTML element tags like "<div></div>" is a hack to get
-;; around a Blackfriday limitation.  Details:
-;; https://github.com/kaushalmodi/ox-hugo/issues/93.
 
 ;;; ox-blackfriday.el ends here

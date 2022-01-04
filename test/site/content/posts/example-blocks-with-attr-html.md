@@ -9,7 +9,6 @@ Some text.
 <style>.indent-block { padding-left: 50px;  }</style>
 
 <div class="indent-block">
-  <div></div>
 
 ```text
 This is an example

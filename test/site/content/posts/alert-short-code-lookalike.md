@@ -139,7 +139,6 @@ div.alert-warning p:nth-child(2):before {
 ## Alert using Special Block {#alert-using-special-block}
 
 <div class="alert-note alert">
-  <div></div>
 
 Here's a tip or note.
 
@@ -148,7 +147,6 @@ This can be multi-paragraph too.
 </div>
 
 <div class="alert-warning alert">
-  <div></div>
 
 Here's a warning!
 
@@ -162,14 +160,12 @@ This can be multi-paragraph too.
 This will work only if the message is a single paragraph.
 
 <div class="alert alert-note">
-  <div></div>
 
 Here's a tip or note.
 
 </div>
 
 <div class="alert alert-warning">
-  <div></div>
 
 Here's a warning!
 </div>

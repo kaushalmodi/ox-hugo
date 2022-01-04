@@ -31,7 +31,12 @@ jobs:
       - uses: purcell/setup-emacs@master
         with:
           version: ${{ matrix.emacs_version }}
-      - uses: xu-cheng/latex-action@v2 # For Org tests with `tex:dvisvgm` export option
+      # https://github.com/xu-cheng/texlive-action#example
+      - uses: xu-cheng/texlive-action/small@v1 # For Org tests with `tex:dvisvgm` export option
+        with:
+          run: |
+            apk add make
+            make
       # Don't run "make doc"; it's finicky as it could fail on running the getJSON command in hugo.
       # - name: make doc
       #   run: make --no-print-directory doc # Just ensure that "make doc" doesn't fail for any reason.. this is *not* used to do Org->Markdown doc conversion

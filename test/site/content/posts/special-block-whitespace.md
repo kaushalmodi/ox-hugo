@@ -9,7 +9,6 @@ draft = false
 +++
 
 <div class="foo">
-  <div></div>
 
 
 

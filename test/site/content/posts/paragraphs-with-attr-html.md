@@ -9,7 +9,6 @@ Regular text.
 <style>.red-text { color: red;  }</style>
 
 <div class="red-text">
-  <div></div>
 
 Red text.
 
@@ -20,7 +19,6 @@ Regular text.
 <style>.green-text { color: green;  }</style>
 
 <div class="green-text">
-  <div></div>
 
 Green text.
 

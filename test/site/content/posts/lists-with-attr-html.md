@@ -9,7 +9,6 @@ draft = false
 <style>.red-text { color: red;  }</style>
 
 <div class="red-text">
-  <div></div>
 
 -   Red list item 1
 -   Red list item 2
@@ -20,7 +19,6 @@ draft = false
 <style>.green-text { color: green;  }</style>
 
 <div class="green-text">
-  <div></div>
 
 -   Green list item 1
 -   Green list item 2
@@ -31,7 +29,6 @@ draft = false
 ## Ordered lists {#ordered-lists}
 
 <div class="green-text">
-  <div></div>
 
 1.  Green ordered list item 1
 2.  Green ordered list item 2
@@ -55,7 +52,6 @@ _The `green-text` style is defined in the list above this one._
 ## Definition/descriptive lists {#definition-descriptive-lists}
 
 <div class="red-text">
-  <div></div>
 
 Defn A
 : Something A in red

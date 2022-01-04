@@ -36,7 +36,6 @@ print(str[1:])
 <style>.results-fixed-block { color: blue;  }</style>
 
 <div class="results-fixed-block">
-  <div></div>
 
 ```text
 	ef
@@ -77,7 +76,6 @@ echo "ABC\nDEF\nGHI\nJKL\nMNO\nPQR\nSTU\nVWX\nYZ0\n123\n456\n789"
 <style>.results-example-block { color: green;  }</style>
 
 <div class="results-example-block">
-  <div></div>
 
 ```text
 ABC

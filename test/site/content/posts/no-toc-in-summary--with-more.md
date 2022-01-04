@@ -33,7 +33,7 @@ HTML comment **`<!--endtoc-->`** after the TOC.
 
 ## Snippet {#snippet}
 
-As the `more` comment is present, the [`summary_minus_toc.html`](https://github.com/kaushalmodi/hugo-bare-min-theme/blob/master/layouts/partials/summary%5Fminus%5Ftoc.html) partial
+As the `more` comment is present, the [`summary_minus_toc.html`](https://github.com/kaushalmodi/hugo-bare-min-theme/blob/master/layouts/partials/summary_minus_toc.html) partial
 used for this test site ensures that only the content between
 `<!--endtoc-->` and `<!--more-->` is considered as summary.
 

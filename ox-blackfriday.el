@@ -466,13 +466,17 @@ style tag."
     ret))
 
 ;;;; Sanitize URL
-(defun org-blackfriday--url-sanitize (url)
+(defun org-blackfriday--url-sanitize-maybe (info url)
   "Sanitize the URL by replace certain characters with their hex encoding.
 
-Replaces \"_\" with \"%5F\".
+INFO is a plist used as a communication channel.
+
+Replaces \"_\" with \"%5F\" only if :hugo-goldmark is nil.
 
 Workaround for Blackfriday bug https://github.com/russross/blackfriday/issues/278."
-  (replace-regexp-in-string "_" "%5F" url))
+  (if (not (org-blackfriday--plist-get-true-p info :hugo-goldmark))
+      (replace-regexp-in-string "_" "%5F" url)
+    url))
 
 ;;;; Blackfriday Issue 239 Workaround
 (defun org-blackfriday--issue-239-workaround (code parent-type)

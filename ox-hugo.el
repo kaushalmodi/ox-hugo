@@ -2089,7 +2089,7 @@ and rewrite link paths to make blogging more seamless."
 
     (when (and (stringp raw-path)
                link-is-url)
-      (setq raw-path (org-blackfriday--url-sanitize
+      (setq raw-path (org-blackfriday--url-sanitize-maybe info
                       (url-encode-url raw-path))))
     ;; (message "[ox-hugo-link DBG] link: %S" link)
     ;; (message "[ox-hugo-link DBG] link path: %s" (org-element-property :path link))

@@ -391,10 +391,12 @@ stop
 :PROPERTIES:
 :EXPORT_FILE_NAME: embedded-video
 :END:
+{{{oxhugoissue(274)}}}
+
 [[https://www.w3schools.com/html/html5_video.asp][Using ~video~ HTML5 tag]]
 
 #+begin_export html
- <video width="320" height="240" controls>
+<video width="320" height="240" controls>
   <source src="/videos/sample.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
@@ -2372,22 +2374,37 @@ And these ones should be eventually removed and _underline_ the text
 - /This is italics, and *this is bold too*, and back to plain
   italics./
 - *This is bold, and /this is italics too/, and back to plain bold.*
-** Italicize links with underscores                 :italic:links:underscore:
+** Italicize links with underscores (Goldmark) :italic:links:underscore:goldmark:
 :PROPERTIES:
-:EXPORT_FILE_NAME: italicize-links-with-underscores
+:EXPORT_FILE_NAME: italicize-links-with-underscores-goldmark
+:EXPORT_HUGO_ALIASES: italicize-links-with-underscores
+:EXPORT_HUGO_GOLDMARK: t
+:END:
+#+begin_description
+Test that links with underscores can be italicized/emboldened/both
+without replacing underscores with ~%5f~.
+#+end_description
+{{{oxhugoissue(308)}}}, {{{oxhugoissue(170)}}}
+*** External links
+- Italic :: /What is a [[https://en.wikipedia.org/wiki/Two's_complement][two's complement]]?/
+- Bold :: *What is a [[https://en.wikipedia.org/wiki/Two's_complement][two's complement]]?*
+- Bold + Italic :: /*What is a [[https://en.wikipedia.org/wiki/Two's_complement][two's complement]]?*/
+*** Internal links
+- Italic :: /Link to [[file:single-posts/post_with_underscore_in_name.org][another post on this site]]?/
+- Bold :: *Link to [[file:single-posts/post_with_underscore_in_name.org][another post on this site]]?*
+- Bold + Italic :: /*Link to [[file:single-posts/post_with_underscore_in_name.org][another post on this site]]?*/
+** Italicize links with underscores (Blackfriday) :italic:links:underscore:blackfriday:
+:PROPERTIES:
+:EXPORT_FILE_NAME: italicize-links-with-underscores-blackfriday
+:EXPORT_HUGO_GOLDMARK:
 :END:
 #+begin_description
 Test that links with underscores can be italicized/emboldened/both.
 #+end_description
 {{{oxhugoissue(170)}}}
-*** External links
-- Italic :: /What is a [[https://en.wikipedia.org/wiki/Two%27s_complement][two's complement]]?/
-- Bold :: *What is a [[https://en.wikipedia.org/wiki/Two%27s_complement][two's complement]]?*
-- Bold + Italic :: /*What is a [[https://en.wikipedia.org/wiki/Two%27s_complement][two's complement]]?*/
-*** Internal links
-- Italic :: /Link to [[file:single-posts/post_with_underscore_in_name.org][another post on this site]]?/
-- Bold :: *Link to [[file:single-posts/post_with_underscore_in_name.org][another post on this site]]?*
-- Bold + Italic :: /*Link to [[file:single-posts/post_with_underscore_in_name.org][another post on this site]]?*/
+- Italic :: /What is a [[https://en.wikipedia.org/wiki/Two's_complement][two's complement]]?/
+- Bold :: *What is a [[https://en.wikipedia.org/wiki/Two's_complement][two's complement]]?*
+- Bold + Italic :: /*What is a [[https://en.wikipedia.org/wiki/Two's_complement][two's complement]]?*/
 ** Single and Double quotes
 :PROPERTIES:
 :EXPORT_FILE_NAME: single-double-quotes

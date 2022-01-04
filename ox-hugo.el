@@ -2086,15 +2086,16 @@ and rewrite link paths to make blogging more seamless."
          (raw-path (org-element-property :path link))
          (type (org-element-property :type link))
          (link-is-url (member type '("http" "https" "ftp" "mailto"))))
+    ;; (message "[org-hugo-link DBG] raw-path 1: %s" raw-path)
 
     (when (and (stringp raw-path)
                link-is-url)
       (setq raw-path (org-blackfriday--url-sanitize-maybe
                       info (url-encode-url raw-path))))
-    ;; (message "[ox-hugo-link DBG] link: %S" link)
-    ;; (message "[ox-hugo-link DBG] link path: %s" (org-element-property :path link))
-    ;; (message "[ox-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
-    ;; (message "[ox-hugo-link DBG] link type: %s" type)
+    ;; (message "[org-hugo-link DBG] raw-path 2: %s" raw-path)
+    ;; (message "[org-hugo-link DBG] link: %S" link)
+    ;; (message "[org-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
+    ;; (message "[org-hugo-link DBG] link type: %s" type)
     (cond
      ;; Link type is handled by a special function.
      ((org-export-custom-protocol-maybe link desc 'md))
@@ -2102,6 +2103,9 @@ and rewrite link paths to make blogging more seamless."
       (let ((destination (if (string= type "fuzzy")
                              (org-export-resolve-fuzzy-link link info)
                            (org-export-resolve-id-link link info))))
+        ;; (message "[org-hugo-link DBG] link type: %s" type)
+        ;; (message "[org-hugo-link DBG] destination: %s" destination)
+        ;; (message "[org-hugo-link DBG] link: %S" link)
         ;; (message "[org-hugo-link DBG] link destination elem type: %S" (org-element-type destination))
         (pcase (org-element-type destination)
           (`plain-text                  ;External file
@@ -2110,13 +2114,17 @@ and rewrite link paths to make blogging more seamless."
                          (if (string= ".org" (downcase (file-name-extension destination ".")))
                              (concat (file-name-sans-extension destination) ".md")
                            destination))))
-             ;; (message "[org-hugo-link DBG] markdown path: %s" (concat (org-hugo--get-pub-dir info) path))
-             ;; Treat links as a normal post if the markdown file exists in hugo publish directory
+             ;; (message "[org-hugo-link DBG] plain-text path: %s" path)
              (if (org-id-find-id-file raw-path)
-                 (let ((anchor (org-hugo-link--heading-anchor-maybe link)))
+                 (let* ((anchor (org-hugo-link--heading-anchor-maybe link))
+                        (anchor-str (if (org-string-nw-p anchor)
+                                        (concat "#" anchor)
+                                      "")))
+                   ;; (message "[org-hugo-link DBG] plain-text org-id anchor: %S" anchor)
+                   ;; (message "[org-hugo-link DBG] plain-text org-id anchor-str: %S" anchor-str)
                    (if desc
-                       (format "[%s]({{<relref \"%s#%s\" >}})" desc path anchor)
-                     (format "[%s]({{<relref \"%s#%s\">}})" path path anchor)))
+                       (format "[%s]({{< relref \"%s%s\" >}})" desc path anchor-str)
+                     (format "[%s]({{< relref \"%s%s\" >}})" path path anchor-str)))
                (if desc
                    (format "[%s](%s)" desc path)
                  (format "<%s>" path)))))
@@ -2144,7 +2152,7 @@ and rewrite link paths to make blogging more seamless."
                           (let ((num-str (if (atom number)
                                              (number-to-string number)
                                            (mapconcat #'number-to-string number "."))))
-                            ;; (message "[ox-hugo-link DBG] num-str: %s" num-str)
+                            ;; (message "[org-hugo-link DBG] num-str: %s" num-str)
                             (if org-hugo-link-desc-insert-type
                                 (let* ((type (org-element-type destination))
                                        ;; Org doesn't have a specific
@@ -2159,7 +2167,7 @@ and rewrite link paths to make blogging more seamless."
                                        (type-str (org-blackfriday--translate type info)))
                                   (format "%s %s" type-str num-str))
                               num-str)))))))
-             ;; (message "[ox-hugo-link DBG] link description: %s" description)
+             ;; (message "[org-hugo-link DBG] link description: %s" description)
              (when description
                (let ((dest-link (cond
                                  ;; Ref to a source block or table.
@@ -2214,9 +2222,9 @@ and rewrite link paths to make blogging more seamless."
              (inlined-svg (and (stringp extension)
                                (string= "svg" (downcase extension))
                                (plist-get attr :inlined))))
-        ;; (message "[ox-hugo-link DBG] Inline image: %s, extension: %s" raw-path extension)
-        ;; (message "[ox-hugo-link DBG] inlined svg? %S" inlined-svg)
-        ;; (message "[ox-hugo-link DBG] caption: %s" caption)
+        ;; (message "[org-hugo-link DBG] Inline image: %s, extension: %s" raw-path extension)
+        ;; (message "[org-hugo-link DBG] inlined svg? %S" inlined-svg)
+        ;; (message "[org-hugo-link DBG] caption: %s" caption)
         (if inlined-svg
             (let* ((svg-contents (with-temp-buffer
                                    (insert-file-contents raw-path)
@@ -2240,8 +2248,8 @@ and rewrite link paths to make blogging more seamless."
                                                    "</div>")
                                            (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
                                             (org-export-data-with-backend caption 'ascii info))))))
-              ;; (message "[ox-hugo-link DBG] svg contents: %s" svg-contents)
-              ;; (message "[ox-hugo-link DBG] svg contents sanitized: %s" svg-contents-sanitized)
+              ;; (message "[org-hugo-link DBG] svg contents: %s" svg-contents)
+              ;; (message "[org-hugo-link DBG] svg contents sanitized: %s" svg-contents-sanitized)
               (concat svg-contents-sanitized caption-html))
           (let* ((path (org-hugo--attachment-rewrite-maybe raw-path info))
                  (inline-image (not (org-html-standalone-image-p useful-parent info)))
@@ -2250,8 +2258,8 @@ and rewrite link paths to make blogging more seamless."
                            path))
                  (num-attr (/ (length attr) 2)) ;(:alt foo) -> num-attr = 1
                  (alt-text (plist-get attr :alt)))
-            ;; (message "[ox-hugo-link DBG] path: %s" path)
-            ;; (message "[ox-hugo-link DBG] inline image? %s" inline-image)
+            ;; (message "[org-hugo-link DBG] path: %s" path)
+            ;; (message "[org-hugo-link DBG] inline image? %s" inline-image)
             ;; (message "[org-hugo-link DBG] attr: %s num of attr: %d"
             ;;          attr (length attr))
             ;; (message "[org-hugo-link DBG] parent-type: %s" parent-type)
@@ -2342,12 +2350,12 @@ and rewrite link paths to make blogging more seamless."
                              (setq link-param-str (concat link-param-str
                                                           (format "%s=\"%s\" "
                                                                   name val))))))
-                       ;; (message "[ox-hugo-link DBG] link params: %s" link-param-str)
+                       ;; (message "[org-hugo-link DBG] link params: %s" link-param-str)
                        )
                      (concat type ":" raw-path))
                     (;; Remove the "file://" prefix.
                      (string= type "file")
-                     ;; (message "[ox-hugo-link DBG] raw-path: %s" raw-path)
+                     ;; (message "[org-hugo-link DBG] raw-path: %s" raw-path)
                      (let ((path1 (replace-regexp-in-string "\\`file://" "" raw-path)))
                        (if (string= ".org" (downcase (file-name-extension path1 ".")))
                            (let ((raw-link-minus-org-file
@@ -2365,8 +2373,8 @@ and rewrite link paths to make blogging more seamless."
                     (t
                      raw-path)))
              (link-param-str (org-string-nw-p (org-trim link-param-str))))
-        ;; (message "[ox-hugo-link DBG] desc=%s path=%s" desc path)
-        ;; (message "[ox-hugo-link DBG] link-param-str=%s" link-param-str)
+        ;; (message "[org-hugo-link DBG] desc=%s path=%s" desc path)
+        ;; (message "[org-hugo-link DBG] link-param-str=%s" link-param-str)
         (cond
          ;; Link description is a `figure' shortcode but does not
          ;; already have the `link' parameter set.

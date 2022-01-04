@@ -1,5 +1,7 @@
 +++
 title = "B"
+tags = ["org-roam"]
+categories = ["org-id"]
 draft = false
 +++
 

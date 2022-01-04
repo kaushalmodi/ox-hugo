@@ -5,5 +5,6 @@
 #+hugo_section: org-roam
 #+author:
 #+title: B
+#+filetags: org-roam @org-id
 
 https://github.com/kaushalmodi/ox-hugo/issues/500

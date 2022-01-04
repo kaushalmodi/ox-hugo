@@ -1314,6 +1314,65 @@ This code block once again contains no backticks:
 #+begin_src emacs-lisp
 (message "Hello again x6")
 #+end_src
+** Source block annotations                           :src_block:annotations:
+*** Source blocks with line number annotation                       :linenum:
+**** Source blocks with line number annotation (Goldmark)          :goldmark:
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-with-line-numbers
+:END:
+- [[https://orgmode.org/manual/Literal-examples.html][Org reference]]
+***** Cases
+:PROPERTIES:
+:CUSTOM_ID: source-block-line-number-cases
+:END:
+****** Default new line number start
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-n-default-start>>
+#+end_src
+******* Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-default-start>>
+#+end_src
+****** Specify new line number start
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-n-custom-start>>
+#+end_src
+******* Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-custom-start>>
+#+end_src
+****** Default continued line numbers
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-n-default-continue>>
+#+end_src
+******* Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-default-continue>>
+#+end_src
+****** Specify continued line numbers jump
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-n-custom-continue>>
+#+end_src
+******* Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-custom-continue>>
+#+end_src
+***** Specifying ~linenos~ parameter
+#+begin_src emacs-lisp :linenos false
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+#+end_src
+
+#+begin_src emacs-lisp -n 30 :linenos inline
+(message "This is line 30")
+(message "This is line 31")
+(message "This is line 32")
+#+end_src
 ** Highlight Shortcode                                  :highlight:shortcode:
 *** Source blocks with =highlight= shortcode
 :PROPERTIES:
@@ -1329,9 +1388,10 @@ property needs to be left *empty* instead of setting to =nil=!
 :END:
 #+end_example
 #+include: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
-*** Source blocks with line number annotation
+*** Source blocks with line number annotation (Blackfriday) :blackfriday:linenum:
 :PROPERTIES:
-:EXPORT_FILE_NAME: source-block-with-line-numbers
+:EXPORT_FILE_NAME: source-block-with-line-numbers-blackfriday
+:EXPORT_HUGO_GOLDMARK:
 :END:
 - [[https://orgmode.org/manual/Literal-examples.html][Org reference]]
 - [[https://gohugo.io/content-management/syntax-highlighting/][Hugo =highlight= shortcode with line numbers]]

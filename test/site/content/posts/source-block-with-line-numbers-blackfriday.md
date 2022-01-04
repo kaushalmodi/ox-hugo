@@ -1,10 +1,11 @@
 +++
-title = "Source blocks with line number annotation (Goldmark)"
-tags = ["src-block", "annotations", "linenum", "goldmark"]
+title = "Source blocks with line number annotation (Blackfriday)"
+tags = ["src-block", "highlight", "shortcode", "blackfriday", "linenum"]
 draft = false
 +++
 
 -   [Org reference](https://orgmode.org/manual/Literal-examples.html)
+-   [Hugo `highlight` shortcode with line numbers](https://gohugo.io/content-management/syntax-highlighting/)
 
 
 ## Cases {#source-block-line-number-cases}

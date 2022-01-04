@@ -2425,7 +2425,7 @@ and rewrite link paths to make blogging more seamless."
         ""))))
 
 ;;;;; Helpers
-(defun org-hugo--maybe-copy-resources (info)
+(defun org-hugo--copy-resources-maybe (info)
   "Copy resources to the bundle directory if needed.
 
 INFO is a plist used as a communication channel."
@@ -2929,7 +2929,7 @@ INFO is a plist holding export options."
 BODY is the result of the export.
 INFO is a plist holding export options."
   ;; Copy the page resources to the bundle directory.
-  (org-hugo--maybe-copy-resources info)
+  (org-hugo--copy-resources-maybe info)
   ;; (message "[ox-hugo body filter] ITEM %S" (org-entry-get (point) "ITEM"))
   ;; (message "[ox-hugo body filter] TAGS: %S" (org-entry-get (point) "TAGS"))
   ;; (message "[ox-hugo body filter] ALLTAGS: %S" (org-entry-get (point) "ALLTAGS"))

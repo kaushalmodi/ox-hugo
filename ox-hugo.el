@@ -1754,10 +1754,11 @@ information."
         (when linenostart-str
           (setq code-attr-str (format "%s, linenostart=%s" code-attr-str linenostart-str))))
 
-      ;; Remove Org-inserted numbers from the beginning of each line
-      ;; as the Hugo highlight shortcode will be used instead of
-      ;; literally inserting the line numbers.
-      (setq example-code (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" example-code))
+      (when number-lines
+        ;; Remove Org-inserted numbers from the beginning of each line
+        ;; as the Hugo highlight shortcode will be used instead of
+        ;; literally inserting the line numbers.
+        (setq example-code (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" example-code)))
       (unless use-highlight-sc
         (plist-put info :md-code example-code)
         (plist-put info :md-code-attr code-attr-str)))

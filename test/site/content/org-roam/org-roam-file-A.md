@@ -5,6 +5,6 @@ categories = ["org-id"]
 draft = false
 +++
 
-<https://github.com/kaushalmodi/ox-hugo/issues/500>
+Ref: `ox-hugo` Issue #[500](https://github.com/kaushalmodi/ox-hugo/issues/500), `ox-hugo` Issue #[395](https://github.com/kaushalmodi/ox-hugo/issues/395)
 
-[B]({{< relref "org-roam-file-B.md" >}})
+[File B]({{< relref "org-roam-file-B.md" >}})

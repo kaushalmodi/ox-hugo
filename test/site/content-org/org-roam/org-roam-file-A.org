@@ -4,9 +4,11 @@
 #+title: A
 #+filetags: org-roam @org-id
 
-https://github.com/kaushalmodi/ox-hugo/issues/500
+#+macro: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
 
-[[id:01579e8c-a90b-4c53-af58-e18ff7877d00][B]]
+Ref: {{{oxhugoissue(500)}}}, {{{oxhugoissue(395)}}}
+
+[[id:01579e8c-a90b-4c53-af58-e18ff7877d00][File B]]
 
 #+begin_src emacs-lisp :eval never-export :exports none
 (setq org-id-extra-files (directory-files-recursively default-directory "\.org$"))

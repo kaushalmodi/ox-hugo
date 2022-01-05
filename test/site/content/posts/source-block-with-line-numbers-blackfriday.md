@@ -8,7 +8,7 @@ draft = false
 -   [Hugo `highlight` shortcode with line numbers](https://gohugo.io/content-management/syntax-highlighting/)
 
 
-## Cases {#source-block-line-number-cases}
+## Cases {#cases}
 
 
 ### Default new line number start {#default-new-line-number-start}

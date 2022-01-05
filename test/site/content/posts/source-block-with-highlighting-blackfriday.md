@@ -1,10 +1,10 @@
 +++
 title = "Source blocks with highlighting (Blackfriday)"
-tags = ["src-block", "highlight", "shortcode", "blackfriday", "syntax-highlighting"]
+tags = ["src-block", "shortcode", "blackfriday", "highlight"]
 draft = false
 +++
 
-## Without line numbers {#source-blocks-with-highlighting-no-linenums}
+## Without line numbers {#without-line-numbers}
 
 
 #### Org source {#org-source}
@@ -62,21 +62,7 @@ A workaround is below.. **use line numbers too!**.
 {{< /highlight >}}
 
 
-## With line numbers **not** starting from 1 {#source-blocks-with-highlighting-with-linenums-not-starting-from-1}
-
-With line numbers enabled, the highlighting is limited to the width of
-the HTML table rows (because `ox-hugo` sets the `linenos=table` option
-in the `highlight` shortcode when line numbers are enabled).
-
-Note 1
-: When using both, switches (like `-n`), and header args
-    (like `:hl_lines`), the <span class="underline">switches have to come first</span>.
-
-Note 2
-: The line numbers in the value for `:hl_lines` parameter is
-    always with the starting line number reference of 1. That
-    has no relation with the value of the line numbers
-    displayed using the `-n` or `+n` switches!
+## With line numbers **not** starting from 1 {#with-line-numbers-not-starting-from-1}
 
 
 #### Org source {#org-source}
@@ -105,7 +91,7 @@ Note 2
 {{< /highlight >}}
 
 
-## With line numbers {#source-blocks-with-highlighting-with-linenums}
+## With line numbers {#with-line-numbers}
 
 
 #### Org source {#org-source}

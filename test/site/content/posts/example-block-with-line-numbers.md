@@ -5,7 +5,6 @@ draft = false
 +++
 
 -   [Org reference](https://orgmode.org/manual/Literal-examples.html)
--   [Hugo `highlight` shortcode with line numbers](https://gohugo.io/content-management/syntax-highlighting/)
 
 
 ## Default new line number start {#default-new-line-number-start}
@@ -48,6 +47,9 @@ line 34
 
 
 ## Specifying `linenos` parameter {#specifying-linenos-parameter}
+
+In the below block, `:linenos false` switch was added to the example
+block header.
 
 ```text { linenos=false }
 This is line 1

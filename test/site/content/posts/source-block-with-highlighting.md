@@ -1,7 +1,7 @@
 +++
 title = "Source blocks with highlighting (Goldmark)"
 aliases = ["/posts/source-block-with-highlighting-goldmark"]
-tags = ["src-block", "annotations", "goldmark", "syntax-highlighting"]
+tags = ["src-block", "annotations", "goldmark", "highlight"]
 draft = false
 +++
 

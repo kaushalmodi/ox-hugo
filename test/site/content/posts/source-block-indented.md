@@ -71,7 +71,13 @@ Switched from exporting the `highlight` shortcode to exporting the
 code fenced blocks with attributes. These code fences are support by
 Hugo + Goldmark since v0.60.0.
 
+**Below notes are now outdated and thus grayed out.**
+
 </div>
+
+<style> .gray { color: gray; }</style>
+
+<div class="gray">
 
 This is an **upstream** bug in `hugo` as of 2018-05-12. The issue is
 that when the code blocks in `highlight` shortcodes are inserted at
@@ -86,6 +92,8 @@ unremoved indentation on the last line of those code blocks.
 In the above section, the same code blocks are code-fenced instead of
 using `highlight` shortcode, and the extra indentation is not seen
 there.
+
+</div>
 
 -   List item 1
 

@@ -188,6 +188,16 @@ If TAG is not specified, it defaults to \"div\"."
         ""
       (format "\n  <%s></%s>" tag tag))))
 
+(defun org-blackfriday--get-ref-prefix (symbol)
+  "Return the prefix string for SYMBOL which can be an Org element type.
+
+Returns nil if the SYMBOL's prefix string isn't defined."
+  (let ((prefix-alist '((figure . "figure--")
+                        (src-block . "code-snippet--")
+                        (table . "table--")
+                        (target . "org-target--"))))
+    (cdr (assoc symbol prefix-alist))))
+
 ;;;; Footnote section
 (defun org-blackfriday-footnote-section (info &optional is-cjk)
   "Format the footnote section.
@@ -551,11 +561,8 @@ The return value, if non-nil, is a string."
     ;; (message "[ox-bf ref DBG] name: %S" name)
     (when name
       (let* ((elem-type (org-element-type elem))
-             (prefix (if (assoc elem-type org-blackfriday--org-element-string)
-                         (let ((type-str (cdr (assoc elem-type org-blackfriday--org-element-string))))
-                           (replace-regexp-in-string " " "-"
-                                                     (downcase type-str)))
-                       (format "org-%s" (symbol-name elem-type))))
+             (prefix (or (org-blackfriday--get-ref-prefix elem-type)
+                         (format "org-%s--" (symbol-name elem-type))))
              (name1 (let* ((tmp name)
                            ;; Remove commonly used code/table/figure
                            ;; prefixes in the #+name itself.
@@ -565,7 +572,7 @@ The return value, if non-nil, is a string."
                            ;; chars with hyphens.
                            (tmp (replace-regexp-in-string "[_/]" "-" tmp)))
                       tmp)))
-        (format "%s--%s" prefix name1)))))
+        (format "%s%s" prefix name1)))))
 
 ;;;; Translate
 (defun org-blackfriday--translate (type info &optional str)
@@ -1315,8 +1322,9 @@ contextual information."
   "Transcode a TARGET object from Org to HTML.
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
-  (let* ((ref-prefix "org-target--")
-         (ref (format "%s%s" ref-prefix (org-element-property :value target))))
+  (let ((ref (format "%s%s"
+                     (org-blackfriday--get-ref-prefix 'target)
+                     (org-element-property :value target))))
     (org-html--anchor ref nil nil info)))
 
 ;;;; Verse Block

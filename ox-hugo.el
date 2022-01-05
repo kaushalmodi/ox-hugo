@@ -2169,14 +2169,16 @@ and rewrite link paths to make blogging more seamless."
                                        (eq (org-element-type destination) 'paragraph))
                                   (let ((figure-ref (org-blackfriday--get-reference destination)))
                                     (if (org-string-nw-p figure-ref)
-                                        (replace-regexp-in-string "\\`org-paragraph--" "figure--" figure-ref)
+                                        (replace-regexp-in-string
+                                         "\\`org-paragraph--"
+                                         (org-blackfriday--get-ref-prefix 'figure)
+                                         figure-ref)
                                       (org-export-get-reference destination info))))
                                  ;; Ref to a <<target>>.
                                  ((eq (org-element-type destination) 'target)
-                                  ;; Keep the below "org-target--" prefix in
-                                  ;; sync with that in
-                                  ;; `org-blackfriday-target'.
-                                  (format "org-target--%s" raw-path)) ;If the target is <<xyz>>, `raw-path' will be "xyz"
+                                  (format "%s%s"
+                                          (org-blackfriday--get-ref-prefix (org-element-type destination))
+                                          raw-path)) ;If the target is <<xyz>>, `raw-path' will be "xyz"
                                  ;; Ref to all other link destinations.
                                  (t
                                   (org-export-get-reference destination info)))))
@@ -2674,7 +2676,10 @@ communication channel."
       (let ((figure-ref (org-blackfriday--get-reference paragraph))
             label)
         (when (org-string-nw-p figure-ref)
-          (setq figure-ref (replace-regexp-in-string "\\`org-paragraph--" "figure--" figure-ref)))
+          (setq figure-ref (replace-regexp-in-string
+                            "\\`org-paragraph--"
+                            (org-blackfriday--get-ref-prefix 'figure)
+                            figure-ref)))
         (setq label (if figure-ref
                         (format "<a id=\"%s\"></a>\n\n" figure-ref)
                       ""))

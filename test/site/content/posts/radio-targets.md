@@ -5,7 +5,7 @@ tags = ["links", "internal-links", "radio-targets"]
 draft = false
 +++
 
-Here I am referencing to [asdf123](#org405da13) that I talk about later.
+Here I am referencing to [asdf123](#org-radio--asdf123) that I talk about later.
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -111,7 +111,7 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-Here I talk about the [asdf123](#org405da13) topic again.
+Here I talk about the [asdf123](#org-radio--asdf123) topic again.
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -217,4 +217,4 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-Here I talk about <a id="org405da13">asdf123</a>.
+Here I talk about <a id="org-radio--asdf123">asdf123</a>.

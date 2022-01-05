@@ -2081,12 +2081,12 @@ and rewrite link paths to make blogging more seamless."
                       info (url-encode-url raw-path))))
     ;; (message "[org-hugo-link DBG] raw-path 2: %s" raw-path)
     ;; (message "[org-hugo-link DBG] link: %S" link)
-    ;; (message "[org-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
     ;; (message "[org-hugo-link DBG] link type: %s" type)
     (cond
      ;; Link type is handled by a special function.
      ((org-export-custom-protocol-maybe link desc 'md))
-     ((member type '("custom-id" "id" "fuzzy"))
+     ((member type '("custom-id" "id"
+                     "fuzzy")) ;<<target>>, #+name, heading links
       (let ((destination (if (string= type "fuzzy")
                              (org-export-resolve-fuzzy-link link info)
                            (org-export-resolve-id-link link info))))
@@ -2095,7 +2095,8 @@ and rewrite link paths to make blogging more seamless."
         ;; (message "[org-hugo-link DBG] link: %S" link)
         ;; (message "[org-hugo-link DBG] link destination elem type: %S" (org-element-type destination))
         (pcase (org-element-type destination)
-          (`plain-text                  ;External file
+          ;; External file.
+          (`plain-text
            (let ((path (progn
                          ;; Treat links to `file.org' as links to `file.md'.
                          (if (string= ".org" (downcase (file-name-extension destination ".")))
@@ -2115,7 +2116,8 @@ and rewrite link paths to make blogging more seamless."
                (if desc
                    (format "[%s](%s)" desc path)
                  (format "<%s>" path)))))
-          (`headline                 ;Links of type [[* Some heading]]
+          ;; Links of type [[* Some heading]].
+          (`headline
            (let ((title (org-export-data (org-element-property :title destination) info)))
              (format
               "[%s](#%s)"
@@ -2129,6 +2131,8 @@ and rewrite link paths to make blogging more seamless."
                      title))
               ;; Reference
               (org-hugo--get-anchor destination info title))))
+          ;; Links to other Org elements like source blocks, tables,
+          ;; paragraphs, standalone figures, <<target>> links, etc.
           (_
            (let ((description
                   (or (org-string-nw-p desc)
@@ -2165,8 +2169,16 @@ and rewrite link paths to make blogging more seamless."
                                        (eq (org-element-type destination) 'paragraph))
                                   (let ((figure-ref (org-blackfriday--get-reference destination)))
                                     (if (org-string-nw-p figure-ref)
-                                        (replace-regexp-in-string "\\`org-paragraph--" "figure--" figure-ref)
+                                        (replace-regexp-in-string
+                                         "\\`org-paragraph--"
+                                         (org-blackfriday--get-ref-prefix 'figure)
+                                         figure-ref)
                                       (org-export-get-reference destination info))))
+                                 ;; Ref to a <<target>>.
+                                 ((eq (org-element-type destination) 'target)
+                                  (format "%s%s"
+                                          (org-blackfriday--get-ref-prefix (org-element-type destination))
+                                          raw-path)) ;If the target is <<xyz>>, `raw-path' will be "xyz"
                                  ;; Ref to all other link destinations.
                                  (t
                                   (org-export-get-reference destination info)))))
@@ -2308,9 +2320,12 @@ and rewrite link paths to make blogging more seamless."
       (let ((ref (org-element-property :path link)))
         (format (org-export-get-coderef-format ref desc)
                 (org-export-resolve-coderef ref info))))
-     ((equal type "radio")
+     ((string= type "radio")
       (let ((destination (org-export-resolve-radio-link link info)))
-        (format "[%s](#%s)" desc (org-export-get-reference destination info))))
+        (format "[%s](#%s%s)"
+                desc
+                (org-blackfriday--get-ref-prefix 'radio)
+                (org-element-property :value destination))))
      (t
       (let* ((link-param-str "")
              (path (cond
@@ -2664,7 +2679,10 @@ communication channel."
       (let ((figure-ref (org-blackfriday--get-reference paragraph))
             label)
         (when (org-string-nw-p figure-ref)
-          (setq figure-ref (replace-regexp-in-string "\\`org-paragraph--" "figure--" figure-ref)))
+          (setq figure-ref (replace-regexp-in-string
+                            "\\`org-paragraph--"
+                            (org-blackfriday--get-ref-prefix 'figure)
+                            figure-ref)))
         (setq label (if figure-ref
                         (format "<a id=\"%s\"></a>\n\n" figure-ref)
                       ""))

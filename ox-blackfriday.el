@@ -123,12 +123,14 @@ tag needs to be `python'."
                      (plain-list . org-blackfriday-plain-list)
                      (plain-text . org-blackfriday-plain-text)
                      (quote-block . org-blackfriday-quote-block)
+                     (radio-target . org-blackfriday-radio-target)
                      (special-block . org-blackfriday-special-block)
                      (src-block . org-blackfriday-src-block)
                      (strike-through . org-blackfriday-strike-through)
                      (table-cell . org-blackfriday-table-cell)
                      (table-row . org-blackfriday-table-row)
                      (table . org-blackfriday-table)
+                     (target . org-blackfriday-target)
                      (verse-block . org-blackfriday-verse-block)))
 
 
@@ -186,6 +188,17 @@ If TAG is not specified, it defaults to \"div\"."
     (if (org-blackfriday--plist-get-true-p info :hugo-goldmark)
         ""
       (format "\n  <%s></%s>" tag tag))))
+
+(defun org-blackfriday--get-ref-prefix (symbol)
+  "Return the prefix string for SYMBOL which can be an Org element type.
+
+Returns nil if the SYMBOL's prefix string isn't defined."
+  (let ((prefix-alist '((figure . "figure--")
+                        (radio . "org-radio--")
+                        (src-block . "code-snippet--")
+                        (table . "table--")
+                        (target . "org-target--"))))
+    (cdr (assoc symbol prefix-alist))))
 
 ;;;; Footnote section
 (defun org-blackfriday-footnote-section (info &optional is-cjk)
@@ -550,11 +563,8 @@ The return value, if non-nil, is a string."
     ;; (message "[ox-bf ref DBG] name: %S" name)
     (when name
       (let* ((elem-type (org-element-type elem))
-             (prefix (if (assoc elem-type org-blackfriday--org-element-string)
-                         (let ((type-str (cdr (assoc elem-type org-blackfriday--org-element-string))))
-                           (replace-regexp-in-string " " "-"
-                                                     (downcase type-str)))
-                       (format "org-%s" (symbol-name elem-type))))
+             (prefix (or (org-blackfriday--get-ref-prefix elem-type)
+                         (format "org-%s--" (symbol-name elem-type))))
              (name1 (let* ((tmp name)
                            ;; Remove commonly used code/table/figure
                            ;; prefixes in the #+name itself.
@@ -564,7 +574,7 @@ The return value, if non-nil, is a string."
                            ;; chars with hyphens.
                            (tmp (replace-regexp-in-string "[_/]" "-" tmp)))
                       tmp)))
-        (format "%s--%s" prefix name1)))))
+        (format "%s%s" prefix name1)))))
 
 ;;;; Translate
 (defun org-blackfriday--translate (type info &optional str)
@@ -957,6 +967,16 @@ communication channel."
                         "\n\n<!--quoteend-->")))
     ret))
 
+;;;; Radio Target
+(defun org-blackfriday-radio-target (radio-target text info)
+  "Transcode a RADIO-TARGET object from Org to HTML.
+CONTENTS is nil.  INFO is a plist holding contextual
+information."
+  (let ((ref (format "%s%s"
+                     (org-blackfriday--get-ref-prefix 'radio)
+                     (org-element-property :value radio-target))))
+    (org-html--anchor ref text nil info)))
+
 ;;;; Special Block
 (defun org-blackfriday-special-block (special-block contents info)
   "Transcode a SPECIAL-BLOCK element from Org to HTML.
@@ -1308,6 +1328,16 @@ contextual information."
 
       (concat table-pre table-anchor caption-html
               blank-line-before-table tbl table-post))))
+
+;;;; Target
+(defun org-blackfriday-target (target _contents info)
+  "Transcode a TARGET object from Org to HTML.
+CONTENTS is nil.  INFO is a plist holding contextual
+information."
+  (let ((ref (format "%s%s"
+                     (org-blackfriday--get-ref-prefix 'target)
+                     (org-element-property :value target))))
+    (org-html--anchor ref nil nil info)))
 
 ;;;; Verse Block
 (defun org-blackfriday-verse-block (_verse-block contents info)

@@ -30,7 +30,7 @@ init file.
 -   [Link to CUSTOM_ID within the same post](#internal-target)
 -   [Link to ID within the same post](#internal-target)
 -   [Link to heading within the same post](#internal-target)
--   [Link to target within the same post](#orgac7640c)
+-   [Link to target within the same post](#org-target--internal-target)
 
 
 ## Cross-post links {#cross-post-links}
@@ -68,7 +68,7 @@ resolved to the containing post.
 
 ## Internal target {#internal-target}
 
-<a id="orgac7640c"></a>
+<a id="org-target--internal-target"></a>
 
 
 ## Link destination {#link-destination}
@@ -76,7 +76,7 @@ resolved to the containing post.
 
 ### External target {#external-target}
 
-<a id="org15cb7d5"></a>
+<a id="org-target--external-target"></a>
 
 
 ### External target with **bold** and _italic_ {#external-target-with-bold-and-italic}

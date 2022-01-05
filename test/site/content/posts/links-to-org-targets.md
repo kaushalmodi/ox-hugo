@@ -16,7 +16,7 @@ will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
 -   one item
--   <a id="orgf486ef7"></a>another item
+-   <a id="org-target--target"></a>another item
 
 _Scroll to the end of the below 'lorem-ipsum' block to find the test
 link._
@@ -73,4 +73,4 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-**Here we refer to item [2](#orgf486ef7).**
+**Here we refer to item [2](#org-target--target).**

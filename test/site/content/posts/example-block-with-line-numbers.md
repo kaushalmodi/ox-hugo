@@ -5,45 +5,54 @@ draft = false
 +++
 
 -   [Org reference](https://orgmode.org/manual/Literal-examples.html)
--   [Hugo `highlight` shortcode with line numbers](https://gohugo.io/content-management/syntax-highlighting/)
 
 
 ## Default new line number start {#default-new-line-number-start}
 
-{{< highlight text "linenos=table, linenostart=1" >}}
+```text { linenos=table, linenostart=1 }
 line 1
  line 2
-{{< /highlight >}}
+```
+
+An example without `-n`:
+
+```text
+foo
+bar
+```
 
 
 ## Specify new line number start {#specify-new-line-number-start}
 
-{{< highlight text "linenos=table, linenostart=20" >}}
+```text { linenos=table, linenostart=20 }
 line 20
 line 21
-{{< /highlight >}}
+```
 
 
 ## Default continued line numbers {#default-continued-line-numbers}
 
-{{< highlight text "linenos=table, linenostart=22" >}}
+```text { linenos=table, linenostart=22 }
  line 22
 line 23
-{{< /highlight >}}
+```
 
 
 ## Specify continued line numbers jump {#specify-continued-line-numbers-jump}
 
-{{< highlight text "linenos=table, linenostart=33" >}}
+```text { linenos=table, linenostart=33 }
 line 33
 line 34
-{{< /highlight >}}
+```
 
 
 ## Specifying `linenos` parameter {#specifying-linenos-parameter}
 
-{{< highlight text "linenos=false" >}}
+In the below block, `:linenos false` switch was added to the example
+block header.
+
+```text { linenos=false }
 This is line 1
 This is line 2
 This is line 3
-{{< /highlight >}}
+```

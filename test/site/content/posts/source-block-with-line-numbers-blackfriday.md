@@ -1,14 +1,14 @@
 +++
-title = "Source blocks with line number annotation (Goldmark)"
-aliases = ["/posts/source-block-with-line-numbers-goldmark"]
-tags = ["src-block", "annotations", "goldmark", "linenum"]
+title = "Source blocks with line number annotation (Blackfriday)"
+tags = ["src-block", "highlight", "shortcode", "blackfriday", "linenum"]
 draft = false
 +++
 
 -   [Org reference](https://orgmode.org/manual/Literal-examples.html)
+-   [Hugo `highlight` shortcode with line numbers](https://gohugo.io/content-management/syntax-highlighting/)
 
 
-## Cases {#source-block-line-number-cases}
+## Cases {#cases}
 
 
 ### Default new line number start {#default-new-line-number-start}
@@ -26,10 +26,10 @@ draft = false
 
 #### Output {#output}
 
-```emacs-lisp { linenos=table, linenostart=1 }
+{{< highlight emacs-lisp "linenos=table, linenostart=1" >}}
 ;; this will export with line number 1 (default)
 (message "This is line 2")
-```
+{{< /highlight >}}
 
 
 ### Specify new line number start {#specify-new-line-number-start}
@@ -47,10 +47,10 @@ draft = false
 
 #### Output {#output}
 
-```emacs-lisp { linenos=table, linenostart=20 }
+{{< highlight emacs-lisp "linenos=table, linenostart=20" >}}
 ;; this will export with line number 20
 (message "This is line 21")
-```
+{{< /highlight >}}
 
 
 ### Default continued line numbers {#default-continued-line-numbers}
@@ -68,10 +68,10 @@ draft = false
 
 #### Output {#output}
 
-```emacs-lisp { linenos=table, linenostart=22 }
+{{< highlight emacs-lisp "linenos=table, linenostart=22" >}}
 ;; This will be listed as line 22
 (message "This is line 23")
-```
+{{< /highlight >}}
 
 
 ### Specify continued line numbers jump {#specify-continued-line-numbers-jump}
@@ -89,22 +89,22 @@ draft = false
 
 #### Output {#output}
 
-```emacs-lisp { linenos=table, linenostart=33 }
+{{< highlight emacs-lisp "linenos=table, linenostart=33" >}}
 ;; This will be listed as line 33
 (message "This is line 34")
-```
+{{< /highlight >}}
 
 
 ## Specifying `linenos` parameter {#specifying-linenos-parameter}
 
-```emacs-lisp { linenos=false }
+{{< highlight emacs-lisp "linenos=false" >}}
 (message "This is line 1")
 (message "This is line 2")
 (message "This is line 3")
-```
+{{< /highlight >}}
 
-```emacs-lisp { linenos=inline, linenostart=30 }
+{{< highlight emacs-lisp "linenos=inline, linenostart=30" >}}
 (message "This is line 30")
 (message "This is line 31")
 (message "This is line 32")
-```
+{{< /highlight >}}

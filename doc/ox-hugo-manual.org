@@ -1327,11 +1327,19 @@ adding this to the CSS:
 possible. It also supports exporting source blocks with line numbers
 and/or highlighting enabled for specific lines.
 **** Code Fences
-By default, the =HUGO_CODE_FENCE= property is set to a non-nil
-value. So the code blocks will be exported with GitHub-style
-code-fencing with triple-backticks when possible.
+By default, the =HUGO_CODE_FENCE= property is non-nil. So the code
+blocks will be exported with GitHub-style code-fencing with
+triple-backticks when possible.
 
-Example:
+For example, below Org source block:
+
+#+begin_src org
+,#+begin_src emacs-lisp
+(message "Hello")
+,#+end_src
+#+end_src
+
+will export to:
 
 #+begin_src md
 ```emacs-lisp
@@ -1344,17 +1352,8 @@ Example:
   least as of [[https://github.com/gohugoio/hugo/commit/bfb9613a14ab2d93a4474e5486d22e52a9d5e2b3][Hugo v0.60.0]]) for syntax highlighting to work for fenced
   code blocks.
 
-The Hugo =highlight= shortcode is automatically used instead of code
-fences (even with this property at a non-nil value) if:
-- Line numbers are enabled using the Org =-n= / =+n= syntax (see
-  below), or
-- Line highlighting is enabled using the =:hl_lines= parameter in the
-  source block header (see below), or
-- =:linenos= parameter is specified in the source block header (see
-  below).
-
-Set the =HUGO_CODE_FENCE= property to =nil= if you want to *always*
-use the Hugo =highlight= shortcode.
+If you want to always use the Hugo [[#highlight-shortcode][=highlight= shortcode]], set the
+=HUGO_CODE_FENCE= property to =nil=.
 **** Line numbers
 Line numbers can be enabled/configured using the Org =-n= / =+n=
 syntax. See the Info node [[https://orgmode.org/manual/Literal-Examples.html][=(org) Literal Examples=]] for more
@@ -1364,37 +1363,10 @@ Here are some examples fetched from the "Source blocks with line
 number annotation" test case in the {{{ox-hugo-test-file}}}.
 
 #+include: "../test/site/content-org/all-posts.org::#source-block-line-number-cases" :only-contents t
-**** Highlighting
-Implementing this feature was interesting, because while Org doesn't
-have a syntax to enable highlighting only specific lines, the Hugo
-=highlight= shortcode does allow that via =hl_lines= argument.
-
-So the challenge was to present that "lines to be highlighted"
-information in the Org source in a nice format and then translate that
-to the =hl_lines= =highlight= shortcode argument at the time of
-exporting.
-
-It involved /hacking/ the =org-babel-exp-code=. See [[https://lists.gnu.org/archive/html/emacs-orgmode/2017-10/msg00300.html][this discussion on
-the =emacs-orgmode= thread]] if interested.
-
-This feature is implemented by using a parameter called =:hl_lines= in
-the header of source blocks. This parameter is specific to =ox-hugo=,
-and that's why implementing this needed that hack.
-
-If a user wants to highlight lines 1, and then 3 to 5, they would add
-=:hl_lines 1,3-5= to the source block header.
-# Below 2 include statements fetch the noweb references used in the
-# code inserted by the following include statements.
-#+include: "../test/site/content-org/all-posts.org::#source-block-with-line-numbers-examples"
-#+include: "../test/site/content-org/all-posts.org::#source-block-with-line-highlighting-examples"
-***** Without line numbers
-#+include: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-no-linenums" :only-contents t
-***** With line numbers
-The Org source for the below is similar to the above, except that the
-=-n= switch is also added to enable the line numbers.
-
-#+include: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-with-linenums-not-starting-from-1" :only-contents t
-**** Line number Style (*linenos*)
+***** Line number Style (*linenos*)
+:PROPERTIES:
+:CUSTOM_ID: linenos
+:END:
 When line numbers are enabled, by default the "table" style is used
 for line numbers. This is specified using the [[https://gohugo.io/content-management/syntax-highlighting/#highlight-shortcode][=linenos= argument to
 the =highlight= shortcode]].
@@ -1421,7 +1393,61 @@ by adding =:linenos false= to their headers.
 ,#+end_src
 #+end_src
 
+- Valid values of ~linenos~ :: ~table~ (default), ~true~, ~false~,
+  ~inline~
+
 /The same =:linenos= header arg works for example blocks too./
+**** Highlighting
+Implementing this feature was interesting, because while Org doesn't
+have a syntax to enable highlighting only specific lines, Hugo
+supports highlighting using the =hl_lines= attribute to [[https://gohugo.io/content-management/syntax-highlighting#highlighting-in-code-fences][code fences]]
+(Hugo v0.60.0+) or its ~highlight~ shortcode.
+
+So the challenge was to present that "lines to be highlighted"
+information in the Org source in a nice format and then translate that
+to the =hl_lines= attribute with the required format at the time of
+exporting.
+
+It involved /hacking/ the =org-babel-exp-code=. See [[https://lists.gnu.org/archive/html/emacs-orgmode/2017-10/msg00300.html][this discussion on
+the =emacs-orgmode= thread]] if interested.
+
+This feature is implemented by using a parameter called =:hl_lines= in
+the header of source blocks. This parameter is specific to =ox-hugo=,
+and that's why implementing this needed that hack.
+
+If a user wants to highlight lines 1, and then 3 to 5, they would add
+=:hl_lines 1,3-5= to the source block header.
+***** Noweb refences                                               :noexport:
+Below 2 include statements fetch the noweb references used in the code
+inserted by other include statements in the following sections.
+
+They are included to get the /noweb/ references working but they do
+not need to be exported.
+
+#+include: "../test/site/content-org/all-posts.org::#source-block-with-line-numbers-examples"
+#+include: "../test/site/content-org/all-posts.org::#source-block-with-line-highlighting-examples"
+***** Highlighting without line numbers
+#+include: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-no-linenums" :only-contents t
+***** Highlighting with line numbers
+The Org source for the below is similar to the above, except that the
+=-n= switch is also added to enable the line numbers.
+
+#+include: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-with-linenums-not-starting-from-1" :only-contents t
+**** ~highlight~ shortcode
+:PROPERTIES:
+:CUSTOM_ID: highlight-shortcode
+:END:
+The Hugo [[https://gohugo.io/content-management/syntax-highlighting#highlight-shortcode][=highlight= shortcode]] is automatically used instead of code
+fences (even with this property at a non-nil value) if one of these is
+true:
+- ~HUGO_CODE_FENCE~ is set to /nil/.
+- "Blackfriday mode" is enabled (~HUGO_GOLDMARK~ is /nil/) *and*
+  either the [[*Line numbers][line numbering]] or [[*Highlighting][highlighting]] feature is enabled, or if
+  the [[#linenos][=:linenos= parameter]] is specified in the source block header.
+
+By default, ~ox-hugo~ tries to avoid using this shortcode because it's
+more bug-prone than the code fences ({{{issue(161)}}}), and also the
+code fences are more /Markdownish/ :smile:.
 **** Hiding source block caption numbers
 The "Code Snippet <number>:" part of the source block captions can be
 hidden by adding this to the CSS:

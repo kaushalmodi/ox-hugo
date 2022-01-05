@@ -1720,15 +1720,15 @@ channel."
 (defun org-hugo-example-block (example-block _contents info)
   "Transcode an EXAMPLE-BLOCK element into Markdown format.
 
-If the example blocks are *not* set to be exported with line
-numbers (See (org) Literal examples), Markdown style
-triple-backquoted code blocks with \"text\" \\='language\\=' are
-created.
+Markdown style triple-backquoted code blocks with \"text\"
+\\='language\\=' are created.
 
-Otherwise, a \"text\" \\='language\\=' code block wrapped in Hugo
-\"highlight\" shortcode (See
-https://gohugo.io/content-management/syntax-highlighting) is
-created.
+If `org-hugo-goldmark' is nil and if the example blocks are *not*
+set to be exported with line numbers (See (org) Literal
+examples), a \"text\" \\='language\\=' code block wrapped in Hugo
+\"highlight\" shortcode is created.
+
+See https://gohugo.io/content-management/syntax-highlighting#highlighting-in-code-fences.
 
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
@@ -1738,24 +1738,37 @@ information."
          (linenos-style (and (org-string-nw-p switches-str)
                              (string-match ":linenos\\s-+\\([^ ]+\\)\\b" switches-str)
                              (match-string-no-properties 1 switches-str)))
-         linenos-str
+         (use-highlight-sc (and (or number-lines linenos-style) ;Use `highlight' shortcode only for Blackfriday if linenos is non-nil
+                                (not (org-hugo--plist-get-true-p info :hugo-goldmark))))
+         (example-code (org-export-format-code-default example-block info))
+         code-attr-str
          ret)
-    (if (or number-lines linenos-style)
-        (let ((linenos-style (or linenos-style "table"))
-              (text (org-export-format-code-default example-block info)))
-          (setq linenos-str (format "linenos=%s" linenos-style))
-          (let ((linenostart-str (and ;Extract the start line number of the example block.
-                                  (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" text)
-                                  (match-string-no-properties 1 text))))
-            (when linenostart-str
-              (setq linenos-str (format "%s, linenostart=%s" linenos-str linenostart-str))))
+    (when (or number-lines linenos-style)
+      ;; Default "linenos" style set to "table" if only number-lines
+      ;; is non-nil.
+      (setq linenos-style (or linenos-style "table"))
+      (setq code-attr-str (format "linenos=%s" linenos-style))
+      (let ((linenostart-str (and ;Extract the start line number of the example block.
+                              (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" example-code)
+                              (match-string-no-properties 1 example-code))))
+        (when linenostart-str
+          (setq code-attr-str (format "%s, linenostart=%s" code-attr-str linenostart-str))))
 
-          ;; Remove Org-inserted numbers from the beginning of each
-          ;; line as the Hugo highlight shortcode will be used instead
-          ;; of literally inserting the line numbers.
-          (setq text (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" text))
-          (setq text (format "{{< highlight text \"%s\" >}}\n%s{{< /highlight >}}\n" linenos-str text))
-          (setq ret (org-blackfriday--div-wrap-maybe example-block text info)))
+      (when number-lines
+        ;; Remove Org-inserted numbers from the beginning of each line
+        ;; as the Hugo highlight shortcode will be used instead of
+        ;; literally inserting the line numbers.
+        (setq example-code (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" example-code))))
+
+    (unless use-highlight-sc
+      (plist-put info :md-code example-code)
+      (plist-put info :md-code-attr code-attr-str))
+
+    (if use-highlight-sc
+        (setq ret (org-blackfriday--div-wrap-maybe
+                   example-block
+                   (format "{{< highlight text \"%s\" >}}\n%s{{< /highlight >}}\n" code-attr-str example-code)
+                   info))
       (setq ret (org-blackfriday-example-block example-block nil info)))
     ret))
 
@@ -2680,61 +2693,88 @@ communication channel."
 The Markdown style triple-backquoted code blocks are created if:
   - If the HUGO_CODE_FENCE property is set to a non-nil value
     (default),
-  - *AND* if none of the Hugo \"highlight\" shortcode features
-    are needed (see below).
+  - *AND* if the Hugo \"highlight\" shortcode is not needed (see
+    below).
 
-The code block is wrapped in Hugo \"highlight\" shortcode (See
-https://gohugo.io/content-management/syntax-highlighting) if one
-of the above conditions is false.
+Hugo v0.60.0 onwards, the `markup.highlight.codeFences' (new name
+for the old `pygmentsCodeFences') config variable defaults to
+true. See
+https://gohugo.io/content-management/syntax-highlighting#highlighting-in-code-fences.
+Attributes like highlighting code, \"linenos\", etc. are now
+supported with code fences too.
 
-If using a Hugo version older than v0.60.0, note that even with
-the default non-nil value of HUGO_CODE_FENCE, the user *needs* to
+CONTENTS is nil.  INFO is a plist used as a communication
+channel.
+
+--- Hugo older than v0.60.0 ---
+
+If using a Hugo version older than v0.60.0, the user *needs* to
 set the `pygmentsCodeFences' variable to `true' in their Hugo
 site's config.  Otherwise syntax highlighting will not work in
 the generated fenced code blocks!
 
-Hugo v0.60.0 onwards, the `markup.highlight.codeFences' (new name
-for the old `pygmentsCodeFences') config variable defaults to
-true.
-
-Hugo \"highlight\" shortcode features:
-  - Code blocks with line numbers (if the -n or +n switch is used)
+Hugo \"highlight\" shortcode is needed if `org-hugo-goldmark' is
+nil and,
+  - Code blocks with line numbers (if the -n or +n switch is used).
   - Highlight certains lines in the code block (if the :hl_lines
-    parameter is used)
+    parameter is used).
   - Set the `linenos' argument to the value passed by :linenos
-    (defaults to `table')
-
-CONTENTS is nil.  INFO is a plist used as a communication
-channel."
+    (defaults to `table')."
   (let* ((lang (org-element-property :language src-block))
          (parameters-str (org-element-property :parameters src-block))
          (parameters (org-babel-parse-header-arguments parameters-str))
-         (is-fm-extra (cdr (assoc :front_matter_extra parameters)))
-         (fm-format (plist-get info :hugo-front-matter-format)))
+         (is-fm-extra (cdr (assoc :front_matter_extra parameters))))
     ;; (message "ox-hugo src [dbg] lang: %S" lang)
-    ;; (message "ox-hugo src [dbg] is-fm-extra: %S" is-fm-extra)
     ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
-    (if (and is-fm-extra
-             (member lang '("toml" "yaml")))
-        (progn
-          ;; The fm-extra src block lang and user-set fm-format have to
-          ;; be the same.  Else. that src block is completely discarded.
-          (when (string= lang fm-format)
-            (let ((fm-extra (org-export-format-code-default src-block info)))
-              ;; (message "ox-hugo src [dbg] fm-extra: %S" fm-extra)
-              (plist-put info :fm-extra fm-extra)))
-          ;; Do not export the `:front_matter_extra' TOML/YAML source
-          ;; blocks in Markdown body.
-          nil)
+    ;; (message "ox-hugo src [dbg] is-fm-extra: %S" is-fm-extra)
+
+    ;; Extra front matter.
+    (cond
+     ((and is-fm-extra
+           (member lang '("toml" "yaml")))
+      (let ((fm-format (plist-get info :hugo-front-matter-format)))
+        ;; The fm-extra src block lang and user-set fm-format have to
+        ;; be the same.  Else. that src block is completely discarded.
+        (when (string= lang fm-format)
+          (let ((fm-extra (org-export-format-code-default src-block info)))
+            ;; (message "ox-hugo src [dbg] fm-extra: %S" fm-extra)
+            (plist-put info :fm-extra fm-extra)))
+        ;; Do not export the `:front_matter_extra' TOML/YAML source
+        ;; blocks in Markdown body.
+        nil))
+
+     ;; Regular src block.
+     (t
       (let* (;; See `org-element-src-block-parser' for all SRC-BLOCK properties.
              (number-lines (org-element-property :number-lines src-block)) ;Non-nil if -n or +n switch is used
-             (hl-lines (cdr (assoc :hl_lines parameters)))
              (linenos-style (cdr (assoc :linenos parameters)))
-             (hl-lines (cond
-                        ((stringp hl-lines)
-                         (replace-regexp-in-string "," " " hl-lines)) ;"1,3-4" -> "1 3-4"
-                        ((numberp hl-lines)
-                         (number-to-string hl-lines))))
+             ;; Convert `hl-lines' to string.  If it's not a number,
+             ;; it's already a string, or nil.
+             (hl-lines (let* ((hl-lines-param (cdr (assoc :hl_lines parameters))))
+                         ;; (message "ox-hugo src [dbg] hl-lines-param: %S" hl-lines-param)
+                         (if (numberp hl-lines-param)
+                             (number-to-string hl-lines-param)
+                           hl-lines-param)))
+             ;; Use the `highlight' shortcode only if ..
+             (use-highlight-sc (or ;; HUGO_CODE_FENCE is nil, or ..
+                                (null (org-hugo--plist-get-true-p info :hugo-code-fence))
+                                ;; "Blackfriday mode" is enabled and line numbering
+                                ;; or highlighting is needed.
+                                (and (or number-lines hl-lines linenos-style)
+                                     (not (org-hugo--plist-get-true-p info :hugo-goldmark)))))
+             (hl-lines (when (stringp hl-lines)
+                         (if use-highlight-sc
+                             (progn
+                               ;; Syntax of hl_lines in `highlight' shortcode:
+                               ;;   {{< highlight emacs-lisp "hl_lines=1 3-5" >}} ..
+                               (replace-regexp-in-string "," " " hl-lines)) ;"1,3-5" -> "1 3-5"
+                           ;; Fenced code blocks
+                           ;; Syntax of hl_lines in fenced code attributes:
+                           ;;   ```emacs-lisp { hl_lines=["1","3-5"] } ..
+                           (format "[%s]"
+                                   (mapconcat
+                                    (lambda(el) (format "%S" el))
+                                    (split-string hl-lines ",") ","))))) ;"1,3-5" -> "[\"1\",\"3-5\"]"
              (src-ref (org-blackfriday--get-reference src-block))
              (src-anchor (if src-ref
                              (format "<a id=\"%s\"></a>\n" src-ref)
@@ -2759,58 +2799,56 @@ channel."
                                          (format "%s %s"
                                                  caption-prefix src-block-num))
                                        caption-str))))
-             content
+             (src-code (org-hugo--escape-hugo-shortcode
+                        (org-export-format-code-default src-block info)
+                        lang))
+             code-attr-str
+             src-code-wrap
              ret)
         ;; (message "ox-hugo src [dbg] number-lines: %S" number-lines)
         ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
-        (setq content
-              (cond
-               ;; If all: number-lines, hl-lines and linenos-style are nil
-               ;; , AND if :hugo-code-fence is non-nil (which is, by default).
-               ((and (null number-lines)
-                     (null hl-lines)
-                     (null linenos-style)
-                     (org-hugo--plist-get-true-p info :hugo-code-fence))
-                (let ((content1 (org-blackfriday-src-block src-block nil info)))
-                  (setq content1 (org-hugo--escape-hugo-shortcode content1 lang))
-                  content1))
-               ;; If number-lines is non-nil
-               ;; , or if hl-lines is non-nil
-               ;; , or if linenos-style is non-nil
-               ;; , or if :hugo-code-fence is nil
-               (t
-                (let ((code (org-export-format-code-default src-block info))
-                      (linenos-str "")
-                      (hllines-str "")
-                      ;; Formatter string where the first arg si linenos-str and
-                      ;; second is hllines-str.
-                      (highlight-args-str "%s%s"))
-                  (when (or number-lines hl-lines linenos-style)
-                    (setq highlight-args-str " \"%s%s\""))
-                  (when (or number-lines linenos-style)
-                    (let ((linenos-style (or linenos-style "table")))
-                      (setq linenos-str (format "linenos=%s" linenos-style))
-                      (let ((linenostart-str (and ;Extract the start line number of the code block
-                                              (string-match "\\`\\s-*\\([0-9]+\\)\\s-\\{2\\}" code)
-                                              (match-string-no-properties 1 code))))
-                        (when linenostart-str
-                          (setq linenos-str (format "%s, linenostart=%s" linenos-str linenostart-str)))))
-                    ;; Remove Org-inserted numbers from the beginning of each
-                    ;; line as the Hugo highlight shortcode will be used instead
-                    ;; of literally inserting the line numbers.
-                    (setq code (replace-regexp-in-string "^\\s-*[0-9]+\\s-\\{2\\}" "" code)))
-                  (when hl-lines
-                    (setq hllines-str (concat "hl_lines=" hl-lines))
-                    (when number-lines
-                      (setq hllines-str (concat ", " hllines-str))))
-                  (setq code (org-hugo--escape-hugo-shortcode code lang))
-                  (format "{{< highlight %s%s >}}\n%s{{< /highlight >}}\n"
-                          lang
-                          (format highlight-args-str linenos-str hllines-str)
-                          code)))))
-        (setq ret (concat src-anchor content caption-html))
-        (setq ret (org-blackfriday--div-wrap-maybe src-block ret info))
-        ret))))
+
+        (when (or linenos-style number-lines)
+          ;; Default "linenos" style set to "table" if linenos-style
+          ;; is nil.
+          (setq linenos-style (or linenos-style "table"))
+          (setq code-attr-str (format "linenos=%s" linenos-style))
+          (let ((linenostart-str (and ;Extract the start line number of the src block
+                                  (string-match "\\`\\s-*\\([0-9]+\\)\\s-\\{2\\}" src-code)
+                                  (match-string-no-properties 1 src-code))))
+            (when linenostart-str
+              (setq code-attr-str (format "%s, linenostart=%s" code-attr-str linenostart-str))))
+
+          (when number-lines
+            ;; Remove Org-inserted numbers from the beginning of each line
+            ;; as the Hugo highlight shortcode will be used instead of
+            ;; literally inserting the line numbers.
+            (setq src-code (replace-regexp-in-string "^\\s-*[0-9]+\\s-\\{2\\}" "" src-code))))
+
+        ;; (message "ox-hugo src [dbg] hl-lines: %S" hl-lines)
+        (when hl-lines
+          (if (org-string-nw-p code-attr-str)
+              (setq code-attr-str (format "%s, hl_lines=%s" code-attr-str hl-lines))
+            (setq code-attr-str (format "hl_lines=%s" hl-lines))))
+
+        (unless use-highlight-sc
+          (plist-put info :md-code src-code)
+          (plist-put info :md-code-attr code-attr-str))
+
+        (setq src-code-wrap
+              (if use-highlight-sc
+                  (let ((hl-attr (if (org-string-nw-p code-attr-str)
+                                     (format " \"%s\"" code-attr-str)
+                                   "")))
+                    (format "{{< highlight %s%s >}}\n%s{{< /highlight >}}\n"
+                            lang hl-attr src-code))
+                (org-blackfriday-src-block src-block nil info)))
+
+        (setq ret (org-blackfriday--div-wrap-maybe
+                   src-block
+                   (concat src-anchor src-code-wrap caption-html)
+                   info))
+        ret)))))
 
 ;;;; Special Block
 (defun org-hugo-special-block (special-block contents info)

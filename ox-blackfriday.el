@@ -641,12 +641,15 @@ information."
   (let* ((parent-element (org-export-get-parent example-block))
          (parent-type (car parent-element))
          (backticks (make-string org-blackfriday--code-block-num-backticks ?`))
-         (example (org-export-format-code-default example-block info))
+         (example (or (plist-get info :md-code) ;if set in `org-hugo-example-block'
+                      (org-export-format-code-default example-block info)))
+         (code-attr (if (plist-get info :md-code-attr) ;if set in `org-hugo-example-block'
+                        (format " { %s }" (plist-get info :md-code-attr))
+                      ""))
          ret)
-    ;; (message "[ox-bf example-block DBG]")
     ;; (message "[ox-bf example-block DBG] parent type: %S" parent-type)
     (setq ret (org-blackfriday--issue-239-workaround example parent-type))
-    (setq ret (format "%stext\n%s%s" backticks ret backticks))
+    (setq ret (format "%stext%s\n%s%s" backticks code-attr ret backticks))
     (setq ret (org-blackfriday--div-wrap-maybe example-block ret info))
     (when (equal 'quote-block parent-type)
       ;; If the current example block is inside a quote block, future
@@ -655,6 +658,9 @@ information."
       ;; for https://github.com/russross/blackfriday/issues/407.
       (setq org-blackfriday--code-block-num-backticks
             (1+ org-blackfriday--code-block-num-backticks)))
+    ;; Reset the temp info in the `info' plist.
+    (plist-put info :md-code nil)
+    (plist-put info :md-code-attr nil)
     ret))
 
 ;;;; Fixed Width
@@ -1054,7 +1060,11 @@ This function is adapted from `org-html-special-block'."
 INFO is a plist used as a communication channel."
   (let* ((lang (org-element-property :language src-block))
          (lang (or (cdr (assoc lang org-blackfriday-syntax-highlighting-langs)) lang))
-         (code (org-export-format-code-default src-block info))
+         (code (or (plist-get info :md-code) ;if set in `org-hugo-src-block'
+                   (org-export-format-code-default src-block info)))
+         (code-attr (if (plist-get info :md-code-attr) ;if set in `org-hugo-src-block'
+                        (format " { %s }" (plist-get info :md-code-attr))
+                      ""))
          (parent-element (org-export-get-parent src-block))
          (parent-type (car parent-element))
          (num-backticks-in-code (when (string-match "^[[:blank:]]*\\(`\\{3,\\}\\)" code)
@@ -1074,19 +1084,21 @@ INFO is a plist used as a communication channel."
                (<= org-blackfriday--code-block-num-backticks num-backticks-in-code))
       (setq org-blackfriday--code-block-num-backticks (1+ num-backticks-in-code)))
     (setq backticks (make-string org-blackfriday--code-block-num-backticks ?`))
-    ;; (message "[ox-bf src-block DBG]")
-    ;; (message "ox-bf [dbg] code: %s" code)
+    ;; (message "[ox-bf src-block DBG] code: %s" code)
     ;; (message "[ox-bf src-block DBG] parent type: %S" parent-type)
     (setq code (org-blackfriday--issue-239-workaround code parent-type))
     (prog1
-        (format "%s%s\n%s%s" backticks lang code backticks)
+        (format "%s%s%s\n%s%s" backticks lang code-attr code backticks)
       (when (equal 'quote-block parent-type)
         ;; If the current code block is inside a quote block, future
         ;; example/code blocks (especially the ones outside this quote
         ;; block) will require higher number of backticks.  Workaround
         ;; for https://github.com/russross/blackfriday/issues/407.
         (setq org-blackfriday--code-block-num-backticks
-              (1+ org-blackfriday--code-block-num-backticks))))))
+              (1+ org-blackfriday--code-block-num-backticks)))
+      ;; Reset the temp info in the `info' plist.
+      (plist-put info :md-code nil)
+      (plist-put info :md-code-attr nil))))
 
 ;;;; Strike-Through
 (defun org-blackfriday-strike-through (_strike-through contents _info)

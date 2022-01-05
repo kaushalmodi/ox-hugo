@@ -1314,6 +1314,133 @@ This code block once again contains no backticks:
 #+begin_src emacs-lisp
 (message "Hello again x6")
 #+end_src
+** Source block annotations                           :src_block:annotations:
+*** Code fence annotation with Goldmark                            :goldmark:
+**** Source blocks with line number annotation (Goldmark)           :linenum:
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-with-line-numbers
+:EXPORT_HUGO_ALIASES: source-block-with-line-numbers-goldmark
+:END:
+- [[https://orgmode.org/manual/Literal-examples.html][Org reference]]
+***** Cases
+:PROPERTIES:
+:CUSTOM_ID: source-block-line-number-cases
+:END:
+****** Default new line number start
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-n-default-start>>
+#+end_src
+******* Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-default-start>>
+#+end_src
+****** Specify new line number start
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-n-custom-start>>
+#+end_src
+******* Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-custom-start>>
+#+end_src
+****** Default continued line numbers
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-n-default-continue>>
+#+end_src
+******* Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-default-continue>>
+#+end_src
+****** Specify continued line numbers jump
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-n-custom-continue>>
+#+end_src
+******* Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-n-custom-continue>>
+#+end_src
+***** Specifying ~linenos~ parameter
+#+begin_src emacs-lisp :linenos false
+(message "This is line 1")
+(message "This is line 2")
+(message "This is line 3")
+#+end_src
+
+#+begin_src emacs-lisp -n 30 :linenos inline
+(message "This is line 30")
+(message "This is line 31")
+(message "This is line 32")
+#+end_src
+**** Source blocks with highlighting (Goldmark)                   :highlight:
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-with-highlighting
+:CUSTOM_ID: source-blocks-with-highlighting
+:EXPORT_HUGO_ALIASES: source-block-with-highlighting-goldmark
+:EXPORT_HUGO_GOLDMARK: t
+:END:
+***** Without line numbers
+:PROPERTIES:
+:CUSTOM_ID: source-blocks-with-highlighting-no-linenums
+:END:
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-hl-without-n>>
+#+end_src
+******* Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-hl-without-n>>
+#+end_src
+Above highlighting might look weird as the highlighting spans the full
+page/container width. This could be either called a bug in Hugo, or
+the HTML limitation.
+
+A workaround is below.. *use line numbers too!*.
+******* Highlighting only 1 line
+******** Org source
+#+begin_src org :noweb yes
+<<src-block-hl-without-n-just-1-line>>
+#+end_src
+******** Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-hl-without-n-just-1-line>>
+#+end_src
+***** With line numbers *not* starting from 1
+:PROPERTIES:
+:CUSTOM_ID: source-blocks-with-highlighting-with-linenums-not-starting-from-1
+:END:
+With line numbers enabled, the highlighting is limited to the width of
+the HTML table rows if the =linenos= option is set to =table=
+(default).
+
+- Note 1 :: When using both, switches (like =-n=), and header args
+            (like =:hl_lines=), the _switches have to come first_.
+- Note 2 :: The line numbers in the value for =:hl_lines= parameter is
+            always with the starting line number reference of 1. That
+            has no relation with the value of the line numbers
+            displayed using the =-n= or =+n= switches!
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-hl-with-n-not-1>>
+#+end_src
+******* Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-hl-with-n-not-1>>
+#+end_src
+***** With line numbers
+:PROPERTIES:
+:CUSTOM_ID: source-blocks-with-highlighting-with-linenums
+:END:
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-hl-with-n>>
+#+end_src
+******* Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-hl-with-n>>
+#+end_src
 ** Highlight Shortcode                                  :highlight:shortcode:
 *** Source blocks with =highlight= shortcode
 :PROPERTIES:
@@ -1329,53 +1456,54 @@ property needs to be left *empty* instead of setting to =nil=!
 :END:
 #+end_example
 #+include: "./all-posts.org::#example-text-with-code-blocks" :only-contents t
-*** Source blocks with line number annotation
+*** Annotate code blocks need =highlight= shortcode in Blackfriday :blackfriday:
 :PROPERTIES:
-:EXPORT_FILE_NAME: source-block-with-line-numbers
+:EXPORT_HUGO_GOLDMARK:
+:END:
+**** Source blocks with line number annotation (Blackfriday)        :linenum:
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-block-with-line-numbers-blackfriday
 :END:
 - [[https://orgmode.org/manual/Literal-examples.html][Org reference]]
 - [[https://gohugo.io/content-management/syntax-highlighting/][Hugo =highlight= shortcode with line numbers]]
-**** Cases
-:PROPERTIES:
-:CUSTOM_ID: source-block-line-number-cases
-:END:
-***** Default new line number start
-****** Org source
+***** Cases
+****** Default new line number start
+******* Org source
 #+begin_src org :noweb yes
 <<src-block-n-default-start>>
 #+end_src
-****** Output
+******* Output
 #+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-n-default-start>>
 #+end_src
-***** Specify new line number start
-****** Org source
+****** Specify new line number start
+******* Org source
 #+begin_src org :noweb yes
 <<src-block-n-custom-start>>
 #+end_src
-****** Output
+******* Output
 #+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-n-custom-start>>
 #+end_src
-***** Default continued line numbers
-****** Org source
+****** Default continued line numbers
+******* Org source
 #+begin_src org :noweb yes
 <<src-block-n-default-continue>>
 #+end_src
-****** Output
+******* Output
 #+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-n-default-continue>>
 #+end_src
-***** Specify continued line numbers jump
-****** Org source
+****** Specify continued line numbers jump
+******* Org source
 #+begin_src org :noweb yes
 <<src-block-n-custom-continue>>
 #+end_src
-****** Output
+******* Output
 #+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-n-custom-continue>>
 #+end_src
-**** Specifying ~linenos~ parameter
+***** Specifying ~linenos~ parameter
 #+begin_src emacs-lisp :linenos false
 (message "This is line 1")
 (message "This is line 2")
@@ -1387,20 +1515,16 @@ property needs to be left *empty* instead of setting to =nil=!
 (message "This is line 31")
 (message "This is line 32")
 #+end_src
-*** Source blocks with highlighting
+**** Source blocks with highlighting (Blackfriday)                :highlight:
 :PROPERTIES:
-:EXPORT_FILE_NAME: source-block-with-highlighting
-:CUSTOM_ID: source-blocks-with-highlighting
+:EXPORT_FILE_NAME: source-block-with-highlighting-blackfriday
 :END:
-**** Without line numbers
-:PROPERTIES:
-:CUSTOM_ID: source-blocks-with-highlighting-no-linenums
-:END:
-****** Org source
+***** Without line numbers
+******* Org source
 #+begin_src org :noweb yes
 <<src-block-hl-without-n>>
 #+end_src
-****** Output
+******* Output
 #+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-hl-without-n>>
 #+end_src
@@ -1409,46 +1533,30 @@ page/container width. This could be either called a bug in Hugo, or
 the HTML limitation.
 
 A workaround is below.. *use line numbers too!*.
-****** Highlighting only 1 line
-******* Org source
+******* Highlighting only 1 line
+******** Org source
 #+begin_src org :noweb yes
 <<src-block-hl-without-n-just-1-line>>
+#+end_src
+******** Output
+#+begin_src org :noweb yes :exports results :results output replace :eval yes
+<<src-block-hl-without-n-just-1-line>>
+#+end_src
+***** With line numbers *not* starting from 1
+******* Org source
+#+begin_src org :noweb yes
+<<src-block-hl-with-n-not-1>>
 #+end_src
 ******* Output
 #+begin_src org :noweb yes :exports results :results output replace :eval yes
-<<src-block-hl-without-n-just-1-line>>
-#+end_src
-**** With line numbers *not* starting from 1
-:PROPERTIES:
-:CUSTOM_ID: source-blocks-with-highlighting-with-linenums-not-starting-from-1
-:END:
-With line numbers enabled, the highlighting is limited to the width of
-the HTML table rows (because =ox-hugo= sets the =linenos=table= option
-in the =highlight= shortcode when line numbers are enabled).
-
-- Note 1 :: When using both, switches (like =-n=), and header args
-            (like =:hl_lines=), the _switches have to come first_.
-- Note 2 :: The line numbers in the value for =:hl_lines= parameter is
-            always with the starting line number reference of 1. That
-            has no relation with the value of the line numbers
-            displayed using the =-n= or =+n= switches!
-****** Org source
-#+begin_src org :noweb yes
 <<src-block-hl-with-n-not-1>>
 #+end_src
-****** Output
-#+begin_src org :noweb yes :exports results :results output replace :eval yes
-<<src-block-hl-with-n-not-1>>
-#+end_src
-**** With line numbers
-:PROPERTIES:
-:CUSTOM_ID: source-blocks-with-highlighting-with-linenums
-:END:
-****** Org source
+***** With line numbers
+******* Org source
 #+begin_src org :noweb yes
 <<src-block-hl-with-n>>
 #+end_src
-****** Output
+******* Output
 #+begin_src org :noweb yes :exports results :results output replace :eval yes
 <<src-block-hl-with-n>>
 #+end_src
@@ -1640,9 +1748,10 @@ YZ0
 #+end_example
 
 Above results block will be in _green_ text.
-** Indented source block :indented:lists:code_fence:highlight:src_block:@upstream:
+** Indented source block                :indented:lists:code_fence:src_block:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-indented
+:EXPORT_HUGO_GOLDMARK: t
 :END:
 #+begin_description
 Test that indented source blocks, and also the ones in lists export
@@ -1689,7 +1798,19 @@ Reference: {{{hugoissue(4006)}}}
 *** Code blocks in list using ~highlight~ shortcode
 Reference: {{{hugoissue(4717)}}}, {{{oxhugoissue(161)}}}
 
-This is an *upstream* bug in ~hugo~ as of 2018-05-12. The issues is
+#+html: <style> .red { color: red; }</style>
+#+attr_html: :class red
+#+begin_note
+Switched from exporting the ~highlight~ shortcode to exporting the
+code fenced blocks with attributes. These code fences are support by
+Hugo + Goldmark since v0.60.0.
+
+*Below notes are now outdated and thus grayed out.*
+#+end_note
+
+#+html: <style> .gray { color: gray; }</style>
+#+begin_gray
+This is an *upstream* bug in ~hugo~ as of 2018-05-12. The issue is
 that when the code blocks in ~highlight~ shortcodes are inserted at
 the required indentation levels in lists.. so that they get rendered
 *in* the list at *that* indentation level, those indentations are not
@@ -1702,6 +1823,7 @@ unremoved indentation on the last line of those code blocks.
 In the above section, the same code blocks are code-fenced instead of
 using ~highlight~ shortcode, and the extra indentation is not seen
 there.
+#+end_gray
 
 - List item 1
   #+begin_src emacs-lisp -n
@@ -1743,9 +1865,9 @@ should *not* be expanded.. they should be visible verbatim.
 {{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
 {{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
 #+end_src
-**** Code block using =highlight= shortcode
-Here, the =-n= switch is added to the Org source block to
-auto-enable[fn:4] using the =highlight= shortcode.
+**** Code block using code fences with line numbering enabled
+Here, the =-n= switch is added to the Org source block to enable line
+numbering.
 #+begin_src md -n
 {{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
 {{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
@@ -1910,11 +2032,17 @@ This is an example
 :EXPORT_FILE_NAME: example-block-with-line-numbers
 :END:
 - [[https://orgmode.org/manual/Literal-examples.html][Org reference]]
-- [[https://gohugo.io/content-management/syntax-highlighting/][Hugo =highlight= shortcode with line numbers]]
 *** Default new line number start
 #+begin_example -n
 line 1
  line 2
+#+end_example
+
+An example without ~-n~:
+
+#+begin_example
+foo
+bar
 #+end_example
 *** Specify new line number start
 #+begin_example -n 20
@@ -1932,12 +2060,15 @@ line 33
 line 34
 #+end_example
 *** Specifying ~linenos~ parameter
+In the below block, ~:linenos false~ switch was added to the example
+block header.
 #+begin_example :linenos false
 This is line 1
 This is line 2
 This is line 3
 #+end_example
 ** Example blocks with ATTR_HTML                     :attr___html:attr___css:
+*** Example blocks with ATTR_HTML (Goldmark)                       :goldmark:
 :PROPERTIES:
 :EXPORT_FILE_NAME: example-blocks-with-attr-html
 :END:
@@ -1952,6 +2083,38 @@ Line 3
 #+end_example
 
 Some more text.
+
+#+attr_html: :class heavy
+#+attr_css: :font-weight bold
+#+begin_example -n
+This is an example
+Line 2
+Line 3
+#+end_example
+*** Example blocks with ATTR_HTML (Blackfriday)                       :blackfriday:
+:PROPERTIES:
+:EXPORT_FILE_NAME: example-blocks-with-attr-html-blackfriday
+:EXPORT_HUGO_GOLDMARK:
+:END:
+Some text.
+
+#+attr_html: :class indent-block
+#+attr_css: :padding-left 50px
+#+begin_example
+This is an example
+Line 2
+Line 3
+#+end_example
+
+Some more text.
+
+#+attr_html: :class heavy
+#+attr_css: :font-weight bold
+#+begin_example -n
+This is an example
+Line 2
+Line 3
+#+end_example
 * Menu in front matter                                                 :menu:
 ** Menu Meta Data in TOML Front Matter
 :PROPERTIES:
@@ -8022,13 +8185,6 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 テストです.
 
 [fn:5] See [@thompson2016].
-
-[fn:4] Even if the user has set the =HUGO_CODE_FENCE= value to =t=
-(via variable, keyword or subtree property), the Hugo =highlight=
-shortcode will be used automatically instead of code fences if either
-(i) the user has chosen to either show the line numbers, or (ii) has
-chosen to highlight lines of code (See the =ox-hugo= documentation on
-{{{doc(source-blocks,Source Blocks)}}}).
 
 [fn:3] This is a long footnote. It is so long that it gets auto-filled
 over multiple lines. But even then it should be handled fine.

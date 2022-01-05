@@ -21,15 +21,15 @@ should **not** be expanded.. they should be visible verbatim.
 ```
 
 
-### Code block using `highlight` shortcode {#code-block-using-highlight-shortcode}
+### Code block using code fences with line numbering enabled {#code-block-using-code-fences-with-line-numbering-enabled}
 
-Here, the `-n` switch is added to the Org source block to
-auto-enable[^fn:1] using the `highlight` shortcode.
+Here, the `-n` switch is added to the Org source block to enable line
+numbering.
 
-{{< highlight md "linenos=table, linenostart=1" >}}
+```md { linenos=table, linenostart=1 }
 {{</* figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" */>}}
 {{%/* figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" */%}}
-{{< /highlight >}}
+```
 
 
 ## Shortcodes **not** escaped {#shortcodes-not-escaped}
@@ -64,10 +64,3 @@ Note
 **It is necessary to set the Hugo site config variable
 `markup.highlight.codeFences` to `true` (default) for syntax
 highlighting to work for fenced code blocks.**
-
-[^fn:1]: Even if the user has set the `HUGO_CODE_FENCE` value to `t`
-    (via variable, keyword or subtree property), the Hugo `highlight`
-    shortcode will be used automatically instead of code fences if either
-    (i) the user has chosen to either show the line numbers, or (ii) has
-    chosen to highlight lines of code (See the `ox-hugo` documentation on
-    [Source Blocks](https://ox-hugo.scripter.co/doc/source-blocks)).

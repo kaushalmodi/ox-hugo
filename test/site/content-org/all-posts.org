@@ -1924,6 +1924,43 @@ Some more text.
 #+begin_src jupyter-python
 (print "hello")
 #+end_src
+* Inline code blocks                                            :inline:code:
+:PROPERTIES:
+:EXPORT_FILE_NAME: inline-code-blocks
+:END:
+#+begin_description
+Test exporting inline code blocks
+#+end_description
+
+[[https://orgmode.org/manual/Structure-of-Code-Blocks.html][Reference]]
+
+** Only results (default)
+#+begin_src org
+src_emacs-lisp{(message "Hello 1")}
+#+end_src
+src_emacs-lisp{(message "Hello 1")} {{{results(=Hello 1=)}}}
+
+Above is the same as:
+
+#+begin_src org
+src_emacs-lisp[:exports results]{(message "Hello 1")}
+#+end_src
+src_emacs-lisp[:exports results]{(message "Hello 1")} {{{results(=Hello 1=)}}}
+** Only code
+#+begin_src org
+src_emacs-lisp[:exports code]{(message "Hello 2")}
+#+end_src
+src_emacs-lisp[:exports code]{(message "Hello 2")} {{{results(=Hello 2=)}}}
+** Both code and results
+#+begin_src org
+src_emacs-lisp[:exports both]{(message "Hello 3")}
+#+end_src
+src_emacs-lisp[:exports both]{(message "Hello 3")} {{{results(=Hello 3=)}}}
+** None!
+#+begin_src org
+src_emacs-lisp[:exports none]{(message "Hello 4")}
+#+end_src
+src_emacs-lisp[:exports none]{(message "Hello 4")} {{{results(=Hello 4=)}}}
 * Formatting                                                     :formatting:
 ** General
 :PROPERTIES:

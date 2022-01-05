@@ -129,6 +129,7 @@ tag needs to be `python'."
                      (table-cell . org-blackfriday-table-cell)
                      (table-row . org-blackfriday-table-row)
                      (table . org-blackfriday-table)
+                     (target . org-blackfriday-target)
                      (verse-block . org-blackfriday-verse-block)))
 
 
@@ -1308,6 +1309,15 @@ contextual information."
 
       (concat table-pre table-anchor caption-html
               blank-line-before-table tbl table-post))))
+
+;;;; Target
+(defun org-blackfriday-target (target _contents info)
+  "Transcode a TARGET object from Org to HTML.
+CONTENTS is nil.  INFO is a plist holding contextual
+information."
+  (let* ((ref-prefix "org-target--")
+         (ref (format "%s%s" ref-prefix (org-element-property :value target))))
+    (org-html--anchor ref nil nil info)))
 
 ;;;; Verse Block
 (defun org-blackfriday-verse-block (_verse-block contents info)

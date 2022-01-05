@@ -2081,12 +2081,12 @@ and rewrite link paths to make blogging more seamless."
                       info (url-encode-url raw-path))))
     ;; (message "[org-hugo-link DBG] raw-path 2: %s" raw-path)
     ;; (message "[org-hugo-link DBG] link: %S" link)
-    ;; (message "[org-hugo-link DBG] link filename: %s" (expand-file-name (plist-get (car (cdr link)) :path)))
     ;; (message "[org-hugo-link DBG] link type: %s" type)
     (cond
      ;; Link type is handled by a special function.
      ((org-export-custom-protocol-maybe link desc 'md))
-     ((member type '("custom-id" "id" "fuzzy"))
+     ((member type '("custom-id" "id"
+                     "fuzzy")) ;<<target>>, #+name, heading links
       (let ((destination (if (string= type "fuzzy")
                              (org-export-resolve-fuzzy-link link info)
                            (org-export-resolve-id-link link info))))
@@ -2095,7 +2095,8 @@ and rewrite link paths to make blogging more seamless."
         ;; (message "[org-hugo-link DBG] link: %S" link)
         ;; (message "[org-hugo-link DBG] link destination elem type: %S" (org-element-type destination))
         (pcase (org-element-type destination)
-          (`plain-text                  ;External file
+          ;; External file.
+          (`plain-text
            (let ((path (progn
                          ;; Treat links to `file.org' as links to `file.md'.
                          (if (string= ".org" (downcase (file-name-extension destination ".")))
@@ -2115,7 +2116,8 @@ and rewrite link paths to make blogging more seamless."
                (if desc
                    (format "[%s](%s)" desc path)
                  (format "<%s>" path)))))
-          (`headline                 ;Links of type [[* Some heading]]
+          ;; Links of type [[* Some heading]].
+          (`headline
            (let ((title (org-export-data (org-element-property :title destination) info)))
              (format
               "[%s](#%s)"
@@ -2129,6 +2131,8 @@ and rewrite link paths to make blogging more seamless."
                      title))
               ;; Reference
               (org-hugo--get-anchor destination info title))))
+          ;; Links to other Org elements like source blocks, tables,
+          ;; paragraphs, standalone figures, <<target>> links, etc.
           (_
            (let ((description
                   (or (org-string-nw-p desc)
@@ -2167,6 +2171,12 @@ and rewrite link paths to make blogging more seamless."
                                     (if (org-string-nw-p figure-ref)
                                         (replace-regexp-in-string "\\`org-paragraph--" "figure--" figure-ref)
                                       (org-export-get-reference destination info))))
+                                 ;; Ref to a <<target>>.
+                                 ((eq (org-element-type destination) 'target)
+                                  ;; Keep the below "org-target--" prefix in
+                                  ;; sync with that in
+                                  ;; `org-blackfriday-target'.
+                                  (format "org-target--%s" raw-path)) ;If the target is <<xyz>>, `raw-path' will be "xyz"
                                  ;; Ref to all other link destinations.
                                  (t
                                   (org-export-get-reference destination info)))))

@@ -123,6 +123,7 @@ tag needs to be `python'."
                      (plain-list . org-blackfriday-plain-list)
                      (plain-text . org-blackfriday-plain-text)
                      (quote-block . org-blackfriday-quote-block)
+                     (radio-target . org-blackfriday-radio-target)
                      (special-block . org-blackfriday-special-block)
                      (src-block . org-blackfriday-src-block)
                      (strike-through . org-blackfriday-strike-through)
@@ -193,6 +194,7 @@ If TAG is not specified, it defaults to \"div\"."
 
 Returns nil if the SYMBOL's prefix string isn't defined."
   (let ((prefix-alist '((figure . "figure--")
+                        (radio . "org-radio--")
                         (src-block . "code-snippet--")
                         (table . "table--")
                         (target . "org-target--"))))
@@ -964,6 +966,16 @@ communication channel."
                       (when next-is-quote
                         "\n\n<!--quoteend-->")))
     ret))
+
+;;;; Radio Target
+(defun org-blackfriday-radio-target (radio-target text info)
+  "Transcode a RADIO-TARGET object from Org to HTML.
+CONTENTS is nil.  INFO is a plist holding contextual
+information."
+  (let ((ref (format "%s%s"
+                     (org-blackfriday--get-ref-prefix 'radio)
+                     (org-element-property :value radio-target))))
+    (org-html--anchor ref text nil info)))
 
 ;;;; Special Block
 (defun org-blackfriday-special-block (special-block contents info)

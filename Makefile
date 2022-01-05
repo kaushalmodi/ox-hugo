@@ -237,18 +237,13 @@ ctemp:
 	@find $(OX_HUGO_TEST_SITE_DIR)/content -name "*.*~" -delete
 	@find ./doc/content -name "*.*~" -delete
 
-# Before doing the diff, replace the randomly generated org reference
-# id's like "org123abcd" with "orgxxxxxxx" so that the diff doesn't
-# fail on those id mismatches.
-# Also get rid of all changes in $(OX_HUGO_TEST_SITE_DIR)/content
-# after making a copy to $(OX_HUGO_TEST_SITE_DIR)/content-modified.
+# Get rid of all changes in $(OX_HUGO_TEST_SITE_DIR)/content after
+# making a copy to $(OX_HUGO_TEST_SITE_DIR)/content-modified.
 # https://stackoverflow.com/a/16589534/1219634
 diffgolden:
 	@rm -rf $(OX_HUGO_TEST_SITE_DIR)/content-modified
 	@cp -rf $(OX_HUGO_TEST_SITE_DIR)/content $(OX_HUGO_TEST_SITE_DIR)/content-modified
 	@git checkout --ignore-skip-worktree-bits -- $(OX_HUGO_TEST_SITE_DIR)/content
-	@find $(OX_HUGO_TEST_SITE_DIR)/content-modified -name "*.md" -exec perl -pi -e 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/' -- '{}' +
-	@find $(OX_HUGO_TEST_SITE_DIR)/content-golden -name "*.md" -exec perl -pi -e 's/(["#]org)([a-f0-9]{7})/\1xxxxxxx/' -- '{}' +
 	@diff -r $(OX_HUGO_TEST_SITE_DIR)/content-modified $(OX_HUGO_TEST_SITE_DIR)/content-golden
 
 clean: ctemp

@@ -37,7 +37,7 @@ This is an inline non-hyperlinked image with the width attribute:
 ## Inline hyperlinked image {#inline-hyperlinked-image}
 
 
-### No Alt text or any other attributes {#no-alt-text-or-any-other-attributes}
+### No Alt text or any other attributes {#inline-image-to-be-copied-to-static--no-attr}
 
 This is an inline non-hyperlinked image without alt text or other
 attributes:

@@ -188,6 +188,9 @@ This is an inline non-hyperlinked image with the width attribute:
 [[/images/org-mode-unicorn-logo.png]]
 *** Inline hyperlinked image
 **** No Alt text or any other attributes
+:PROPERTIES:
+:CUSTOM_ID: inline-image-to-be-copied-to-static--no-attr
+:END:
 This is an inline non-hyperlinked image without alt text or other
 attributes:
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
@@ -386,6 +389,24 @@ stop
 #+attr_html: :inlined t
 #+RESULTS:
 [[file:images/svg-with-hyperlinks.svg]]
+** Figures from included Org file                                   :include:
+:PROPERTIES:
+:EXPORT_FILE_NAME: figures-from-included-org-file
+:END:
+{{{oxhugoissue(339)}}}
+
+*** Including another subtree from this same file
+This test can be truly tested by locally deleting
+~test/site/static/ox-hugo/copy-2-of-unicorn-logo.png~ from this repo,
+exporting this file and checking that the file got copied again.
+
+#+include: "./all-posts.org::#inline-image-to-be-copied-to-static--no-attr" :only-contents t
+*** Including a subtree from a file in different directory
+This test can be truly tested by locally deleting
+~test/site/static/ox-hugo/gnu.png~ from this repo, exporting this file
+and checking that the file got copied again.
+
+#+include: "./images-in-content/images-in-content.org::*Post 1" :only-contents t
 * Video                                                              :videos:
 ** Embedded Video                                                  :embedded:
 :PROPERTIES:

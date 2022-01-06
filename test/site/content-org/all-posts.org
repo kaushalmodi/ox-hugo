@@ -3743,6 +3743,28 @@ C = W\log_{2} (1+\mathrm{SNR})
 Referencing to equation labels does not work when {{{latex}}}
 equations are exported as images.
 #+end_note
+** Equations exported to PNG (dvipng)   :dont_export_during_make_test:dvipng:
+:PROPERTIES:
+:EXPORT_FILE_NAME: equations-exported-to-png
+:EXPORT_OPTIONS: tex:dvipng
+:END:
+#+begin_description
+Exporting {{{latex}}} equations as PNG images.
+#+end_description
+{{{oxhugoissue(473)}}}
+
+Example of an inline equation: \[ a + b \]
+
+Example of a block equation:
+
+\begin{equation}
+C = W\log_{2} (1+\mathrm{SNR})
+\end{equation}
+
+#+begin_note
+Referencing to equation labels does not work when {{{latex}}}
+equations are exported as images.
+#+end_note
 * Lists                                                               :lists:
 ** List following a list
 :PROPERTIES:

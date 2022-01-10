@@ -538,6 +538,26 @@ Export the SCHEDULED, DEADLINE, etc. planning info time stamps.
 {{{oxhugoissue(514)}}}
 *** TODO Some plan
 SCHEDULED: <2022-01-20 Mon> DEADLINE: <2022-01-30 Mon>
+** Export with sub-heading tags                                :tags:subtree:
+:PROPERTIES:
+:EXPORT_FILE_NAME: sub-headings-with-tags
+:EXPORT_OPTIONS: tags:t
+:END:
+#+begin_description
+Export tags of sub-headings
+#+end_description
+{{{oxhugoissue(513)}}}
+
+#+begin_export html
+<style>
+  .tag span {
+    background: lightgrey;
+    font-size: small;
+    padding: 0.1rem 0.2rem;
+  }
+</style>
+#+end_export
+*** Sub heading                              :abc:def:@abc__def__ghi:ghi_jkl:
 * Title in Front Matter                                               :title:
 ** Awesome title with "quoted text"
 :PROPERTIES:

@@ -1462,6 +1462,12 @@ hidden by adding this to the CSS:
 :EXPORT_FILE_NAME: equations
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :mathjax true
 :END:
+#+begin_description
+Supporting {{{latex}}} equations
+#+end_description
+By default, the inline and block equations are exported to Markdown in
+a format that can be rendered using [[https://www.mathjax.org/#gettingstarted][MathJax]]. /You can find one MathJax
+config example [[#mathjax-config-example][below]]./
 **** Inline equations
 - Inline equations are wrapped between =\(= and =\)=.
   - =$= wrapping also works, but it is not preferred as it comes with
@@ -1527,6 +1533,20 @@ Equation referencing will also work[fn:3]. So =\ref{eq:1}= will render as
 \ref{eq:1}.
 **** Examples
 You can find many examples by looking at {{{testtag(equations)}}}.
+**** MathJax config example
+:PROPERTIES:
+:CUSTOM_ID: mathjax-config-example
+:END:
+Here's how MathJax is configured for this website:
+
+1. hugo-onyx-theme [[https://github.com/kaushalmodi/hugo-onyx-theme/blob/master/layouts/partials/mathjax.html][~mathjax.html~ partial]]:
+   #+caption: MathJax script tags in HTML ~<head>~
+   #+name: code__mathjax_script_in_head
+   #+include: "./themes/hugo-onyx-theme/layouts/partials/mathjax.html" src html
+2. MathJax config ( [[https://github.com/kaushalmodi/hugo-onyx-theme/blob/master/static/js/mathjax-config.js][~js/mathjax-config.js~]] ):
+   #+caption: MathJax config
+   #+name: code__mathjax_config
+   #+include: "./themes/hugo-onyx-theme/static/js/mathjax-config.js" src js
 *** Tags and Categories
 :PROPERTIES:
 :EXPORT_FILE_NAME: tags-and-categories

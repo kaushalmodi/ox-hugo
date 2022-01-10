@@ -101,3 +101,9 @@ and `"zoo"` will be the _second_.
 {{< myshortcode-pos "foo bar" zoo >}}
 The Markdown _emphasis_ characters are !! NOT !! rendered.
 {{< /myshortcode-pos >}}
+
+`ox-hugo` Issue #[377](https://github.com/kaushalmodi/ox-hugo/issues/377)
+
+{{< katex display >}}
+E = -J \sum\_{i=1}^N s\_i s\_{i+1}
+{{< /katex >}}

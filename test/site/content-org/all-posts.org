@@ -4800,18 +4800,10 @@ default Special Blocks.
 
 This will export as [[/posts/special-blocks][Special Blocks]] --- either wrapped with =<div>=
 tags or HTML5-recognized tags.
-
-{{{oxhugoissue(377)}}}
-
-#+begin_export hugo
-{{< katex display >}}
-E = -J \sum\_{i=1}^N s\_i s\_{i+1}
-{{< /katex >}}
-#+end_export
 *** Paired shortcodes using special blocks (Positional Arguments) :positional:arguments:
 :PROPERTIES:
 :EXPORT_FILE_NAME: paired-shortcodes-special-blocks-positional-arguments
-:EXPORT_HUGO_PAIRED_SHORTCODES: %alert myshortcode-pos
+:EXPORT_HUGO_PAIRED_SHORTCODES: %alert myshortcode-pos katex
 :END:
 #+begin_description
 Tests for paired shortcodes with positional arguments.
@@ -4847,6 +4839,13 @@ and ="zoo"= will be the /second/.
 #+begin_myshortcode-pos
 The Markdown /emphasis/ characters are !! NOT !! rendered.
 #+end_myshortcode-pos
+
+{{{oxhugoissue(377)}}}
+
+#+attr_shortcode: display
+#+begin_katex
+E = -J \sum\_{i=1}^N s\_i s\_{i+1}
+#+end_katex
 *** Paired shortcodes using special blocks (Named Arguments) :arguments:named:
 :PROPERTIES:
 :EXPORT_FILE_NAME: paired-shortcodes-special-blocks-named-arguments

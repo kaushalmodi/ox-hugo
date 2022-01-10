@@ -3440,6 +3440,36 @@ which will render as:
 #+begin_red
 This text will be in red.
 #+end_red
+**** Raw Org contents
+By default, the content inside the Org special blocks will have some
+default processing done by the exporter -- Org entities like ~\sum~ will
+be replaced by its HTML entity ~&sum;~, ~foo_{bar}~ will be replaced
+with ~foo<sub>bar</sub>~, and so on.
+
+But many times, the user might want to keep the contents of the
+special block as-as, in its raw form. If the user wants to do this for
+a special block of the /type/ FOO:
+
+#+begin_src org
+,#+begin_FOO
+Some content
+,#+end_FOO
+#+end_src
+
+, they need to add ~"FOO"~ to the customization variable
+~org-hugo-special-block-raw-content-types~.
+
+By default , ~"katex"~ is added to this list. So when using a special
+block like,
+
+#+begin_src org
+,#+begin_katex
+E = -J \sum\_{i=1}^N s\_i s\_{i+1}
+,#+end_katex
+#+end_src
+
+, the equation in the content of that special block: ~E = -J
+\sum\_{i=1}^N s\_i s\_{i+1}~ will be exported to Markdown as-is.
 *** Shortcodes
 :PROPERTIES:
 :EXPORT_FILE_NAME: shortcodes

@@ -736,6 +736,16 @@ specified for them):
   :type 'boolean)
 ;;;###autoload (put 'org-hugo-link-desc-insert-type 'safe-local-variable 'booleanp)
 
+(defcustom org-hugo-special-block-raw-content-types '("katex")
+  "List of special block types for which the exported contents
+should be same as the raw content in Org source.
+
+Each element is a string representing a type of Org special
+block."
+  :group 'org-export-hugo
+  :type '(repeat string))
+;;;###autoload (put 'org-hugo-special-block-raw-content-types 'safe-local-variable (lambda (x) (stringp x)))
+
 
 
 ;;; Define Back-End
@@ -2893,14 +2903,18 @@ For all other special blocks, processing is passed on to
 `org-blackfriday-special-block'.
 
 INFO is a plist holding export options."
-  (let ((block-type (org-element-property :type special-block))
-        (paired-shortcodes (let* ((str (plist-get info :hugo-paired-shortcodes))
-                                  (str-list (when (org-string-nw-p str)
-                                              (split-string str " "))))
-                             str-list))
-        (sc-regexp "\\`%%?%s\\'") ;Regexp to match an element from `paired-shortcodes'
-        (contents (when (stringp contents)
-                    (org-trim contents))))
+  (let* ((block-type (org-element-property :type special-block))
+         (paired-shortcodes (let* ((str (plist-get info :hugo-paired-shortcodes))
+                                   (str-list (when (org-string-nw-p str)
+                                               (split-string str " "))))
+                              str-list))
+         (sc-regexp "\\`%%?%s\\'") ;Regexp to match an element from `paired-shortcodes'
+         (contents (when (stringp contents)
+                     (org-trim
+                      (if (member block-type org-hugo-special-block-raw-content-types)
+                          ;; https://lists.gnu.org/r/emacs-orgmode/2022-01/msg00132.html
+                          (org-element-interpret-data (org-element-contents special-block))
+                        contents)))))
     (when contents
       (cond
        ((string= block-type "description")

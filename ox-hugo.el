@@ -736,7 +736,7 @@ specified for them):
   :type 'boolean)
 ;;;###autoload (put 'org-hugo-link-desc-insert-type 'safe-local-variable 'booleanp)
 
-(defcustom org-hugo-special-block-raw-content-types '("katex")
+(defcustom org-hugo-special-block-raw-content-types '("katex" "tikzjax")
   "List of special block types for which the exported contents
 should be same as the raw content in Org source.
 
@@ -2909,6 +2909,8 @@ INFO is a plist holding export options."
                                                (split-string str " "))))
                               str-list))
          (sc-regexp "\\`%%?%s\\'") ;Regexp to match an element from `paired-shortcodes'
+         (html-attr (org-export-read-attribute :attr_html special-block))
+         (caption (plist-get html-attr :caption))
          (contents (when (stringp contents)
                      (org-trim
                       (if (member block-type org-hugo-special-block-raw-content-types)
@@ -2917,6 +2919,18 @@ INFO is a plist holding export options."
                         contents)))))
     (when contents
       (cond
+       ((string= block-type "tikzjax")
+        (setq contents (format "%s%s%s"
+                               "<script type=\"text/tikz\">\n  \\begin{tikzpicture}\n"
+                               contents
+                               "\n\\end{tikzpicture}\n</script>"))
+        (when (org-string-nw-p caption)
+          (setq contents (format "%s%s%s"
+                                 "<figure>\n"
+                                 contents
+                                 (format "\n<figcaption>%s</figcaption>\n</figure>"
+                                         caption))))
+        contents)
        ((string= block-type "description")
         ;; Overwrite the value of the `:description' key in `info'.
         (plist-put info :description contents)

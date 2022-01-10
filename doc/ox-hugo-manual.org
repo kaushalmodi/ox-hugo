@@ -3490,6 +3490,32 @@ E = -J \sum\_{i=1}^N s\_i s\_{i+1}
 
 , the equation in the content of that special block: ~E = -J
 \sum\_{i=1}^N s\_i s\_{i+1}~ will be exported to Markdown as-is.
+**** TikZJax
+~ox-hugo~ supports exporting raw /tikz/ snippet to Markdown which can be
+rendered to images using the [[https://tikzjax.com/][TikZJax]] project.
+
+To use this feature, ensure that the /TikZJax/ scripts are loaded in
+the HTML ~<head>~ (you will need to tweak your site's Hugo template
+for that):
+
+#+caption: Sourcing TikZJax scripts in HTML head
+#+name: code__tikzjax_html_head
+#+begin_src html
+<link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+#+end_src
+
+Then simply put /tikz/ snippets in the Org source like so:
+
+#+caption: Example use of tikzjax special block
+#+name: code__tikzjax_special_block_example
+#+begin_src org
+,#+begin_tikzjax
+\draw (0,0) circle (1in);
+,#+end_tikzjax
+#+end_src
+
+{{{test-search(tikzjax)}}}
 *** Shortcodes
 :PROPERTIES:
 :EXPORT_FILE_NAME: shortcodes

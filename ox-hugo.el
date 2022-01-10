@@ -746,6 +746,16 @@ block."
   :type '(repeat string))
 ;;;###autoload (put 'org-hugo-special-block-raw-content-types 'safe-local-variable (lambda (x) (stringp x)))
 
+(defcustom org-hugo-container-element ""
+  "HTML element to use for wrapping top level sections.
+Can be set with the in-buffer HTML_CONTAINER property.
+
+When set to \"\", the top level sections are not wrapped in any
+HTML element."
+  :group 'org-export-hugo
+  :type 'string)
+;;;###autoload (put 'org-hugo-container-element 'safe-local-variable 'stringp)
+
 
 
 ;;; Define Back-End
@@ -819,6 +829,8 @@ block."
                    (:hugo-paired-shortcodes "HUGO_PAIRED_SHORTCODES" nil org-hugo-paired-shortcodes space)
                    (:hugo-pandoc-citations "HUGO_PANDOC_CITATIONS" nil nil)
                    (:bibliography "BIBLIOGRAPHY" nil nil newline) ;Used in ox-hugo-pandoc-cite
+                   (:html-container "HTML_CONTAINER" nil org-hugo-container-element)
+                   (:html-container-class "HTML_CONTAINER_CLASS" nil "")
 
                    ;; Front-matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -1881,10 +1893,44 @@ a communication channel."
                                (org-hugo--get-anchor heading info)))
                (heading-title (org-hugo--heading-title style level loffset title
                                                        todo-fmtd anchor numbers))
+               (wrap-element (org-hugo--container heading info))
                (content-str (or (org-string-nw-p contents) "")))
-          (format "%s%s" heading-title content-str)))))))
+          (if wrap-element
+              (let* ((container-class (or (org-element-property :HTML_CONTAINER_CLASS heading)
+                                          (org-element-property :EXPORT_HTML_CONTAINER_CLASS heading)
+                                          (plist-get info :html-container-class)))
+                     (container-class-str (when (org-string-nw-p container-class)
+                                            (concat " " container-class))))
+                (format (concat "<%s class=\"outline-%d%s\">\n"
+                                "%s%s\n"
+                                "</%s>")
+                        wrap-element level container-class-str
+                        heading-title content-str
+                        wrap-element))
+            (format "%s%s" heading-title content-str))))))))
 
 ;;;;; Heading Helpers
+(defun org-hugo--container (heading info)
+  "Get the HTML container element for HEADING.
+
+INFO is a plist used as a communication channel.
+
+If a heading has `:HTML_CONTAINER:' or `:EXPORT_HTML_CONTAINER:'
+property, that is used for the container element.
+
+Else if the `:html-container' property is a non-empty string:
+  - For the top level headings, wrapping is done using that property.
+  - For second and lower level headings, wrapping is done using
+    the HTML <div> tags.
+
+Else, no HTML element is wrapped around the HEADING."
+  (or (org-element-property :HTML_CONTAINER heading) ;property of the immediate heading
+      (org-element-property :EXPORT_HTML_CONTAINER heading) ;property of the immediate heading
+      (and (org-string-nw-p (plist-get info :html-container)) ;inherited :html-container: property if any
+           (if (= 1 (org-export-get-relative-level heading info))
+               (plist-get info :html-container)
+             "div"))))
+
 ;;;###autoload
 (defun org-hugo-slug (str)
   "Convert string STR to a `slug' and return that string.
@@ -3903,6 +3949,8 @@ are \"toml\" and \"yaml\"."
                      "HUGO_BASE_DIR"
                      "HUGO_GOLDMARK"
                      "HUGO_CODE_FENCE"
+                     "HTML_CONTAINER"
+                     "HTML_CONTAINER_CLASS"
                      "HUGO_MENU"
                      "HUGO_CUSTOM_FRONT_MATTER"
                      "HUGO_DRAFT"
@@ -4232,7 +4280,7 @@ links."
                   (org-export-get-environment 'hugo)))
            (local-variables (buffer-local-variables))
            (bound-variables (org-export--list-bound-variables))
-	       vars)
+           vars)
       (with-current-buffer buffer
         (let ((inhibit-modification-hooks t)
               (org-mode-hook nil)
@@ -4243,20 +4291,20 @@ links."
           ;; through BIND keywords.
           (dolist (entry local-variables vars)
             (when (consp entry)
-	          (let ((var (car entry))
-	                (val (cdr entry)))
-	            (and (not (memq var org-export-ignored-local-variables))
-	                 (or (memq var
-			                   '(default-directory
-			                      buffer-file-name
-			                      buffer-file-coding-system))
-		                 (assq var bound-variables)
-		                 (string-match "^\\(org-\\|orgtbl-\\)"
-				                       (symbol-name var)))
-	                 ;; Skip unreadable values, as they cannot be
-	                 ;; sent to external process.
-	                 (or (not val) (ignore-errors (read (format "%S" val))))
-	                 (push (set (make-local-variable var) val) vars)))))
+              (let ((var (car entry))
+                    (val (cdr entry)))
+                (and (not (memq var org-export-ignored-local-variables))
+                     (or (memq var
+                               '(default-directory
+                                  buffer-file-name
+                                  buffer-file-coding-system))
+                         (assq var bound-variables)
+                         (string-match "^\\(org-\\|orgtbl-\\)"
+                                       (symbol-name var)))
+                     ;; Skip unreadable values, as they cannot be
+                     ;; sent to external process.
+                     (or (not val) (ignore-errors (read (format "%S" val))))
+                     (push (set (make-local-variable var) val) vars)))))
 
           ;; Process all link elements in the AST.
           (org-element-map ast 'link

@@ -1,6 +1,7 @@
 +++
 title = "Setting heading anchors"
 date = 2017-07-12T17:05:39-04:00
+tags = ["headings", "anchor"]
 draft = false
 +++
 

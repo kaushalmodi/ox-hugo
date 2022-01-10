@@ -423,66 +423,67 @@ and checking that the file got copied again.
 </video>
 #+end_export
 [[https://sample-videos.com/][Video source]]
-* Setting heading anchors
+* Heading                                                          :headings:
+** Setting heading anchors                                           :anchor:
 :PROPERTIES:
 :EXPORT_FILE_NAME: setting-heading-anchors
 :EXPORT_DATE: 2017-07-12T17:05:39-04:00
 :END:
-** Heading 1 of the post
+*** Heading 1 of the post
 :PROPERTIES:
 :CUSTOM_ID: cool-ref-1
 :END:
 Something
-*** Heading 1.1 of the post
+**** Heading 1.1 of the post
 :PROPERTIES:
 :CUSTOM_ID: cool-ref-1.1
 :END:
 Something else
-** Heading 2 of the post
+*** Heading 2 of the post
 :PROPERTIES:
 :CUSTOM_ID: cool-ref-2
 :END:
 Something 2
-*** Heading 2.1 of the post
+**** Heading 2.1 of the post
 :PROPERTIES:
 :CUSTOM_ID: cool-ref-2.1
 :END:
 Something 2.1
-* Post heading with crazy characters
+** Post heading with crazy characters
 :PROPERTIES:
 :EXPORT_FILE_NAME: post-heading-slugs
 :EXPORT_DATE: 2017-07-12T13:46:33-04:00
 :END:
-** Releasing version 1.1
-** Foo ( Bar ) Baz
-** (Foo)Bar.Baz&Zoo
+*** Releasing version 1.1
+*** Foo ( Bar ) Baz
+*** (Foo)Bar.Baz&Zoo
 - ~.~ → ~dot~
 - ~&~ → ~and~
-** C++
+*** C++
 - ~+~ → ~plus~
-** Hey! I have a link [[https://example.org][here]] (Awesome!)
-** Este título es en español
-** Non-English titles
-*** ÂÊÎÔÛ
-*** ÁÉÍÓÚÝ
-*** ÀÈÌÒÙ
-*** ÄËÏÖÜ
-*** ÃÐÑÕÞ
-*** Ç
-** Headings with HTML
-*** Checklist [1/3]
+*** Hey! I have a link [[https://example.org][here]] (Awesome!)
+*** Este título es en español
+*** Non-English titles
+**** ÂÊÎÔÛ
+**** ÁÉÍÓÚÝ
+**** ÀÈÌÒÙ
+**** ÄËÏÖÜ
+**** ÃÐÑÕÞ
+***** Ç
+*** Headings with HTML
+**** Checklist [1/3]
 Above title would render to ~Checklist <code>[1/3]</code>~ in
 Markdown.
-**** DONE Item 1
+***** DONE Item 1
 Above would render to ~<span class="todo DONE_">DONE </span> Item 1~
 in Markdown.
-**** TODO Item 2
+***** TODO Item 2
 Above would render to ~<span class="todo TODO_">TODO </span> Item 2~
 in Markdown.
-**** TODO Item 3
+***** TODO Item 3
 Above would render to ~<span class="todo TODO_">TODO </span> Item 3~
 in Markdown.
-*** Version 0.1 <2017-10-11 Wed>
+**** Version 0.1 <2017-10-11 Wed>
 Above title would render to ~Version 0.1 <span
 class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-11
 Wed&gt;</span></span>~ in Markdown.

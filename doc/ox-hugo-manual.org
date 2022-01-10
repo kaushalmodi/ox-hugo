@@ -3837,6 +3837,26 @@ This links to the {{{relref(Org Special Blocks,org-special-blocks)}}} page.
 will also render to:
 
 This links to the {{{relref(Org Special Blocks,org-special-blocks)}}} page.
+*** HTML Containers
+:PROPERTIES:
+:EXPORT_FILE_NAME: html-containers
+:END:
+#+begin_description
+Support ~HTML_CONTAINER~ and ~HTML_CONTAINER_CLASS~ similar to the way
+~ox-html~ does, but also supporting property inheritance.
+#+end_description
+The ~HTML_CONTAINER~ and ~HTML_CONTAINER_CLASS~ properties can be
+added to any of the subtrees with the ~EXPORT_~ prefix.
+
+If a sub-tree has the property ~EXPORT_HTML_CONTAINER: section~, that
+sub-tree is exported as a heading surrounding with ~<section>~ and
+~</section>~. By default, that ~section~ tag has the class
+"outline-NUM" where /NUM/ is the level of that heading in that post.
+
+Additionally, if it has the property ~EXPORT_HTML_CONTAINER_CLASS:
+foo~, the "foo" class gets added to that container tag as well.
+
+{{{test-search(container)}}}
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"

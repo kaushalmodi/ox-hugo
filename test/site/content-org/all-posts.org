@@ -487,6 +487,46 @@ in Markdown.
 Above title would render to ~Version 0.1 <span
 class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-11
 Wed&gt;</span></span>~ in Markdown.
+** HTML Container                                            :container:html:
+:PROPERTIES:
+:EXPORT_HTML_CONTAINER: section
+:END:
+*** HTML Container with class
+:PROPERTIES:
+:EXPORT_FILE_NAME: html-container-with-class
+:EXPORT_HTML_CONTAINER_CLASS: foo
+:END:
+**** Top level heading 1
+This heading is wrapped in a ~section~ tag with classes ~outline-1~
+and ~foo~.
+***** Sub-heading 1.1
+This heading is wrapped in a ~div~ tag with classes ~outline-2~ and
+~foo~.
+**** Top level heading 2
+:PROPERTIES:
+:EXPORT_HTML_CONTAINER_CLASS: bar
+:END:
+This heading is wrapped in a ~section~ tag with classes ~outline-2~ and
+~bar~.
+***** Sub-heading 2.1
+:PROPERTIES:
+:EXPORT_HTML_CONTAINER_CLASS: zoo
+:END:
+This heading is wrapped in a ~div~ tag with classes ~outline-2~ and
+~zoo~.
+**** Top level heading 3
+:PROPERTIES:
+:EXPORT_HTML_CONTAINER: aside
+:END:
+This heading is wrapped in an ~aside~ tag with classes ~outline-1~ and
+~foo~.
+***** Sub-heading 3.1
+:PROPERTIES:
+:EXPORT_HTML_CONTAINER: blockquote
+:EXPORT_HTML_CONTAINER_CLASS: baz
+:END:
+This heading is wrapped in a ~blockquote~ tag with classes ~outline-2~
+and ~baz~.
 * Title in Front Matter                                               :title:
 ** Awesome title with "quoted text"
 :PROPERTIES:

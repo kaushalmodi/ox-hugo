@@ -547,16 +547,6 @@ SCHEDULED: <2022-01-20 Mon> DEADLINE: <2022-01-30 Mon>
 Export tags of sub-headings
 #+end_description
 {{{oxhugoissue(513)}}}
-
-#+begin_export html
-<style>
-  .tag span {
-    background: lightgrey;
-    font-size: small;
-    padding: 0.1rem 0.2rem;
-  }
-</style>
-#+end_export
 *** Sub heading                              :abc:def:@abc__def__ghi:ghi_jkl:
 * Title in Front Matter                                               :title:
 ** Awesome title with "quoted text"
@@ -3323,7 +3313,12 @@ This gets both categories =catA= and =catB=.
 ** Do not leak post's immediate sub-heading tag into the front-matter :expected_tag:post_heading_followed_soon_with_subheading:
 :PROPERTIES:
 :EXPORT_FILE_NAME: dont-leak-subheading-tags
+:EXPORT_OPTIONS: tags:nil
 :END:
+#+begin_description
+Disable exporting of sub-heading tags by setting export option
+~tags:nil~.
+#+end_description
 *** Sub-heading 1                                            :unexpected_tag:
 This is a *special* case where:
 - A post has a sub-heading as the first line in its body, and

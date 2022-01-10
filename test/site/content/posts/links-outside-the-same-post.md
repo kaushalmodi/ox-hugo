@@ -7,7 +7,7 @@ draft = false
 `ox-hugo` Issue #[30](https://github.com/kaushalmodi/ox-hugo/issues/30)
 
 
-## External links with search options {#external-links-with-search-options}
+## External links with search options <span class="tag"><span class="external_links">external-links</span></span> {#external-links-with-search-options}
 
 Links between documents can contain some search options. Only links
 to a heading with a **:CUSTOM_ID** property will be resolved to the
@@ -19,7 +19,7 @@ links to targets will be resolved to the containing file.
 -   [Link to a target]({{< relref "link-destination" >}})
 
 
-## Internal links {#internal-links}
+## Internal links <span class="tag"><span class="internal_links">internal-links</span></span> {#internal-links}
 
 Internal links point to targets in the current subtree that will be
 exported to the same Hugo post as the link source. To handle links to
@@ -33,7 +33,7 @@ init file.
 -   [Link to target within the same post](#org-target--internal-target)
 
 
-## Cross-post links {#cross-post-links}
+## Cross-post links <span class="tag"><span class="crosspost_links">crosspost-links</span></span> {#cross-post-links}
 
 Cross-post links are internal links pointing to targets in a different
 subtree that will be exported to another Hugo post than the link

@@ -38,7 +38,7 @@ the Markdown file name to the actual link/slug.
 [[file:post-with-slug.org]]
 ** Link to the CUSTOM_ID of a different file
 [[./post-yaml.org::#first-heading]]
-* Local Variables :ARCHIVE:
+* Local Variables                                          :ARCHIVE:noexport:
 # Local Variables:
 # org-link-file-path-type: relative
 # End:

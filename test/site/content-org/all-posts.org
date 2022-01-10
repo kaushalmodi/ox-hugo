@@ -4543,6 +4543,24 @@ This is Summary.
 #+end_summary
 Here are the /details/.
 #+end_details
+** TikZJax                                                          :tikzjax:
+:PROPERTIES:
+:EXPORT_FILE_NAME: tikzjax
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tikzjax true
+:END:
+#+begin_description
+TikZJax example
+#+end_description
+
+{{{oxhugoissue(390)}}}
+
+<<circle>>
+#+attr_html: :caption Picture of a circle
+#+begin_tikzjax
+\draw (0,0) circle (1in);
+#+end_tikzjax
+
+Here's a link to the [[circle][Circle]].
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
 *** Common CSS

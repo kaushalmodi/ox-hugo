@@ -21,6 +21,8 @@
 (require 'ox-publish)
 (require 'table)         ;To support tables written in table.el format
 
+(require 'subr-x)                       ;For `string-remove-suffix'
+
 
 ;;; Variables
 

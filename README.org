@@ -27,8 +27,9 @@ using =ox-hugo= and their Org sources.
   - [[#source-of-the-documentation-site][Source of the Documentation site]]
 - [[#demo][Demo]]
 - [[#installation][Installation]]
-- [[#usage][Usage]]
+  - [[#use-package][Use Package]]
   - [[#spacemacs][Spacemacs]]
+- [[#usage][Usage]]
   - [[#before-you-export][Before you export]]
   - [[#export-bindings][Export bindings]]
   - [[#customization-options][Customization Options]]
@@ -86,9 +87,10 @@ content translates from Org to Markdown as expected.
 presentation styles./
 
 * Installation
-This package requires emacs 24.4+ and Org 9.0+. It is available on
-Melpa ([[https://melpa.org/#/ox-hugo]]).
-* Usage
+This package requires at least GNU Emacs *25.3* and
+Org Mode *9.0*. It is available on Melpa
+([[https://melpa.org/#/ox-hugo]]).
+
 Once the package is installed, you will need to /require/ it so that
 the =ox-hugo= export options are available in the /Org Export
 Dispatcher/ menu (the one you see when you hit =C-c C-e= to initiate
@@ -99,6 +101,7 @@ You can do that by adding the below to your config:
 (with-eval-after-load 'ox
   (require 'ox-hugo))
 #+end_src
+** Use Package
 If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can do the below instead:
 #+begin_src emacs-lisp
 (use-package ox-hugo
@@ -106,7 +109,6 @@ If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can d
   :after ox)
 #+end_src
 
-Also see the [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto Exporting]] section.
 ** Spacemacs
 Spacemacs users can use =ox-hugo= by setting the variable
 =org-enable-hugo-support=.
@@ -116,7 +118,13 @@ Spacemacs users can use =ox-hugo= by setting the variable
               '((org :variables
                   org-enable-hugo-support t)))
 #+end_src
-/This was verified to work on Spacemacs =develop= branch ([[https://github.com/kaushalmodi/ox-hugo/pull/440][ref]])./
+
+/This was verified to work on Spacemacs =develop= branch ([[https://github.com/kaushalmodi/ox-hugo/pull/440][ref]]).
+* Usage
+#+begin_note
+Jump to the [[https://ox-hugo.scripter.co/doc/quick-start/][Quick Start]] section to quickly try
+out ~ox-hugo~ with Hugo.
+#+end_note
 ** Before you export
 Before you export check that these properties are set as you need:
 - HUGO_BASE_DIR :: Root directory of the source for the Hugo site. If
@@ -179,6 +187,8 @@ The common =ox-hugo= export bindings are:
     the whole Org file to a Hugo post in Markdown.
 *** For only the one-post-per-file flow
 - =C-c C-e H h= :: Export the Org file to a Hugo post in Markdown.
+
+/Also see the [[https://ox-hugo.scripter.co/doc/auto-export-on-saving/][Auto Exporting]] section.
 ** Customization Options
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.

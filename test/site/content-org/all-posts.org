@@ -3980,28 +3980,40 @@ Paragraph outside the list.
 Ordered lists with custom counter.
 
 1. This will be 1.
-1. This will be 2.
+2. This will be 2.
 
 
-1. [@10] This will be 10!
-1. This will be 11.
+10. [@10] This will be 10!
+11. This will be 11.
 
 
-1. [@17] This will be 17!
-1. This will be 18.
-1. [@123] This will be 123!
-1. This will be 124.
+17. [@17] This will be 17!
+18. This will be 18.
+123. [@123] This will be 123!
+124. This will be 124.
 
 
 1. This will be 1 again.
-1. This will be 2.
+2. This will be 2.
 
 Another example:
 
 1. This will be 1.
-1. [@3] This will be 3!
-1. [@7] This will be 7!
-1. [@100] This will be 100!
+3. [@3] This will be 3!
+7. [@7] This will be 7!
+100. [@100] This will be 100!
+
+Ordered list numbers larger then 99:
+
+100. [@100] This will be 100!
+101. This will be 101.
+102. This will be 102.
+
+
+999999997. [@999999997] This will be 999999997!
+999999998. This will be 999999998.
+999999999. This will be 999999999. CommonMark 0.30 [[https://spec.commonmark.org/0.30/#ordered-list-marker][allows]] an ordered
+           list marker to be at max 9 digits long.
 
 See [[https://orgmode.org/manual/Plain-Lists.html][(org) Plain Lists]] to read more about plain lists in Org.
 ** Checklist

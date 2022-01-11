@@ -294,21 +294,33 @@ in the column, or by the maximum cell with in the column."
         (puthash column max-width org-blackfriday-width-cookies)))))
 
 ;;;; Plain List Helper
-(defun org-blackfriday--ordered-list-with-custom-counter-p (plain-list)
-  "Return non-nil is PLAIN-LIST element has an item with custom counter.
-Returns nil immediately if PLAIN-LIST is not an ordered list."
+(defun org-blackfriday--export-ordered-list-as-html-p (plain-list)
+  "Return non-nil if the PLAIN-LIST needs to be exported as HTML.
+
+The PLAIN-LIST is exported as HTML if the list is an ordered list
+and a custom counter is used on second or later item in the list.
+
+Returns nil otherwise."
   (let ((type (org-element-property :type plain-list))
         has-custom-counter)
     (when (eq 'ordered type)
-      (let* ((list-contents (org-element-contents plain-list)))
-        (dolist (el list-contents)
-          (when (eq 'item (car el))
-            (let* ((item-plist (car (cdr el)))
-                   (counter (plist-get item-plist :counter)))
-              ;; (message "dbg: %S" counter)
-              (when counter
-                (setq has-custom-counter t)))))))
-    ;; (message "has custom counter: %S" has-custom-counter)
+      (let ((list-contents (org-element-contents plain-list))
+            (item-num 1))
+        (setq has-custom-counter
+              (catch 'break
+                (dolist (el list-contents)
+                  (when (eq 'item (car el))
+                    (let* ((item-plist (car (cdr el)))
+                           (counter (plist-get item-plist :counter)))
+                      ;; (message "dbg: item num: %d counter: %S" item-num counter)
+                      ;; Make special provision for the custom counter
+                      ;; notation [@N] only if it's present on second
+                      ;; or later items.
+                      (when (and (> item-num 1)
+                                 counter)
+                        (throw 'break t))))
+                  (cl-incf item-num))))))
+    ;; (message "dbg: has custom counter: %S" has-custom-counter)
     has-custom-counter))
 
 ;;;; Table Cell Alignment
@@ -762,11 +774,11 @@ If that list is nested, `ox-md' style descriptive list is
 exported instead:
 
     -   **Term1:** Description of term 1."
-  (let* ((parent-list (org-export-get-parent item)))
+  (let ((parent-list (org-export-get-parent item)))
     ;; If this item is in an ordered list and if this or any other
     ;; item in this list is using a custom counter, export this list
     ;; item in HTML.
-    (if (org-blackfriday--ordered-list-with-custom-counter-p parent-list)
+    (if (org-blackfriday--export-ordered-list-as-html-p parent-list)
         (org-html-format-list-item contents 'ordered nil info
                                    (org-element-property :counter item))
       (let* ((parent-list (org-export-get-parent item))
@@ -795,11 +807,12 @@ exported instead:
                            ox-md-style-desc-list)
                        "-")
                       ((eq parent-list-type 'ordered)
-                       (format "%d." item-num))
+                       (format "%d. " item-num))
                       (t             ;Non-nested descriptive list item
                        (when (> item-num 1)
                          "\n")))) ;Newline between each descriptive list item
-             (padding (unless bf-style-desc-list
+             (padding (when (and (not bf-style-desc-list)
+                                 (<= (length bullet) 3))
                         (make-string (- 4 (length bullet)) ? )))
              (tag (when desc-list?
                     (let* ((tag1 (org-element-property :tag item))
@@ -888,9 +901,7 @@ INFO is a plist holding contextual information."
 CONTENTS is the plain-list contents.  INFO is a plist used as a
 communication channel."
   (let (ret)
-    (if (org-blackfriday--ordered-list-with-custom-counter-p plain-list)
-        ;; If this is an ordered list and if any item in this list is
-        ;; using a custom counter, export this list in HTML.
+    (if (org-blackfriday--export-ordered-list-as-html-p plain-list)
         (setq ret (concat
                    (org-blackfriday--div-wrap-maybe plain-list nil info)
                    (org-html-plain-list plain-list contents info)))

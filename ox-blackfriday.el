@@ -648,7 +648,9 @@ Credit: https://emacs.stackexchange.com/a/53433/115."
 (defun org-blackfriday--valid-html-anchor-name (str)
   "Turn STR into a valid HTML anchor name.
 Replaces invalid characters with \"-\"."
-  (replace-regexp-in-string "[^a-zA-Z0-9_-.]" "-" str))
+  (or (and (stringp str)
+           (replace-regexp-in-string "[^a-zA-Z0-9_-.]" "-" str))
+      ""))
 
 ;; Return HTML span tags for link targets.
 (defun org-blackfriday--link-target (attr &optional desc)

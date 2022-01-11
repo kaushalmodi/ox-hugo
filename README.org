@@ -119,7 +119,7 @@ Spacemacs users can use =ox-hugo= by setting the variable
                   org-enable-hugo-support t)))
 #+end_src
 
-/This was verified to work on Spacemacs =develop= branch ([[https://github.com/kaushalmodi/ox-hugo/pull/440][ref]]).
+/This was verified to work on Spacemacs =develop= branch ([[https://github.com/kaushalmodi/ox-hugo/pull/440][ref]])./
 * Usage
 #+begin_note
 Jump to the [[https://ox-hugo.scripter.co/doc/quick-start/][Quick Start]] section to quickly try

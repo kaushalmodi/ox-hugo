@@ -1723,6 +1723,22 @@ user has requested for it.)"
          (member lang-2chars '("zh"      ;"zh", "zh_CH", ..
                                "ja"))))) ;"ja", ..
 
+(defun org-hugo--tags (tags info)
+  "Format TAGS into HTML.
+INFO is a plist containing export options.
+
+This function is almost identical to `org-html--tags' from
+`ox-html' except that the tag separator is an empty string."
+  (when tags
+    (format "<span class=\"tag\">%s</span>"
+            (mapconcat
+             (lambda (tag)
+               (format "<span class=\"%s\">%s</span>"
+                       (concat (plist-get info :html-tag-class-prefix)
+                               (org-html-fix-class-name tag))
+                       tag))
+             tags ""))))
+
 
 
 ;;; Transcode Functions
@@ -1861,7 +1877,7 @@ a communication channel."
                            (let* ((tags-list (org-export-get-tags heading info))
                                   (tags-list (dolist (fn org-hugo-tag-processing-functions tags-list)
                                                (setq tags-list (funcall fn tags-list info))))
-                                  (tags-html (org-html--tags tags-list info)))
+                                  (tags-html (org-hugo--tags tags-list info)))
                              (when (org-string-nw-p tags-html)
                                (concat " " tags-html)))))
            (priority

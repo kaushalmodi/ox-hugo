@@ -1729,6 +1729,23 @@ These variables do not affect the tags set via keywords =#+hugo_tags=,
 property forms), because Org keywords and properties allow using the
 hyphen and space (/in "double-quoted strings"/) characters. So the
 underscores in these keywords remain untransformed on export.
+**** Sub-heading Tags
+Sub-heading tags are exported wrapped in HTML ~span~ tags to the right
+of the exported heading if ~org-export-with-tags~ is non-nil (default)
+or if ~#+options: tags:t~ is used.
+
+The ~span~ tags are best formatted using CSS. Here's one example:
+
+#+begin_src css
+.tag span {
+    background: lightgrey;
+    font-size: small;
+    padding: 0.1rem 0.2rem;
+    margin: 0.2rem;
+}
+#+end_src
+
+{{{test-search(subheading-tags)}}}
 **** More Examples
 - [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/tags-and-categories.org][Org source]]
 - Exported Markdown -- [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/posts/inheriting-tags.md][=inheriting-tags.md=]], [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content/posts/overriding-tags.md][=overriding-tags.md=]]

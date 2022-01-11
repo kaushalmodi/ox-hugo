@@ -2404,7 +2404,8 @@ and rewrite link paths to make blogging more seamless."
         (format "[%s](#%s%s)"
                 desc
                 (org-blackfriday--get-ref-prefix 'radio)
-                (org-element-property :value destination))))
+                (org-blackfriday--valid-html-anchor-name
+                 (org-element-property :value destination)))))
      (t
       (let* ((link-param-str "")
              (path (cond

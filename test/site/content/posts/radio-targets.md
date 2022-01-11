@@ -5,7 +5,8 @@ tags = ["links", "internal-links", "radio-targets"]
 draft = false
 +++
 
-Here I am referencing to [asdf123](#org-radio--asdf123) that I talk about later.
+Here I am referencing to [asdf123](#org-radio--asdf123) that I talk about later. A reference
+to a radio target [something something](#org-radio--something-something) that has spaces in it.
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
 quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut dui
@@ -218,3 +219,5 @@ molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
 Here I talk about <a id="org-radio--asdf123">asdf123</a>.
+
+Here I talk about <a id="org-radio--something-something">something something</a>.

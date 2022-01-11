@@ -641,6 +641,12 @@ Credit: https://emacs.stackexchange.com/a/53433/115."
          (kill-buffer "*Org HTML Export*"))))
     ret-val))
 
+;;;; Convert Org string to HTML
+(defun org-blackfriday--valid-html-anchor-name (str)
+  "Turn STR into a valid HTML anchor name.
+Replaces invalid characters with \"-\"."
+  (replace-regexp-in-string "[^a-zA-Z0-9_-.]" "-" str))
+
 
 
 ;;; Transcode Functions
@@ -985,7 +991,8 @@ CONTENTS is nil.  INFO is a plist holding contextual
 information."
   (let ((ref (format "%s%s"
                      (org-blackfriday--get-ref-prefix 'radio)
-                     (org-element-property :value radio-target))))
+                     (org-blackfriday--valid-html-anchor-name
+                      (org-element-property :value radio-target)))))
     (org-html--anchor ref text nil info)))
 
 ;;;; Special Block

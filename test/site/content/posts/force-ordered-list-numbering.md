@@ -36,4 +36,17 @@ Another example:
 <li value="100">This will be 100!</li>
 </ol>
 
+Ordered list numbers larger then 99:
+
+100. This will be 100!
+101. This will be 101.
+102. This will be 102.
+
+<!--listend-->
+
+999999997. This will be 999999997!
+999999998. This will be 999999998.
+999999999. This will be 999999999. CommonMark 0.30 [allows](https://spec.commonmark.org/0.30/#ordered-list-marker) an ordered
+    list marker to be at max 9 digits long.
+
 See [(org) Plain Lists](https://orgmode.org/manual/Plain-Lists.html) to read more about plain lists in Org.

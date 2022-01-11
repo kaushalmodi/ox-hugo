@@ -807,11 +807,12 @@ exported instead:
                            ox-md-style-desc-list)
                        "-")
                       ((eq parent-list-type 'ordered)
-                       (format "%d." item-num))
+                       (format "%d. " item-num))
                       (t             ;Non-nested descriptive list item
                        (when (> item-num 1)
                          "\n")))) ;Newline between each descriptive list item
-             (padding (unless bf-style-desc-list
+             (padding (when (and (not bf-style-desc-list)
+                                 (<= (length bullet) 3))
                         (make-string (- 4 (length bullet)) ? )))
              (tag (when desc-list?
                     (let* ((tag1 (org-element-property :tag item))

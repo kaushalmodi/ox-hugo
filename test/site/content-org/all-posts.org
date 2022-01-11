@@ -4003,6 +4003,18 @@ Another example:
 7. [@7] This will be 7!
 100. [@100] This will be 100!
 
+Ordered list numbers larger then 99:
+
+100. [@100] This will be 100!
+101. This will be 101.
+102. This will be 102.
+
+
+999999997. [@999999997] This will be 999999997!
+999999998. This will be 999999998.
+999999999. This will be 999999999. CommonMark 0.30 [[https://spec.commonmark.org/0.30/#ordered-list-marker][allows]] an ordered
+           list marker to be at max 9 digits long.
+
 See [[https://orgmode.org/manual/Plain-Lists.html][(org) Plain Lists]] to read more about plain lists in Org.
 ** Checklist
 :PROPERTIES:

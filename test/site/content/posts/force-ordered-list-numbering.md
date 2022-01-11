@@ -12,10 +12,10 @@ Ordered lists with custom counter.
 
 <!--listend-->
 
-<ol class="org-ol">
-<li value="10">This will be 10!</li>
-<li>This will be 11.</li>
-</ol>
+10. This will be 10!
+11. This will be 11.
+
+<!--listend-->
 
 <ol class="org-ol">
 <li value="17">This will be 17!</li>

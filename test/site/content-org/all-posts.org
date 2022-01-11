@@ -527,6 +527,17 @@ This heading is wrapped in an ~aside~ tag with classes ~outline-1~ and
 :END:
 This heading is wrapped in a ~blockquote~ tag with classes ~outline-2~
 and ~baz~.
+** Export with planning info                                       :planning:
+:PROPERTIES:
+:EXPORT_FILE_NAME: planning-info
+:EXPORT_OPTIONS: p:t
+:END:
+#+begin_description
+Export the SCHEDULED, DEADLINE, etc. planning info time stamps.
+#+end_description
+{{{oxhugoissue(514)}}}
+*** TODO Some plan
+SCHEDULED: <2022-01-20 Mon> DEADLINE: <2022-01-30 Mon>
 * Title in Front Matter                                               :title:
 ** Awesome title with "quoted text"
 :PROPERTIES:

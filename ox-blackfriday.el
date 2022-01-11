@@ -76,7 +76,8 @@ This sub directory is created when an export option like
 
 (defcustom org-blackfriday-syntax-highlighting-langs
   '(("ipython" . "python")
-    ("jupyter-python" . "python"))
+    ("jupyter-python" . "python")
+    ("conf-toml" . "toml"))
   "Alist mapping src block languages to their syntax highlighting languages.
 
 The key is the src block language name.  The value is the

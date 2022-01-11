@@ -218,6 +218,6 @@ suscipit nec nec neque. Suspendisse vitae tincidunt justo, sed
 molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
-Here I talk about <a id="org-radio--asdf123">asdf123</a>.
+Here I talk about <span class="org-radio" id="org-radio--asdf123">asdf123</span>.
 
-Here I talk about <a id="org-radio--something-something">something something</a>.
+Here I talk about <span class="org-radio" id="org-radio--something-something">something something</span>.

@@ -641,11 +641,19 @@ Credit: https://emacs.stackexchange.com/a/53433/115."
          (kill-buffer "*Org HTML Export*"))))
     ret-val))
 
-;;;; Convert Org string to HTML
+;;;; Convert string to a valid anchor name
 (defun org-blackfriday--valid-html-anchor-name (str)
   "Turn STR into a valid HTML anchor name.
 Replaces invalid characters with \"-\"."
   (replace-regexp-in-string "[^a-zA-Z0-9_-.]" "-" str))
+
+;; Return HTML span tags for link targets.
+(defun org-blackfriday--link-target (attr &optional desc)
+  "Format a link target in HTML.
+
+ATTR is a string representing the attributes of the target HTML tag.
+DESC is either nil or the description string of the target."
+  (format "<span%s>%s</span>" (or attr "") (or desc "")))
 
 
 
@@ -985,15 +993,18 @@ communication channel."
     ret))
 
 ;;;; Radio Target
-(defun org-blackfriday-radio-target (radio-target text info)
+(defun org-blackfriday-radio-target (radio-target text _info)
   "Transcode a RADIO-TARGET object from Org to HTML.
-CONTENTS is nil.  INFO is a plist holding contextual
-information."
-  (let ((ref (format "%s%s"
-                     (org-blackfriday--get-ref-prefix 'radio)
-                     (org-blackfriday--valid-html-anchor-name
-                      (org-element-property :value radio-target)))))
-    (org-html--anchor ref text nil info)))
+CONTENTS is nil."
+  (let* ((prefix (org-blackfriday--get-ref-prefix 'radio))
+         (ref (format "%s%s"
+                      prefix
+                      (org-blackfriday--valid-html-anchor-name
+                       (org-element-property :value radio-target))))
+         (attr (format " class=\"%s\" id=\"%s\""
+                       (string-remove-suffix "--" prefix)
+                       ref)))
+    (org-blackfriday--link-target attr text)))
 
 ;;;; Special Block
 (defun org-blackfriday-special-block (special-block contents info)
@@ -1348,14 +1359,17 @@ contextual information."
               blank-line-before-table tbl table-post))))
 
 ;;;; Target
-(defun org-blackfriday-target (target _contents info)
+(defun org-blackfriday-target (target _contents _info)
   "Transcode a TARGET object from Org to HTML.
-CONTENTS is nil.  INFO is a plist holding contextual
-information."
-  (let ((ref (format "%s%s"
-                     (org-blackfriday--get-ref-prefix 'target)
-                     (org-element-property :value target))))
-    (org-html--anchor ref nil nil info)))
+CONTENTS is nil."
+  (let* ((prefix (org-blackfriday--get-ref-prefix 'target))
+         (ref (format "%s%s"
+                      prefix
+                      (org-element-property :value target)))
+         (attr (format " class=\"%s\" id=\"%s\""
+                       (string-remove-suffix "--" prefix)
+                       ref)))
+    (org-blackfriday--link-target attr)))
 
 ;;;; Verse Block
 (defun org-blackfriday-verse-block (_verse-block contents info)

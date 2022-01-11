@@ -63,6 +63,3 @@ the Markdown file name to the actual link/slug.
 ### Link to the CUSTOM_ID of a different file {#link-to-the-custom-id-of-a-different-file}
 
 [{{< relref "post-yaml#first-heading" >}}]({{< relref "post-yaml#first-heading" >}})
-
-
-## Local Variables {#local-variables}

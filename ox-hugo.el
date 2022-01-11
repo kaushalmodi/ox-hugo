@@ -1723,6 +1723,22 @@ user has requested for it.)"
          (member lang-2chars '("zh"      ;"zh", "zh_CH", ..
                                "ja"))))) ;"ja", ..
 
+(defun org-hugo--tags (tags info)
+  "Format TAGS into HTML.
+INFO is a plist containing export options.
+
+This function is almost identical to `org-html--tags' from
+`ox-html' except that the tag separator is an empty string."
+  (when tags
+    (format "<span class=\"tag\">%s</span>"
+            (mapconcat
+             (lambda (tag)
+               (format "<span class=\"%s\">%s</span>"
+                       (concat (plist-get info :html-tag-class-prefix)
+                               (org-html-fix-class-name tag))
+                       tag))
+             tags ""))))
+
 
 
 ;;; Transcode Functions
@@ -1857,17 +1873,21 @@ a communication channel."
                       (org-element-property :todo-keyword heading)))
            (todo-fmtd (when todo
                         (concat (org-hugo--todo todo info) " ")))
-           (tags (and (org-hugo--plist-get-true-p info :with-tags)
-                      (let ((tag-list (org-export-get-tags heading info)))
-                        (and tag-list
-                             (format "     :%s:"
-                                     (mapconcat #'identity tag-list ":"))))))
+           (tags-fmtd (and (org-hugo--plist-get-true-p info :with-tags)
+                           (let* ((tags-list (org-export-get-tags heading info))
+                                  (tags-list (dolist (fn org-hugo-tag-processing-functions tags-list)
+                                               (setq tags-list (funcall fn tags-list info))))
+                                  (tags-html (org-hugo--tags tags-list info)))
+                             (when (org-string-nw-p tags-html)
+                               (concat " " tags-html)))))
            (priority
             (and (org-hugo--plist-get-true-p info :with-priority)
                  (let ((char (org-element-property :priority heading)))
                    (and char (format "[#%c] " char)))))
            (style (plist-get info :md-headline-style)))
       ;; (message "[ox-hugo-heading DBG] num: %s" numbers)
+      ;; (message "[ox-hugo-heading DBG] with-tags: %S" (org-hugo--plist-get-true-p info :with-tags))
+      ;; (message "[ox-hugo-heading DBG] tags: %S" (org-export-get-tags heading info))
       (cond
        ;; Cannot create a heading.  Fall-back to a list.
        ((or (org-export-low-level-p heading info)
@@ -1886,13 +1906,13 @@ a communication channel."
                   ;; section above is ending with a plain list. That
                   ;; HTML comment will force-end the <ul> or <ol> tag
                   ;; of that preceding list.
-                  bullet " " heading tags "\n\n"
+                  bullet " " heading tags-fmtd "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
         (let* ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
                                (org-hugo--get-anchor heading info)))
                (heading-title (org-hugo--heading-title style level loffset title
-                                                       todo-fmtd anchor numbers))
+                                                       todo-fmtd tags-fmtd anchor numbers))
                (wrap-element (org-hugo--container heading info))
                (content-str (or (org-string-nw-p contents) "")))
           (if wrap-element
@@ -2027,7 +2047,7 @@ output."
         (setq ret (org-hugo-slug title))))
     ret))
 
-(defun org-hugo--heading-title (style level loffset title &optional todo anchor numbers)
+(defun org-hugo--heading-title (style level loffset title &optional todo tags anchor numbers)
   "Generate a heading title in the preferred Markdown heading style.
 
 STYLE is the preferred style (`atx' or `setext').
@@ -2038,12 +2058,15 @@ TITLE is the heading title.
 
 Optional argument TODO is the Org TODO string.
 
+Optional argument TAGS is a string containing the current
+heading's tags.
+
 Optional argument ANCHOR is the Hugo anchor tag for the section as a
 string.
 
 Optional argument NUMBERS, if non-nil, is an htmlized string
 containing the TITLE's number."
-  (let ((heading (concat todo numbers title " " anchor "\n")))
+  (let ((heading (concat todo numbers title tags " " anchor "\n")))
     ;; Use "Setext" style
     (if (and (eq style 'setext) (< level 3))
         (let* ((underline-char (if (= level 1) ?= ?-))

@@ -19,7 +19,6 @@ creator: "Dummy creator string"
 
 - <span class="section-num">1</span> [Variables set in <kbd>.dir-locals.el</kbd>](#variables-set-in-dot-dir-locals-dot-el)
 - <span class="section-num">2</span> [Test text](#test-text)
-- <span class="section-num">3</span> [Local Variables](#local-variables):ARCHIVE:
 
 </div>
 <!--endtoc-->
@@ -51,8 +50,5 @@ creator: "Dummy creator string"
 ## <span class="section-num">2</span> Test text {#test-text}
 
 `This is verbatim` but <kbd>this</kbd> is wrapped in the `kbd` tag. As `org-hugo-preserve-filling` is set to `nil`, the column filling in the Org source is not preserved in the exported Markdown.
-
-
-## <span class="section-num">3</span> Local Variables {#local-variables}
 
 This text is auto inserted at the end of the exported Markdown.

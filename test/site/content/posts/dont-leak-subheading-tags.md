@@ -1,5 +1,9 @@
 +++
 title = "Do not leak post's immediate sub-heading tag into the front-matter"
+description = """
+  Disable exporting of sub-heading tags by setting export option
+  `tags:nil`.
+  """
 tags = ["expected-tag", "post-heading-followed-soon-with-subheading"]
 draft = false
 +++

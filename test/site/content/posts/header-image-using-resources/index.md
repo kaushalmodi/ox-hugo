@@ -19,7 +19,7 @@ This test suggests an alternative way to do what the OP wants in
 
 Instead of having a TOML front-matter like:
 
-```conf-toml
+```toml
 +++
 title = "fourth test"
 author = ["Eason Zhang"]

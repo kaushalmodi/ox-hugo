@@ -11,6 +11,8 @@
 
 ;;; Code:
 
+(declare-function org-hugo--plist-get-true-p "ox-hugo")
+
 (defcustom org-hugo-pandoc-cite-references-heading "References {#references}"
   "Markdown title for Pandoc inserted references section."
   :group 'org-export-hugo
@@ -164,7 +166,7 @@ The list of Pandoc specific meta-data is defined in
       (delete-matching-lines regexp))
     (buffer-substring-no-properties (point-min) (point-max))))
 
-(defun org-hugo-pandoc-cite--fix-pandoc-output (content loffset)
+(defun org-hugo-pandoc-cite--fix-pandoc-output (content loffset info)
   "Fix the Pandoc output CONTENT and return it.
 
 Required fixes:
@@ -172,11 +174,13 @@ Required fixes:
 - Prepend Pandoc inserted \"references\" class div with
   `org-hugo-pandoc-cite-references-heading'.
 
-- Add the Blackfriday required \"<div></div>\" hack to Pandoc
-  divs with \"ref\" id's.
+- When not using Goldmark (Hugo v0.60.0+), add the Blackfriday
+  required \"<div></div>\" hack to Pandoc divs with \"ref\" id's.
 
 - Unescape the Hugo shortcodes: \"{{\\\\=< shortcode \\\\=>}}\" ->
-  \"{{< shortcode >}}\"."
+  \"{{< shortcode >}}\"
+
+INFO is a plist used as a communication channel."
   (with-temp-buffer
     (insert content)
     (let ((case-fold-search nil))
@@ -192,12 +196,15 @@ Required fixes:
             (when (org-string-nw-p org-hugo-pandoc-cite-references-heading)
               (let ((level-mark (make-string (+ loffset 1) ?#)))
                 (setq references-heading (concat level-mark " " org-hugo-pandoc-cite-references-heading))))
-            (replace-match (concat references-heading "\n\n\\&\n  <div></div>\n"))))) ;See footnote 1
+            (replace-match (concat references-heading "\n\n\\&"
+                                   (when (null (org-hugo--plist-get-true-p info :hugo-goldmark))
+                                     "\n  <div></div>\n")))))) ;See footnote 1
 
       ;; Add the Blackfriday required hack to Pandoc ref divs.
-      (save-excursion
-        (while (re-search-forward org-hugo-pandoc-cite--reference-entry-regexp nil :noerror)
-          (replace-match "\\&\n  <div></div>"))) ;See footnote 1
+      (when (null (org-hugo--plist-get-true-p info :hugo-goldmark))
+        (save-excursion
+          (while (re-search-forward org-hugo-pandoc-cite--reference-entry-regexp nil :noerror)
+            (replace-match "\\&\n  <div></div>")))) ;See footnote 1
 
       ;; Fix Hugo shortcodes.
       (save-excursion
@@ -289,7 +296,7 @@ ORIG-OUTFILE is the Org exported file name."
             ;; references.
             (if content-has-references
                 (let* ((contents-fixed (org-hugo-pandoc-cite--fix-pandoc-output
-                                        pandoc-outfile-contents loffset))
+                                        pandoc-outfile-contents loffset info))
                        (fm (org-hugo-pandoc-cite--remove-pandoc-meta-data fm))
                        (fm-plus-content (concat fm "\n" contents-fixed)))
                   (write-region fm-plus-content nil orig-outfile))

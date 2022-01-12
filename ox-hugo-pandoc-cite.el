@@ -197,11 +197,11 @@ INFO is a plist used as a communication channel."
               (let ((level-mark (make-string (+ loffset 1) ?#)))
                 (setq references-heading (concat level-mark " " org-hugo-pandoc-cite-references-heading))))
             (replace-match (concat references-heading "\n\n\\&"
-                                   (when (null (org-hugo--plist-get-true-p info :hugo-goldmark))
+                                   (unless (org-hugo--plist-get-true-p info :hugo-goldmark)
                                      "\n  <div></div>\n")))))) ;See footnote 1
 
       ;; Add the Blackfriday required hack to Pandoc ref divs.
-      (when (null (org-hugo--plist-get-true-p info :hugo-goldmark))
+      (unless (org-hugo--plist-get-true-p info :hugo-goldmark)
         (save-excursion
           (while (re-search-forward org-hugo-pandoc-cite--reference-entry-regexp nil :noerror)
             (replace-match "\\&\n  <div></div>")))) ;See footnote 1

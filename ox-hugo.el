@@ -1147,7 +1147,7 @@ contents according to the current heading."
                       (if local
                           " local"
                         ""))
-              (when (not org-hugo-goldmark)
+              (unless (org-hugo--plist-get-true-p info :hugo-goldmark)
                 "<div></div>\n") ;This is a nasty workaround till Hugo/Blackfriday support
               toc-heading    ;wrapping Markdown in HTML div's.
               "\n"
@@ -4400,7 +4400,7 @@ links."
           ;; Workaround to prevent exporting of empty special blocks.
           (org-element-map ast 'special-block
             (lambda (block)
-              (when (null (org-element-contents block))
+              (unless (org-element-contents block)
                 (org-element-adopt-elements block ""))))
 
           ;; Turn the AST with updated links into an Org document.

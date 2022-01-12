@@ -16,18 +16,14 @@ footnote citation.[^fn:1]
 ## References {#references}
 
 <div id="refs" class="references csl-bib-body hanging-indent">
-  <div></div>
-
 
 <div id="ref-eilan2016" class="csl-entry">
-  <div></div>
 
 Eilan, Naomi. 2016. "You Me and the World." *Analysis* 76 (3): 311--24.
 
 </div>
 
 <div id="ref-giovanelli2016" class="csl-entry">
-  <div></div>
 
 Giovanelli, Marco. 2016. "\"\...But I Still Can't Get Rid of a Sense of
 Artificiality\" The Reichenbach--Einstein Debate on the Geometrization
@@ -37,7 +33,6 @@ Science* 54: 35--51.
 </div>
 
 <div id="ref-loncar2016" class="csl-entry">
-  <div></div>
 
 Loncar, Samuel. 2016. "Why Listen to Philosophers? A Constructive
 Critique of Disciplinary Philosophy." *Metaphilosophy* 47 (1): 3--25.
@@ -45,7 +40,6 @@ Critique of Disciplinary Philosophy." *Metaphilosophy* 47 (1): 3--25.
 </div>
 
 <div id="ref-thompson2016" class="csl-entry">
-  <div></div>
 
 Thompson, Morgan, Toni Adleberg, Sam Sims, and Eddy Nahmias. 2016. "Why
 Do Women Leave Philosophy? Surveying Students at the Introductory

@@ -12,7 +12,6 @@ draft = false
 Below, TOC is exported with only level-1 headings in this post.
 
 <div class="ox-hugo-toc toc">
-<div></div>
 
 <div class="heading">Table of Contents</div>
 
@@ -28,7 +27,6 @@ generated using the `local` param as it is at the root level of this
 post.
 
 <div class="ox-hugo-toc toc local">
-<div></div>
 
 - [Post sub-heading 1](#post-sub-heading-1)
 - [Post sub-heading 2](#post-sub-heading-2)
@@ -44,7 +42,6 @@ Below, TOC is exported with only level-1 headings **relative to** this
 "Post sub-heading 1" section.
 
 <div class="ox-hugo-toc toc local">
-<div></div>
 
 - [Post sub-heading 1.1](#post-sub-heading-1-dot-1)
 - [Post sub-heading 1.2](#post-sub-heading-1-dot-2)
@@ -78,7 +75,6 @@ Below, TOC is exported with only up to level-2 headings **relative to**
 this "Post sub-heading 2.2" section.
 
 <div class="ox-hugo-toc toc local">
-<div></div>
 
 - [Post sub-heading 2.2.1](#post-sub-heading-2-dot-2-dot-1)
 - [Post sub-heading 2.2.2](#post-sub-heading-2-dot-2-dot-2)
@@ -102,7 +98,6 @@ Below, TOC is exported with only level-1 headings **relative to** this
 "Post sub-heading 2.2.3" section.
 
 <div class="ox-hugo-toc toc local">
-<div></div>
 
 - [Post sub-heading 2.2.3.1](#post-sub-heading-2-dot-2-dot-3-dot-1)
 - [Post sub-heading 2.2.3.2](#post-sub-heading-2-dot-2-dot-3-dot-2)

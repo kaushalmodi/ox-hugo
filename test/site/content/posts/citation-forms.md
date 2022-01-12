@@ -63,11 +63,8 @@ Citations" ([n.d.](#ref-rmdCitations)) for more.
 ## References {#references}
 
 <div id="refs" class="references csl-bib-body hanging-indent">
-  <div></div>
-
 
 <div id="ref-rmdCitations" class="csl-entry">
-  <div></div>
 
 "Bibliographies and Citations / Citations." n.d. In *RMarkdown*.
 RStudio.
@@ -76,7 +73,6 @@ RStudio.
 </div>
 
 <div id="ref-doe99" class="csl-entry">
-  <div></div>
 
 Doe, John. 1999. *An Awesome Revelation*. 3rd ed. Vol. 4. 10th Series.
 The address: Publisher Foo.
@@ -84,7 +80,6 @@ The address: Publisher Foo.
 </div>
 
 <div id="ref-smith04" class="csl-entry">
-  <div></div>
 
 Smith, Adam. 2004. *The Book on Life*. 1st ed. Vol. 7. 99th Series. The
 address: Publisher Bar.
@@ -92,7 +87,6 @@ address: Publisher Bar.
 </div>
 
 <div id="ref-addCite17" class="csl-entry">
-  <div></div>
 
 Xie, Yihui. 2017. "Adding Citations to Posts."
 <https://blogdown-demo.rbind.io/2017/08/28/adding-citations-to-posts/>.

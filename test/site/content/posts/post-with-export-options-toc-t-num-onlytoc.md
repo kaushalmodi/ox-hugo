@@ -10,7 +10,6 @@ draft = false
   }
 </style>
 <div class="ox-hugo-toc toc">
-<div></div>
 
 <div class="heading">Table of Contents</div>
 

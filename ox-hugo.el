@@ -1147,7 +1147,8 @@ contents according to the current heading."
                       (if local
                           " local"
                         ""))
-              "<div></div>\n" ;This is a nasty workaround till Hugo/Blackfriday support
+              (when (not org-hugo-goldmark)
+                "<div></div>\n") ;This is a nasty workaround till Hugo/Blackfriday support
               toc-heading    ;wrapping Markdown in HTML div's.
               "\n"
               toc-items ;https://github.com/kaushalmodi/ox-hugo/issues/93

@@ -7263,6 +7263,9 @@ you will be able to see when you view this page's source).
                 [[https://github.com/Vonng][*Vonng*]] in [[https://github.com/gohugoio/hugo/issues/234#issuecomment-347725391][this comment]]. All credit for this post
                 goes to the original author.
 -----
+
+#+toc: headlines 2
+
 神经网络相关基本知识笔记
 *** 神经网络表示
 **** 神经元模型

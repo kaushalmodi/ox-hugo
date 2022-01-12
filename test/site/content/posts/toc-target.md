@@ -14,7 +14,6 @@ draft = false
 ### landing page {#landing-page}
 
 <div class="ox-hugo-toc toc">
-<div></div>
 
 <div class="heading">Table of Contents</div>
 
@@ -45,7 +44,6 @@ draft = false
 ### Another section {#another-section}
 
 <div class="ox-hugo-toc toc">
-<div></div>
 
 <div class="heading">Table of Contents</div>
 

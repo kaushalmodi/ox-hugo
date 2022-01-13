@@ -8,11 +8,11 @@ draft = false
 Note that to disable the code fence option, the value portion of the
 property needs to be left **empty** instead of setting to `nil`!
 
-```text
+{{< highlight text >}}
 :PROPERTIES:
 :EXPORT_HUGO_CODE_FENCE:
 :END:
-```
+{{< /highlight >}}
 
 Here are few variables that you might like to change in the `local.mk`:
 

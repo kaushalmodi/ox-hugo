@@ -1243,6 +1243,82 @@ hidden by adding this to the CSS:
   display: none;
 }
 #+end_src
+**** Code References
+~ox-hugo~ generates code references hyperlinked to line numbers of
+source and example blocks when using the ~(ref:REF)~ syntax in the
+blocks as explained in [[https://orgmode.org/manual/Literal-Examples.html][Literal Examples]] section of the Org manual.
+
+#+begin_quote
+Org interprets strings like ~(ref:name)~ as labels, and use them as
+targets for special hyperlinks like ~[[(name)]]~ — i.e., the
+reference name enclosed in single parenthesis.
+
+You can also add a ~-r~ switch which removes the labels from the
+source code.
+#+end_quote
+
+#+begin_note
+One convenience feature added by ~ox-hugo~ is that the ~-n~ is always
+implied when code references are detected in the source or example
+blocks.
+#+end_note
+
+- Note :: It is the user's responsibility to ensure that all code ref
+  labels used within a single post are unique.
+***** Code references exported with labels
+As an example, this in Org source:
+
+# Below the '-l "((%s))"' switch is used to change the reference label
+# format so that the labels in the nested emacs-lisp src block in this
+# Org src block don't get parsed as this Org block's references.
+#+begin_src org -l "((%s))"
+,#+begin_src emacs-lisp
+(save-excursion                 (ref:sc)
+   (goto-char (point-min))      (ref:jump)
+,#+end_src
+
+In line [[(sc)]] we remember the current position. [[(jump)][Line (jump)]] jumps to
+~point-min~.
+#+end_src
+
+exports to:
+
+#+begin_src emacs-lisp
+(save-excursion                 (ref:sc)
+   (goto-char (point-min))      (ref:jump)
+#+end_src
+
+In line [[(sc)]] we remember the current position. [[(jump)][Line (jump)]] jumps to
+~point-min~.
+***** Code references exported *without* labels
+When the ~-r~ switch is used in the header, the code ref labels are
+removed from the exported code block, and the labels in code ref link
+descriptions are replaced with line numbers.
+
+As an example, this in Org source:
+
+# Below the '-l "((%s))"' switch is used to change the reference label
+# format so that the labels in the nested emacs-lisp src block in this
+# Org src block don't get parsed as this Org block's references.
+#+begin_src org -l "((%s))"
+,#+begin_src emacs-lisp -r
+(save-excursion                 (ref:sc1)
+   (goto-char (point-min))      (ref:jump1)
+,#+end_src
+
+In line [[(sc1)]] we remember the current position. [[(jump1)][Line (jump1)]] jumps to
+~point-min~.
+#+end_src
+
+exports to:
+
+#+begin_src emacs-lisp -r
+(save-excursion                 (ref:sc1)
+   (goto-char (point-min))      (ref:jump1)
+#+end_src
+
+In line [[(sc1)]] we remember the current position. [[(jump1)][Line (jump1)]] jumps to
+~point-min~.
 *** Equations
 :PROPERTIES:
 :EXPORT_FILE_NAME: equations

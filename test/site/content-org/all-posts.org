@@ -1999,7 +1999,7 @@ Some text.
 #+end_src
 
 Some more text.
-** Coderef                                               :coderef:annotation:
+** Coderef                                 :coderef:annotation:example_block:
 :PROPERTIES:
 :EXPORT_FILE_NAME: coderef
 :END:
@@ -2048,12 +2048,19 @@ point-min.
    (goto-char (point-min))      (ref:jump3)
 #+end_src
 [[(jump3)][Line (jump3)]] jumps to point-min.
+**** Reference to lines *before* code block
+In line [[(sc4)]] we remember the current position. [[(jump4)][Line (jump4)]] jumps to
+point-min.
+#+begin_src emacs-lisp -r
+(save-excursion                 (ref:sc4)
+   (goto-char (point-min))      (ref:jump4)
+#+end_src
 *** Example block
 #+begin_example -n 20 -r :hl_lines 2
 (save-excursion
-   (goto-char (point-min))      (ref:jump4)
+   (goto-char (point-min))      (ref:jump5)
 #+end_example
-[[(jump4)][Line (jump4)]] jumps to point-min.
+[[(jump5)][Line (jump5)]] jumps to point-min.
 
 ** Source blocks with langs that need to be replaced in Markdown :lang:syntax_highlighting:
 :PROPERTIES:

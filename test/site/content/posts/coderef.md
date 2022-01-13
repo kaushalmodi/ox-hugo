@@ -4,7 +4,7 @@ description = """
   Support anchoring the source and example block lines using Org coderef
   links.
   """
-tags = ["src-block", "coderef", "annotation"]
+tags = ["src-block", "coderef", "annotation", "example-block"]
 draft = false
 +++
 
@@ -66,11 +66,22 @@ point-min.
 [Line 21](#org-coderef--a1ac71-21) jumps to point-min.
 
 
-## Example block {#example-block}
+### Reference to lines **before** code block {#reference-to-lines-before-code-block}
 
-{{< highlight text "linenos=table, linenostart=20, anchorlinenos=true, lineanchors=org-coderef--36657f" >}}
+In line [1](#org-coderef--4489bc-1) we remember the current position. [Line 2](#org-coderef--4489bc-2) jumps to
+point-min.
+
+{{< highlight emacs-lisp "linenos=table, anchorlinenos=true, lineanchors=org-coderef--4489bc" >}}
 (save-excursion
    (goto-char (point-min))
 {{< /highlight >}}
 
-[Line 21](#org-coderef--36657f-21) jumps to point-min.
+
+## Example block {#example-block}
+
+{{< highlight text "linenos=table, linenostart=20, anchorlinenos=true, lineanchors=org-coderef--942ea6" >}}
+(save-excursion
+   (goto-char (point-min))
+{{< /highlight >}}
+
+[Line 21](#org-coderef--942ea6-21) jumps to point-min.

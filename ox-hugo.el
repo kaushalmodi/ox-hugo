@@ -2141,7 +2141,17 @@ Throw an error if no block contains REF."
                   (setq ref-info (plist-put ref-info :ref ref-str))
                   ;; The `:anchor-prefix' property key is set in
                   ;; `org-hugo-src-block'.
-                  (setq ref-info (plist-put ref-info :anchor-prefix (org-element-property :anchor-prefix el))))
+                  (let ((anchor-prefix (org-element-property :anchor-prefix el)))
+                    (unless anchor-prefix
+                      ;; If the coderef link appears before the code
+                      ;; block, `anchor-prefix' will be nil.  So that
+                      ;; prefix needs to be calculated here first.
+                      ;; The logic needs to match exactly that in
+                      ;; `org-hugo-src-block'.
+                      (let* ((code-refs (cdr (org-export-unravel-code el)))
+                             (unique-id (substring (md5 (format "%s" code-refs)) 0 6)))
+                        (setq anchor-prefix (format "org-coderef--%s" unique-id))))
+                    (setq ref-info (plist-put ref-info :anchor-prefix anchor-prefix))))
                 ref-info))))
 	    info 'first-match)
       (signal 'org-link-broken (list ref))))

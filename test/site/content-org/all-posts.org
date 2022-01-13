@@ -4490,7 +4490,12 @@ Unmarked.
 #+begin_mark
 /Some/ *marked* text --- 2.5.
 #+end_mark
+
 Unmarked again.
+
+#+begin_mark
+Page Bundles of =page= [[https://gohugo.io/templates/section-templates/#page-kinds][/Kind/]] are always /leaf bundles/.. and vice versa.
+#+end_mark
 *** DIV-wrapped Blocks
 **** DIV without NAME, class or id
 #+begin_something

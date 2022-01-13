@@ -626,24 +626,6 @@ Else return an empty string."
           (org-html--translate str info)
         ""))))
 
-;;;; Convert Org string to HTML
-(defun org-blackfriday--org-string-to-html (string)
-  "Convert Org string STRING to an HTMLized string.
-Credit: https://emacs.stackexchange.com/a/53433/115."
-  (let ((ret-val ""))
-    (when (org-string-nw-p string)
-      (org-export-with-buffer-copy
-       (let ((start (goto-char (point-max))))
-         (insert string)
-         (narrow-to-region start (point-max))
-         (with-current-buffer
-             (org-html-export-as-html nil nil :visible-only :body-only)
-           ;; Return the string without the initial "<p>\n" and trailing
-           ;; "</p>".
-           (setq ret-val (substring (buffer-string) 4 -5)))
-         (kill-buffer "*Org HTML Export*"))))
-    ret-val))
-
 ;;;; Convert string to a valid anchor name
 (defun org-blackfriday--valid-html-anchor-name (str)
   "Turn STR into a valid HTML anchor name.
@@ -1092,10 +1074,7 @@ This function is adapted from `org-html-special-block'."
          ((string= block-type "summary")
           (format "<%s%s>\n%s\n</%s>"
                   block-type attr-str contents block-type))
-         (t
-          ;; Correctly render Org markup in inline HTML tags like
-          ;; `mark' by simply exporting those contents as HTML.
-          (setq contents (org-blackfriday--org-string-to-html contents))
+         (t                          ;Inline HTML elements like `mark'
           (format "<%s%s>%s</%s>"
                   block-type attr-str contents block-type))))
        (html5-block-fancy

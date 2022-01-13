@@ -46,9 +46,11 @@ _Some_ **text** --- 2
 
 Unmarked.
 
-<mark><span class="underline">Some</span> <b><b>marked</b></b> text &#x2014; 2.5.</mark>
+<mark>_Some_ **marked** text --- 2.5.</mark>
 
 Unmarked again.
+
+<mark>Page Bundles of `page` [_Kind_](https://gohugo.io/templates/section-templates/#page-kinds) are always _leaf bundles_.. and vice versa.</mark>
 
 
 ## DIV-wrapped Blocks {#div-wrapped-blocks}

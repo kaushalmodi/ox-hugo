@@ -97,6 +97,16 @@ tag needs to be `python'."
            (string "Src Block language")
            (string "Syntax highlighting language"))))
 
+(defcustom org-blackfriday-special-block-raw-content-types '("video" "audio")
+  "List of special block types for which the exported contents
+should be same as the raw content in Org source.
+
+Each element is a string representing a type of Org special
+block."
+  :group 'org-export-blackfriday
+  :type '(repeat string))
+;;;###autoload (put 'org-blackfriday-special-block-raw-content-types 'safe-local-variable (lambda (x) (stringp x)))
+
 
 
 ;;; Define Back-End
@@ -1040,7 +1050,12 @@ This function is adapted from `org-html-special-block'."
                                     (if class
                                         (concat class " " block-type)
                                       block-type)))))
-    (let* ((contents (or contents ""))
+    (let* ((contents (or (org-trim
+                          (if (member block-type org-blackfriday-special-block-raw-content-types)
+                              ;; https://lists.gnu.org/r/emacs-orgmode/2022-01/msg00132.html
+                              (org-element-interpret-data (org-element-contents special-block))
+                            contents))
+                         ""))
            ;; If #+name is specified, use that for the HTML element
            ;; "id" attribute.
            (name (org-element-property :name special-block))

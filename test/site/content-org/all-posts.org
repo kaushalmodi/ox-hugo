@@ -416,13 +416,13 @@ and checking that the file got copied again.
 
 [[https://www.w3schools.com/html/html5_video.asp][Using ~video~ HTML5 tag]]
 
-#+begin_export html
-<video width="320" height="240" controls>
-  <source src="/videos/sample.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-#+end_export
-[[https://sample-videos.com/][Video source]]
+#+attr_html: :width 320 :height 240 :controls t
+#+begin_video
+<source src="/videos/sample.mp4" type="video/mp4">
+Your browser does not support the video tag.
+#+end_video
+
+[[https://sample-videos.com/][/Video source/]]
 * Heading                                                          :headings:
 ** Setting heading anchors                                           :anchor:
 :PROPERTIES:

@@ -17,6 +17,8 @@ enableGitInfo = true
 
 disableFastRender = true        # Hugo 0.30
 
+enableInlineShortcodes = true   # Hugo 0.52 - https://gohugo.io/templates/shortcode-templates/#inline-shortcodes
+
 [markup]
   [markup.highlight]
     codeFences = true # default = true

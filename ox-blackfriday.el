@@ -498,7 +498,7 @@ style tag."
                    (plist-put attr1 :height nil)
                    (plist-put attr1 :width nil))
                  attr1))
-         (attr-str (org-html--make-attribute-string attr))
+         (attr-str (org-blackfriday--make-attribute-string attr))
          (ret contents))
     (when (org-string-nw-p attr-str)
       (let ((class (plist-get attr :class))
@@ -641,6 +641,34 @@ Replaces invalid characters with \"-\"."
 ATTR is a string representing the attributes of the target HTML tag.
 DESC is either nil or the description string of the target."
   (format "<span%s>%s</span>" (or attr "") (or desc "")))
+
+(defun org-blackfriday--make-attribute-string (attributes)
+  "Return a list of attributes, as a string.
+ATTRIBUTES is a plist where values are either strings or nil.
+
+An attribute with a nil value will be omitted from the result.
+
+An attribute with a \"t\" value will be added as a key-only or
+boolean attribute.
+
+This function is mostly a copy of
+`org-html--make-attribute-string', except that it parses `:foo
+\"t\"' as setting a boolean \"foo\" attribute."
+  (let (output)
+    (dolist (item attributes (mapconcat 'identity (nreverse output) " "))
+      (cond ((null item)
+             (pop output))
+            ((symbolp item)
+             (push (substring (symbol-name item) 1) output))
+            ((and (stringp item)
+                  (string= item "t")) ;Example: (:control "t") -> "control"
+             ;; Do nothing
+             )
+            (t
+             (let ((key (car output))
+                   (value (replace-regexp-in-string
+                           "\"" "&quot;" (org-html-encode-plain-text item))))
+               (setcar output (format "%s=\"%s\"" key value))))))))
 
 
 
@@ -1016,7 +1044,7 @@ This function is adapted from `org-html-special-block'."
            ;; If #+name is specified, use that for the HTML element
            ;; "id" attribute.
            (name (org-element-property :name special-block))
-           (attr-str (org-html--make-attribute-string
+           (attr-str (org-blackfriday--make-attribute-string
                       (if (or (not name) (plist-member attributes :id))
                           attributes
                         (plist-put attributes :id name))))

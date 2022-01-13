@@ -1,0 +1,10 @@
+{{ $page := (.Get 0) }}
+{{ with site.GetPage $page }}
+    <h2 style="color: blue;">"{{ $page }}"</h2>
+    <h3>Page Metadata</h3>
+    {{ partial "debugprint" . }}
+    <h3>Page Params</h3>
+    {{ partial "debugprint" .Params }}
+    <h3>Page Content</h3>
+    <blockquote>{{ .Content }}</blockquote>
+{{ end }}

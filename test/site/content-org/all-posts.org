@@ -7085,51 +7085,21 @@ discarded because the front-matter type is YAML.
 :EXPORT_FILE_NAME: _index
 :END:
 
-{{{oxhugoissue(358)}}} | [[https://gohugo.io/news/0.65.0-relnotes/#new-in-hugo-core][Hugo v0.65.0 release notes]]
+{{{oxhugoissue(358)}}} | [[https://gohugo.io/content-management/build-options/][~_build~ page params]]
 
-#+begin_export hugo
-{{< getpage1.inline >}}
-  {{ with site.GetPage "do-not-list" }}
-  <h2>"do-not-list"</h2>
-  <p>
-    Found "do-not-list" page -> <a href="{{ .Permalink }}">{{ .Title }}</a>
-  </p>
-  <p>
-    <strong>Content</strong>:
-    <blockquote>{{ .Content }}</blockquote>
-  </p>
-  {{ end }}
-{{< /getpage1.inline >}}
-#+end_export
-
-#+begin_export hugo
-{{< getpage2.inline >}}
-  {{ with site.GetPage "do-not-render" }}
-  <h2>"do-not-render"</h2>
-  <p>
-    Found "do-not-render" page -> <a href="{{ .Permalink }}">{{ .Title }}</a> (<mark>As this page is not
-    technically rendered, this link doesn't actually link to that page; it just links to its parent page.</mark>)
-  </p>
-  <p>
-    <strong>Content</strong>:
-    <blockquote>{{ .Content }}</blockquote>
-  {{ end }}
-  </p>
-{{< /getpage2.inline >}}
-#+end_export
-
------
-
-- Note :: An [[https://gohugo.io/templates/shortcode-templates/#inline-shortcodes][/inline shortcode/]] is used above. ~enableInlineShortcodes
-  = true~ needs to be added to the site config for that to work.
+#+hugo: {{< getpage "do-not-list" >}}
+#+hugo: {{< getpage "do-not-render" >}}
+#+hugo: {{< getpage "do-not-render-or-list" >}}
 *** _build: Don't list this page                                  :dont_list:
 :PROPERTIES:
 :EXPORT_FILE_NAME: do-not-list
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :_build '((list . nil))
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :_build '((list . never))
 :END:
 #+begin_description
 Build this page but don't list it in /list/ pages.
 #+end_description
+
+[[https://gohugo.io/content-management/build-options/#list][~_build.list~ option]]
 
 *This is the "do not list" page.*
 
@@ -7139,22 +7109,41 @@ method there, but it won't be listed there under "Posts in
 *** _build: Don't render this page                              :dont_render:
 :PROPERTIES:
 :EXPORT_FILE_NAME: do-not-render
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :_build '((render . nil))
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :_build '((render . never))
 :END:
 #+begin_description
 Do not render this page, but.. still list it.
 #+end_description
 
+[[https://gohugo.io/content-management/build-options/#render][~_build.render~ option]]
+
 *This is the "do not render" page.*
 
 See the [[../][parent]] list page -- This page is not rendered, but its content
-and metadata can be found using the ~site.GetPage~ method. This page
-also listed on that parent list page, but the link won't lead to this
-page as.. it did not get rendered.
+and metadata can be found using the ~site.GetPage~ method.
 
-So, with the ~_build.render~ set to ~false~, this page kind of behaves
-like a [[https://gohugo.io/content-management/page-resources][Page Resource]] of "page" /ResourceType/. So we can still access
-this page's ~.Content~ and other metadata like ~.Title~, etc.
+#+begin_mark
+This page is listed on that parent list page, but the link won't lead
+to this page as.. it did not get rendered. That link will point to
+that page itself because with ~render~ set to ~false~ or ~"never"~,
+the ~.Permalink~ and ~.RelPermalink~ get set to ~""~.
+#+end_mark
+*** _build: Don't render or list this page   :dont_render:dont_list:headless:
+:PROPERTIES:
+:EXPORT_FILE_NAME: do-not-render-or-list
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :_build '((render . nil) (list . nil))
+:END:
+#+begin_description
+Do not render or list this page.
+#+end_description
+
+*This is the "do not render or list" page.*
+
+See the [[../][parent]] list page -- This page is not rendered, but its content
+and metadata can be found using the ~site.GetPage~ method.
+
+Setting both ~render~ and ~list~ to ~false~ or ~"never"~ makes this
+page behave like a *headless* page bundle -- [[https://github.com/gohugoio/hugo/issues/6412#issuecomment-573446730][ref]].
 * Date and slug inheritance                           :inheritance:date:slug:
 :PROPERTIES:
 :EXPORT_DATE: 2018-02-12

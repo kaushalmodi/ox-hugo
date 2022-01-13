@@ -4,8 +4,10 @@ description = "Build this page but don't list it in _list_ pages."
 tags = ["front-matter", "page-bundles", "_build", "dont-list"]
 draft = false
 [_build]
-  list = false
+  list = "never"
 +++
+
+[`_build.list` option](https://gohugo.io/content-management/build-options/#list)
 
 **This is the "do not list" page.**
 

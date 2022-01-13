@@ -2963,7 +2963,7 @@ nil and,
              ret)
         ;; (message "ox-hugo src [dbg] line-num-p: %S" line-num-p)
         ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
-        (message "ox-hugo src [dbg] code refs: %S" code-refs)
+        ;; (message "ox-hugo src [dbg] code refs: %S" code-refs)
 
         (when (or linenos-style line-num-p)
           ;; Default "linenos" style set to "table" if linenos-style

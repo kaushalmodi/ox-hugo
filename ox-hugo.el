@@ -1759,57 +1759,18 @@ channel."
 (defun org-hugo-example-block (example-block _contents info)
   "Transcode an EXAMPLE-BLOCK element into Markdown format.
 
-Markdown style triple-backquoted code blocks with \"text\"
-\\='language\\=' are created.
-
-If `org-hugo-goldmark' is nil and if the example blocks are *not*
-set to be exported with line numbers (See (org) Literal
-examples), a \"text\" \\='language\\=' code block wrapped in Hugo
-\"highlight\" shortcode is created.
-
-See https://gohugo.io/content-management/syntax-highlighting#highlighting-in-code-fences.
-
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
-  (let* (;; See `org-element-example-block-parser' for all EXAMPLE-BLOCK properties.
-         (number-lines (org-element-property :number-lines example-block)) ;Non-nil if -n or +n switch is used
-         (switches-str (org-element-property :switches example-block))
+  (let* ((switches-str (org-element-property :switches example-block))
+         ;; Below is a hack for allowing ":linenos <value>" parameter
+         ;; in example block header, because the example-block Org
+         ;; element parses only "-switches", not ":parameters".
          (linenos-style (and (org-string-nw-p switches-str)
                              (string-match ":linenos\\s-+\\([^ ]+\\)\\b" switches-str)
-                             (match-string-no-properties 1 switches-str)))
-         (use-highlight-sc (and (or number-lines linenos-style) ;Use `highlight' shortcode only for Blackfriday if linenos is non-nil
-                                (not (org-hugo--plist-get-true-p info :hugo-goldmark))))
-         (example-code (org-export-format-code-default example-block info))
-         code-attr-str
-         ret)
-    (when (or number-lines linenos-style)
-      ;; Default "linenos" style set to "table" if only number-lines
-      ;; is non-nil.
-      (setq linenos-style (or linenos-style "table"))
-      (setq code-attr-str (format "linenos=%s" linenos-style))
-      (let ((linenostart-str (and ;Extract the start line number of the example block.
-                              (string-match "\\`\\([0-9]+\\)\\s-\\{2\\}" example-code)
-                              (match-string-no-properties 1 example-code))))
-        (when linenostart-str
-          (setq code-attr-str (format "%s, linenostart=%s" code-attr-str linenostart-str))))
-
-      (when number-lines
-        ;; Remove Org-inserted numbers from the beginning of each line
-        ;; as the Hugo highlight shortcode will be used instead of
-        ;; literally inserting the line numbers.
-        (setq example-code (replace-regexp-in-string "^[0-9]+\\s-\\{2\\}" "" example-code))))
-
-    (unless use-highlight-sc
-      (plist-put info :md-code example-code)
-      (plist-put info :md-code-attr code-attr-str))
-
-    (if use-highlight-sc
-        (setq ret (org-blackfriday--div-wrap-maybe
-                   example-block
-                   (format "{{< highlight text \"%s\" >}}\n%s{{< /highlight >}}\n" code-attr-str example-code)
-                   info))
-      (setq ret (org-blackfriday-example-block example-block nil info)))
-    ret))
+                             (match-string-no-properties 1 switches-str))))
+    (org-element-put-property example-block :language "text")
+    (org-element-put-property example-block :linenos-style linenos-style)
+    (org-hugo-src-block example-block nil info)))
 
 ;;;; Export Snippet
 (defun org-hugo-export-snippet (export-snippet _contents _info)
@@ -2844,9 +2805,9 @@ communication channel."
   "Convert SRC-BLOCK element to Hugo-compatible Markdown.
 
 The Markdown style triple-backquoted code blocks are created if:
-  - If the HUGO_CODE_FENCE property is set to a non-nil value
+  - The HUGO_CODE_FENCE property is set to a non-nil value
     (default),
-  - *AND* if the Hugo \"highlight\" shortcode is not needed (see
+  - *AND* the Hugo \"highlight\" shortcode is not needed (see
     below).
 
 Hugo v0.60.0 onwards, the `markup.highlight.codeFences' (new name
@@ -2858,6 +2819,13 @@ supported with code fences too.
 
 CONTENTS is nil.  INFO is a plist used as a communication
 channel.
+
+--- Hugo v0.60.0 and newer ---
+
+If using Hugo version v0.60.0 or newer (if `org-hugo-goldmark' is
+non-nil), the Hugo \"highlight\" shortcode is needed if,
+
+  - Coderefs are used.
 
 --- Hugo older than v0.60.0 ---
 
@@ -2872,7 +2840,8 @@ nil and,
   - Highlight certains lines in the code block (if the :hl_lines
     parameter is used).
   - Set the `linenos' argument to the value passed by :linenos
-    (defaults to `table')."
+    (defaults to `table').
+  - Coderefs are used."
   (let* ((lang (org-element-property :language src-block))
          (parameters-str (org-element-property :parameters src-block))
          (parameters (org-babel-parse-header-arguments parameters-str))
@@ -2900,7 +2869,10 @@ nil and,
      (t
       (let* (;; See `org-element-src-block-parser' for all SRC-BLOCK properties.
              (line-num-p (org-element-property :number-lines src-block)) ;Non-nil if -n or +n switch is used
-             (linenos-style (cdr (assoc :linenos parameters)))
+             (linenos-style (or (cdr (assoc :linenos parameters))
+                                ;; If `org-hugo-src-block' is called from
+                                ;; `org-hugo-example-block'.
+                                (org-element-property :linenos-style src-block)))
              ;; Convert `hl-lines' to string.  If it's not a number,
              ;; it's already a string, or nil.
              (hl-lines (let* ((hl-lines-param (cdr (assoc :hl_lines parameters))))

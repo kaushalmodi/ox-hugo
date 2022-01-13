@@ -2004,7 +2004,8 @@ Some more text.
 :EXPORT_FILE_NAME: coderef
 :END:
 #+begin_description
-Support anchoring the code block lines using Org coderef links.
+Support anchoring the source and example block lines using Org coderef
+links.
 #+end_description
 
 See [[info:org#Literal%20Examples][info:org#Literal Examples]].
@@ -2017,35 +2018,43 @@ parenthesis.
 #+begin_quote
 Line numbers are always enabled if coderefs are used. The code blocks
 are exported as if the user always added the ~-n~ switches to the
-source block header.
+source or example block header.
 #+end_quote
-*** Default line nums with coderef labels
+*** Source block
+**** Default line nums with coderef labels
 #+begin_src emacs-lisp
 (save-excursion                 (ref:sc)
    (goto-char (point-min))      (ref:jump)
 #+end_src
 In line [[(sc)]] we remember the current position. [[(jump)][Line (jump)]] jumps to
 point-min.
-*** Default line nums without coderef labels
+**** Default line nums without coderef labels
 #+begin_src emacs-lisp -r
 (save-excursion                 (ref:sc1)
    (goto-char (point-min))      (ref:jump1)
 #+end_src
 In line [[(sc1)]] we remember the current position. [[(jump1)][Line (jump1)]] jumps to
 point-min.
-*** Custom line nums without coderef labels
+**** Custom line nums without coderef labels
 #+begin_src emacs-lisp -n 20 -r
 (save-excursion                 (ref:sc2)
    (goto-char (point-min))      (ref:jump2)
 #+end_src
 In line [[(sc2)]] we remember the current position. [[(jump2)][Line (jump2)]] jumps to
 point-min.
-*** Custom line nums without coderef labels and with highlighting
+**** Custom line nums without coderef labels and with highlighting
 #+begin_src emacs-lisp -n 20 -r :hl_lines 2
 (save-excursion
    (goto-char (point-min))      (ref:jump3)
 #+end_src
 [[(jump3)][Line (jump3)]] jumps to point-min.
+*** Example block
+#+begin_example -n 20 -r :hl_lines 2
+(save-excursion
+   (goto-char (point-min))      (ref:jump4)
+#+end_example
+[[(jump4)][Line (jump4)]] jumps to point-min.
+
 ** Source blocks with langs that need to be replaced in Markdown :lang:syntax_highlighting:
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-block-replace-langs-in-exported-md

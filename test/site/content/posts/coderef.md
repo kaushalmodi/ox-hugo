@@ -1,6 +1,9 @@
 +++
 title = "Coderef"
-description = "Support anchoring the code block lines using Org coderef links."
+description = """
+  Support anchoring the source and example block lines using Org coderef
+  links.
+  """
 tags = ["src-block", "coderef", "annotation"]
 draft = false
 +++
@@ -14,10 +17,13 @@ parenthesis.
 
 > Line numbers are always enabled if coderefs are used. The code blocks
 > are exported as if the user always added the `-n` switches to the
-> source block header.
+> source or example block header.
 
 
-## Default line nums with coderef labels {#default-line-nums-with-coderef-labels}
+## Source block {#source-block}
+
+
+### Default line nums with coderef labels {#default-line-nums-with-coderef-labels}
 
 {{< highlight emacs-lisp "linenos=table, anchorlinenos=true, lineanchors=org-coderef--c1cbed" >}}
 (save-excursion                 (sc)
@@ -28,7 +34,7 @@ In line [sc](#org-coderef--c1cbed-1) we remember the current position. [Line jum
 point-min.
 
 
-## Default line nums without coderef labels {#default-line-nums-without-coderef-labels}
+### Default line nums without coderef labels {#default-line-nums-without-coderef-labels}
 
 {{< highlight emacs-lisp "linenos=table, anchorlinenos=true, lineanchors=org-coderef--ea1413" >}}
 (save-excursion
@@ -39,7 +45,7 @@ In line [1](#org-coderef--ea1413-1) we remember the current position. [Line 2](#
 point-min.
 
 
-## Custom line nums without coderef labels {#custom-line-nums-without-coderef-labels}
+### Custom line nums without coderef labels {#custom-line-nums-without-coderef-labels}
 
 {{< highlight emacs-lisp "linenos=table, linenostart=20, anchorlinenos=true, lineanchors=org-coderef--cc4270" >}}
 (save-excursion
@@ -50,7 +56,7 @@ In line [20](#org-coderef--cc4270-20) we remember the current position. [Line 21
 point-min.
 
 
-## Custom line nums without coderef labels and with highlighting {#custom-line-nums-without-coderef-labels-and-with-highlighting}
+### Custom line nums without coderef labels and with highlighting {#custom-line-nums-without-coderef-labels-and-with-highlighting}
 
 {{< highlight emacs-lisp "linenos=table, linenostart=20, hl_lines=2, anchorlinenos=true, lineanchors=org-coderef--a1ac71" >}}
 (save-excursion
@@ -58,3 +64,13 @@ point-min.
 {{< /highlight >}}
 
 [Line 21](#org-coderef--a1ac71-21) jumps to point-min.
+
+
+## Example block {#example-block}
+
+{{< highlight text "linenos=table, linenostart=20, anchorlinenos=true, lineanchors=org-coderef--36657f" >}}
+(save-excursion
+   (goto-char (point-min))
+{{< /highlight >}}
+
+[Line 21](#org-coderef--36657f-21) jumps to point-min.

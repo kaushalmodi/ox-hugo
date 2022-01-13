@@ -2102,6 +2102,28 @@ channel."
       (org-md-keyword keyword contents info)))))
 
 ;;;; Links
+(defun org-hugo--get-coderef-anchor-prefix (el)
+  "Get anchor prefix string for code refs in element EL.
+
+Returns a cons (CODE-REFS . ANCHOR-PREFIX) where
+
+- CODE-REFS is an alist of the type (LINENUM . LABEL) where
+
+  LINENUM is the line number where the code referenced labeled
+  LABEL was found.  LABEL is a string.
+
+- ANCHOR-PREFIX is a string.
+
+Returns nil if EL has no code references."
+  (let ((prefix "org-coderef")
+        (hash-len 6)
+        (code-refs (cdr (org-export-unravel-code el))))
+    (when code-refs
+      (let* ((unique-id (substring
+                         (md5 (format "%s" code-refs)) 0 hash-len))
+             (anchor-prefix (format "%s--%s" prefix unique-id)))
+        (cons code-refs anchor-prefix)))))
+
 (defun org-hugo-link--resolve-coderef (ref info)
   "Resolve a code reference REF.
 
@@ -2139,18 +2161,8 @@ Throw an error if no block contains REF."
                                                line-num))))
 		          (setq ref-info (plist-put ref-info :line-num line-num))
                   (setq ref-info (plist-put ref-info :ref ref-str))
-                  ;; The `:anchor-prefix' property key is set in
-                  ;; `org-hugo-src-block'.
-                  (let ((anchor-prefix (org-element-property :anchor-prefix el)))
-                    (unless anchor-prefix
-                      ;; If the coderef link appears before the code
-                      ;; block, `anchor-prefix' will be nil.  So that
-                      ;; prefix needs to be calculated here first.
-                      ;; The logic needs to match exactly that in
-                      ;; `org-hugo-src-block'.
-                      (let* ((code-refs (cdr (org-export-unravel-code el)))
-                             (unique-id (substring (md5 (format "%s" code-refs)) 0 6)))
-                        (setq anchor-prefix (format "org-coderef--%s" unique-id))))
+                  (let ((anchor-prefix (or (org-element-property :anchor-prefix el) ;set in `org-hugo-src-block'
+                                           (cdr (org-hugo--get-coderef-anchor-prefix el)))))
                     (setq ref-info (plist-put ref-info :anchor-prefix anchor-prefix))))
                 ref-info))))
 	    info 'first-match)
@@ -2890,7 +2902,8 @@ nil and,
                          (if (numberp hl-lines-param)
                              (number-to-string hl-lines-param)
                            hl-lines-param)))
-             (code-refs (let ((code-refs1 (cdr (org-export-unravel-code src-block))))
+             (code-refs-and-anchor (org-hugo--get-coderef-anchor-prefix src-block))
+             (code-refs (let ((code-refs1 (car code-refs-and-anchor)))
                           (when code-refs1
                             (setq line-num-p t))
                           code-refs1))
@@ -2950,7 +2963,7 @@ nil and,
              ret)
         ;; (message "ox-hugo src [dbg] line-num-p: %S" line-num-p)
         ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
-        ;; (message "ox-hugo src [dbg] code refs: %S" code-refs)
+        (message "ox-hugo src [dbg] code refs: %S" code-refs)
 
         (when (or linenos-style line-num-p)
           ;; Default "linenos" style set to "table" if linenos-style
@@ -2976,8 +2989,7 @@ nil and,
             (setq code-attr-str (format "hl_lines=%s" hl-lines))))
 
         (when code-refs
-          (let* ((unique-id (substring (md5 (format "%s" code-refs)) 0 6))
-                 (anchor-prefix (format "org-coderef--%s" unique-id))
+          (let* ((anchor-prefix (cdr code-refs-and-anchor))
                  (anchor-str (format "anchorlinenos=true, lineanchors=%s" anchor-prefix)))
             (org-element-put-property src-block :anchor-prefix anchor-prefix)
             (setq code-attr-str (format "%s, %s" code-attr-str anchor-str))))

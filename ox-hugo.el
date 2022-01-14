@@ -2912,7 +2912,7 @@ nil and,
                                 (null (org-hugo--plist-get-true-p info :hugo-code-fence))
                                 ;; code refs are used (code fences format
                                 ;; does not support code line
-                                ;; anchors!), or ..
+                                ;; anchors! See https://discourse.gohugo.io/t/36564/3), or ..
                                 code-refs
                                 ;; "Blackfriday mode" is enabled and line numbering
                                 ;; or highlighting is needed.

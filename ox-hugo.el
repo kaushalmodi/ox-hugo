@@ -73,6 +73,7 @@
 ;;; Code:
 
 (require 'ox-blackfriday)
+
 (require 'ffap)                         ;For `ffap-url-regexp'
 (require 'ob-core)                      ;For `org-babel-parse-header-arguments'
 ;; `org-refile.el' is new in Org 9.4
@@ -122,40 +123,6 @@ Pandoc understands meta-data only in YAML format.  So when Pandoc
 Citations are enabled, Pandoc is handed over the file with this
 YAML front-matter.")
 
-(defvar org-hugo-blackfriday-options
-  '("taskLists"
-    "smartypants"
-    "smartypantsQuotesNBSP"
-    "angledQuotes"
-    "fractions"
-    "smartDashes"
-    "latexDashes"
-    "hrefTargetBlank"
-    "plainIDAnchors"
-    "extensions"
-    "extensionsmask")
-  "Deprecated Blackfriday parser option names.")
-
-(defvar org-hugo-blackfriday-extensions
-  '("noIntraEmphasis"
-    "tables"
-    "fencedCode"
-    "autolink"
-    "strikethrough"
-    "laxHtmlBlocks"
-    "spaceHeaders"
-    "hardLineBreak"
-    "tabSizeEight"
-    "footnotes"
-    "noEmptyLineBeforeBlock"
-    "headerIds"
-    "titleblock"
-    "autoHeaderIds"
-    "backslashLineBreak"
-    "definitionLists"
-    "joinLines")
-  "Deprecated Blackfriday extension names.")
-
 (defvar org-hugo--internal-list-separator "\n"
   "String used to separate elements in list variables.
 
@@ -192,12 +159,6 @@ export flow.")
 (define-obsolete-variable-alias 'org-hugo-default-section-directory 'org-hugo-section "Oct 31, 2018")
 (define-obsolete-function-alias 'org-hugo-headline 'org-hugo-heading "Jan 3, 2022")
 
-;; Blackfriday support is being removed from `ox-hugo' as Hugo has
-;; deprecated its support for a while.
-;; https://github.com/kaushalmodi/ox-hugo/discussions/485
-(make-obsolete-variable 'org-hugo-blackfriday-options nil "Hugo has switched to use Goldmark as the default Markdown parser since v0.60." "Jan 15, 2022")
-(make-obsolete-variable 'org-hugo-blackfriday-extensions nil "Hugo has switched to use Goldmark as the default Markdown parser since v0.60." "Jan 15, 2022")
-
 
 
 ;;; User-Configurable Variables
@@ -222,7 +183,9 @@ export."
 processing.
 
 If using Hugo v0.60.0 (released Nov 2019), keep the default
-value."
+value.
+
+https://github.com/kaushalmodi/ox-hugo/discussions/485."
   :group 'org-export-hugo
   :type 'boolean)
 ;;;###autoload (put 'org-hugo-goldmark 'safe-local-variable 'booleanp)
@@ -599,8 +562,8 @@ HTML element."
                    (:section-numbers nil "num" org-hugo-export-with-section-numbers)
                    (:author "AUTHOR" nil user-full-name newline)
                    (:creator "CREATOR" nil org-hugo-export-creator-string)
-                   (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
-                   (:with-special-strings nil "-" nil) ;Don't use special strings for ndash, mdash; that is done automatically by Blackfriday
+                   (:with-smart-quotes nil "'" nil)
+                   (:with-special-strings nil "-" nil)
                    (:with-sub-superscript nil "^" '{}) ;Require curly braces to be wrapped around text to sub/super-scripted
                    (:hugo-with-locale "HUGO_WITH_LOCALE" nil nil)
                    (:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
@@ -617,7 +580,7 @@ HTML element."
                    (:hugo-allow-spaces-in-tags "HUGO_ALLOW_SPACES_IN_TAGS" nil org-hugo-allow-spaces-in-tags)
                    (:hugo-auto-set-lastmod "HUGO_AUTO_SET_LASTMOD" nil org-hugo-auto-set-lastmod)
                    (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil space)
-                   (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil space)
+                   (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil space) ;Deprecated. See https://github.com/kaushalmodi/ox-hugo/discussions/485.
                    (:hugo-front-matter-key-replace "HUGO_FRONT_MATTER_KEY_REPLACE" nil nil space)
                    (:hugo-date-format "HUGO_DATE_FORMAT" nil org-hugo-date-format)
                    (:hugo-paired-shortcodes "HUGO_PAIRED_SHORTCODES" nil org-hugo-paired-shortcodes space)
@@ -3105,50 +3068,6 @@ convert to ((foo . \"bar\") (baz . 1) (zoo . \"two words\"))."
      (t
       (user-error "%S needs to represent a boolean value" str)))))
 
-(defun org-hugo--parse-blackfriday-prop-to-alist (str)
-  "Return an alist of valid Hugo blackfriday properties converted from STR.
-
-For example, input STR:
-
-  \":fractions :smartdashes nil :angledquotes t\"
-
-would convert to:
-
-  ((fractions . \"false\") (smartDashes . \"false\") (angledQuotes . \"true\"))
-
-The \"true\" and \"false\" strings in the return value are due to
-`org-hugo--front-matter-value-booleanize'."
-  (let ((blackfriday-alist (org-hugo--parse-property-arguments str))
-        valid-blackfriday-alist)
-    (dolist (ref-prop org-hugo-blackfriday-options)
-      (dolist (user-prop blackfriday-alist)
-        (when (string= (downcase (symbol-name (car user-prop)))
-                       (downcase ref-prop))
-          (let* ((key (intern ref-prop))
-                 (value (cdr user-prop))
-                 (value (if (or (equal key 'extensions)
-                                (equal key 'extensionsmask))
-                            (org-hugo--delim-str-to-list value)
-                          (org-hugo--front-matter-value-booleanize value))))
-            (push (cons key value)
-                  valid-blackfriday-alist)))))
-    valid-blackfriday-alist))
-
-(defun org-hugo--return-valid-blackfriday-extension (ext)
-  "Return valid case-sensitive string for Blackfriday extension EXT.
-
-Example: If EXT is \"hardlinebreak\",
-\"\"hardLineBreak\"\" (quoted string) is returned."
-  (let (ret)
-    (dolist (ref-ext org-hugo-blackfriday-extensions)
-      ;; (message "ox-hugo bf valid ext DBG: ext=%s ref-ext=%s" ext ref-ext)
-      (when (string= (downcase ext) (downcase ref-ext))
-        (setq ret ref-ext)))
-    (unless ret
-      (user-error "Invalid Blackfriday extension name %S, see `org-hugo-blackfriday-extensions'"
-                  ext))
-    (org-hugo--quote-string ret)))
-
 (defun org-hugo--parse-menu-prop-to-alist (str)
   "Return an alist of valid Hugo menu properties converted from STR.
 
@@ -3200,10 +3119,9 @@ double-quotes."
                                       '(bold code italic strike-through
                                              underline verbatim))))))
         (setq title (org-export-data-with-backend title raw-backend info))
-        ;; Hugo does not render Markdown in the titles and so the
-        ;; Blackfriday smartDashes conversion does not work there.  So
-        ;; do that here instead.  Convert "---" to EM DASH, "--" to EN
-        ;; DASH, and "..." to HORIZONTAL ELLIPSIS.
+        ;; Hugo does not render Markdown in the titles.  So do that
+        ;; here instead.  Convert "---" to EM DASH, "--" to EN DASH,
+        ;; and "..." to HORIZONTAL ELLIPSIS.
 
         ;; Below two replacements are order sensitive!
         (setq title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
@@ -3466,6 +3384,7 @@ INFO is a plist used as a communication channel."
          (resources (org-hugo--get-resources-alist
                      (org-hugo--parse-property-arguments (plist-get info :hugo-resources))))
          (blackfriday (unless (org-hugo--plist-get-true-p info :hugo-goldmark)
+                        (require 'ox-hugo-deprecated)
                         (org-hugo--parse-blackfriday-prop-to-alist (plist-get info :hugo-blackfriday))))
          (data `(;; The order of the elements below will be the order in which the front-matter
                  ;; variables will be ordered.
@@ -3504,7 +3423,6 @@ INFO is a plist used as a communication channel."
     ;; (message "[get fm DBG] tags: %s" tags)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
     ;; (message "[get fm info DBG] %S" info)
-    ;; (message "[get fm blackfriday DBG] %S" blackfriday)
     ;; (message "[get fm menu DBG] %S" menu-alist)
     ;; (message "[get fm menu override DBG] %S" menu-alist-override)
     ;; (message "[custom fm data DBG] %S" custom-fm-data)

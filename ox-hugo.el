@@ -80,9 +80,13 @@
 ;; https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=f636cf91b6cbe322eca56e23283f4614548c9d65
 (require 'org-refile nil :noerror)      ;For `org-get-outline-path'
 
-(require 'org-id nil :noerror)          ;For `org-id-goto'
+(require 'org-id)                       ;For `org-id-goto'
+(require 'org-agenda)                   ;For `org-find-top-headline'
 
 (declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
+
+(declare-function org-hugo--return-valid-blackfriday-extension "ox-hugo-deprecated")
+(declare-function org-hugo--parse-blackfriday-prop-to-alist "ox-hugo-deprecated")
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
 

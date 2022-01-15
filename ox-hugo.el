@@ -134,90 +134,7 @@ YAML front-matter.")
     "plainIDAnchors"
     "extensions"
     "extensionsmask")
-  "Blackfriday option names as used inside Hugo.
-Note that these names are case-sensitive.
-
-This is a list of strings.
-
-Stable Hugo version reference:
-https://gohugo.io/content-management/formats/#blackfriday-options
-
-Development Hugo version reference:
-https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
-
-taskLists
-- default: `true'
-- Purpose: `false' turns off GitHub-style automatic task/TODO list
-           generation.
-
-smartypants
-- default: `true'
-- Purpose: `false' disables smart punctuation substitutions, including
-           smart quotes, smart dashes, smart fractions, etc.  If
-           `true', it may be fine-tuned with the `angledQuotes',
-           `fractions', `smartDashes', and `latexDashes' flags.
-
-smartypantsQuotesNBSP
-- default: `false'
-- Purpose: `true' enables French style Guillemets with non-breaking
-           space inside the quotes.
-
-angledQuotes
-- default: `false'
-- Purpose: `true' enables smart, angled double quotes.
-           Example: \"Hugo\" renders to «Hugo» instead of “Hugo”.
-
-fractions
-- default: `true'
-- Purpose: `false' disables smart fractions.
-- Example: 5/12 renders to 5⁄12(<sup>5</sup>&frasl;<sub>12</sub>).
-- Caveat:  Even with \"fractions = false\", Blackfriday still converts
-           1/2, 1/4, and 3/4 respectively to ½ (&frac12;), ¼
-           (&frac14;) and ¾ (&frac34;), but only these three.
-
-smartDashes
-- default: `true'
-- Purpose: `false' disables smart dashes; i.e., the conversion of
-           multiple hyphens into an en-dash or em-dash.  If `true',
-           its behavior can be modified with the `latexDashes' flag.
-
-latexDashes
-- default: `true'
-- Purpose: `false' disables LaTeX-style smart dashes and selects
-           conventional smart dashes.  Assuming `smartDashes': If
-           `true', -- is translated into – (&ndash;), whereas ---
-           is translated into — (&mdash;).  However, spaced single
-           hyphen between two words is translated into an en dash
-           e.g., \"12 June - 3 July\" becomes \"12 June &ndash; 3
-           July\" upon rendering.
-
-hrefTargetBlank
-- default: `false'
-- Purpose: `true' opens external links in a new window or tab.
-
-plainIDAnchors
-- default: `true'
-- Purpose: `true' renders any heading and footnote IDs without the
-           document ID.
-- Example: renders \"#my-heading\" instead of
-           \"#my-heading:bec3ed8ba720b970\".
-
-extensions
-- default: []
-- Purpose: Enable one or more Blackfriday's Markdown extensions (if
-           they aren't Hugo defaults).
-- Example: Include `hardLineBreak' in the list to enable Blackfriday's
-           EXTENSION_HARD_LINE_BREAK.
-
-extensionsmask
-- default: []
-- Purpose: Enable one or more of Blackfriday's Markdown extensions (if
-           they aren't Hugo defaults). Example: Include `autoHeaderIds'
-           as `false' in the list to disable Blackfriday's
-           EXTENSION_AUTO_HEADER_IDS
-
-See `org-hugo-blackfriday-extensions' for valid Blackfriday
-extensions.")
+  "Deprecated Blackfriday parser option names.")
 
 (defvar org-hugo-blackfriday-extensions
   '("noIntraEmphasis"
@@ -237,136 +154,7 @@ extensions.")
     "backslashLineBreak"
     "definitionLists"
     "joinLines")
-  "Blackfriday extension names as used inside Hugo.
-Note that these names are case-sensitive.
-
-This is a list of strings.
-
-Stable Hugo version reference:
-https://gohugo.io/content-management/formats/#blackfriday-extensions
-
-Development Hugo version references:
-https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
-https://github.com/russross/blackfriday#extensions
-https://github.com/russross/blackfriday/blob/master/markdown.go
-https://github.com/gohugoio/hugo/blob/master/helpers/content.go
-
-noIntraEmphasis
-- default: enabled
-- Purpose: The \"_\" character is commonly used inside words when
-           discussing code, so having Markdown interpret it as an
-           emphasis command is usually the wrong thing.  When enabled,
-           Blackfriday lets you treat all emphasis markers as normal
-           characters when they occur inside a word.
-
-tables
-- default: enabled
-- Purpose: When enabled, tables can be created by drawing them in the
-           input using the below syntax:
-- Example:
-           Name    | Age
-           --------|------
-           Bob     | 27
-           Alice   | 23
-
-fencedCode
-- default: enabled
-- Purpose: When enabled, in addition to the normal 4-space indentation
-           to mark code blocks, you can explicitly mark them and
-           supply a language (to make syntax highlighting simple).
-
-           You can use 3 or more backticks to mark the beginning of
-           the block, and the same number to mark the end of the
-           block.
-- Example:
-           ```emacs-lisp
-           (message \"Hello\")
-           ```
-
-autolink
-- default: enabled
-- Purpose: When enabled, URLs that have not been explicitly marked as
-           links will be converted into links.
-
-strikethrough
-- default: enabled
-- Purpose: When enabled, text wrapped with two tildes will be crossed
-           out.
-- Example: ~~crossed-out~~
-
-laxHtmlBlocks
-- default: disabled
-- Purpose: When enabled, loosen up HTML block parsing rules.
-           «Needs more information»
-
-spaceHeaders
-- default: enabled
-- Purpose: When enabled, be strict about prefix header rules.
-           «Needs more information»
-
-hardLineBreak
-- default: disabled
-- Purpose: When enabled, newlines in the input translate into line
-           breaks in the output, like in Org verse blocks.
-
-tabSizeEight
-- default: disabled
-- Purpose: When enabled, expand tabs to eight spaces instead of four.
-
-footnotes
-- default: enabled
-- Purpose: When enabled, Pandoc-style footnotes will be supported.
-           The footnote marker in the text that will become a
-           superscript text; the footnote definition will be placed in
-           a list of footnotes at the end of the document.
-- Example:
-           This is a footnote.[^1]
-
-           [^1]: the footnote text.
-
-noEmptyLineBeforeBlock
-- default: disabled
-- Purpose: When enabled, no need to insert an empty line to start a
-           (code, quote, ordered list, unordered list) block.
-
-headerIds
-- default: enabled
-- Purpose: When enabled, allow specifying header IDs with {#id}.
-
-titleblock
-- default: disabled
-- Purpose: When enabled, support Pandoc-style title blocks.
-           http://pandoc.org/MANUAL.html#extension-pandoc_title_block
-
-autoHeaderIds
-- default: enabled
-- Purpose: When enabled, auto-create the header ID's from the heading
-           text.
-
-backslashLineBreak
-- default: enabled
-- Purpose: When enabled, translate trailing backslashes into line
-           breaks.
-
-definitionLists
-- default: enabled
-- Purpose: When enabled, a simple definition list is made of a
-           single-line term followed by a colon and the definition for
-           that term.
-- Example:
-           Cat
-           : Fluffy animal everyone likes
-
-           Internet
-           : Vector of transmission for pictures of cats
-
-           Terms must be separated from the previous definition by a
-           blank line.
-
-joinLines
-- default: enabled
-- Purpose: When enabled, delete newlines and join the lines.  This
-           behavior is similar to the default behavior in Org.")
+  "Deprecated Blackfriday extension names.")
 
 (defvar org-hugo--internal-list-separator "\n"
   "String used to separate elements in list variables.
@@ -403,6 +191,12 @@ export flow.")
 
 (define-obsolete-variable-alias 'org-hugo-default-section-directory 'org-hugo-section "Oct 31, 2018")
 (define-obsolete-function-alias 'org-hugo-headline 'org-hugo-heading "Jan 3, 2022")
+
+;; Blackfriday support is being removed from `ox-hugo' as Hugo has
+;; deprecated its support for a while.
+;; https://github.com/kaushalmodi/ox-hugo/discussions/485
+(make-obsolete-variable 'org-hugo-blackfriday-options nil "Hugo has switched to use Goldmark as the default Markdown parser since v0.60." "Jan 15, 2022")
+(make-obsolete-variable 'org-hugo-blackfriday-extensions nil "Hugo has switched to use Goldmark as the default Markdown parser since v0.60." "Jan 15, 2022")
 
 
 

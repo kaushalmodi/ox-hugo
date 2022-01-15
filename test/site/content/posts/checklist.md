@@ -3,8 +3,6 @@ title = "Checklist"
 date = 2017-08-02
 tags = ["lists"]
 draft = false
-[blackfriday]
-  fractions = false
 +++
 
 This is a check-list:

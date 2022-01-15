@@ -100,6 +100,11 @@
       (defalias 'org-hugo--get-tags 'org-get-tags)
     (defalias 'org-hugo--get-tags 'org-get-tags-at)))
 
+(defvar org-hugo-backend 'hugo
+  "The symbol to use for the backend.
+For use with `org-export-define-derived-backend'. Set to 'hugo
+or the name of a backend derived from ox-hugo.")
+
 (defvar org-hugo--subtree-coord nil
   "Variable to store the current valid Hugo subtree coordinates.
 It holds the value returned by
@@ -1095,7 +1100,7 @@ contents according to the current headline."
                              todo-str
                              (org-export-data-with-backend
                               (org-export-get-alt-title headline info)
-                              (org-export-toc-entry-backend 'hugo)
+                              (org-export-toc-entry-backend org-hugo-backend)
                               info)
                              (org-hugo--get-anchor headline info)))
                     (tags (and (plist-get info :with-tags)
@@ -3837,9 +3842,9 @@ use `message' to display the error message instead of signaling a
 user error."
   (let* ((info (org-combine-plists
                 (org-export--get-export-attributes
-                 'hugo nil visible-only)
+                 org-hugo-backend nil visible-only)
                 (org-export--get-buffer-attributes)
-                (org-export-get-environment 'hugo)))
+                (org-export-get-environment org-hugo-backend)))
          (title (car (plist-get info :title)))
          ret)
     (if title
@@ -3904,9 +3909,9 @@ subtree-number being exported.
         ;; If subtree is a valid Hugo post subtree, proceed ..
         (let* ((info (org-combine-plists
                       (org-export--get-export-attributes
-                       'hugo subtree visible-only)
+                       org-hugo-backend subtree visible-only)
                       (org-export--get-buffer-attributes)
-                      (org-export-get-environment 'hugo subtree)))
+                      (org-export-get-environment org-hugo-backend subtree)))
                (exclude-tags (plist-get info :exclude-tags))
                (is-commented (org-element-property :commentedp subtree))
                is-excluded matched-exclude-tag ret)
@@ -4026,9 +4031,9 @@ links."
          (org-use-property-inheritance (org-hugo--selective-property-inheritance))
          (info (org-combine-plists
                 (list :parse-tree ast)
-                (org-export--get-export-attributes 'hugo)
+                (org-export--get-export-attributes org-hugo-backend)
                 (org-export--get-buffer-attributes)
-                (org-export-get-environment 'hugo)))
+                (org-export-get-environment org-hugo-backend)))
          (local-variables (buffer-local-variables))
          (bound-variables (org-export--list-bound-variables))
 	 vars)
@@ -4169,11 +4174,11 @@ Return the buffer the export happened to."
   (let ((org-use-property-inheritance (org-hugo--selective-property-inheritance))
         (info (org-combine-plists
                (org-export--get-export-attributes
-                'hugo subtreep visible-only)
+                org-hugo-backend subtreep visible-only)
                (org-export--get-buffer-attributes)
-               (org-export-get-environment 'hugo subtreep))))
+               (org-export-get-environment org-hugo-backend subtreep))))
     (prog1
-        (org-export-to-buffer 'hugo "*Org Hugo Export*"
+        (org-export-to-buffer org-hugo-backend "*Org Hugo Export*"
           async subtreep visible-only nil nil (lambda () (text-mode)))
       (org-hugo--after-export-function info nil))))
 
@@ -4207,14 +4212,14 @@ Return output file's name."
   (let* ((org-use-property-inheritance (org-hugo--selective-property-inheritance))
          (info (org-combine-plists
                 (org-export--get-export-attributes
-                 'hugo subtreep visible-only)
+                 org-hugo-backend subtreep visible-only)
                 (org-export--get-buffer-attributes)
-                (org-export-get-environment 'hugo subtreep)))
+                (org-export-get-environment org-hugo-backend subtreep)))
          (pub-dir (org-hugo--get-pub-dir info))
          (outfile (org-export-output-file-name ".md" subtreep pub-dir)))
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (prog1
-        (org-export-to-file 'hugo outfile async subtreep visible-only)
+        (org-export-to-file org-hugo-backend outfile async subtreep visible-only)
       (org-hugo--after-export-function info outfile))))
 
 ;;;###autoload

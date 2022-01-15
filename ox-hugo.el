@@ -3465,7 +3465,8 @@ INFO is a plist used as a communication channel."
          (custom-fm-data (org-hugo--parse-property-arguments (plist-get info :hugo-custom-front-matter)))
          (resources (org-hugo--get-resources-alist
                      (org-hugo--parse-property-arguments (plist-get info :hugo-resources))))
-         (blackfriday (org-hugo--parse-blackfriday-prop-to-alist (plist-get info :hugo-blackfriday)))
+         (blackfriday (unless (org-hugo--plist-get-true-p info :hugo-goldmark)
+                        (org-hugo--parse-blackfriday-prop-to-alist (plist-get info :hugo-blackfriday))))
          (data `(;; The order of the elements below will be the order in which the front-matter
                  ;; variables will be ordered.
                  (title . ,(org-hugo--get-sanitized-title info))

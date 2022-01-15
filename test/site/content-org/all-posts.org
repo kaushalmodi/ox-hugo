@@ -7061,6 +7061,14 @@ and metadata can be found using the ~site.GetPage~ method.
 
 Setting both ~render~ and ~list~ to ~false~ or ~"never"~ makes this
 page behave like a *headless* page bundle -- [[https://github.com/gohugoio/hugo/issues/6412#issuecomment-573446730][ref]].
+** Front-matter mixed bag                            :blackfriday_deprecated:
+:PROPERTIES:
+:EXPORT_FILE_NAME: front-matter-mixed-bag
+:EXPORT_HUGO_BLACKFRIDAY: :extensions hardLineBreak
+:END:
+With ~org-hugo-goldmark~ non-nil, ~:EXPORT_HUGO_BLACKFRIDAY:
+:extensions hardLineBreak~ property of this post will *not* get
+exported to the front-matter.
 * Date and slug inheritance                           :inheritance:date:slug:
 :PROPERTIES:
 :EXPORT_DATE: 2018-02-12

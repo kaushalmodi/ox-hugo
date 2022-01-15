@@ -73,6 +73,7 @@
 ;;; Code:
 
 (require 'ox-blackfriday)
+
 (require 'ffap)                         ;For `ffap-url-regexp'
 (require 'ob-core)                      ;For `org-babel-parse-header-arguments'
 ;; `org-refile.el' is new in Org 9.4
@@ -121,252 +122,6 @@ front-matter that's used after Pandoc Citation parsing.")
 Pandoc understands meta-data only in YAML format.  So when Pandoc
 Citations are enabled, Pandoc is handed over the file with this
 YAML front-matter.")
-
-(defvar org-hugo-blackfriday-options
-  '("taskLists"
-    "smartypants"
-    "smartypantsQuotesNBSP"
-    "angledQuotes"
-    "fractions"
-    "smartDashes"
-    "latexDashes"
-    "hrefTargetBlank"
-    "plainIDAnchors"
-    "extensions"
-    "extensionsmask")
-  "Blackfriday option names as used inside Hugo.
-Note that these names are case-sensitive.
-
-This is a list of strings.
-
-Stable Hugo version reference:
-https://gohugo.io/content-management/formats/#blackfriday-options
-
-Development Hugo version reference:
-https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
-
-taskLists
-- default: `true'
-- Purpose: `false' turns off GitHub-style automatic task/TODO list
-           generation.
-
-smartypants
-- default: `true'
-- Purpose: `false' disables smart punctuation substitutions, including
-           smart quotes, smart dashes, smart fractions, etc.  If
-           `true', it may be fine-tuned with the `angledQuotes',
-           `fractions', `smartDashes', and `latexDashes' flags.
-
-smartypantsQuotesNBSP
-- default: `false'
-- Purpose: `true' enables French style Guillemets with non-breaking
-           space inside the quotes.
-
-angledQuotes
-- default: `false'
-- Purpose: `true' enables smart, angled double quotes.
-           Example: \"Hugo\" renders to «Hugo» instead of “Hugo”.
-
-fractions
-- default: `true'
-- Purpose: `false' disables smart fractions.
-- Example: 5/12 renders to 5⁄12(<sup>5</sup>&frasl;<sub>12</sub>).
-- Caveat:  Even with \"fractions = false\", Blackfriday still converts
-           1/2, 1/4, and 3/4 respectively to ½ (&frac12;), ¼
-           (&frac14;) and ¾ (&frac34;), but only these three.
-
-smartDashes
-- default: `true'
-- Purpose: `false' disables smart dashes; i.e., the conversion of
-           multiple hyphens into an en-dash or em-dash.  If `true',
-           its behavior can be modified with the `latexDashes' flag.
-
-latexDashes
-- default: `true'
-- Purpose: `false' disables LaTeX-style smart dashes and selects
-           conventional smart dashes.  Assuming `smartDashes': If
-           `true', -- is translated into – (&ndash;), whereas ---
-           is translated into — (&mdash;).  However, spaced single
-           hyphen between two words is translated into an en dash
-           e.g., \"12 June - 3 July\" becomes \"12 June &ndash; 3
-           July\" upon rendering.
-
-hrefTargetBlank
-- default: `false'
-- Purpose: `true' opens external links in a new window or tab.
-
-plainIDAnchors
-- default: `true'
-- Purpose: `true' renders any heading and footnote IDs without the
-           document ID.
-- Example: renders \"#my-heading\" instead of
-           \"#my-heading:bec3ed8ba720b970\".
-
-extensions
-- default: []
-- Purpose: Enable one or more Blackfriday's Markdown extensions (if
-           they aren't Hugo defaults).
-- Example: Include `hardLineBreak' in the list to enable Blackfriday's
-           EXTENSION_HARD_LINE_BREAK.
-
-extensionsmask
-- default: []
-- Purpose: Enable one or more of Blackfriday's Markdown extensions (if
-           they aren't Hugo defaults). Example: Include `autoHeaderIds'
-           as `false' in the list to disable Blackfriday's
-           EXTENSION_AUTO_HEADER_IDS
-
-See `org-hugo-blackfriday-extensions' for valid Blackfriday
-extensions.")
-
-(defvar org-hugo-blackfriday-extensions
-  '("noIntraEmphasis"
-    "tables"
-    "fencedCode"
-    "autolink"
-    "strikethrough"
-    "laxHtmlBlocks"
-    "spaceHeaders"
-    "hardLineBreak"
-    "tabSizeEight"
-    "footnotes"
-    "noEmptyLineBeforeBlock"
-    "headerIds"
-    "titleblock"
-    "autoHeaderIds"
-    "backslashLineBreak"
-    "definitionLists"
-    "joinLines")
-  "Blackfriday extension names as used inside Hugo.
-Note that these names are case-sensitive.
-
-This is a list of strings.
-
-Stable Hugo version reference:
-https://gohugo.io/content-management/formats/#blackfriday-extensions
-
-Development Hugo version references:
-https://github.com/gohugoio/hugo/blob/master/docs/content/readfiles/bfconfig.md
-https://github.com/russross/blackfriday#extensions
-https://github.com/russross/blackfriday/blob/master/markdown.go
-https://github.com/gohugoio/hugo/blob/master/helpers/content.go
-
-noIntraEmphasis
-- default: enabled
-- Purpose: The \"_\" character is commonly used inside words when
-           discussing code, so having Markdown interpret it as an
-           emphasis command is usually the wrong thing.  When enabled,
-           Blackfriday lets you treat all emphasis markers as normal
-           characters when they occur inside a word.
-
-tables
-- default: enabled
-- Purpose: When enabled, tables can be created by drawing them in the
-           input using the below syntax:
-- Example:
-           Name    | Age
-           --------|------
-           Bob     | 27
-           Alice   | 23
-
-fencedCode
-- default: enabled
-- Purpose: When enabled, in addition to the normal 4-space indentation
-           to mark code blocks, you can explicitly mark them and
-           supply a language (to make syntax highlighting simple).
-
-           You can use 3 or more backticks to mark the beginning of
-           the block, and the same number to mark the end of the
-           block.
-- Example:
-           ```emacs-lisp
-           (message \"Hello\")
-           ```
-
-autolink
-- default: enabled
-- Purpose: When enabled, URLs that have not been explicitly marked as
-           links will be converted into links.
-
-strikethrough
-- default: enabled
-- Purpose: When enabled, text wrapped with two tildes will be crossed
-           out.
-- Example: ~~crossed-out~~
-
-laxHtmlBlocks
-- default: disabled
-- Purpose: When enabled, loosen up HTML block parsing rules.
-           «Needs more information»
-
-spaceHeaders
-- default: enabled
-- Purpose: When enabled, be strict about prefix header rules.
-           «Needs more information»
-
-hardLineBreak
-- default: disabled
-- Purpose: When enabled, newlines in the input translate into line
-           breaks in the output, like in Org verse blocks.
-
-tabSizeEight
-- default: disabled
-- Purpose: When enabled, expand tabs to eight spaces instead of four.
-
-footnotes
-- default: enabled
-- Purpose: When enabled, Pandoc-style footnotes will be supported.
-           The footnote marker in the text that will become a
-           superscript text; the footnote definition will be placed in
-           a list of footnotes at the end of the document.
-- Example:
-           This is a footnote.[^1]
-
-           [^1]: the footnote text.
-
-noEmptyLineBeforeBlock
-- default: disabled
-- Purpose: When enabled, no need to insert an empty line to start a
-           (code, quote, ordered list, unordered list) block.
-
-headerIds
-- default: enabled
-- Purpose: When enabled, allow specifying header IDs with {#id}.
-
-titleblock
-- default: disabled
-- Purpose: When enabled, support Pandoc-style title blocks.
-           http://pandoc.org/MANUAL.html#extension-pandoc_title_block
-
-autoHeaderIds
-- default: enabled
-- Purpose: When enabled, auto-create the header ID's from the heading
-           text.
-
-backslashLineBreak
-- default: enabled
-- Purpose: When enabled, translate trailing backslashes into line
-           breaks.
-
-definitionLists
-- default: enabled
-- Purpose: When enabled, a simple definition list is made of a
-           single-line term followed by a colon and the definition for
-           that term.
-- Example:
-           Cat
-           : Fluffy animal everyone likes
-
-           Internet
-           : Vector of transmission for pictures of cats
-
-           Terms must be separated from the previous definition by a
-           blank line.
-
-joinLines
-- default: enabled
-- Purpose: When enabled, delete newlines and join the lines.  This
-           behavior is similar to the default behavior in Org.")
 
 (defvar org-hugo--internal-list-separator "\n"
   "String used to separate elements in list variables.
@@ -428,7 +183,9 @@ export."
 processing.
 
 If using Hugo v0.60.0 (released Nov 2019), keep the default
-value."
+value.
+
+https://github.com/kaushalmodi/ox-hugo/discussions/485."
   :group 'org-export-hugo
   :type 'boolean)
 ;;;###autoload (put 'org-hugo-goldmark 'safe-local-variable 'booleanp)
@@ -805,8 +562,8 @@ HTML element."
                    (:section-numbers nil "num" org-hugo-export-with-section-numbers)
                    (:author "AUTHOR" nil user-full-name newline)
                    (:creator "CREATOR" nil org-hugo-export-creator-string)
-                   (:with-smart-quotes nil "'" nil) ;Don't use smart quotes; that is done automatically by Blackfriday
-                   (:with-special-strings nil "-" nil) ;Don't use special strings for ndash, mdash; that is done automatically by Blackfriday
+                   (:with-smart-quotes nil "'" nil)
+                   (:with-special-strings nil "-" nil)
                    (:with-sub-superscript nil "^" '{}) ;Require curly braces to be wrapped around text to sub/super-scripted
                    (:hugo-with-locale "HUGO_WITH_LOCALE" nil nil)
                    (:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)
@@ -823,7 +580,7 @@ HTML element."
                    (:hugo-allow-spaces-in-tags "HUGO_ALLOW_SPACES_IN_TAGS" nil org-hugo-allow-spaces-in-tags)
                    (:hugo-auto-set-lastmod "HUGO_AUTO_SET_LASTMOD" nil org-hugo-auto-set-lastmod)
                    (:hugo-custom-front-matter "HUGO_CUSTOM_FRONT_MATTER" nil nil space)
-                   (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil space)
+                   (:hugo-blackfriday "HUGO_BLACKFRIDAY" nil nil space) ;Deprecated. See https://github.com/kaushalmodi/ox-hugo/discussions/485.
                    (:hugo-front-matter-key-replace "HUGO_FRONT_MATTER_KEY_REPLACE" nil nil space)
                    (:hugo-date-format "HUGO_DATE_FORMAT" nil org-hugo-date-format)
                    (:hugo-paired-shortcodes "HUGO_PAIRED_SHORTCODES" nil org-hugo-paired-shortcodes space)
@@ -3311,50 +3068,6 @@ convert to ((foo . \"bar\") (baz . 1) (zoo . \"two words\"))."
      (t
       (user-error "%S needs to represent a boolean value" str)))))
 
-(defun org-hugo--parse-blackfriday-prop-to-alist (str)
-  "Return an alist of valid Hugo blackfriday properties converted from STR.
-
-For example, input STR:
-
-  \":fractions :smartdashes nil :angledquotes t\"
-
-would convert to:
-
-  ((fractions . \"false\") (smartDashes . \"false\") (angledQuotes . \"true\"))
-
-The \"true\" and \"false\" strings in the return value are due to
-`org-hugo--front-matter-value-booleanize'."
-  (let ((blackfriday-alist (org-hugo--parse-property-arguments str))
-        valid-blackfriday-alist)
-    (dolist (ref-prop org-hugo-blackfriday-options)
-      (dolist (user-prop blackfriday-alist)
-        (when (string= (downcase (symbol-name (car user-prop)))
-                       (downcase ref-prop))
-          (let* ((key (intern ref-prop))
-                 (value (cdr user-prop))
-                 (value (if (or (equal key 'extensions)
-                                (equal key 'extensionsmask))
-                            (org-hugo--delim-str-to-list value)
-                          (org-hugo--front-matter-value-booleanize value))))
-            (push (cons key value)
-                  valid-blackfriday-alist)))))
-    valid-blackfriday-alist))
-
-(defun org-hugo--return-valid-blackfriday-extension (ext)
-  "Return valid case-sensitive string for Blackfriday extension EXT.
-
-Example: If EXT is \"hardlinebreak\",
-\"\"hardLineBreak\"\" (quoted string) is returned."
-  (let (ret)
-    (dolist (ref-ext org-hugo-blackfriday-extensions)
-      ;; (message "ox-hugo bf valid ext DBG: ext=%s ref-ext=%s" ext ref-ext)
-      (when (string= (downcase ext) (downcase ref-ext))
-        (setq ret ref-ext)))
-    (unless ret
-      (user-error "Invalid Blackfriday extension name %S, see `org-hugo-blackfriday-extensions'"
-                  ext))
-    (org-hugo--quote-string ret)))
-
 (defun org-hugo--parse-menu-prop-to-alist (str)
   "Return an alist of valid Hugo menu properties converted from STR.
 
@@ -3406,10 +3119,9 @@ double-quotes."
                                       '(bold code italic strike-through
                                              underline verbatim))))))
         (setq title (org-export-data-with-backend title raw-backend info))
-        ;; Hugo does not render Markdown in the titles and so the
-        ;; Blackfriday smartDashes conversion does not work there.  So
-        ;; do that here instead.  Convert "---" to EM DASH, "--" to EN
-        ;; DASH, and "..." to HORIZONTAL ELLIPSIS.
+        ;; Hugo does not render Markdown in the titles.  So do that
+        ;; here instead.  Convert "---" to EM DASH, "--" to EN DASH,
+        ;; and "..." to HORIZONTAL ELLIPSIS.
 
         ;; Below two replacements are order sensitive!
         (setq title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
@@ -3671,7 +3383,9 @@ INFO is a plist used as a communication channel."
          (custom-fm-data (org-hugo--parse-property-arguments (plist-get info :hugo-custom-front-matter)))
          (resources (org-hugo--get-resources-alist
                      (org-hugo--parse-property-arguments (plist-get info :hugo-resources))))
-         (blackfriday (org-hugo--parse-blackfriday-prop-to-alist (plist-get info :hugo-blackfriday)))
+         (blackfriday (unless (org-hugo--plist-get-true-p info :hugo-goldmark)
+                        (require 'ox-hugo-deprecated)
+                        (org-hugo--parse-blackfriday-prop-to-alist (plist-get info :hugo-blackfriday))))
          (data `(;; The order of the elements below will be the order in which the front-matter
                  ;; variables will be ordered.
                  (title . ,(org-hugo--get-sanitized-title info))
@@ -3709,7 +3423,6 @@ INFO is a plist used as a communication channel."
     ;; (message "[get fm DBG] tags: %s" tags)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
     ;; (message "[get fm info DBG] %S" info)
-    ;; (message "[get fm blackfriday DBG] %S" blackfriday)
     ;; (message "[get fm menu DBG] %S" menu-alist)
     ;; (message "[get fm menu override DBG] %S" menu-alist-override)
     ;; (message "[custom fm data DBG] %S" custom-fm-data)

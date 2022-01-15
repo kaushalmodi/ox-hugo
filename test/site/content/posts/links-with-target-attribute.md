@@ -2,8 +2,6 @@
 title = "Links with target attribute"
 tags = ["links"]
 draft = false
-[blackfriday]
-  hrefTargetBlank = false
 +++
 
 <a href="https://orgmode.org/manual/Hyperlinks.html" target="_blank" rel="noopener">This link (to Hyperlinks chapter in Org manual)</a> will open in a new tab

@@ -23,14 +23,6 @@ strings-symbols = ["abc", "def", "two words"]
 integers = [123, -5, 17, 1_234]
 floats = [12.3, -5.0, -1.7e-05]
 booleans = [true, false]
-[blackfriday]
-  extensionsmask = ["fencedCode", "strikethrough"]
-  extensions = ["tabSizeEight", "hardLineBreak"]
-  plainIDAnchors = false
-  hrefTargetBlank = true
-  smartDashes = false
-  fractions = false
-  angledQuotes = true
 [dog]
   legs = 4
   eyes = 2
@@ -75,7 +67,7 @@ keywords get collected.
 <!--more-->
 
 
-## Keyword Collection Tested to work <code>[16/16]</code> {#keyword-collection-tested-to-work}
+## Keyword Collection Tested to work <code>[15/15]</code> {#keyword-collection-tested-to-work}
 
 -   [X] `#+author`
 -   [X] `#+hugo_tags`
@@ -83,7 +75,6 @@ keywords get collected.
 -   [X] `#+hugo_menu`
 -   [X] `#+hugo_menu_override`
 -   [X] `#+hugo_custom_front_matter`
--   [X] `#+hugo_blackfriday`
 -   [X] `#+hugo_front_matter_key_replace`
 -   [X] `#+hugo_aliases`
 -   [X] `#+keywords`

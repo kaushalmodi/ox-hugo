@@ -6359,6 +6359,14 @@ The front-matter for this post contains the default Creator string.
 :EXPORT_FILE_NAME: custom-creator
 :END:
 The front-matter for this post contains a custom Creator string.
+** Preserve Breaks                                          :preserve_breaks:
+:PROPERTIES:
+:EXPORT_FILE_NAME: preserve-breaks
+:EXPORT_OPTIONS: \n:t
+:END:
+abc
+def
+ghi
 * Export snippets and blocks
 ** Export snippet                                            :export_snippet:
 *** Export snippet Hugo                                                :hugo:

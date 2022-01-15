@@ -994,7 +994,7 @@ matches with \"\\\" as needed."
     (setq text (org-html-convert-special-strings text)))
   ;; Handle break preservation, if required.
   (when (plist-get info :preserve-breaks)
-    (setq text (replace-regexp-in-string "[ \t]*\n" "  \n" text)))
+    (setq text (replace-regexp-in-string "[ \t]*\n" " <br/>\n" text)))
   ;; Return value.
   text)
 

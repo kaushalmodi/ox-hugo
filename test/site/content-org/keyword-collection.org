@@ -43,12 +43,6 @@
 #+hugo_custom_front_matter: :header '((image . "projects/Readingabook.jpg") (caption . "stay hungry, stay foolish"))
 #+hugo_custom_front_matter: :collection '((nothing) (nonnil . t) (animals . (dog cat "penguin" "mountain gorilla")) (strings-symbols . ("abc" def "two words")) (integers . (123 -5 17 1_234)) (floats . (12.3 -5.0 -17E-6)) (booleans . (true false)))
 
-# Blackfriday
-#+hugo_blackfriday: :smartdashes :fractions nil :plainidanchors false
-#+hugo_blackfriday: :angledquotes t :hrefTargetBlank true
-#+hugo_blackfriday: :extensions tabsizeeight hardlinebreak
-#+hugo_blackfriday: :extensionsmask fencedcode strikethrough
-
 # Front-matter key replacement
 #+hugo_front_matter_key_replace: foo>myfoo
 #+hugo_front_matter_key_replace: baz>mybaz
@@ -99,14 +93,13 @@ keywords get collected.
 
 #+hugo: more
 
-* Keyword Collection Tested to work [16/16]
+* Keyword Collection Tested to work [15/15]
 - [X] =#+author=
 - [X] =#+hugo_tags=
 - [X] =#+hugo_categories=
 - [X] =#+hugo_menu=
 - [X] =#+hugo_menu_override=
 - [X] =#+hugo_custom_front_matter=
-- [X] =#+hugo_blackfriday=
 - [X] =#+hugo_front_matter_key_replace=
 - [X] =#+hugo_aliases=
 - [X] =#+keywords=

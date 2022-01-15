@@ -965,38 +965,41 @@ separated by blank lines.
 This function is almost same as `org-md-plain-text' except it
 first escapes any existing \"\\\", and then escapes other string
 matches with \"\\\" as needed."
-  (when (plist-get info :with-smart-quotes)
-    (setq text (org-export-activate-smart-quotes text :html info)))
-  ;; The below series of replacements in `text' is order sensitive.
-  ;; Protect `, * and \
-  (setq text (replace-regexp-in-string "[`*\\]" "\\\\\\&" text))
-  ;; Protect _ only if it is preceded or followed by a word boundary
-  ;; ("\b" doesn't work because _ itself is considered to be a word
-  ;; boundary).
-  ;; "foo_ bar" -> "foo\_ bar"
-  (setq text (replace-regexp-in-string "\\([[:graph:]]\\)\\([_]\\)\\([[:space:].!?]\\|\\'\\)" "\\1\\\\\\2\\3" text))
-  ;; "foo _bar" -> "foo \_bar"
-  (setq text (replace-regexp-in-string "\\([[:space:]]\\|\\`\\)\\([_]\\)\\([[:graph:]]\\)" "\\1\\\\\\2\\3" text))
-  ;; Protect the characters in `org-html-protect-char-alist' (`<',
-  ;; `>', `&').
-  (setq text (org-html-encode-plain-text text))
-  ;; Protect braces when verbatim shortcode mentions are detected.
-  (setq text (replace-regexp-in-string "{{%" "{&lbrace;%" text))
-  (setq text (replace-regexp-in-string "%}}" "%&rbrace;}" text))
-  ;; Protect ambiguous #.  This will protect # at the beginning of
-  ;; a line, but not at the beginning of a paragraph.  See
-  ;; `org-md-paragraph'.
-  (setq text (replace-regexp-in-string "\n#" "\n\\\\#" text))
-  ;; Protect ambiguous !
-  (setq text (replace-regexp-in-string "\\(!\\)\\[" "\\\\!" text nil nil 1))
-  ;; Handle special strings, if required.
-  (when (plist-get info :with-special-strings)
-    (setq text (org-html-convert-special-strings text)))
-  ;; Handle break preservation, if required.
-  (when (plist-get info :preserve-breaks)
-    (setq text (replace-regexp-in-string "[ \t]*\n" " <br/>\n" text)))
-  ;; Return value.
-  text)
+  (let ((orig-text text))
+    ;; The below series of replacements in `text' is order
+    ;; sensitive.
+    ;; Protect `, * and \
+    (setq text (replace-regexp-in-string "[`*\\]" "\\\\\\&" text))
+    ;; Protect _ only if it is preceded or followed by a word boundary
+    ;; ("\b" doesn't work because _ itself is considered to be a word
+    ;; boundary).
+    ;; "foo_ bar" -> "foo\_ bar"
+    (setq text (replace-regexp-in-string "\\([[:graph:]]\\)\\([_]\\)\\([[:space:].!?]\\|\\'\\)" "\\1\\\\\\2\\3" text))
+    ;; "foo _bar" -> "foo \_bar"
+    (setq text (replace-regexp-in-string "\\([[:space:]]\\|\\`\\)\\([_]\\)\\([[:graph:]]\\)" "\\1\\\\\\2\\3" text))
+    ;; Protect the characters in `org-html-protect-char-alist' (`<',
+    ;; `>', `&').
+    (setq text (org-html-encode-plain-text text))
+    ;; Protect braces when verbatim shortcode mentions are detected.
+    (setq text (replace-regexp-in-string "{{%" "{&lbrace;%" text))
+    (setq text (replace-regexp-in-string "%}}" "%&rbrace;}" text))
+    ;; Protect ambiguous #.  This will protect # at the beginning of a
+    ;; line, but not at the beginning of a paragraph.  See
+    ;; `org-md-paragraph'.
+    (setq text (replace-regexp-in-string "\n#" "\n\\\\#" text))
+    ;; Protect ambiguous `!'
+    (setq text (replace-regexp-in-string "\\(!\\)\\[" "\\\\!" text nil nil 1))
+    ;; Convert to smart quotes, if required.
+    (when (plist-get info :with-smart-quotes)
+      (setq text (org-export-activate-smart-quotes text :html info orig-text)))
+    ;; Handle special strings, if required.
+    (when (plist-get info :with-special-strings)
+      (setq text (org-html-convert-special-strings text)))
+    ;; Handle break preservation, if required.
+    (when (plist-get info :preserve-breaks)
+      (setq text (replace-regexp-in-string "[ \t]*\n" " <br/>\n" text)))
+    ;; Return value.
+    text))
 
 ;;;; Quote Block
 (defun org-blackfriday-quote-block (quote-block contents info)

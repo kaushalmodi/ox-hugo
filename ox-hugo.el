@@ -567,7 +567,7 @@ HTML element."
                    (:author "AUTHOR" nil user-full-name newline)
                    (:creator "CREATOR" nil org-hugo-export-creator-string)
                    (:with-smart-quotes nil "'" nil)
-                   (:with-special-strings nil "-" nil)
+                   (:with-special-strings nil "-" nil) ;Hugo/Goldmark does the auto-conversion of "--" -> "–", "---" -> "—" and "..." -> "…"
                    (:with-sub-superscript nil "^" '{}) ;Require curly braces to be wrapped around text to sub/super-scripted
                    (:hugo-with-locale "HUGO_WITH_LOCALE" nil nil)
                    (:hugo-front-matter-format "HUGO_FRONT_MATTER_FORMAT" nil     org-hugo-front-matter-format)

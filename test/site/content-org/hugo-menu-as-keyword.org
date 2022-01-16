@@ -6,21 +6,21 @@
 
 * Post with menu 1 (HUGO_MENU as keyword)
 :PROPERTIES:
-:EXPORT_FILE_NAME: hugo-menu-as-keyword--post-with-menu-1
+:EXPORT_FILE_NAME: hugo-menu-as-keyword-post-with-menu-1
 :END:
 * Post with menu 2 (HUGO_MENU as keyword)
 :PROPERTIES:
-:EXPORT_FILE_NAME: hugo-menu-as-keyword--post-with-menu-2
+:EXPORT_FILE_NAME: hugo-menu-as-keyword-post-with-menu-2
 :END:
 * Post with menu 3 (HUGO_MENU as keyword)
 :PROPERTIES:
-:EXPORT_FILE_NAME: hugo-menu-as-keyword--post-with-menu-3
+:EXPORT_FILE_NAME: hugo-menu-as-keyword-post-with-menu-3
 :END:
 * Post with menu 4 (HUGO_MENU as keyword)
 :PROPERTIES:
-:EXPORT_FILE_NAME: hugo-menu-as-keyword--post-with-menu-4
+:EXPORT_FILE_NAME: hugo-menu-as-keyword-post-with-menu-4
 :END:
 * Post with menu 5 (HUGO_MENU as keyword)
 :PROPERTIES:
-:EXPORT_FILE_NAME: hugo-menu-as-keyword--post-with-menu-5
+:EXPORT_FILE_NAME: hugo-menu-as-keyword-post-with-menu-5
 :END:

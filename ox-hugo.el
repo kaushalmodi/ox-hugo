@@ -1675,7 +1675,7 @@ Else, no HTML element is wrapped around the HEADING."
              "div"))))
 
 ;;;###autoload
-(defun org-hugo-slug (str)
+(defun org-hugo-slug (str &optional allow-double-hyphens)
   "Convert string STR to a `slug' and return that string.
 
 A `slug' is the part of a URL which identifies a particular page
@@ -1686,9 +1686,8 @@ slug \"my-first-post\", which can become part of an easy to read
 URL like \"https://example.com/posts/my-first-post/\".
 
 In general, STR is a string.  But it can also be a string with
-Markdown markup as that string passed to this function is often
-the sub-headings of a post (which can contain bold, italics,
-link, etc markup).
+Markdown markup because STR is often a post's sub-heading (which
+can contain bold, italics, link, etc markup).
 
 The `slug' generated from that STR follows these rules:
 
@@ -1703,7 +1702,9 @@ The `slug' generated from that STR follows these rules:
   becomes \"foo--bar--baz\".
 - Replace non [[:alnum:]-] chars with spaces, and then one or
   more consecutive spaces with a single hyphen.
-- At most two consecutive hyphens are allowed.
+- If ALLOW-DOUBLE-HYPHENS is non-nil, at most two consecutive
+  hyphens are allowed in the returned string, otherwise consecutive
+  hyphens are not returned.
 - No hyphens allowed at the leading or trailing end of the slug."
   (let* (;; All lower-case
          (str (downcase str))
@@ -1745,6 +1746,8 @@ The `slug' generated from that STR follows these rules:
          (str (replace-regexp-in-string " " "-" str))
          ;; Remove leading and trailing hyphens.
          (str (replace-regexp-in-string "\\(^[-]*\\|[-]*$\\)" "" str)))
+    (unless allow-double-hyphens
+      (setq str (replace-regexp-in-string "--" "-" str)))
     str))
 
 (defun org-hugo--get-anchor(element info &optional title-str)
@@ -1767,7 +1770,7 @@ output."
       (let ((title (or (org-string-nw-p title-str)
                        (org-export-data-with-backend
                         (org-element-property :title element) 'md info))))
-        (setq ret (org-hugo-slug title))))
+        (setq ret (org-hugo-slug title :allow-double-hyphens))))
     ret))
 
 (defun org-hugo--heading-title (style level loffset title &optional todo tags anchor numbers)
@@ -2310,7 +2313,7 @@ and rewrite link paths to make blogging more seamless."
     (let ((heading (org-find-top-headline)))
       (kill-buffer (current-buffer))
       (if heading
-          (org-hugo-slug heading)
+          (org-hugo-slug heading :allow-double-hyphens)
         ""))))
 
 ;;;;; Helpers

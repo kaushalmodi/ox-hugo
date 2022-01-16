@@ -5116,36 +5116,36 @@ with spaces was added in {{{commit(7691f0453b)}}}.
 ********** TODO Level 7
 *** Deeply nested Org TODO headings -- Default heading level
 :PROPERTIES:
-:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--default-h
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings-default-h
 :END:
 #+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
 *** Deeply nested Org TODO headings -- h1
 :PROPERTIES:
-:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h1
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings-h1
 :EXPORT_OPTIONS: h:1
 :END:
 #+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
 *** Deeply nested Org TODO headings -- h2
 :PROPERTIES:
-:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h2
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings-h2
 :EXPORT_OPTIONS: h:2
 :END:
 #+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
 *** Deeply nested Org TODO headings -- h5
 :PROPERTIES:
-:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h5
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings-h5
 :EXPORT_OPTIONS: h:5
 :END:
 #+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
 *** Deeply nested Org TODO headings -- h6
 :PROPERTIES:
-:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h6
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings-h6
 :EXPORT_OPTIONS: h:6
 :END:
 #+include: "./all-posts.org::#deeply-nested-todo-headings" :only-contents t
 *** Deeply nested Org TODO headings -- h6, Offset 0
 :PROPERTIES:
-:EXPORT_FILE_NAME: deeply-nested-org-todo-headings--h6--offset0
+:EXPORT_FILE_NAME: deeply-nested-org-todo-headings-h6-offset0
 :EXPORT_OPTIONS: h:6
 :EXPORT_HUGO_LEVEL_OFFSET: 0
 :END:
@@ -5583,7 +5583,7 @@ ghi
 :END:
 *** Filling automatically not preserved for Chinese characters (preserve filling on)
 :PROPERTIES:
-:EXPORT_FILE_NAME: filling-not-preserved-for-chinese-characters--preserve-filling-on
+:EXPORT_FILE_NAME: filling-not-preserved-for-chinese-characters-preserve-filling-on
 :EXPORT_HUGO_PRESERVE_FILLING: t
 :END:
 #+begin_description
@@ -5599,7 +5599,7 @@ ghi
 [[https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/5][Reference]]
 *** Filling automatically not preserved for Chinese characters (preserve filling off)
 :PROPERTIES:
-:EXPORT_FILE_NAME: filling-not-preserved-for-chinese-characters--preserve-filling-off
+:EXPORT_FILE_NAME: filling-not-preserved-for-chinese-characters-preserve-filling-off
 :EXPORT_HUGO_PRESERVE_FILLING:
 :END:
 #+begin_description
@@ -6060,7 +6060,7 @@ Still some people might prefer to use the Org generated TOC.
 **** No TOC in Summary                                       :summary:endtoc:
 ***** No TOC in Summary (with more comment marker)                     :more:
 :PROPERTIES:
-:EXPORT_FILE_NAME: no-toc-in-summary--with-more
+:EXPORT_FILE_NAME: no-toc-in-summary-with-more
 :EXPORT_OPTIONS: toc:t
 :END:
 By default, Hugo will dump everything at the beginning of a post into
@@ -6084,7 +6084,7 @@ This partial needs to be used wherever the summary text is needed
 (example: the Opengraph =og:description= meta tag).
 ***** No TOC in Summary (without more comment marker)
 :PROPERTIES:
-:EXPORT_FILE_NAME: no-toc-in-summary--without-more
+:EXPORT_FILE_NAME: no-toc-in-summary-without-more
 :EXPORT_OPTIONS: toc:t
 :END:
 By default, Hugo will dump everything at the beginning of a post into

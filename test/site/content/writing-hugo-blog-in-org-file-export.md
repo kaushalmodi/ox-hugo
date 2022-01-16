@@ -13,7 +13,7 @@ alpha = 1
 beta = "two words"
 gamma = 10
 [menu.main]
-  identifier = "writing-hugo-blog-in-org--file-export"
+  identifier = "writing-hugo-blog-in-org-file-export"
   weight = 2001
 +++
 

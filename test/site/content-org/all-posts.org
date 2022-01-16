@@ -6213,6 +6213,50 @@ The front-matter for this post contains a custom Creator string.
 abc
 def
 ghi
+** Smart Quotes                                                :smart_quotes:
+*** Smart Quotes Test
+:PROPERTIES:
+:CUSTOM_ID: smart-quotes-test
+:END:
+**** Single quotes
+- Single quotes surrounded by spaces: 'abc'
+- Second single quote followed by a period: 'abc'.
+- Second single quote followed by a comma: 'abc',
+- Brackets inside single quotes: '(abc)', '[abc]', '{abc}', 'xyz
+  (abc)', 'xyz [abc]', 'xyz {abc}', '(abc) xyz', '[abc] xyz', '{abc}
+  xyz'
+- Brackets inside single quotes (now with periods instead of commas):
+  '(abc)'. '[abc]'. '{abc}'. 'xyz (abc)'. 'xyz [abc]'. 'xyz
+  {abc}'. '(abc) xyz'. '[abc] xyz'. '{abc} xyz'
+- Single quotes in contractions: it's, I'll, I've, can't
+**** Double quotes
+- Double quotes surrounded by spaces: "abc"
+- Second double quote followed by a period: "abc".
+- Second double quote followed by a comma: "abc",
+- Brackets inside double quotes: "(abc)", "[abc]", "{abc}", "xyz
+  (abc)", "xyz [abc]", "xyz {abc}", "(abc) xyz", "[abc] xyz", "{abc}
+  xyz"
+- Brackets inside double quotes (now with periods instead of commas):
+  "(abc)". "[abc]". "{abc}". "xyz (abc)". "xyz [abc]". "xyz
+  {abc}". "(abc) xyz". "[abc] xyz". "{abc} xyz"
+*** Smart Quotes Enabled                                             :enable:
+:PROPERTIES:
+:EXPORT_FILE_NAME: smart-quotes-enabled
+:EXPORT_OPTIONS: ':t
+:END:
+#+begin_description
+Org mode smart quotes processing enabled
+#+end_description
+#+include: "./all-posts.org::#smart-quotes-test" :only-contents t
+*** Smart Quotes Disabled                                           :disable:
+:PROPERTIES:
+:EXPORT_FILE_NAME: smart-quotes-disabled
+:EXPORT_OPTIONS: ':nil
+:END:
+#+begin_description
+Org mode smart quotes processing disabled
+#+end_description
+#+include: "./all-posts.org::#smart-quotes-test" :only-contents t
 * Export snippets and blocks
 ** Export snippet                                            :export_snippet:
 *** Export snippet Hugo                                                :hugo:

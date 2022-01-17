@@ -4525,7 +4525,7 @@ Line 5 has this > charcter in-between and is retained.
 :PROPERTIES:
 :EXPORT_FILE_NAME: special-blocks
 :END:
-*** HTML5 Element Blocks
+*** HTML5 Elements
 **** Block without NAME, class or id
 #+begin_article
 This is /an article/.
@@ -4546,7 +4546,7 @@ This is /an article/.
 | g | h | i |
 | j | k | l |
 #+end_section
-**** An inline HTML5 element
+**** Inline HTML5 elements
 Unmarked.
 #+begin_mark
 /Some/ *marked* text --- 2.5.
@@ -4557,6 +4557,20 @@ Unmarked again.
 #+begin_mark
 Page Bundles of =page= [[https://gohugo.io/templates/section-templates/#page-kinds][/Kind/]] are always /leaf bundles/.. and vice versa.
 #+end_mark
+
+Here's an inline HTML element ~<cite>~ inside a Quote block:
+
+#+begin_quote
+He puts his claw against the divider. "Fist my bump."
+#+begin_cite
+Andy Weir, Project Hail Mary
+#+end_cite
+#+end_quote
+
+#+attr_html: :max 100 :value 70
+#+begin_progress
+70%
+#+end_progress
 *** DIV-wrapped Blocks
 **** DIV without NAME, class or id
 #+begin_something

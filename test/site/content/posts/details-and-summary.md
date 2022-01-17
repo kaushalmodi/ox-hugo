@@ -22,13 +22,11 @@ in a "summary" Org Special block `#+begin_summary` .. `#+end_summary`.
 ### Summary + Details {#summary-plus-details}
 
 <details>
-<summary>
-Here is the summary.
+<summary>Here is the summary.
 
 _Due to the limitations of how interleaved HTML and Markdown get
 parsed by Hugo+Goldmark, the first line of the summary **cannot**
-contain any markup (like bold, italics, links, etc.)._
-</summary>
+contain any markup (like bold, italics, links, etc.)._</summary>
 <div class="details">
 
 Here are some _details_.
@@ -79,13 +77,11 @@ render the collapsing triangle. But nothing will show up when you
 uncollapse it.. _as there are no details_.
 
 <details>
-<summary>
-Here is the summary.
+<summary>Here is the summary.
 
 _Due to the limitations of how interleaved HTML and Markdown get
 parsed by Hugo+Goldmark, the first line of the summary **cannot**
-contain any markup (like bold, italics, links, etc.)._
-</summary>
+contain any markup (like bold, italics, links, etc.)._</summary>
 <div class="details">
 </div>
 </details>
@@ -94,9 +90,7 @@ contain any markup (like bold, italics, links, etc.)._
 ### Details containing only code block {#details-containing-only-code-block}
 
 <details>
-<summary>
-This is Summary.
-</summary>
+<summary>This is Summary.</summary>
 <div class="details">
 
 ```emacs-lisp
@@ -116,13 +110,11 @@ by default.
 ### Summary + Details (Open) {#summary-plus-details--open}
 
 <details open>
-<summary>
-Here is the summary.
+<summary>Here is the summary.
 
 _Due to the limitations of how interleaved HTML and Markdown get
 parsed by Hugo+Goldmark, the first line of the summary **cannot**
-contain any markup (like bold, italics, links, etc.)._
-</summary>
+contain any markup (like bold, italics, links, etc.)._</summary>
 <div class="details">
 
 Here are some _details_.
@@ -165,13 +157,11 @@ And another paragraph.
 ### Only summary, no details (Open) {#only-summary-no-details--open}
 
 <details open>
-<summary>
-Here is the summary.
+<summary>Here is the summary.
 
 _Due to the limitations of how interleaved HTML and Markdown get
 parsed by Hugo+Goldmark, the first line of the summary **cannot**
-contain any markup (like bold, italics, links, etc.)._
-</summary>
+contain any markup (like bold, italics, links, etc.)._</summary>
 <div class="details">
 </div>
 </details>
@@ -182,9 +172,7 @@ contain any markup (like bold, italics, links, etc.)._
 Test that other attributes, if present along with `:open t`, are also retained.
 
 <details open class="foo">
-<summary>
-This is Summary.
-</summary>
+<summary>This is Summary.</summary>
 <div class="details">
 
 Here are the _details_.
@@ -198,9 +186,7 @@ If the `open` attribute is set to any other value than `t`, it won't
 be inserted in the `details` element.
 
 <details class="foo">
-<summary>
-This is Summary.
-</summary>
+<summary>This is Summary.</summary>
 <div class="details">
 
 Here are the _details_.

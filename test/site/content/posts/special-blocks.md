@@ -4,7 +4,7 @@ tags = ["special-block"]
 draft = false
 +++
 
-## HTML5 Element Blocks {#html5-element-blocks}
+## HTML5 Elements {#html5-elements}
 
 
 ### Block without NAME, class or id {#block-without-name-class-or-id}
@@ -42,7 +42,7 @@ _Some_ **text** --- 2
 </section>
 
 
-### An inline HTML5 element {#an-inline-html5-element}
+### Inline HTML5 elements {#inline-html5-elements}
 
 Unmarked.
 
@@ -51,6 +51,14 @@ Unmarked.
 Unmarked again.
 
 <mark>Page Bundles of `page` [_Kind_](https://gohugo.io/templates/section-templates/#page-kinds) are always _leaf bundles_.. and vice versa.</mark>
+
+Here's an inline HTML element `<cite>` inside a Quote block:
+
+> He puts his claw against the divider. "Fist my bump."
+>
+> <cite>Andy Weir, Project Hail Mary</cite>
+
+<progress max="100" value="70">70%</progress>
 
 
 ## DIV-wrapped Blocks {#div-wrapped-blocks}

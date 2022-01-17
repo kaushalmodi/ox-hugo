@@ -34,11 +34,41 @@
 (defconst org-blackfriday-table-separator "| ")
 
 (defconst org-blackfriday-html5-inline-elements
-  '("audio" "details" "command" "datalist" "mark" "meter"
-    "nav" "source" "summary" "time")
-  "New inline elements in html5.
+  '(;; "a" ;Use Org [[link]] syntax instead
+    "abbr" "audio"
+    ;; "b" ;Use Org *bold* syntax instead
+    "bdi" "bdo"
+    ;; "br" ;Use "\\" or "#+options: \n:t" instead
+    "button"
+    "canvas" "cite"
+    ;; "code" ;Use Org =code= or ~code~ instead
+    "data" "datalist" "del" "dfn"
+    ;; "em" ;Use Org /italics/ syntax instead
+    "embed"
+    ;; "i" ;Use Org /italics/ syntax instead
+    "iframe"
+    ;; "img" ;Use Org image insertion syntax instead
+    "input" "ins"
+    "kbd"
+    "label"
+    "map" "mark" "meter"
+    "noscript"
+    "object" "output"
+    "picture" "progress"
+    "q"
+    "ruby"
+    "s" "samp" "script" "select" "slot" "span"
+    ;; "strong" ;Use Org *bold* syntax instead
+    ;; "sub" ;Use Org abc_{subscript} syntax instead
+    ;; "sup" ;Use Org abc^{superscript} syntax instead
+    "summary" ;https://developer.mozilla.org/en-US/docs/Web/HTML/Element/summary
+    "svg"
+    "template" "textarea" "time"
+    "u"
+    "var" "video")
+  "HTML 5 inline elements.
 
-http://itman.in/en/inline-elements-html5/.")
+https://developer.mozilla.org/en-US/docs/Web/HTML/Inline_elements#list_of_inline_elements.")
 
 (defvar org-blackfriday--hrule-inserted nil
   "State variable to track if the horizontal rule was inserted.
@@ -1072,59 +1102,57 @@ This function is adapted from `org-html-special-block'."
                          (concat " " attr-str)
                        "")))
       (cond
-       (html5-inline-fancy
-        (cond
-         ((string= block-type "details")
-          ;; Recognize Org Special blocks like:
-          ;;   #+begin_details
-          ;;   #+begin_summary
-          ;;   This is summary.
-          ;;   #+end_summary
-          ;;   Here are the details.
-          ;;   #+end_details
-          (let ((div-open "<div class=\"details\">"))
-            (setq contents
-                  (concat
-                   ;; Wrap the "details" portion in the <details> tag
-                   ;; with '<div class="details"> .. </div>'.  With
-                   ;; that, CSS rules can be set specific to that
-                   ;; details portion using "details .details".
-                   (if (string-match "\\(?1:<summary>\\(?:.\\|\n\\)*</summary>\\)" contents) ;If summary exists
-                       (replace-match (format "\\1\n%s" div-open) nil nil contents 1)
-                     (concat div-open "\n\n" contents))
-                   ;; Newline is inserted before the closing </div>
-                   ;; tag for the reason explained below using the
-                   ;; emacs-lisp Markdown code block.
-                   "\n</div>")))
-          ;; Insert the "open" attribute only if user has ":open t" in
-          ;; "#+attr_html".
-          (when (org-string-nw-p attr-str)
-            (when (string-match "\\(?1:open\\(?2:=\"\\(?3:t\\)\"\\)\\)" attr-str)
-              (if (match-string 3 attr-str) ;if attr-str contains `open="t"'
-                  (setq attr-str (replace-match "" nil nil attr-str 2))
-                (setq attr-str (replace-match "" nil nil attr-str 1)))))
-          ;; Insert a newline before and after the `contents' to handle
-          ;; the cases where that could begin or end with a Markdown
-          ;; blocks like:
-          ;;   ```emacs-lisp
-          ;;   (message "foo")
-          ;;   ```
-          ;; An example scenario would be where such content could be
-          ;; present in the "inline" <details> or <summary> Special
-          ;; Blocks.
-          ;; Without those newlines, the Markdown converted content will
-          ;; look like below, and Blackfriday won't parse it correctly.
-          ;;   <details>```emacs-lisp
-          ;;   (message "foo")
-          ;;   ```</details>
-          (format "<%s%s>\n%s\n</%s>"
-                  block-type attr-str contents block-type))
-         ((string= block-type "summary")
-          (format "<%s%s>\n%s\n</%s>"
-                  block-type attr-str contents block-type))
-         (t                          ;Inline HTML elements like `mark'
-          (format "<%s%s>%s</%s>"
-                  block-type attr-str contents block-type))))
+       ((string= block-type "details")
+        ;; Recognize Org Special blocks like:
+        ;;   #+begin_details
+        ;;   #+begin_summary
+        ;;   This is summary.
+        ;;   #+end_summary
+        ;;   Here are the details.
+        ;;   #+end_details
+        (let ((div-open "<div class=\"details\">"))
+          (setq contents
+                (concat
+                 ;; Wrap the "details" portion in the <details> tag
+                 ;; with '<div class="details"> .. </div>'.  With
+                 ;; that, CSS rules can be set specific to that
+                 ;; details portion using "details .details".
+                 (if (string-match "\\(?1:<summary>\\(?:.\\|\n\\)*</summary>\\)" contents) ;If summary exists
+                     (replace-match (format "\\1\n%s" div-open) nil nil contents 1)
+                   (concat div-open "\n\n" contents))
+                 ;; Newline is inserted before the closing </div>
+                 ;; tag for the reason explained below using the
+                 ;; emacs-lisp Markdown code block.
+                 "\n</div>")))
+        ;; Insert the "open" attribute only if user has ":open t" in
+        ;; "#+attr_html".
+        (when (org-string-nw-p attr-str)
+          (when (string-match "\\(?1:open\\(?2:=\"\\(?3:t\\)\"\\)\\)" attr-str)
+            (if (match-string 3 attr-str) ;if attr-str contains `open="t"'
+                (setq attr-str (replace-match "" nil nil attr-str 2))
+              (setq attr-str (replace-match "" nil nil attr-str 1)))))
+        ;; Insert a newline before and after the `contents' to handle
+        ;; the cases where that could begin or end with a Markdown
+        ;; blocks like:
+        ;;   ```emacs-lisp
+        ;;   (message "foo")
+        ;;   ```
+        ;; An example scenario would be where such content could be
+        ;; present in the "inline" <details> or <summary> Special
+        ;; Blocks.
+        ;; Without those newlines, the Markdown converted content will
+        ;; look like below, and Blackfriday won't parse it correctly.
+        ;;   <details>```emacs-lisp
+        ;;   (message "foo")
+        ;;   ```</details>
+        (format "<%s%s>\n%s\n</%s>"
+                block-type attr-str contents block-type))
+       ;; ((string= block-type "summary")
+       ;;  (format "<%s%s>\n%s\n</%s>"
+       ;;          block-type attr-str contents block-type))
+       (html5-inline-fancy ;Inline HTML elements like `summary', `mark', `cite'.
+        (format "<%s%s>%s</%s>"
+                block-type attr-str contents block-type))
        (html5-block-fancy
         (format "<%s%s>%s\n\n%s\n\n</%s>"
                 block-type attr-str

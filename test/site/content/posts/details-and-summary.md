@@ -22,11 +22,9 @@ in a "summary" Org Special block `#+begin_summary` .. `#+end_summary`.
 ### Summary + Details {#summary-plus-details}
 
 <details>
-<summary>Here is the summary.
+<summary>Here is the <b>summary</b>.
 
-_Due to the limitations of how interleaved HTML and Markdown get
-parsed by Hugo+Goldmark, the first line of the summary **cannot**
-contain any markup (like bold, italics, links, etc.)._</summary>
+Summary can also contain markup (like <b>bold</b>, <i>italics</i>, etc.).</summary>
 <div class="details">
 
 Here are some _details_.
@@ -77,11 +75,9 @@ render the collapsing triangle. But nothing will show up when you
 uncollapse it.. _as there are no details_.
 
 <details>
-<summary>Here is the summary.
+<summary>Here is the <b>summary</b>.
 
-_Due to the limitations of how interleaved HTML and Markdown get
-parsed by Hugo+Goldmark, the first line of the summary **cannot**
-contain any markup (like bold, italics, links, etc.)._</summary>
+Summary can also contain markup (like <b>bold</b>, <i>italics</i>, etc.).</summary>
 <div class="details">
 </div>
 </details>
@@ -110,11 +106,9 @@ by default.
 ### Summary + Details (Open) {#summary-plus-details--open}
 
 <details open>
-<summary>Here is the summary.
+<summary>Here is the <b>summary</b>.
 
-_Due to the limitations of how interleaved HTML and Markdown get
-parsed by Hugo+Goldmark, the first line of the summary **cannot**
-contain any markup (like bold, italics, links, etc.)._</summary>
+Summary can also contain markup (like <b>bold</b>, <i>italics</i>, etc.).</summary>
 <div class="details">
 
 Here are some _details_.
@@ -157,11 +151,9 @@ And another paragraph.
 ### Only summary, no details (Open) {#only-summary-no-details--open}
 
 <details open>
-<summary>Here is the summary.
+<summary>Here is the <b>summary</b>.
 
-_Due to the limitations of how interleaved HTML and Markdown get
-parsed by Hugo+Goldmark, the first line of the summary **cannot**
-contain any markup (like bold, italics, links, etc.)._</summary>
+Summary can also contain markup (like <b>bold</b>, <i>italics</i>, etc.).</summary>
 <div class="details">
 </div>
 </details>

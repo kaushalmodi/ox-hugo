@@ -8223,11 +8223,9 @@ Some quoted text.
 :PROPERTIES:
 :CUSTOM_ID: details-disclosure-summary
 :END:
-Here is the summary.
+Here is the *summary*.
 
-/Due to the limitations of how interleaved HTML and Markdown get
-parsed by Hugo+Goldmark, the first line of the summary *cannot*
-contain any markup (like bold, italics, links, etc.)./
+Summary can also contain markup (like *bold*, /italics/, etc.).
 ** Details portion in <details> element
 :PROPERTIES:
 :CUSTOM_ID: details-disclosure-details

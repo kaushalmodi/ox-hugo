@@ -61,7 +61,6 @@
     ;; "strong" ;Use Org *bold* syntax instead
     ;; "sub" ;Use Org abc_{subscript} syntax instead
     ;; "sup" ;Use Org abc^{superscript} syntax instead
-    "summary" ;https://developer.mozilla.org/en-US/docs/Web/HTML/Element/summary
     "svg"
     "template" "textarea" "time"
     "u"
@@ -712,6 +711,13 @@ This function is mostly a copy of
                            "\"" "&quot;" (org-html-encode-plain-text item))))
                (setcar output (format "%s=\"%s\"" key value))))))))
 
+;;;; Convert Org string to HTML
+(defun org-blackfriday--org-contents-to-html (el)
+  "Convert Org contents in EL element to HTML."
+  (let* ((org-str (org-element-interpret-data (org-element-contents el)))
+         (html-str (org-export-string-as org-str 'html :body-only)))
+    html-str))
+
 
 
 ;;; Transcode Functions
@@ -1147,10 +1153,19 @@ This function is adapted from `org-html-special-block'."
         ;;   ```</details>
         (format "<%s%s>\n%s\n</%s>"
                 block-type attr-str contents block-type))
-       ;; ((string= block-type "summary")
-       ;;  (format "<%s%s>\n%s\n</%s>"
-       ;;          block-type attr-str contents block-type))
-       (html5-inline-fancy ;Inline HTML elements like `summary', `mark', `cite'.
+       ((string= block-type "summary")
+        (format "<%s%s>%s</%s>"
+                block-type attr-str
+                (org-trim
+                 ;; Remove "<p>" and "</p>" tags; Hugo will auto-wrap
+                 ;; newline-separated blocks with p tags.
+                 (replace-regexp-in-string
+                  "\n\n+" "\n\n"        ;Remove extra newlines
+                  (replace-regexp-in-string
+                   "</?p>" ""
+                   (org-blackfriday--org-contents-to-html special-block))))
+                block-type))
+       (html5-inline-fancy ;Inline HTML elements like `mark', `cite'.
         (format "<%s%s>%s</%s>"
                 block-type attr-str contents block-type))
        (html5-block-fancy

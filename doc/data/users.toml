@@ -91,13 +91,6 @@
   org_dir = "content-org"
   branch = "source"
 
-[vinurs]
-  author = "vinurs"
-  source = "https://github.com/vinurs/vinurs.github.io"
-  site = "https://vinurs.me/"
-  org_dir = "content-org"
-  branch = "source"
-
 [cf-learn]
   author = "Diego Zamboni"
   source = "https://github.com/zzamboni/cf-learn.info"
@@ -134,7 +127,7 @@
 [tsdye1]
   author = "Thomas S. Dye"
   source = "https://github.com/tsdye/online-web-sites"
-  site = "http://www.tsdye.online/an-archaeologist-reads/"
+  site = "https://www.tsdye.online/an-archaeologist-reads/"
   org_dir = "an-archaeologist-reads"
   branch = "master"
 
@@ -168,7 +161,7 @@
 [petercheng00]
   author = "Peter Cheng"
   source = "https://github.com/petercheng00/personal"
-  site = "http://petercheng.net/"
+  site = "https://petercheng.net/"
   org_dir = "website/v2/petercheng"
   branch = "master"
 
@@ -304,9 +297,9 @@
 [emilioj]
   author = "Emilio J. Padrón González"
   source = "https://github.com/emilioj/homepage"
-  site = "http://gac.udc.es/~emilioj/"
+  site = "https://gac.udc.es/~emilioj/"
   org_dir = "content_org"
-  branch = "master"
+  branch = "emilioj"
 
 [ctanas]
   author = "Claudiu Tănăselia"

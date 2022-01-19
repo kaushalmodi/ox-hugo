@@ -1177,10 +1177,18 @@ This function is adapted from `org-html-special-block'."
                 (org-blackfriday--extra-div-hack info block-type)
                 contents block-type trim-post-tag))
        (t
-        (format "%s<div%s>%s\n\n%s\n\n</div>%s"
-                trim-pre-tag attr-str
-                (org-blackfriday--extra-div-hack info)
-                contents trim-post-tag))))))
+        (if (or (org-string-nw-p trim-pre-tag)
+                (org-string-nw-p trim-post-tag))
+            (progn ;Use <span> tag if any of the trimming options is enabled.
+              (format "%s<span%s>%s</span>%s"
+                      trim-pre-tag attr-str
+                      contents trim-post-tag)
+              )
+          (progn                        ;Use <div> tag otherwise.
+            (format "%s<div%s>%s\n\n%s\n\n</div>%s"
+                    trim-pre-tag attr-str
+                    (org-blackfriday--extra-div-hack info)
+                    contents trim-post-tag))))))))
 
 ;;;; Src Block
 (defun org-blackfriday-src-block (src-block _contents info)

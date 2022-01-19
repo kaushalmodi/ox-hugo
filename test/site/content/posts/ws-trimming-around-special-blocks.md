@@ -79,3 +79,63 @@ exports and renders as:
 line 1
 
 <mark>abc def</mark> line 2
+
+
+## Use `<span>` tag if trimming detected {#use-span-tag-if-trimming-detected}
+
+Below Org block:
+
+```org
+line 1
+#+begin_sidenote
+abc def
+#+end_sidenote
+line 2
+```
+
+export with `<div>` tags by default:
+
+```html { linenos=table, linenostart=1 }
+line 1
+
+<div class="sidenote">
+
+abc def
+
+</div>
+
+line 2
+```
+
+and render as:
+
+line 1
+
+<div class="sidenote">
+
+abc def
+
+</div>
+
+line 2
+
+But if a trimming marker (any of them) is detected, it switches to
+using the `<span>` tag. So the below Org block:
+
+```org
+line 1
+#+begin_sidenote<>
+abc def
+#+end_sidenote<>
+line 2
+```
+
+will export to:
+
+```html { linenos=table, linenostart=1 }
+line 1 <span class="sidenote">abc def</span> line 2
+```
+
+and render as:
+
+line 1 <span class="sidenote">abc def</span> line 2

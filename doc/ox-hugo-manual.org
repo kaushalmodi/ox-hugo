@@ -3389,6 +3389,18 @@ Then simply put /tikz/ snippets in the Org source like so:
 #+end_src
 
 {{{test-search(tikzjax)}}}
+**** Whitespace Trimming
+Whitespace trimming around exported Org Special Blocks is supported.
+
+Whether the whitespace before the exported block, after the block, or
+at both spaces is trimmed is decided by using some special markers
+after the special block name.
+
+- ~<~ suffix :: Trim whitespace only before the block.
+- ~>~ suffix :: Trim whitespace only after the block.
+- ~<>~ suffix :: Trim whitespace both before and after the block.
+
+#+include: "../test/site/content-org/all-posts.org::* Whitespace trimming around special blocks" :only-contents t
 *** Shortcodes
 :PROPERTIES:
 :EXPORT_FILE_NAME: shortcodes

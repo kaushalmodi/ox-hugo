@@ -4729,26 +4729,74 @@ Here's a link to the [[circle][Circle]].
 ** Whitespace trimming around special blocks            :whitespace:trimming:
 :PROPERTIES:
 :EXPORT_FILE_NAME: ws-trimming-around-special-blocks
+:EXPORT_DESCRIPTION: Whitespace trimming using special markers <>, < or > after special block names.
 :END:
 *** No trimming
+Below Org block:
+#+begin_src org
+line 1
+,#+begin_mark
+abc def
+,#+end_mark
+line 2
+#+end_src
+
+exports and renders as:
+
 line 1
 #+begin_mark
 abc def
 #+end_mark
 line 2
 *** Whitespace trimmed before and after the ~mark~ special block using ~<>~ suffix
+Below Org block:
+
+#+begin_src org
+line 1
+,#+begin_mark<>
+abc def
+,#+end_mark<>
+line 2
+#+end_src
+
+exports and renders as:
+
 line 1
 #+begin_mark<>
 abc def
 #+end_mark<>
 line 2
 *** Whitespace trimmed only before the ~mark~ special block using ~<~ suffix
+Below Org block:
+
+#+begin_src org
+line 1
+,#+begin_mark<
+abc def
+,#+end_mark<
+line 2
+#+end_src
+
+exports and renders as:
+
 line 1
 #+begin_mark<
 abc def
 #+end_mark<
 line 2
 *** Whitespace trimmed only after the ~mark~ special block using ~>~ suffix
+Below Org block:
+
+#+begin_src org
+line 1
+,#+begin_mark>
+abc def
+,#+end_mark>
+line 2
+#+end_src
+
+exports and renders as:
+
 line 1
 #+begin_mark>
 abc def

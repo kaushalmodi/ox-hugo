@@ -4726,6 +4726,34 @@ TikZJax example
 #+end_tikzjax
 
 Here's a link to the [[circle][Circle]].
+** Whitespace trimming around special blocks            :whitespace:trimming:
+:PROPERTIES:
+:EXPORT_FILE_NAME: ws-trimming-around-special-blocks
+:END:
+*** No trimming
+line 1
+#+begin_mark
+abc def
+#+end_mark
+line 2
+*** Whitespace trimmed before and after the ~mark~ special block using ~<>~ suffix
+line 1
+#+begin_mark<>
+abc def
+#+end_mark<>
+line 2
+*** Whitespace trimmed only before the ~mark~ special block using ~<~ suffix
+line 1
+#+begin_mark<
+abc def
+#+end_mark<
+line 2
+*** Whitespace trimmed only after the ~mark~ special block using ~>~ suffix
+line 1
+#+begin_mark>
+abc def
+#+end_mark>
+line 2
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
 *** Common CSS

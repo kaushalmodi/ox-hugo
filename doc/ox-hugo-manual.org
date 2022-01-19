@@ -3283,6 +3283,9 @@ description = """
 See
 {{{relref(~HUGO_PAIRED_SHORTCODES~,shortcodes/#hugo-paired-shortcodes)}}}.
 **** Other Special Blocks (~div~ tags)
+:PROPERTIES:
+:CUSTOM_ID: special-blocks--div-tags
+:END:
 If the Special Block /tag/ used isn't found in
 ~org-blackfriday-html5-inline-elements~ or ~org-html-html5-elements~,
 that block exports just as an HTML ~div~ block.
@@ -3322,6 +3325,9 @@ which will render as:
 #+begin_red
 This text will be in red.
 #+end_red
+
+/See the [[* Whitespace Trimming][Whitespace Trimming]] section if you need to export with
+~<span>~ tags instead of ~<div>~ tags./
 **** Raw Org contents
 By default, the content inside the Org special blocks will have some
 default processing done by the exporter -- Org entities like ~\sum~ will
@@ -3389,6 +3395,25 @@ Then simply put /tikz/ snippets in the Org source like so:
 #+end_src
 
 {{{test-search(tikzjax)}}}
+**** Whitespace Trimming
+Whitespace trimming around exported Org Special Blocks is supported.
+
+Whether the whitespace before the exported block, after the block, or
+at both spaces is trimmed is decided by using some special markers
+after the special block name.
+
+- ~<~ suffix :: Trim whitespace only before the block.
+- ~>~ suffix :: Trim whitespace only after the block.
+- ~<>~ suffix :: Trim whitespace both before and after the block.
+
+#+begin_note
+By default if a special block tag is not recognized as an HTML block
+or inline element, or as a Hugo shortcode, it defaults to exporting
+[[#special-blocks--div-tags][with ~<div>~ tags]]. But if any of the whitespace trimming markers is
+used in a special block, it will export with ~<span>~ tags.
+#+end_note
+
+#+include: "../test/site/content-org/all-posts.org::* Whitespace trimming around special blocks" :only-contents t
 *** Shortcodes
 :PROPERTIES:
 :EXPORT_FILE_NAME: shortcodes

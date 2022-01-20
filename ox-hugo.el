@@ -2497,6 +2497,14 @@ INFO is a plist used as a communication channel."
                           ;; base URL.
                           file-name-relative-path
                         (concat "/" file-name-relative-path)))))))
+     ;; If the user has set
+     ;; `org-hugo-external-file-extensions-allowed-for-copying' to
+     ;; nil, assume that the `path' will be served from the root of
+     ;; the website, and just prefix a "/".
+     ((null org-hugo-external-file-extensions-allowed-for-copying)
+      (setq ret (if (string-prefix-p "/" path)
+                    path
+                  (concat "/" path))))
      (t
       (setq ret path)))
     ;; (message "[ox-hugo DBG attch rewrite] returned path: %s" ret)

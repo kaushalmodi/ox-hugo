@@ -1,7 +1,6 @@
 baseURL = "https://ox-hugo.scripter.co/"
 
 Title = "ox-hugo - Org to Hugo exporter"
-theme = ["hugo-debugprint", "hugo-onyx-theme"]
 
 contentdir = "content"
 layoutdir = "layouts"
@@ -23,6 +22,12 @@ LanguageCode = "en-us" # Used in RSS generation
 disableFastRender = true        # Hugo 0.30
 
 disableKinds = ["taxonomy", "taxonomyTerm"]
+
+[module]
+  [[module.imports]]
+    path = "github.com/kaushalmodi/hugo-onyx-theme"
+  [[module.imports]]
+    path = "github.com/kaushalmodi/hugo-debugprint"
 
 [markup]
   [markup.highlight]

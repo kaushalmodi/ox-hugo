@@ -651,9 +651,9 @@ exported Markdown files.
 **** How to try =ox-hugo= on that site?
 1. Clone this repo:
    #+begin_example
-   git clone --recurse-submodules -j8 https://github.com/kaushalmodi/ox-hugo
+   git clone -j8 https://github.com/kaushalmodi/ox-hugo
    #+end_example
-2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
+2. Ensure that [[https://go.dev/doc/install][~go~]], and ~pandoc-citeproc~ (at least version
    {{{pandoc_version}}}) are installed (more info
    {{{doc(contributing-guide,#contribute-to-code,here)}}}).
 3. Start the =hugo= server:
@@ -672,9 +672,9 @@ exported Markdown files.
 **** Alternative way
 1. Clone this repo.
    #+begin_example
-   git clone --recurse-submodules -j8 https://github.com/kaushalmodi/ox-hugo
+   git clone -j8 https://github.com/kaushalmodi/ox-hugo
    #+end_example
-2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
+2. Ensure that [[https://go.dev/doc/install][~go~]], ~pandoc~ and ~pandoc-citeproc~ (at least version
    {{{pandoc_version}}}) are installed (more info
    {{{doc(contributing-guide,#contribute-to-code,here)}}}).
 3. =cd= to the =test/site/= directory and do:
@@ -685,12 +685,10 @@ exported Markdown files.
    served. Open that in your browser.
 5. In emacs, ~(require 'ox-hugo)~ or evaluate the ~ox-hugo.el~ from
    the cloned repo.
-6. Do ~(require 'org-id)~ too because some tests in the below test
-   file rely on that Org feature.
-7. Open the {{{ox-hugo-test-file}}} file.
-8. ~C-c C-e H A~ -- That will export *all* subtrees in the file to
+6. Open the {{{ox-hugo-test-file}}} file.
+7. ~C-c C-e H A~ -- That will export *all* subtrees in the file to
    Markdown files.
-9. In few seconds, hundreds of test posts will get created, with the
+8. In few seconds, hundreds of test posts will get created, with the
    ~hugo server~ aided preview in the browser zapping through each new
    created post.
 *** Real World Examples
@@ -3790,6 +3788,12 @@ and /mark.js/. -- [[https://gist.github.com/eddiewebb/735feb48f50f0ddd65ae5606a1
 :PROPERTIES:
 :EXPORT_FILE_NAME: requirements
 :END:
+Any user who wants to clone this repo and run the test or doc site
+locally will need to have a [[https://go.dev/doc/install][recent version of Go installed]].
+
+Go isn't a requirement for ~ox-hugo~ or ~hugo~ to work in general. But
+because the test and doc sites use [[https://gohugo.io/hugo-modules/use-modules/][Hugo Modules]] approach for managing
+the theme and component dependencies, Go is required for that.
 **** Requirements for doc contributor
 :PROPERTIES:
 :CUSTOM_ID: doc_contributor_reqs

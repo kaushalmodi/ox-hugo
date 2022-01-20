@@ -411,6 +411,7 @@ The auto-copying behavior is disabled if this variable is set to
 nil."
   :group 'org-export-hugo
   :type '(repeat string))
+;;;###autoload (put 'org-hugo-external-file-extensions-allowed-for-copying 'safe-local-variable (lambda (x) (or (null x) (stringp x))))
 
 (defcustom org-hugo-export-creator-string
   (format "Emacs %s (Org mode%s + ox-hugo)"

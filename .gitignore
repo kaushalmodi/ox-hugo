@@ -7,3 +7,5 @@ test/site/content-golden/
 test/site/content-modified/
 test/.emacs.d/
 .hugo_build.lock
+/test/site/public/
+go.sum

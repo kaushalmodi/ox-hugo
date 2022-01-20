@@ -1,7 +1,6 @@
 baseURL = "http://example.org/"
 languageCode = "en-us"
 title = "ox-hugo Test Site"
-theme = "hugo-bare-min-theme"
 
 # Mon Dec 18 17:41:00 EST 2017 - kmodi
 # Need the canonifyURLs to be true as the test site is
@@ -16,6 +15,10 @@ enableEmoji = true
 enableGitInfo = true
 
 disableFastRender = true        # Hugo 0.30
+
+[module]
+  [[module.imports]]
+    path = "github.com/kaushalmodi/hugo-bare-min-theme"
 
 [markup]
   [markup.highlight]

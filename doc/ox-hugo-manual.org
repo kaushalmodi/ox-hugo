@@ -507,15 +507,42 @@ in Emacs.
    documentation you find on this site.
 3. Follow {{{doc(installation,,Installation)}}} page to ensure that
    =ox-hugo= is installed and available in your Emacs session.
-4. Clone any theme. Here we will arbitrarily pick one of the popular
+4. Pick any theme. Here we will arbitrarily pick one of the popular
    themes: [[https://github.com/adityatelange/hugo-PaperMod][PaperMod]].
-   #+begin_src shell
-   git clone https://github.com/adityatelange/hugo-PaperMod themes/PaperMod --depth=1
-   #+end_src
+   - :sparkles: Using [[https://gohugo.io/hugo-modules/use-modules/][Hugo Modules]] :sparkles: ::
+     This method is preferred, but requires the user to have ~go~ (at
+     least version 1.12) installed. [[https://go.dev/doc/install][~go~ download link]].
+
+     Make your Hugo site a Hugo Module (one time thing):
+
+     #+begin_src shell
+     hugo mod init <any string, like your repo or site URL will work, without https://>
+     # example: hugo mod init github.com/user/reponame
+     #+end_src
+
+     Add this to your site config:
+     #+begin_src conf-toml
+     [module]
+       [[module.imports]]
+         path = "github.com/adityatelange/hugo-PaperMod"
+     #+end_src
+
+     And then run this in the terminal:
+     #+begin_src shell
+     hugo mod get -u
+     #+end_src
+   - Using ~git clone~ approach ::
+     Clone the theme repo inside a ~themes/~ directory in your site dir.
+     #+begin_src shell
+     git clone https://github.com/adityatelange/hugo-PaperMod themes/PaperMod --depth=1
+     #+end_src
+
+     Add this to your site config:
+     #+begin_src conf-toml
+     theme = "PaperMod"
+     #+end_src
 5. Append these lines to the site config:
    #+begin_src conf-toml
-   theme = "PaperMod"
-
    [markup.goldmark.renderer]
      unsafe = true
    #+end_src

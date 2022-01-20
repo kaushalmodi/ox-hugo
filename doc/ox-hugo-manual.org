@@ -1400,13 +1400,7 @@ You can find many examples by looking at {{{testtag(equations)}}}.
 Here's how MathJax is configured for this website:
 
 1. hugo-onyx-theme [[https://github.com/kaushalmodi/hugo-onyx-theme/blob/master/layouts/partials/mathjax.html][~mathjax.html~ partial]]:
-   #+caption: MathJax script tags in HTML ~<head>~
-   #+name: code__mathjax_script_in_head
-   #+include: "./themes/hugo-onyx-theme/layouts/partials/mathjax.html" src html
 2. MathJax config ( [[https://github.com/kaushalmodi/hugo-onyx-theme/blob/master/static/js/mathjax-config.js][~js/mathjax-config.js~]] ):
-   #+caption: MathJax config
-   #+name: code__mathjax_config
-   #+include: "./themes/hugo-onyx-theme/static/js/mathjax-config.js" src js
 *** Tags and Categories
 :PROPERTIES:
 :EXPORT_FILE_NAME: tags-and-categories

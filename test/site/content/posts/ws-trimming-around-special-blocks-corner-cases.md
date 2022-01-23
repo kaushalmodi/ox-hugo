@@ -6,4 +6,11 @@ draft = false
 
 ## Whitespace trimming inside quote blocks {#whitespace-trimming-inside-quote-blocks}
 
-> line 1 <mark>abc def</mark> line 2
+> line 1 <mark>marked text</mark> line 2
+
+
+## Whitespace trimming before list elements {#whitespace-trimming-before-list-elements}
+
+something <mark>marked text</mark>
+-   list item 1
+-   list item 2

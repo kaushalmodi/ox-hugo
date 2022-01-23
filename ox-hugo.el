@@ -1834,8 +1834,8 @@ holding export options."
                     (concat "\\([[:space:]>]\\|\n\\)+" (regexp-quote org-hugo--trim-pre-marker))
                     " " contents))
          (contents (replace-regexp-in-string ;Trim stuff after selected exported elements
-                    (concat (regexp-quote org-hugo--trim-post-marker) "\\([[:space:]>]\\|\n\\)+")
-                    " " contents)))
+                    (concat (regexp-quote org-hugo--trim-post-marker) "\\([[:space:]>]\\|\n\\)+\\([^-]\\)")
+                    " \\2" contents)))
     ;; (message "[org-hugo-inner-template DBG] toc-level: %s" toc-level)
     (org-trim (concat
                toc

@@ -4868,10 +4868,17 @@ line 2
 #+begin_quote
 line 1
 #+begin_mark<>
-abc def
+marked text
 #+end_mark<>
 line 2
 #+end_quote
+**** Whitespace trimming before list elements
+something
+#+begin_mark<>
+marked text
+#+end_mark<>
+- list item 1
+- list item 2
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
 *** Common CSS

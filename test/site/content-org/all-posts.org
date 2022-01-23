@@ -4879,6 +4879,12 @@ marked text
 #+end_mark<>
 - list item 1
 - list item 2
+**** Whitespace trimming before headings
+something
+#+begin_mark<>
+marked text
+#+end_mark<>
+***** Next heading
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
 *** Common CSS

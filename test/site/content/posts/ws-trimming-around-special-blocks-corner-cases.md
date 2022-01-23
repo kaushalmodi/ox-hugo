@@ -14,3 +14,9 @@ draft = false
 something <mark>marked text</mark>
 -   list item 1
 -   list item 2
+
+
+## Whitespace trimming before headings {#whitespace-trimming-before-headings}
+
+something <mark>marked text</mark>
+### Next heading {#next-heading}

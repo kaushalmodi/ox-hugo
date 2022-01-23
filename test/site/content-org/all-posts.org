@@ -4860,7 +4860,7 @@ line 1
 abc def
 #+end_sidenote<>
 line 2
-*** Whitespace trimming around special blocks (corner cases)         :quotes:
+*** Whitespace trimming around special blocks (corner cases)
 :PROPERTIES:
 :EXPORT_FILE_NAME: ws-trimming-around-special-blocks-corner-cases
 :END:
@@ -4885,6 +4885,24 @@ something
 marked text
 #+end_mark<>
 ***** Next heading
+**** Whitespace trimming before and after code blocks
+something
+#+begin_mark<>
+marked text
+#+end_mark<>
+#+begin_example
+code line
+#+end_example
+#+begin_mark<>
+marked text
+#+end_mark<>
+
+something
+~inline code 1~
+#+begin_mark<>
+marked text
+#+end_mark<>
+~inline code 2~
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
 *** Common CSS

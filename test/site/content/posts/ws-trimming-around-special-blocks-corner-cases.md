@@ -1,6 +1,6 @@
 +++
 title = "Whitespace trimming around special blocks (corner cases)"
-tags = ["special-block", "whitespace", "trimming", "quotes"]
+tags = ["special-block", "whitespace", "trimming"]
 draft = false
 +++
 
@@ -20,3 +20,15 @@ something <mark>marked text</mark>
 
 something <mark>marked text</mark>
 ### Next heading {#next-heading}
+
+
+## Whitespace trimming before and after code blocks {#whitespace-trimming-before-and-after-code-blocks}
+
+something <mark>marked text</mark>
+```text
+code line
+```
+ <mark>marked text</mark> something
+`inline code 1`
+ <mark>marked text</mark>
+`inline code 2`

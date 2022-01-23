@@ -4726,12 +4726,13 @@ TikZJax example
 #+end_tikzjax
 
 Here's a link to the [[circle][Circle]].
-** Whitespace trimming around special blocks            :whitespace:trimming:
+** Whitespace trimming                                  :whitespace:trimming:
+*** Whitespace trimming around special blocks
 :PROPERTIES:
 :EXPORT_FILE_NAME: ws-trimming-around-special-blocks
 :EXPORT_DESCRIPTION: Whitespace trimming using special markers <>, < or > after special block names.
 :END:
-*** No trimming
+**** No trimming
 Below Org block:
 #+begin_src org
 line 1
@@ -4748,7 +4749,7 @@ line 1
 abc def
 #+end_mark
 line 2
-*** Whitespace trimmed before and after the ~mark~ special block using ~<>~ suffix
+**** Whitespace trimmed before and after the ~mark~ special block using ~<>~ suffix
 Below Org block:
 
 #+begin_src org
@@ -4766,7 +4767,7 @@ line 1
 abc def
 #+end_mark<>
 line 2
-*** Whitespace trimmed only before the ~mark~ special block using ~<~ suffix
+**** Whitespace trimmed only before the ~mark~ special block using ~<~ suffix
 Below Org block:
 
 #+begin_src org
@@ -4784,7 +4785,7 @@ line 1
 abc def
 #+end_mark<
 line 2
-*** Whitespace trimmed only after the ~mark~ special block using ~>~ suffix
+**** Whitespace trimmed only after the ~mark~ special block using ~>~ suffix
 Below Org block:
 
 #+begin_src org
@@ -4802,7 +4803,7 @@ line 1
 abc def
 #+end_mark>
 line 2
-*** Use ~<span>~ tag if trimming detected
+**** Use ~<span>~ tag if trimming detected
 Below Org block:
 
 #+begin_src org
@@ -4859,6 +4860,18 @@ line 1
 abc def
 #+end_sidenote<>
 line 2
+*** Whitespace trimming around special blocks (corner cases)         :quotes:
+:PROPERTIES:
+:EXPORT_FILE_NAME: ws-trimming-around-special-blocks-corner-cases
+:END:
+**** Whitespace trimming inside quote blocks
+#+begin_quote
+line 1
+#+begin_mark<>
+abc def
+#+end_mark<>
+line 2
+#+end_quote
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
 *** Common CSS

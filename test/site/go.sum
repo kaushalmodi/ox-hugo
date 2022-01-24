@@ -1,0 +1,4 @@
+github.com/kaushalmodi/hugo-bare-min-theme v0.2.2 h1:pnxZnofajp83NuBmR6Ph9WchZuZ9xMO/61Mb13ngV+I=
+github.com/kaushalmodi/hugo-bare-min-theme v0.2.2/go.mod h1:15uDuSpKgqQ4WYHM7TRSehkhX3tGmdbmHv61xm6BeQw=
+github.com/kaushalmodi/hugo-debugprint v0.1.0/go.mod h1:vusrDLlGE+4Uc1b4PgM0dI8lJCEqC1o7NjFr8WIfkaQ=
+github.com/kaushalmodi/hugo-search-fuse-js v0.2.0/go.mod h1:96kq3KKM93E06XVL//h4MaYFhZIYzJTj5/E+Kqeg7TA=

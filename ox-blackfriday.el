@@ -1084,9 +1084,7 @@ This function is adapted from `org-html-special-block'."
          (html5-inline-fancy (member block-type org-blackfriday-html5-inline-elements))
          (html5-block-fancy (member block-type org-html-html5-elements))
          (html5-fancy (or html5-inline-fancy html5-block-fancy))
-         (attributes (org-export-read-attribute :attr_html special-block))
-         (trim-pre-tag (or (plist-get info :trim-pre-tag) ""))
-         (trim-post-tag (or (plist-get info :trim-post-tag) "")))
+         (attributes (org-export-read-attribute :attr_html special-block)))
     (unless html5-fancy
       (let ((class (plist-get attributes :class)))
         (setq attributes (plist-put attributes :class
@@ -1168,27 +1166,16 @@ This function is adapted from `org-html-special-block'."
                    (org-blackfriday--org-contents-to-html special-block))))
                 block-type))
        (html5-inline-fancy ;Inline HTML elements like `mark', `cite'.
-        (format "%s<%s%s>%s</%s>%s"
-                trim-pre-tag block-type attr-str
-                contents block-type trim-post-tag))
+        (format "<%s%s>%s</%s>"
+                block-type attr-str contents block-type))
        (html5-block-fancy
-        (format "%s<%s%s>%s\n\n%s\n\n</%s>%s"
-                trim-pre-tag block-type attr-str
+        (format "<%s%s>%s\n\n%s\n\n</%s>"
+                block-type attr-str
                 (org-blackfriday--extra-div-hack info block-type)
-                contents block-type trim-post-tag))
+                contents block-type))
        (t
-        (if (or (org-string-nw-p trim-pre-tag)
-                (org-string-nw-p trim-post-tag))
-            (progn ;Use <span> tag if any of the trimming options is enabled.
-              (format "%s<span%s>%s</span>%s"
-                      trim-pre-tag attr-str
-                      contents trim-post-tag)
-              )
-          (progn                        ;Use <div> tag otherwise.
-            (format "%s<div%s>%s\n\n%s\n\n</div>%s"
-                    trim-pre-tag attr-str
-                    (org-blackfriday--extra-div-hack info)
-                    contents trim-post-tag))))))))
+        (format "<div%s>%s\n\n%s\n\n</div>"
+                attr-str (org-blackfriday--extra-div-hack info) contents))))))
 
 ;;;; Src Block
 (defun org-blackfriday-src-block (src-block _contents info)

@@ -4726,6 +4726,139 @@ TikZJax example
 #+end_tikzjax
 
 Here's a link to the [[circle][Circle]].
+** Whitespace trimming around special blocks            :whitespace:trimming:
+:PROPERTIES:
+:EXPORT_FILE_NAME: ws-trimming-around-special-blocks
+:EXPORT_DESCRIPTION: Whitespace trimming using special markers <>, < or > after special block names.
+:END:
+*** No trimming
+Below Org block:
+#+begin_src org
+line 1
+,#+begin_mark
+abc def
+,#+end_mark
+line 2
+#+end_src
+
+exports and renders as:
+
+line 1
+#+begin_mark
+abc def
+#+end_mark
+line 2
+*** Whitespace trimmed before and after the ~mark~ special block using ~<>~ suffix
+Below Org block:
+
+#+begin_src org
+line 1
+,#+begin_mark<>
+abc def
+,#+end_mark<>
+line 2
+#+end_src
+
+exports and renders as:
+
+line 1
+#+begin_mark<>
+abc def
+#+end_mark<>
+line 2
+*** Whitespace trimmed only before the ~mark~ special block using ~<~ suffix
+Below Org block:
+
+#+begin_src org
+line 1
+,#+begin_mark<
+abc def
+,#+end_mark<
+line 2
+#+end_src
+
+exports and renders as:
+
+line 1
+#+begin_mark<
+abc def
+#+end_mark<
+line 2
+*** Whitespace trimmed only after the ~mark~ special block using ~>~ suffix
+Below Org block:
+
+#+begin_src org
+line 1
+,#+begin_mark>
+abc def
+,#+end_mark>
+line 2
+#+end_src
+
+exports and renders as:
+
+line 1
+#+begin_mark>
+abc def
+#+end_mark>
+line 2
+*** Use ~<span>~ tag if trimming detected
+Below Org block:
+
+#+begin_src org
+line 1
+,#+begin_sidenote
+abc def
+,#+end_sidenote
+line 2
+#+end_src
+
+export with ~<div>~ tags by default:
+
+#+begin_src html -n
+line 1
+
+<div class="sidenote">
+
+abc def
+
+</div>
+
+line 2
+#+end_src
+
+and render as:
+
+line 1
+#+begin_sidenote
+abc def
+#+end_sidenote
+line 2
+
+But if a trimming marker (any of them) is detected, it switches to
+using the ~<span>~ tag. So the below Org block:
+
+#+begin_src org
+line 1
+,#+begin_sidenote<>
+abc def
+,#+end_sidenote<>
+line 2
+#+end_src
+
+will export to:
+
+#+begin_src html -n
+line 1 <span class="sidenote">abc def</span> line 2
+#+end_src
+
+and render as:
+
+line 1
+#+begin_sidenote<>
+abc def
+#+end_sidenote<>
+line 2
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
 *** Common CSS

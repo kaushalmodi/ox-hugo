@@ -150,14 +150,6 @@ Examples:
   2017-07-31T17:05:38+04:00
   2017-07-31T17:05:38-04:00.")
 
-(defvar org-hugo--trim-pre-marker "<!-- trim-pre -->"
-  "Special string inserted internally to know where the whitespace
-preceding an exported Org element needs to be trimmed.")
-
-(defvar org-hugo--trim-post-marker "<!-- trim-post -->"
-  "Special string inserted internally to know where the whitespace
-following an exported Org element needs to be trimmed.")
-
 (defconst org-hugo--preprocess-buffer t
   "Enable pre-processing of the current Org buffer.
 
@@ -1829,13 +1821,7 @@ holding export options."
                        (wholenump toc-level)
                        (> toc-level 0)) ;TOC will be exported only if toc-level is positive
                   (concat (org-hugo--build-toc info toc-level) "\n")
-                ""))
-         (contents (replace-regexp-in-string ;Trim stuff before selected exported elements
-                    (concat "\\([[:space:]]\\|\n\\)+" (regexp-quote org-hugo--trim-pre-marker))
-                    " " contents))
-         (contents (replace-regexp-in-string ;Trim stuff after selected exported elements
-                    (concat (regexp-quote org-hugo--trim-post-marker) "\\([[:space:]]\\|\n\\)+")
-                    " " contents)))
+                "")))
     ;; (message "[org-hugo-inner-template DBG] toc-level: %s" toc-level)
     (org-trim (concat
                toc
@@ -2815,20 +2801,8 @@ more information.
 For all other special blocks, processing is passed on to
 `org-blackfriday-special-block'.
 
-If a `block-type' has a \"<>\" suffix, whitespace exported before
-and after that block is trimmed.  If a `block-type' has a \"<\"
-suffix, only the whitespace *before* that block is trimmed.  And
-finally, if a `block-type' has a \">\" suffix, only the
-whitespace *after* that block is trimmed.
-
 INFO is a plist holding export options."
   (let* ((block-type (org-element-property :type special-block))
-         (trim-pre (or (string-suffix-p "<>" block-type)
-                       (string-suffix-p "<" block-type)))
-         (trim-pre-tag (or (and trim-pre org-hugo--trim-pre-marker) ""))
-         (trim-post (string-suffix-p ">" block-type))
-         (trim-post-tag (or (and trim-post org-hugo--trim-post-marker) ""))
-         (block-type (replace-regexp-in-string "\\`\\(.+?\\)[<>]*\\'" "\\1" block-type))
          (paired-shortcodes (let* ((str (plist-get info :hugo-paired-shortcodes))
                                    (str-list (when (org-string-nw-p str)
                                                (split-string str " "))))
@@ -2842,12 +2816,6 @@ INFO is a plist holding export options."
                           ;; https://lists.gnu.org/r/emacs-orgmode/2022-01/msg00132.html
                           (org-element-interpret-data (org-element-contents special-block))
                         contents)))))
-    ;; (message "[ox-hugo-spl-blk DBG] block-type: %s" block-type)
-    ;; (message "[ox-hugo-spl-blk DBG] trim-pre: %s" trim-pre)
-    ;; (message "[ox-hugo-spl-blk DBG] trim-post: %s" trim-post)
-    (org-element-put-property special-block :type block-type)
-    (plist-put info :trim-pre-tag trim-pre-tag)
-    (plist-put info :trim-post-tag trim-post-tag)
     (when contents
       (cond
        ((string= block-type "tikzjax")
@@ -2899,10 +2867,10 @@ INFO is a plist holding export options."
                (sc-close-char (if (string-prefix-p "%" matched-sc-str)
                                   "%"
                                 ">"))
-               (sc-begin (format "%s{{%s %s%s%s}}"
-                                 trim-pre-tag sc-open-char block-type sc-args sc-close-char))
-               (sc-end (format "{{%s /%s %s}}%s"
-                               sc-open-char block-type sc-close-char trim-post-tag)))
+               (sc-begin (format "{{%s %s%s%s}}"
+                                 sc-open-char block-type sc-args sc-close-char))
+               (sc-end (format "{{%s /%s %s}}"
+                               sc-open-char block-type sc-close-char)))
           ;; (message "[ox-hugo-spl-blk DBG] attr-sc1: %s"
           ;;          (org-element-property :attr_shortcode special-block))
           ;; (message "[ox-hugo-spl-blk DBG] attr-sc: %s" attr-sc)

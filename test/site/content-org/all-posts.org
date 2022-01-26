@@ -4730,7 +4730,7 @@ Here's a link to the [[circle][Circle]].
 *** Whitespace trimming around special blocks
 :PROPERTIES:
 :EXPORT_FILE_NAME: ws-trimming-around-special-blocks
-:EXPORT_DESCRIPTION: Whitespace trimming using special markers <>, < or > after special block names.
+:EXPORT_DESCRIPTION: Whitespace trimming using ~#+header: :trim-pre t :trim-post t~ before special blocks.
 :END:
 **** No trimming
 Below Org block:
@@ -4749,59 +4749,65 @@ line 1
 abc def
 #+end_mark
 line 2
-**** Whitespace trimmed before and after the ~mark~ special block using ~<>~ suffix
+**** Whitespace trimmed before and after the ~mark~ special block
 Below Org block:
 
 #+begin_src org
 line 1
-,#+begin_mark<>
+,#+header: :trim-pre t :trim-post t
+,#+begin_mark
 abc def
-,#+end_mark<>
+,#+end_mark
 line 2
 #+end_src
 
 exports and renders as:
 
 line 1
-#+begin_mark<>
+#+header: :trim-pre t :trim-post t
+#+begin_mark
 abc def
-#+end_mark<>
+#+end_mark
 line 2
-**** Whitespace trimmed only before the ~mark~ special block using ~<~ suffix
+**** Whitespace trimmed only before the ~mark~ special block
 Below Org block:
 
 #+begin_src org
 line 1
-,#+begin_mark<
+,#+header: :trim-pre t
+,#+begin_mark
 abc def
-,#+end_mark<
+,#+end_mark
 line 2
 #+end_src
 
 exports and renders as:
 
 line 1
-#+begin_mark<
+#+header: :trim-pre t
+#+begin_mark
 abc def
-#+end_mark<
+#+end_mark
 line 2
-**** Whitespace trimmed only after the ~mark~ special block using ~>~ suffix
+**** Whitespace trimmed only after the ~mark~ special block
 Below Org block:
 
 #+begin_src org
 line 1
-,#+begin_mark>
+,#+header: :trim-post t
+,#+begin_mark
 abc def
-,#+end_mark>
+,#+end_mark
 line 2
 #+end_src
 
 exports and renders as:
 
 line 1
-#+begin_mark>
+#+header: :trim-post t
+#+begin_mark
 abc def
-#+end_mark>
+#+end_mark
 line 2
 **** Use ~<span>~ tag if trimming detected
 Below Org block:
@@ -4814,7 +4820,7 @@ abc def
 line 2
 #+end_src
 
-export with ~<div>~ tags by default:
+exports with ~<div>~ tags by default:
 
 #+begin_src html -n
 line 1
@@ -4828,7 +4834,7 @@ abc def
 line 2
 #+end_src
 
-and render as:
+and renders as:
 
 line 1
 #+begin_sidenote
@@ -4836,14 +4842,15 @@ abc def
 #+end_sidenote
 line 2
 
-But if a trimming marker (any of them) is detected, it switches to
-using the ~<span>~ tag. So the below Org block:
+But if any of the trimming options are set in the header, it switches
+to using the ~<span>~ tag. So the below Org block:
 
 #+begin_src org
 line 1
-,#+begin_sidenote<>
+,#+header: :trim-pre t :trim-post t
+,#+begin_sidenote
 abc def
-,#+end_sidenote<>
+,#+end_sidenote
 line 2
 #+end_src
 
@@ -4856,9 +4863,10 @@ line 1 <span class="sidenote">abc def</span> line 2
 and render as:
 
 line 1
-#+begin_sidenote<>
+#+header: :trim-pre t :trim-post t
+#+begin_sidenote
 abc def
-#+end_sidenote<>
+#+end_sidenote
 line 2
 *** Whitespace trimming around special blocks (corner cases)
 :PROPERTIES:
@@ -4867,41 +4875,47 @@ line 2
 **** Whitespace trimming inside quote blocks
 #+begin_quote
 line 1
-#+begin_mark<>
+#+header: :trim-pre t :trim-post t
+#+begin_mark
 marked text
-#+end_mark<>
+#+end_mark
 line 2
 #+end_quote
 **** Whitespace trimming before list elements
 something
-#+begin_mark<>
+#+header: :trim-pre t :trim-post t
+#+begin_mark
 marked text
-#+end_mark<>
+#+end_mark
 - list item 1
 - list item 2
 **** Whitespace trimming before headings
 something
-#+begin_mark<>
+#+header: :trim-pre t :trim-post t
+#+begin_mark
 marked text
-#+end_mark<>
+#+end_mark
 ***** Next heading
 **** Whitespace trimming before and after code blocks
 something
-#+begin_mark<>
+#+header: :trim-pre t :trim-post t
+#+begin_mark
 marked text
-#+end_mark<>
+#+end_mark
 #+begin_example
 code line
 #+end_example
-#+begin_mark<>
+#+header: :trim-pre t :trim-post t
+#+begin_mark
 marked text
-#+end_mark<>
+#+end_mark
 
 something
 ~inline code 1~
-#+begin_mark<>
+#+header: :trim-pre t :trim-post t
+#+begin_mark
 marked text
-#+end_mark<>
+#+end_mark
 ~inline code 2~
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:

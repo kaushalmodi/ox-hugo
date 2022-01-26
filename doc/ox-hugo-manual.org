@@ -3415,21 +3415,19 @@ Then simply put /tikz/ snippets in the Org source like so:
 
 {{{test-search(tikzjax)}}}
 **** Whitespace Trimming
-Whitespace trimming around exported Org Special Blocks is supported.
+Whitespace trimming around exported Org Special Blocks is supported
+with the help of ~#+header:~ keywords above those blocks.
 
-Whether the whitespace before the exported block, after the block, or
-at both spaces is trimmed is decided by using some special markers
-after the special block name.
-
-- ~<~ suffix :: Trim whitespace only before the block.
-- ~>~ suffix :: Trim whitespace only after the block.
-- ~<>~ suffix :: Trim whitespace both before and after the block.
+- If the header has ~:trim-pre t~, whitespace is removed before the
+  block.
+- If the header has ~:trim-post t~, whitespace is removed after the
+  block.
 
 #+begin_note
-By default if a special block tag is not recognized as an HTML block
-or inline element, or as a Hugo shortcode, it defaults to exporting
-[[#special-blocks--div-tags][with ~<div>~ tags]]. But if any of the whitespace trimming markers is
-used in a special block, it will export with ~<span>~ tags.
+If a special block tag is not recognized as an HTML block or inline
+element, or as a Hugo shortcode, it defaults to exporting [[#special-blocks--div-tags][with ~<div>~
+tags]]. But if either pre or post trimming options are detected for a
+special block, it will export with ~<span>~ tags.
 #+end_note
 
 #+include: "../test/site/content-org/all-posts.org::* Whitespace trimming around special blocks" :only-contents t

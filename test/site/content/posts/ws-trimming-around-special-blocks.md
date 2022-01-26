@@ -1,6 +1,6 @@
 +++
 title = "Whitespace trimming around special blocks"
-description = "Whitespace trimming using special markers <>, < or > after special block names."
+description = "Whitespace trimming using ~#+header: :trim-pre t :trim-post t~ before special blocks."
 tags = ["special-block", "whitespace", "trimming"]
 draft = false
 +++
@@ -26,15 +26,16 @@ line 1
 line 2
 
 
-## Whitespace trimmed before and after the `mark` special block using `<>` suffix {#whitespace-trimmed-before-and-after-the-mark-special-block-using-suffix}
+## Whitespace trimmed before and after the `mark` special block {#whitespace-trimmed-before-and-after-the-mark-special-block}
 
 Below Org block:
 
 ```org
 line 1
-#+begin_mark<>
+#+header: :trim-pre t :trim-post t
+#+begin_mark
 abc def
-#+end_mark<>
+#+end_mark
 line 2
 ```
 
@@ -43,15 +44,16 @@ exports and renders as:
 line 1 <mark>abc def</mark> line 2
 
 
-## Whitespace trimmed only before the `mark` special block using `<` suffix {#whitespace-trimmed-only-before-the-mark-special-block-using-suffix}
+## Whitespace trimmed only before the `mark` special block {#whitespace-trimmed-only-before-the-mark-special-block}
 
 Below Org block:
 
 ```org
 line 1
-#+begin_mark<
+#+header: :trim-pre t
+#+begin_mark
 abc def
-#+end_mark<
+#+end_mark
 line 2
 ```
 
@@ -62,15 +64,16 @@ line 1 <mark>abc def</mark>
 line 2
 
 
-## Whitespace trimmed only after the `mark` special block using `>` suffix {#whitespace-trimmed-only-after-the-mark-special-block-using-suffix}
+## Whitespace trimmed only after the `mark` special block {#whitespace-trimmed-only-after-the-mark-special-block}
 
 Below Org block:
 
 ```org
 line 1
-#+begin_mark>
+#+header: :trim-post t
+#+begin_mark
 abc def
-#+end_mark>
+#+end_mark
 line 2
 ```
 
@@ -93,7 +96,7 @@ abc def
 line 2
 ```
 
-export with `<div>` tags by default:
+exports with `<div>` tags by default:
 
 ```html { linenos=table, linenostart=1 }
 line 1
@@ -107,7 +110,7 @@ abc def
 line 2
 ```
 
-and render as:
+and renders as:
 
 line 1
 
@@ -119,14 +122,15 @@ abc def
 
 line 2
 
-But if a trimming marker (any of them) is detected, it switches to
-using the `<span>` tag. So the below Org block:
+But if any of the trimming options are set in the header, it switches
+to using the `<span>` tag. So the below Org block:
 
 ```org
 line 1
-#+begin_sidenote<>
+#+header: :trim-pre t :trim-post t
+#+begin_sidenote
 abc def
-#+end_sidenote<>
+#+end_sidenote
 line 2
 ```
 

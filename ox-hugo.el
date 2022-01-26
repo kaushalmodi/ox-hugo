@@ -2823,12 +2823,12 @@ whitespace *after* that block is trimmed.
 
 INFO is a plist holding export options."
   (let* ((block-type (org-element-property :type special-block))
-         (trim-pre (or (string-suffix-p "<>" block-type)
-                       (string-suffix-p "<" block-type)))
+         (header (org-babel-parse-header-arguments
+                  (car (org-element-property :header special-block))))
+         (trim-pre (alist-get :trim-pre header))
          (trim-pre-tag (or (and trim-pre org-hugo--trim-pre-marker) ""))
-         (trim-post (string-suffix-p ">" block-type))
+         (trim-post (alist-get :trim-post header))
          (trim-post-tag (or (and trim-post org-hugo--trim-post-marker) ""))
-         (block-type (replace-regexp-in-string "\\`\\(.+?\\)[<>]*\\'" "\\1" block-type))
          (paired-shortcodes (let* ((str (plist-get info :hugo-paired-shortcodes))
                                    (str-list (when (org-string-nw-p str)
                                                (split-string str " "))))
@@ -2843,9 +2843,9 @@ INFO is a plist holding export options."
                           (org-element-interpret-data (org-element-contents special-block))
                         contents)))))
     ;; (message "[ox-hugo-spl-blk DBG] block-type: %s" block-type)
+    ;; (message "[ox-hugo-spl-blk DBG] header: %s" header)
     ;; (message "[ox-hugo-spl-blk DBG] trim-pre: %s" trim-pre)
     ;; (message "[ox-hugo-spl-blk DBG] trim-post: %s" trim-post)
-    (org-element-put-property special-block :type block-type)
     (plist-put info :trim-pre-tag trim-pre-tag)
     (plist-put info :trim-post-tag trim-post-tag)
     (when contents

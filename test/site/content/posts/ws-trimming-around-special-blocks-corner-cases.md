@@ -19,6 +19,8 @@ something <mark>marked text</mark>
 ## Whitespace trimming before headings {#whitespace-trimming-before-headings}
 
 something <mark>marked text</mark>
+
+
 ### Next heading {#next-heading}
 
 
@@ -32,3 +34,7 @@ code line
 `inline code 1`
  <mark>marked text</mark>
 `inline code 2`
+
+
+## Last element of a post {#last-element-of-a-post} <mark>No "post" trim markers should be inserted after this block as it's the
+last element of this post.</mark>

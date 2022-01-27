@@ -4911,6 +4911,11 @@ something
 marked text
 #+end_mark
 ~inline code 2~
+**** Last element of a post
+#+begin_mark
+No "post" trim markers should be inserted after this block as it's the
+last element of this post.
+#+end_mark
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
 *** Common CSS

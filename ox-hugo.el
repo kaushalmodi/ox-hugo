@@ -2852,8 +2852,10 @@ INFO is a plist holding export options."
                        (plist-get block-type-plist :trim-pre)))
          (trim-pre (org-hugo--value-get-true-p trim-pre)) ;If "nil", converts to nil
          (trim-pre-tag (if trim-pre org-hugo--trim-pre-marker ""))
-         (trim-post (or (alist-get :trim-post header) ;`:trim-post' in #+header has higher precedence.
-                        (plist-get block-type-plist :trim-pre)))
+         (last-element-p (null (org-export-get-next-element special-block info)))
+         (trim-post (unless last-element-p ;No need to add trim-post markers if this is the last element.
+                      (or (alist-get :trim-post header) ;`:trim-post' in #+header has higher precedence.
+                          (plist-get block-type-plist :trim-pre))))
          (trim-post (org-hugo--value-get-true-p trim-post)) ;If "nil", converts to nil
          (trim-post-tag (if trim-post org-hugo--trim-post-marker ""))
          (paired-shortcodes (let* ((str (plist-get info :hugo-paired-shortcodes))

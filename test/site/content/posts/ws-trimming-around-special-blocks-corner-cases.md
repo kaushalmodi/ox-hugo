@@ -16,6 +16,14 @@ line 2
 >
 > line 4 (line 3, above, is blank, but inside the quote block)
 
+-   Special block in a quote block in a list
+
+    > line 1
+<mark>marked text</mark>
+line 2
+    >
+    > line 4 (line 3, above, is blank, but inside the quote block)
+
 
 ## Whitespace trimming before list elements {#whitespace-trimming-before-list-elements}
 

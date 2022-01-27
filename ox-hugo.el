@@ -1855,8 +1855,8 @@ holding export options."
          ;; Handling the case of special blocks inside markdown quote
          ;; blocks.
          (contents (replace-regexp-in-string
-                    (concat "\\(\n> \\)*" (regexp-quote org-hugo--trim-pre-marker))
-                    ;;          ^^^^ Markdown quote blocks have lines beginning with "> ".
+                    (concat "\\(\n\\s-*> \\)*" (regexp-quote org-hugo--trim-pre-marker))
+                    ;;          ^^^^^^^^ Markdown quote blocks have lines beginning with "> ".
                     org-hugo--trim-pre-marker ;Keep the trim marker; it will be removed next.
                     contents))
          (contents (replace-regexp-in-string

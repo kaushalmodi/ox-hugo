@@ -4892,6 +4892,17 @@ line 2
 
 line 4 (line 3, above, is blank, but inside the quote block)
 #+end_quote
+
+- Special block in a quote block in a list
+  #+begin_quote
+  line 1
+  #+begin_mark
+  marked text
+  #+end_mark
+  line 2
+
+  line 4 (line 3, above, is blank, but inside the quote block)
+  #+end_quote
 **** Whitespace trimming before list elements
 something
 #+begin_mark

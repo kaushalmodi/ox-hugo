@@ -4922,6 +4922,18 @@ something
 #+begin_mark
 marked text
 #+end_mark
+**** ~>~ character before a special block with ~:trim_pre~ set
+#+begin_export html
+<style>
+  .red {
+    color: red;
+  }
+</style>
+#+end_export
+#+attr_html: :class red
+#+begin_mark
+This marked text's foreground is red.
+#+end_mark
 **** Last element of a post
 #+begin_mark
 No "post" trim markers should be inserted after this block as it's the

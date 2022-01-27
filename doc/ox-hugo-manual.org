@@ -3150,6 +3150,7 @@ will export as:
 
 and render as:
 
+#+header: :trim-pre nil
 #+begin_mark
 This sentence is marked.
 #+end_mark

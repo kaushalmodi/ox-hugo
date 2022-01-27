@@ -1852,9 +1852,17 @@ holding export options."
                        (> toc-level 0)) ;TOC will be exported only if toc-level is positive
                   (concat (org-hugo--build-toc info toc-level) "\n")
                 ""))
-         (contents (replace-regexp-in-string ;Trim stuff before selected exported elements
-                    (concat "\\([[:space:]>]\\|\n\\)+" (regexp-quote org-hugo--trim-pre-marker))
-                    "\n" contents))
+         ;; Handling the case of special blocks inside markdown quote
+         ;; blocks.
+         (contents (replace-regexp-in-string
+                    (concat "\\(\n> \\)*" (regexp-quote org-hugo--trim-pre-marker))
+                    ;;          ^^ Markdown quote blocks have lines beginning with "> ".
+                    org-hugo--trim-pre-marker ;Keep the trim marker; it will be removed next.
+                    contents))
+         (contents (replace-regexp-in-string
+                    (concat "\\([[:space:]]\\|\n\\)*" (regexp-quote org-hugo--trim-pre-marker))
+                    "\n"
+                    contents))
          (contents (replace-regexp-in-string ;Trim stuff after selected exported elements
                     (concat (regexp-quote org-hugo--trim-post-marker) "\\([[:space:]>]\\|\n\\)+")
                     "\n" contents))

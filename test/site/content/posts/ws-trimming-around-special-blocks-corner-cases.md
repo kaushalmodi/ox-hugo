@@ -53,6 +53,16 @@ something
 <mark>marked text</mark>
 
 
+## `>` character before a special block with `:trim_pre` set {#character-before-a-special-block-with-trim-pre-set}
+
+<style>
+  .red {
+    color: red;
+  }
+</style>
+<mark class="red">This marked text's foreground is red.</mark>
+
+
 ## Last element of a post {#last-element-of-a-post}
 <mark>No "post" trim markers should be inserted after this block as it's the
 last element of this post.</mark>

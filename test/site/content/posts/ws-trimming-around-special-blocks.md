@@ -37,7 +37,9 @@ line 2
 
 exports and renders as:
 
-line 1 <mark>abc def</mark> line 2
+line 1 <mark>abc def</mark>
+
+line 2
 
 
 ## Whitespace trimmed only after the `mark` special block {#whitespace-trimmed-only-after-the-mark-special-block}
@@ -55,7 +57,9 @@ line 2
 
 exports and renders as:
 
-line 1 <mark>abc def</mark> line 2
+line 1
+
+<mark>abc def</mark> line 2
 
 
 ## No trimming {#no-trimming}
@@ -73,7 +77,11 @@ line 2
 
 exports and renders as:
 
-line 1 <mark>abc def</mark> line 2
+line 1
+
+<mark>abc def</mark>
+
+line 2
 
 
 ## Use `<span>` tag if trimming detected {#use-span-tag-if-trimming-detected}

@@ -4551,9 +4551,9 @@ Unmarked.
 #+begin_mark
 /Some/ *marked* text --- 2.5.
 #+end_mark
-
 Unmarked again.
 
+#+header: :trim-pre nil :trim-post nil
 #+begin_mark
 Page Bundles of =page= [[https://gohugo.io/templates/section-templates/#page-kinds][/Kind/]] are always /leaf bundles/.. and vice versa.
 #+end_mark
@@ -4875,7 +4875,6 @@ line 2
 **** Whitespace trimming inside quote blocks
 #+begin_quote
 line 1
-#+header: :trim-pre t :trim-post t
 #+begin_mark
 marked text
 #+end_mark
@@ -4883,7 +4882,6 @@ line 2
 #+end_quote
 **** Whitespace trimming before list elements
 something
-#+header: :trim-pre t :trim-post t
 #+begin_mark
 marked text
 #+end_mark
@@ -4891,28 +4889,24 @@ marked text
 - list item 2
 **** Whitespace trimming before headings
 something
-#+header: :trim-pre t :trim-post t
 #+begin_mark
 marked text
 #+end_mark
 ***** Next heading
 **** Whitespace trimming before and after code blocks
 something
-#+header: :trim-pre t :trim-post t
 #+begin_mark
 marked text
 #+end_mark
 #+begin_example
 code line
 #+end_example
-#+header: :trim-pre t :trim-post t
 #+begin_mark
 marked text
 #+end_mark
 
 something
 ~inline code 1~
-#+header: :trim-pre t :trim-post t
 #+begin_mark
 marked text
 #+end_mark
@@ -7288,6 +7282,7 @@ Do not render this page, but.. still list it.
 See the [[../][parent]] list page -- This page is not rendered, but its content
 and metadata can be found using the ~site.GetPage~ method.
 
+#+header: :trim-pre nil
 #+begin_mark
 This page is listed on that parent list page, but the link won't lead
 to this page as.. it did not get rendered. That link will point to

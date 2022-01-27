@@ -2850,9 +2850,11 @@ INFO is a plist holding export options."
                   (car (org-element-property :header special-block))))
          (trim-pre (or (alist-get :trim-pre header) ;`:trim-pre' in #+header has higher precedence.
                        (plist-get block-type-plist :trim-pre)))
+         (trim-pre (org-hugo--value-get-true-p trim-pre)) ;If "nil", converts to nil
          (trim-pre-tag (if trim-pre org-hugo--trim-pre-marker ""))
          (trim-post (or (alist-get :trim-post header) ;`:trim-post' in #+header has higher precedence.
                         (plist-get block-type-plist :trim-pre)))
+         (trim-post (org-hugo--value-get-true-p trim-post)) ;If "nil", converts to nil
          (trim-post-tag (if trim-post org-hugo--trim-post-marker ""))
          (paired-shortcodes (let* ((str (plist-get info :hugo-paired-shortcodes))
                                    (str-list (when (org-string-nw-p str)
@@ -2868,9 +2870,10 @@ INFO is a plist holding export options."
                           (org-element-interpret-data (org-element-contents special-block))
                         contents)))))
     ;; (message "[ox-hugo-spl-blk DBG] block-type: %s" block-type)
-    ;; (message "[ox-hugo-spl-blk DBG] header: %s" header)
-    ;; (message "[ox-hugo-spl-blk DBG] trim-pre: %s" trim-pre)
-    ;; (message "[ox-hugo-spl-blk DBG] trim-post: %s" trim-post)
+    ;; (message "[ox-hugo-spl-blk DBG] last element?: %s" (null (org-export-get-next-element special-block info)))
+    ;; (message "[ox-hugo-spl-blk DBG] %s: header: %s" block-type header)
+    ;; (message "[ox-hugo-spl-blk DBG] %s: trim-pre (type = %S): %S" block-type (type-of trim-pre) trim-pre)
+    ;; (message "[ox-hugo-spl-blk DBG] %s: trim-post (type = %S): %S" block-type (type-of trim-post) trim-post)
     (plist-put info :type-plist block-type-plist)
     (plist-put info :trim-pre-tag trim-pre-tag)
     (plist-put info :trim-post-tag trim-post-tag)

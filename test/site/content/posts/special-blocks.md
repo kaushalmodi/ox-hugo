@@ -44,11 +44,7 @@ _Some_ **text** --- 2
 
 ### Inline HTML5 elements {#inline-html5-elements}
 
-Unmarked.
-
-<mark>_Some_ **marked** text --- 2.5.</mark>
-
-Unmarked again.
+Unmarked. <mark>_Some_ **marked** text --- 2.5.</mark> Unmarked again.
 
 <mark>Page Bundles of `page` [_Kind_](https://gohugo.io/templates/section-templates/#page-kinds) are always _leaf bundles_.. and vice versa.</mark>
 

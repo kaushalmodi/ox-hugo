@@ -11,16 +11,14 @@ draft = false
 ## Whitespace trimming inside quote blocks {#whitespace-trimming-inside-quote-blocks}
 
 > line 1
-<mark>marked text</mark>
-line 2
+<mark>marked text</mark> line 2
 >
 > line 4 (line 3, above, is blank, but inside the quote block)
 
 -   Special block in a quote block in a list
 
     > line 1
-<mark>marked text</mark>
-line 2
+<mark>marked text</mark> line 2
     >
     > line 4 (line 3, above, is blank, but inside the quote block)
 
@@ -49,8 +47,7 @@ something
 ```text
 code line
 ```
-<mark>marked text</mark>
-something
+<mark>marked text</mark> something
 `inline code 1`
 <mark>marked text</mark>
 `inline code 2`

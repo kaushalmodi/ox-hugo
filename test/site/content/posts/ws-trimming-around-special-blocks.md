@@ -27,8 +27,7 @@ line 2
 exports and renders as:
 
 line 1
-<mark>abc def</mark>
-line 2
+<mark>abc def</mark> line 2
 
 
 ## Whitespace trimmed only before the `mark` special block {#whitespace-trimmed-only-before-the-mark-special-block}
@@ -69,8 +68,7 @@ exports and renders as:
 
 line 1
 
-<mark>abc def</mark>
-line 2
+<mark>abc def</mark> line 2
 
 
 ## No trimming {#no-trimming}
@@ -154,5 +152,4 @@ line 1 <span class="foo">abc def</span> line 2
 and render as:
 
 line 1
-<span class="foo">abc def</span>
-line 2
+<span class="foo">abc def</span> line 2

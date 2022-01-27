@@ -545,7 +545,7 @@ For the special block types not specified in this variable, the
 default behavior is same as if (:raw nil :trim-pre nil :trim-post
 nil) plist were associated with them."
   :group 'org-export-hugo
-  :type '(list (cons string (plist :key-type symbol :value-type boolean))))
+  :type '(alist :key-type string :value-type (plist :key-type symbol :value-type boolean)))
 
 
 

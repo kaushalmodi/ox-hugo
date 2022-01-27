@@ -5,6 +5,13 @@ tags = ["special-block", "whitespace", "trimming"]
 draft = false
 +++
 
+By default (in `org-hugo-special-block-type-properties`), the "mark"
+special block type has `:trim-pre` and `:trim-post` both set to `t`,
+because typically the `<mark>` is used to highlight words and phrases
+mid-sentence and we wouldn't want to introduce a paragraph break
+before or after a `<mark>` element.
+
+
 ## Whitespace trimmed before and after the `mark` special block (default) {#whitespace-trimmed-before-and-after-the-mark-special-block--default}
 
 Below Org block:

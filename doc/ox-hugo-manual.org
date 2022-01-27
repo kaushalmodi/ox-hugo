@@ -3408,15 +3408,40 @@ Then simply put /tikz/ snippets in the Org source like so:
 The default whitespace trimming around exported Org Special Blocks can
 be configured by setting the ~:trim-pre~ and ~:trim-post~ properties
 for specific special block types in the
-~org-hugo-special-block-type-properties~ defcustom.
+~org-hugo-special-block-type-properties~ customization variable.
 
-- If ~:trim-pre~ is set to ~t~, whitespace is removed before the
-  block.
-- If ~:trim-post~ is set to ~t~, whitespace is removed after the
-  block.
+- If ~:trim-pre~ is set to ~t~, whitespace before the block is
+  removed.
+- If ~:trim-post~ is set to ~t~, whitespace after the block is
+  removed.
 
-The default values of these properties can be overridden by using the
-~#+header:~ keywords above the special blocks.
+#+begin_note
+For the types not specified in
+~org-hugo-special-block-type-properties~, the default behavior is like
+that of ~'(:trim-pre nil :trim-post nil)~.
+#+end_note
+
+Here's an example of specifying trimming options for a new special
+block type "sidenote":
+
+#+begin_src elisp
+(with-eval-after-load 'ox-hugo
+  (add-to-list 'org-hugo-special-block-type-properties '("sidenote" . (:trim-pre t :trim-post t))))
+#+end_src
+
+Here's an example of overriding properties for one of the types, say "mark":
+
+#+begin_src elisp
+(with-eval-after-load 'ox-hugo
+  (setcdr (assoc "mark" org-hugo-special-block-type-properties) '(:trim-pre t :trim-post nil)))
+#+end_src
+
+Or, you can ~M-x customize-group~, select ~org-select-hugo~ and tweak
+this variable in that UI.
+
+The default values set this way can be overridden in the Org file by
+using the ~#+header:~ keyword above the special blocks. Below examples
+demonstrate the usage of this ~#+header~ keyword.
 
 #+begin_note
 If a special block tag is not recognized as an HTML block or inline

@@ -4732,6 +4732,12 @@ Here's a link to the [[circle][Circle]].
 :EXPORT_FILE_NAME: ws-trimming-around-special-blocks
 :EXPORT_DESCRIPTION: Whitespace trimming using ~#+header: :trim-pre t :trim-post t~ before special blocks.
 :END:
+By default (in ~org-hugo-special-block-type-properties~), the "mark"
+special block type has ~:trim-pre~ and ~:trim-post~ both set to ~t~,
+because typically the ~<mark>~ is used to highlight words and phrases
+mid-sentence and we wouldn't want to introduce a paragraph break
+before or after a ~<mark>~ element.
+
 **** Whitespace trimmed before and after the ~mark~ special block (default)
 Below Org block:
 

@@ -517,6 +517,7 @@ HTML element."
 
 (defcustom org-hugo-special-block-type-properties '(("audio" . (:raw t))
                                                     ("katex" . (:raw t))
+                                                    ("mark" . (:trim-pre t :trim-post t))
                                                     ("tikzjax" . (:raw t))
                                                     ("video" . (:raw t)))
   "Alist for storing default properties for special block types.
@@ -531,12 +532,18 @@ string.
 
 Properties recognized in the PLIST:
 
-- :raw :: When set to `t', the contents of the special block as exported raw
-          i.e. as typed in the Org buffer.
+- :raw :: When set to `t', the contents of the special block as
+          exported raw i.e. as typed in the Org buffer.
+
+- :trim-pre :: When set to `t', the whitespace before the special
+               block is removed.
+
+- :trim-pre :: When set to `t', the whitespace after the special
+               block is removed.
 
 For the special block types not specified in this variable, the
-default behavior is same as if (:raw nil) plist were associated
-with them."
+default behavior is same as if (:raw nil :trim-pre nil :trim-post
+nil) plist were associated with them."
   :group 'org-export-hugo
   :type '(list (cons string (plist :key-type symbol :value-type boolean))))
 
@@ -2841,10 +2848,12 @@ INFO is a plist holding export options."
          (block-type-plist (cdr (assoc block-type org-hugo-special-block-type-properties)))
          (header (org-babel-parse-header-arguments
                   (car (org-element-property :header special-block))))
-         (trim-pre (alist-get :trim-pre header))
-         (trim-pre-tag (or (and trim-pre org-hugo--trim-pre-marker) ""))
-         (trim-post (alist-get :trim-post header))
-         (trim-post-tag (or (and trim-post org-hugo--trim-post-marker) ""))
+         (trim-pre (or (alist-get :trim-pre header) ;`:trim-pre' in #+header has higher precedence.
+                       (plist-get block-type-plist :trim-pre)))
+         (trim-pre-tag (if trim-pre org-hugo--trim-pre-marker ""))
+         (trim-post (or (alist-get :trim-post header) ;`:trim-post' in #+header has higher precedence.
+                        (plist-get block-type-plist :trim-pre)))
+         (trim-post-tag (if trim-post org-hugo--trim-post-marker ""))
          (paired-shortcodes (let* ((str (plist-get info :hugo-paired-shortcodes))
                                    (str-list (when (org-string-nw-p str)
                                                (split-string str " "))))

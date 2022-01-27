@@ -3404,13 +3404,18 @@ Then simply put /tikz/ snippets in the Org source like so:
 
 {{{test-search(tikzjax)}}}
 **** Whitespace Trimming
-Whitespace trimming around exported Org Special Blocks is supported
-with the help of ~#+header:~ keywords above those blocks.
+The default whitespace trimming around exported Org Special Blocks can
+be configured by setting the ~:trim-pre~ and ~:trim-post~ properties
+for specific special block types in the
+~org-hugo-special-block-type-properties~ defcustom.
 
-- If the header has ~:trim-pre t~, whitespace is removed before the
+- If ~:trim-pre~ is set to ~t~, whitespace is removed before the
   block.
-- If the header has ~:trim-post t~, whitespace is removed after the
+- If ~:trim-post~ is set to ~t~, whitespace is removed after the
   block.
+
+The default values of these properties can be overridden by using the
+~#+header:~ keywords above the special blocks.
 
 #+begin_note
 If a special block tag is not recognized as an HTML block or inline

@@ -5,34 +5,12 @@ tags = ["special-block", "whitespace", "trimming"]
 draft = false
 +++
 
-## No trimming {#no-trimming}
+## Whitespace trimmed before and after the `mark` special block (default) {#whitespace-trimmed-before-and-after-the-mark-special-block--default}
 
 Below Org block:
 
 ```org
 line 1
-#+begin_mark
-abc def
-#+end_mark
-line 2
-```
-
-exports and renders as:
-
-line 1
-
-<mark>abc def</mark>
-
-line 2
-
-
-## Whitespace trimmed before and after the `mark` special block {#whitespace-trimmed-before-and-after-the-mark-special-block}
-
-Below Org block:
-
-```org
-line 1
-#+header: :trim-pre t :trim-post t
 #+begin_mark
 abc def
 #+end_mark
@@ -50,7 +28,7 @@ Below Org block:
 
 ```org
 line 1
-#+header: :trim-pre t
+#+header: :trim-post nil
 #+begin_mark
 abc def
 #+end_mark
@@ -59,9 +37,7 @@ line 2
 
 exports and renders as:
 
-line 1 <mark>abc def</mark>
-
-line 2
+line 1 <mark>abc def</mark> line 2
 
 
 ## Whitespace trimmed only after the `mark` special block {#whitespace-trimmed-only-after-the-mark-special-block}
@@ -70,7 +46,7 @@ Below Org block:
 
 ```org
 line 1
-#+header: :trim-post t
+#+header: :trim-pre nil
 #+begin_mark
 abc def
 #+end_mark
@@ -79,9 +55,25 @@ line 2
 
 exports and renders as:
 
-line 1
+line 1 <mark>abc def</mark> line 2
 
-<mark>abc def</mark> line 2
+
+## No trimming {#no-trimming}
+
+Below Org block:
+
+```org
+line 1
+#+header: :trim-pre nil :trim-post nil
+#+begin_mark
+abc def
+#+end_mark
+line 2
+```
+
+exports and renders as:
+
+line 1 <mark>abc def</mark> line 2
 
 
 ## Use `<span>` tag if trimming detected {#use-span-tag-if-trimming-detected}

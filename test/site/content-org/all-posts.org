@@ -4732,8 +4732,9 @@ Here's a link to the [[circle][Circle]].
 :EXPORT_FILE_NAME: ws-trimming-around-special-blocks
 :EXPORT_DESCRIPTION: Whitespace trimming using ~#+header: :trim-pre t :trim-post t~ before special blocks.
 :END:
-**** No trimming
+**** Whitespace trimmed before and after the ~mark~ special block (default)
 Below Org block:
+
 #+begin_src org
 line 1
 ,#+begin_mark
@@ -4745,26 +4746,6 @@ line 2
 exports and renders as:
 
 line 1
-#+begin_mark
-abc def
-#+end_mark
-line 2
-**** Whitespace trimmed before and after the ~mark~ special block
-Below Org block:
-
-#+begin_src org
-line 1
-,#+header: :trim-pre t :trim-post t
-,#+begin_mark
-abc def
-,#+end_mark
-line 2
-#+end_src
-
-exports and renders as:
-
-line 1
-#+header: :trim-pre t :trim-post t
 #+begin_mark
 abc def
 #+end_mark
@@ -4774,7 +4755,7 @@ Below Org block:
 
 #+begin_src org
 line 1
-,#+header: :trim-pre t
+,#+header: :trim-post nil
 ,#+begin_mark
 abc def
 ,#+end_mark
@@ -4784,7 +4765,7 @@ line 2
 exports and renders as:
 
 line 1
-#+header: :trim-pre t
+#+header: :trim-post nil
 #+begin_mark
 abc def
 #+end_mark
@@ -4794,7 +4775,7 @@ Below Org block:
 
 #+begin_src org
 line 1
-,#+header: :trim-post t
+,#+header: :trim-pre nil
 ,#+begin_mark
 abc def
 ,#+end_mark
@@ -4804,7 +4785,26 @@ line 2
 exports and renders as:
 
 line 1
-#+header: :trim-post t
+#+header: :trim-pre nil
+#+begin_mark
+abc def
+#+end_mark
+line 2
+**** No trimming
+Below Org block:
+#+begin_src org
+line 1
+,#+header: :trim-pre nil :trim-post nil
+,#+begin_mark
+abc def
+,#+end_mark
+line 2
+#+end_src
+
+exports and renders as:
+
+line 1
+#+header: :trim-pre nil :trim-post nil
 #+begin_mark
 abc def
 #+end_mark

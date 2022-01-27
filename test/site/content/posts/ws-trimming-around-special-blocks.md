@@ -101,9 +101,9 @@ Below Org block:
 
 ```org
 line 1
-#+begin_sidenote
+#+begin_foo
 abc def
-#+end_sidenote
+#+end_foo
 line 2
 ```
 
@@ -112,7 +112,7 @@ exports with `<div>` tags by default:
 ```html { linenos=table, linenostart=1 }
 line 1
 
-<div class="sidenote">
+<div class="foo">
 
 abc def
 
@@ -125,7 +125,7 @@ and renders as:
 
 line 1
 
-<div class="sidenote">
+<div class="foo">
 
 abc def
 
@@ -139,20 +139,20 @@ to using the `<span>` tag. So the below Org block:
 ```org
 line 1
 #+header: :trim-pre t :trim-post t
-#+begin_sidenote
+#+begin_foo
 abc def
-#+end_sidenote
+#+end_foo
 line 2
 ```
 
 will export to:
 
 ```html { linenos=table, linenostart=1 }
-line 1 <span class="sidenote">abc def</span> line 2
+line 1 <span class="foo">abc def</span> line 2
 ```
 
 and render as:
 
 line 1
-<span class="sidenote">abc def</span>
+<span class="foo">abc def</span>
 line 2

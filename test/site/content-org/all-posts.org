@@ -4820,9 +4820,9 @@ Below Org block:
 
 #+begin_src org
 line 1
-,#+begin_sidenote
+,#+begin_foo
 abc def
-,#+end_sidenote
+,#+end_foo
 line 2
 #+end_src
 
@@ -4831,7 +4831,7 @@ exports with ~<div>~ tags by default:
 #+begin_src html -n
 line 1
 
-<div class="sidenote">
+<div class="foo">
 
 abc def
 
@@ -4843,9 +4843,9 @@ line 2
 and renders as:
 
 line 1
-#+begin_sidenote
+#+begin_foo
 abc def
-#+end_sidenote
+#+end_foo
 line 2
 
 But if any of the trimming options are set in the header, it switches
@@ -4854,25 +4854,25 @@ to using the ~<span>~ tag. So the below Org block:
 #+begin_src org
 line 1
 ,#+header: :trim-pre t :trim-post t
-,#+begin_sidenote
+,#+begin_foo
 abc def
-,#+end_sidenote
+,#+end_foo
 line 2
 #+end_src
 
 will export to:
 
 #+begin_src html -n
-line 1 <span class="sidenote">abc def</span> line 2
+line 1 <span class="foo">abc def</span> line 2
 #+end_src
 
 and render as:
 
 line 1
 #+header: :trim-pre t :trim-post t
-#+begin_sidenote
+#+begin_foo
 abc def
-#+end_sidenote
+#+end_foo
 line 2
 *** Whitespace trimming around special blocks (corner cases)   :corner_cases:
 :PROPERTIES:

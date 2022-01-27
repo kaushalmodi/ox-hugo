@@ -4877,6 +4877,7 @@ line 2
 *** Whitespace trimming around special blocks (corner cases)   :corner_cases:
 :PROPERTIES:
 :EXPORT_FILE_NAME: ws-trimming-around-special-blocks-corner-cases
+:EXPORT_HUGO_PAIRED_SHORTCODES: %inline
 :END:
 #+begin_description
 Corner cases for testing the whitespace trimming around the special
@@ -4951,6 +4952,31 @@ marked text
 #+begin_mark
 This marked text's foreground is red.
 #+end_mark
+**** Hugo shortcode in a definition list with pre/post trimming
+The content in the ~inline~ shortcode (created for this test site)
+should render /inline/ and not create a parapraph break at the end of
+it.
+- defn1 ::
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
+  quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut
+  dui mi. Maecenas pharetra sapien nunc, ut mollis enim aliquam
+  quis.
+  #+header: :trim-pre t :trim-post t
+  #+begin_inline
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
+  quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut
+  dui mi. Maecenas pharetra sapien nunc, ut mollis enim aliquam
+  quis.
+  #+end_inline
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
+  quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut
+  dui mi. Maecenas pharetra sapien nunc, ut mollis enim aliquam
+  quis.
+- defn2 ::
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
+  quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut
+  dui mi. Maecenas pharetra sapien nunc, ut mollis enim aliquam
+  quis.
 **** Last element of a post
 #+begin_mark
 No "post" trim markers should be inserted after this block as it's the

@@ -68,6 +68,34 @@ something
 <mark class="red">This marked text's foreground is red.</mark>
 
 
+## Hugo shortcode in a definition list with pre/post trimming {#hugo-shortcode-in-a-definition-list-with-pre-post-trimming}
+
+The content in the `inline` shortcode (created for this test site)
+should render _inline_ and not create a parapraph break at the end of
+it.
+
+defn1
+: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
+    quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut
+    dui mi. Maecenas pharetra sapien nunc, ut mollis enim aliquam
+    quis.
+{{% inline %}}
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
+    quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut
+    dui mi. Maecenas pharetra sapien nunc, ut mollis enim aliquam
+    quis.
+    {{% /inline %}} Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
+    quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut
+    dui mi. Maecenas pharetra sapien nunc, ut mollis enim aliquam
+    quis.
+
+defn2
+: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et
+    quam metus. Etiam in iaculis mi, sit amet pretium magna. Donec ut
+    dui mi. Maecenas pharetra sapien nunc, ut mollis enim aliquam
+    quis.
+
+
 ## Last element of a post {#last-element-of-a-post}
 <mark>No "post" trim markers should be inserted after this block as it's the
 last element of this post.</mark>

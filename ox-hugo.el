@@ -150,6 +150,14 @@ Examples:
   2017-07-31T17:05:38+04:00
   2017-07-31T17:05:38-04:00.")
 
+(defvar org-hugo--trim-pre-marker "<!-- trim-pre -->"
+  "Special string inserted internally to know where the whitespace
+preceding an exported Org element needs to be trimmed.")
+
+(defvar org-hugo--trim-post-marker "<!-- trim-post -->"
+  "Special string inserted internally to know where the whitespace
+following an exported Org element needs to be trimmed.")
+
 (defconst org-hugo--preprocess-buffer t
   "Enable pre-processing of the current Org buffer.
 
@@ -497,16 +505,6 @@ specified for them):
   :type 'boolean)
 ;;;###autoload (put 'org-hugo-link-desc-insert-type 'safe-local-variable 'booleanp)
 
-(defcustom org-hugo-special-block-raw-content-types '("katex" "tikzjax")
-  "List of special block types for which the exported contents
-should be same as the raw content in Org source.
-
-Each element is a string representing a type of Org special
-block."
-  :group 'org-export-hugo
-  :type '(repeat string))
-;;;###autoload (put 'org-hugo-special-block-raw-content-types 'safe-local-variable (lambda (x) (stringp x)))
-
 (defcustom org-hugo-container-element ""
   "HTML element to use for wrapping top level sections.
 Can be set with the in-buffer HTML_CONTAINER property.
@@ -516,6 +514,38 @@ HTML element."
   :group 'org-export-hugo
   :type 'string)
 ;;;###autoload (put 'org-hugo-container-element 'safe-local-variable 'stringp)
+
+(defcustom org-hugo-special-block-type-properties '(("audio" . (:raw t))
+                                                    ("katex" . (:raw t))
+                                                    ("mark" . (:trim-pre t :trim-post t))
+                                                    ("tikzjax" . (:raw t))
+                                                    ("video" . (:raw t)))
+  "Alist for storing default properties for special block types.
+
+Each element of the alist is of the form (TYPE . PLIST) where
+TYPE is a string holding the special block's type and PLIST is a
+property list for that TYPE.
+
+The TYPE string could be any special block type like an HTML
+inline or block tag, or name of a Hugo shortcode, or any random
+string.
+
+Properties recognized in the PLIST:
+
+- :raw :: When set to `t', the contents of the special block as
+          exported raw i.e. as typed in the Org buffer.
+
+- :trim-pre :: When set to `t', the whitespace before the special
+               block is removed.
+
+- :trim-pre :: When set to `t', the whitespace after the special
+               block is removed.
+
+For the special block types not specified in this variable, the
+default behavior is same as if (:raw nil :trim-pre nil :trim-post
+nil) plist were associated with them."
+  :group 'org-export-hugo
+  :type '(alist :key-type string :value-type (plist :key-type symbol :value-type boolean)))
 
 
 
@@ -1821,7 +1851,26 @@ holding export options."
                        (wholenump toc-level)
                        (> toc-level 0)) ;TOC will be exported only if toc-level is positive
                   (concat (org-hugo--build-toc info toc-level) "\n")
-                "")))
+                ""))
+         ;; Handling the case of special blocks inside markdown quote
+         ;; blocks.
+         (contents (replace-regexp-in-string
+                    (concat "\\(\n\\s-*> \\)*" (regexp-quote org-hugo--trim-pre-marker))
+                    ;;          ^^^^^^^^ Markdown quote blocks have lines beginning with "> ".
+                    org-hugo--trim-pre-marker ;Keep the trim marker; it will be removed next.
+                    contents))
+         (contents (replace-regexp-in-string
+                    (concat "\\([[:space:]]\\|\n\\)*" (regexp-quote org-hugo--trim-pre-marker))
+                    "\n"
+                    contents))
+         (contents (replace-regexp-in-string ;Trim stuff after selected exported elements
+                    (concat (regexp-quote org-hugo--trim-post-marker)
+                            ;; Pull up the contents from the next
+                            ;; line, unless the next line is a list
+                            ;; item (-), a heading (#) or a code block
+                            ;; (`).
+                            "\\([[:space:]>]\\|\n\\)+\\([^-#`]\\)")
+                    " \\2" contents)))
     ;; (message "[org-hugo-inner-template DBG] toc-level: %s" toc-level)
     (org-trim (concat
                toc
@@ -1908,28 +1957,28 @@ Returns a plist with these elements:
 
 Throw an error if no block contains REF."
   (or (org-element-map (plist-get info :parse-tree) '(example-block src-block)
-	    (lambda (el)
-	      (with-temp-buffer
-	        (insert (org-trim (org-element-property :value el)))
-	        (let* ((ref-info ())
+        (lambda (el)
+          (with-temp-buffer
+            (insert (org-trim (org-element-property :value el)))
+            (let* ((ref-info ())
                    (label-fmt (or (org-element-property :label-fmt el)
-				                  org-coderef-label-format))
-		           (ref-re (org-src-coderef-regexp label-fmt ref)))
-	          ;; Element containing REF is found.  Resolve it to
-	          ;; either a label or a line number, as needed.
-	          (when (re-search-backward ref-re nil :noerror)
+                                  org-coderef-label-format))
+                   (ref-re (org-src-coderef-regexp label-fmt ref)))
+              ;; Element containing REF is found.  Resolve it to
+              ;; either a label or a line number, as needed.
+              (when (re-search-backward ref-re nil :noerror)
                 (let* ((line-num (+ (or (org-export-get-loc el info) 0)
-		                            (line-number-at-pos)))
+                                    (line-number-at-pos)))
                        (ref-str (format "%s" (if (org-element-property :use-labels el)
                                                  ref
                                                line-num))))
-		          (setq ref-info (plist-put ref-info :line-num line-num))
+                  (setq ref-info (plist-put ref-info :line-num line-num))
                   (setq ref-info (plist-put ref-info :ref ref-str))
                   (let ((anchor-prefix (or (org-element-property :anchor-prefix el) ;set in `org-hugo-src-block'
                                            (cdr (org-hugo--get-coderef-anchor-prefix el)))))
                     (setq ref-info (plist-put ref-info :anchor-prefix anchor-prefix))))
                 ref-info))))
-	    info 'first-match)
+        info 'first-match)
       (signal 'org-link-broken (list ref))))
 
 (defun org-hugo-link (link desc info)
@@ -2801,8 +2850,27 @@ more information.
 For all other special blocks, processing is passed on to
 `org-blackfriday-special-block'.
 
+If a block type has the `:trim-pre' property set to `t' in
+`org-hugo-special-block-type-properties' or in the `#+header'
+keyword above the special block, whitespace exported before that
+block is trimmed.  Similarly, if `:trim-post' property is set to
+`t', whitespace after that block is trimmed.
+
 INFO is a plist holding export options."
   (let* ((block-type (org-element-property :type special-block))
+         (block-type-plist (cdr (assoc block-type org-hugo-special-block-type-properties)))
+         (header (org-babel-parse-header-arguments
+                  (car (org-element-property :header special-block))))
+         (trim-pre (or (alist-get :trim-pre header) ;`:trim-pre' in #+header has higher precedence.
+                       (plist-get block-type-plist :trim-pre)))
+         (trim-pre (org-hugo--value-get-true-p trim-pre)) ;If "nil", converts to nil
+         (trim-pre-tag (if trim-pre org-hugo--trim-pre-marker ""))
+         (last-element-p (null (org-export-get-next-element special-block info)))
+         (trim-post (unless last-element-p ;No need to add trim-post markers if this is the last element.
+                      (or (alist-get :trim-post header) ;`:trim-post' in #+header has higher precedence.
+                          (plist-get block-type-plist :trim-pre))))
+         (trim-post (org-hugo--value-get-true-p trim-post)) ;If "nil", converts to nil
+         (trim-post-tag (if trim-post org-hugo--trim-post-marker ""))
          (paired-shortcodes (let* ((str (plist-get info :hugo-paired-shortcodes))
                                    (str-list (when (org-string-nw-p str)
                                                (split-string str " "))))
@@ -2812,10 +2880,18 @@ INFO is a plist holding export options."
          (caption (plist-get html-attr :caption))
          (contents (when (stringp contents)
                      (org-trim
-                      (if (member block-type org-hugo-special-block-raw-content-types)
+                      (if (plist-get block-type-plist :raw)
                           ;; https://lists.gnu.org/r/emacs-orgmode/2022-01/msg00132.html
                           (org-element-interpret-data (org-element-contents special-block))
                         contents)))))
+    ;; (message "[ox-hugo-spl-blk DBG] block-type: %s" block-type)
+    ;; (message "[ox-hugo-spl-blk DBG] last element?: %s" (null (org-export-get-next-element special-block info)))
+    ;; (message "[ox-hugo-spl-blk DBG] %s: header: %s" block-type header)
+    ;; (message "[ox-hugo-spl-blk DBG] %s: trim-pre (type = %S): %S" block-type (type-of trim-pre) trim-pre)
+    ;; (message "[ox-hugo-spl-blk DBG] %s: trim-post (type = %S): %S" block-type (type-of trim-post) trim-post)
+    (plist-put info :type-plist block-type-plist)
+    (plist-put info :trim-pre-tag trim-pre-tag)
+    (plist-put info :trim-post-tag trim-post-tag)
     (when contents
       (cond
        ((string= block-type "tikzjax")
@@ -2867,10 +2943,10 @@ INFO is a plist holding export options."
                (sc-close-char (if (string-prefix-p "%" matched-sc-str)
                                   "%"
                                 ">"))
-               (sc-begin (format "{{%s %s%s%s}}"
-                                 sc-open-char block-type sc-args sc-close-char))
-               (sc-end (format "{{%s /%s %s}}"
-                               sc-open-char block-type sc-close-char)))
+               (sc-begin (format "%s{{%s %s%s%s}}"
+                                 trim-pre-tag sc-open-char block-type sc-args sc-close-char))
+               (sc-end (format "{{%s /%s %s}}%s"
+                               sc-open-char block-type sc-close-char trim-post-tag)))
           ;; (message "[ox-hugo-spl-blk DBG] attr-sc1: %s"
           ;;          (org-element-property :attr_shortcode special-block))
           ;; (message "[ox-hugo-spl-blk DBG] attr-sc: %s" attr-sc)

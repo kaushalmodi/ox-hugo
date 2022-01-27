@@ -4551,9 +4551,9 @@ Unmarked.
 #+begin_mark
 /Some/ *marked* text --- 2.5.
 #+end_mark
-
 Unmarked again.
 
+#+header: :trim-pre nil :trim-post nil
 #+begin_mark
 Page Bundles of =page= [[https://gohugo.io/templates/section-templates/#page-kinds][/Kind/]] are always /leaf bundles/.. and vice versa.
 #+end_mark
@@ -4726,6 +4726,236 @@ TikZJax example
 #+end_tikzjax
 
 Here's a link to the [[circle][Circle]].
+** Whitespace trimming                                  :whitespace:trimming:
+*** Whitespace trimming around special blocks
+:PROPERTIES:
+:EXPORT_FILE_NAME: ws-trimming-around-special-blocks
+:EXPORT_DESCRIPTION: Whitespace trimming using ~#+header: :trim-pre t :trim-post t~ before special blocks.
+:END:
+By default (in ~org-hugo-special-block-type-properties~), the "mark"
+special block type has ~:trim-pre~ and ~:trim-post~ both set to ~t~,
+because typically the ~<mark>~ is used to highlight words and phrases
+mid-sentence and we wouldn't want to introduce a paragraph break
+before or after a ~<mark>~ element.
+
+**** Whitespace trimmed before and after the ~mark~ special block (default)
+Below Org block:
+
+#+begin_src org
+line 1
+,#+begin_mark
+abc def
+,#+end_mark
+line 2
+#+end_src
+
+exports and renders as:
+
+line 1
+#+begin_mark
+abc def
+#+end_mark
+line 2
+**** Whitespace trimmed only before the ~mark~ special block
+Below Org block:
+
+#+begin_src org
+line 1
+,#+header: :trim-post nil
+,#+begin_mark
+abc def
+,#+end_mark
+line 2
+#+end_src
+
+exports and renders as:
+
+line 1
+#+header: :trim-post nil
+#+begin_mark
+abc def
+#+end_mark
+line 2
+**** Whitespace trimmed only after the ~mark~ special block
+Below Org block:
+
+#+begin_src org
+line 1
+,#+header: :trim-pre nil
+,#+begin_mark
+abc def
+,#+end_mark
+line 2
+#+end_src
+
+exports and renders as:
+
+line 1
+#+header: :trim-pre nil
+#+begin_mark
+abc def
+#+end_mark
+line 2
+**** No trimming
+Below Org block:
+#+begin_src org
+line 1
+,#+header: :trim-pre nil :trim-post nil
+,#+begin_mark
+abc def
+,#+end_mark
+line 2
+#+end_src
+
+exports and renders as:
+
+line 1
+#+header: :trim-pre nil :trim-post nil
+#+begin_mark
+abc def
+#+end_mark
+line 2
+**** Use ~<span>~ tag if trimming detected
+Below Org block:
+
+#+begin_src org
+line 1
+,#+begin_foo
+abc def
+,#+end_foo
+line 2
+#+end_src
+
+exports with ~<div>~ tags by default:
+
+#+begin_src html -n
+line 1
+
+<div class="foo">
+
+abc def
+
+</div>
+
+line 2
+#+end_src
+
+and renders as:
+
+line 1
+#+begin_foo
+abc def
+#+end_foo
+line 2
+
+But if any of the trimming options are set in the header, it switches
+to using the ~<span>~ tag. So the below Org block:
+
+#+begin_src org
+line 1
+,#+header: :trim-pre t :trim-post t
+,#+begin_foo
+abc def
+,#+end_foo
+line 2
+#+end_src
+
+will export to:
+
+#+begin_src html -n
+line 1 <span class="foo">abc def</span> line 2
+#+end_src
+
+and render as:
+
+line 1
+#+header: :trim-pre t :trim-post t
+#+begin_foo
+abc def
+#+end_foo
+line 2
+*** Whitespace trimming around special blocks (corner cases)   :corner_cases:
+:PROPERTIES:
+:EXPORT_FILE_NAME: ws-trimming-around-special-blocks-corner-cases
+:END:
+#+begin_description
+Corner cases for testing the whitespace trimming around the special
+blocks.
+#+end_description
+**** Whitespace trimming inside quote blocks
+#+begin_quote
+line 1
+#+begin_mark
+marked text
+#+end_mark
+line 2
+
+line 4 (line 3, above, is blank, but inside the quote block)
+#+end_quote
+
+- Special block in a quote block in a list
+  #+begin_quote
+  line 1
+  #+begin_mark
+  marked text
+  #+end_mark
+  line 2
+
+  line 4 (line 3, above, is blank, but inside the quote block)
+  #+end_quote
+**** Whitespace trimming before list elements
+something
+#+begin_mark
+marked text
+#+end_mark
+- list item 1
+- list item 2
+**** Whitespace trimming before headings
+something
+#+begin_mark
+marked text
+#+end_mark
+***** Next heading
+**** Whitespace trimming before and after code blocks
+something
+#+begin_mark
+marked text
+#+end_mark
+#+begin_example
+code line
+#+end_example
+#+begin_mark
+marked text
+#+end_mark
+
+something
+~inline code 1~
+#+begin_mark
+marked text
+#+end_mark
+~inline code 2~
+something
+**** Whitespace trimming with ~:trim-pre~ set immediately after a heading
+#+begin_mark
+marked text
+#+end_mark
+**** ~>~ character before a special block with ~:trim_pre~ set
+#+begin_export html
+<style>
+  .red {
+    color: red;
+  }
+</style>
+#+end_export
+#+attr_html: :class red
+#+begin_mark
+This marked text's foreground is red.
+#+end_mark
+**** Last element of a post
+#+begin_mark
+No "post" trim markers should be inserted after this block as it's the
+last element of this post.
+#+end_mark
 * Shortcodes                                                      :shortcode:
 ** Alert CSS                                                       :noexport:
 *** Common CSS
@@ -7097,6 +7327,7 @@ Do not render this page, but.. still list it.
 See the [[../][parent]] list page -- This page is not rendered, but its content
 and metadata can be found using the ~site.GetPage~ method.
 
+#+header: :trim-pre nil
 #+begin_mark
 This page is listed on that parent list page, but the link won't lead
 to this page as.. it did not get rendered. That link will point to

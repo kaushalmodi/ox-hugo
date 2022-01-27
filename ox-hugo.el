@@ -1856,7 +1856,7 @@ holding export options."
          ;; blocks.
          (contents (replace-regexp-in-string
                     (concat "\\(\n> \\)*" (regexp-quote org-hugo--trim-pre-marker))
-                    ;;          ^^ Markdown quote blocks have lines beginning with "> ".
+                    ;;          ^^^^ Markdown quote blocks have lines beginning with "> ".
                     org-hugo--trim-pre-marker ;Keep the trim marker; it will be removed next.
                     contents))
          (contents (replace-regexp-in-string
@@ -1953,28 +1953,28 @@ Returns a plist with these elements:
 
 Throw an error if no block contains REF."
   (or (org-element-map (plist-get info :parse-tree) '(example-block src-block)
-	    (lambda (el)
-	      (with-temp-buffer
-	        (insert (org-trim (org-element-property :value el)))
-	        (let* ((ref-info ())
+        (lambda (el)
+          (with-temp-buffer
+            (insert (org-trim (org-element-property :value el)))
+            (let* ((ref-info ())
                    (label-fmt (or (org-element-property :label-fmt el)
-				                  org-coderef-label-format))
-		           (ref-re (org-src-coderef-regexp label-fmt ref)))
-	          ;; Element containing REF is found.  Resolve it to
-	          ;; either a label or a line number, as needed.
-	          (when (re-search-backward ref-re nil :noerror)
+                                  org-coderef-label-format))
+                   (ref-re (org-src-coderef-regexp label-fmt ref)))
+              ;; Element containing REF is found.  Resolve it to
+              ;; either a label or a line number, as needed.
+              (when (re-search-backward ref-re nil :noerror)
                 (let* ((line-num (+ (or (org-export-get-loc el info) 0)
-		                            (line-number-at-pos)))
+                                    (line-number-at-pos)))
                        (ref-str (format "%s" (if (org-element-property :use-labels el)
                                                  ref
                                                line-num))))
-		          (setq ref-info (plist-put ref-info :line-num line-num))
+                  (setq ref-info (plist-put ref-info :line-num line-num))
                   (setq ref-info (plist-put ref-info :ref ref-str))
                   (let ((anchor-prefix (or (org-element-property :anchor-prefix el) ;set in `org-hugo-src-block'
                                            (cdr (org-hugo--get-coderef-anchor-prefix el)))))
                     (setq ref-info (plist-put ref-info :anchor-prefix anchor-prefix))))
                 ref-info))))
-	    info 'first-match)
+        info 'first-match)
       (signal 'org-link-broken (list ref))))
 
 (defun org-hugo-link (link desc info)

@@ -4868,10 +4868,14 @@ line 1
 abc def
 #+end_sidenote
 line 2
-*** Whitespace trimming around special blocks (corner cases)
+*** Whitespace trimming around special blocks (corner cases)   :corner_cases:
 :PROPERTIES:
 :EXPORT_FILE_NAME: ws-trimming-around-special-blocks-corner-cases
 :END:
+#+begin_description
+Corner cases for testing the whitespace trimming around the special
+blocks.
+#+end_description
 **** Whitespace trimming inside quote blocks
 #+begin_quote
 line 1
@@ -4879,6 +4883,8 @@ line 1
 marked text
 #+end_mark
 line 2
+
+line 4 (line 3, above, is blank, but inside the quote block)
 #+end_quote
 **** Whitespace trimming before list elements
 something
@@ -4911,6 +4917,11 @@ something
 marked text
 #+end_mark
 ~inline code 2~
+something
+**** Whitespace trimming with ~:trim-pre~ set immediately after a heading
+#+begin_mark
+marked text
+#+end_mark
 **** Last element of a post
 #+begin_mark
 No "post" trim markers should be inserted after this block as it's the

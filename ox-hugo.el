@@ -2850,11 +2850,11 @@ more information.
 For all other special blocks, processing is passed on to
 `org-blackfriday-special-block'.
 
-If a `block-type' has a \"<>\" suffix, whitespace exported before
-and after that block is trimmed.  If a `block-type' has a \"<\"
-suffix, only the whitespace *before* that block is trimmed.  And
-finally, if a `block-type' has a \">\" suffix, only the
-whitespace *after* that block is trimmed.
+If a block type has the `:trim-pre' property set to `t' in
+`org-hugo-special-block-type-properties' or in the `#+header'
+keyword above the special block, whitespace exported before that
+block is trimmed.  Similarly, if `:trim-post' property is set to
+`t', whitespace after that block is trimmed.
 
 INFO is a plist holding export options."
   (let* ((block-type (org-element-property :type special-block))

@@ -128,16 +128,6 @@ tag needs to be `python'."
            (string "Src Block language")
            (string "Syntax highlighting language"))))
 
-(defcustom org-blackfriday-special-block-raw-content-types '("video" "audio")
-  "List of special block types for which the exported contents
-should be same as the raw content in Org source.
-
-Each element is a string representing a type of Org special
-block."
-  :group 'org-export-blackfriday
-  :type '(repeat string))
-;;;###autoload (put 'org-blackfriday-special-block-raw-content-types 'safe-local-variable (lambda (x) (stringp x)))
-
 
 
 ;;; Define Back-End
@@ -1081,6 +1071,7 @@ INFO is a plist used as a communication channel.
 
 This function is adapted from `org-html-special-block'."
   (let* ((block-type (org-element-property :type special-block))
+         (block-type-plist (org-element-property :type-plist special-block))
          (html5-inline-fancy (member block-type org-blackfriday-html5-inline-elements))
          (html5-block-fancy (member block-type org-html-html5-elements))
          (html5-fancy (or html5-inline-fancy html5-block-fancy))
@@ -1094,7 +1085,7 @@ This function is adapted from `org-html-special-block'."
                                         (concat class " " block-type)
                                       block-type)))))
     (let* ((contents (or (org-trim
-                          (if (member block-type org-blackfriday-special-block-raw-content-types)
+                          (if (plist-get block-type-plist :raw)
                               ;; https://lists.gnu.org/r/emacs-orgmode/2022-01/msg00132.html
                               (org-element-interpret-data (org-element-contents special-block))
                             contents))

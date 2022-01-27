@@ -505,16 +505,6 @@ specified for them):
   :type 'boolean)
 ;;;###autoload (put 'org-hugo-link-desc-insert-type 'safe-local-variable 'booleanp)
 
-(defcustom org-hugo-special-block-raw-content-types '("katex" "tikzjax")
-  "List of special block types for which the exported contents
-should be same as the raw content in Org source.
-
-Each element is a string representing a type of Org special
-block."
-  :group 'org-export-hugo
-  :type '(repeat string))
-;;;###autoload (put 'org-hugo-special-block-raw-content-types 'safe-local-variable (lambda (x) (stringp x)))
-
 (defcustom org-hugo-container-element ""
   "HTML element to use for wrapping top level sections.
 Can be set with the in-buffer HTML_CONTAINER property.
@@ -524,6 +514,31 @@ HTML element."
   :group 'org-export-hugo
   :type 'string)
 ;;;###autoload (put 'org-hugo-container-element 'safe-local-variable 'stringp)
+
+(defcustom org-hugo-special-block-type-properties '(("audio" . (:raw t))
+                                                    ("katex" . (:raw t))
+                                                    ("tikzjax" . (:raw t))
+                                                    ("video" . (:raw t)))
+  "Alist for storing default properties for special block types.
+
+Each element of the alist is of the form (TYPE . PLIST) where
+TYPE is a string holding the special block's type and PLIST is a
+property list for that TYPE.
+
+The TYPE string could be any special block type like an HTML
+inline or block tag, or name of a Hugo shortcode, or any random
+string.
+
+Properties recognized in the PLIST:
+
+- :raw :: When set to `t', the contents of the special block as exported raw
+          i.e. as typed in the Org buffer.
+
+For the special block types not specified in this variable, the
+default behavior is same as if (:raw nil) plist were associated
+with them."
+  :group 'org-export-hugo
+  :type '(list (cons string (plist :key-type symbol :value-type boolean))))
 
 
 
@@ -2823,6 +2838,7 @@ whitespace *after* that block is trimmed.
 
 INFO is a plist holding export options."
   (let* ((block-type (org-element-property :type special-block))
+         (block-type-plist (cdr (assoc block-type org-hugo-special-block-type-properties)))
          (header (org-babel-parse-header-arguments
                   (car (org-element-property :header special-block))))
          (trim-pre (alist-get :trim-pre header))
@@ -2838,7 +2854,7 @@ INFO is a plist holding export options."
          (caption (plist-get html-attr :caption))
          (contents (when (stringp contents)
                      (org-trim
-                      (if (member block-type org-hugo-special-block-raw-content-types)
+                      (if (plist-get block-type-plist :raw)
                           ;; https://lists.gnu.org/r/emacs-orgmode/2022-01/msg00132.html
                           (org-element-interpret-data (org-element-contents special-block))
                         contents)))))
@@ -2846,6 +2862,7 @@ INFO is a plist holding export options."
     ;; (message "[ox-hugo-spl-blk DBG] header: %s" header)
     ;; (message "[ox-hugo-spl-blk DBG] trim-pre: %s" trim-pre)
     ;; (message "[ox-hugo-spl-blk DBG] trim-post: %s" trim-post)
+    (plist-put info :type-plist block-type-plist)
     (plist-put info :trim-pre-tag trim-pre-tag)
     (plist-put info :trim-post-tag trim-post-tag)
     (when contents

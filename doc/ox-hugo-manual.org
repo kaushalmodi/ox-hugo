@@ -3353,9 +3353,9 @@ default processing done by the exporter -- Org entities like ~\sum~ will
 be replaced by its HTML entity ~&sum;~, ~foo_{bar}~ will be replaced
 with ~foo<sub>bar</sub>~, and so on.
 
-But many times, the user might want to keep the contents of the
-special block as-as, in its raw form. If the user wants to do this for
-a special block of the /type/ FOO:
+But the user might want to keep the contents of the special block
+as-as, in its raw form, for some special block types. If the user
+wants to do this for a special block of the /type/ FOO:
 
 #+begin_src org
 ,#+begin_FOO
@@ -3363,11 +3363,11 @@ Some content
 ,#+end_FOO
 #+end_src
 
-, they need to add ~"FOO"~ to the customization variable
-~org-hugo-special-block-raw-content-types~.
+, they need to add ~("FOO" . (:raw t))~ to the customization variable
+~org-hugo-special-block-type-properties~.
 
-By default , ~"katex"~ is added to this list. So when using a special
-block like,
+By default , ~("katex" . (:raw t))~ is added to this list. So when
+using a special block like,
 
 #+begin_src org
 ,#+begin_katex
@@ -3377,17 +3377,6 @@ E = -J \sum\_{i=1}^N s\_i s\_{i+1}
 
 , the equation in the content of that special block: ~E = -J
 \sum\_{i=1}^N s\_i s\_{i+1}~ will be exported to Markdown as-is.
-
------
-
-If the ~"FOO"~ block type is one of types in
-~org-blackfriday-html5-inline-elements~ (see [[* HTML5 inline elements][HTML5 inline elements]]) or
-~org-html-html5-elements~ (see [[* HTML5 block elements][HTML5 block elements]]) and you need to
-export the raw contents for that, it needs to be added to
-~org-blackfriday-special-block-raw-content-types~.
-
-By default, ~"video"~ and ~"audio"~ are added to
-~org-blackfriday-special-block-raw-content-types~.
 **** TikZJax
 ~ox-hugo~ supports exporting raw /tikz/ snippet to Markdown which can be
 rendered to images using the [[https://tikzjax.com/][TikZJax]] project.

@@ -548,7 +548,8 @@ nil) plist were associated with them."
   :type '(alist :key-type string :value-type (plist :key-type symbol :value-type boolean)))
 
 (defcustom org-hugo-anchor-functions '(org-hugo-get-custom-id
-                                       org-hugo-get-heading-slug)
+                                       org-hugo-get-heading-slug
+                                       org-hugo-get-md5)
   "A list of functions for deriving the anchor of current Org heading.
 
 The functions will be run in the order added to this variable
@@ -571,6 +572,7 @@ even be declared as optional):
 Some of the inbuilt functions that can be added to this list:
 - `org-hugo-get-custom-id'
 - `org-hugo-get-heading-slug'
+- `org-hugo-get-md5'
 - `org-hugo-get-id'"
   :group 'org-export-hugo
   :type '(repeat function))
@@ -1692,10 +1694,7 @@ a communication channel."
                   bullet " " heading tags-fmtd "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
-        (let* ((anchor (org-hugo--get-anchor heading info))
-               (anchor (or (and (org-string-nw-p anchor)
-                                (format "{#%s}" anchor)) ;https://gohugo.io/extras/crossreferences/
-                           ""))
+        (let* ((anchor (format "{#%s}" (org-hugo--get-anchor heading info))) ;https://gohugo.io/extras/crossreferences/
                (heading-title (org-hugo--heading-title style level loffset title
                                                        todo-fmtd tags-fmtd anchor numbers))
                (wrap-element (org-hugo--container heading info))
@@ -1835,6 +1834,18 @@ Return nil if ELEMENT's `:title' property is nil or an empty string."
   (let ((title (org-export-data-with-backend
                 (org-element-property :title element) 'md info)))
     (org-string-nw-p (org-hugo-slug title :allow-double-hyphens))))
+
+(defun org-hugo-get-md5(element info)
+  "Return md5 sum derived string using ELEMENT's title property.
+
+INFO is a plist used as a communication channel.
+
+This function will never return nil."
+  (let ((hash-len 6)
+        (title (or (org-string-nw-p (org-export-data-with-backend
+                                     (org-element-property :title element) 'md info))
+                   "")))
+    (substring (md5 title) 0 hash-len)))
 
 (defun org-hugo--get-anchor(element info)
   "Return anchor string for Org heading ELEMENT.

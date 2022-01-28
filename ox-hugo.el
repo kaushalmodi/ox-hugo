@@ -1782,14 +1782,13 @@ The `slug' generated from that STR follows these rules:
       (setq str (replace-regexp-in-string "--" "-" str)))
     str))
 
-(defun org-hugo--get-anchor(element info &optional title-str)
+(defun org-hugo--get-anchor(element info)
   "Return an Org heading's anchor.
 
 The anchor is derived in the following precedence:
 
 1. `:CUSTOM_ID' property of the ELEMENT if set
-2. Optional TITLE-STR string argument to this function
-3. `:title' property of the ELEMENT.  If ELEMENT is an Org heading,
+2. `:title' property of the ELEMENT.  If ELEMENT is an Org heading,
    the `:title' will be the heading string.
 
 INFO is a plist used as a communication channel.
@@ -1797,9 +1796,8 @@ INFO is a plist used as a communication channel.
 If the anchor cannot be derived from any of the above, return
 nil."
   (or (org-element-property :CUSTOM_ID element)
-      (let ((title (or (org-string-nw-p title-str)
-                       (org-export-data-with-backend
-                        (org-element-property :title element) 'md info))))
+      (let ((title (org-export-data-with-backend
+                    (org-element-property :title element) 'md info)))
         (when (org-string-nw-p title)
           (org-hugo-slug title :allow-double-hyphens)))))
 
@@ -2050,7 +2048,7 @@ and rewrite link paths to make blogging more seamless."
                     (t
                      title))
               ;; Reference
-              (org-hugo--get-anchor destination info title))))
+              (org-hugo--get-anchor destination info))))
           ;; Links to other Org elements like source blocks, tables,
           ;; paragraphs, standalone figures, <<target>> links, etc.
           (_

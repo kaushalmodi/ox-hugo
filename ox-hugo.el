@@ -1916,7 +1916,7 @@ channel."
 (defun org-hugo--get-coderef-anchor-prefix (el)
   "Get anchor prefix string for code refs in element EL.
 
-Returns a cons (CODE-REFS . ANCHOR-PREFIX) where
+Return a cons (CODE-REFS . ANCHOR-PREFIX) where
 
 - CODE-REFS is an alist of the type (LINENUM . LABEL) where
 
@@ -1925,7 +1925,7 @@ Returns a cons (CODE-REFS . ANCHOR-PREFIX) where
 
 - ANCHOR-PREFIX is a string.
 
-Returns nil if EL has no code references."
+Return nil if EL has no code references."
   (let ((prefix "org-coderef")
         (hash-len 6)
         (code-refs (cdr (org-export-unravel-code el))))
@@ -1943,7 +1943,7 @@ This function is heavily derived from
 
 INFO is a plist used as a communication channel.
 
-Returns a plist with these elements:
+Return a plist with these elements:
 
 - `:line-num' :: REF associated line number
 
@@ -2542,7 +2542,7 @@ INFO is a plist used as a communication channel."
 - Add \"&nbsp;\" HTML entity before footnote anchors so that the
   anchors won't be on a separate line by themselves.
 
-Returns the processed CONTENTS string from the PARAGRAPH element.
+Return the processed CONTENTS string from the PARAGRAPH element.
 INFO is a plist used as a communication channel."
   (let ((ret contents))
     ;; Join consecutive Chinese, Japanese lines into a single long

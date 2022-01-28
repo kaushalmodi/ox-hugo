@@ -9,7 +9,7 @@ draft = false
 `ox-hugo` Issue #[138](https://github.com/kaushalmodi/ox-hugo/issues/138)
 
 
-## `\|` → `\\|` {#}
+## `\|` → `\\|` {#9d819a}
 
 \\[
 C(w,b) = \frac{1}{2n} \sum\_x{{\\|y(x)-a\\|}^2}
@@ -40,7 +40,7 @@ y  &= a^L
 \end{align}
 
 
-## `\{` → `\\{`, `\}` → `\\}` {#}
+## `\{` → `\\{`, `\}` → `\\}` {#3d16e4}
 
 `ox-hugo` Issue #[258](https://github.com/kaushalmodi/ox-hugo/issues/258)
 

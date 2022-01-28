@@ -14,6 +14,9 @@
 ;; Blackfriday support is being removed from `ox-hugo' as Hugo has
 ;; deprecated its support for a while.
 ;; https://github.com/kaushalmodi/ox-hugo/discussions/485
+
+;;; Code:
+
 (make-obsolete-variable 'org-hugo-blackfriday-options nil "Hugo has switched to use Goldmark as the default Markdown parser since v0.60." "Jan 15, 2022")
 (make-obsolete-variable 'org-hugo-blackfriday-extensions nil "Hugo has switched to use Goldmark as the default Markdown parser since v0.60." "Jan 15, 2022")
 

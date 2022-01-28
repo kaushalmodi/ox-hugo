@@ -151,12 +151,10 @@ Examples:
   2017-07-31T17:05:38-04:00.")
 
 (defvar org-hugo--trim-pre-marker "<!-- trim-pre -->"
-  "Special string inserted internally to know where the whitespace
-preceding an exported Org element needs to be trimmed.")
+  "Special string to mark where whitespace should be trimmed before an element.")
 
 (defvar org-hugo--trim-post-marker "<!-- trim-post -->"
-  "Special string inserted internally to know where the whitespace
-following an exported Org element needs to be trimmed.")
+  "Special string to mark where whitespace should be trimmed after an element.")
 
 (defconst org-hugo--preprocess-buffer t
   "Enable pre-processing of the current Org buffer.
@@ -191,8 +189,10 @@ export."
 ;;;###autoload (put 'org-hugo-base-dir 'safe-local-variable 'stringp)
 
 (defcustom org-hugo-goldmark t
-  "When nil, enable the hacks necessary for Blackfriday Markdown
-processing.
+  "Enable Goldmark or Commonmark compatible Markdown export.
+
+When nil, the hacks necessary for Blackfriday Markdown
+processing are enabled.
 
 If using Hugo v0.60.0 (released Nov 2019), keep the default
 value.
@@ -532,13 +532,13 @@ string.
 
 Properties recognized in the PLIST:
 
-- :raw :: When set to `t', the contents of the special block as
+- :raw :: When set to t, the contents of the special block as
           exported raw i.e. as typed in the Org buffer.
 
-- :trim-pre :: When set to `t', the whitespace before the special
+- :trim-pre :: When set to t, the whitespace before the special
                block is removed.
 
-- :trim-pre :: When set to `t', the whitespace after the special
+- :trim-pre :: When set to t, the whitespace after the special
                block is removed.
 
 For the special block types not specified in this variable, the
@@ -1505,8 +1505,10 @@ INFO is a plist used as a communication channel."
 (defun org-hugo--lang-cjk-p (info)
   "Return non-nil is the language is Chinese or Japanese.
 
-(Check for Korean language has not been added as no `ox-hugo'
-user has requested for it.)"
+\(Check for Korean language has not been added as no `ox-hugo'
+user has requested for it.)
+
+INFO is a plist used as a communication channel."
   (let* ((lang (org-hugo--get-lang info))
          (lang-2chars (when (and (stringp lang)
                                  (>= (length lang) 2))
@@ -2645,8 +2647,8 @@ The Markdown style triple-backquoted code blocks are created if:
 
 Hugo v0.60.0 onwards, the `markup.highlight.codeFences' (new name
 for the old `pygmentsCodeFences') config variable defaults to
-true. See
-https://gohugo.io/content-management/syntax-highlighting#highlighting-in-code-fences.
+true.  See the \"Highlighting in Code Fences\" section on
+https://gohugo.io/content-management/syntax-highlighting.
 Attributes like highlighting code, \"linenos\", etc. are now
 supported with code fences too.
 
@@ -2848,11 +2850,11 @@ more information.
 For all other special blocks, processing is passed on to
 `org-blackfriday-special-block'.
 
-If a block type has the `:trim-pre' property set to `t' in
+If a block type has the `:trim-pre' property set to t in
 `org-hugo-special-block-type-properties' or in the `#+header'
 keyword above the special block, whitespace exported before that
 block is trimmed.  Similarly, if `:trim-post' property is set to
-`t', whitespace after that block is trimmed.
+t, whitespace after that block is trimmed.
 
 INFO is a plist holding export options."
   (let* ((block-type (org-element-property :type special-block))
@@ -3326,7 +3328,9 @@ the Hugo front-matter."
        (string-match-p "\\`@" tag)))
 
 (defun org-hugo--subtree-export-p (info)
-  "Return non-nil if the current export is subtree based."
+  "Return non-nil if the current export is subtree based.
+
+INFO is a plist used as a communication channel."
   (memq 'subtree (plist-get info :export-options)))
 
 (defun org-hugo--get-front-matter (info)

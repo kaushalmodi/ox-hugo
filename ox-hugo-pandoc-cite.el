@@ -169,6 +169,8 @@ The list of Pandoc specific meta-data is defined in
 (defun org-hugo-pandoc-cite--fix-pandoc-output (content loffset info)
   "Fix the Pandoc output CONTENT and return it.
 
+LOFFSET is the heading level offset.
+
 Required fixes:
 
 - Prepend Pandoc inserted \"references\" class div with

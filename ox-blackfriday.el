@@ -900,7 +900,7 @@ exported instead:
 
 ;;;; Latex Environment
 (defun org-blackfriday--update-ltximg-path (html-str)
-  "Update the path to latex exported images directory.
+  "Update the path in HTML-STR to latex exported images directory.
 
 For example, this function converts
 
@@ -1051,7 +1051,8 @@ communication channel."
 ;;;; Radio Target
 (defun org-blackfriday-radio-target (radio-target text _info)
   "Transcode a RADIO-TARGET object from Org to HTML.
-CONTENTS is nil."
+
+TEXT is nil."
   (let* ((prefix (org-blackfriday--get-ref-prefix 'radio))
          (ref (format "%s%s"
                       prefix

@@ -3792,6 +3792,73 @@ Additionally, if it has the property ~EXPORT_HTML_CONTAINER_CLASS:
 foo~, the "foo" class gets added to that container tag as well.
 
 {{{test-search(container)}}}
+*** Anchors
+:PROPERTIES:
+:EXPORT_FILE_NAME: anchors
+:END:
+#+begin_description
+Anchors derived for sub-heading and other HTML elements in a page.
+#+end_description
+Hugo supports specifying custom ID's for headings in a page using the
+~{#some-id}~ syntax. See its documentation on [[https://gohugo.io/content-management/cross-references/#heading-ids][Cross References:
+Heading IDs]] for reference.
+
+If the heading ID's are not specified using the above syntax, Hugo
+will generate them automatically. While that is OK in general, it
+becomes problematic when user generates [[* Table of Contents][TOC]] using Org, where the links
+to headings on the page need to be embedded, or uses Org internal or
+external links to reference other headings.
+
+So in order to make the user experience smooth, anchors for all
+headings are always derived withing ~ox-hugo~ and exported using the
+~{#some-id}~ syntax.
+
+The functions used for deriving the anchors can be customized using
+the *~org-hugo-anchor-functions~* variable.
+
+This variable is a list of functions which can return the anchor
+string for a given Org heading element. The first function in the list
+to return a non-nil value wins. So this scheme can be used to set a
+precedence order that the user desires.
+
+This is the default precedence order:
+
+- ~org-hugo-get-custom-id~ :: Use the heading's ~:CUSTOM_ID~ property
+  if set, else return /nil/.
+- ~org-hugo-get-heading-slug~ :: Derive anchor using the heading's
+  text. This could also return /nil/, if the heading has no
+  alphanumeric characters or no text (empty string).
+- ~org-hugo-get-md5~ :: Derive anchor using the few 6 characters of
+  /md5/ based on the heading title text. It returns the /md5/ of an
+  empty string if nothing else works. That way, this function
+  guarantees to return some non-empty string.
+
+Above precedence is set in the default value of
+~org-hugo-anchor-functions~ --- ~'(org-hugo-get-custom-id
+org-hugo-get-heading-slug org-hugo-get-md5)~.
+**** Other anchor functions
+- ~org-hugo-get-id~ :: This function returns the ID, if that property
+  is set for a heading.
+
+  If a user prefers to give higher precedence to Org ID than the
+  heading-derived-slug, they can customize ~org-hugo-anchor-functions~
+  to ~'(org-hugo-get-custom-id org-hugo-get-id
+  org-hugo-get-heading-slug org-hugo-get-md5)~.
+
+  Now if an Org heading looks like this:
+
+  #+begin_src org
+  ,** Heading in a post
+  :PROPERTIES:
+  :ID:       74283e7c-a20b-1c22-af88-e41ff8055d17
+  :END:
+  #+end_src
+
+  , it will be exported as below in Markdown:
+
+  #+begin_src md
+  ### Heading in a post {#74283e7c-a20b-1c22-af88-e41ff8055d17}
+  #+end_src
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"

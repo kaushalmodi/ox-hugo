@@ -547,6 +547,34 @@ nil) plist were associated with them."
   :group 'org-export-hugo
   :type '(alist :key-type string :value-type (plist :key-type symbol :value-type boolean)))
 
+(defcustom org-hugo-anchor-functions '(org-hugo-get-custom-id
+                                       org-hugo-get-heading-slug)
+  "A list of functions for deriving the anchor of current Org heading.
+
+The functions will be run in the order added to this variable
+until the first one returns a non-nil value.  So the functions in
+this list are order-sensitive.
+
+For example, if `org-hugo-get-custom-id' is the first element in
+this list, the heading's `:CUSTOM_ID' property will have the
+highest precedence in determining the heading's anchor string.
+
+This variable is used in the `org-hugo--get-anchor' internal
+function.
+
+Functions added to this list should have 2 arguments (which could
+even be declared as optional):
+
+1. ELEMENT : Org element
+2. INFO    : General plist used as a communication channel
+
+Some of the inbuilt functions that can be added to this list:
+- `org-hugo-get-custom-id'
+- `org-hugo-get-heading-slug'
+- `org-hugo-get-id'"
+  :group 'org-export-hugo
+  :type '(repeat function))
+
 
 
 ;;; Define Back-End
@@ -1664,8 +1692,10 @@ a communication channel."
                   bullet " " heading tags-fmtd "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
-        (let* ((anchor (format "{#%s}" ;https://gohugo.io/extras/crossreferences/
-                               (org-hugo--get-anchor heading info)))
+        (let* ((anchor (org-hugo--get-anchor heading info))
+               (anchor (or (and (org-string-nw-p anchor)
+                                (format "{#%s}" anchor)) ;https://gohugo.io/extras/crossreferences/
+                           ""))
                (heading-title (org-hugo--heading-title style level loffset title
                                                        todo-fmtd tags-fmtd anchor numbers))
                (wrap-element (org-hugo--container heading info))
@@ -1782,24 +1812,45 @@ The `slug' generated from that STR follows these rules:
       (setq str (replace-regexp-in-string "--" "-" str)))
     str))
 
-(defun org-hugo--get-anchor(element info)
-  "Return an Org heading's anchor.
+(defun org-hugo-get-custom-id(element &optional _info)
+  "Return ELEMENT's `:CUSTOM_ID' property.
 
-The anchor is derived in the following precedence:
+Return nil if ELEMENT doesn't have the CUSTOM_ID property set."
+  (org-string-nw-p (org-element-property :CUSTOM_ID element)))
 
-1. `:CUSTOM_ID' property of the ELEMENT if set
-2. `:title' property of the ELEMENT.  If ELEMENT is an Org heading,
-   the `:title' will be the heading string.
+(defun org-hugo-get-id(&optional _element _info)
+  "Return the value of `:ID' property at point.
+
+Return nil if id is not found."
+  (org-id-get))
+
+(defun org-hugo-get-heading-slug(element info)
+  "Return the slug string derived from an Org heading ELEMENT.
+
+The slug string is parsed from the ELEMENT's `:title' property.
 
 INFO is a plist used as a communication channel.
 
-If the anchor cannot be derived from any of the above, return
-nil."
-  (or (org-element-property :CUSTOM_ID element)
-      (let ((title (org-export-data-with-backend
-                    (org-element-property :title element) 'md info)))
-        (when (org-string-nw-p title)
-          (org-hugo-slug title :allow-double-hyphens)))))
+Return nil if ELEMENT's `:title' property is nil or an empty string."
+  (let ((title (org-export-data-with-backend
+                (org-element-property :title element) 'md info)))
+    (org-string-nw-p (org-hugo-slug title :allow-double-hyphens))))
+
+(defun org-hugo--get-anchor(element info)
+  "Return anchor string for Org heading ELEMENT.
+
+The anchor is derived using the first function that returns a
+non-nil value (a string) from the list
+`org-hugo-anchor-functions'.
+
+INFO is a plist used as a communication channel.
+
+Return an empty string if all functions in
+`org-hugo-anchor-functions' return nil."
+  (or (seq-some
+       (lambda (fn) (funcall fn element info))
+       org-hugo-anchor-functions)
+      ""))
 
 (defun org-hugo--heading-title (style level loffset title &optional todo tags anchor numbers)
   "Generate a heading title in the preferred Markdown heading style.

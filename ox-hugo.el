@@ -1781,27 +1781,25 @@ The `slug' generated from that STR follows these rules:
     str))
 
 (defun org-hugo--get-anchor(element info &optional title-str)
-  "Return an Org heading's CUSTOM_ID or it's title's slug.
+  "Return an Org heading's anchor.
 
-If an Org ELEMENT has the CUSTOM_ID property defined, return
-that.
+The anchor is derived in the following precedence:
+
+1. `:CUSTOM_ID' property of the ELEMENT if set
+2. Optional TITLE-STR string argument to this function
+3. `:title' property of the ELEMENT.  If ELEMENT is an Org heading,
+   the `:title' will be the heading string.
 
 INFO is a plist used as a communication channel.
 
-If the CUSTOM_ID property is not defined, and if TITLE-STR is
-nil, derive the title string from the INFO, pass that to
-`org-hugo-slug' and return its output.
-
-If the CUSTOM_ID property is not defined, and if TITLE-STR is a
-non-empty string, pass that to `org-hugo-slug' and return its
-output."
-  (let ((ret (org-element-property :CUSTOM_ID element)))
-    (unless ret
+If the anchor cannot be derived from any of the above, return
+nil."
+  (or (org-element-property :CUSTOM_ID element)
       (let ((title (or (org-string-nw-p title-str)
                        (org-export-data-with-backend
                         (org-element-property :title element) 'md info))))
-        (setq ret (org-hugo-slug title :allow-double-hyphens))))
-    ret))
+        (when (org-string-nw-p title)
+          (org-hugo-slug title :allow-double-hyphens)))))
 
 (defun org-hugo--heading-title (style level loffset title &optional todo tags anchor numbers)
   "Generate a heading title in the preferred Markdown heading style.

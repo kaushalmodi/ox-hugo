@@ -766,27 +766,29 @@ subtree* i.e. an Org subtree that has the =EXPORT_FILE_NAME= property
 set.
 #+caption: Hugo front-matter translation for subtree-based exports
 #+attr_html: :class sane-table
-|------------------------------------+----------------------------------------+----------------------------------------------------------------------------|
-| Hugo front-matter (TOML)           | Org                                    | Org description                                                            |
-|------------------------------------+----------------------------------------+----------------------------------------------------------------------------|
-| =title = "foo"=                    | =* foo=                                | Subtree heading                                                            |
-| =date = 2017-09-11T14:32:00-04:00= | =CLOSED: [2017-09-11 Mon 14:32]=       | Auto-inserted =CLOSED= subtree property when switch to Org *DONE* state    |
-| =date = 2017-07-24=                | =:EXPORT_DATE: 2017-07-24=             | Subtree property                                                           |
+|------------------------------------+-----------------------------------------+----------------------------------------------------------------------------|
+| Hugo front-matter (TOML)           | Org                                     | Org description                                                            |
+|------------------------------------+-----------------------------------------+----------------------------------------------------------------------------|
+| =title = "foo"=                    | =* foo=                                 | Subtree heading                                                            |
+| =date = 2017-09-11T14:32:00-04:00= | =CLOSED: [2017-09-11 Mon 14:32]=        | Auto-inserted =CLOSED= subtree property when switch to Org *DONE* state    |
+| =date = 2017-07-24=                | =:EXPORT_DATE: 2017-07-24=              | Subtree property                                                           |
 | =publishDate = 2018-01-26=         | =SCHEDULED: <2018-01-26 Fri>=           | Auto-inserted =SCHEDULED= subtree property using default =C-c C-s= binding |
 | =publishDate = 2018-01-26=         | =:EXPORT_HUGO_PUBLISHDATE: 2018-01-26:= | Subtree property                                                           |
 | =expiryDate = 2999-01-01=          | =:EXPORT_HUGO_EXPIRYDATE: 2999-01-01:=  | Subtree property                                                           |
-| =lastmod = <current date>=          | =:EXPORT_HUGO_AUTO_SET_LASTMOD: t=     | Subtree property                                                           |
-| =lastmod = <current date>=          | =#+hugo_auto_set_lastmod: t=           | Org keyword                                                                |
+| =lastmod = <current date>=         | =:EXPORT_HUGO_AUTO_SET_LASTMOD: t=      | Subtree property                                                           |
+| =lastmod = <current date>=         | =#+hugo_auto_set_lastmod: t=            | Org keyword                                                                |
 | =tags = ["toto", "zulu"]=          | =* foo :toto:zulu:=                     | Subtree heading tags                                                       |
 | =categories = ["x", "y"]=          | =* foo :@x:@y:=                         | Subtree heading tags with =@= prefix                                       |
-| =draft = true=                     | =* TODO foo=                           | Subtree heading Org TODO state set to =TODO=[fn:4].                        |
-| =draft = false=                    | =* foo= or =* DONE foo=                | Subtree heading Org TODO state not set or set to =DONE=[fn:4].             |
-| =weight = 123= (manual)            | =:EXPORT_HUGO_WEIGHT: 123=             | Manual setting of page weight                                              |
-| =weight = 123= (auto-calc)         | =:EXPORT_HUGO_WEIGHT: auto=            | When set to =auto=, page weight is auto-calculated                         |
-| =tags_weight = 123= (manual)       | =:EXPORT_HUGO_WEIGHT: :tags 123=       | Manual setting of /FOO/ taxonomy weight, by setting to =:FOO VALUE=        |
-| =tags_weight = 123= (auto-calc)    | =:EXPORT_HUGO_WEIGHT: :tags auto=      | When set to =:FOO auto=, /FOO/ taxonomy weight is auto-calculated          |
-| =weight = 123= (in =[menu.foo]=)   | =:EXPORT_HUGO_MENU: :menu foo=         | Menu weight is auto-calculated unless specified                            |
-|------------------------------------+----------------------------------------+----------------------------------------------------------------------------|
+| =draft = true=                     | =* TODO foo=                            | Subtree heading Org TODO state set to =TODO=[fn:4].                        |
+| =draft = false=                    | =* foo= or =* DONE foo=                 | Subtree heading Org TODO state not set or set to =DONE=[fn:4].             |
+| =weight = 123= (manual)            | =:EXPORT_HUGO_WEIGHT: 123=              | Manual setting of page weight                                              |
+| =weight = 123= (auto-calc)         | =:EXPORT_HUGO_WEIGHT: auto=             | When set to =auto=, page weight is auto-calculated                         |
+| =tags_weight = 123= (manual)       | =:EXPORT_HUGO_WEIGHT: :tags 123=        | Manual setting of /FOO/ taxonomy weight, by setting to =:FOO VALUE=        |
+| =tags_weight = 123= (auto-calc)    | =:EXPORT_HUGO_WEIGHT: :tags auto=       | When set to =:FOO auto=, /FOO/ taxonomy weight is auto-calculated          |
+| =weight = 123= (in =[menu.foo]=)   | =:EXPORT_HUGO_MENU: :menu foo=          | Menu weight is auto-calculated unless specified                            |
+| =aliases = ["my-post-alias"]=      | =:EXPORT_HUGO_ALIASES: my-post-alias=   | Manual setting of a post alias                                             |
+| =aliases = ["123456"]=             | =:ID: 123456=                           | Subtree's =ID= property is auto-exported as the post's alias.              |
+|------------------------------------+-----------------------------------------+----------------------------------------------------------------------------|
 ***** Notes
 - Precedence for =date= parsing :: =CLOSED= subtree property /more
      than/ =EXPORT_DATE= subtree property /more than/ =#+date:=
@@ -798,23 +800,25 @@ set.
 **** For file-based exports
 #+caption: Hugo front-matter translation for file-based exports
 #+attr_html: :class sane-table
-|----------------------------------+--------------------------------------|
-| Hugo front-matter (TOML)         | Org                                  |
-|----------------------------------+--------------------------------------|
-| =title = "foo"=                  | =#+title: foo=                       |
-| =date = 2017-07-24=              | =#+date: 2017-07-24=                 |
-| =publishDate = 2018-01-26=       | =#+hugo_publishdate: 2018-01-26=     |
-| =expiryDate = 2999-01-01=        | =#+hugo_expirydate: 2999-01-01=      |
-| =lastmod = <current date>=        | =#+hugo_auto_set_lastmod: t=         |
-| =tags = ["toto", "zulu"]=        | =#+hugo_tags: toto zulu=             |
-| =categories = ["x", "y"]=        | =#+hugo_categories: x y=             |
-| =draft = true=                   | =#+hugo_draft: true=                 |
-| =draft = false=                  | =#+hugo_draft: false=                |
-| =weight = 123=                   | =#+hugo_weight: 123=                 |
-| =tags_weight = 123=              | =#+hugo_weight: :tags 123=           |
-| =categories_weight = 123=        | =#+hugo_weight: :categories 123=     |
-| =weight = 123= (in =[menu.foo]=) | =#+hugo_menu: :menu foo :weight 123= |
-|----------------------------------+--------------------------------------|
+|----------------------------------+--------------------------------------------------------|
+| Hugo front-matter (TOML)         | Org                                                    |
+|----------------------------------+--------------------------------------------------------|
+| =title = "foo"=                  | =#+title: foo=                                         |
+| =date = 2017-07-24=              | =#+date: 2017-07-24=                                   |
+| =publishDate = 2018-01-26=       | =#+hugo_publishdate: 2018-01-26=                       |
+| =expiryDate = 2999-01-01=        | =#+hugo_expirydate: 2999-01-01=                        |
+| =lastmod = <current date>=       | =#+hugo_auto_set_lastmod: t=                           |
+| =tags = ["toto", "zulu"]=        | =#+hugo_tags: toto zulu=                               |
+| =categories = ["x", "y"]=        | =#+hugo_categories: x y=                               |
+| =draft = true=                   | =#+hugo_draft: true=                                   |
+| =draft = false=                  | =#+hugo_draft: false=                                  |
+| =weight = 123=                   | =#+hugo_weight: 123=                                   |
+| =tags_weight = 123=              | =#+hugo_weight: :tags 123=                             |
+| =categories_weight = 123=        | =#+hugo_weight: :categories 123=                       |
+| =weight = 123= (in =[menu.foo]=) | =#+hugo_menu: :menu foo :weight 123=                   |
+| =aliases = ["my-post-alias"]=    | =#+hugo_aliases: my-post-alias=                        |
+| =aliases = ["123456"]=           | =:ID: 123456= (=:ID:= property at the top of the file) |
+|----------------------------------+--------------------------------------------------------|
 ***** Notes
 - The *auto calculation* of weights for pages, taxonomies and menu
   items works *only* for subtree-based exports.

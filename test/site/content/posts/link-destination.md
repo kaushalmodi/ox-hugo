@@ -1,5 +1,6 @@
 +++
 title = "Link destination"
+aliases = ["1e5e0bcd-caea-40ad-a75b-e488634c2678"]
 tags = ["links"]
 draft = false
 +++

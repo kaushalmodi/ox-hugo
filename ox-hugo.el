@@ -3426,7 +3426,10 @@ INFO is a plist used as a communication channel."
          (aliases-raw (let ((aliases-raw-1 (org-string-nw-p (plist-get info :hugo-aliases))))
                         (when aliases-raw-1
                           (org-split-string aliases-raw-1 " "))))
-         (aliases (let (alias-list)
+         (aliases (let ((org-id (org-id-get))
+                        alias-list)
+                    (when org-id ;If Org ID is set, add it as an alias.
+                      (push org-id alias-list))
                     (dolist (alias aliases-raw)
                       (unless (string-match-p "/" alias)
                         (let ((section (file-name-as-directory ;Suffix section with "/" if it isn't already

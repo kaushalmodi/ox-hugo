@@ -1,5 +1,6 @@
 +++
 title = "Org-mode ID links in other section"
+aliases = ["094C3D7B-5AE7-45A7-8AD6-D0B45C50A8FE"]
 draft = false
 +++
 

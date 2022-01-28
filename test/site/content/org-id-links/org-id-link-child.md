@@ -1,5 +1,6 @@
 +++
 title = "Org-mode ID links child"
+aliases = ["FAADA682-B553-48BE-AC15-F80BDEE5A962"]
 draft = false
 +++
 

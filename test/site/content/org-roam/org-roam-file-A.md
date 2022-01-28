@@ -1,5 +1,6 @@
 +++
 title = "A"
+aliases = ["1e8ccec9-735d-41d0-b0cf-143d9c3e965d"]
 tags = ["org-roam"]
 categories = ["org-id"]
 draft = false

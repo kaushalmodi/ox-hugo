@@ -1647,7 +1647,7 @@ control on:
 - *Where* to include the TOC --- Location of the =#+toc= keyword in the
   Org content.
 - How many headings to include in the TOC --- /Example: =#+toc:
-  headings 2=/ or =:EXPORT_OPTIONS: toc:2=.
+  headlines 2=/ or =:EXPORT_OPTIONS: toc:2=.
 - Whether you want *all* the headings in the TOC to be numbered or
   not --- See =org-hugo-export-with-section-numbers=.
 - Whether you want *only some* headings numbered (both in post body

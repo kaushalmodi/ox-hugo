@@ -1,3 +1,4 @@
+# -*- conf -*-
 # Paste the below in https://play.netlify.com/headers to test
 # Set max-age to 1 year for stuff not expected to update any time soon.
 /css/*
@@ -47,9 +48,47 @@
   X-Content-Type-Options: nosniff
 
 # Content Security Policy
-## Hashes for Privacy Badger injected scripts: https://gitlab.com/kaushalmodi/kaushalmodi.gitlab.io/blob/29fc983ac72fa886ac39bff6b46dc7e426cb993b/netlify.toml#L174-199
+## script sha 1: 'sha256-O+U/ptNNoUqEhNU1BSkb7izMavM1GxrvRrabNX8WTKE='
+## toc_on_side inline script in hugo-onyx-theme
+
+## script sha 2: 'sha256-YiWMVJIplziLxmHOI6iqs51JQS9W2hg1wDsKBD3u09g='
+## DataTable JS in doc/layouts/_default/examples.html
+## https://github.com/kaushalmodi/ox-hugo/commit/eec3303296c64c5a7f244ee3d0fd06cc6997d017
+
+## script sha 3: 'sha256-Zgc2pp+yOmAVogxvTHYBMFKubY0HKk2a0+0+8sX17WY='
+## is the hash for the special script ";undefined". This is added
+## as a hack to prevent the below report caused by the Lastpass
+## Extension on Firefox.
+##   {
+##       "csp-report": {
+##           "blocked-uri": "self",
+##           "document-uri": "https://scripter.co/",
+##           "line-number": 1,
+##           "original-policy": "default-src 'none'; script-src https://scripter.co 'sha256-AICaU7ez1zEahkwGOinOvyDtJHKvnJAO607ClgXh4xg=' 'sha256-fB1lnlS3H5DCH26tOB+Agbmbv0abX4TwU9MYAf3FJIw=' 'sha256-1iz8p6+E+t6QRucmo3ZtYZwPhxbSzs8i3JrycOAMAUU=' https://cdnjs.cloudflare.com/ajax/libs/mathjax/ 'unsafe-inline'; object-src 'none'; style-src https://scripter.co 'unsafe-inline'; img-src https://scripter.co; font-src https://scripter.co about: data: https://cdnjs.cloudflare.com/ajax/libs/mathjax/; connect-src https://scripter.co; manifest-src https://scripter.co; media-src 'none'; form-action https://scripter.co https://webmention.io/scripter.co/webmention https://quill.p3k.io/; frame-ancestors 'none'; base-uri https://scripter.co; block-all-mixed-content; report-uri https://c571407e2c6d71ed2021633b7fdad0de.report-uri.com/r/d/csp/enforce",
+##           "script-sample": ";undefined",
+##           "violated-directive": "script-src"
+##       }
+##   }
+## https://twitter.com/kaushalmodi/status/989941320558039040
+
+## script sha 4: 'sha256-kNsowQfHpWMrbQG7AtSzSuMQg2t/YKwmDWdqeKfm4BI='
+## Privacy Badger script:
+## (function (NAVIGATOR, OBJECT) {\n\n    OBJ...
+##    https://github.com/EFForg/privacybadger/blob/6c042773f398a5b86bd3e1a7cced16ebae4b1eba/src/js/contentscripts/dnt.js#L1
+
+## script sha 5: 'sha256-afSIEhWGAPlY458Q4YkhPLVnsVEBh/u5YNlpg6od8TU='
+## Privacy Badger script:
+## (function (ERROR) {\n\n    const V8_STACK_...
+##    https://github.com/EFForg/privacybadger/blob/6c042773f398a5b86bd3e1a7cced16ebae4b1eba/src/js/contentscripts/fingerprinting.js#L21-L300
+
+## script sha 6: 'sha256-MPj6vnuF78urAeAbBOvZTLkBsXd6sKVbPvo2xawWHmg='
+## inline script in hugo-search-fuse-js' search.html layout page.
+
+## script sha 7: 'sha256-4hMQLEunRODqnKXR8LDzifJHDuafWrG7ki9/LGlTpc4='
+## tikz script on https://ox-hugo.scripter.co/test/posts/tikzjax/
+## https://github.com/kaushalmodi/ox-hugo/commit/5521105fb50c50f7802759bcece966fd9b502a24
 /*
-  Content-Security-Policy: default-src 'none'; script-src 'self' 'sha256-O+U/ptNNoUqEhNU1BSkb7izMavM1GxrvRrabNX8WTKE=' 'sha256-YiWMVJIplziLxmHOI6iqs51JQS9W2hg1wDsKBD3u09g=' 'sha256-Zgc2pp+yOmAVogxvTHYBMFKubY0HKk2a0+0+8sX17WY=' 'sha256-kNsowQfHpWMrbQG7AtSzSuMQg2t/YKwmDWdqeKfm4BI=' 'sha256-afSIEhWGAPlY458Q4YkhPLVnsVEBh/u5YNlpg6od8TU=' https://cdn.jsdelivr.net/npm/mathjax@3/ https://d33wubrfki0l68.cloudfront.net/js/ https://cdn.datatables.net https://tikzjax.com/v1/tikzjax.js 'sha256-4hMQLEunRODqnKXR8LDzifJHDuafWrG7ki9/LGlTpc4=' 'unsafe-inline'; object-src 'none'; style-src 'self' https://d33wubrfki0l68.cloudfront.net https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/ https://cdn.datatables.net https://tikzjax.com 'unsafe-inline'; img-src 'self' https://d33wubrfki0l68.cloudfront.net https://github.com/kaushalmodi/ https://cdn.datatables.net; font-src https://cdn.jsdelivr.net/npm/mathjax@3/ https://tikzjax.com 'self' about: data: https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/; connect-src 'self' https://tikzjax.com; manifest-src 'self'; media-src 'self'; frame-src https://ghbtns.com https://www.youtube-nocookie.com; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; block-all-mixed-content; report-uri https://c571407e2c6d71ed2021633b7fdad0de.report-uri.com/r/d/csp/enforce;
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'sha256-O+U/ptNNoUqEhNU1BSkb7izMavM1GxrvRrabNX8WTKE=' 'sha256-YiWMVJIplziLxmHOI6iqs51JQS9W2hg1wDsKBD3u09g=' 'sha256-Zgc2pp+yOmAVogxvTHYBMFKubY0HKk2a0+0+8sX17WY=' 'sha256-kNsowQfHpWMrbQG7AtSzSuMQg2t/YKwmDWdqeKfm4BI=' 'sha256-afSIEhWGAPlY458Q4YkhPLVnsVEBh/u5YNlpg6od8TU=' 'sha256-MPj6vnuF78urAeAbBOvZTLkBsXd6sKVbPvo2xawWHmg=' https://cdn.jsdelivr.net/npm/mathjax@3/ https://d33wubrfki0l68.cloudfront.net/js/ https://cdn.datatables.net https://tikzjax.com/v1/tikzjax.js 'sha256-4hMQLEunRODqnKXR8LDzifJHDuafWrG7ki9/LGlTpc4=' 'unsafe-inline'; object-src 'none'; style-src 'self' https://d33wubrfki0l68.cloudfront.net https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/ https://cdn.datatables.net https://tikzjax.com 'unsafe-inline'; img-src 'self' https://d33wubrfki0l68.cloudfront.net https://github.com/kaushalmodi/ https://cdn.datatables.net; font-src https://cdn.jsdelivr.net/npm/mathjax@3/ https://tikzjax.com 'self' about: data: https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/; connect-src 'self' https://tikzjax.com; manifest-src 'self'; media-src 'self'; frame-src https://ghbtns.com https://www.youtube-nocookie.com; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; block-all-mixed-content; report-uri https://c571407e2c6d71ed2021633b7fdad0de.report-uri.com/r/d/csp/enforce;
 
 # Feature Policy
 ## https://github.com/WICG/feature-policy/blob/master/features.md

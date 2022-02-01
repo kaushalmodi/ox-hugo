@@ -1,5 +1,7 @@
+github.com/julmot/mark.js v0.0.0-20210820195258-8b57fccf976b/go.mod h1:aAyDyl2EhNPiZbFqqURsAmxYwwTHslrIxZErXMO3pJQ=
 github.com/kaushalmodi/hugo-debugprint v0.1.0 h1:L8McCoJ0WPkKSRQ0f3j4mMGubIedbOWdLs9Y4/rPGAs=
 github.com/kaushalmodi/hugo-debugprint v0.1.0/go.mod h1:vusrDLlGE+4Uc1b4PgM0dI8lJCEqC1o7NjFr8WIfkaQ=
-github.com/kaushalmodi/hugo-onyx-theme v0.3.0 h1:wq12FDJM8yQGwcrvsB1eUGz2fO9twsan2fLNtBT0yoI=
-github.com/kaushalmodi/hugo-onyx-theme v0.3.0/go.mod h1:TJ+MprQCL2U8dVxJ/OlFUvf6L+qWnPuzBahjJufi578=
-github.com/kaushalmodi/hugo-search-fuse-js v0.3.0/go.mod h1:96kq3KKM93E06XVL//h4MaYFhZIYzJTj5/E+Kqeg7TA=
+github.com/kaushalmodi/hugo-onyx-theme v0.4.0 h1:7V8riDHrPk8k0QhfeFPR6z7JoYV2wSZVTaXF2puomQc=
+github.com/kaushalmodi/hugo-onyx-theme v0.4.0/go.mod h1:bHX/lQn7AsnQmcdB7XhLUnBUHhG1UxgWHaEaTIXjcq4=
+github.com/kaushalmodi/hugo-search-fuse-js v0.4.1/go.mod h1:Wr6gbPat+KW6wReh/hDBykKIWn296FsEkuhojJvHHxw=
+github.com/krisk/Fuse v3.2.1+incompatible/go.mod h1:3moWv8rDjwoKic9nwiPLgZjldkbdTAbtzJHCu/Vsj4A=

@@ -399,6 +399,11 @@
    source = "https://gitlab.com/spcbfr/blog/"
    site = "https://spcbfr.vercel.app"
 
+[ParetoOptimalDev]
+   author = "ParetoOptimalDev"
+   source = "https://github.com/ParetoOptimalDev/ParetoOptimalDev.github.io"
+   site = "https://paretooptimal.dev"
+
 # []
 #   author = ""
 #   source = ""

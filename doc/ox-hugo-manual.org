@@ -3584,7 +3584,7 @@ specified using the ~#+attr_shortcode~ keyword.
 For example,
 
 #+begin_src org
-,#+attr_shortcode argval1 "arg val 2"
+,#+attr_shortcode: argval1 "arg val 2"
 ,#+begin_myshortcode
 Something
 ,#+end_myshortcode
@@ -3604,7 +3604,7 @@ Something
 For example,
 
 #+begin_src org
-,#+attr_shortcode :arg1 foo bar :arg2 color: red; text-align: center;
+,#+attr_shortcode: :arg1 foo bar :arg2 color: red; text-align: center;
 ,#+begin_myshortcode
 Something
 ,#+end_myshortcode

@@ -3358,6 +3358,8 @@ But the user might want to keep the contents of the special block
 as-as, in its raw form, for some special block types. If the user
 wants to do this for a special block of the /type/ FOO:
 
+#+name: code__example_special_block
+#+caption: An example /special block/ of type /FOO/
 #+begin_src org
 ,#+begin_FOO
 Some content
@@ -3370,6 +3372,8 @@ Some content
 By default , ~("katex" . (:raw t))~ is added to this list. So when
 using a special block like,
 
+#+name: code__example_katex_special_block
+#+caption: An example /special block/ of type /katex/
 #+begin_src org
 ,#+begin_katex
 E = -J \sum\_{i=1}^N s\_i s\_{i+1}
@@ -3378,6 +3382,28 @@ E = -J \sum\_{i=1}^N s\_i s\_{i+1}
 
 , the equation in the content of that special block: ~E = -J
 \sum\_{i=1}^N s\_i s\_{i+1}~ will be exported to Markdown as-is.
+
+As an another example, if you have a special block for the [[https://mermaid-js.github.io/mermaid/'][Mermaid
+diagramming markup]], and you need to write special blocks like below
+which has one of the HTML reserved characters (~>~),
+#+name: code__example_mermaid_special_block
+#+caption: An example /special block/ of type /mermaid/
+#+begin_src org
+,#+begin_mermaid
+flowchart TD
+    Start --> Stop
+,#+end_mermaid
+#+end_src
+
+you will need to export the content of that shortcode in raw Org. To
+do so, you can add something like this to your config:
+
+#+name: code__example_update_raw_special_block_prop
+#+caption: An example of updating a special block type's ~:raw~ property to ~t~
+#+begin_src emacs-lisp
+(with-eval-after-load 'ox-hugo
+  (add-to-list 'org-hugo-special-block-type-properties '("mermaid" . (:raw t))))
+#+end_src
 **** TikZJax
 ~ox-hugo~ supports exporting raw /tikz/ snippet to Markdown which can be
 rendered to images using the [[https://tikzjax.com/][TikZJax]] project.

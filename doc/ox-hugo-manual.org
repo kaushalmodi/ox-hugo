@@ -3383,7 +3383,7 @@ E = -J \sum\_{i=1}^N s\_i s\_{i+1}
 , the equation in the content of that special block: ~E = -J
 \sum\_{i=1}^N s\_i s\_{i+1}~ will be exported to Markdown as-is.
 
-As an another example, if you have a special block for the [[https://mermaid-js.github.io/mermaid/'][Mermaid
+As an another example, if you have a special block for the [[https://mermaid-js.github.io/mermaid/][Mermaid
 diagramming markup]], and you need to write special blocks like below
 which has one of the HTML reserved characters (~>~),
 #+name: code__example_mermaid_special_block

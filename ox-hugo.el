@@ -2185,7 +2185,7 @@ and rewrite link paths to make blogging more seamless."
                        (plist-get attr :caption)))
              (caption (when (org-string-nw-p caption)
                         (format "%s%s%s%s"
-                                "<span class=\\\"figure-number\\\">"
+                                "<span class=\"figure-number\">"
                                 (format (org-html--translate
                                          (concat
                                           (cdr (assoc 'figure org-blackfriday--org-element-string))
@@ -2195,8 +2195,7 @@ and rewrite link paths to make blogging more seamless."
                                          useful-parent info
                                          nil #'org-html--has-caption-p))
                                 " </span>"
-                                ;; Escape the double-quotes, if any.
-                                (replace-regexp-in-string "\"" "\\\\\"" caption))))
+                                caption)))
              (extension (file-name-extension raw-path))
              (inlined-svg (and (stringp extension)
                                (string= "svg" (downcase extension))
@@ -2222,11 +2221,10 @@ and rewrite link paths to make blogging more seamless."
                                               svg-contents))))
                    (caption-html (if (not caption)
                                      ""
-                                   (format (concat "\n\n<div class=\"figure-caption\">\n"
+                                   (format (concat "\n\n<div class=\"figure-caption\">\n\n"
                                                    "  %s\n"
                                                    "</div>")
-                                           (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
-                                            (org-export-data-with-backend caption 'ascii info))))))
+                                           caption))))
               ;; (message "[org-hugo-link DBG] svg contents: %s" svg-contents)
               ;; (message "[org-hugo-link DBG] svg contents sanitized: %s" svg-contents-sanitized)
               (concat svg-contents-sanitized caption-html))
@@ -2269,7 +2267,8 @@ and rewrite link paths to make blogging more seamless."
               ;; https://gohugo.io/content-management/shortcodes/#figure
               (let ((figure-params `((src . ,source)
                                      (alt . ,alt-text)
-                                     (caption . ,caption)
+                                     (caption . ,(when (org-string-nw-p caption)
+                                                   (replace-regexp-in-string "\"" "\\\\\\&" caption))) ;Escape the double-quotes, if any.
                                      (link . ,(plist-get attr :link))
                                      (title . ,(plist-get attr :title))
                                      (class . ,(plist-get attr :class))

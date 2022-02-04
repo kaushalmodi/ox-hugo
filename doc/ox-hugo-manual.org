@@ -3019,20 +3019,38 @@ The /section path/ derived at this level is ~"main/sub2/"~.
 Inlined SVGs are supported by a new HTML attribute introduced by
 ~ox-hugo~: *inlined*.
 
-Simply add ~#+attr_html: :inlined t~ above the SVG file link.
+Just add ~#+attr_html: :inlined t~
+#+begin_mark
+above the SVG file link
+#+end_mark
+.
 
 Here's an example of inlining an SVG:
 
 #+begin_src org
-,#+caption: An SVG with hyperlink
+,#+begin_src plantuml :file ../test/site/content-org/images/svg-with-hyperlinks.svg :exports results
+skinparam svgLinkTarget _parent
+start
+:[[https://ox-hugo.scripter.co/ ox-hugo homepage]];
+stop
+,#+end_src
+,#+caption: An SVG with a *hyperlink*
 ,#+attr_html: :inlined t
+,#+RESULTS:
 [[file:../test/site/content-org/images/svg-with-hyperlinks.svg]]
 #+end_src
 
 .. which results in:
 
-#+caption: An SVG with hyperlink
+#+begin_src plantuml :file ../test/site/content-org/images/svg-with-hyperlinks.svg :exports results
+skinparam svgLinkTarget _parent
+start
+:[[https://ox-hugo.scripter.co/ ox-hugo homepage]];
+stop
+#+end_src
+#+caption: An SVG with a *hyperlink*
 #+attr_html: :inlined t
+#+RESULTS:
 [[file:../test/site/content-org/images/svg-with-hyperlinks.svg]]
 *** CJK Support
 :PROPERTIES:

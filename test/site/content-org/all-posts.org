@@ -389,6 +389,17 @@ stop
 #+attr_html: :inlined t
 #+RESULTS:
 [[file:images/svg-with-hyperlinks.svg]]
+*** Captioned source block followed by an inlined SVG
+{{{oxhugoissue(552)}}}
+
+#+caption: My class diagram
+#+begin_src plantuml :file images/issue-552.svg :exports both
+  class A
+  url of A is [[https://example.org/]]
+#+end_src
+#+attr_html: :inlined t
+#+RESULTS:
+[[file:images/issue-552.svg]]
 ** Figures from included Org file                                   :include:
 :PROPERTIES:
 :EXPORT_FILE_NAME: figures-from-included-org-file

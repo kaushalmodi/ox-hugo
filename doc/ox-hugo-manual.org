@@ -654,6 +654,52 @@ _necessary_ to add this to your Hugo site's ~config.toml~:
 
 /While that setting sounds scary, all that does is allow have inline
 HTML in your Markdown, *as CommonMark allows!*/
+*** Troubleshooting
+:PROPERTIES:
+:EXPORT_FILE_NAME: troubleshooting
+:END:
+**** Exports with mixed unix and dos/windows style line endings
+Based on your emacs configuration, you could end up exporting a
+Markdown file that has a mix of unix-style (~"\n"~) and dos-style
+(~"\r\n"~) line endings. This will confuse Hugo and it would then see
+unix-style newline as just a whitespace. So now the unix-style line
+breaks in Markdown that were supposed to create paragraph breaks will
+be /seen/ as just a whitespace and those paragraph breaks will
+disappear!
+
+One scenario where this is happen is if (i) you have a Windows OS, but
+(ii) you set the default ~buffer-file-coding-system~ (~C-x RET f~) to
+be ~utf-8-unix~, and then (iii) [[*Inlined SVGs][embedded a file like an SVG]] created in
+Windows. Here, your Org buffer will have unix-style line endings, but
+the SVG created outside Emacs will have dos-style line endings. So you
+end up exporting a file with mixed line endings.
+
+Here are some possible fixes:
+- Consistent line endings :: Figure out a way for the externally
+  created file to have the line endings consistent with your Emacs
+  buffers. Taking the above example, find a way for that SVG to have
+  unix-style line endings as well.
+- ~org-export-coding-system~ :: If you are setting
+  ~buffer-file-coding-system~ to be a non-default value in your OS
+  environment, set ~org-export-coding-system~ to be that same value!
+- Override ~ox-hugo~ export coding system :: If you don't want to sync
+  up these two variables, add the below advice to your Emacs
+  config. /Below example overrides the export coding system to
+  ~utf-8-unix~ assuming that the user has set the
+  ~buffer-file-encoding-system~ to the same value./
+  #+name: code__ox_hugo_override_export_coding_system
+  #+caption: Example of overriding the export coding system when exporting with ~ox-hugo~
+  #+begin_src emacs-lisp
+  (defun my/org-hugo-export-to-md-always-utf-8-unix (orig-fun &rest args)
+    (let ((org-export-coding-system 'utf-8-unix))
+      (apply orig-fun args)))
+
+  (with-eval-after-load 'ox-hugo
+    (advice-add 'org-hugo-export-to-md :around #'my/org-hugo-export-to-md-always-utf-8-unix))
+
+  ;; To remove the advice
+  ;; (advice-remove 'org-hugo-export-to-md #'my/org-hugo-export-to-md-always-utf-8-unix)
+  #+end_src
 ** Example
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "4.example"

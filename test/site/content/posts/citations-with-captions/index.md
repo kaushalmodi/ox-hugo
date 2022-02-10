@@ -12,7 +12,7 @@ description = """
       shortcodes" get unwrapped.
   """
 date = 2018-08-19
-tags = ["pandoc", "citations", "caption", "figure", "plantuml"]
+tags = ["citations", "pandoc", "caption", "figure", "plantuml"]
 draft = false
 +++
 

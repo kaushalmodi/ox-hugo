@@ -1,6 +1,6 @@
 +++
 title = "Invalid Nocites"
-tags = ["pandoc", "citations", "invalid", "nocite"]
+tags = ["citations", "pandoc", "invalid", "nocite"]
 draft = false
 +++
 

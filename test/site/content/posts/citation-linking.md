@@ -4,7 +4,7 @@ description = """
   Auto-link citations from post body to the citation in References
   section.
   """
-tags = ["pandoc", "citations", "link-citations"]
+tags = ["citations", "pandoc", "link-citations"]
 draft = false
 +++
 

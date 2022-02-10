@@ -1,7 +1,7 @@
 +++
 title = "Citation Forms"
 description = "Demonstrating different styles / forms of citations"
-tags = ["pandoc", "citations", "forms"]
+tags = ["citations", "pandoc", "forms"]
 draft = false
 +++
 

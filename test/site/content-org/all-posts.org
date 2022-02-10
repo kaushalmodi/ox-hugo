@@ -18,6 +18,8 @@
 #+macro: latex @@html:<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>@@
 #+macro: youtube @@html:<div class="org-youtube"><iframe src="https://www.youtube-nocookie.com/embed/$1" allowfullscreen title="YouTube Video"></iframe></div>@@
 
+#+bibliography: cite/bib/orgcite.bib
+
 #+author:
 
 * Preparation
@@ -5998,6 +6000,46 @@ Test the ~#+toc~ keyword with ~:target~ attribute
 ***** Another section
 #+toc: headlines 1 :target #TargetSection
 * Citations                                                       :citations:
+** Org Cite                                                        :org_cite:
+*** Org Cite Basic Example
+:PROPERTIES:
+:EXPORT_FILE_NAME: org-cite-basic-example
+:EXPORT_DESCRIPTION: Basic example of using [cite:@xyz] citation.
+:END:
+*Org 9.5* is needed for this as that version introduced
+#+begin_mark
+the new *oc.el* Org Cite library
+#+end_mark
+.
+**** Specify Bibligraphy files
+Org Cite (~oc.el~) requires the bibliography files to be specified
+using one or more ~#+bibliography: <file.bib>~ keywords or using the
+~org-cite-global-bibliography~ variable.
+
+Example: ~#+bibliography: orgcite.bib~
+
+#+begin_note
+~:EXPORT_BIBLIOGRAPHY:~ in subtree property drawers will *not* work
+with Org Cite!
+#+end_note
+**** Citation Syntax
+Below Org snippet:
+#+begin_src org
+[cite:@OrgCitations]
+#+end_src
+exports to:
+
+[cite:@OrgCitations]
+
+See [[https://blog.tecosaur.com/tmio/2021-07-31-citations.html][the /TMIO/ July 2021 blog post]] for more information on the ~cite:~
+syntax.
+**** Printing Bibliography
+Below Org snippet:
+#+begin_src org
+,#+print_bibliography:
+#+end_src
+exports to:
+#+print_bibliography:
 ** Pandoc Citations                                                  :pandoc:
 :PROPERTIES:
 :EXPORT_HUGO_PANDOC_CITATIONS: t

@@ -1841,11 +1841,14 @@ The `slug' generated from that STR follows these rules:
 Return nil if ELEMENT doesn't have the CUSTOM_ID property set."
   (org-string-nw-p (org-element-property :CUSTOM_ID element)))
 
-(defun org-hugo-get-id(&optional _element _info)
-  "Return the value of `:ID' property at point.
+(defun org-hugo-get-id(&optional element _info)
+  "Return the value of `:ID' property for ELEMENT.
 
 Return nil if id is not found."
-  (org-id-get))
+  (let ((element-begin (org-element-property :begin element)))
+    (save-excursion
+      (goto-char element-begin)
+      (org-id-get))))
 
 (defun org-hugo-get-heading-slug(element info)
   "Return the slug string derived from an Org heading ELEMENT.

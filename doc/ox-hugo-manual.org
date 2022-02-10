@@ -11,6 +11,8 @@
 #+macro: imageclick [[file:./static/images/$1][file:/images/$1]]
 #+macro: doc [[/doc/$1/$2][$3]]
 
+#+bibliography: ../test/site/content-org/cite/bib/orgcite.bib
+
 * Homepage
 :PROPERTIES:
 :EXPORT_TITLE: Org to Markdown for Hugo
@@ -2556,6 +2558,19 @@ add this to the top of your Org files:
 You can find a bunch of examples if you search for /"Replace
 front-matter keys"/ in {{{ox-hugo-test-file}}}.
 - Those examples are exported as {{{testtag(replace)}}}.
+*** Org-Cite Citations
+:PROPERTIES:
+:EXPORT_FILE_NAME: org-cite-citations
+:END:
+#+include: "../test/site/content-org/all-posts.org::*Org Cite Basic Example" :only-contents t
+
+#+begin_note
+The Ox-Hugo Pandoc Citation feature needs to be disabled for Org Cite
+based citation processing to work.
+
+So make sure that you don't have ~:EXPORT_HUGO_PANDOC_CITATIONS: t~ in
+your post tree or ~#+hugo_pandoc_citations: t~ in your Org file!
+#+end_note
 *** Pandoc Citations
 :PROPERTIES:
 :EXPORT_FILE_NAME: pandoc-citations
@@ -2681,23 +2696,6 @@ be fixed.
 
 (Of course, open an issue whenever any ~ox-hugo~ export does not do
 things as you expect :smile:)
-*** Org-ref Citations
-:PROPERTIES:
-:EXPORT_FILE_NAME: org-ref-citations
-:END:
-[[https://github.com/jkitchin/org-ref][Org-ref]] citations can be exported to Hugo-compatible markdown via the
-[[https://github.com/andras-simonyi/citeproc-org][citeproc-org]] package. To enable this, simply install ~citeproc-org~
-from MELPA, and run the setup hook. With ~use-package~, this looks
-like:
-
-#+begin_src emacs-lisp
-(use-package citeproc-org
-  :ensure t
-  :after ox-hugo
-  :config
-  (citeproc-org-setup))
-#+end_src
-
 *** Custom Front-matter Parameters
 :PROPERTIES:
 :EXPORT_FILE_NAME: custom-front-matter

@@ -18,6 +18,8 @@
 #+macro: latex @@html:<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>@@
 #+macro: youtube @@html:<div class="org-youtube"><iframe src="https://www.youtube-nocookie.com/embed/$1" allowfullscreen title="YouTube Video"></iframe></div>@@
 
+#+bibliography: cite/bib/orgcite.bib
+
 #+author:
 
 * Preparation
@@ -5997,14 +5999,55 @@ Test the ~#+toc~ keyword with ~:target~ attribute
 ****** Heading B
 ***** Another section
 #+toc: headlines 1 :target #TargetSection
-* Pandoc Citations                                         :pandoc:citations:
+* Citations                                                       :citations:
+** Org Cite                                                        :org_cite:
+*** Org Cite Basic Example
+:PROPERTIES:
+:EXPORT_FILE_NAME: org-cite-basic-example
+:EXPORT_DESCRIPTION: Basic example of using [cite:@xyz] citation.
+:END:
+*Org 9.5* is needed for this as that version introduced
+#+begin_mark
+the new *oc.el* Org Cite library
+#+end_mark
+.
+**** Specify Bibligraphy files
+Org Cite (~oc.el~) requires the bibliography files to be specified
+using one or more ~#+bibliography: <file.bib>~ keywords or using the
+~org-cite-global-bibliography~ variable.
+
+Example: ~#+bibliography: orgcite.bib~
+
+#+begin_note
+~:EXPORT_BIBLIOGRAPHY:~ in subtree property drawers will *not* work
+with Org Cite!
+#+end_note
+**** Citation Syntax
+Below Org snippet:
+#+begin_src org
+[cite:@OrgCitations]
+#+end_src
+exports to:
+
+[cite:@OrgCitations]
+
+See [[https://blog.tecosaur.com/tmio/2021-07-31-citations.html][the /TMIO/ July 2021 blog post]] for more information on the ~cite:~
+syntax.
+**** Printing Bibliography
+Below Org snippet:
+#+begin_src org
+,#+print_bibliography:
+#+end_src
+exports to:
+#+print_bibliography:
+** Pandoc Citations                                                  :pandoc:
 :PROPERTIES:
 :EXPORT_HUGO_PANDOC_CITATIONS: t
 :EXPORT_BIBLIOGRAPHY: cite/bib/bib1.bib, cite/bib/bib2.bib, cite/bib/bib3.bib
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@giovanelli2016 @eilan2016)
 :EXPORT_HUGO_PAIRED_SHORTCODES: %mdshortcode myshortcode
 :END:
-** Citations Example (TOML)                                            :toml:
+*** Citations Example (TOML)                                           :toml:
 :PROPERTIES:
 :EXPORT_FILE_NAME: citations-example-toml
 :END:
@@ -6013,18 +6056,18 @@ Test the parsing of Pandoc Citations, while also testing that ox-hugo
 exported Markdown doesn't get broken -- TOML front-matter.
 #+end_description
 {{{oxhugoissue(175)}}}
-*** Section 1
+**** Section 1
 Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
 
 See [[#citation-example-toml-section-2]].
-*** Section 2
+**** Section 2
 :PROPERTIES:
 :CUSTOM_ID: citation-example-toml-section-2
 :END:
 Content in section 2.
-*** Testing random Hugo shortcodes
+**** Testing random Hugo shortcodes
 #+begin_mdshortcode
 Text containing *Markdown*
 #+end_mdshortcode
@@ -6035,22 +6078,22 @@ Text not containing *Markdown*
 
 This link will generate a ~relref~ shortcode: Here's a link to an
 arbitrarily picked post: [[*Citation Linking][Citation Linking]].
-*** Testing ox-hugo inserted HTML div tags
+**** Testing ox-hugo inserted HTML div tags
 #+begin_foo
 *bold* /italics/
 #+end_foo
-*** Testing tables
+**** Testing tables
 |----------+----------+----------|
 | Header 1 | Header 2 | Header 3 |
 |----------+----------+----------|
 | a        | b        | c        |
 | d        | e        | f        |
 |----------+----------+----------|
-*** Testing fenced code blocks
+**** Testing fenced code blocks
 #+begin_src emacs-lisp
 (message "Hello World")
 #+end_src
-*** Lists Galore
+**** Lists Galore
 - item1 in list
 - item2 in list. The following list is in a separate list body.
 
@@ -6073,9 +6116,9 @@ arbitrarily picked post: [[*Citation Linking][Citation Linking]].
   - L2 -- bar2
 - L1 -- foo1
 - L1 -- foo2
-*** Citation key with underscore
+**** Citation key with underscore
 Ox-hugo manual (@ox_hugo_man)
-** Citations Example (YAML)                                            :yaml:
+*** Citations Example (YAML)                                           :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml
 :EXPORT_FILE_NAME: citations-example-yaml
@@ -6085,18 +6128,18 @@ Test the parsing of Pandoc Citations, while also testing that ox-hugo
 exported Markdown doesn't get broken -- YAML front-matter.
 #+end_description
 {{{oxhugoissue(175)}}}
-*** Section 1
+**** Section 1
 Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
 
 See [[#citation-example-yaml-section-2]].
-*** Section 2
+**** Section 2
 :PROPERTIES:
 :CUSTOM_ID: citation-example-yaml-section-2
 :END:
 Content in section 2.
-** Citation Linking                                          :link_citations:
+*** Citation Linking                                         :link_citations:
 :PROPERTIES:
 :EXPORT_FILE_NAME: citation-linking
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :link-citations true
@@ -6108,16 +6151,16 @@ section.
 Here is a test example file with an in-text citation where someone
 important says something important (e.g. @loncar2016). And here is
 another bit of blah with a footnote citation.[fn:5]
-** Citation Forms                                                     :forms:
+*** Citation Forms                                                    :forms:
 :PROPERTIES:
 :EXPORT_BIBLIOGRAPHY: cite/bib/bib3.bib
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :link-citations true
 :END:
-*** Citation Forms Test Body
+**** Citation Forms Test Body
 :PROPERTIES:
 :CUSTOM_ID: citation-forms-test-body
 :END:
-**** Citations in square brackets
+***** Citations in square brackets
 The citations withing square brackets will be rendered within
 parentheses.
 #+begin_src org
@@ -6134,7 +6177,7 @@ Blah blah [@doe99, pp. 33-35, 38-39].
 Blah blah [@smith04; @doe99].
 #+end_src
 Blah blah [@smith04; @doe99].
-**** Citations with author name suppressed
+***** Citations with author name suppressed
 A minus sign (~-~) before the ~@~ will suppress mention of the author
 in the citation. This can be useful when the author is already
 mentioned in the text.
@@ -6142,7 +6185,7 @@ mentioned in the text.
 Smith says blah [-@smith04].
 #+end_src
 Smith says blah [-@smith04].
-**** In-text citations (no square brackets)
+***** In-text citations (no square brackets)
 #+begin_src org
 @smith04 says blah.
 #+end_src
@@ -6152,9 +6195,9 @@ Smith says blah [-@smith04].
 @smith04 [p. 33] says blah.
 #+end_src
 @smith04 [p. 33] says blah.
-**** Actual citations for this test post :)
+***** Actual citations for this test post :)
 See @addCite17; @rmdCitations for more.
-*** Citation Forms
+**** Citation Forms
 :PROPERTIES:
 :EXPORT_FILE_NAME: citation-forms
 :END:
@@ -6162,7 +6205,7 @@ See @addCite17; @rmdCitations for more.
 Demonstrating different styles / forms of citations
 #+end_description
 #+include: "./all-posts.org::#citation-forms-test-body" :only-contents t
-*** Citation Forms (Custom CSL)                                   :forms:csl:
+**** Citation Forms (Custom CSL)                                  :forms:csl:
 :PROPERTIES:
 :EXPORT_FILE_NAME: citation-forms-apa-csl
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER+: :csl cite/csl/apa.csl
@@ -6174,14 +6217,14 @@ Demonstrating different styles / forms of citations using APA CSL
 
 *Compare the References section below with [[/posts/citation-forms/#references][that]] when using the default
  CSL.*
-** No Citations                                                        :none:
+*** No Citations                                                       :none:
 :PROPERTIES:
 :EXPORT_FILE_NAME: citations-none
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '()
 :END:
 This post has Pandoc Citations parsing enabled, but has no actual
 citations.
-** Invalid Nocites                                           :invalid:nocite:
+*** Invalid Nocites                                          :invalid:nocite:
 :PROPERTIES:
 :EXPORT_FILE_NAME: invalid-nocites
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :nocite '(@foo @bar)
@@ -6195,7 +6238,7 @@ But that generates neither a Pandoc warning nor error.
 As the final Pandoc output Markdown ends up with *no* references, the
 Pandoc output is discarded, and the original ~ox-hugo~ output is used
 instead.
-** Citations with captions                          :caption:figure:plantuml:
+*** Citations with captions                         :caption:figure:plantuml:
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: citations-with-captions
 :EXPORT_FILE_NAME: index
@@ -6228,8 +6271,8 @@ rectangle "<html>, <body>, etc." as a  {
 #+caption: PlantUML generated figure showing nested boxes
 #+RESULTS: code__plantuml_nested_boxes
 [[file:images/citations-with-captions/nested-boxes.svg]]
-** Disabling Pandoc citations in a subtree                          :disable:
-*** Disabling Pandoc citations in a subtree (empty string)
+*** Disabling Pandoc citations in a subtree                         :disable:
+**** Disabling Pandoc citations in a subtree (empty string)
 :PROPERTIES:
 :EXPORT_FILE_NAME: disabling-pandoc-citations-in-a-subtree-empty-string
 :EXPORT_HUGO_PANDOC_CITATIONS:
@@ -6239,7 +6282,7 @@ Test that ~:EXPORT_HUGO_PANDOC_CITATIONS:~ disables Pandoc citations
 in a subtree.
 #+end_description
 The Nocites in the front-matter do not get rendered as citations.
-*** Disabling Pandoc citations in a subtree (nil string)
+**** Disabling Pandoc citations in a subtree (nil string)
 :PROPERTIES:
 :EXPORT_FILE_NAME: disabling-pandoc-citations-in-a-subtree-nil-string
 :EXPORT_HUGO_PANDOC_CITATIONS: nil

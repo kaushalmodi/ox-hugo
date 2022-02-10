@@ -1,7 +1,7 @@
 +++
 title = "Citation Forms (Custom CSL)"
 description = "Demonstrating different styles / forms of citations using APA CSL"
-tags = ["pandoc", "citations", "forms", "csl"]
+tags = ["citations", "pandoc", "forms", "csl"]
 draft = false
 +++
 

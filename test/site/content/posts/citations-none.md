@@ -1,6 +1,6 @@
 +++
 title = "No Citations"
-tags = ["pandoc", "citations", "none"]
+tags = ["citations", "pandoc", "none"]
 draft = false
 +++
 

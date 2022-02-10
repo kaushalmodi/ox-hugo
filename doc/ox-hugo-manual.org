@@ -2696,6 +2696,46 @@ be fixed.
 
 (Of course, open an issue whenever any ~ox-hugo~ export does not do
 things as you expect :smile:)
+*** Org-ref Citations
+:PROPERTIES:
+:EXPORT_FILE_NAME: org-ref-citations
+:EXPORT_HUGO_MENU:
+:END:
+#+begin_note
+<2022-02-10 Thu> Below instructions are out-dated. The [[https://github.com/andras-simonyi/citeproc-org][citeproc-org]]
+package repository now mentions that the package is *obsolete* as
+citation handling is now integrated into Org 9.5 in the new *oc.el*
+library.
+#+begin_quote
+As native support for citations including CSL-based export is now part
+of Org (see [[https://orgmode.org/list/87o8bcnfk9.fsf@nicolasgoaziou.fr/][the announcement]] and the relevant [[https://orgmode.org/manual/Citation-handling.html][manual section]]), and the
+most recent org-ref version also supports CSL-formatting (see [[https://www.youtube.com/watch?v=Xs59PGTfDC0][this
+video]]), citeproc-org is obsolete and will be in maintenance mode
+(reported bugs will be fixed), with only occasional backports from the
+Org-native CSL infrastructure, which is under active development. The
+recommended way of getting CSL-rendering of Org citations is therefore
+using native Org cites with the CSL export processor or using [[https://github.com/jkitchin/org-ref][org-ref
+3]].
+#+end_quote
+Related: [[*Org-Cite Citations][Org-Cite Citations]] | [[https://blog.tecosaur.com/tmio/2021-07-31-citations.html][/This Month in Org/ -- July 2021]]
+#+end_note
+
+#+begin_center
+*DEPRECATED*
+#+end_center
+
+[[https://github.com/jkitchin/org-ref][Org-ref]] citations can be exported to Hugo-compatible markdown via the
+[[https://github.com/andras-simonyi/citeproc-org][citeproc-org]] package. To enable this, simply install ~citeproc-org~
+from MELPA, and run the setup hook. With ~use-package~, this looks
+like:
+
+#+begin_src emacs-lisp
+(use-package citeproc-org
+  :ensure t
+  :after ox-hugo
+  :config
+  (citeproc-org-setup))
+#+end_src
 *** Custom Front-matter Parameters
 :PROPERTIES:
 :EXPORT_FILE_NAME: custom-front-matter

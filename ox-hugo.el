@@ -577,22 +577,26 @@ Some of the inbuilt functions that can be added to this list:
   :group 'org-export-hugo
   :type '(repeat function))
 
-(defcustom org-hugo-citations-plist '(:bibliography-section-regexp "\n\n\\(.\\|\\n\\)*?<div class=\"csl-bib-body\">"
+(defcustom org-hugo-citations-plist '(:bibliography-section-heading "Bibliography"
+                                      :bibliography-section-regexp "\n\n\\(.\\|\\n\\)*?<div class=\"csl-bib-body\">"
                                       ;;                            ^^^^ blank line before the <div> block
-                                      :bibliography-section-heading "Bibliography")
+                                      )
   "Property list for storing default properties for citation exports.
 
 Properties recognized in the PLIST:
 
-- :bibliography-section-regexp :: Regular expression to mark the
-                                  beginning of Bibliography section.
-
-- :bibliography-section-heading :: Heading to insert before the Bibliography
+- :bibliography-section-heading :: Heading to insert before the bibliography
                                    section.
 
-Auto-detection of Bibliography section requires installing the
+- :bibliography-section-regexp :: Regular expression to find the
+                                  beginning of the bibliography section.
+
+Auto-detection of bibliography section requires installing the
 `citations' package from Melpa and adding `#+cite_export: csl' at
-the top of the Org file."
+the top of the Org file.
+
+If `:bibliography-section-heading' set to an empty string,
+bibliography heading auto-injection is not done."
   :group 'org-export-hugo
   :type '(plist :key-type symbol :value-type string))
 

@@ -57,8 +57,8 @@ Smith ([2004, p. 33](#ref-smith04)) says blah.
 
 ## Actual citations for this test post :)
 
-See Xie ([2017](#ref-addCite17)); "Bibliographies and citations /
-citations" ([n.d.](#ref-rmdCitations)) for more.
+See Xie ([2017](#ref-addCite17)); "Bibliographies and Citations /
+Citations" ([n.d.](#ref-rmdCitations)) for more.
 
 **Compare the References section below with
 [that](/posts/citation-forms/#references) when using the default CSL.**
@@ -71,28 +71,27 @@ line-spacing="2">
 <div id="ref-rmdCitations" class="csl-entry">
 
 Bibliographies and citations / citations. (n.d.). In *RMarkdown*.
-RStudio. Retrieved from
+RStudio.
 <https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html#citations>
 
 </div>
 
 <div id="ref-doe99" class="csl-entry">
 
-Doe, J. (1999). *An awesome revelation* (3rd ed., Vol. 4). The address:
-Publisher Foo.
+Doe, J. (1999). *An awesome revelation* (3rd ed., Vol. 4). Publisher
+Foo.
 
 </div>
 
 <div id="ref-smith04" class="csl-entry">
 
-Smith, A. (2004). *The book on life* (1st ed., Vol. 7). The address:
-Publisher Bar.
+Smith, A. (2004). *The book on life* (1st ed., Vol. 7). Publisher Bar.
 
 </div>
 
 <div id="ref-addCite17" class="csl-entry">
 
-Xie, Y. (2017). Adding citations to posts. Retrieved from
+Xie, Y. (2017). *Adding citations to posts*.
 <https://blogdown-demo.rbind.io/2017/08/28/adding-citations-to-posts/>
 
 </div>

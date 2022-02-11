@@ -577,6 +577,24 @@ Some of the inbuilt functions that can be added to this list:
   :group 'org-export-hugo
   :type '(repeat function))
 
+(defcustom org-hugo-citations-plist '(:bibliography-section-regexp "\n.*<div class=\"csl-bib-body\">"
+                                      :bibliography-section-heading "Bibliography")
+  "Property list for storing default properties for citation exports.
+
+Properties recognized in the PLIST:
+
+- :bibliography-section-regexp :: Regular expression to mark the
+                                  beginning of Bibliography section.
+
+- :bibliography-section-heading :: Heading to insert before the Bibliography
+                                   section.
+
+Auto-detection of Bibliography section requires installing the
+`citations' package from Melpa and adding `#+cite_export: csl' at
+the top of the Org file."
+  :group 'org-export-hugo
+  :type '(plist :key-type symbol :value-type string))
+
 
 
 ;;; Define Back-End
@@ -1932,6 +1950,19 @@ holding export options."
                             ;; (`).
                             "\\([[:space:]>]\\|\n\\)+\\([^-#`]\\)")
                     " \\2" contents)))
+
+    ;; Auto-inject Bibliography heading.
+    (let ((bib-heading (org-string-nw-p (plist-get org-hugo-citations-plist :bibliography-section-heading))))
+      (when (and bib-heading (featurep 'citeproc))
+        (let* ((bib-regexp (plist-get org-hugo-citations-plist :bibliography-section-regexp))
+               (loffset (string-to-number
+                         (or (org-entry-get nil "EXPORT_HUGO_LEVEL_OFFSET" :inherit)
+                             (plist-get info :hugo-level-offset))))
+               (level-mark (make-string (+ loffset 1) ?#)))
+          (setq contents (replace-regexp-in-string
+                          bib-regexp
+                          (format "\n%s %s\n\\&" level-mark bib-heading) contents)))))
+
     ;; (message "[org-hugo-inner-template DBG] toc-level: %s" toc-level)
     (org-trim (concat
                toc

@@ -22,7 +22,7 @@ jobs:
           - 'snapshot'
           - '27.2'
           - '26.3'
-          - '25.3'
+          # - '25.3' # citeproc.el throws error on emacs 25.3: https://github.com/andras-simonyi/citeproc-el/issues/102
     # runs-on: ubuntu-latest
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.emacs_version == 'snapshot' }}

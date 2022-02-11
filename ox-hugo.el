@@ -613,6 +613,7 @@ Some of the inbuilt functions that can be added to this list:
                      (export-snippet . org-hugo-export-snippet)
                      (headline . org-hugo-heading)
                      (inner-template . org-hugo-inner-template)
+                     (inline-src-block . org-hugo-inline-src-block)
                      (keyword . org-hugo-keyword)
                      (link . org-hugo-link)
                      (paragraph . org-hugo-paragraph)
@@ -1939,6 +1940,11 @@ holding export options."
                ;; and footnotes with at least a blank line.
                "\n"
                (org-blackfriday-footnote-section info (org-hugo--lang-cjk-p info))))))
+
+;;;; Inline Src Block
+(defun org-hugo-inline-src-block (inline-src-block _contents _info)
+  "Transcode INLINE-SRC-BLOCK object into Hugo-compatible Markdown format."
+  (org-md-verbatim inline-src-block nil nil))
 
 ;;;; Keyword
 (defun org-hugo-keyword (keyword contents info)

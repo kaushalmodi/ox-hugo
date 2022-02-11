@@ -83,9 +83,6 @@
 (require 'org-id)                       ;For `org-id-goto'
 (require 'org-agenda)                   ;For `org-find-top-headline'
 
-(require 'citeproc nil :noerror)        ;Load `citeproc' if installed
-(require 'oc-csl nil :noerror)          ;Load `oc-csl' if installed as this registers the `csl' processor
-
 (declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
 
 (declare-function org-hugo--return-valid-blackfriday-extension "ox-hugo-deprecated")

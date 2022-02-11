@@ -577,6 +577,29 @@ Some of the inbuilt functions that can be added to this list:
   :group 'org-export-hugo
   :type '(repeat function))
 
+(defcustom org-hugo-citations-plist '(:bibliography-section-heading "Bibliography"
+                                      :bibliography-section-regexp "\n\n\\(.\\|\\n\\)*?<div class=\"csl-bib-body\">"
+                                      ;;                            ^^^^ blank line before the <div> block
+                                      )
+  "Property list for storing default properties for citation exports.
+
+Properties recognized in the PLIST:
+
+- :bibliography-section-heading :: Heading to insert before the bibliography
+                                   section.
+
+- :bibliography-section-regexp :: Regular expression to find the
+                                  beginning of the bibliography section.
+
+Auto-detection of bibliography section requires installing the
+`citations' package from Melpa and adding `#+cite_export: csl' at
+the top of the Org file.
+
+If `:bibliography-section-heading' set to an empty string,
+bibliography heading auto-injection is not done."
+  :group 'org-export-hugo
+  :type '(plist :key-type symbol :value-type string))
+
 
 
 ;;; Define Back-End
@@ -1932,6 +1955,19 @@ holding export options."
                             ;; (`).
                             "\\([[:space:]>]\\|\n\\)+\\([^-#`]\\)")
                     " \\2" contents)))
+
+    ;; Auto-inject Bibliography heading.
+    (let ((bib-heading (org-string-nw-p (plist-get org-hugo-citations-plist :bibliography-section-heading))))
+      (when (and bib-heading (featurep 'citeproc))
+        (let* ((bib-regexp (plist-get org-hugo-citations-plist :bibliography-section-regexp))
+               (loffset (string-to-number
+                         (or (org-entry-get nil "EXPORT_HUGO_LEVEL_OFFSET" :inherit)
+                             (plist-get info :hugo-level-offset))))
+               (level-mark (make-string (+ loffset 1) ?#)))
+          (setq contents (replace-regexp-in-string
+                          bib-regexp
+                          (format "\n\n%s %s\\&" level-mark bib-heading) contents)))))
+
     ;; (message "[org-hugo-inner-template DBG] toc-level: %s" toc-level)
     (org-trim (concat
                toc

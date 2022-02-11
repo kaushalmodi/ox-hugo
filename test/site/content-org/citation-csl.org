@@ -1,0 +1,23 @@
+#+title: Citation CSL
+
+#+hugo_base_dir: ../
+#+author:
+
+#+bibliography: cite/bib/orgcite.bib
+#+cite_export: csl
+
+#+filetags: org_cite csl citations bibliography
+
+#+macro: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+
+#+begin_description
+Test citation CSL using ~oc.el~ + ~citeproc.el~.
+#+end_description
+
+{{{oxhugoissue(558)}}}
+
+[cite:@OrgCitations]
+
+Below, the "Bibliography" heading will be auto-inserted.
+
+#+print_bibliography:

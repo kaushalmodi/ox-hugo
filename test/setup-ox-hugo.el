@@ -110,7 +110,7 @@ Emacs installation.  If Emacs is installed using
 (when ox-hugo-test-setup-verbose
   (message "ox-hugo-tmp-dir: %s" ox-hugo-tmp-dir))
 
-(defvar ox-hugo-packages '(toc-org))
+(defvar ox-hugo-packages '(toc-org citeproc))
 (when ox-hugo-install-org-from-elpa
   ;; Fri Sep 22 18:24:19 EDT 2017 - kmodi
   ;; Install the packages in the specified order. We do not want
@@ -157,7 +157,7 @@ Emacs installation.  If Emacs is installed using
                            "http"
                          "https"))
              (melpa-url (concat protocol "://melpa.org/packages/")))
-        (add-to-list 'package-archives (cons "melpa" melpa-url) :append) ;For `toc-org'
+        (add-to-list 'package-archives (cons "melpa" melpa-url) :append) ;For `toc-org', `citeproc'
         )
 
       ;; Delete element with "nongnu" car from `package-archives'.
@@ -196,7 +196,7 @@ to be installed.")
         (setq ox-hugo-missing-packages '())))
   (error "The environment variable OX_HUGO_TMP_DIR needs to be set"))
 
-(require 'org-id)
+(require 'oc-csl nil :noerror)          ;Auto-register csl processor
 (require 'ox-hugo)
 (defun org-hugo-export-all-wim-to-md ()
   (org-hugo-export-wim-to-md :all-subtrees nil nil :noerror))

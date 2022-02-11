@@ -2571,6 +2571,58 @@ based citation processing to work.
 So make sure that you don't have ~:EXPORT_HUGO_PANDOC_CITATIONS: t~ in
 your post tree or ~#+hugo_pandoc_citations: t~ in your Org file!
 #+end_note
+**** Citation Processor: CSL
+The [[https://citationstyles.org/][Citations Style Language]] (CSL) defines how the citations and
+bibliographies should be exported.
+
+Using CSL is optional, and dependent on an external package
+[[https://github.com/andras-simonyi/citeproc-el][~citeproc.el~]]. By default CSL is not enabled and the citations and
+bibliographies will be exported to Markdown in plain text i.e. without
+any emphasis, hyperlinking, etc.
+
+To enable <<<CSL-formatted exports>>>:
+1. Install ~citeproc~ from [[https://melpa.org/#/citeproc][Melpa]].
+2. Add this to the top of your Org file: ~#+cite_export: csl~
+
+That's it! The Org inbuilt library ~oc-csl.el~ will autoload
+~citeproc~ when it sees that ~#+cite_export~ keyword. With CSL
+processing enabled, the citations and bibliographies will now be
+exported in HTML embedded in the exported Markdown files.
+
+Check out the [[https://blog.tecosaur.com/tmio/2021-07-31-citations.html#using-csl][/This Month in Org/ -- July 2021]] post for more
+information.
+**** Auto-injecting /Bibliography/ heading
+#+begin_mark
+If CSL-formatted exports are enabled
+#+end_mark
+, a Markdown heading named "Bibliography" will be auto-inserted above
+the /bibliography/ section. This section is exported if the Org file
+has {{{relref(~#print_bibliography:~
+keyword,#printing-bibliography)}}}.
+
+This feature is controlled by the ~org-hugo-citations-plist~
+property list variable.
+
+This property list recognizes these properties:
+
+- :bibliography-section-heading :: /(string)/ Heading to insert before
+  the bibliography section.  The default value is "Bibliography". If
+  this property is set to an empty string, the bibliography heading
+  auto-injection is not done.
+
+  Some users might choose to customize this value to
+  "References". Here's an example of how that can be done in the Emacs
+  config:
+  #+name: code__customizing_bibliography_heading
+  #+caption: Customizing bibliography heading
+  #+begin_src emacs-lisp
+  (with-eval-after-load 'ox-hugo
+    (plist-put org-hugo-citations-plist :bibliography-section-heading "References"))
+  #+end_src
+- :bibliography-section-regexp :: /(string)/ Regular expression to
+  find the beginning of the bibliography section.  The default value
+  is a regular expression that matches the ~<div
+  class="csl-bib-body">~ HTML element exported by ~citeproc.el~.
 *** Pandoc Citations
 :PROPERTIES:
 :EXPORT_FILE_NAME: pandoc-citations
@@ -2726,7 +2778,7 @@ Related: [[*Org-Cite Citations][Org-Cite Citations]] | [[https://blog.tecosaur.c
 
 [[https://github.com/jkitchin/org-ref][Org-ref]] citations can be exported to Hugo-compatible markdown via the
 [[https://github.com/andras-simonyi/citeproc-org][citeproc-org]] package. To enable this, simply install ~citeproc-org~
-from MELPA, and run the setup hook. With ~use-package~, this looks
+from Melpa, and run the setup hook. With ~use-package~, this looks
 like:
 
 #+begin_src emacs-lisp

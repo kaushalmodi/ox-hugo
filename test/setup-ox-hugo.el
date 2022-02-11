@@ -275,11 +275,7 @@ Fake current time: 2100/12/21 00:00:00 (arbitrary)."
         nil :nomessage :nosuffix)
 
   (with-eval-after-load 'ox
-    (add-to-list 'org-export-exclude-tags "dont_export_during_make_test")
-    ;; `citeproc.el' throws error on Emacs 25.x
-    ;; https://github.com/andras-simonyi/citeproc-el/issues/102
-    (when (version< emacs-version "26.0")
-      (add-to-list 'org-export-exclude-tags "noexport_emacs25")))
+    (add-to-list 'org-export-exclude-tags "dont_export_during_make_test"))
 
   ;; Wed Sep 04 22:23:03 EDT 2019 - kmodi
   ;; The ox-hugo tests were failing on Travis only on Emacs 24.4 and

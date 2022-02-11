@@ -1,0 +1,44 @@
+#+title: Citation using ~org-ref~
+
+#+hugo_base_dir: ../
+#+author:
+
+#+filetags: org_ref csl citations bibliography
+
+#+csl-style: cite/csl/apa.csl
+#+csl-locale: en-US
+
+- [[https://github.com/kaushalmodi/ox-hugo/blob/main/test/site/content-org/cite/csl/apa.csl][.csl location]]
+- [[https://github.com/kaushalmodi/ox-hugo/blob/main/test/site/content-org/cite/bib/orgcite.bib][.bib location]]
+
+* First Heading
+This should be a title citation: [[citetitle:&OrgCitations]].
+** Second Heading
+
+This should be a usual citation without parentheses:
+[[cite:&OrgCitations]].
+
+bibliography: cite/bib/orgcite.bib
+
+* Meta                                                             :noexport:
+** Install ~org-ref~
+#+begin_src emacs-lisp :results none
+(use-package org-ref
+  :ensure t)
+#+end_src
+** For debug only
+Preprocess current buffer to HTML.
+#+begin_src emacs-lisp :results none
+(org-ref-process-buffer 'html)
+#+end_src
+** Export current buffer using ~ox-hugo~ after pre-processing using ~org-ref~
+#+begin_src emacs-lisp :results none
+(let ((org-export-before-parsing-hook
+       '(lambda (_)
+          (org-ref-process-buffer 'html))))
+  (org-hugo-export-wim-to-md))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-ref)
+#+end_src

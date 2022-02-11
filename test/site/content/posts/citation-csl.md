@@ -1,7 +1,7 @@
 +++
 title = "Citation CSL"
 description = "Test citation CSL using `oc.el` + `citeproc.el`."
-tags = ["org-cite", "csl", "citations", "bibliography"]
+tags = ["org-cite", "csl", "citations", "bibliography", "noexport-emacs25"]
 draft = false
 +++
 

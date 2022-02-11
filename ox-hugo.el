@@ -580,7 +580,8 @@ Some of the inbuilt functions that can be added to this list:
   :group 'org-export-hugo
   :type '(repeat function))
 
-(defcustom org-hugo-citations-plist '(:bibliography-section-regexp "\n.*<div class=\"csl-bib-body\">"
+(defcustom org-hugo-citations-plist '(:bibliography-section-regexp "\n\n\\(.\\|\\n\\)*?<div class=\"csl-bib-body\">"
+                                      ;;                            ^^^^ blank line before the <div> block
                                       :bibliography-section-heading "Bibliography")
   "Property list for storing default properties for citation exports.
 
@@ -1964,7 +1965,7 @@ holding export options."
                (level-mark (make-string (+ loffset 1) ?#)))
           (setq contents (replace-regexp-in-string
                           bib-regexp
-                          (format "\n%s %s\n\\&" level-mark bib-heading) contents)))))
+                          (format "\n\n%s %s\\&" level-mark bib-heading) contents)))))
 
     ;; (message "[org-hugo-inner-template DBG] toc-level: %s" toc-level)
     (org-trim (concat

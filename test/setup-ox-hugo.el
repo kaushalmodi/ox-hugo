@@ -197,6 +197,8 @@ to be installed.")
   (error "The environment variable OX_HUGO_TMP_DIR needs to be set"))
 
 (require 'oc-csl nil :noerror)          ;Auto-register csl processor
+(require 'org-ref)
+
 (require 'ox-hugo)
 (defun org-hugo-export-all-wim-to-md ()
   (org-hugo-export-wim-to-md :all-subtrees nil nil :noerror))

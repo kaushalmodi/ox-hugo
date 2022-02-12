@@ -18,7 +18,7 @@ This should be a title citation: [[citetitle:&OrgCitations]].
 This should be a usual citation without parentheses:
 [[cite:&OrgCitations]].
 
-bibliography: cite/bib/orgcite.bib
+bibliography:cite/bib/orgcite.bib
 
 * Meta                                                             :noexport:
 ** Install ~org-ref~

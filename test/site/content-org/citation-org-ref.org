@@ -1,0 +1,25 @@
+#+title: Citation using ~org-ref~
+
+#+hugo_base_dir: ../
+#+author:
+
+#+filetags: org_ref csl citations bibliography
+
+#+csl-style: cite/csl/apa.csl
+
+#+macro: oxhugodiscuss =ox-hugo= Discussion #[[https://github.com/kaushalmodi/ox-hugo/discussions/$1][$1]]
+
+#+begin_description
+Test citation CSL using ~org-ref~.
+#+end_description
+
+{{{oxhugodiscuss(561)}}}
+
+[[cite:&OrgCitations]]
+
+[[bibliography:cite/bib/orgcite.bib]]
+
+#+bind: org-export-before-parsing-hook (lambda (_) (org-ref-process-buffer 'html))
+# Local Variables:
+# org-export-allow-bind-keywords: t
+# End:

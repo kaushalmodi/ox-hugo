@@ -110,7 +110,7 @@ Emacs installation.  If Emacs is installed using
 (when ox-hugo-test-setup-verbose
   (message "ox-hugo-tmp-dir: %s" ox-hugo-tmp-dir))
 
-(defvar ox-hugo-packages '(toc-org citeproc))
+(defvar ox-hugo-packages '(toc-org citeproc org-ref))
 (when ox-hugo-install-org-from-elpa
   ;; Fri Sep 22 18:24:19 EDT 2017 - kmodi
   ;; Install the packages in the specified order. We do not want
@@ -197,6 +197,8 @@ to be installed.")
   (error "The environment variable OX_HUGO_TMP_DIR needs to be set"))
 
 (require 'oc-csl nil :noerror)          ;Auto-register csl processor
+(require 'org-ref)
+
 (require 'ox-hugo)
 (defun org-hugo-export-all-wim-to-md ()
   (org-hugo-export-wim-to-md :all-subtrees nil nil :noerror))

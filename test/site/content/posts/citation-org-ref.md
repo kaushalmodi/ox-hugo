@@ -4,10 +4,6 @@ tags = ["org-ref", "csl", "citations", "bibliography"]
 draft = false
 +++
 
--   [.csl location](https://github.com/kaushalmodi/ox-hugo/blob/main/test/site/content-org/cite/csl/apa.csl)
--   [.bib location](https://github.com/kaushalmodi/ox-hugo/blob/main/test/site/content-org/cite/bib/orgcite.bib)
-
-
 ## First Heading {#first-heading}
 
 This should be a title citation: <a href="#citeproc_bib_item_1">2021</a>.

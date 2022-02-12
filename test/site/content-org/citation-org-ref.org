@@ -6,16 +6,18 @@
 #+filetags: org_ref csl citations bibliography
 
 #+csl-style: cite/csl/apa.csl
-#+csl-locale: en-US
 
-* First Heading
-This should be a title citation: [[citetitle:&OrgCitations]].
-** Second Heading
+#+macro: oxhugodiscuss =ox-hugo= Discussion #[[https://github.com/kaushalmodi/ox-hugo/discussions/$1][$1]]
 
-This should be a usual citation without parentheses:
-[[cite:&OrgCitations]].
+#+begin_description
+Test citation CSL using ~org-ref~.
+#+end_description
 
-bibliography:cite/bib/orgcite.bib
+{{{oxhugodiscuss(561)}}}
+
+[[cite:&OrgCitations]]
+
+[[bibliography:cite/bib/orgcite.bib]]
 
 #+bind: org-export-before-parsing-hook (lambda (_) (org-ref-process-buffer 'html))
 # Local Variables:

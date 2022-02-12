@@ -1,18 +1,13 @@
 +++
 title = "Citation using org-ref"
+description = "Test citation CSL using `org-ref`."
 tags = ["org-ref", "csl", "citations", "bibliography"]
 draft = false
 +++
 
-## First Heading {#first-heading}
+`ox-hugo` Discussion #[561](https://github.com/kaushalmodi/ox-hugo/discussions/561)
 
-This should be a title citation: <a href="#citeproc_bib_item_1">2021</a>.
-
-
-### Second Heading {#second-heading}
-
-This should be a usual citation without parentheses:
-(<a href="#citeproc_bib_item_1">Org et al., 2021</a>).
+(<a href="#citeproc_bib_item_1">Org et al., 2021</a>)
 
 ## Bibliography
 

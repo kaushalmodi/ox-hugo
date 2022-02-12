@@ -2558,7 +2558,7 @@ add this to the top of your Org files:
 You can find a bunch of examples if you search for /"Replace
 front-matter keys"/ in {{{ox-hugo-test-file}}}.
 - Those examples are exported as {{{testtag(replace)}}}.
-*** Org-Cite Citations
+*** Org Cite Citations
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-cite-citations
 :END:
@@ -2623,11 +2623,11 @@ This property list recognizes these properties:
   find the beginning of the bibliography section.  The default value
   is a regular expression that matches the ~<div
   class="csl-bib-body">~ HTML element exported by ~citeproc.el~.
-*** Org-ref Citations
+*** Org Ref Citations
 :PROPERTIES:
 :EXPORT_FILE_NAME: org-ref-citations
 :END:
-[[https://github.com/jkitchin/org-ref][Org-ref]] citations can be exported to Hugo-compatible markdown/HTML by
+[[https://github.com/jkitchin/org-ref][org-ref]] citations can be exported to Hugo-compatible markdown/HTML by
 calling ~(org-ref-process-buffer 'html)~ in the
 ~org-export-before-parsing-hook~ hook.
 
@@ -2644,7 +2644,7 @@ Here's an example of how to do that using ~use-package~:
                    (when (org-export-derived-backend-p backend 'html)
                      (org-ref-process-buffer 'html))))))
 #+end_src
-
+**** Example
 Minimal example with ~org-ref~ citations:
 
 #+name: code_citation_org_ref
@@ -2660,6 +2660,14 @@ Minimal example with ~org-ref~ citations:
 
 [[bibliography:/path/to/file.bib]]
 #+end_src
+**** Auto-injecting /Bibliography/ heading
+The {{{relref(auto-injecting bibliography
+heading,org-cite-citations/#auto-injecting-bibliography-heading)}}}
+section for Org Cite library based citations applies to ~org-ref~ as
+well as they both use the same ~citeproc.el~ library.
+
+See that section on how to customize the name of the auto-injected
+heading, etc.
 *** Pandoc Citations
 :PROPERTIES:
 :EXPORT_FILE_NAME: pandoc-citations

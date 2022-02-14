@@ -95,12 +95,12 @@ those by =ox-blackfriday.el=.
 :END:
 This package requires at least GNU Emacs {{{min_emacs_version}}} and
 Org Mode {{{min_org_version}}}. It is available on Melpa
-([[https://melpa.org/#/ox-hugo]]).
+([[https://melpa.org/#/ox-hugo]]), and it's recommended to install this
+package from [[https://melpa.org/#/getting-started][Melpa]] (​_not_ Melpa /Stable/).
 
-Once the package is installed, you will need to /require/ it so that
-the =ox-hugo= export options are available in the /Org Export
-Dispatcher/ menu (the one you see when you hit =C-c C-e= to initiate
-any export).
+You will need to /require/ the package after installing it to get the
+=ox-hugo= export options in the /Org Export Dispatcher/ menu (the one
+you see when you hit =C-c C-e= to initiate any export).
 
 You can do that by adding the below to your config:
 #+begin_src emacs-lisp
@@ -111,7 +111,8 @@ You can do that by adding the below to your config:
 If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can do the below instead:
 #+begin_src emacs-lisp
 (use-package ox-hugo
-  :ensure t            ;Auto-install the package from Melpa (optional)
+  :ensure t   ;Auto-install the package from Melpa
+  :pin melpa  ;`package-archives' should already have ("melpa" . "https://melpa.org/packages/")
   :after ox)
 #+end_src
 

@@ -2673,11 +2673,16 @@ Here's an example of how to do that using ~use-package~:
   :ensure t
   :init
   (with-eval-after-load 'ox
-    (add-to-list 'org-export-before-parsing-hook
-                 (lambda (backend)
-                   ;; ox-hugo <- ox-blackfriday <- ox-md <- ox-html
-                   (when (org-export-derived-backend-p backend 'html)
-                     (org-ref-process-buffer 'html))))))
+    (defun my/org-ref-process-buffer--html (backend)
+      "Preprocess `org-ref' citations to HTML format.
+
+Do this only if the export backend is `html' or a derivative of
+that."
+      ;; `ox-hugo' is derived indirectly from `ox-html'.
+      ;; ox-hugo <- ox-blackfriday <- ox-md <- ox-html
+      (when (org-export-derived-backend-p backend 'html)
+        (org-ref-process-buffer 'html)))
+    (add-to-list 'org-export-before-parsing-hook #'my/org-ref-process-buffer--html)))
 #+end_src
 **** Auto-inserting /Bibliography/ heading
 A Markdown heading named "Bibliography" will be auto-inserted above

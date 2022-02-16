@@ -30,3 +30,17 @@ Referencing to equation labels does not work when <span class="latex">L<sup>a</s
 equations are exported as images.
 
 </div>
+
+
+## tikz {#tikz}
+
+`ox-hugo` Issue #[565](https://github.com/kaushalmodi/ox-hugo/issues/565)
+
+
+<div class="equation-container">
+<span class="equation">
+<img src="/ltximg/all-posts_883cc123fe80ef810c1787b4c684be98b48dae22.svg" alt="\begin{equation*}\begin{tikzpicture}
+  \draw[gray, thick] (-1,1) -- (1,-1);
+\end{tikzpicture}\end{equation*}" class="org-svg" />
+</span>
+</div>

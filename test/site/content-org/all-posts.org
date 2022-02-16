@@ -3912,6 +3912,15 @@ C = W\log_{2} (1+\mathrm{SNR})
 Referencing to equation labels does not work when {{{latex}}}
 equations are exported as images.
 #+end_note
+*** tikz
+{{{oxhugoissue(565)}}}
+
+#+latex_header: \usepackage{tikz}
+#+latex_header: \usepackage{pgfplots}
+
+\begin{equation*}\begin{tikzpicture}
+  \draw[gray, thick] (-1,1) -- (1,-1);
+\end{tikzpicture}\end{equation*}
 ** Equations exported to PNG (dvipng)   :dont_export_during_make_test:dvipng:
 :PROPERTIES:
 :EXPORT_FILE_NAME: equations-exported-to-png

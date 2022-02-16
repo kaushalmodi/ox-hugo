@@ -916,12 +916,14 @@ where \"ltximg/\" is the default value of
 Return the updated HTML string."
   ;; (message "dbg html-str: %S" html-str)
   (if (and (stringp html-str)
-           (string-match "\\(.*?<img src=\"\\)\\([^\"]+\\)\\(\"\\(.\\|\n\\)*\\)" html-str))
+           (string-match "\\(\\(?:.\\|\n\\)*?<img src=\"\\)\\([^\"]+\\)\\(\"\\(?:.\\|\n\\)*\\)" html-str))
       (let ((updated-img-path (format "/%s%s"
                                       org-blackfriday--ltximg-directory
                                       (file-name-nondirectory
                                        (match-string-no-properties 2 html-str)))))
         ;; (message "dbg updated-img-path: %S" updated-img-path)
+        ;; (message "dbg match 1: %S" (match-string-no-properties 1 html-str))
+        ;; (message "dbg match 3: %S" (match-string-no-properties 3 html-str))
         (format "%s%s%s"
                 (match-string-no-properties 1 html-str)
                 updated-img-path

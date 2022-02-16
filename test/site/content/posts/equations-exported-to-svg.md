@@ -11,6 +11,9 @@ Example of an inline equation: <img src="/ltximg/all-posts_ceee782e7b4ae762ba550
 
 Example of a block equation:
 
+
+<div class="equation-container">
+<span class="equation">
 <img src="/ltximg/all-posts_bfe9e5d17c9e7a6e0fb64dba06c0d3466b8d9542.svg" alt="\begin{equation*}
 C = W\log_{2} (1+\mathrm{SNR})
 \end{equation*}

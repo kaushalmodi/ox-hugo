@@ -2198,10 +2198,7 @@ and rewrite link paths to make blogging more seamless."
                                       (org-export-get-reference destination info))))
                                  ;; Ref to a <<target>>.
                                  ((eq (org-element-type destination) 'target)
-                                  (format "%s%s"
-                                          (org-blackfriday--get-ref-prefix (org-element-type destination))
-                                          ;; If the target is <<xyz>>, `raw-path' will be "xyz".
-                                          (org-blackfriday--valid-html-anchor-name raw-path)))
+                                  (org-blackfriday--get-target-anchor destination))
                                  ;; Ref to all other link destinations.
                                  (t
                                   (org-export-get-reference destination info)))))

@@ -3536,7 +3536,7 @@ Once that is evaluated, links like these will export fine i.e. no
 :CUSTOM_ID: link-heading-2
 :END:
 - Link to [[#link-heading-1][Heading 1]]
-*** Links to Org targets
+*** Links to Org Targets
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-org-targets
 :END:
@@ -3560,6 +3560,13 @@ link./
 #+include: "./misc/common.org::#lorem-ipsum" :only-contents t
 
 *Here we refer to item [[target]].*
+**** Using Org targets as verbatim anchors
+paragraph 1
+
+<<.paragraph-2>>
+paragraph 2
+
+[[.paragraph-2][Link to paragraph 2]]
 *** Links to source blocks                                        :src_block:
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-source-blocks

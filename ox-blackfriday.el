@@ -1450,7 +1450,7 @@ CONTENTS is nil."
                       (org-element-property :value target)))
          (attr (format " class=\"%s\" id=\"%s\""
                        (string-remove-suffix "--" prefix)
-                       ref)))
+                       (org-blackfriday--valid-html-anchor-name ref))))
     (org-blackfriday--link-target attr)))
 
 ;;;; Verse Block

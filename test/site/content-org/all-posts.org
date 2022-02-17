@@ -3655,7 +3655,7 @@ init file.
 - [[#internal-target][Link to CUSTOM_ID within the same post]]
 - [[id:8e65ff86-3f9a-48ef-9b43-751a2e8a9372][Link to ID within the same post]]
 - [[*Internal target][Link to heading within the same post]]
-- [[internal-target][Link to target within the same post]]
+- Links to target links within the same post like [[internal target link][this]].
 *** Cross-post links                                        :crosspost_links:
 Cross-post links are internal links pointing to targets in a different
 subtree that will be exported to another Hugo post than the link
@@ -3685,7 +3685,7 @@ resolved to the containing post.
 :CUSTOM_ID: internal-target
 :ID:       8e65ff86-3f9a-48ef-9b43-751a2e8a9372
 :END:
-<<internal-target>>
+<<internal target link>>
 *** Link destination
 :PROPERTIES:
 :CUSTOM_ID: link-destination

@@ -68,7 +68,7 @@ resolved to the containing post.
 
 ## Internal target {#internal-target}
 
-<span class="org-target" id="org-target--internal-target-link"></span>
+<span class="org-target" id="org-target--internal-target-link" title="internal target link"></span>
 
 
 ## Link destination {#link-destination}
@@ -76,7 +76,7 @@ resolved to the containing post.
 
 ### External target {#external-target}
 
-<span class="org-target" id="org-target--external-target"></span>
+<span class="org-target" id="org-target--external-target" title="external-target"></span>
 
 
 ### External target with **bold** and _italic_ {#external-target-with-bold-and-italic}

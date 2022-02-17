@@ -16,7 +16,7 @@ will output below (_lorem-ipsum_ added to increase page content so
 that the link jump is evident):
 
 -   one item
--   <span class="org-target" id="org-target--target"></span>another item
+-   <span class="org-target" id="org-target--target" title="target"></span>another item
 
 _Scroll to the end of the below 'lorem-ipsum' block to find the test
 link._
@@ -80,7 +80,7 @@ blandit in.
 
 paragraph 1
 
-<span class="org-target" id="paragraph-2"></span>
+<span class="org-target" id="paragraph-2" title=".paragraph-2"></span>
 paragraph 2
 
 [Link to paragraph 2](#paragraph-2)

@@ -8,7 +8,7 @@ tikzjax = true
 
 `ox-hugo` Issue #[390](https://github.com/kaushalmodi/ox-hugo/issues/390)
 
-<span class="org-target" id="org-target--circle"></span>
+<span class="org-target" id="org-target--circle" title="circle"></span>
 
 <figure>
 <script type="text/tikz">

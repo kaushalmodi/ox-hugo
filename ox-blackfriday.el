@@ -1477,7 +1477,9 @@ CONTENTS is nil."
   (let* ((class (string-remove-suffix "--"
                                       (org-blackfriday--get-ref-prefix 'target)))
          (anchor (org-blackfriday--get-target-anchor target))
-         (attr (format " class=\"%s\" id=\"%s\"" class anchor)))
+         (target-name (org-element-property :value target))
+         (attr (format " class=\"%s\" id=\"%s\" title=\"%s\""
+                       class anchor target-name)))
     (org-blackfriday--link-target attr)))
 
 ;;;; Verse Block

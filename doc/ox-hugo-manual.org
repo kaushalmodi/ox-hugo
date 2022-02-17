@@ -3980,6 +3980,7 @@ might appreciate the power of [[https://orgmode.org/manual/Macro-Replacement.htm
 
 This is best shown using the same ~relref~ shortcode example ..
 
+<<.relref-org-macro>>
 Instead of always typing ~@@hugo:[Org Special Blocks]({​{< relref
 "org-special-blocks" >}})@@~, you can define an Org macro called
 ~relref~ like so:
@@ -4084,6 +4085,25 @@ org-hugo-get-heading-slug org-hugo-get-md5)~.
   #+begin_src md
   ### Heading in a post {#74283e7c-a20b-1c22-af88-e41ff8055d17}
   #+end_src
+**** Target Links
+Org mode specifies the ~<<target>>~ syntax in the [[https://orgmode.org/manual/Internal-Links.html][Internal Links]]
+section of the Org manual.
+
+By default, a target named "foo" <<foo>>(~<<foo>>~) will create an
+HTML anchor with a prefix (like ~org-target--~). See [[foo][this link]] to that
+"foo" target.
+
+But if the target name is prefixed with a ".", like ".bar"
+<<.bar>>(~<<.bar>>~), the HTML anchor with
+#+begin_mark
+not have that prefix
+#+end_mark
+. See [[.bar][this link]] to that ".bar" target.
+
+This special feature allows you to create an HTML anchor anywhere in
+your document which you might then refer from a different post by
+using something like the {{{relref(~relref~ Org
+macro,shortcodes#relref-org-macro)}}}.
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"

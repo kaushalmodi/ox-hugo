@@ -30,7 +30,7 @@ init file.
 -   [Link to CUSTOM_ID within the same post](#internal-target)
 -   [Link to ID within the same post](#internal-target)
 -   [Link to heading within the same post](#internal-target)
--   [Link to target within the same post](#org-target--internal-target)
+-   Links to target links within the same post like [this](#org-target--internal-target-link).
 
 
 ## Cross-post links <span class="tag"><span class="crosspost_links">crosspost-links</span></span> {#cross-post-links}
@@ -68,7 +68,7 @@ resolved to the containing post.
 
 ## Internal target {#internal-target}
 
-<span class="org-target" id="org-target--internal-target"></span>
+<span class="org-target" id="org-target--internal-target-link"></span>
 
 
 ## Link destination {#link-destination}

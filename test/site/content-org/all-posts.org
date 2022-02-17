@@ -3536,7 +3536,7 @@ Once that is evaluated, links like these will export fine i.e. no
 :CUSTOM_ID: link-heading-2
 :END:
 - Link to [[#link-heading-1][Heading 1]]
-*** Links to Org targets
+*** Links to Org Targets
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-org-targets
 :END:
@@ -3560,6 +3560,13 @@ link./
 #+include: "./misc/common.org::#lorem-ipsum" :only-contents t
 
 *Here we refer to item [[target]].*
+**** Using Org targets as verbatim anchors
+paragraph 1
+
+<<.paragraph-2>>
+paragraph 2
+
+[[.paragraph-2][Link to paragraph 2]]
 *** Links to source blocks                                        :src_block:
 :PROPERTIES:
 :EXPORT_FILE_NAME: links-to-source-blocks
@@ -3655,7 +3662,7 @@ init file.
 - [[#internal-target][Link to CUSTOM_ID within the same post]]
 - [[id:8e65ff86-3f9a-48ef-9b43-751a2e8a9372][Link to ID within the same post]]
 - [[*Internal target][Link to heading within the same post]]
-- [[internal-target][Link to target within the same post]]
+- Links to target links within the same post like [[internal target link][this]].
 *** Cross-post links                                        :crosspost_links:
 Cross-post links are internal links pointing to targets in a different
 subtree that will be exported to another Hugo post than the link
@@ -3685,7 +3692,7 @@ resolved to the containing post.
 :CUSTOM_ID: internal-target
 :ID:       8e65ff86-3f9a-48ef-9b43-751a2e8a9372
 :END:
-<<internal-target>>
+<<internal target link>>
 *** Link destination
 :PROPERTIES:
 :CUSTOM_ID: link-destination

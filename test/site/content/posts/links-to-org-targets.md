@@ -1,5 +1,5 @@
 +++
-title = "Links to Org targets"
+title = "Links to Org Targets"
 tags = ["links", "internal-links"]
 draft = false
 +++
@@ -74,3 +74,13 @@ molestie velit. Nullam pellentesque convallis ante, vel posuere libero
 blandit in.
 
 **Here we refer to item [2](#org-target--target).**
+
+
+## Using Org targets as verbatim anchors {#using-org-targets-as-verbatim-anchors}
+
+paragraph 1
+
+<span class="org-target" id="paragraph-2"></span>
+paragraph 2
+
+[Link to paragraph 2](#paragraph-2)

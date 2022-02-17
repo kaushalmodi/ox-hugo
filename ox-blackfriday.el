@@ -660,9 +660,14 @@ Else return an empty string."
 ;;;; Convert string to a valid anchor name
 (defun org-blackfriday--valid-html-anchor-name (str)
   "Turn STR into a valid HTML anchor name.
-Replaces invalid characters with \"-\"."
+
+Replaces invalid characters with \"-\".  The returned anchor name
+will also never begin or end with \"-\".
+"
   (or (and (stringp str)
-           (replace-regexp-in-string "[^a-zA-Z0-9_-.]" "-" str))
+           (string-trim
+            (replace-regexp-in-string "[^a-zA-Z0-9_-.]" "-" str)
+            "-"))
       ""))
 
 ;; Return HTML span tags for link targets.
@@ -1441,16 +1446,38 @@ contextual information."
               blank-line-before-table tbl table-post))))
 
 ;;;; Target
+(defun org-blackfriday--get-target-anchor (target)
+  "Get HTML anchor for TARGET element.
+
+By default, the returned anchor string is the HTML sanitized
+target name (`:value' property of TARGET element) with a prefix
+returned by `org-blackfriday--get-ref-prefix'.
+
+If the anchor string begins with \".\", the returned anchor
+string is just the HTML sanitized target name without that \".\".
+
+  TARGET NAME    ANCHOR
+
+   abc            org-target--abc
+   abc def        org-target--abc-def
+   .abc           abc"
+  (let ((target-name (org-element-property :value target))
+        (verbatim-target-prefix ".") ;This needs to be non-alpha-numeric, and not an Org-recognized link prefix like "#"
+        (prefix ""))
+    (unless (string-prefix-p verbatim-target-prefix target-name)
+      (setq prefix (org-blackfriday--get-ref-prefix 'target)))
+    ;; Below function will auto-remove the `verbatim-target-prefix' if
+    ;; present.
+    (setq target-name (org-blackfriday--valid-html-anchor-name target-name))
+    (format "%s%s" prefix target-name)))
+
 (defun org-blackfriday-target (target _contents _info)
   "Transcode a TARGET object from Org to HTML.
 CONTENTS is nil."
-  (let* ((prefix (org-blackfriday--get-ref-prefix 'target))
-         (ref (format "%s%s"
-                      prefix
-                      (org-element-property :value target)))
-         (attr (format " class=\"%s\" id=\"%s\""
-                       (string-remove-suffix "--" prefix)
-                       ref)))
+  (let* ((class (string-remove-suffix "--"
+                                      (org-blackfriday--get-ref-prefix 'target)))
+         (anchor (org-blackfriday--get-target-anchor target))
+         (attr (format " class=\"%s\" id=\"%s\"" class anchor)))
     (org-blackfriday--link-target attr)))
 
 ;;;; Verse Block

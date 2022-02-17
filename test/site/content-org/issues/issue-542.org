@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       31c61d47-0afc-4d5c-9b60-6c154a1c518d
+:END:
+#+title: Issue # 542
+#+hugo_section: issues
+#+hugo_base_dir: ../../
+
+#+author:
+
+#+filetags: org_id link anchor heading
+
+#+macro: issue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+
+#+begin_description
+Test links to headings whose anchors are derived from org-id's.
+#+end_description
+
+{{{issue(542)}}}
+
+- [[id:04e97225-6956-4554-b812-ee0e52921c7a][Link]] to a heading that has both CUSTOM_ID and ID set.
+- [[id:909536ed-b636-4bb9-9cc6-6a06992d8853][Link]] to a heading that has only the ID set.
+
+* Local Variables                                          :ARCHIVE:noexport:
+#+bind: org-hugo-anchor-functions (org-hugo-get-custom-id org-hugo-get-id org-hugo-get-heading-slug org-hugo-get-md5)
+# Local Variables:
+# org-export-allow-bind-keywords: t
+# End:

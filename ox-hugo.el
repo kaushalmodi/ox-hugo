@@ -80,8 +80,7 @@
 ;; https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=f636cf91b6cbe322eca56e23283f4614548c9d65
 (require 'org-refile nil :noerror)      ;For `org-get-outline-path'
 
-(require 'org-id)                       ;For `org-id-goto'
-(require 'org-agenda)                   ;For `org-find-top-headline'
+(require 'org-id)                       ;For `org-id-find'
 
 (declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
 
@@ -2129,7 +2128,7 @@ and rewrite link paths to make blogging more seamless."
                            destination))))
              ;; (message "[org-hugo-link DBG] plain-text path: %s" path)
              (if (org-id-find-id-file raw-path)
-                 (let* ((anchor (org-hugo-link--heading-anchor-maybe link))
+                 (let* ((anchor (org-hugo-link--heading-anchor-maybe link info))
                         (anchor-str (if (org-string-nw-p anchor)
                                         (concat "#" anchor)
                                       "")))
@@ -2400,6 +2399,7 @@ and rewrite link paths to make blogging more seamless."
                                   (if (string-match ".*\\.org::\\(#.*\\)" raw-link)
                                       (match-string-no-properties 1 raw-link)
                                     "")))
+                             ;; (message "[org-hugo-link DBG] raw-link-minus-org-file: %s" raw-link-minus-org-file)
                              (format "{{< relref \"%s%s\" >}}"
                                      (file-name-sans-extension
                                       (file-name-nondirectory path1))
@@ -2450,22 +2450,30 @@ and rewrite link paths to make blogging more seamless."
               (format "[%s](%s)" path path)
             (format "<%s>" path)))))))))
 
+(defun org-hugo-link--heading-anchor-maybe (link info)
+  "Return anchor of the heading pointed to by LINK.
 
-(defun org-hugo-link--heading-anchor-maybe (link)
-  "Return heading pointed to by LINK."
-  (with-temp-buffer
-    (org-id-goto (org-element-property :path link))
-    ;; Thu Oct 21 21:29:17 EDT 2021 - kmodi
-    ;; It was necessary to set the major mode to `org-mode' after the
-    ;; `org-id-goto' jump. Otherwise, the temp buffer would remain
-    ;; in fundamental mode, and so the `org-find-top-headline'
-    ;; always returned nil.
-    (org-mode)
-    (let ((heading (org-find-top-headline)))
-      (kill-buffer (current-buffer))
-      (if heading
-          (org-hugo-slug heading :allow-double-hyphens)
-        ""))))
+INFO is a plist used as a communication channel."
+  ;; (message "dbg link id: %S" (org-element-property :path link))
+  (let* ((id-loc (org-id-find (org-element-property :path link)))
+         (id-file (car id-loc))
+         (id-pos (cdr id-loc))
+         (id-buffer (get-file-buffer id-file))) ;nil if `id-file' buffer is not already open
+    ;; (message "[org-hugo-link--heading-anchor-maybe DBG] id-loc: %S" id-loc)
+    (with-current-buffer (or id-buffer (find-file-noselect id-file :nowarn))
+      (org-export-get-environment)        ;Eval #+bind keywords, etc.
+      (goto-char id-pos)
+      ;; (org-show-context)
+      (let* ((elem (org-element-at-point))
+             (anchor (if (equal (org-element-type elem) 'headline)
+                         (org-hugo--get-anchor elem info)
+                       "")))    ;If it's a file ID and not a headline ID
+        ;; (message "[org-hugo-link--heading-anchor-maybe DBG] elem type: %S" (org-element-type elem))
+        ;; (message "[org-hugo-link--heading-anchor-maybe DBG] elem: %S" elem)
+        ;; (message "[org-hugo-link--heading-anchor-maybe DBG] anchor: %S" anchor)
+        (unless id-buffer ;Kill the buffer with ID if it wasn't open already
+          (kill-buffer (current-buffer)))
+        anchor))))
 
 ;;;;; Helpers
 (defun org-hugo--copy-resources-maybe (info)

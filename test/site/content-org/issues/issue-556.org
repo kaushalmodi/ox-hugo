@@ -7,6 +7,8 @@
 
 #+author:
 
+#+filetags: org_id anchor heading
+
 #+macro: issue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
 
 #+begin_description

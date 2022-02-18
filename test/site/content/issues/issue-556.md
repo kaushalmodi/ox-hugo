@@ -5,6 +5,7 @@ description = """
   org-hugo-get-heading-slug` `org-hugo-get-md5` `precedence set in
   ~org-hugo-anchor-functions`.
   """
+tags = ["org-id", "anchor", "heading"]
 draft = false
 +++
 

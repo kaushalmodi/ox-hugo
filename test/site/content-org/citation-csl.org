@@ -4,7 +4,7 @@
 #+author:
 
 #+bibliography: cite/bib/orgcite.bib
-#+cite_export: csl
+#+cite_export: csl cite/csl/ieee.csl
 
 #+filetags: org_cite csl citations bibliography
 
@@ -17,6 +17,8 @@ Test citation CSL using ~oc.el~ + ~citeproc.el~.
 {{{oxhugoissue(558)}}}
 
 [cite:@OrgCitations]
+
+[cite:@AdaptiveVNF]
 
 Below, the "Bibliography" heading will be auto-inserted.
 

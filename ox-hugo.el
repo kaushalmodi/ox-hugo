@@ -577,8 +577,9 @@ Some of the inbuilt functions that can be added to this list:
   :type '(repeat function))
 
 (defcustom org-hugo-citations-plist '(:bibliography-section-heading "Bibliography"
-                                      :bibliography-section-regexp "\n\n\\(.\\|\\n\\)*?<div class=\"csl-bib-body\">"
-                                      ;;                            ^^^^ blank line before the <div> block
+                                      :bibliography-section-regexp "\n\n<style>\\(.\\|\n\\)*?<div class=\"csl-bib-body\">"
+                                      ;;                            ^^^^ blank line before the <style> ..
+                                      ;;                                          .. <div class="csl-bib-body"> block
                                       )
   "Property list for storing default properties for citation exports.
 

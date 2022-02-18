@@ -20,6 +20,18 @@ Test links to headings whose anchors are derived from org-id's.
 - [[id:04e97225-6956-4554-b812-ee0e52921c7a][Link]] to a heading that has both CUSTOM_ID and ID set.
 - [[id:909536ed-b636-4bb9-9cc6-6a06992d8853][Link]] to a heading that has only the ID set.
 
+
+- [[file:issue-556.org::* Heading 1][Link]] to a heading without CUSTOM_ID or ID properties.
+- [[file:issue-556.org::* Heading 2][Link]] to a heading with only the CUSTOM_ID property set.
+- [[file:issue-556.org::* Heading 3.1][Link]] to a heading with only the ID property set.
+- [[file:issue-556.org::* Heading 3][Link]] to a heading with both CUSTOM_ID and ID properties set.
+
+
+- [[file:issue-556.org::#heading-abc][Link]] to a heading using CUSTOM_ID where the heading has both
+  CUSTOM_ID and ID properties set.
+- [[file:issue-556.org::#heading-xyz][Link]] to a heading using CUSTOM_ID where the heading has only the
+  CUSTOM_ID property set.
+
 * Local Variables                                          :ARCHIVE:noexport:
 #+bind: org-hugo-anchor-functions (org-hugo-get-custom-id org-hugo-get-id org-hugo-get-heading-slug org-hugo-get-md5)
 # Local Variables:

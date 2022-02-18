@@ -2086,6 +2086,46 @@ Throw an error if no block contains REF."
         info 'first-match)
       (signal 'org-link-broken (list ref))))
 
+(defun org-hugo--search-and-get-element (org-file search-str)
+  "Return Org element at the point where SEARCH-STR is found in ORG-FILE.
+
+ORG-FILE is the file path in which the SEARCH-STR is to be searched.
+
+SEARCH-STR needs to be a non-empty string. Example values: \"*
+Some heading\", \"#some_custom_id\".
+
+If the search fails, return nil."
+  ;; (message "[get-link-search-location DBG] org-file: %S" org-file)
+  ;; (message "[get-link-search-location DBG] search-str: %S" search-str)
+  (let ((buffer (get-file-buffer org-file))) ;nil if `org-file' buffer is not already open
+    (with-current-buffer (or buffer (find-file-noselect org-file))
+      (org-export-get-environment)        ;Eval #+bind keywords, etc.
+      ;; Below code for `save-position-maybe' and `search' is taken
+      ;; from the `org-open-file' function.
+      (let* ((save-position-maybe
+	          (let ((old-buffer (current-buffer))
+		            (old-pos (point))
+		            (old-mode major-mode))
+	            (lambda ()
+	              (and (derived-mode-p 'org-mode)
+		               (eq old-mode 'org-mode)
+		               (or (not (eq old-buffer (current-buffer)))
+		                   (not (eq old-pos (point))))
+		               (org-mark-ring-push old-pos old-buffer)))))
+             elem)
+        (condition-case err
+			(org-link-search search-str)
+		  ;; Save position before error-ing out so user
+		  ;; can easily move back to the original buffer.
+		  (error (funcall save-position-maybe)
+			     (error (nth 1 err))))
+        (setq elem (org-element-at-point))
+        ;; (message "[get-link-search-location DBG] elem: %S" elem)
+
+        (unless buffer ;Kill the buffer if it wasn't open already
+          (kill-buffer (current-buffer)))
+        elem))))
+
 (defun org-hugo-link (link desc info)
   "Convert LINK to Markdown format.
 
@@ -2104,6 +2144,7 @@ and rewrite link paths to make blogging more seamless."
                link-is-url)
       (setq raw-path (org-blackfriday--url-sanitize-maybe
                       info (url-encode-url raw-path))))
+    ;; (message "[org-hugo-link DBG] raw-link: %s" raw-link)
     ;; (message "[org-hugo-link DBG] raw-path 2: %s" raw-path)
     ;; (message "[org-hugo-link DBG] link: %S" link)
     ;; (message "[org-hugo-link DBG] link type: %s" type)
@@ -2359,7 +2400,7 @@ and rewrite link paths to make blogging more seamless."
                 (org-blackfriday--get-ref-prefix 'radio)
                 (org-blackfriday--valid-html-anchor-name
                  (org-element-property :value destination)))))
-     (t
+     (t ;[[file:foo.png]], [[file:foo.org::* Heading]], [[file:foo.org::#custom-id]],
       (let* ((link-param-str "")
              (path (cond
                     (link-is-url
@@ -2393,18 +2434,23 @@ and rewrite link paths to make blogging more seamless."
                      ;; (message "[org-hugo-link DBG] raw-path: %s" raw-path)
                      (let ((path1 (replace-regexp-in-string "\\`file://" "" raw-path)))
                        (if (string= ".org" (downcase (file-name-extension path1 ".")))
-                           (let ((raw-link-minus-org-file
+                           (let ((link-search-str
                                   ;; If raw-link is "./foo.org::#bar",
-                                  ;; set `raw-link-minus-org-file' to
+                                  ;; set `link-search-str' to
                                   ;; "#bar".
-                                  (if (string-match ".*\\.org::\\(#.*\\)" raw-link)
-                                      (match-string-no-properties 1 raw-link)
-                                    "")))
-                             ;; (message "[org-hugo-link DBG] raw-link-minus-org-file: %s" raw-link-minus-org-file)
+                                  (when (string-match ".*\\.org::\\(.*\\)" raw-link)
+                                    (match-string-no-properties 1 raw-link)))
+                                 (anchor ""))
+                             ;; (message "[org-hugo-link DBG] link-search-str: %s" link-search-str)
+                             (when link-search-str
+                               (let ((matched-elem
+                                      (org-hugo--search-and-get-element raw-path link-search-str)))
+                                 (when matched-elem
+                                   (setq anchor (format "#%s" (org-hugo--get-anchor matched-elem info))))))
+                             ;; (message "[org-hugo-link DBG] link search anchor: %S" anchor)
                              (format "{{< relref \"%s%s\" >}}"
-                                     (file-name-sans-extension
-                                      (file-name-nondirectory path1))
-                                     raw-link-minus-org-file))
+                                     (file-name-sans-extension (file-name-nondirectory path1))
+                                     anchor))
                          (org-hugo--attachment-rewrite-maybe path1 info))))
                     (t
                      raw-path)))
@@ -2464,7 +2510,6 @@ INFO is a plist used as a communication channel."
     (with-current-buffer (or id-buffer (find-file-noselect id-file :nowarn))
       (org-export-get-environment)        ;Eval #+bind keywords, etc.
       (goto-char id-pos)
-      ;; (org-show-context)
       (let* ((elem (org-element-at-point))
              (anchor (if (equal (org-element-type elem) 'headline)
                          (org-hugo--get-anchor elem info)

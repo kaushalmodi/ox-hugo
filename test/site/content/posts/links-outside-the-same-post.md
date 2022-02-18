@@ -14,9 +14,9 @@ to a heading with a **:CUSTOM_ID** property will be resolved to the
 appropriate location in the linked file. Links to headings and
 links to targets will be resolved to the containing file.
 
--   [Link to CUSTOM_ID]({{< relref "link-destination#external-target" >}})
--   [Link to a heading]({{< relref "link-destination" >}})
--   [Link to a target]({{< relref "link-destination" >}})
+-   [Link to CUSTOM_ID]({{< relref "issue-556#heading-xyz" >}})
+-   [Link to a heading]({{< relref "issue-556#heading-abc" >}})
+-   [Link to an Org Target]({{< relref "issue-556#d41d8c" >}})
 
 
 ## Internal links <span class="tag"><span class="internal_links">internal-links</span></span> {#internal-links}
@@ -69,14 +69,3 @@ resolved to the containing post.
 ## Internal target {#internal-target}
 
 <span class="org-target" id="org-target--internal-target-link"></span>
-
-
-## Link destination {#link-destination}
-
-
-### External target {#external-target}
-
-<span class="org-target" id="org-target--external-target"></span>
-
-
-### External target with **bold** and _italic_ {#external-target-with-bold-and-italic}

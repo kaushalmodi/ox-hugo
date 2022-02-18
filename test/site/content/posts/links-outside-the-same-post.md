@@ -16,7 +16,7 @@ links to targets will be resolved to the containing file.
 
 -   [Link to CUSTOM_ID]({{< relref "issue-556#heading-xyz" >}})
 -   [Link to a heading]({{< relref "issue-556#heading-abc" >}})
--   [Link to an Org Target]({{< relref "issue-556#d41d8c" >}})
+-   [Link to an Org Target]({{< relref "issue-556" >}})
 
 
 ## Internal links <span class="tag"><span class="internal_links">internal-links</span></span> {#internal-links}

@@ -2093,29 +2093,44 @@ Throw an error if no block contains REF."
         info 'first-match)
       (signal 'org-link-broken (list ref))))
 
-(defun org-hugo--search-and-get-element (org-file search-str)
-  "Return Org element at the point where SEARCH-STR is found in ORG-FILE.
+(defun org-hugo--search-and-get-anchor (org-file search-str info)
+  "Return HTML anchor for the point where SEARCH-STR is found in ORG-FILE.
 
 ORG-FILE is the file path in which the SEARCH-STR is to be searched.
 
 SEARCH-STR needs to be a non-empty string. Example values: \"*
 Some heading\", \"#some_custom_id\".
 
-If the search fails, return nil."
-  ;; (message "[get-link-search-location DBG] org-file: %S" org-file)
-  ;; (message "[get-link-search-location DBG] search-str: %S" search-str)
+If the search fails, return \"\".
+
+INFO is a plist used as a communication channel."
+  ;; (message "[search and get anchor DBG] org-file: %S" org-file)
+  ;; (message "[search and get anchor DBG] search-str: %S" search-str)
   (let ((buffer (get-file-buffer org-file)) ;nil if `org-file' buffer is not already open
-        elem)
+        (anchor "")
+        elem )
     (unless (file-exists-p org-file)
-      (error "[org-hugo--search-and-get-element] Unable to open Org file `%s'" org-file))
+      (error "[org-hugo--search-and-get-anchor] Unable to open Org file `%s'" org-file))
     (with-current-buffer (or buffer (find-file-noselect org-file))
       (org-export-get-environment)        ;Eval #+bind keywords, etc.
       (org-link-search search-str) ;This is extracted from the `org-open-file' function.
       (setq elem (org-element-at-point))
-	  ;; (message "[get-link-search-location DBG] elem: %S" elem)
+	  ;; (message "[search and get anchor DBG] elem: %S" elem)
+	  (cond
+       ((equal (org-element-type elem) 'headline)
+        (setq anchor (org-hugo--get-anchor elem info)))
+       (t ;This could be the case if `search-str' is a Target link.
+        ;; But I don't know how exactly I would derive a target link's
+        ;; anchor, because for target links, the element type is a
+        ;; `paragraph', and that doesn't have any reference to the
+        ;; `target' Org element.
+        ))
+      (when (org-string-nw-p anchor)
+        (setq anchor (format "#%s" anchor)))
+      ;; (message "[search and get anchor DBG] anchor: %S" anchor)
       (unless buffer ;Kill the buffer if it wasn't open already
         (kill-buffer (current-buffer))))
-    elem))
+    anchor))
 
 (defun org-hugo-link (link desc info)
   "Convert LINK to Markdown format.
@@ -2452,10 +2467,7 @@ and rewrite link paths to make blogging more seamless."
                                       (match-string-no-properties 1 raw-link))))
                                ;; (message "[org-hugo-link DBG] link-search-str: %s" link-search-str)
                                (when link-search-str
-                                 (let ((matched-elem
-                                        (org-hugo--search-and-get-element raw-path link-search-str)))
-                                   (when matched-elem
-                                     (setq anchor (format "#%s" (org-hugo--get-anchor matched-elem info))))))))
+                                 (setq anchor (org-hugo--search-and-get-anchor raw-path link-search-str info)))))
                            ;; (message "[org-hugo-link DBG] link search anchor: %S" anchor)
                            (format "{{< relref \"%s%s\" >}}" ref anchor)))
                         (t ;; attachments like foo.png

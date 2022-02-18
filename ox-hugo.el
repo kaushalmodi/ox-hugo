@@ -2098,7 +2098,7 @@ Throw an error if no block contains REF."
 
 ORG-FILE is the file path in which the SEARCH-STR is to be searched.
 
-SEARCH-STR needs to be a non-empty string. Example values: \"*
+SEARCH-STR needs to be a non-empty string.  Example values: \"*
 Some heading\", \"#some_custom_id\".
 
 If the search fails, return \"\".

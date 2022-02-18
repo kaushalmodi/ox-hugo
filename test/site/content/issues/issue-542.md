@@ -12,9 +12,9 @@ draft = false
 
 <!--listend-->
 
--   [Link]({{< relref "issue-556#31c61d47-0afc-4d5c-9b60-6c154a1c518d" >}}) to a heading without CUSTOM_ID or ID properties.
+-   [Link]({{< relref "issue-556#heading-1" >}}) to a heading without CUSTOM_ID or ID properties.
 -   [Link]({{< relref "issue-556#heading-xyz" >}}) to a heading with only the CUSTOM_ID property set.
--   [Link]({{< relref "issue-556#31c61d47-0afc-4d5c-9b60-6c154a1c518d" >}}) to a heading with only the ID property set.
+-   [Link]({{< relref "issue-556#909536ed-b636-4bb9-9cc6-6a06992d8853" >}}) to a heading with only the ID property set.
 -   [Link]({{< relref "issue-556#heading-abc" >}}) to a heading with both CUSTOM_ID and ID properties set.
 
 <!--listend-->

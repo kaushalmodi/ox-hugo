@@ -3649,9 +3649,9 @@ to a heading with a *:CUSTOM_ID* property will be resolved to the
 appropriate location in the linked file. Links to headings and
 links to targets will be resolved to the containing file.
 
-- [[file:link-destination.org::#external-target][Link to CUSTOM_ID]]
-- [[file:link-destination.org::*external-target][Link to a heading]]
-- [[file:link-destination.org::external-target][Link to a target]]
+- [[file:issues/issue-556.org::#heading-xyz][Link to CUSTOM_ID]]
+- [[file:issues/issue-556.org::* Heading 3][Link to a heading]]
+- Links to Org Targets: [[file:issues/issue-556.org::paragraph-2][here]] and [[file:issues/issue-556.org::.paragraph-3][here]]
 *** Internal links                                           :internal_links:
 Internal links point to targets in the current subtree that will be
 exported to the same Hugo post as the link source. To handle links to
@@ -3693,19 +3693,19 @@ resolved to the containing post.
 :ID:       8e65ff86-3f9a-48ef-9b43-751a2e8a9372
 :END:
 <<internal target link>>
-*** Link destination
+** Link destination
 :PROPERTIES:
 :CUSTOM_ID: link-destination
 :EXPORT_FILE_NAME: link-destination
 :ID:       1e5e0bcd-caea-40ad-a75b-e488634c2678
 :END:
-**** External target
+*** External target
 :PROPERTIES:
 :CUSTOM_ID: external-target
 :ID:       de0df718-f9b4-4449-bb0a-eb4402fa5fcb
 :END:
 <<external-target>>
-**** External target with *bold* and /italic/
+*** External target with *bold* and /italic/
 ** Url encoding in links                              :escaping:url:encoding:
 :PROPERTIES:
 :EXPORT_FILE_NAME: url-encoding-in-links

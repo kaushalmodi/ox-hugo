@@ -1,5 +1,5 @@
 :PROPERTIES:
-:ID:       31c61d47-0afc-4d5c-9b60-6c154a1c518d
+:ID:       68b23d25-827c-49a5-9855-09ac63dc6db3
 :END:
 #+title: Issue # 556
 #+hugo_section: issues
@@ -51,6 +51,14 @@ This heading's anchor will be derived off the ~ID~.
 * %
 This heading's anchor will be derived from /md5/ of the title as it is
 not alphanumeric.
+* Org Target
+paragraph one
+
+<<paragraph-2>>
+paragraph two
+
+<<.paragraph-3>>
+paragraph three
 
 * Local Variables                                          :ARCHIVE:noexport:
 #+bind: org-hugo-anchor-functions (org-hugo-get-custom-id org-hugo-get-id org-hugo-get-heading-slug org-hugo-get-md5)

@@ -208,6 +208,7 @@ to be installed.")
 ;; Allow setting few vars in Local Variables in the test files.
 (put 'org-hugo-auto-set-lastmod 'safe-local-variable 'booleanp)
 (put 'org-hugo-suppress-lastmod-period 'safe-local-variable 'floatp)
+(put 'org-cite-csl-styles-dir 'safe-local-variable 'stringp)
 
 (with-eval-after-load 'org
   ;; Allow multiple line Org emphasis markup

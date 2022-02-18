@@ -4,7 +4,7 @@
 #+author:
 
 #+bibliography: cite/bib/orgcite.bib
-#+cite_export: csl cite/csl/ieee.csl
+#+cite_export: csl ieee.csl
 
 #+filetags: org_cite csl citations bibliography
 
@@ -23,3 +23,7 @@ Test citation CSL using ~oc.el~ + ~citeproc.el~.
 Below, the "Bibliography" heading will be auto-inserted.
 
 #+print_bibliography:
+
+# Local Variables:
+# org-cite-csl-styles-dir: "./cite/csl/"
+# End:

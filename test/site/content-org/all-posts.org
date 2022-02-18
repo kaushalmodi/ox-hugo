@@ -3651,7 +3651,7 @@ links to targets will be resolved to the containing file.
 
 - [[file:issues/issue-556.org::#heading-xyz][Link to CUSTOM_ID]]
 - [[file:issues/issue-556.org::* Heading 3][Link to a heading]]
-- [[file:issues/issue-556.org::paragraph-2][Link to an Org Target]]
+- Links to Org Targets: [[file:issues/issue-556.org::paragraph-2][here]] and [[file:issues/issue-556.org::.paragraph-3][here]]
 *** Internal links                                           :internal_links:
 Internal links point to targets in the current subtree that will be
 exported to the same Hugo post as the link source. To handle links to

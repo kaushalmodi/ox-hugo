@@ -55,3 +55,6 @@ paragraph one
 
 <span class="org-target" id="org-target--paragraph-2"></span>
 paragraph two
+
+<span class="org-target" id="paragraph-3"></span>
+paragraph three

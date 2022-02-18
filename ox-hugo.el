@@ -2119,12 +2119,11 @@ INFO is a plist used as a communication channel."
 	  (cond
        ((equal (org-element-type elem) 'headline)
         (setq anchor (org-hugo--get-anchor elem info)))
-       (t ;This could be the case if `search-str' is a Target link.
-        ;; But I don't know how exactly I would derive a target link's
-        ;; anchor, because for target links, the element type is a
-        ;; `paragraph', and that doesn't have any reference to the
-        ;; `target' Org element.
-        ))
+       (t
+        ;; If current point has an Org Target, get the target anchor.
+        (let ((target-elem (org-element-target-parser)))
+          (when (equal (org-element-type target-elem) 'target)
+            (setq anchor (org-blackfriday--get-target-anchor target-elem))))))
       (when (org-string-nw-p anchor)
         (setq anchor (format "#%s" anchor)))
       ;; (message "[search and get anchor DBG] anchor: %S" anchor)

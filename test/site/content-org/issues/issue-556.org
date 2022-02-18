@@ -57,6 +57,9 @@ paragraph one
 <<paragraph-2>>
 paragraph two
 
+<<.paragraph-3>>
+paragraph three
+
 * Local Variables                                          :ARCHIVE:noexport:
 #+bind: org-hugo-anchor-functions (org-hugo-get-custom-id org-hugo-get-id org-hugo-get-heading-slug org-hugo-get-md5)
 # Local Variables:

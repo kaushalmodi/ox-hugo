@@ -205,15 +205,6 @@ section./
 *** Customization Options
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
-**** =org-hugo-pandoc-cite-references-heading=
- - Default value :: ="References {#references}"=
-
-This is the Markdown heading that gets inserted before the section of
-references inserted by Pandoc inserted (See
-{{{doc(pandoc-citations,,Pandoc Citations)}}}) at the end of the post.
-
-To prevent the insertion of that Markdown heading, set this variable
-to an empty string (=""=).
 ** Screenshots Intro
 :PROPERTIES:
 :CUSTOM_ID: screenshots_intro
@@ -2711,18 +2702,21 @@ Below, the "Bibliography" heading will be auto-inserted.
 :PROPERTIES:
 :EXPORT_FILE_NAME: pandoc-citations
 :END:
+#+begin_note
+Org mode has inbuilt supporting for exporting citations starting
+#+begin_mark
+version 9.5
+#+end_mark
+See [[*Org Cite Citations][Org Cite Citations]] for more info.
+#+end_note
+
 The [[https://pandoc.org/][Pandoc]] Citations are prefixed with the *@* character. If the
 citation is ~@foo~, that particular /foo/ reference much be present in
 one of the specified bibliography files.
 
 #+begin_note
-Users need to have the ~pandoc~ and ~pandoc-citeproc~ binaries[fn:7]
-present in the ~PATH~.
+Users need to have the ~pandoc~ executable[fn:7] present in the ~PATH~.
 #+end_note
-
-When one or more citations are found by Pandoc, a top-level
-"References" section with matching references is automatically added
-at the very end of the post.
 **** Enabling
 Pandoc based citation parsing is enabled by setting the
 ~#+hugo_pandoc_citations:~ keyword or ~:EXPORT_HUGO_PANDOC_CITATIONS:~
@@ -2747,36 +2741,46 @@ file directory./
 ~nocite~ is a special Pandoc-specific meta-data which can be used to
 add extra citations even when they are not referenced in the post. It
 is set like any other list-type custom front-matter parameter
-(i.e. ~:LIST_PARAM '(ELEMENT1 ELEMENT2)~). See its example [[#pandoc-citations-example][below]].
+(i.e. ~:LIST_PARAM '(ELEMENT1 ELEMENT2)~). See its example [[code__pandoc_citations_example][below]].
 **** Link citations
 ~link-citations~ is a special Pandoc-specific meta-data which, when
 set to ~true~, enables linking of the citations in the post body to
 the corresponding reference in the "References" section. It is set
 like any other single-value custom front-matter parameter
-(i.e. ~:LIST_PARAM VALUE~). See its example [[#pandoc-citations-example][below]].
+(i.e. ~:LIST_PARAM VALUE~). See its example [[code__pandoc_citations_example][below]].
 **** Specifying Citation Style Language (CSL)
 By default, Pandoc uses /Chicago Manual of Style author-date/ as the
 [[https://citationstyles.org/][Citation Style Language]] ([[https://pandoc.org/MANUAL.html#citations][ref]]). This can be customized by using the
 Pandoc-specific meta-data ~csl~ to specify the new CSL file. It is set
 like any other single-value custom front-matter parameter
-(i.e. ~:LIST_PARAM VALUE~). See its example [[#pandoc-citations-example][below]].
+(i.e. ~:LIST_PARAM VALUE~). See its example [[code__pandoc_citations_example][below]].
 
 /Note that the path to the CSL file is relative to the Org file
 directory./
 **** Removal of Pandoc-specific meta-data
 The Pandoc-specific meta-data mentioned above (~nocite~,
-~link-citations~ and ~csl~) are auto-deleted from the front-matter in
-the final Markdown file that's supposed to be used by Hugo.
+~link-citations~ and ~csl~) are added using HUGO_CUSTOM_FRONT_MATTER
+*only for Pandoc* to parse.
 
-Those meta-data were added using HUGO_CUSTOM_FRONT_MATTER *only for
-Pandoc* to parse. Also there's no point leaking the user's
-bibliography and CSL file paths in the front-matter to be processed by
-Hugo.
+Once they are used by ~pandoc~, those front-matter keys are deleted in
+the final Markdown file (Hugo has no use of those Pandoc-specific
+front-matter keys).
+**** Auto-insertion of headings
+When one or more citations are found by Pandoc, a top-level
+"References" section with matching references is automatically added
+at the end of the post.
+
+By default, ~ox-hugo~ will insert a Markdown heading with the string
+defined in ~org-hugo-pandoc-cite-references-heading~ before that
+Pandoc-inserted /References/ section. It's default value is
+~References {#references}"~.
+
+If you want to prevent this Markdown heading auto-insertion, set this
+variable to an empty string (~""~).
 **** Example
-:PROPERTIES:
-:CUSTOM_ID: pandoc-citations-example
-:END:
-Here is a mini-example using Pandoc Citations:
+Here is a small example using Pandoc Citations:
+#+name: code__pandoc_citations_example
+#+caption: Example of using Pandoc Citations
 #+begin_src org
 ,* Citations Example
 :PROPERTIES:
@@ -2798,40 +2802,14 @@ another bit of blah with a footnote citation.[fn:1]
 
 - Note :: Above example assumes ~cite/bib/bib1.bib~,
           ~cite/bib/bib2.bib~ and ~cite/csl/my-custom-csl.format.csl~
-          to exist in the same directory containing that Org file.
+          to exist in the same directory containing the Org file.
 
-{{{test-search(citations)}}}
-
-Also see [[https://pandoc.org/MANUAL.html#citations][Pandoc Manual -- Citations]] for more details.
+See [[https://pandoc.org/MANUAL.html#citations][Pandoc Manual -- Citations]] for more details.
 **** How Pandoc Citations work
 1. ~ox-hugo~ first exports the Org file/subtree to a Markdown file as
    usual.
 2. ~pandoc~ then expands the ~@foo~ citations in that file and
    *rewrites* the whole Markdown file from the AST parsed by it.
-***** COMMENT
-/Below caveat shouldn't apply now. Pandoc output seems to be pretty
-much Blackfriday-compatible now -- <2018-07-20 Fri>/
-
------
-
-/Mostly/ this would work fine.
-
-But you might end up with issues if the /Blackfriday/ workarounds
-implemented in ~ox-hugo~ exports get removed during the rewrite by
-Pandoc.
-
-To check if an issue you see is specific to Pandoc rewrites,
-- temporarily set the ~HUGO_PANDOC_CITATIONS~ option to ~nil~,
-- re-export using ~ox-hugo~, and
-- check if Hugo renders the final HTML correctly after that.
-
-If this original Markdown export is parsed fine by Hugo, open an Issue
-with all the details (reproducible Org snippet, failing Markdown
-output by Pandoc, etc.), and we can see if this is something that can
-be fixed.
-
-(Of course, open an issue whenever any ~ox-hugo~ export does not do
-things as you expect :smile:)
 *** Custom Front-matter Parameters
 :PROPERTIES:
 :EXPORT_FILE_NAME: custom-front-matter
@@ -4161,11 +4139,10 @@ the theme and component dependencies, Go is required for that.
 - ~pandoc~ and ~pandoc_site~ version {{{pandoc_version}}}
 #+end_note
 
-- About Pandoc :: /While the end-user does not need Pandoc installed on
-  their machine, a code contributor needs to have both ~pandoc~ and
-  ~pandoc-citeproc~ installed[fn:7]. These are needed for ~make md~
-  and ~make -j1 test~ steps to work as they use/test the [[*Pandoc Citations][Pandoc
-  Citations]] feature too./
+- About Pandoc :: /While the end-user does not need Pandoc installed
+  on their machine, a code contributor needs to have ~pandoc~
+  installed[fn:7]. These are needed for ~make md~ and ~make -j1 test~
+  steps to work as they use/test the [[*Pandoc Citations][Pandoc Citations]] feature too./
 *** Contributing Guide
 :PROPERTIES:
 :EXPORT_FILE_NAME: contributing-guide
@@ -4482,12 +4459,11 @@ Categories,)}}}.
 
 [fn:8] The [[https://github.com/toml-lang/toml#local-date-time][TOML date-time]] uses the same RFC3339 format.
 
-[fn:7] The Pandoc Citations feature was last tested on
-<2019-01-03 Thu> with Pandoc version {{{pandoc_version}}}. If you are
-running an older version, the quickest way to install might be to
-simply download the latest release archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]],
-extract it and put the ~pandoc~ and ~pandoc-citeproc~ binaries in one
-of the directories in your /PATH/.
+[fn:7] The Pandoc Citations feature was last tested with Pandoc
+version {{{pandoc_version}}}. If you are running an older version, the
+quickest way to install might be to simply download the latest release
+archive from [[https://github.com/jgm/pandoc/releases][Pandoc releases]], extract it and put the ~pandoc~
+executable in one of the directories in your /PATH/.
 
 [fn:6] If you are still using a Hugo version older than 0.25, update
 now! -- Because that version added support for the awesome

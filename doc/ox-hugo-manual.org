@@ -2463,7 +2463,7 @@ Here are few use cases to better explain this feature.
 **** Use =description= in Org file, but export as =summary=
 The /Description/ meta-data is standard in Org.
 
-Starting with *v0.55.0*, Hugo now supports ~summary~ as an built-in
+Starting with *v0.55.0*, Hugo now supports ~summary~ as a built-in
 front-matter variable to directly specify the post /summary/. See Hugo
 commit [[https://github.com/gohugoio/hugo/commit/3a62d54745e2cbfda6772390830042908d725c71][3a62d547]] for details.
 

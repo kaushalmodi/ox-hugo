@@ -13,7 +13,16 @@
 #+macro: testtag tests tagged [[https://ox-hugo.scripter.co/test/tags/$1][$1]]
 #+macro: test-search Search the ~ox-hugo~ test site for [[https://ox-hugo.scripter.co/test/search/?q=$1]["$1"]] examples.
 
+#+macro: doc [[https://ox-hugo.scripter.co/doc/$1/$2][$3]]
 #+macro: relref @@hugo:[@@ $1 @@hugo:]({{< relref "$2" >}})@@
+
+#+macro: pagelink @@hugo:{{< pagelink "$1" "@@ $2 @@hugo:" >}}@@
+# Usage:
+#   {{{pagelink(PAGETITLE,)}}}                -> Hyperlink to a page with that title.
+#   {{{pagelink(PAGETITLE,LINKDESC)}}}        -> Hyperlink to a page with that title,
+#                                                 with that description.
+#   {{{pagelink(PAGETITLE#ANCHOR,LINKDESC)}}} -> Hyperlink to a page with that title#anchor,
+#                                                 with that description.
 
 # https://scripter.co/latex-in-html/
 #+macro: latex @@html:<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>@@

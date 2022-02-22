@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Time-stamp: <2022-02-22 11:40:20 kmodi>
+
+set -euo pipefail # http://redsymbol.net/articles/unofficial-bash-strict-mode
+IFS=$'\n\t'
+
+# mod_base_dir="${HOME}/hugo"
+# mods_to_be_replaced=("github.com/kaushalmodi/hugo-onyx-theme")
+
+# sed -i '/replace .* =>/d' go.mod
+# for mod in "${mods_to_be_replaced[@]}"
+# do
+#     echo "replace ${mod} => ${mod_base_dir}/$(basename "${mod}")" >> go.mod
+# done
+
+echo "Hugo Module Graph:"
+hugo mod graph
+
+site_root="$(git rev-parse --show-toplevel)"
+cd "${site_root}" || exit
+
+make server HUGO_BASE_DIR=doc PORT=5554

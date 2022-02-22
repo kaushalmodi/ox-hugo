@@ -4,8 +4,6 @@
 #+setupfile: doc-setupfile.org
 
 #+macro: imageclick [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/doc/static/images/$1][https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/doc/static/images/$1]]
-#+macro: doc [[https://ox-hugo.scripter.co/doc/$1/$2][$3]]
-
 
 * Readme                                                             :readme:
 :PROPERTIES:
@@ -53,8 +51,6 @@ export from Org to Markdown, and then finally =hugo=.
 #+include: "./ox-hugo-manual.org::#installation" :only-contents t
 ** Usage
 #+include: "./ox-hugo-manual.org::#usage" :only-contents t
-** Changelog                                                     :noexport_1:
-#+include: "./ox-hugo-manual.org::#changelog" :only-contents t
 ** Thanks
 #+include: "./ox-hugo-manual.org::#thanks" :only-contents t
 * Contributing                                                 :contributing:

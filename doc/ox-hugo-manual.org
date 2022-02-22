@@ -9,7 +9,6 @@
 #+setupfile: doc-setupfile.org
 
 #+macro: imageclick [[file:./static/images/$1][file:/images/$1]]
-#+macro: doc [[/doc/$1/$2][$3]]
 
 #+bibliography: ../test/site/content-org/cite/bib/orgcite.bib
 
@@ -201,7 +200,8 @@ The common =ox-hugo= export bindings are:
 **** For only the one-post-per-file flow
 - =C-c C-e H h= :: Export the Org file to a Hugo post in Markdown.
 
-/Also see the {{{doc(auto-export-on-saving,,Auto Exporting)}}} section.
+/Also see the {{{doc(auto-export-on-saving,,Auto Exporting)}}}
+section./
 *** Customization Options
 Do =M-x customize-group=, and select =org-export-hugo= to see the
 available customization options for this package.
@@ -508,8 +508,8 @@ in Emacs.
    In this directory, you will find a =config.toml= which is referred
    to as the "<<<site config>>>" file in Hugo docs and the
    documentation you find on this site.
-3. Follow {{{doc(installation,,Installation)}}} page to ensure that
-   =ox-hugo= is installed and available in your Emacs session.
+3. Follow {{{pagelink(Installation,)}}} page to ensure that =ox-hugo=
+   is installed and available in your Emacs session.
 4. Pick any theme. Here we will arbitrarily pick one of the popular
    themes: [[https://github.com/adityatelange/hugo-PaperMod][PaperMod]].
    - :sparkles: Using [[https://gohugo.io/hugo-modules/use-modules/][Hugo Modules]] :sparkles: ::
@@ -549,8 +549,8 @@ in Emacs.
    [markup.goldmark.renderer]
      unsafe = true
    #+end_src
-   See the page on {{{doc(goldmark,,Goldmark)}}} for some more info on
-   the =unsafe = true= setting.
+   See the page on {{{pagelink(Goldmark,)}}} for some more info on the
+   =unsafe = true= setting.
 6. Create a separate directory for Org content in the Hugo site base
    directory -- let's call it =content-org=.<<content-org-created>>
    #+begin_src shell
@@ -624,7 +624,7 @@ See the [[*Auto-export on Saving][Auto-export on saving]] page to learn how to s
 live-preview of the Hugo-rendered HTML each time you do =C-x C-s= in
 the Org file. That section explains how to set that up for either of
 the above two blogging flows.
-*** Goldmark (Hugo v0.60+)
+*** Goldmark
 :PROPERTIES:
 :EXPORT_FILE_NAME: goldmark
 :END:
@@ -731,7 +731,7 @@ exported Markdown files.
    #+end_example
 2. Ensure that [[https://go.dev/doc/install][~go~]], and ~pandoc-citeproc~ (at least version
    {{{pandoc_version}}}) are installed (more info
-   {{{doc(contributing-guide,#contribute-to-code,here)}}}).
+   {{{pagelink(Requirements#code_contributor_reqs,here)}}}).
 3. Start the =hugo= server:
    #+begin_example
    make serve HUGO_BASE_DIR=test/site
@@ -752,7 +752,7 @@ exported Markdown files.
    #+end_example
 2. Ensure that [[https://go.dev/doc/install][~go~]], ~pandoc~ and ~pandoc-citeproc~ (at least version
    {{{pandoc_version}}}) are installed (more info
-   {{{doc(contributing-guide,#contribute-to-code,here)}}}).
+   {{{pagelink(Requirements#code_contributor_reqs,here)}}}).
 3. =cd= to the =test/site/= directory and do:
    #+begin_example
    hugo server -D --navigateToChanged
@@ -1144,8 +1144,8 @@ copied location inside =static=:
 | =~/temp/static/articles/zoo.pdf= | =<HUGO_BASE_DIR>/static/articles/zoo.pdf= | (same as above)                                                                                          |
 |----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------|
 
-See the {{{doc(usage,#before-you-export,Usage → Before you export)}}}
-section to learn how to set the *HUGO_BASE_DIR*.
+See the {{{pagelink(Usage#before-you-export,Usage → Before you
+export)}}} section to learn how to set the *HUGO_BASE_DIR*.
 ***** Source path does not contain =/static/=
 Here is an example link where the source path does not contain
 =/static/=:
@@ -1527,8 +1527,7 @@ assign a special tag to the whole file (example: =no_no_dont_export=).
 Then in your export setup, add that special tag to the
 =org-export-exclude-tags= variable. You can grep through this repo for
 the special tag =dont_export_during_make_test= that is used to mark
-few Org files to not be exported when running the
-{{{doc(test,,tests)}}}.
+few Org files to not be exported when running the tests.
 ****** Why use =#+filetags= and not =#+tags=?
 - About =#+filetags= -- [[https://orgmode.org/manual/Tag-Inheritance.html][Tag Inheritance]] or =C-h i g (org) Tag
   inheritance=
@@ -2811,7 +2810,7 @@ Also see [[https://pandoc.org/MANUAL.html#citations][Pandoc Manual -- Citations]
    *rewrites* the whole Markdown file from the AST parsed by it.
 ***** COMMENT
 /Below caveat shouldn't apply now. Pandoc output seems to be pretty
-much Blackfriday-compatiable now -- <2018-07-20 Fri>/
+much Blackfriday-compatible now -- <2018-07-20 Fri>/
 
 -----
 
@@ -4357,9 +4356,9 @@ the theme and component dependencies, Go is required for that.
 - Now exporting 1-row Org tables works too.
 - Add missing http/https/ftp prefix for hyper-linked images.
 *** Meta
-- Add documentation on how you can have
-  {{{doc(images-in-content,,Images live in the same directory as Org
-  source)}}} -- {{{issue(91)}}}.
+- Add documentation on how you can have {{{pagelink(Images in
+  Content,Images live in the same directory as Org source)}}} --
+  {{{issue(91)}}}.
 - Now only Org files for the [[https://ox-hugo.scripter.co][documentation site]] need to be committed
   to git. =ox-hugo= then exports those to Markdown, and then Hugo
   publishes those to HTML (as before) --- all on Netlify.
@@ -4369,8 +4368,8 @@ the theme and component dependencies, Go is required for that.
   yourself :smile:.
 ** v0.5 <2017-11-06 Mon>
 *** Features
-- Export TOC as a Markdown ordered list. See {{{doc(org-toc,,Table of
-  Contents)}}} -- {{{issue(88)}}}.
+- Export TOC as a Markdown ordered list. See {{{pagelink(Table of
+  Contents,)}}} -- {{{issue(88)}}}.
 - =#+attr_html= above http/https/ftp links is now supported (useful
   for specifying the =target=, =rel=, attributes, for example).
 ** v0.4.1 <2017-10-29 Sun>
@@ -4402,8 +4401,8 @@ the theme and component dependencies, Go is required for that.
   - Note that for subtree-based exports, =#+filetags= can be used to
     set categories (tags with "@") globally in the file.
 
-See the new section added to documentation:
-{{{doc(tags-and-categories,,*Tags and Categories*)}}}
+See the new section added to documentation: {{{pagelink(Tags and
+Categories,)}}}.
 *** Features
 - Support specifying the =:width= parameter in the =#+attr_html= above
   image links. That eventually gets transformed to the =width=
@@ -4423,7 +4422,7 @@ See the new section added to documentation:
 - Source blocks can now be exported with line numbers and/or
   highlighting!
 
-  See {{{doc(source-blocks,,Source Blocks)}}} for details.
+  See {{{pagelink(Source blocks,)}}} for details.
 ** v0.2.3 <2017-10-11 Wed>
 *** Fixes
 - =org-hugo-slug= earlier stripped off only the =code= HTML tag
@@ -4519,7 +4518,8 @@ Org style tags too. Example: ~* I don't want to export this post
 
 [fn:1] To understand why the attachment files get copied to the
 =static/ox-hugo/= directory, have a look at the documentation for
-{{{doc(image-links,#references-to-files-outside-the-static-directory,referencing
+{{{pagelink(Image
+Links#references-to-files-outside-the-static-directory,referencing
 files outside static directory)}}}.
 * COMMENT Local Variables                                           :ARCHIVE:
 # Local Variables:

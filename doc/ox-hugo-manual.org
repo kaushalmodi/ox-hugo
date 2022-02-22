@@ -368,7 +368,7 @@ its complete feature-set. Org also allows stuff like:
   (Org Babel)
 - ..
 
-Using Org for content writing allows using in-built Org features to
+Using Org for content writing allows using built-in Org features to
 translate to Hugo front-matter:
 
 - Org uses an outline structure and can inherit meta data (tags and
@@ -899,7 +899,7 @@ heading and how it exports to Markdown in [[https://raw.githubusercontent.com/ka
 :END:
 **** Date Formats
 The =EXPORT_DATE= and other date-type properties support date in
-either the [[https://tools.ietf.org/html/rfc3339#section-5.8][RFC3339 date-time format]][fn:8] or the in-built Org
+either the [[https://tools.ietf.org/html/rfc3339#section-5.8][RFC3339 date-time format]][fn:8] or the built-in Org
 time-stamp (default binding ~C-c .~).
 - RFC3339 date-time examples ::
   - =2017-09-12=
@@ -2463,7 +2463,7 @@ Here are few use cases to better explain this feature.
 **** Use =description= in Org file, but export as =summary=
 The /Description/ meta-data is standard in Org.
 
-Starting with *v0.55.0*, Hugo now supports ~summary~ as an inbuilt
+Starting with *v0.55.0*, Hugo now supports ~summary~ as an built-in
 front-matter variable to directly specify the post /summary/. See Hugo
 commit [[https://github.com/gohugoio/hugo/commit/3a62d54745e2cbfda6772390830042908d725c71][3a62d547]] for details.
 
@@ -2575,7 +2575,7 @@ To enable <<<CSL-formatted exports>>>:
 1. Install ~citeproc~ from [[https://melpa.org/#/citeproc][Melpa]].
 2. Add this to the top of your Org file: ~#+cite_export: csl~
 
-That's it! The Org inbuilt library ~oc-csl.el~ will autoload
+That's it! The Org built-in library ~oc-csl.el~ will autoload
 ~citeproc~ when it sees that ~#+cite_export~ keyword. With CSL
 processing enabled, the citations and bibliographies will now be
 exported in HTML embedded in the exported Markdown files.
@@ -2703,11 +2703,11 @@ Below, the "Bibliography" heading will be auto-inserted.
 :EXPORT_FILE_NAME: pandoc-citations
 :END:
 #+begin_note
-Org mode has inbuilt supporting for exporting citations starting
+Org mode has built-in supporting for exporting citations starting
 #+begin_mark
 version 9.5
 #+end_mark
-See [[*Org Cite Citations][Org Cite Citations]] for more info.
+. See [[*Org Cite Citations][Org Cite Citations]] for more info.
 #+end_note
 
 The [[https://pandoc.org/][Pandoc]] Citations are prefixed with the *@* character. If the
@@ -3878,7 +3878,7 @@ This is a warning.
 applied here too./
 **** Quoting Hugo-specific exports
 The Org source should contain only Org syntax text which could be
-parsed in general by any of the in-built Org exporters.
+parsed in general by any of the built-in Org exporters.
 
 So ~ox-hugo~ does not recommend or support using raw Hugo shortcodes
 directly in Org source as shown below:

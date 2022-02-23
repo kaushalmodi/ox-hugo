@@ -75,7 +75,7 @@ disableKinds = ["taxonomy", "taxonomyTerm"]
                  , "css/style.css"
                ]
   custom_css_absolute = [ # Iosevka fonts
-                          "https://cdn.rawgit.com/kaushalmodi/iosevka-mirror/v1.14.1/iosevka.css"
+                          "https://cdn.jsdelivr.net/gh/kaushalmodi/iosevka-mirror@v1.14.1/iosevka.css"
                         ]
   custom_js  = []
 

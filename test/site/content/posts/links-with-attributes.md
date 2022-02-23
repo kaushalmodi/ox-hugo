@@ -1,8 +1,12 @@
 +++
-title = "Links with target attribute"
-tags = ["links"]
+title = "Links with attributes"
+description = "Testing links with different HTML attributes."
+aliases = ["/posts/links-with-target-attribute"]
+tags = ["links", "attributes"]
 draft = false
 +++
+
+## Links with `target` attribute {#links-with-target-attribute}
 
 <a href="https://orgmode.org/manual/Hyperlinks.html" target="_blank" rel="noopener">This link (to Hyperlinks chapter in Org manual)</a> will open in a new tab
 as it is annotated with `target="_blank"`.
@@ -16,7 +20,7 @@ browser (typically an external link will open in a new tab
 automatically).
 
 
-## Image linked to image with `target` attribute {#image-linked-to-image-with-target-attribute}
+### Image linked to image with `target` attribute {#image-linked-to-image-with-target-attribute}
 
 `ox-hugo` Issue #[133](https://github.com/kaushalmodi/ox-hugo/issues/133)
 
@@ -38,3 +42,11 @@ Here's an inline hyperlinked image with the exact same HTML
 attributes: <a href="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" target="_self"><img src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" alt="org-mode-unicorn-logo.png" width="10%" /></a>. So,
 clicking this image too should open the linked image in the same
 brower tab.
+
+
+## Links with `title` and `style` attributes {#links-with-title-and-style-attributes}
+
+<div title="The Org mode homepage" style="color:red;">
+
+<a href="https://orgmode.org" title="The Org mode homepage" style="color:red;">https&colon;//orgmode.org</a>
+</div>

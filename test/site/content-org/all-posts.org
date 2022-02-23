@@ -3406,10 +3406,15 @@ This is a *special* case where:
 The passing case for this test would be that the =unexpected_tag= does
 not leak into the post's front-matter.
 * Links                                                               :links:
-** Links with target attribute
+** Links with attributes                                         :attributes:
 :PROPERTIES:
-:EXPORT_FILE_NAME: links-with-target-attribute
+:EXPORT_FILE_NAME: links-with-attributes
+:EXPORT_HUGO_ALIASES: links-with-target-attribute
 :END:
+#+begin_description
+Testing links with different HTML attributes.
+#+end_description
+*** Links with ~target~ attribute
 #+attr_html: :target _blank :rel noopener
 [[https://orgmode.org/manual/Hyperlinks.html][This link (to Hyperlinks chapter in Org manual)]] will open in a new tab
 as it is annotated with ~target="_blank"~.
@@ -3422,7 +3427,7 @@ clicking it will open that link in this same tab!
 annotation. So the behavior of clicking this link will depend on the
 browser (typically an external link will open in a new tab
 automatically).
-*** Image linked to image with =target= attribute
+**** Image linked to image with =target= attribute
 
 {{{oxhugoissue(133)}}}
 
@@ -3446,6 +3451,9 @@ Here's an inline hyperlinked image with the exact same HTML
 attributes: [[https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png][https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]. So,
 clicking this image too should open the linked image in the same
 brower tab.
+*** Links with ~title~ and ~style~ attributes
+#+attr_html: :title The Org mode homepage :style color:red;
+[[https://orgmode.org]]
 ** External Links                                            :external_links:
 :PROPERTIES:
 :EXPORT_FILE_NAME: external-links

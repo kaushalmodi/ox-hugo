@@ -2419,7 +2419,10 @@ and rewrite link paths to make blogging more seamless."
                                (and (eq (org-element-map parent 'link #'identity info :first-match) link)
                                     (org-export-read-attribute :attr_html parent))))
                             ;; https://www.w3schools.com/tags/tag_link.asp
-                            (link-params `((media . ,(plist-get attr :media))
+                            (link-params `((title . ,(plist-get attr :title))
+                                           (style . ,(plist-get attr :style))
+                                           (referrerpolicy . ,(plist-get attr :referrerpolicy))
+                                           (media . ,(plist-get attr :media))
                                            (target . ,(plist-get attr :target))
                                            (rel . ,(plist-get attr :rel))
                                            (sizes . ,(plist-get attr :sizes))
@@ -2509,7 +2512,11 @@ and rewrite link paths to make blogging more seamless."
             (format "<a href=\"%s\" %s>%s</a>"
                     path
                     link-param-str
-                    (org-link-unescape path))))
+                    ;; Below trick is to prevent Hugo from
+                    ;; auto-hyperlinking the link in the
+                    ;; description. Idea from
+                    ;; https://stackoverflow.com/q/25706012/1219634.
+                    (replace-regexp-in-string ":" "&colon;" (org-link-unescape path)))))
          ;; Neither link description, nor link attributes.
          (t
           (if (string-prefix-p "{{< relref " path)

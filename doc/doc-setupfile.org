@@ -16,13 +16,13 @@
 #+macro: doc [[https://ox-hugo.scripter.co/doc/$1/$2][$3]]
 #+macro: relref @@hugo:[@@ $1 @@hugo:]({{< relref "$2" >}})@@
 
-#+macro: pagelink @@hugo:{{< pagelink "$1" "@@ $2 @@hugo:" >}}@@
+#+macro: titleref @@hugo:{{< titleref "$1" "@@ $2 @@hugo:" >}}@@
 # Usage:
-#   {{{pagelink(PAGETITLE,)}}}                -> Hyperlink to a page with that title.
-#   {{{pagelink(PAGETITLE,LINKDESC)}}}        -> Hyperlink to a page with that title,
-#                                                 with that description.
-#   {{{pagelink(PAGETITLE#ANCHOR,LINKDESC)}}} -> Hyperlink to a page with that title#anchor,
-#                                                 with that description.
+#   {{{titleref(TITLE,)}}}                -> Hyperlink to a page with that title.
+#   {{{titleref(TITLE,LINKDESC)}}}        -> Hyperlink to a page with that title,
+#                                              with that description.
+#   {{{titleref(TITLE#ANCHOR,LINKDESC)}}} -> Hyperlink to a page with that title#anchor,
+#                                              with that description.
 
 # https://scripter.co/latex-in-html/
 #+macro: latex @@html:<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>@@

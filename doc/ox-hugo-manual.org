@@ -499,7 +499,7 @@ in Emacs.
    In this directory, you will find a =config.toml= which is referred
    to as the "<<<site config>>>" file in Hugo docs and the
    documentation you find on this site.
-3. Follow {{{pagelink(Installation,)}}} page to ensure that =ox-hugo=
+3. Follow {{{titleref(Installation,)}}} page to ensure that =ox-hugo=
    is installed and available in your Emacs session.
 4. Pick any theme. Here we will arbitrarily pick one of the popular
    themes: [[https://github.com/adityatelange/hugo-PaperMod][PaperMod]].
@@ -540,7 +540,7 @@ in Emacs.
    [markup.goldmark.renderer]
      unsafe = true
    #+end_src
-   See the page on {{{pagelink(Goldmark,)}}} for some more info on the
+   See the page on {{{titleref(Goldmark,)}}} for some more info on the
    =unsafe = true= setting.
 6. Create a separate directory for Org content in the Hugo site base
    directory -- let's call it =content-org=.<<content-org-created>>
@@ -722,7 +722,7 @@ exported Markdown files.
    #+end_example
 2. Ensure that [[https://go.dev/doc/install][~go~]], and ~pandoc-citeproc~ (at least version
    {{{pandoc_version}}}) are installed (more info
-   {{{pagelink(Requirements#code_contributor_reqs,here)}}}).
+   {{{titleref(Requirements#code_contributor_reqs,here)}}}).
 3. Start the =hugo= server:
    #+begin_example
    make serve HUGO_BASE_DIR=test/site
@@ -743,7 +743,7 @@ exported Markdown files.
    #+end_example
 2. Ensure that [[https://go.dev/doc/install][~go~]], ~pandoc~ and ~pandoc-citeproc~ (at least version
    {{{pandoc_version}}}) are installed (more info
-   {{{pagelink(Requirements#code_contributor_reqs,here)}}}).
+   {{{titleref(Requirements#code_contributor_reqs,here)}}}).
 3. =cd= to the =test/site/= directory and do:
    #+begin_example
    hugo server -D --navigateToChanged
@@ -1135,7 +1135,7 @@ copied location inside =static=:
 | =~/temp/static/articles/zoo.pdf= | =<HUGO_BASE_DIR>/static/articles/zoo.pdf= | (same as above)                                                                                          |
 |----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------|
 
-See the {{{pagelink(Usage#before-you-export,Usage → Before you
+See the {{{titleref(Usage#before-you-export,Usage → Before you
 export)}}} section to learn how to set the *HUGO_BASE_DIR*.
 ***** Source path does not contain =/static/=
 Here is an example link where the source path does not contain
@@ -4333,7 +4333,7 @@ the theme and component dependencies, Go is required for that.
 - Now exporting 1-row Org tables works too.
 - Add missing http/https/ftp prefix for hyper-linked images.
 *** Meta
-- Add documentation on how you can have {{{pagelink(Images in
+- Add documentation on how you can have {{{titleref(Images in
   Content,Images live in the same directory as Org source)}}} --
   {{{issue(91)}}}.
 - Now only Org files for the [[https://ox-hugo.scripter.co][documentation site]] need to be committed
@@ -4345,7 +4345,7 @@ the theme and component dependencies, Go is required for that.
   yourself :smile:.
 ** v0.5 <2017-11-06 Mon>
 *** Features
-- Export TOC as a Markdown ordered list. See {{{pagelink(Table of
+- Export TOC as a Markdown ordered list. See {{{titleref(Table of
   Contents,)}}} -- {{{issue(88)}}}.
 - =#+attr_html= above http/https/ftp links is now supported (useful
   for specifying the =target=, =rel=, attributes, for example).
@@ -4378,7 +4378,7 @@ the theme and component dependencies, Go is required for that.
   - Note that for subtree-based exports, =#+filetags= can be used to
     set categories (tags with "@") globally in the file.
 
-See the new section added to documentation: {{{pagelink(Tags and
+See the new section added to documentation: {{{titleref(Tags and
 Categories,)}}}.
 *** Features
 - Support specifying the =:width= parameter in the =#+attr_html= above
@@ -4399,7 +4399,7 @@ Categories,)}}}.
 - Source blocks can now be exported with line numbers and/or
   highlighting!
 
-  See {{{pagelink(Source blocks,)}}} for details.
+  See {{{titleref(Source blocks,)}}} for details.
 ** v0.2.3 <2017-10-11 Wed>
 *** Fixes
 - =org-hugo-slug= earlier stripped off only the =code= HTML tag
@@ -4494,7 +4494,7 @@ Org style tags too. Example: ~* I don't want to export this post
 
 [fn:1] To understand why the attachment files get copied to the
 =static/ox-hugo/= directory, have a look at the documentation for
-{{{pagelink(Image
+{{{titleref(Image
 Links#references-to-files-outside-the-static-directory,referencing
 files outside static directory)}}}.
 * COMMENT Local Variables                                           :ARCHIVE:

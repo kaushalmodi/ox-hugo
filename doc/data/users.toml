@@ -404,6 +404,11 @@
    source = "https://github.com/ParetoOptimalDev/ParetoOptimalDev.github.io"
    site = "https://paretooptimal.dev"
 
+[chop.ink]
+   author = "Chop Tr"
+   source = "https://github.com/trchopan/chop.ink"
+   site = "https://chop.ink"
+
 # []
 #   author = ""
 #   source = ""

@@ -404,12 +404,13 @@
    source = "https://github.com/ParetoOptimalDev/ParetoOptimalDev.github.io"
    site = "https://paretooptimal.dev"
 
-[chop.ink]
+[ChopTr]
    author = "Chop Tr"
    source = "https://github.com/trchopan/chop.ink"
    site = "https://chop.ink"
+   org_dir = "content-org"
 
-# []
+# [ValidTOMLKey] <-- The key cannot contain spaces or periods.
 #   author = ""
 #   source = ""
 #   site = ""

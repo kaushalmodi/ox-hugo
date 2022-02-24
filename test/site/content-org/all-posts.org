@@ -4059,6 +4059,9 @@ So in that case, switch back to the descriptive list syntax used in
 :PROPERTIES:
 :EXPORT_FILE_NAME: paragraphs-in-lists
 :END:
+#+begin_description
+Test paragraphs inside various list types.
+#+end_description
 - Bullet lists can have paragraphs or block elements within them.
 
   Just indent the content to be even with the text of the bullet
@@ -4074,6 +4077,17 @@ So in that case, switch back to the descriptive list syntax used in
   Paragraph 2 in second bullet.
 
 Paragraph outside the list.
+
+- foo1 :: Descriptive list item.
+
+  Paragraph 1 in the desc list item.
+
+  Paragraph 2 in the desc list item.
+- foo2 :: Descriptive list item.
+
+  Paragraph 1 in the desc list item.
+
+  Paragraph 2 in the desc list item.
 ** Force ordered list numbering                              :custom_counter:
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01

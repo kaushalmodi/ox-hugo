@@ -191,7 +191,7 @@ diff:
 	@git diff
 
 ert:
-	$(EMACS) --batch -l ert -L $(OX_HUGO_TEST_DIR)/ert/ -l all_tests.el -f ert-run-tests-batch-and-exit
+	$(EMACS) --batch -l ert -L . -L $(OX_HUGO_TEST_DIR)/ert/ -l all_tests.el -f ert-run-tests-batch-and-exit
 
 test: vcheck_emacs vcheck_pandoc ert testmkgold do_test
 

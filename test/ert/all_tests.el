@@ -20,4 +20,11 @@
 
 ;;; Code:
 
+(setq load-prefer-newer t)
+
+(require 'org-test-lib)
+
+(require 'ox-hugo)
+
 (require 't1)
+(require 'tanchor)

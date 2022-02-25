@@ -8,13 +8,27 @@ Some text.
 
 <style>.indent-block { padding-left: 50px;  }</style>
 
-<div class="indent-block">
-
-```emacs-lisp
+```emacs-lisp { class="indent-block" }
 (message (mapconcat #'identity
                     '("Hello," "how" "are" "you?")
                     " "))
 ```
-</div>
 
 Some more text.
+
+<style>.blue { color: blue;  }</style>
+
+```goat { class="blue w-40" }
+┌─────┐       ┌───┐
+│Alice│       │Bob│
+└──┬──┘       └─┬─┘
+   │            │
+   │ Hello Bob! │
+   │───────────>│
+   │            │
+   │Hello Alice!│
+   │<───────────│
+┌──┴──┐       ┌─┴─┐
+│Alice│       │Bob│
+└─────┘       └───┘
+```

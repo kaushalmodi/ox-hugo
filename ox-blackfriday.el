@@ -532,14 +532,14 @@ style tag."
          (attr-str (org-blackfriday--make-attribute-string attr))
          (ret contents))
     (when (org-string-nw-p attr-str)
-      (let ((class (plist-get attr :class))
+      (let ((first-class (car (split-string (plist-get attr :class))))
             (style-str ""))
-        (when class
+        (when first-class
           (let* ((css-props (org-export-read-attribute :attr_css elem))
                  (css-props-str (org-blackfriday--make-css-property-string css-props)))
             (when (org-string-nw-p css-props-str)
               (setq style-str (format "<style>.%s { %s }</style>\n\n"
-                                      class css-props-str)))))
+                                      first-class css-props-str)))))
 
         (setq ret (concat style-str
                           (if contents

@@ -2300,7 +2300,7 @@ Line 3
 
 Some more text.
 
-#+attr_html: :class heavy
+#+attr_html: :class heavy :title some code block
 #+attr_css: :font-weight bold
 #+begin_example -n
 This is an example

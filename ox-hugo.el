@@ -2902,6 +2902,7 @@ nil and,
                           (when code-refs1
                             (setq line-num-p t))
                           code-refs1))
+             (goldmarkp (org-hugo--plist-get-true-p info :hugo-goldmark))
              ;; Use the `highlight' shortcode only if ..
              (use-highlight-sc (or ;; HUGO_CODE_FENCE is nil, or ..
                                 (null (org-hugo--plist-get-true-p info :hugo-code-fence))
@@ -2912,7 +2913,7 @@ nil and,
                                 ;; "Blackfriday mode" is enabled and line numbering
                                 ;; or highlighting is needed.
                                 (and (or line-num-p hl-lines linenos-style)
-                                     (not (org-hugo--plist-get-true-p info :hugo-goldmark)))))
+                                     (not goldmarkp))))
              (hl-lines (when (stringp hl-lines)
                          (if use-highlight-sc
                              (progn
@@ -2953,14 +2954,17 @@ nil and,
              (src-code (org-hugo--escape-hugo-shortcode
                         (org-export-format-code-default src-block info)
                         lang))
-             (html-attr (org-export-read-attribute :attr_html src-block))
-             (code-attr-str (org-html--make-attribute-string html-attr))
+             (code-attr-str "")
              src-code-wrap
              ret)
         ;; (message "ox-hugo src [dbg] line-num-p: %S" line-num-p)
         ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
         ;; (message "ox-hugo src [dbg] code refs: %S" code-refs)
         ;; (message "ox-hugo src [dbg] code-attr-str: %S" code-attr-str)
+
+        (when (and goldmarkp (not use-highlight-sc))
+          (let ((html-attr (org-export-read-attribute :attr_html src-block)))
+            (setq code-attr-str (org-html--make-attribute-string html-attr))))
 
         (when (or linenos-style line-num-p)
           ;; Default "linenos" style set to "table" if linenos-style
@@ -3006,8 +3010,13 @@ nil and,
                             lang hl-attr src-code))
                 (org-blackfriday-src-block src-block nil info)))
 
-        (setq ret (concat (org-blackfriday--get-style-str src-block)
-                          src-anchor src-code-wrap caption-html))
+        (if (and goldmarkp (not use-highlight-sc))
+            (setq ret (concat (org-blackfriday--get-style-str src-block)
+                              src-anchor src-code-wrap caption-html))
+          (setq ret (org-blackfriday--div-wrap-maybe
+                     src-block
+                     (concat src-anchor src-code-wrap caption-html)
+                     info)))
         ret)))))
 
 ;;;; Special Block

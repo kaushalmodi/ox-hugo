@@ -19,10 +19,9 @@
 
 ;;; Code:
 
-;; Intentionally failing test
 ;; https://www.gnu.org/software/emacs/manual/html_node/ert/The-should-Macro.html
 (ert-deftest addition-test ()
-  (should (= (+ 1 2) 4)))
+  (should (= (+ 1 2) 3)))
 
 
 (provide 't1)

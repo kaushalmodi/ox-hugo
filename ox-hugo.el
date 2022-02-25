@@ -2953,18 +2953,22 @@ nil and,
              (src-code (org-hugo--escape-hugo-shortcode
                         (org-export-format-code-default src-block info)
                         lang))
-             code-attr-str
+             (html-attr (org-export-read-attribute :attr_html src-block))
+             (code-attr-str (org-html--make-attribute-string html-attr))
              src-code-wrap
              ret)
         ;; (message "ox-hugo src [dbg] line-num-p: %S" line-num-p)
         ;; (message "ox-hugo src [dbg] parameters: %S" parameters)
         ;; (message "ox-hugo src [dbg] code refs: %S" code-refs)
+        ;; (message "ox-hugo src [dbg] code-attr-str: %S" code-attr-str)
 
         (when (or linenos-style line-num-p)
           ;; Default "linenos" style set to "table" if linenos-style
           ;; is nil.
           (setq linenos-style (or linenos-style "table"))
-          (setq code-attr-str (format "linenos=%s" linenos-style))
+          (if (org-string-nw-p code-attr-str)
+              (setq code-attr-str (format "%s, linenos=%s" code-attr-str linenos-style))
+            (setq code-attr-str (format "linenos=%s" linenos-style)))
           (let ((linenostart-str (and ;Extract the start line number of the src block
                                   (string-match "\\`\\s-*\\([0-9]+\\)\\s-\\{2\\}" src-code)
                                   (match-string-no-properties 1 src-code))))
@@ -2991,7 +2995,7 @@ nil and,
 
         (unless use-highlight-sc
           (plist-put info :md-code src-code)
-          (plist-put info :md-code-attr code-attr-str))
+          (plist-put info :md-code-attr (org-string-nw-p code-attr-str)))
 
         (setq src-code-wrap
               (if use-highlight-sc
@@ -3002,10 +3006,8 @@ nil and,
                             lang hl-attr src-code))
                 (org-blackfriday-src-block src-block nil info)))
 
-        (setq ret (org-blackfriday--div-wrap-maybe
-                   src-block
-                   (concat src-anchor src-code-wrap caption-html)
-                   info))
+        (setq ret (concat (org-blackfriday--get-style-str src-block)
+                          src-anchor src-code-wrap caption-html))
         ret)))))
 
 ;;;; Special Block

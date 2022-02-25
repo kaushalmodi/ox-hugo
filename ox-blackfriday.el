@@ -509,7 +509,9 @@ those specified classes.
 Returns an empty string if either #+attr_html or #+attr_css are
 not used, or if a class name is not specified in #+attr_html."
   (let* ((html-attr (org-export-read-attribute :attr_html elem))
-         (first-class (car (split-string (plist-get html-attr :class))))
+         (class (plist-get html-attr :class))
+         (first-class (when (stringp class)
+                        (car (split-string class))))
          (style-str ""))
     (when first-class
       (let* ((css-props (org-export-read-attribute :attr_css elem))

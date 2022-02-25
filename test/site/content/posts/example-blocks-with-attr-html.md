@@ -8,24 +8,18 @@ Some text.
 
 <style>.indent-block { padding-left: 50px;  }</style>
 
-<div class="indent-block">
-
-```text
+```text { class="indent-block" }
 This is an example
 Line 2
 Line 3
 ```
-</div>
 
 Some more text.
 
 <style>.heavy { font-weight: bold;  }</style>
 
-<div class="heavy">
-
-```text { linenos=table, linenostart=1 }
+```text { class="heavy" title="some code block", linenos=table, linenostart=1 }
 This is an example
 Line 2
 Line 3
 ```
-</div>

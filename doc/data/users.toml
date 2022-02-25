@@ -410,6 +410,12 @@
    site = "https://chop.ink"
    org_dir = "content-org"
 
+[tianheg]
+   author = "Jim Gao"
+   source = "https://github.com/tianheg/blog"
+   site = "https://www.yidajiabei.xyz/"
+   org_dir = "org"
+
 # [ValidTOMLKey] <-- The key cannot contain spaces or periods.
 #   author = ""
 #   source = ""

@@ -75,9 +75,7 @@ echo "ABC\nDEF\nGHI\nJKL\nMNO\nPQR\nSTU\nVWX\nYZ0\n123\n456\n789"
 
 <style>.results-example-block { color: green;  }</style>
 
-<div class="results-example-block">
-
-```text
+```text { class="results-example-block" }
 ABC
 DEF
 GHI
@@ -91,6 +89,5 @@ YZ0
 456
 789
 ```
-</div>
 
 Above results block will be in <span class="underline">green</span> text.

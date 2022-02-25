@@ -2012,6 +2012,23 @@ Some text.
 #+end_src
 
 Some more text.
+
+#+attr_css: :color blue
+#+attr_html: :class blue w-40
+#+begin_src goat
+┌─────┐       ┌───┐
+│Alice│       │Bob│
+└──┬──┘       └─┬─┘
+   │            │
+   │ Hello Bob! │
+   │───────────>│
+   │            │
+   │Hello Alice!│
+   │<───────────│
+┌──┴──┐       ┌─┴─┐
+│Alice│       │Bob│
+└─────┘       └───┘
+#+end_src
 ** Coderef                                 :coderef:annotation:example_block:
 :PROPERTIES:
 :EXPORT_FILE_NAME: coderef
@@ -2283,7 +2300,7 @@ Line 3
 
 Some more text.
 
-#+attr_html: :class heavy
+#+attr_html: :class heavy :title some code block
 #+attr_css: :font-weight bold
 #+begin_example -n
 This is an example

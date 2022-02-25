@@ -497,6 +497,30 @@ This function is adapted from `org-html--make-attribute-string'."
                            "\"" "&quot;" (org-html-encode-plain-text item))))
                (setcar ret (format "%s: %s; " key value))))))))
 
+;;;; Get CSS string
+(defun org-blackfriday--get-style-str (elem)
+  "Get HTML style tag string for ELEM.
+
+If #+attr_html is used to specify one or more classes for ELEM
+and if #+attr_css is also used, then an inline style string is
+returned such that it applies the specified CSS to the first of
+those specified classes.
+
+Returns an empty string if either #+attr_html or #+attr_css are
+not used, or if a class name is not specified in #+attr_html."
+  (let* ((html-attr (org-export-read-attribute :attr_html elem))
+         (class (plist-get html-attr :class))
+         (first-class (when (stringp class)
+                        (car (split-string class))))
+         (style-str ""))
+    (when first-class
+      (let* ((css-props (org-export-read-attribute :attr_css elem))
+             (css-props-str (org-blackfriday--make-css-property-string css-props)))
+        (when (org-string-nw-p css-props-str)
+          (setq style-str (format "<style>.%s { %s }</style>\n\n"
+                                  first-class css-props-str)))))
+    style-str))
+
 ;;;; Wrap with HTML attributes
 (defun org-blackfriday--div-wrap-maybe (elem contents info)
   "Wrap the CONTENTS with HTML div tags.
@@ -506,46 +530,38 @@ INFO is a plist used as a communication channel.
 The div wrapping is done only if HTML attributes are set for the
 ELEM Org element using #+attr_html.
 
-If #+attr_css is also used, and if a class is specified in
-#+attr_html, then an inline style is also inserted that applies
-the specified CSS to that class.
+If #+attr_css is also used, and if one or more classes are
+specified in #+attr_html, then an inline style is also inserted
+that applies the specified CSS to the first of those specified
+classes.
 
 If CONTENTS is nil, and #+attr_css is used, return only the HTML
 style tag."
   (let* ((elem-type (org-element-type elem))
-         (attr (let ((attr1 (org-export-read-attribute :attr_html elem)))
-                 (when (equal elem-type 'paragraph)
-                   ;; Remove "target" and "rel" attributes from the
-                   ;; list of a paragraph's HTML attributes as they
-                   ;; would be meant for links inside the paragraph
-                   ;; instead of the paragraph itself.
-                   (plist-put attr1 :target nil)
-                   (plist-put attr1 :rel nil)
-                   ;; Remove other attributes from the list of a
-                   ;; paragraph's HTML attributes which would be meant
-                   ;; for the inline images inside that paragraph.
-                   (plist-put attr1 :src nil)
-                   (plist-put attr1 :alt nil)
-                   (plist-put attr1 :height nil)
-                   (plist-put attr1 :width nil))
-                 attr1))
-         (attr-str (org-blackfriday--make-attribute-string attr))
+         (html-attr (let ((attr1 (org-export-read-attribute :attr_html elem)))
+                      (when (equal elem-type 'paragraph)
+                        ;; Remove "target" and "rel" attributes from the
+                        ;; list of a paragraph's HTML attributes as they
+                        ;; would be meant for links inside the paragraph
+                        ;; instead of the paragraph itself.
+                        (plist-put attr1 :target nil)
+                        (plist-put attr1 :rel nil)
+                        ;; Remove other attributes from the list of a
+                        ;; paragraph's HTML attributes which would be meant
+                        ;; for the inline images inside that paragraph.
+                        (plist-put attr1 :src nil)
+                        (plist-put attr1 :alt nil)
+                        (plist-put attr1 :height nil)
+                        (plist-put attr1 :width nil))
+                      attr1))
+         (html-attr-str (org-blackfriday--make-attribute-string html-attr))
          (ret contents))
-    (when (org-string-nw-p attr-str)
-      (let ((class (plist-get attr :class))
-            (style-str ""))
-        (when class
-          (let* ((css-props (org-export-read-attribute :attr_css elem))
-                 (css-props-str (org-blackfriday--make-css-property-string css-props)))
-            (when (org-string-nw-p css-props-str)
-              (setq style-str (format "<style>.%s { %s }</style>\n\n"
-                                      class css-props-str)))))
-
-        (setq ret (concat style-str
-                          (if contents
-                              (format "<div %s>%s\n\n%s\n</div>"
-                                      attr-str (org-blackfriday--extra-div-hack info) contents))
-                          ""))))
+    (when (org-string-nw-p html-attr-str)
+      (setq ret (concat (org-blackfriday--get-style-str elem)
+                        (if contents
+                            (format "<div %s>%s\n\n%s\n</div>"
+                                    html-attr-str (org-blackfriday--extra-div-hack info) contents))
+                        "")))
     ret))
 
 ;;;; Sanitize URL

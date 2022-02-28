@@ -32,6 +32,13 @@ numbering.
 ```
 
 
+### Shortcode escaped in Org source blocks {#shortcode-escaped-in-org-source-blocks}
+
+```org
+#+macro: relref @@hugo:[@@ $1 @@hugo:]({{</* relref "$2" */>}})@@
+```
+
+
 ## Shortcodes **not** escaped {#shortcodes-not-escaped}
 
 The `figure` shortcode in the below example block **should** be

@@ -1023,14 +1023,14 @@ contents according to the current heading."
 (defun org-hugo--escape-hugo-shortcode (code lang)
   "Escape Hugo shortcodes if present in CODE string.
 
-The escaping is enabled only if LANG is \"md\".
+The escaping is enabled only if LANG is \"md\" or \"org\".
 
  - Shortcode with Markdown    : {{% foo %}} -> {{%/* foo */%}}
 
  - Shortcode without Markdown : {{< foo >}} -> {{</* foo */>}}
 
 Return the escaped/unescaped string."
-  (if (string= lang "md")
+  (if (member lang '("md" "org"))
       (replace-regexp-in-string
        "\\({{<\\)\\([^}][^}]*\\)\\(>}}\\)" "\\1/*\\2*/\\3"
        (replace-regexp-in-string

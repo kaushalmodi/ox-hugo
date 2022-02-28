@@ -1971,6 +1971,10 @@ numbering.
 {{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
 {{% figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" %}}
 #+end_src
+**** Shortcode escaped in Org source blocks
+#+begin_src org
+,#+macro: relref @@hugo:[@@ $1 @@hugo:]({{< relref "$2" >}})@@
+#+end_src
 *** Shortcodes *not* escaped
 The =figure= shortcode in the below example block *should* be
 expanded.. you should be seeing a little unicorn below.

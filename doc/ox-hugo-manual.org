@@ -38,6 +38,7 @@ using =ox-hugo= and their Org sources.
 #+include: "./ox-hugo-manual.org::#usage" :only-contents t
 ** Thanks
 #+include: "./ox-hugo-manual.org::#thanks" :only-contents t
+- This site is powered by [[https://www.netlify.com][Netlify]].
 ** Future Plans                                                    :noexport:
 There is a plan to create a =hugo.el= that would do things like:
 - New post creation using =org-capture= (port code from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-hugo.el][here]]).

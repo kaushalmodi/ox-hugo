@@ -10,6 +10,10 @@
 
 #+macro: oxhugoissue =ox-hugo= Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
 
+* Citation CSL
+:PROPERTIES:
+:EXPORT_FILE_NAME: citation-csl
+:END:
 #+begin_description
 Test citation CSL using ~oc.el~ + ~citeproc.el~.
 #+end_description
@@ -20,10 +24,29 @@ Test citation CSL using ~oc.el~ + ~citeproc.el~.
 
 [cite:@AdaptiveVNF]
 
-Below, the "Bibliography" heading will be auto-inserted.
+Below, the "References" heading will be auto-inserted.
 
 #+print_bibliography:
+* Citation CSL (Turkish)                                           :language:
+:PROPERTIES:
+:EXPORT_FILE_NAME: citation-csl-tr
+:EXPORT_LANGUAGE: tr
+:END:
+#+begin_description
+Test auto-translated Bibliography heading insertion for citations
+using ~oc.el~ + ~citeproc.el~.
+#+end_description
 
+{{{oxhugoissue(574)}}}
+
+[cite:@OrgCitations]
+
+Below, the ~#+language:~ keyword or ~:EXPORT_LANGUAGE:~ set language
+will be used to translate "References" and that heading will be
+auto-inserted.
+
+#+print_bibliography:
+* Local Variables                                                   :ARCHIVE:
 # Local Variables:
 # org-cite-csl-styles-dir: "./cite/csl/"
 # End:

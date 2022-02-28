@@ -583,7 +583,7 @@ Some of the inbuilt functions that can be added to this list:
   :group 'org-export-hugo
   :type '(repeat function))
 
-(defcustom org-hugo-citations-plist '(:bibliography-section-heading "Bibliography"
+(defcustom org-hugo-citations-plist '(:bibliography-section-heading "References"
                                       :bibliography-section-regexp "\n\n<style>\\(.\\|\n\\)*?<div class=\"csl-bib-body\">"
                                       ;;                            ^^^^ blank line before the <style> ..
                                       ;;                                          .. <div class="csl-bib-body"> block
@@ -1969,7 +1969,8 @@ holding export options."
     ;; Auto-inject Bibliography heading.
     (let ((bib-heading (org-string-nw-p (plist-get org-hugo-citations-plist :bibliography-section-heading))))
       (when (and bib-heading (featurep 'citeproc))
-        (let* ((bib-regexp (plist-get org-hugo-citations-plist :bibliography-section-regexp))
+        (let* ((bib-heading (org-blackfriday--translate nil info bib-heading))
+               (bib-regexp (plist-get org-hugo-citations-plist :bibliography-section-regexp))
                (loffset (string-to-number
                          (or (org-entry-get nil "EXPORT_HUGO_LEVEL_OFFSET" :inherit)
                              (plist-get info :hugo-level-offset))))

@@ -2586,7 +2586,7 @@ information.
 #+begin_mark
 If CSL-formatted exports are enabled
 #+end_mark
-, a Markdown heading named "Bibliography" will be auto-inserted above
+, a Markdown heading named "References" will be auto-inserted above
 the /bibliography/ section. This section is exported if the Org file
 has {{{relref(~#print_bibliography:~
 keyword,#printing-bibliography)}}}.
@@ -2600,20 +2600,20 @@ property list variable.
 This property list recognizes these properties:
 
 - :bibliography-section-heading :: /(string)/ Heading to insert before
-  the bibliography section.  The default value is "Bibliography".
+  the bibliography section.  The default value is "References".
 
   Some users might choose to customize this value to
-  "References". Here's an example of how that can be done in the Emacs
-  config:
+  "Bibliography". Here's an example of how that can be done in the
+  Emacs config:
   #+name: code__customizing_bibliography_heading
   #+caption: Customizing bibliography heading
   #+begin_src emacs-lisp
   (with-eval-after-load 'ox-hugo
-    (plist-put org-hugo-citations-plist :bibliography-section-heading "References"))
+    (plist-put org-hugo-citations-plist :bibliography-section-heading "Bibliography"))
   #+end_src
 
-  If this property is set to an empty string, the bibliography heading
-  auto-insertion is not done.
+  If this property is set to an empty string, this heading will not be
+  auto-inserted.
   #+name: code__bibliography_no_heading
   #+caption: Disabling bibliography heading insertion
   #+begin_src emacs-lisp
@@ -2644,7 +2644,7 @@ Minimal example with ~org-cite~ citations:
 
 [cite:@SomeCitation]
 
-Below, the "Bibliography" heading will be auto-inserted.
+Below, the "References" heading will be auto-inserted.
 
 #+print_bibliography:
 #+end_src
@@ -2675,7 +2675,7 @@ that."
     (add-to-list 'org-export-before-parsing-hook #'my/org-ref-process-buffer--html)))
 #+end_src
 **** Auto-inserting /Bibliography/ heading
-A Markdown heading named "Bibliography" will be auto-inserted above
+A Markdown heading named "References" will be auto-inserted above
 the ~org-ref~ ~[[bibliography:..]]~ link, which is typically present
 at the end of a post.
 
@@ -2694,7 +2694,7 @@ Minimal example with ~org-ref~ citations:
 
 [[cite:&SomeCitation]]
 
-Below, the "Bibliography" heading will be auto-inserted.
+Below, the "References" heading will be auto-inserted.
 
 [[bibliography:/path/to/file.bib]]
 #+end_src

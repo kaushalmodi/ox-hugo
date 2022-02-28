@@ -11,9 +11,9 @@ draft = false
 
 <a href="#citeproc_bib_item_2">[2]</a>
 
-Below, the "Bibliography" heading will be auto-inserted.
+Below, the "References" heading will be auto-inserted.
 
-## Bibliography
+## References
 
 <style>.csl-left-margin{float: left; padding-right: 0em;}
  .csl-right-inline{margin: 0 0 0 1em;}</style><div class="csl-bib-body">

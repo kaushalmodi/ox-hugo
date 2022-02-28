@@ -20,7 +20,7 @@ Test citation CSL using ~oc.el~ + ~citeproc.el~.
 
 [cite:@AdaptiveVNF]
 
-Below, the "Bibliography" heading will be auto-inserted.
+Below, the "References" heading will be auto-inserted.
 
 #+print_bibliography:
 

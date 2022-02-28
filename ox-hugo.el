@@ -583,7 +583,7 @@ Some of the inbuilt functions that can be added to this list:
   :group 'org-export-hugo
   :type '(repeat function))
 
-(defcustom org-hugo-citations-plist '(:bibliography-section-heading "Bibliography"
+(defcustom org-hugo-citations-plist '(:bibliography-section-heading "References"
                                       :bibliography-section-regexp "\n\n<style>\\(.\\|\n\\)*?<div class=\"csl-bib-body\">"
                                       ;;                            ^^^^ blank line before the <style> ..
                                       ;;                                          .. <div class="csl-bib-body"> block

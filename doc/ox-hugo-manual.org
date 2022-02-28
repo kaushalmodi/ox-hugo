@@ -1718,6 +1718,9 @@ See the [[https://orgmode.org/manual/Table-of-Contents.html][Table of Contents]]
 /Note that =ox-hugo= does not support =#+toc: listings= and =#+toc:
 tables=./
 **** "Table of Contents" heading
+:PROPERTIES:
+:CUSTOM_ID: toc-heading
+:END:
 The "Table of Contents" heading is inserted as a plain HTML ~div~
 element. Users can customize the looks of that ~div~ by setting CSS
 rules for ~.ox-hugo-toc .heading~.
@@ -2583,6 +2586,9 @@ exported in HTML embedded in the exported Markdown files.
 Check out the [[https://blog.tecosaur.com/tmio/2021-07-31-citations.html#using-csl][/This Month in Org/ -- July 2021]] post for more
 information.
 **** Auto-inserting /Bibliography/ heading
+:PROPERTIES:
+:CUSTOM_ID: bibliography-heading
+:END:
 #+begin_mark
 If CSL-formatted exports are enabled
 #+end_mark
@@ -4081,6 +4087,29 @@ This special feature allows you to create an HTML anchor anywhere in
 your document which you might then refer from a different post by
 using something like the {{{relref(~relref~ Org
 macro,shortcodes#relref-org-macro)}}}.
+*** Multi-lingual Support
+:PROPERTIES:
+:EXPORT_FILE_NAME: multi-lingual-support
+:END:
+#+begin_description
+Support for translation of some ~ox-hugo~ inserted strings based on
+~org-export-translate~ machinery designed in ~ox.el~.
+#+end_description
+~ox-hugo~ relies on the ~org-export-dictionary~ variable from the core
+Org Export library ~ox.el~ to derive translated strings for these:
+
+- Source block caption prefix /"Code Snippet"/
+- Figure caption prefix /"Figure"/
+- Table caption prefix /"Table"/
+- Table of contents {{{titleref(Table of
+  Contents#toc-heading,heading)}}} /"Table of Contents"/
+- Bibliography {{{titleref(Org Cite
+  Citations#bibliography-heading,heading)}}} /"References"/
+
+The translation language is detected from the ~#+language:~ keyword
+present in the Org file or the ~:EXPORT_LANGUAGE:~ property in the
+post subtree. For reference, see [[https://orgmode.org/manual/Export-Settings.html#index-LANGUAGE_002c-keyword][~LANGUAGE~ in the Export Settings]]
+section of the Org manual.
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"

@@ -1180,8 +1180,7 @@ possible. It also supports exporting source blocks with line numbers
 and/or highlighting enabled for specific lines.
 **** Code Fences
 By default, the =HUGO_CODE_FENCE= property is non-nil. So the code
-blocks will be exported with GitHub-style code-fencing with
-triple-backticks when possible.
+blocks will be exported with /CommonMark/ code fences when possible.
 
 For example, below Org source block:
 
@@ -1203,9 +1202,6 @@ will export to:
   =markup.highlight.codeFences= to =true= (which is the default at
   least as of [[https://github.com/gohugoio/hugo/commit/bfb9613a14ab2d93a4474e5486d22e52a9d5e2b3][Hugo v0.60.0]]) for syntax highlighting to work for fenced
   code blocks.
-
-If you want to always use the Hugo [[#highlight-shortcode][=highlight= shortcode]], set the
-=HUGO_CODE_FENCE= property to =nil=.
 **** Line numbers
 Line numbers can be enabled/configured using the Org =-n= / =+n=
 syntax. See the Info node [[https://orgmode.org/manual/Literal-Examples.html][=(org) Literal Examples=]] for more
@@ -1249,11 +1245,11 @@ by adding =:linenos false= to their headers.
   ~inline~
 
 /The same =:linenos= header arg works for example blocks too./
-**** Highlighting
+**** Highlight Lines
 Implementing this feature was interesting, because while Org doesn't
 have a syntax to enable highlighting only specific lines, Hugo
-supports highlighting using the =hl_lines= attribute to [[https://gohugo.io/content-management/syntax-highlighting#highlighting-in-code-fences][code fences]]
-(Hugo v0.60.0+) or its ~highlight~ shortcode.
+supports line highlighting using the =hl_lines= attribute for [[https://gohugo.io/content-management/syntax-highlighting#highlighting-in-code-fences][code
+fences]] (Hugo v0.60.0+) or its ~highlight~ shortcode.
 
 So the challenge was to present that "lines to be highlighted"
 information in the Org source in a nice format and then translate that
@@ -1285,21 +1281,6 @@ The Org source for the below is similar to the above, except that the
 =-n= switch is also added to enable the line numbers.
 
 #+include: "../test/site/content-org/all-posts.org::#source-blocks-with-highlighting-with-linenums-not-starting-from-1" :only-contents t
-**** ~highlight~ shortcode
-:PROPERTIES:
-:CUSTOM_ID: highlight-shortcode
-:END:
-The Hugo [[https://gohugo.io/content-management/syntax-highlighting#highlight-shortcode][=highlight= shortcode]] is automatically used instead of code
-fences (even with this property at a non-nil value) if one of these is
-true:
-- ~HUGO_CODE_FENCE~ is set to /nil/.
-- "Blackfriday mode" is enabled (~HUGO_GOLDMARK~ is /nil/) *and*
-  either the [[*Line numbers][line numbering]] or [[*Highlighting][highlighting]] feature is enabled, or if
-  the [[#linenos][=:linenos= parameter]] is specified in the source block header.
-
-By default, ~ox-hugo~ tries to avoid using this shortcode because it's
-more bug-prone than the code fences ({{{issue(161)}}}), and also the
-code fences are more /Markdownish/ :smile:.
 **** Hiding source block caption numbers
 The "Code Snippet <number>:" part of the source block captions can be
 hidden by adding this to the CSS:
@@ -1385,6 +1366,22 @@ exports to:
 
 In line [[(sc1)]] we remember the current position. [[(jump1)][Line (jump1)]] jumps to
 ~point-min~.
+**** ~highlight~ shortcode
+:PROPERTIES:
+:CUSTOM_ID: highlight-shortcode
+:END:
+#+begin_note
+By default, ~ox-hugo~ tries to avoid using this shortcode because it
+is buggy ({{{issue(161)}}}), and also it's better to export
+/CommonMark/ supported code fences than Hugo-specific shortcodes.
+#+end_note
+The Hugo [[https://gohugo.io/content-management/syntax-highlighting#highlight-shortcode][=highlight= shortcode]] is used instead of code fences if one
+of these is true:
+- ~HUGO_CODE_FENCE~ is set to /nil/.
+- "Blackfriday mode" is enabled (~HUGO_GOLDMARK~ is /nil/) *and*
+  either of the [[*Line numbers][line numbering]], [[*Highlight Lines][line highlighting]] or [[*Code References][code ref]] features
+  are enabled, or if the [[#linenos][=:linenos= parameter]] is specified in the
+  source block header.
 *** Equations
 :PROPERTIES:
 :EXPORT_FILE_NAME: equations

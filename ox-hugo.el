@@ -2839,28 +2839,20 @@ supported with code fences too.
 CONTENTS is nil.  INFO is a plist used as a communication
 channel.
 
---- Hugo v0.60.0 and newer ---
+--- When is the \"highlight\" shortcode needed? ---
 
-If using Hugo version v0.60.0 or newer (if `org-hugo-goldmark' is
-non-nil), the Hugo \"highlight\" shortcode is needed if,
-
-  - Coderefs are used.
-
---- Hugo older than v0.60.0 ---
-
-If using a Hugo version older than v0.60.0, the user *needs* to
-set the `pygmentsCodeFences' variable to `true' in their Hugo
-site's config.  Otherwise syntax highlighting will not work in
-the generated fenced code blocks!
-
-Hugo \"highlight\" shortcode is needed if `org-hugo-goldmark' is
-nil and,
+It's needed only in Blackfriday mode (`org-hugo-goldmark' is
+nil), and if any of these is true:
   - Code blocks with line numbers (if the -n or +n switch is used).
   - Highlight certains lines in the code block (if the :hl_lines
     parameter is used).
   - Set the `linenos' argument to the value passed by :linenos
     (defaults to `table').
-  - Coderefs are used."
+  - Coderefs are used.
+
+Note: If using a Hugo version older than v0.60.0, the user
+*needs* to set the `pygmentsCodeFences' variable to `true' in
+their Hugo site's config."
   (let* ((lang (org-element-property :language src-block))
          (parameters-str (org-element-property :parameters src-block))
          (parameters (org-babel-parse-header-arguments parameters-str))
@@ -2908,13 +2900,9 @@ nil and,
              ;; Use the `highlight' shortcode only if ..
              (use-highlight-sc (or ;; HUGO_CODE_FENCE is nil, or ..
                                 (null (org-hugo--plist-get-true-p info :hugo-code-fence))
-                                ;; code refs are used (code fences format
-                                ;; does not support code line
-                                ;; anchors! See https://discourse.gohugo.io/t/36564/3), or ..
-                                code-refs
                                 ;; "Blackfriday mode" is enabled and line numbering
-                                ;; or highlighting is needed.
-                                (and (or line-num-p hl-lines linenos-style)
+                                ;; , highlighting or code refs are needed.
+                                (and (or line-num-p hl-lines linenos-style code-refs)
                                      (not goldmarkp))))
              (hl-lines (when (stringp hl-lines)
                          (if use-highlight-sc

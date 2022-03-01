@@ -1,6 +1,6 @@
 #+macro: min_emacs_version *25.3*
 #+macro: min_org_version *9.0*
-#+macro: min_hugo_version [[https://github.com/gohugoio/hugo/releases/tag/v0.60.0][*0.60.0*]]
+#+macro: min_hugo_version [[https://github.com/gohugoio/hugo/releases/tag/v0.93.0][*0.93.0*]]
 #+macro: org_mode_version [[https://git.savannah.gnu.org/cgit/emacs/org-mode.git/log/?h=bugfix][*9.5.1*]]
 #+macro: pandoc_version [[https://github.com/jgm/pandoc/releases/tag/2.16.2][*2.16.2*]]
 

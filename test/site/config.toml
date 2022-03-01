@@ -46,6 +46,7 @@ This is the test site for the <a href="https://github.com/kaushalmodi/ox-hugo">
 <code>ox-hugo</code></a> package for Emacs/Org-mode.
 """
   footer = """
+<small>This site is powered by <a href="https://www.netlify.com">Netlify</a>.</small>
 <div style="text-align: center;">
   [<a href="/">Test Site home</a> | <a href="https://ox-hugo.scripter.co/"><code>ox-hugo</code> home</a>]
 </div>

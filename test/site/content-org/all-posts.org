@@ -2164,6 +2164,12 @@ src_emacs-lisp[:exports none]{(message "Hello 4")} {{{results(=Hello 4=)}}}
 - md :: src_md[:exports code]{{{< some_shortcode "foo" >}}}
 - org :: src_org[:exports code]{{{% some_shortcode "foo" %}}}
 - go-html-template :: src_go-html-template[:exports code]{{{< some_shortcode "foo" >}}}
+** COMMENT Wrapping inline source block in a list item
+As of <2022-03-01 Tue>, below snippet exports incorrectly due to a bug
+in Org element parsing in Org mode. The issue was [[https://lists.gnu.org/r/emacs-orgmode/2022-03/msg00008.html][reported on the
+mailing list today]].
+- abcdefg abcdefg abcdefg abcdefg src_org[:exports code]{[[abc
+  def][bar]]}.
 * Formatting                                                     :formatting:
 ** General
 :PROPERTIES:

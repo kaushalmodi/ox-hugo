@@ -2160,6 +2160,10 @@ src_emacs-lisp[:exports both]{(message "Hello 3")} {{{results(=Hello 3=)}}}
 src_emacs-lisp[:exports none]{(message "Hello 4")}
 #+end_src
 src_emacs-lisp[:exports none]{(message "Hello 4")} {{{results(=Hello 4=)}}}
+** Escape Hugo shortcodes
+- md :: src_md[:exports code]{{{< some_shortcode "foo" >}}}
+- org :: src_org[:exports code]{{{% some_shortcode "foo" %}}}
+- go-html-template :: src_go-html-template[:exports code]{{{< some_shortcode "foo" >}}}
 * Formatting                                                     :formatting:
 ** General
 :PROPERTIES:

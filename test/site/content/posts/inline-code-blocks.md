@@ -48,3 +48,15 @@ src_emacs-lisp[:exports both]{(message "Hello 3")}
 ```org
 src_emacs-lisp[:exports none]{(message "Hello 4")}
 ```
+
+
+## Escape Hugo shortcodes {#escape-hugo-shortcodes}
+
+md
+: `{{</* some_shortcode "foo" */>}}`
+
+org
+: `{{%/* some_shortcode "foo" */%}}`
+
+go-html-template
+: `{{</* some_shortcode "foo" */>}}`

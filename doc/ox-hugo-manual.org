@@ -1269,17 +1269,12 @@ of Hugo's default value, add this to your site's ~config.toml~:
     lineNumbersInTable = true
 #+end_src
 
-Similarly, to override the rendering of line numbers and code blocks
-to happen in ~<div>~ and ~<span>~ tags, add this to your site's
-~config.toml~:
-
-#+name: code__line_numbers_in_divs_and_spans
-#+caption: Render line numbers and code blocks in HTML ~<div>~ and ~<span>~ tags
-#+begin_src conf-toml
-[markup]
-  [markup.highlight]
-    lineNumbersInTable = false
-#+end_src
+To override the rendering of line numbers and code blocks to happen in
+~<div>~ and ~<span>~ tags, set ~lineNumbersInTable = false~ instead,
+but *this is not recommended*. /With ~lineNumbersInTable = false~,
+when the code blocks are copied in Firefox, extra blank lines get
+inserted after each line when pasted elsewhere. See [[https://bugzilla.mozilla.org/show_bug.cgi?id=1273836#c29][Bugzilla #
+1273836]]./
 **** Highlight Lines
 Implementing this feature was interesting, because while Org doesn't
 have a syntax to enable highlighting only specific lines, Hugo

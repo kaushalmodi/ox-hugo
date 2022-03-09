@@ -18,6 +18,7 @@ With the `DOCTYPE` tag removed, the browser doesn't throw any error
 (below is the SVG from that issue.. seems like it's just blank. But
 you will be able to see when you view this page's source).
 
+<figure>
 <svg width="100%"
 height="100%" viewBox="0 0 1485 440" version="1.1"
 xmlns="http://www.w3.org/2000/svg"
@@ -26,8 +27,8 @@ xmlns:serif="http://www.serif.com/"
 style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
 </svg>
 
-
-<div class="figure-caption">
+<figcaption>
 
   <span class="figure-number">Figure 1: </span>SVG from Issue 470
-</div>
+</figcaption>
+</figure>

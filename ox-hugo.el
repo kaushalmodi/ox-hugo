@@ -2310,15 +2310,13 @@ and rewrite link paths to make blogging more seamless."
                                              (replace-regexp-in-string
                                               "<!DOCTYPE svg[^>]+>" ""
                                               svg-contents))))
-                   (caption-html (if (not caption)
-                                     ""
-                                   (format (concat "\n\n<div class=\"figure-caption\">\n\n"
-                                                   "  %s\n"
-                                                   "</div>")
-                                           caption))))
+                   (svg-html (if caption
+                                 (format "<figure>\n%s\n<figcaption>\n\n  %s\n</figcaption>\n</figure>"
+                                         svg-contents-sanitized caption)
+                               svg-contents-sanitized)))
               ;; (message "[org-hugo-link DBG] svg contents: %s" svg-contents)
               ;; (message "[org-hugo-link DBG] svg contents sanitized: %s" svg-contents-sanitized)
-              (concat svg-contents-sanitized caption-html))
+              svg-html)
           (let* ((path (org-hugo--attachment-rewrite-maybe raw-path info))
                  (inline-image (not (org-html-standalone-image-p useful-parent info)))
                  (source (if link-is-url

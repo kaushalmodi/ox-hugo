@@ -12,6 +12,7 @@ draft = false
 
 Introduce a new `:inlined t` HTML attribute.
 
+<figure>
 <svg
 xmlns="http://www.w3.org/2000/svg"
 xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -49,11 +50,11 @@ style="stroke:#A80036;stroke-width:1.5;" x1="81.5" x2="81.5"
 y1="83.9688" y2="103.9688"/><polygon fill="#A80036"
 points="77.5,93.9688,81.5,103.9688,85.5,93.9688,81.5,97.9688"
 style="stroke:#A80036;stroke-width:1.0;"/></g></svg>
-
-<div class="figure-caption">
+<figcaption>
 
   <span class="figure-number">Figure 1: </span>An SVG with **hyperlinks** -- generated using PlantUML
-</div>
+</figcaption>
+</figure>
 
 
 ## Captioned source block followed by an inlined SVG {#captioned-source-block-followed-by-an-inlined-svg}

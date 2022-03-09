@@ -2847,7 +2847,7 @@ nil), and if any of these is true:
   - Highlight certains lines in the code block (if the :hl_lines
     parameter is used).
   - Set the `linenos' argument to the value passed by :linenos
-    (defaults to `table').
+    (defaults to `true').
   - Coderefs are used.
 
 Note: If using a Hugo version older than v0.60.0, the user
@@ -2957,9 +2957,8 @@ their Hugo site's config."
             (setq code-attr-str (org-html--make-attribute-string html-attr))))
 
         (when (or linenos-style line-num-p)
-          ;; Default "linenos" style set to "table" if linenos-style
-          ;; is nil.
-          (setq linenos-style (or linenos-style "table"))
+          ;; Set "linenos" to "true" if linenos-style is nil.
+          (setq linenos-style (or linenos-style "true"))
           (if (org-string-nw-p code-attr-str)
               (setq code-attr-str (format "%s, linenos=%s" code-attr-str linenos-style))
             (setq code-attr-str (format "linenos=%s" linenos-style)))

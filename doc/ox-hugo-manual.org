@@ -1215,15 +1215,23 @@ number annotation" test case in the {{{ox-hugo-test-file}}}.
 :PROPERTIES:
 :CUSTOM_ID: linenos
 :END:
-When line numbers are enabled, by default the "table" style is used
-for line numbers. This is specified using the [[https://gohugo.io/content-management/syntax-highlighting/#highlight-shortcode][=linenos= argument to
-the =highlight= shortcode]].
+The value of ~linenos~ (Hugo's default value or the site-global value
+set in its ~config.toml~) can be overridden per source block using the
+~:linenos~ parameter in that source block's header.
 
-This default can be overridden using the =:linenos= parameter in the
-source block header.
+#+name: tab__linenos_values
+#+caption: Possible values of ~:linenos~
+|------------------+-----------------------------------------------------------------------------------------------------|
+| ~:linenos~ value | Description                                                                                         |
+|------------------+-----------------------------------------------------------------------------------------------------|
+| ~false~          | Disable line numbers.                                                                               |
+| ~true~           | Enable line numbers with Hugo's default value of [[https://gohugo.io/functions/highlight/#options][~lineNumbersInTable~]].                              |
+| ~inline~         | Enable line numbers where the line numbers and code are rendered in HTML ~<div>~ and ~<span>~ tags. |
+| ~table~          | Enable line numbers where the line numbers and code are rendered in HTML tables.                    |
+|------------------+-----------------------------------------------------------------------------------------------------|
 
 *Example usage*: If a user has enabled the line numbers by default by
-using something like this in the site's =config.toml=:
+adding this in their site's =config.toml=:
 
 #+begin_src toml
 [markup]
@@ -1231,8 +1239,8 @@ using something like this in the site's =config.toml=:
     lineNos = true
 #+end_src
 
-, they can disable printing of line numbers for selected source blocks
-by adding =:linenos false= to their headers.
+, they can disable line numbers for selected source blocks by adding
+~:linenos false~ to their headers.
 
 #+begin_src org
 ,#+begin_src emacs-lisp :linenos false
@@ -1241,10 +1249,37 @@ by adding =:linenos false= to their headers.
 ,#+end_src
 #+end_src
 
-- Valid values of ~linenos~ :: ~table~ (default), ~true~, ~false~,
-  ~inline~
+/The ~:linenos~ header arg works for example blocks too./
+***** Line numbers in HTML table
+The source block or code block rendering is done by Hugo using the
+[[https://github.com/alecthomas/chroma][chroma]] syntax highlighter. When the line numbers are enabled, the line
+numbers and code blocks can be rendered either in HTML tables
+(~lineNumbersInTable = true~) or in the ~div~ and ~span~ tags
+(~lineNumbersInTable = false~). See Hugo's default value of this
+config variable [[https://gohugo.io/getting-started/configuration-markup#highlight][here]].
 
-/The same =:linenos= header arg works for example blocks too./
+To render the line numbers and code blocks in HTML tables regardless
+of Hugo's default value, add this to your site's ~config.toml~:
+
+#+name: code__line_numbers_in_table
+#+caption: Render line numbers and code blocks in HTML tables
+#+begin_src conf-toml
+[markup]
+  [markup.highlight]
+    lineNumbersInTable = true
+#+end_src
+
+Similarly, to override the rendering of line numbers and code blocks
+to happen in ~<div>~ and ~<span>~ tags, add this to your site's
+~config.toml~:
+
+#+name: code__line_numbers_in_divs_and_spans
+#+caption: Render line numbers and code blocks in HTML ~<div>~ and ~<span>~ tags
+#+begin_src conf-toml
+[markup]
+  [markup.highlight]
+    lineNumbersInTable = false
+#+end_src
 **** Highlight Lines
 Implementing this feature was interesting, because while Org doesn't
 have a syntax to enable highlighting only specific lines, Hugo

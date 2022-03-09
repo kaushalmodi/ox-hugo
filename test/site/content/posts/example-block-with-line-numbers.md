@@ -9,7 +9,7 @@ draft = false
 
 ## Default new line number start {#default-new-line-number-start}
 
-```text { linenos=table, linenostart=1 }
+```text { linenos=true, linenostart=1 }
 line 1
  line 2
 ```
@@ -24,7 +24,7 @@ bar
 
 ## Specify new line number start {#specify-new-line-number-start}
 
-```text { linenos=table, linenostart=20 }
+```text { linenos=true, linenostart=20 }
 line 20
 line 21
 ```
@@ -32,7 +32,7 @@ line 21
 
 ## Default continued line numbers {#default-continued-line-numbers}
 
-```text { linenos=table, linenostart=22 }
+```text { linenos=true, linenostart=22 }
  line 22
 line 23
 ```
@@ -40,7 +40,7 @@ line 23
 
 ## Specify continued line numbers jump {#specify-continued-line-numbers-jump}
 
-```text { linenos=table, linenostart=33 }
+```text { linenos=true, linenostart=33 }
 line 33
 line 34
 ```

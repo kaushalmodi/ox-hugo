@@ -26,7 +26,7 @@ should **not** be expanded.. they should be visible verbatim.
 Here, the `-n` switch is added to the Org source block to enable line
 numbering.
 
-```md { linenos=table, linenostart=1 }
+```md { linenos=true, linenostart=1 }
 {{</* figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" */>}}
 {{%/* figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" */%}}
 ```

@@ -25,7 +25,7 @@ parenthesis.
 
 ### Default line nums with coderef labels {#default-line-nums-with-coderef-labels}
 
-```emacs-lisp { linenos=table, anchorlinenos=true, lineanchors=org-coderef--c1cbed }
+```emacs-lisp { linenos=true, anchorlinenos=true, lineanchors=org-coderef--c1cbed }
 (save-excursion                 (sc)
    (goto-char (point-min))      (jump)
 ```
@@ -36,7 +36,7 @@ point-min.
 
 ### Default line nums without coderef labels {#default-line-nums-without-coderef-labels}
 
-```emacs-lisp { linenos=table, anchorlinenos=true, lineanchors=org-coderef--ea1413 }
+```emacs-lisp { linenos=true, anchorlinenos=true, lineanchors=org-coderef--ea1413 }
 (save-excursion
    (goto-char (point-min))
 ```
@@ -47,7 +47,7 @@ point-min.
 
 ### Custom line nums without coderef labels {#custom-line-nums-without-coderef-labels}
 
-```emacs-lisp { linenos=table, linenostart=20, anchorlinenos=true, lineanchors=org-coderef--cc4270 }
+```emacs-lisp { linenos=true, linenostart=20, anchorlinenos=true, lineanchors=org-coderef--cc4270 }
 (save-excursion
    (goto-char (point-min))
 ```
@@ -58,7 +58,7 @@ point-min.
 
 ### Custom line nums without coderef labels and with highlighting {#custom-line-nums-without-coderef-labels-and-with-highlighting}
 
-```emacs-lisp { linenos=table, linenostart=20, hl_lines=["2"], anchorlinenos=true, lineanchors=org-coderef--a1ac71 }
+```emacs-lisp { linenos=true, linenostart=20, hl_lines=["2"], anchorlinenos=true, lineanchors=org-coderef--a1ac71 }
 (save-excursion
    (goto-char (point-min))
 ```
@@ -71,7 +71,7 @@ point-min.
 In line [1](#org-coderef--4489bc-1) we remember the current position. [Line 2](#org-coderef--4489bc-2) jumps to
 point-min.
 
-```emacs-lisp { linenos=table, anchorlinenos=true, lineanchors=org-coderef--4489bc }
+```emacs-lisp { linenos=true, anchorlinenos=true, lineanchors=org-coderef--4489bc }
 (save-excursion
    (goto-char (point-min))
 ```
@@ -79,7 +79,7 @@ point-min.
 
 ## Example block {#example-block}
 
-```text { linenos=table, linenostart=20, anchorlinenos=true, lineanchors=org-coderef--942ea6 }
+```text { linenos=true, linenostart=20, anchorlinenos=true, lineanchors=org-coderef--942ea6 }
 (save-excursion
    (goto-char (point-min))
 ```

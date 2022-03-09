@@ -107,7 +107,7 @@ line 2
 
 exports with `<div>` tags by default:
 
-```html { linenos=table, linenostart=1 }
+```html { linenos=true, linenostart=1 }
 line 1
 
 <div class="foo">
@@ -145,7 +145,7 @@ line 2
 
 will export to:
 
-```html { linenos=table, linenostart=1 }
+```html { linenos=true, linenostart=1 }
 line 1 <span class="foo">abc def</span> line 2
 ```
 

@@ -97,34 +97,34 @@ there.
 
 -   List item 1
 
-    ```emacs-lisp { linenos=table, linenostart=1 }
+    ```emacs-lisp { linenos=true, linenostart=1 }
     (message "I am in list at level-1 indentation")
     ```
 
     -   List item 1.1
 
-        ```emacs-lisp { linenos=table, linenostart=1 }
+        ```emacs-lisp { linenos=true, linenostart=1 }
         (message "I am in list at level-2 indentation")
         ```
 
         -   List item 1.1.1
 
-            ```emacs-lisp { linenos=table, linenostart=1 }
+            ```emacs-lisp { linenos=true, linenostart=1 }
             (message "I am in list at level-3 indentation")
             ```
     -   List item 2.1
 
-        ```emacs-lisp { linenos=table, linenostart=1 }
+        ```emacs-lisp { linenos=true, linenostart=1 }
         (message "I am in list back at level-2 indentation")
         ```
 -   List item 2
 
-    ```emacs-lisp { linenos=table, linenostart=1 }
+    ```emacs-lisp { linenos=true, linenostart=1 }
     (message "I am in list back at level-1 indentation")
     ```
 
 <!--listend-->
 
-```emacs-lisp { linenos=table, linenostart=1 }
+```emacs-lisp { linenos=true, linenostart=1 }
 (message "And now I am at level-0 indentation")
 ```

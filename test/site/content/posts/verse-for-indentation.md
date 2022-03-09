@@ -56,7 +56,7 @@ removed when translating to Markdown.
 
 ## Corner cases {#corner-cases}
 
-```org { linenos=table, linenostart=0 }
+```org { linenos=true, linenostart=0 }
 #+begin_verse
 
 >Line 1 above was empty. So the first =>= seen on this line is removed.
@@ -84,7 +84,7 @@ in the final output, they can use `>>` instead.. **only for that first
 instance**. The below Verse block is same as above except that the
 first `>` is retained in the final output.
 
-```org { linenos=table, linenostart=0 }
+```org { linenos=true, linenostart=0 }
 #+begin_verse
 
 >>Line 1 above was empty. So *only* the first =>= seen on this line is removed.

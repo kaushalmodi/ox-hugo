@@ -25,7 +25,7 @@ Some more text.
 <div class="heavy">
   <div></div>
 
-{{< highlight text "linenos=table, linenostart=1" >}}
+{{< highlight text "linenos=true, linenostart=1" >}}
 This is an example
 Line 2
 Line 3

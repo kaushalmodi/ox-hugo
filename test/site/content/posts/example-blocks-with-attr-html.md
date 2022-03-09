@@ -18,7 +18,7 @@ Some more text.
 
 <style>.heavy { font-weight: bold;  }</style>
 
-```text { class="heavy" title="some code block", linenos=table, linenostart=1 }
+```text { class="heavy" title="some code block", linenos=true, linenostart=1 }
 This is an example
 Line 2
 Line 3

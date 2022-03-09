@@ -26,7 +26,7 @@ draft = false
 
 #### Output {#output}
 
-```emacs-lisp { linenos=table, linenostart=1 }
+```emacs-lisp { linenos=true, linenostart=1 }
 ;; this will export with line number 1 (default)
 (message "This is line 2")
 ```
@@ -47,7 +47,7 @@ draft = false
 
 #### Output {#output}
 
-```emacs-lisp { linenos=table, linenostart=20 }
+```emacs-lisp { linenos=true, linenostart=20 }
 ;; this will export with line number 20
 (message "This is line 21")
 ```
@@ -68,7 +68,7 @@ draft = false
 
 #### Output {#output}
 
-```emacs-lisp { linenos=table, linenostart=22 }
+```emacs-lisp { linenos=true, linenostart=22 }
 ;; This will be listed as line 22
 (message "This is line 23")
 ```
@@ -89,7 +89,7 @@ draft = false
 
 #### Output {#output}
 
-```emacs-lisp { linenos=table, linenostart=33 }
+```emacs-lisp { linenos=true, linenostart=33 }
 ;; This will be listed as line 33
 (message "This is line 34")
 ```

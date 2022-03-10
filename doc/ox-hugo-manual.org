@@ -179,7 +179,9 @@ property), and the ~EXPORT_HUGO_SECTION*~ property (only for
 *** Export bindings
 The common =ox-hugo= export bindings are:
 **** For both one-post-per-subtree and one-post-per-file flows
-- =C-c C-e H H= :: Export "What I Mean".
+- =C-c C-e H H= :: Export "What I Mean". This is same as calling the
+  ~org-hugo-export-wim-to-md~ function interactively or via
+  ~(org-hugo-export-wim-to-md)~ in Emacs Lisp.
   - If point is in a /valid Hugo post subtree/, export that
     subtree to a Hugo post in Markdown.
 
@@ -192,14 +194,17 @@ The common =ox-hugo= export bindings are:
   - If the file is intended to be exported as a whole (i.e. has the
     =#+title= keyword), export the whole Org file to a Hugo post in
     Markdown.
-- =C-c C-e H A= :: Export *all* "What I Mean"
+- =C-c C-e H A= :: Export *all* "What I Mean". This is same as
+  executing ~(org-hugo-export-wim-to-md :all-subtrees)~ in Emacs Lisp.
   - If the Org file has one or more 'valid Hugo post subtrees', export
     them to Hugo posts in Markdown.
   - If the file is intended to be exported as a whole (i.e. no 'valid
     Hugo post subtrees' at all, and has the =#+title= keyword), export
     the whole Org file to a Hugo post in Markdown.
 **** For only the one-post-per-file flow
-- =C-c C-e H h= :: Export the Org file to a Hugo post in Markdown.
+- =C-c C-e H h= :: Export the Org file to a Hugo post in
+  Markdown. This is same as calling the ~org-hugo-export-to-md~
+  function interactively.
 
 /Also see the {{{doc(auto-export-on-saving,,Auto Exporting)}}}
 section./

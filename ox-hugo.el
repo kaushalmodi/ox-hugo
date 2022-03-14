@@ -2117,8 +2117,8 @@ INFO is a plist used as a communication channel."
       (org-export-get-environment)        ;Eval #+bind keywords, etc.
       (org-link-search search-str) ;This is extracted from the `org-open-file' function.
       (setq elem (org-element-at-point))
-	  ;; (message "[search and get anchor DBG] elem: %S" elem)
-	  (cond
+      ;; (message "[search and get anchor DBG] elem: %S" elem)
+      (cond
        ((equal (org-element-type elem) 'headline)
         (setq anchor (org-hugo--get-anchor elem info)))
        (t
@@ -4383,10 +4383,10 @@ links."
                          (destination (if (string= type "fuzzy")
                                           (org-export-resolve-fuzzy-link link info)
                                         (progn
-                                          ;; update `org-id-locations' if it's nil or empty hash table
-                                          ;; to avoid broken link
-                                          (if (or (eq org-id-locations nil) (zerop (hash-table-count org-id-locations)))
-                                              (org-id-update-id-locations (directory-files "." t "\.org\$" t)))
+                                          ;; Update `org-id-locations' if it's nil or empty hash table
+                                          ;; to avoid broken link.
+                                          (when (or (eq org-id-locations nil) (zerop (hash-table-count org-id-locations)))
+                                            (org-id-update-id-locations (directory-files "." :full "\.org\$" :nosort)))
                                           (org-export-resolve-id-link link (org-export--collect-tree-properties ast info)))))
                          (source-path (org-hugo--get-element-path link info))
                          (destination-path (org-hugo--get-element-path destination info))

@@ -52,8 +52,20 @@ error backtrace,
      - You can still hit the /Preview/ tab of the Issue before
        submitting it.
 * Test
+~ox-hugo~ is tested using two kinds of test suites:
+1. Export all the test Org files (includes file-based and
+   subtree-based export tests) to Markdown and /diff/ the exported
+   Markdown against the committed reference versions.
+2. Run ~ert~ based tests.
+
+Steps to run tests on your machine:
 1. Clone this repo.
-2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
-   [[https://github.com/jgm/pandoc/releases/tag/2.16.2][*2.16.2*]]) are installed (more info
+2. Ensure that ~pandoc~ (at least version [[https://github.com/jgm/pandoc/releases/tag/2.16.2][*2.16.2*]]) are
+   installed (more info
    [[https://ox-hugo.scripter.co/doc/contributing-guide/#contribute-to-code][here]]).
-3. Run =make -j1 test=.
+3. Run ~make -j1 test~. This runs all the tests from the two kinds of
+   test suites described above.
+** ~ert~ tests
+- To run all ~ert~ based tests, run ~make ert~.
+- To run only the ~ert~ tests matching a string ~foo~, run ~make ert
+    TEST_MATCH=foo~.

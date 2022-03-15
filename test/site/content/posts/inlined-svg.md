@@ -67,7 +67,7 @@ url of A is [[https://example.org/]]
 ```
 
 <div class="src-block-caption">
-  <span class="src-block-number">Code Snippet 1</span>:
+  <span class="src-block-number">Code Snippet 1:</span>
   My class diagram
 </div>
 

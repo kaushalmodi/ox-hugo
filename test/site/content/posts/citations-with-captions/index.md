@@ -33,7 +33,7 @@ rectangle "<html>, <body>, etc." as a  {
 
 <span
 class="src-block-number"><a href="#code-snippet--plantuml-nested-boxes">Code
-Snippet 1</a></span>: Nested Boxes using PlantUML
+Snippet 1</a>:</span> Nested Boxes using PlantUML
 
 </div>
 

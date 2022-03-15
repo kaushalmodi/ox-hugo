@@ -64,7 +64,7 @@ that the link jump is evident):
 ````
 
 <div class="src-block-caption">
-  <span class="src-block-number"><a href="#code-snippet--hello">Programmlisting 1</a></span>:
+  <span class="src-block-number"><a href="#code-snippet--hello">Programmlisting 1</a>:</span>
   Hello
 </div>
 
@@ -128,7 +128,7 @@ blandit in.
 ````
 
 <div class="src-block-caption">
-  <span class="src-block-number"><a href="#code-snippet--helloagain">Programmlisting 2</a></span>:
+  <span class="src-block-number"><a href="#code-snippet--helloagain">Programmlisting 2</a>:</span>
   Hello Again
 </div>
 

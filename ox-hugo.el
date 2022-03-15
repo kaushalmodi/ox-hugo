@@ -2944,7 +2944,7 @@ their Hugo site's config."
                                      (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
                                       (org-export-data-with-backend caption 'html info))))
                                (format (concat "\n\n<div class=\"src-block-caption\">\n"
-                                               "  <span class=\"src-block-number\">%s</span>:\n"
+                                               "  <span class=\"src-block-number\">%s:</span>\n"
                                                "  %s\n"
                                                "</div>")
                                        (if src-ref ;Hyperlink the code snippet prefix + number

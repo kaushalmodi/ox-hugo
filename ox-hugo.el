@@ -1595,6 +1595,17 @@ This function is almost identical to `org-html--tags' from
                        tag))
              tags ""))))
 
+(defun org-hugo--buffer-has-valid-post-subtree-p ()
+  "Return non-nil if the current Org buffer has at least one valid post subtree.
+
+A valid Hugo post subtree has the `:EXPORT_FILE_NAME:' property
+set to a non-empty string."
+  (org-with-wide-buffer
+   (catch 'found
+     (org-map-entries
+      (lambda () (throw 'found t)) ;Return quickly on finding the first match
+      "EXPORT_FILE_NAME<>\"\""))))
+
 
 
 ;;; Transcode Functions
@@ -4289,14 +4300,7 @@ subtree-number being exported.
 
       ;; If the point is not in a valid subtree, check if there's a
       ;; valid subtree elsewhere in the same Org file.
-      (let ((valid-subtree-found
-             (catch 'break
-               (org-map-entries
-                (lambda ()
-                  (throw 'break t))
-                ;; Only map through subtrees where EXPORT_FILE_NAME
-                ;; property is not empty.
-                "EXPORT_FILE_NAME<>\"\""))))
+      (let ((valid-subtree-found (org-hugo--buffer-has-valid-post-subtree-p)))
         (when valid-subtree-found
           (message "Point is not in a valid Hugo post subtree; move to one and try again"))
         valid-subtree-found))))
@@ -4544,19 +4548,24 @@ Return output file's name."
 
 This is an Export \"What I Mean\" function:
 
-- If the current subtree has the \"EXPORT_FILE_NAME\" property, export
-  that subtree.
-- If the current subtree doesn't have that property, but one of its
-  parent subtrees has, then export from that subtree's scope.
-- If none of the subtrees have that property (or if there are no Org
-  subtrees at all), call `org-hugo--export-file-to-md'.
+- If the current subtree has the \"EXPORT_FILE_NAME\" property,
+  export only that subtree.  Return the return value of
+  `org-hugo--export-subtree-to-md'.
 
-- If ALL-SUBTREES is non-nil, export all valid Hugo post subtrees
-  \(that have the \"EXPORT_FILE_NAME\" property) in the current file
-  to multiple Markdown posts.
-- If ALL-SUBTREES is non-nil, and again if none of the subtrees have
-  that property (or if there are no Org subtrees), call
+- If the current subtree doesn't have that property, but one of
+  its parent subtrees has, export from that subtree's scope.
+  Return the return value of `org-hugo--export-subtree-to-md'.
+
+- If there are no valid Hugo post subtrees (that have the
+  \"EXPORT_FILE_NAME\" property) in the Org buffer the subtrees
+  have that property, do file-based
+  export (`org-hugo--export-file-to-md'), regardless of the value
+  of ALL-SUBTREES.  Return the return value of
   `org-hugo--export-file-to-md'.
+
+- If ALL-SUBTREES is non-nil and the Org buffer has at least 1
+  valid Hugo post subtree, export all those valid post subtrees.
+  Return a list of output files.
 
 A non-nil optional argument ASYNC means the process should happen
 asynchronously.  The resulting file should be accessible through
@@ -4566,64 +4575,53 @@ When optional argument VISIBLE-ONLY is non-nil, don't export
 contents of hidden elements.
 
 The optional argument NOERROR is passed to
-`org-hugo--export-file-to-md'.
-
-- If ALL-SUBTREES is non-nil:
-  - If valid subtrees are found, return the list of output files.
-  - If no valid subtrees are found, return value is the same as
-    that of `org-hugo--export-file-to-md'.
-
-- If ALL-SUBTREES is nil:
-  - If `org-hugo--export-subtree-to-md' returns a non-nil value, return that.
-  - Else return the value of `org-hugo--export-file-to-md'."
+`org-hugo--export-file-to-md'."
   (interactive "P")
   (let ((f-or-b-name (if (buffer-file-name)
                          (file-name-nondirectory (buffer-file-name))
                        (buffer-name)))
+        (buf-has-subtree (org-hugo--buffer-has-valid-post-subtree-p))
         ret)
-    (save-window-excursion
-      (save-restriction
-        (widen)
-        (save-excursion
-          (if all-subtrees
-              (progn ;Publish all valid Hugo post subtrees in the file.
-                (setq org-hugo--subtree-count 0) ;Reset the subtree count
-                (if org-hugo--preprocess-buffer
-                    (let ((buffer (org-hugo--get-pre-processed-buffer)))
-                      (with-current-buffer buffer
-                        (setq ret (org-map-entries
-                                   (lambda ()
-                                     (org-hugo--export-subtree-to-md
-                                      async visible-only :all-subtrees))
-                                   ;; Export only the subtrees where
-                                   ;; EXPORT_FILE_NAME property is not
-                                   ;; empty.
-                                   "EXPORT_FILE_NAME<>\"\""))
-                        (kill-buffer buffer)))
-                  (setq ret (org-map-entries
-                             (lambda ()
-                               (org-hugo--export-subtree-to-md
-                                async visible-only :all-subtrees))
-                             ;; Export only the subtrees where
-                             ;; EXPORT_FILE_NAME property is not
-                             ;; empty.
-                             "EXPORT_FILE_NAME<>\"\"")))
-                (if ret
-                    (message "[ox-hugo] Exported %d subtree%s from %s"
-                             org-hugo--subtree-count
-                             (if (= 1 org-hugo--subtree-count) "" "s")
-                             f-or-b-name)
-                  (message "[ox-hugo] No valid Hugo post subtrees were found")))
+    (cond
+     ;; Publish all subtrees in the current Org buffer.
+     ((and buf-has-subtree all-subtrees)
+      (save-window-excursion
+        (org-with-wide-buffer
+         (setq org-hugo--subtree-count 0) ;Reset the subtree count
+         (if org-hugo--preprocess-buffer
+             (let ((buffer (org-hugo--get-pre-processed-buffer)))
+               (with-current-buffer buffer
+                 (setq ret (org-map-entries
+                            (lambda ()
+                              (org-hugo--export-subtree-to-md
+                               async visible-only :all-subtrees))
+                            ;; Export only the subtrees where
+                            ;; EXPORT_FILE_NAME property is not
+                            ;; empty.
+                            "EXPORT_FILE_NAME<>\"\""))
+                 (kill-buffer buffer)))
+           (setq ret (org-map-entries
+                      (lambda ()
+                        (org-hugo--export-subtree-to-md
+                         async visible-only :all-subtrees))
+                      ;; Export only the subtrees where
+                      ;; EXPORT_FILE_NAME property is not
+                      ;; empty.
+                      "EXPORT_FILE_NAME<>\"\"")))
+         (message "[ox-hugo] Exported %d subtree%s from %s"
+                  org-hugo--subtree-count
+                  (if (= 1 org-hugo--subtree-count) "" "s")
+                  f-or-b-name))))
 
-            ;; Publish only the current valid Hugo post subtree.
-            (setq ret (org-hugo--export-subtree-to-md async visible-only)))
+     ;; Publish only the current valid Hugo post subtree.  When
+     ;; exporting only one subtree, buffer pre-processing is done
+     ;; inside `org-hugo--export-subtree-to-md'.
+     ((and buf-has-subtree (not all-subtrees))
+      (setq ret (org-hugo--export-subtree-to-md async visible-only)))
 
-          ;; If `ret' is nil, no valid Hugo subtree was found.  So
-          ;; call `org-hugo--export-file-to-md' directly.  In that
-          ;; function, it will be checked if the whole Org file can be
-          ;; exported.
-          (unless ret
-            (setq ret (org-hugo--export-file-to-md f-or-b-name async visible-only noerror))))))
+     ;; Attempt file-based export.
+     (t
+      (setq ret (org-hugo--export-file-to-md f-or-b-name async visible-only noerror))))
     ret))
 
 ;;;###autoload

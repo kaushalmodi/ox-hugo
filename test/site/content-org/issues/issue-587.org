@@ -1,0 +1,20 @@
+#+hugo_section: issues
+#+hugo_base_dir: ../../
+#+author:
+#+macro: issue ~ox-hugo~ Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+
+#+options: broken-links:t
+#+filetags: broken_links
+
+#+title: Allow broken links (File based export)
+#+export_file_name: issue-587-file-based-export
+
+#+begin_description
+Test that exports finish without any error even when the post has
+broken links.
+#+end_description
+
+{{{issue(587)}}}
+
+- something [[foo:bar]] something
+- something [[roam:git]] something

@@ -4386,12 +4386,7 @@ links."
 
                          (destination (if (string= type "fuzzy")
                                           (org-export-resolve-fuzzy-link link info)
-                                        (progn
-                                          ;; Update `org-id-locations' if it's nil or empty hash table
-                                          ;; to avoid broken link.
-                                          (when (or (eq org-id-locations nil) (zerop (hash-table-count org-id-locations)))
-                                            (org-id-update-id-locations (directory-files "." :full "\.org\$" :nosort)))
-                                          (org-export-resolve-id-link link (org-export--collect-tree-properties ast info)))))
+                                        (org-export-resolve-id-link link (org-export--collect-tree-properties ast info))))
                          (source-path (org-hugo--get-element-path link info))
                          (destination-path (org-hugo--get-element-path destination info))
                          (destination-type (org-element-type destination)))
@@ -4582,6 +4577,12 @@ The optional argument NOERROR is passed to
                        (buffer-name)))
         (buf-has-subtree (org-hugo--buffer-has-valid-post-subtree-p))
         ret)
+
+    ;; Auto-update `org-id-locations' if it's nil or empty hash table
+    ;; to avoid broken [[id:..]] type links.
+    (when (or (eq org-id-locations nil) (zerop (hash-table-count org-id-locations)))
+      (org-id-update-id-locations (directory-files "." :full "\.org\$" :nosort)))
+
     (cond
      ;; Publish all subtrees in the current Org buffer.
      ((and buf-has-subtree all-subtrees)

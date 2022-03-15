@@ -2481,8 +2481,9 @@ and rewrite link paths to make blogging more seamless."
                                ;; (message "[org-hugo-link DBG] link-search-str: %s" link-search-str)
                                (when link-search-str
                                  (setq anchor (org-hugo--search-and-get-anchor raw-path link-search-str info)))))
-                           ;; (message "[org-hugo-link DBG] link search anchor: %S" anchor)
-                           (format "{{< relref \"%s%s\" >}}" ref anchor)))
+                           (if (or (org-string-nw-p ref) (org-string-nw-p anchor))
+                               (format "{{< relref \"%s%s\" >}}" ref anchor)
+                             "")))
                         (t ;; attachments like foo.png
                          (org-hugo--attachment-rewrite-maybe path1 info)))))
                     (t
@@ -2529,10 +2530,12 @@ and rewrite link paths to make blogging more seamless."
                     ;; https://stackoverflow.com/q/25706012/1219634.
                     (replace-regexp-in-string ":" "&colon;" (org-link-unescape path)))))
          ;; Neither link description, nor link attributes.
+         ((string-prefix-p "{{< relref " path)
+          (format "[%s](%s)" path path))
+         ((org-string-nw-p path)
+          (format "<%s>" path))
          (t
-          (if (string-prefix-p "{{< relref " path)
-              (format "[%s](%s)" path path)
-            (format "<%s>" path)))))))))
+          "")))))))
 
 (defun org-hugo-link--heading-anchor-maybe (link info)
   "Return anchor of the heading pointed to by LINK.
@@ -4385,7 +4388,14 @@ links."
                   (let* ((raw-link (org-element-property :raw-link link))
 
                          (destination (if (string= type "fuzzy")
-                                          (org-export-resolve-fuzzy-link link info)
+                                          (progn
+                                            ;; Derived from ox.el -> `org-export-data'.  If a broken link is seen
+                                            ;; and if `broken-links' option is not nil, ignore the error.
+                                            (condition-case err
+                                                (org-export-resolve-fuzzy-link link info)
+                                              (org-link-broken
+                                               (unless (plist-get info :with-broken-links)
+                                                 (user-error "Unable to resolve link: %S" (nth 1 err))))))
                                         (org-export-resolve-id-link link (org-export--collect-tree-properties ast info))))
                          (source-path (org-hugo--get-element-path link info))
                          (destination-path (org-hugo--get-element-path destination info))

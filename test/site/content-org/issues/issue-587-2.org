@@ -1,0 +1,24 @@
+#+hugo_section: issues
+#+hugo_base_dir: ../../
+#+author:
+#+macro: issue ~ox-hugo~ Issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+
+# Tue Mar 15 13:26:37 EDT 2022 - kmodi
+# Workaround: "#+options: broken-links:t" works, but the
+# ":EXPORT_OPTIONS: broken-links:t" property does not work for now.
+#+options: broken-links:t
+
+* Allow broken links (Subtree based export)                    :broken_links:
+:PROPERTIES:
+:EXPORT_FILE_NAME: issue-587-subtree-based-export
+:EXPORT_OPTIONS: broken-links:t
+:END:
+#+begin_description
+Test that exports finish without any error even when the post has
+broken links.
+#+end_description
+
+{{{issue(587)}}}
+
+- something [[foo:bar]] something
+- something [[roam:git]] something

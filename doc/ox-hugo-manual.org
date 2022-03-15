@@ -326,8 +326,8 @@ error backtrace,
 :CUSTOM_ID: test
 :END:
 1. Clone this repo.
-2. Ensure that ~pandoc~ and ~pandoc-citeproc~ (at least version
-   {{{pandoc_version}}}) are installed (more info
+2. Ensure that ~pandoc~ (at least version {{{pandoc_version}}}) are
+   installed (more info
    {{{doc(contributing-guide,#contribute-to-code,here)}}}).
 3. Run =make -j1 test=.
 ** Thanks

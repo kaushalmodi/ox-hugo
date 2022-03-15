@@ -4581,7 +4581,7 @@ The optional argument NOERROR is passed to
     ;; Auto-update `org-id-locations' if it's nil or empty hash table
     ;; to avoid broken [[id:..]] type links.
     (when (or (eq org-id-locations nil) (zerop (hash-table-count org-id-locations)))
-      (org-id-update-id-locations (directory-files "." :full "\.org\$" :nosort)))
+      (org-id-update-id-locations (directory-files "." :full "\.org\$" :nosort) :silent))
 
     (cond
      ;; Publish all subtrees in the current Org buffer.

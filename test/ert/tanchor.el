@@ -20,6 +20,9 @@
 
 ;;; Code:
 
+(require 'org-test-lib)
+(require 'ox-hugo)
+
 (ert-deftest test-anchor/org-hugo-get-md5 ()
   "Test md5 based anchor string generation."
   ;; md5 of "abc" heading

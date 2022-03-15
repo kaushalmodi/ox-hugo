@@ -325,11 +325,23 @@ error backtrace,
 :PROPERTIES:
 :CUSTOM_ID: test
 :END:
+~ox-hugo~ is tested using two kinds of test suites:
+1. Export all the test Org files (includes file-based and
+   subtree-based export tests) to Markdown and /diff/ the exported
+   Markdown against the committed reference versions.
+2. Run ~ert~ based tests.
+
+Steps to run tests on your machine:
 1. Clone this repo.
 2. Ensure that ~pandoc~ (at least version {{{pandoc_version}}}) are
    installed (more info
    {{{doc(contributing-guide,#contribute-to-code,here)}}}).
-3. Run =make -j1 test=.
+3. Run ~make -j1 test~. This runs all the tests from the two kinds of
+   test suites described above.
+*** ~ert~ tests
+- To run all ~ert~ based tests, run ~make ert~.
+- To run only the ~ert~ tests matching a string ~foo~, run ~make ert
+  TEST_MATCH=foo~.
 ** Thanks
 :PROPERTIES:
 :CUSTOM_ID: thanks

@@ -86,6 +86,9 @@ ORG_FILE=
 # Function to be run in emacs --batch
 FUNC=
 
+# Run all tests by default.
+TEST_MATCH ?=
+
 test_check=1
 
 .PHONY: help emacs-batch md1 \
@@ -191,7 +194,7 @@ diff:
 	@git diff
 
 ert:
-	$(EMACS) --batch -l ert -L . -L $(OX_HUGO_TEST_DIR)/ert/ -l all_tests.el -f ert-run-tests-batch-and-exit
+	$(EMACS) --batch -l ert -L . -L $(OX_HUGO_TEST_DIR)/ert/ -l all_tests.el -eval '(ert-run-tests-batch-and-exit "$(TEST_MATCH)")'
 
 test: vcheck_emacs vcheck_pandoc ert testmkgold do_test
 

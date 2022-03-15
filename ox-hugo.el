@@ -4583,11 +4583,11 @@ The optional argument NOERROR is passed to
     (when (or (eq org-id-locations nil) (zerop (hash-table-count org-id-locations)))
       (org-id-update-id-locations (directory-files "." :full "\.org\$" :nosort) :silent))
 
-    (cond
-     ;; Publish all subtrees in the current Org buffer.
-     ((and buf-has-subtree all-subtrees)
-      (save-window-excursion
-        (org-with-wide-buffer
+    (save-window-excursion
+      (org-with-wide-buffer
+       (cond
+        ;; Publish all subtrees in the current Org buffer.
+        ((and buf-has-subtree all-subtrees)
          (setq org-hugo--subtree-count 0) ;Reset the subtree count
          (if org-hugo--preprocess-buffer
              (let ((buffer (org-hugo--get-pre-processed-buffer)))
@@ -4612,17 +4612,17 @@ The optional argument NOERROR is passed to
          (message "[ox-hugo] Exported %d subtree%s from %s"
                   org-hugo--subtree-count
                   (if (= 1 org-hugo--subtree-count) "" "s")
-                  f-or-b-name))))
+                  f-or-b-name))
 
-     ;; Publish only the current valid Hugo post subtree.  When
-     ;; exporting only one subtree, buffer pre-processing is done
-     ;; inside `org-hugo--export-subtree-to-md'.
-     ((and buf-has-subtree (not all-subtrees))
-      (setq ret (org-hugo--export-subtree-to-md async visible-only)))
+        ;; Publish only the current valid Hugo post subtree.  When
+        ;; exporting only one subtree, buffer pre-processing is done
+        ;; inside `org-hugo--export-subtree-to-md'.
+        ((and buf-has-subtree (not all-subtrees))
+         (setq ret (org-hugo--export-subtree-to-md async visible-only)))
 
-     ;; Attempt file-based export.
-     (t
-      (setq ret (org-hugo--export-file-to-md f-or-b-name async visible-only noerror))))
+        ;; Attempt file-based export.
+        (t
+         (setq ret (org-hugo--export-file-to-md f-or-b-name async visible-only noerror))))))
     ret))
 
 ;;;###autoload

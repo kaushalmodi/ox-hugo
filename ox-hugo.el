@@ -1869,6 +1869,27 @@ Return nil if id is not found."
       (goto-char element-begin)
       (org-id-get))))
 
+(defun org-hugo-get-heading-slug(element info)
+  "Return the slug string derived from an Org heading ELEMENT.
+The slug string is parsed from the ELEMENT's `:title' property.
+INFO is a plist used as a communication channel.
+Return nil if ELEMENT's `:title' property is nil or an empty string."
+  (let ((title (org-export-data-with-backend
+                (org-element-property :title element) 'md info)))
+    (org-string-nw-p (org-hugo-slug title :allow-double-hyphens))))
+
+(defun org-hugo-get-md5(element info)
+  "Return md5 sum derived string using ELEMENT's title property.
+
+INFO is a plist used as a communication channel.
+
+This function will never return nil."
+  (let ((hash-len 6)
+        (title (or (org-string-nw-p (org-export-data-with-backend
+                                     (org-element-property :title element) 'md info))
+                   "")))
+    (substring (md5 title) 0 hash-len)))
+
 (defun org-hugo--heading-get-slug(heading info)
   "Return the slug string derived from an Org HEADING element.
 
@@ -1966,17 +1987,6 @@ INFO is a plist used as a communication channel."
     (message "[org-hugo--heading-get-slug DBG] FINAL slug: %S" slug)
     slug))
 
-(defun org-hugo-get-md5(element info)
-  "Return md5 sum derived string using ELEMENT's title property.
-
-INFO is a plist used as a communication channel.
-
-This function will never return nil."
-  (let ((hash-len 6)
-        (title (or (org-string-nw-p (org-export-data-with-backend
-                                     (org-element-property :title element) 'md info))
-                   "")))
-    (substring (md5 title) 0 hash-len)))
 (defun org-hugo--get-anchor(element info)
   "Return anchor string for Org heading ELEMENT.
 

@@ -23,8 +23,8 @@
 (require 'org-test-lib)
 (require 'ox-hugo)
 
-(ert-deftest test-slug/title ()
-  "Test derivation of the slug from heading title."
+(ert-deftest test-slug/return-nil ()
+  "Test nil return conditions."
 
   ;; Empty title
   (should
@@ -34,25 +34,16 @@
            (let ((el (org-element-at-point)))
              (org-hugo--heading-get-slug el info)))))
 
+  ;; Heading with EXPORT_FILE_NAME.
   (should
-   (string= "#some-heading"
-            (org-test-with-parsed-data
-             "* Some Heading<point>"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info)))))
+   (equal nil
+          (org-test-with-parsed-data
+           "* Some Heading<point>"
+           (let ((el (org-element-at-point)))
+             (org-hugo--heading-get-slug el info))))))
 
-  ;; Only EXPORT_HUGO_SLUG, and no EXPORT_FILE_NAME. So heading is
-  ;; used for deriving slug.
-  (should
-   (string= "#some-heading"
-            (org-test-with-parsed-data
-             "* Some Heading<point>
-:PROPERTIES:
-:EXPORT_HUGO_SLUG: slug
-:END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info)))))
-
+(ert-deftest test-slug/title ()
+  "Test slug when EXPORT_HUGO_SLUG is set."
   ;; EXPORT_FILE_NAME + EXPORT_HUGO_SLUG
   (should
    (string= "slug"
@@ -221,43 +212,6 @@
              (let ((el (org-element-at-point)))
                (org-hugo--heading-get-slug el info))))))
 
-;; Slugs + anchors
-(ert-deftest test-slug/slugs-and-anchors ()
-
-  ;; Anchor on a regular page in a section
-  (should
-   (string= "section/file#some-heading"
-            (org-test-with-parsed-data
-             "* Section
-:PROPERTIES:
-:EXPORT_HUGO_SECTION: section
-:END:
-** Some page
-:PROPERTIES:
-:EXPORT_FILE_NAME: file
-:END:
-*** Some Heading<point>"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info)))))
-
-  ;; Anchor on a leaf bundle in a section
-  (should
-   (string= "section/leaf#some-heading"
-            (org-test-with-parsed-data
-             "* Section
-:PROPERTIES:
-:EXPORT_HUGO_SECTION: section
-:END:
-** Leaf Bundle
-:PROPERTIES:
-:EXPORT_HUGO_BUNDLE: leaf
-:EXPORT_FILE_NAME: index
-:END:
-*** Some Heading<point>"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info))))))
-
-
 ;; Section fragments
 (ert-deftest test-slug/section-fragments ()
 
@@ -283,9 +237,9 @@
              (let ((el (org-element-at-point)))
                (org-hugo--heading-get-slug el info)))))
 
-  ;; Anchor on a branch page in a branch bundle in section fragments.
+  ;; Branch page in a branch bundle in section fragments.
   (should
-   (string= "section/sec2/sec3/branch/branch-page#some-heading"
+   (string= "section/sec2/sec3/branch/branch-page"
             (org-test-with-parsed-data
              "* Section
 :PROPERTIES:
@@ -304,11 +258,10 @@
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: branch
 :END:
-***** Some page
+***** Some page<point>
 :PROPERTIES:
 :EXPORT_FILE_NAME: branch-page
-:END:
-****** Some Heading<point>"
+:END:"
              (let ((el (org-element-at-point)))
                (org-hugo--heading-get-slug el info))))))
 

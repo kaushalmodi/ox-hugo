@@ -10,5 +10,5 @@ draft = false
 
 `ox-hugo` Issue #[587](https://github.com/kaushalmodi/ox-hugo/issues/587)
 
--   something  something
--   something  something
+-   something something
+-   something something

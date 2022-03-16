@@ -1869,17 +1869,101 @@ Return nil if id is not found."
       (goto-char element-begin)
       (org-id-get))))
 
-(defun org-hugo-get-heading-slug(element info)
-  "Return the slug string derived from an Org heading ELEMENT.
+(defun org-hugo-get-heading-slug(heading info)
+  "Return the slug string derived from an Org HEADING element.
 
-The slug string is parsed from the ELEMENT's `:title' property.
+1. If HEADING has `:EXPORT_FILE_NAME' and `:EXPORT_HUGO_SLUG'
+   properties, use the latter as slug.
 
-INFO is a plist used as a communication channel.
+2. If HEADING has only `:EXPORT_FILE_NAME' and it's not a Hugo
+   page bundle, use that property as slug.
 
-Return nil if ELEMENT's `:title' property is nil or an empty string."
-  (let ((title (org-export-data-with-backend
-                (org-element-property :title element) 'md info)))
-    (org-string-nw-p (org-hugo-slug title :allow-double-hyphens))))
+3. If HEADING has a `:EXPORT_FILE_NAME' property, and its value
+   is either \"index\" or \"_index\", use `:EXPORT_HUGO_BUNDLE'
+   to derive the slug.  \"index\" subtree is a Leaf Bundle, and
+   \"_index\" subtree is a Branch Bundle.
+
+4. If HEADING has a `:EXPORT_FILE_NAME' property, and its value
+   is neither \"index\" nor \"_index\", use that to derive the
+   slug.
+
+The `:EXPORT_HUGO_SECTION' property is prepended to all of the
+above options.
+
+5. If none of the above are true, the slug string is parsed from
+   the HEADING's `:title' property.
+
+6. Return nil if the `:title' property is nil or an empty string.
+
+INFO is a plist used as a communication channel."
+  (let ((current-elem-post-subtree-p (org-string-nw-p (org-export-get-node-property :EXPORT_FILE_NAME heading)))
+        (file (org-string-nw-p (org-export-get-node-property :EXPORT_FILE_NAME heading :inherited)))
+        hugo-slug bundle slug)
+    ;; (message "[org-hugo-get-heading-slug DBG] EXPORT_FILE_NAME: %S" file)
+    (when file
+      (setq hugo-slug (org-string-nw-p (org-export-get-node-property :EXPORT_HUGO_SLUG heading :inherited))))
+    (unless hugo-slug
+      (setq bundle (org-string-nw-p (org-export-get-node-property :EXPORT_HUGO_BUNDLE heading :inherited)))
+      ;; (message "[org-hugo-get-heading-slug DBG] EXPORT_HUGO_BUNDLE: %S" bundle)
+      )
+
+    (cond
+     (hugo-slug
+      ;; (message "[org-hugo-get-heading-slug DBG] hugo-slug: %S" hugo-slug)
+      (setq slug hugo-slug))
+     ;; Leaf or branch bundle landing page.
+     ((and bundle file (member file '("index" ;Leaf bundle
+                                      "_index" ;Branch bundle
+                                      )))
+      (setq slug bundle)
+      ;; (message "[org-hugo-get-heading-slug DBG] bundle slug: %S" slug)
+      )
+     ;; It's a Hugo page bundle, but the file is neither index nor
+     ;; _index. So likely a page in a branch bundle.
+     ((and bundle file)
+      (setq slug (concat (file-name-as-directory bundle) file))
+      ;; (message "[org-hugo-get-heading-slug DBG] branch bundle file slug: %S" slug)
+      )
+     ;; Only EXPORT_FILE_NAME is set.
+     (file
+      (setq slug file))
+     (t
+      ;; Do nothing
+      ))
+
+    (when slug
+      (let ((pheading heading)
+            section fragment fragments)
+        (setq section (org-string-nw-p (org-export-get-node-property :EXPORT_HUGO_SECTION heading :inherited)))
+
+        ;; Iterate over all parents of heading, and collect section
+        ;; path fragments.
+        (while (and pheading
+                    (not (org-export-get-node-property :EXPORT_HUGO_SECTION pheading nil)))
+          ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list.
+          (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* pheading nil))
+            (push fragment fragments))
+          (setq pheading (org-element-property :parent pheading)))
+
+        (when section
+          (setq slug (concat (file-name-as-directory section)
+                             (mapconcat #'file-name-as-directory fragments "")
+                             slug)))
+        ;; (message "[org-hugo-get-heading-slug DBG] section: %S" section)
+        ;; (message "[org-hugo-get-heading-slug DBG] section + slug: %S" slug)
+        ))
+
+    ;; Finally use the `:title' property to add anchor if applicable.
+    (unless current-elem-post-subtree-p
+      (let ((anchor (org-string-nw-p
+                     (org-hugo-slug
+                      (org-export-data-with-backend
+                       (org-element-property :title heading) 'md info)
+                      :allow-double-hyphens))))
+        ;; (message "[org-hugo-get-heading-slug DBG] anchor: %S" anchor)
+        (setq slug (format "%s#%s" (or slug "") anchor))))
+    ;; (message "[org-hugo-get-heading-slug DBG] FINAL slug: %S" slug)
+    slug))
 
 (defun org-hugo-get-md5(element info)
   "Return md5 sum derived string using ELEMENT's title property.
@@ -1904,10 +1988,11 @@ INFO is a plist used as a communication channel.
 
 Return an empty string if all functions in
 `org-hugo-anchor-functions' return nil."
-  (or (seq-some
-       (lambda (fn) (funcall fn element info))
-       org-hugo-anchor-functions)
-      ""))
+  (string-remove-prefix "#" ;`org-hugo-get-heading-slug' will return an anchor string prefixed with "#"
+                        (or (seq-some
+                             (lambda (fn) (funcall fn element info))
+                             org-hugo-anchor-functions)
+                            "")))
 
 (defun org-hugo--heading-title (style level loffset title &optional todo tags anchor numbers)
   "Generate a heading title in the preferred Markdown heading style.

@@ -24,3 +24,4 @@
 
 ;; (require 't1)
 (require 'tanchor)
+(require 'tslug)

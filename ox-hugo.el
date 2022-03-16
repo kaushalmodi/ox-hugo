@@ -1961,7 +1961,8 @@ INFO is a plist used as a communication channel."
                        (org-element-property :title heading) 'md info)
                       :allow-double-hyphens))))
         ;; (message "[org-hugo-get-heading-slug DBG] anchor: %S" anchor)
-        (setq slug (format "%s#%s" (or slug "") anchor))))
+        (when (org-string-nw-p anchor)
+          (setq slug (format "%s#%s" (or slug "") anchor)))))
     ;; (message "[org-hugo-get-heading-slug DBG] FINAL slug: %S" slug)
     slug))
 

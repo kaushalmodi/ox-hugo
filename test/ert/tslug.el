@@ -26,6 +26,14 @@
 (ert-deftest test-slug/title ()
   "Test derivation of the slug from heading title."
 
+  ;; Empty title
+  (should
+   (equal nil
+          (org-test-with-parsed-data
+           "* <point>"
+           (let ((el (org-element-at-point)))
+             (org-hugo-get-heading-slug el info)))))
+
   (should
    (string= "#some-heading"
             (org-test-with-parsed-data

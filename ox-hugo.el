@@ -1984,7 +1984,7 @@ INFO is a plist used as a communication channel."
         ;; (message "[org-hugo--heading-get-slug DBG] anchor: %S" anchor)
         (when (org-string-nw-p anchor)
           (setq slug (format "%s#%s" (or slug "") anchor)))))
-    (message "[org-hugo--heading-get-slug DBG] FINAL slug: %S" slug)
+    ;; (message "[org-hugo--heading-get-slug DBG] FINAL slug: %S" slug)
     slug))
 
 (defun org-hugo--get-anchor(element info)

@@ -1869,7 +1869,7 @@ Return nil if id is not found."
       (goto-char element-begin)
       (org-id-get))))
 
-(defun org-hugo-get-heading-slug(heading info)
+(defun org-hugo--heading-get-slug(heading info)
   "Return the slug string derived from an Org HEADING element.
 
 1. If HEADING has `:EXPORT_FILE_NAME' and `:EXPORT_HUGO_SLUG'
@@ -1899,30 +1899,30 @@ INFO is a plist used as a communication channel."
   (let ((current-elem-post-subtree-p (org-string-nw-p (org-export-get-node-property :EXPORT_FILE_NAME heading)))
         (file (org-string-nw-p (org-export-get-node-property :EXPORT_FILE_NAME heading :inherited)))
         hugo-slug bundle slug)
-    ;; (message "[org-hugo-get-heading-slug DBG] EXPORT_FILE_NAME: %S" file)
+    ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_FILE_NAME: %S" file)
     (when file
       (setq hugo-slug (org-string-nw-p (org-export-get-node-property :EXPORT_HUGO_SLUG heading :inherited))))
     (unless hugo-slug
       (setq bundle (org-string-nw-p (org-export-get-node-property :EXPORT_HUGO_BUNDLE heading :inherited)))
-      ;; (message "[org-hugo-get-heading-slug DBG] EXPORT_HUGO_BUNDLE: %S" bundle)
+      ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_HUGO_BUNDLE: %S" bundle)
       )
 
     (cond
      (hugo-slug
-      ;; (message "[org-hugo-get-heading-slug DBG] hugo-slug: %S" hugo-slug)
+      ;; (message "[org-hugo--heading-get-slug DBG] hugo-slug: %S" hugo-slug)
       (setq slug hugo-slug))
      ;; Leaf or branch bundle landing page.
      ((and bundle file (member file '("index" ;Leaf bundle
                                       "_index" ;Branch bundle
                                       )))
       (setq slug bundle)
-      ;; (message "[org-hugo-get-heading-slug DBG] bundle slug: %S" slug)
+      ;; (message "[org-hugo--heading-get-slug DBG] bundle slug: %S" slug)
       )
      ;; It's a Hugo page bundle, but the file is neither index nor
      ;; _index. So likely a page in a branch bundle.
      ((and bundle file)
       (setq slug (concat (file-name-as-directory bundle) file))
-      ;; (message "[org-hugo-get-heading-slug DBG] branch bundle file slug: %S" slug)
+      ;; (message "[org-hugo--heading-get-slug DBG] branch bundle file slug: %S" slug)
       )
      ;; Only EXPORT_FILE_NAME is set.
      (file
@@ -1949,8 +1949,8 @@ INFO is a plist used as a communication channel."
           (setq slug (concat (file-name-as-directory section)
                              (mapconcat #'file-name-as-directory fragments "")
                              slug)))
-        ;; (message "[org-hugo-get-heading-slug DBG] section: %S" section)
-        ;; (message "[org-hugo-get-heading-slug DBG] section + slug: %S" slug)
+        ;; (message "[org-hugo--heading-get-slug DBG] section: %S" section)
+        ;; (message "[org-hugo--heading-get-slug DBG] section + slug: %S" slug)
         ))
 
     ;; Finally use the `:title' property to add anchor if applicable.
@@ -1960,10 +1960,10 @@ INFO is a plist used as a communication channel."
                       (org-export-data-with-backend
                        (org-element-property :title heading) 'md info)
                       :allow-double-hyphens))))
-        ;; (message "[org-hugo-get-heading-slug DBG] anchor: %S" anchor)
+        ;; (message "[org-hugo--heading-get-slug DBG] anchor: %S" anchor)
         (when (org-string-nw-p anchor)
           (setq slug (format "%s#%s" (or slug "") anchor)))))
-    ;; (message "[org-hugo-get-heading-slug DBG] FINAL slug: %S" slug)
+    (message "[org-hugo--heading-get-slug DBG] FINAL slug: %S" slug)
     slug))
 
 (defun org-hugo-get-md5(element info)
@@ -1977,7 +1977,6 @@ This function will never return nil."
                                      (org-element-property :title element) 'md info))
                    "")))
     (substring (md5 title) 0 hash-len)))
-
 (defun org-hugo--get-anchor(element info)
   "Return anchor string for Org heading ELEMENT.
 
@@ -4460,8 +4459,8 @@ links."
                                                (unless (plist-get info :with-broken-links)
                                                  (user-error "Unable to resolve link: %S" (nth 1 err))))))
                                         (org-export-resolve-id-link link (org-export--collect-tree-properties ast info))))
-                         (source-path (org-hugo-get-heading-slug link info))
-                         (destination-path (org-hugo-get-heading-slug destination info))
+                         (source-path (org-hugo--heading-get-slug link info))
+                         (destination-path (org-hugo--heading-get-slug destination info))
                          (destination-type (org-element-type destination)))
                     ;; (message "[ox-hugo pre process DBG] destination type: %s" destination-type)
 

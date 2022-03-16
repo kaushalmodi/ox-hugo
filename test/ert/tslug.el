@@ -32,14 +32,14 @@
           (org-test-with-parsed-data
            "* <point>"
            (let ((el (org-element-at-point)))
-             (org-hugo-get-heading-slug el info)))))
+             (org-hugo--heading-get-slug el info)))))
 
   (should
    (string= "#some-heading"
             (org-test-with-parsed-data
              "* Some Heading<point>"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info)))))
+               (org-hugo--heading-get-slug el info)))))
 
   ;; Only EXPORT_HUGO_SLUG, and no EXPORT_FILE_NAME. So heading is
   ;; used for deriving slug.
@@ -51,7 +51,7 @@
 :EXPORT_HUGO_SLUG: slug
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info)))))
+               (org-hugo--heading-get-slug el info)))))
 
   ;; EXPORT_FILE_NAME + EXPORT_HUGO_SLUG
   (should
@@ -63,7 +63,7 @@
 :EXPORT_HUGO_SLUG: slug
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info)))))
+               (org-hugo--heading-get-slug el info)))))
 
   ;; EXPORT_FILE_NAME + EXPORT_HUGO_SLUG + EXPORT_HUGO_SECTION
   (should
@@ -79,7 +79,7 @@
 :EXPORT_HUGO_SLUG: slug
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info))))))
+               (org-hugo--heading-get-slug el info))))))
 
 (ert-deftest test-slug/export-file-name ()
   "Test derivation of the slug from EXPORT_FILE_NAME."
@@ -93,7 +93,7 @@
 :EXPORT_FILE_NAME: file
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info)))))
+               (org-hugo--heading-get-slug el info)))))
 
   ;; EXPORT_FILE_NAME + EXPORT_HUGO_SECTION
   (should
@@ -108,7 +108,7 @@
 :EXPORT_FILE_NAME: file
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info))))))
+               (org-hugo--heading-get-slug el info))))))
 
 ;; Leaf bundles
 (ert-deftest test-slug/leaf-bundles ()
@@ -122,7 +122,7 @@
 :EXPORT_FILE_NAME: index
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info)))))
+               (org-hugo--heading-get-slug el info)))))
 
   ;; Leaf bundle in a section
   (should
@@ -138,7 +138,7 @@
 :EXPORT_FILE_NAME: index
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info))))))
+               (org-hugo--heading-get-slug el info))))))
 
 ;; Branch bundles
 (ert-deftest test-slug/branch-bundles ()
@@ -151,7 +151,7 @@
 :EXPORT_FILE_NAME: _index
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info)))))
+               (org-hugo--heading-get-slug el info)))))
 
   ;; Inherit :EXPORT_HUGO_BUNDLE
   (should
@@ -166,7 +166,7 @@
 :EXPORT_FILE_NAME: _index
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info)))))
+               (org-hugo--heading-get-slug el info)))))
 
   ;; Page in branch bundle, inheritance
   (should
@@ -181,7 +181,7 @@
 :EXPORT_FILE_NAME: branch-page
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info)))))
+               (org-hugo--heading-get-slug el info)))))
 
   ;; Branch bundle in a section
   (should
@@ -200,7 +200,7 @@
 :EXPORT_FILE_NAME: _index
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info)))))
+               (org-hugo--heading-get-slug el info)))))
 
   ;; Branch page in a branch bundle in a section
   (should
@@ -219,7 +219,7 @@
 :EXPORT_FILE_NAME: branch-page
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info))))))
+               (org-hugo--heading-get-slug el info))))))
 
 ;; Slugs + anchors
 (ert-deftest test-slug/slugs-and-anchors ()
@@ -238,7 +238,7 @@
 :END:
 *** Some Heading<point>"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info)))))
+               (org-hugo--heading-get-slug el info)))))
 
   ;; Anchor on a leaf bundle in a section
   (should
@@ -255,7 +255,7 @@
 :END:
 *** Some Heading<point>"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info))))))
+               (org-hugo--heading-get-slug el info))))))
 
 
 ;; Section fragments
@@ -281,7 +281,7 @@
 :EXPORT_FILE_NAME: file
 :END:"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info)))))
+               (org-hugo--heading-get-slug el info)))))
 
   ;; Anchor on a branch page in a branch bundle in section fragments.
   (should
@@ -310,7 +310,7 @@
 :END:
 ****** Some Heading<point>"
              (let ((el (org-element-at-point)))
-               (org-hugo-get-heading-slug el info))))))
+               (org-hugo--heading-get-slug el info))))))
 
 
 (provide 'tslug)

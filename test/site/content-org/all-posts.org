@@ -2978,17 +2978,20 @@ Content in the right side section
 :EXPORT_FILE_NAME: _index
 :END:
 This is the content for the "bundles" section landing page.
-** Page Bundle A
+** Page Bundle A (Bundle container)
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: page-bundle-a
 :END:
-*** Page Bundle A
+*** Page Bundle A                                               :leaf_bundle:
 :PROPERTIES:
 :EXPORT_FILE_NAME: index
 :EXPORT_HUGO_RESOURCES: :src "images/copy-of-*.png" :title "First copy of Org mode logo"
 :EXPORT_HUGO_RESOURCES+: :src "copy-2-*.png" :title "Second copy of Org mode logo"
 :END:
 Index page of /Page Bundle A/.
+
+- [[*Page Bundle B][Link to Leaf Bundle B]]
+- [[*Branch Bundle C][Link to Branch Bundle C]]
 **** Link to images not in the current directory
 ***** Source path contains =/static/=
 When path contains =/static/=, the path translations are the exact
@@ -3043,14 +3046,27 @@ See [[/images-in-content/page-bundle-images-in-same-dir/][this other test]] for 
 :EXPORT_FILE_NAME: bar
 :END:
 "Bar" page in /Page Bundle A/.
-** Page Bundle B
+** Page Bundle B                                                :leaf_bundle:
 :PROPERTIES:
 :EXPORT_FILE_NAME: index
 :EXPORT_HUGO_BUNDLE: page-bundle-b
 :END:
 Index page of /Page Bundle B/.
 
+- [[*Page Bundle A][Link to Leaf Bundle A]]
+- [[*Branch Bundle C][Link to Branch Bundle C]]
+
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
+** Branch Bundle C                                            :branch_bundle:
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: branch-bundle-c
+:EXPORT_FILE_NAME: _index
+:END:
+#+begin_description
+Example branch bundle.
+#+end_description
+- [[*Page Bundle A][Link to Page Bundle A]]
+- [[*Page Bundle B][Link to Page Bundle B]]
 ** Headless Page Bundle                                            :headless:
 *** Headless Page Bundle X
 :PROPERTIES:

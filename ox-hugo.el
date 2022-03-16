@@ -4309,27 +4309,40 @@ subtree-number being exported.
         valid-subtree-found))))
 
 (defun org-hugo--get-element-path (element info)
-  "Return the section path of ELEMENT.
+  "Return the path of ELEMENT.
+
 INFO is a plist holding export options."
-  (let ((root (or (org-export-get-node-property :EXPORT_HUGO_SECTION element :inherited)
-                  (plist-get info :hugo-section)))
-        (filename (org-export-get-node-property :EXPORT_FILE_NAME element :inherited))
-        (current-element element)
-        fragment fragments)
-    ;; Iterate over all parents of current-element, and collect
-    ;; section path fragments.
-    (while (and current-element
-                (not (org-export-get-node-property :EXPORT_HUGO_SECTION current-element nil)))
+  (let* ((main-section (or (org-export-get-node-property :EXPORT_HUGO_SECTION element :inherited)
+                           (plist-get info :hugo-section)))
+         (bundle (or (org-export-get-node-property :EXPORT_HUGO_BUNDLE element :inherited)
+                     (plist-get info :hugo-bundle)))
+         (filename (org-export-get-node-property :EXPORT_FILE_NAME element :inherited))
+         (slug (cond
+                ((and (org-string-nw-p bundle) (member filename '("index" ;leaf bundle
+                                                                  "_index" ;branch bundle
+                                                                  )))
+                 bundle)
+                ((org-string-nw-p bundle)
+                 (concat (file-name-as-directory bundle) filename))
+                (t
+                 filename)))
+         fragment fragments
+         path)
+    ;; Iterate over all parents of element, and collect section path
+    ;; fragments.
+    (while (and element
+                (not (org-export-get-node-property :EXPORT_HUGO_SECTION element nil)))
       ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list.
-      (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* current-element nil))
+      (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* element nil))
         (push fragment fragments))
-      (setq current-element (org-element-property :parent current-element)))
-    ;; Return the root section, section fragments and filename
+      (setq element (org-element-property :parent element)))
+    ;; Return the main-section section, section fragments and filename
     ;; concatenated.
-    (concat
-     (file-name-as-directory root)
-     (mapconcat #'file-name-as-directory fragments "")
-     filename)))
+    (setq path (concat
+                (file-name-as-directory main-section)
+                (mapconcat #'file-name-as-directory fragments "")
+                slug))
+    path))
 
 (defun org-hugo--get-pre-processed-buffer ()
   "Return a pre-processed copy of the current buffer.

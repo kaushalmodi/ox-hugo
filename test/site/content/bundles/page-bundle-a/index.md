@@ -1,6 +1,6 @@
 +++
 title = "Page Bundle A"
-tags = ["page-bundles"]
+tags = ["page-bundles", "leaf-bundle"]
 draft = false
 [[resources]]
   src = "images/copy-of-*.png"
@@ -11,6 +11,9 @@ draft = false
 +++
 
 Index page of _Page Bundle A_.
+
+-   [Link to Leaf Bundle B]({{< relref "page-bundle-b" >}})
+-   [Link to Branch Bundle C]({{< relref "branch-bundle-c" >}})
 
 
 ## Link to images not in the current directory {#link-to-images-not-in-the-current-directory}

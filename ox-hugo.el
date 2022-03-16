@@ -4393,42 +4393,6 @@ subtree-number being exported.
           (message "Point is not in a valid Hugo post subtree; move to one and try again"))
         valid-subtree-found))))
 
-(defun org-hugo--get-element-path (element info)
-  "Return the path of ELEMENT.
-
-INFO is a plist holding export options."
-  (let* ((main-section (or (org-export-get-node-property :EXPORT_HUGO_SECTION element :inherited)
-                           (plist-get info :hugo-section)))
-         (bundle (or (org-export-get-node-property :EXPORT_HUGO_BUNDLE element :inherited)
-                     (plist-get info :hugo-bundle)))
-         (filename (org-export-get-node-property :EXPORT_FILE_NAME element :inherited))
-         (slug (cond
-                ((and (org-string-nw-p bundle) (member filename '("index" ;leaf bundle
-                                                                  "_index" ;branch bundle
-                                                                  )))
-                 bundle)
-                ((org-string-nw-p bundle)
-                 (concat (file-name-as-directory bundle) filename))
-                (t
-                 filename)))
-         fragment fragments
-         path)
-    ;; Iterate over all parents of element, and collect section path
-    ;; fragments.
-    (while (and element
-                (not (org-export-get-node-property :EXPORT_HUGO_SECTION element nil)))
-      ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list.
-      (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* element nil))
-        (push fragment fragments))
-      (setq element (org-element-property :parent element)))
-    ;; Return the main-section section, section fragments and filename
-    ;; concatenated.
-    (setq path (concat
-                (file-name-as-directory main-section)
-                (mapconcat #'file-name-as-directory fragments "")
-                slug))
-    path))
-
 (defun org-hugo--get-pre-processed-buffer ()
   "Return a pre-processed copy of the current buffer.
 
@@ -4495,8 +4459,8 @@ links."
                                                (unless (plist-get info :with-broken-links)
                                                  (user-error "Unable to resolve link: %S" (nth 1 err))))))
                                         (org-export-resolve-id-link link (org-export--collect-tree-properties ast info))))
-                         (source-path (org-hugo--get-element-path link info))
-                         (destination-path (org-hugo--get-element-path destination info))
+                         (source-path (org-hugo-get-heading-slug link info))
+                         (destination-path (org-hugo-get-heading-slug destination info))
                          (destination-type (org-element-type destination)))
                     ;; (message "[ox-hugo pre process DBG] destination type: %s" destination-type)
 

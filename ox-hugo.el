@@ -1989,11 +1989,10 @@ INFO is a plist used as a communication channel.
 
 Return an empty string if all functions in
 `org-hugo-anchor-functions' return nil."
-  (string-remove-prefix "#" ;`org-hugo-get-heading-slug' will return an anchor string prefixed with "#"
-                        (or (seq-some
-                             (lambda (fn) (funcall fn element info))
-                             org-hugo-anchor-functions)
-                            "")))
+  (or (seq-some
+       (lambda (fn) (funcall fn element info))
+       org-hugo-anchor-functions)
+      ""))
 
 (defun org-hugo--heading-title (style level loffset title &optional todo tags anchor numbers)
   "Generate a heading title in the preferred Markdown heading style.

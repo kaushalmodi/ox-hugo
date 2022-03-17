@@ -4460,10 +4460,10 @@ links."
                                                (unless (plist-get info :with-broken-links)
                                                  (user-error "Unable to resolve link: %S" (nth 1 err))))))
                                         (org-export-resolve-id-link link (org-export--collect-tree-properties ast info))))
-                         (source-path (org-hugo--heading-get-slug link info))
-                         (destination-path (org-hugo--heading-get-slug destination info))
+                         (source-path (org-hugo--heading-get-slug link info :inherit-export-file-name))
+                         (destination-path (org-hugo--heading-get-slug destination info :inherit-export-file-name))
                          (destination-type (org-element-type destination)))
-                    ;; (message "[ox-hugo pre process DBG] destination type: %s" destination-type)
+                    ;; (message "[ox-hugo pre process DBG] destination-type : %s" destination-type)
 
                     ;; Change the link if it points to a valid
                     ;; destination outside the subtree.

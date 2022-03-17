@@ -146,8 +146,29 @@ So using `#+html: <style>.foo img ... </style>` and `#+attr_html: :class
  foo` as shown in the workaround above.
 
 
-## Other {#other}
+### Other {#other}
 
 Similarly, `:link`, `:attr`, `:attrlink` parameters in `#+attr_html`
 are also supported to set the corresponding parameter in the Hugo
 `figure` shortcode.
+
+
+## Pathogenic case (manual HTML tag wrappers in Org source) {#pathogenic-case--manual-html-tag-wrappers-in-org-source}
+
+It works.. but **don't do it!!**
+
+```org
+#+begin_export html
+<div class="inset">
+#+end_export
+[[/images/org-mode-unicorn-logo.png]]
+#+begin_export html
+</div>
+#+end_export
+```
+
+<div class="inset">
+
+{{< figure src="/images/org-mode-unicorn-logo.png" >}}
+
+</div>

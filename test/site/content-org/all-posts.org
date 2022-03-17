@@ -241,24 +241,6 @@ Some more text, after image.
 [[/images/org-mode-unicorn-logo.png]]
 
 [[https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728][Discussion]]
-**** COMMENT Below will not work!
-You cannot wrap markdown code inside HTML.
-
-As /rdwatters/ says [[https://discourse.gohugo.io/t/is-it-possible-to-insert-html-code-in-markdown-content/4867/4?u=kaushalmodi][here]],
-#+begin_quote
-HTML can be part of markdown because HTML-inside-markdown is part of
-the spec. That said, remember that the spec disallows markdown nested
-inside of HTML. So if you create a div, just make sure everything
-inside that div is valid HTML.
-#+end_quote
-
-#+begin_export md
-<div class="inset">
-#+end_export
-[[/images/org-mode-unicorn-logo.png]]
-#+begin_export md
-</div>
-#+end_export
 *** Setting =alt= parameter
 [[https://www.reddit.com/r/emacs/comments/71wy6n/orgmode_as_a_markup_language_does_make_sense_even/dnhqudn/][Reference]]
 #+attr_html: :alt Org-mode Unicorn Logo
@@ -363,10 +345,28 @@ Rendered this:
 
 So using =#+html: <style>.foo img ... </style>= and =#+attr_html: :class
  foo= as shown in the workaround above.
-*** Other
+**** Other
 Similarly, =:link=, =:attr=, =:attrlink= parameters in =#+attr_html=
 are also supported to set the corresponding parameter in the Hugo
 =figure= shortcode.
+*** Pathogenic case (manual HTML tag wrappers in Org source)
+It works.. but *don't do it!!*
+#+begin_src org
+,#+begin_export html
+<div class="inset">
+,#+end_export
+[[/images/org-mode-unicorn-logo.png]]
+,#+begin_export html
+</div>
+,#+end_export
+#+end_src
+#+begin_export html
+<div class="inset">
+#+end_export
+[[/images/org-mode-unicorn-logo.png]]
+#+begin_export html
+</div>
+#+end_export
 ** Inlined SVG                                                   :svg:inline:
 :PROPERTIES:
 :EXPORT_FILE_NAME: inlined-svg

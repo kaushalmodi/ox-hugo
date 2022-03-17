@@ -46,7 +46,7 @@
   "Test slug when EXPORT_HUGO_SLUG is set."
   ;; EXPORT_FILE_NAME + EXPORT_HUGO_SLUG
   (should
-   (string= "slug"
+   (string= "posts/slug"
             (org-test-with-parsed-data
              "* Some Heading<point>
 :PROPERTIES:
@@ -77,7 +77,7 @@
 
   ;; Only EXPORT_FILE_NAME
   (should
-   (string= "file"
+   (string= "posts/file"
             (org-test-with-parsed-data
              "* Some Heading<point>
 :PROPERTIES:
@@ -105,7 +105,7 @@
 (ert-deftest test-slug/leaf-bundles ()
   "Test derivation of the slug leaf bundles."
   (should
-   (string= "leaf"
+   (string= "posts/leaf"
             (org-test-with-parsed-data
              "* Some Heading<point>
 :PROPERTIES:
@@ -134,7 +134,7 @@
 ;; Branch bundles
 (ert-deftest test-slug/branch-bundles ()
   (should
-   (string= "branch"
+   (string= "posts/branch"
             (org-test-with-parsed-data
              "* Some Heading<point>
 :PROPERTIES:
@@ -146,7 +146,7 @@
 
   ;; Inherit :EXPORT_HUGO_BUNDLE
   (should
-   (string= "branch"
+   (string= "posts/branch"
             (org-test-with-parsed-data
              "* Branch bundle
 :PROPERTIES:
@@ -161,7 +161,7 @@
 
   ;; Page in branch bundle, inheritance
   (should
-   (string= "branch/branch-page"
+   (string= "posts/branch/branch-page"
             (org-test-with-parsed-data
              "* Branch bundle
 :PROPERTIES:

@@ -1871,8 +1871,11 @@ Return nil if id is not found."
 
 (defun org-hugo-get-heading-slug (element info)
   "Return the slug string derived from an Org heading ELEMENT.
+
 The slug string is parsed from the ELEMENT's `:title' property.
+
 INFO is a plist used as a communication channel.
+
 Return nil if ELEMENT's `:title' property is nil or an empty string."
   (let ((title (org-export-data-with-backend
                 (org-element-property :title element) 'md info)))

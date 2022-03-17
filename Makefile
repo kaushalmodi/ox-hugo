@@ -194,7 +194,14 @@ diff:
 	@git diff
 
 ert:
-	$(EMACS) --batch -l ert -L . -L $(OX_HUGO_TEST_DIR)/ert/ -l all_tests.el -eval '(ert-run-tests-batch-and-exit "$(TEST_MATCH)")'
+	$(EMACS) --batch \
+	         --eval "(progn\
+	(setenv \"OX_HUGO_TMP_DIR\" \"$(ox_hugo_tmp_dir)\")\
+	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
+    )" \
+	         -L . -L $(OX_HUGO_TEST_DIR)/ert/ \
+	         -l all_tests.el \
+	         --eval "(ert-run-tests-batch-and-exit \"$(TEST_MATCH)\")"
 
 test: vcheck_emacs vcheck_pandoc ert testmkgold do_test
 

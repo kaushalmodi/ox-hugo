@@ -56,7 +56,7 @@ variable, and communication channel under `info'."
      (let* ((tree (org-element-parse-buffer))
             (info (org-combine-plists
                    (org-export--get-export-attributes)
-                   (org-export-get-environment))))
+                   (org-export-get-environment 'hugo))))
        (org-export--prune-tree tree info)
        (org-export--remove-uninterpreted-data tree info)
        (let ((info (org-combine-plists

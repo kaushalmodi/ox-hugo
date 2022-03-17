@@ -1890,7 +1890,7 @@ This function will never return nil."
                    "")))
     (substring (md5 title) 0 hash-len)))
 
-(defun org-hugo--heading-get-slug (heading _info)
+(defun org-hugo--heading-get-slug (heading info &optional inherit-export-file-name)
   "Return the slug string derived from an Org HEADING element.
 
 1. If HEADING has `:EXPORT_FILE_NAME' and `:EXPORT_HUGO_SLUG'
@@ -1908,11 +1908,16 @@ This function will never return nil."
    is neither \"index\" nor \"_index\", use that to derive the
    slug.
 
-The `:EXPORT_HUGO_SECTION' property is prepended to all of the
-above options.
+If INHERIT-EXPORT-FILE-NAME is non-nil, allow inheriting the
+`:EXPORT_FILE_NAME' property from a parent subtree.
+
+The `:EXPORT_HUGO_SECTION' property or `#+hugo_section' keyword
+value is prepended to all of the above options.
+
+INFO is a plist used as a communication channel.
 
 Return nil if none of the above are true."
-  (let ((file (org-string-nw-p (org-export-get-node-property :EXPORT_FILE_NAME heading)))
+  (let ((file (org-string-nw-p (org-export-get-node-property :EXPORT_FILE_NAME heading inherit-export-file-name)))
         hugo-slug bundle slug)
     ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_FILE_NAME: %S" file)
     (when file
@@ -1950,7 +1955,9 @@ Return nil if none of the above are true."
       (when slug
         (let ((pheading heading)
               section fragment fragments)
-          (setq section (org-string-nw-p (org-export-get-node-property :EXPORT_HUGO_SECTION heading :inherited)))
+          (setq section (org-string-nw-p
+                         (or (org-export-get-node-property :EXPORT_HUGO_SECTION heading :inherited)
+                             (plist-get info :hugo-section))))
 
           ;; Iterate over all parents of heading, and collect section
           ;; path fragments.

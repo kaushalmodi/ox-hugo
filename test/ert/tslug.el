@@ -212,6 +212,21 @@
              (let ((el (org-element-at-point)))
                (org-hugo--heading-get-slug el info))))))
 
+;; Section
+(ert-deftest test-slug/section ()
+
+  ;; Section keyword
+  (should
+   (string= "section/file"
+            (org-test-with-parsed-data
+             "#+hugo_section: section
+* Some Heading<point>
+:PROPERTIES:
+:EXPORT_FILE_NAME: file
+:END:"
+             (let ((el (org-element-at-point)))
+               (org-hugo--heading-get-slug el info))))))
+
 ;; Section fragments
 (ert-deftest test-slug/section-fragments ()
 

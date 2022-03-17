@@ -1920,18 +1920,20 @@ This function is creation as a workaround for Org 9.5 and older
 versions for the issue that `org-element-at-point' does not
 return an element with all the inherited properties.  That issue
 is fixed in Org main branch at least as of 2022-03-17."
-  (org-with-wide-buffer
-   (let ((el (org-element-at-point))
-         val)
-     (catch :found
-       (while el
-         (let ((level (org-element-property :level el)))
-           (setq val (org-export-get-node-property prop el :inherited))
-           (when (or val (= 1 level))
-             (throw :found val))
-           (org-up-heading-safe)
-           (setq el (org-element-at-point)))))
-     val)))
+  (let ((el (org-element-at-point))
+        val)
+    (catch :found
+      (while el
+        ;; (message (format "[search prop DBG] el : %S" el ))
+        (let* ((el-type (org-element-type el))
+               (level (org-element-property :level el)))
+          (setq val (org-export-get-node-property prop el :inherited))
+          ;; (message "[search prop DBG] type `%S', level %S, val %S" el-type level val)
+          (when (or val (and (equal el-type 'headline) (= 1 level)))
+            (throw :found val))
+          (org-up-heading-safe)
+          (setq el (org-element-at-point)))))
+    val))
 
 (defun org-hugo--heading-get-slug (heading info &optional inherit-export-file-name)
   "Return the slug string derived from an Org HEADING element.

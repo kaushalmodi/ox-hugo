@@ -2216,25 +2216,31 @@ INFO is a plist used as a communication channel."
         elem )
     (unless (file-exists-p org-file)
       (error "[org-hugo--search-and-get-anchor] Unable to open Org file `%s'" org-file))
-    (with-current-buffer (or buffer (find-file-noselect org-file))
-      (org-export-get-environment)        ;Eval #+bind keywords, etc.
-      (org-link-search search-str) ;This is extracted from the `org-open-file' function.
-      (setq elem (org-element-at-point))
-      ;; (message "[search and get anchor DBG] elem: %S" elem)
-      (cond
-       ((equal (org-element-type elem) 'headline)
-        (setq anchor (org-hugo--get-anchor elem info)))
-       (t
-        ;; If current point has an Org Target, get the target anchor.
-        (let ((target-elem (org-element-target-parser)))
-          (when (equal (org-element-type target-elem) 'target)
-            (setq anchor (org-blackfriday--get-target-anchor target-elem))))))
-      (when (org-string-nw-p anchor)
-        ;; If the element has the `:EXPORT_FILE_NAME' it's not a
-        ;; sub-heading, but the subtree's main heading.  Don't prefix
-        ;; the "#" in that case.
-        (unless (org-export-get-node-property :EXPORT_FILE_NAME elem nil)
-          (setq anchor (format "#%s" anchor))))
+    (with-current-buffer (find-file-noselect org-file)
+      (let ((inhibit-modification-hooks t)
+            (org-mode-hook nil)
+            (org-inhibit-startup t))
+        ;; `org-mode' needs to be loaded for `org-link-search' to work
+        ;; correctly. Otherwise `org-link-search' returns starting
+        ;; points for incorrect subtrees.
+        (org-mode)
+        (org-export-get-environment)        ;Eval #+bind keywords, etc.
+        (org-link-search search-str) ;This is extracted from the `org-open-file' function.
+        (setq elem (org-element-at-point))
+        (cond
+         ((equal (org-element-type elem) 'headline)
+          (setq anchor (org-hugo--get-anchor elem info)))
+         (t
+          ;; If current point has an Org Target, get the target anchor.
+          (let ((target-elem (org-element-target-parser)))
+            (when (equal (org-element-type target-elem) 'target)
+              (setq anchor (org-blackfriday--get-target-anchor target-elem))))))
+        (when (org-string-nw-p anchor)
+          ;; If the element has the `:EXPORT_FILE_NAME' it's not a
+          ;; sub-heading, but the subtree's main heading.  Don't prefix
+          ;; the "#" in that case.
+          (unless (org-export-get-node-property :EXPORT_FILE_NAME elem nil)
+            (setq anchor (format "#%s" anchor)))))
       ;; (message "[search and get anchor DBG] anchor: %S" anchor)
       (unless buffer ;Kill the buffer if it wasn't open already
         (kill-buffer (current-buffer))))

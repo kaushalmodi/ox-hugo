@@ -30,17 +30,17 @@
   (should
    (equal nil
           (org-test-with-parsed-data
-           "* <point>"
-           (let ((el (org-element-at-point)))
-             (org-hugo--heading-get-slug el info)))))
+              "* <point>"
+            (let ((el (org-element-at-point)))
+              (org-hugo--heading-get-slug el info)))))
 
   ;; Heading with EXPORT_FILE_NAME.
   (should
    (equal nil
           (org-test-with-parsed-data
-           "* Some Heading<point>"
-           (let ((el (org-element-at-point)))
-             (org-hugo--heading-get-slug el info))))))
+              "* Some Heading<point>"
+            (let ((el (org-element-at-point)))
+              (org-hugo--heading-get-slug el info))))))
 
 (ert-deftest test-slug/title ()
   "Test slug when EXPORT_HUGO_SLUG is set."
@@ -48,19 +48,19 @@
   (should
    (string= "posts/slug"
             (org-test-with-parsed-data
-             "* Some Heading<point>
+                "* Some Heading<point>
 :PROPERTIES:
 :EXPORT_FILE_NAME: file
 :EXPORT_HUGO_SLUG: slug
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info)))))
+              (let ((el (org-element-at-point)))
+                (org-hugo--heading-get-slug el info)))))
 
   ;; EXPORT_FILE_NAME + EXPORT_HUGO_SLUG + EXPORT_HUGO_SECTION
   (should
    (string= "section/slug"
             (org-test-with-parsed-data
-             "* Section
+                "* Section
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: section
 :END:
@@ -69,8 +69,8 @@
 :EXPORT_FILE_NAME: file
 :EXPORT_HUGO_SLUG: slug
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info))))))
+              (let ((el (nth 1 (org-element-map tree 'headline #'identity info))))
+                (org-hugo--heading-get-slug el info))))))
 
 (ert-deftest test-slug/export-file-name ()
   "Test derivation of the slug from EXPORT_FILE_NAME."
@@ -79,27 +79,28 @@
   (should
    (string= "posts/file"
             (org-test-with-parsed-data
-             "* Some Heading<point>
+                "* Some Heading<point>
 :PROPERTIES:
 :EXPORT_FILE_NAME: file
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info)))))
+              (let ((el (org-element-at-point)))
+                (org-hugo--heading-get-slug el info)))))
 
   ;; EXPORT_FILE_NAME + EXPORT_HUGO_SECTION
   (should
    (string= "section/file"
             (org-test-with-parsed-data
-             "* Section
+                "* Section
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: section
+:EXPORT_OPTIONS: toc:t
 :END:
 ** Some Heading<point>
 :PROPERTIES:
 :EXPORT_FILE_NAME: file
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info))))))
+              (let ((el (nth 1 (org-element-map tree 'headline #'identity info))))
+                (org-hugo--heading-get-slug el info))))))
 
 ;; Leaf bundles
 (ert-deftest test-slug/leaf-bundles ()
@@ -107,19 +108,19 @@
   (should
    (string= "posts/leaf"
             (org-test-with-parsed-data
-             "* Some Heading<point>
+                "* Some Heading<point>
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: leaf
 :EXPORT_FILE_NAME: index
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info)))))
+              (let ((el (org-element-at-point)))
+                (org-hugo--heading-get-slug el info)))))
 
   ;; Leaf bundle in a section
   (should
    (string= "section/leaf"
             (org-test-with-parsed-data
-             "* Section
+                "* Section
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: section
 :END:
@@ -128,27 +129,27 @@
 :EXPORT_HUGO_BUNDLE: leaf
 :EXPORT_FILE_NAME: index
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info))))))
+              (let ((el (nth 1 (org-element-map tree 'headline #'identity info))))
+                (org-hugo--heading-get-slug el info))))))
 
 ;; Branch bundles
 (ert-deftest test-slug/branch-bundles ()
   (should
    (string= "posts/branch"
             (org-test-with-parsed-data
-             "* Some Heading<point>
+                "* Some Heading<point>
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: branch
 :EXPORT_FILE_NAME: _index
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info)))))
+              (let ((el (org-element-at-point)))
+                (org-hugo--heading-get-slug el info)))))
 
   ;; Inherit :EXPORT_HUGO_BUNDLE
   (should
    (string= "posts/branch"
             (org-test-with-parsed-data
-             "* Branch bundle
+                "* Branch bundle
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: branch
 :END:
@@ -156,14 +157,14 @@
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info)))))
+              (let ((el (nth 1 (org-element-map tree 'headline #'identity info))))
+                (org-hugo--heading-get-slug el info)))))
 
   ;; Page in branch bundle, inheritance
   (should
    (string= "posts/branch/branch-page"
             (org-test-with-parsed-data
-             "* Branch bundle
+                "* Branch bundle
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: branch
 :END:
@@ -171,14 +172,14 @@
 :PROPERTIES:
 :EXPORT_FILE_NAME: branch-page
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info)))))
+              (let ((el (nth 1 (org-element-map tree 'headline #'identity info))))
+                (org-hugo--heading-get-slug el info)))))
 
   ;; Branch bundle in a section
   (should
    (string= "section/branch"
             (org-test-with-parsed-data
-             "* Section
+                "* Section
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: section
 :END:
@@ -190,14 +191,14 @@
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info)))))
+              (let ((el (nth 2 (org-element-map tree 'headline #'identity info))))
+                (org-hugo--heading-get-slug el info)))))
 
   ;; Branch page in a branch bundle in a section
   (should
    (string= "section/branch/branch-page"
             (org-test-with-parsed-data
-             "* Section
+                "* Section
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: section
 :END:
@@ -209,8 +210,8 @@
 :PROPERTIES:
 :EXPORT_FILE_NAME: branch-page
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info))))))
+              (let ((el (nth 2 (org-element-map tree 'headline #'identity info))))
+                (org-hugo--heading-get-slug el info))))))
 
 ;; Section
 (ert-deftest test-slug/section ()
@@ -219,13 +220,13 @@
   (should
    (string= "section/file"
             (org-test-with-parsed-data
-             "#+hugo_section: section
+                "#+hugo_section: section
 * Some Heading<point>
 :PROPERTIES:
 :EXPORT_FILE_NAME: file
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info))))))
+              (let ((el (org-element-at-point)))
+                (org-hugo--heading-get-slug el info))))))
 
 ;; Section fragments
 (ert-deftest test-slug/section-fragments ()
@@ -233,7 +234,7 @@
   (should
    (string= "section/sec2/sec3/file"
             (org-test-with-parsed-data
-             "* Section
+                "* Section
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: section
 :END:
@@ -249,14 +250,14 @@
 :PROPERTIES:
 :EXPORT_FILE_NAME: file
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info)))))
+              (let ((el (nth 3 (org-element-map tree 'headline #'identity info))))
+                (org-hugo--heading-get-slug el info)))))
 
   ;; Branch page in a branch bundle in section fragments.
   (should
    (string= "section/sec2/sec3/branch/branch-page"
             (org-test-with-parsed-data
-             "* Section
+                "* Section
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: section
 :END:
@@ -277,8 +278,19 @@
 :PROPERTIES:
 :EXPORT_FILE_NAME: branch-page
 :END:"
-             (let ((el (org-element-at-point)))
-               (org-hugo--heading-get-slug el info))))))
+              (let ((el (nth 4 (org-element-map tree 'headline #'identity info))))
+                (org-hugo--heading-get-slug el info))))))
 
 
 (provide 'tslug)
+
+;; Note: As of 2022-03-17, Org stable or bugfix version's (9.5.2)
+;; `org-element-at-point' returns the Org element at point *but*
+;; without any of the inherited properties. So `org-element-map' is
+;; used where property inheritance needs to be tested (because that
+;; does do the prop inheritance as expected!). This issue doesn't
+;; exist in the `main' branch version of `org-element-at-point'.
+;;
+;; To get the 1st heading element: (nth 0 (org-element-map tree 'headline #'identity info))
+;; To get the 2nd heading element: (nth 1 (org-element-map tree 'headline #'identity info))
+;; ..

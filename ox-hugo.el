@@ -1910,6 +1910,29 @@ This function will never return nil."
                    "")))
     (substring (md5 title) 0 hash-len)))
 
+(defun org-hugo--search-prop-in-parents (prop &optional _info)
+  "Return PROP if found in any of the parent headings.
+
+PROP is a property symbol with a : prefix, example:
+`:EXPORT_FILE_NAME'.
+
+This function is creation as a workaround for Org 9.5 and older
+versions for the issue that `org-element-at-point' does not
+return an element with all the inherited properties.  That issue
+is fixed in Org main branch at least as of 2022-03-17."
+  (org-with-wide-buffer
+   (let ((el (org-element-at-point))
+         val)
+     (catch :found
+       (while el
+         (let ((level (org-element-property :level el)))
+           (setq val (org-export-get-node-property prop el :inherited))
+           (when (or val (= 1 level))
+             (throw :found val))
+           (org-up-heading-safe)
+           (setq el (org-element-at-point)))))
+     val)))
+
 (defun org-hugo--heading-get-slug (heading info &optional inherit-export-file-name)
   "Return the slug string derived from an Org HEADING element.
 
@@ -1938,7 +1961,9 @@ Return nil if none of the above are true."
         bundle slug)
     ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_FILE_NAME: %S" file)
     (when file
-      (setq bundle (org-string-nw-p (org-export-get-node-property :EXPORT_HUGO_BUNDLE heading :inherited)))
+      (setq bundle (org-string-nw-p (or (org-export-get-node-property :EXPORT_HUGO_BUNDLE heading :inherited)
+                                        (plist-get info :hugo-bundle)
+                                        (org-hugo--search-prop-in-parents :EXPORT_HUGO_BUNDLE))))
       ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_HUGO_BUNDLE: %S" bundle)
 
       (cond

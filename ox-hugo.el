@@ -2213,7 +2213,11 @@ INFO is a plist used as a communication channel."
           (when (equal (org-element-type target-elem) 'target)
             (setq anchor (org-blackfriday--get-target-anchor target-elem))))))
       (when (org-string-nw-p anchor)
-        (setq anchor (format "#%s" anchor)))
+        ;; If the element has the `:EXPORT_FILE_NAME' it's not a
+        ;; sub-heading, but the subtree's main heading.  Don't prefix
+        ;; the "#" in that case.
+        (unless (org-export-get-node-property :EXPORT_FILE_NAME elem nil)
+          (setq anchor (format "#%s" anchor))))
       ;; (message "[search and get anchor DBG] anchor: %S" anchor)
       (unless buffer ;Kill the buffer if it wasn't open already
         (kill-buffer (current-buffer))))
@@ -2491,7 +2495,7 @@ and rewrite link paths to make blogging more seamless."
                 (org-blackfriday--get-ref-prefix 'radio)
                 (org-blackfriday--valid-html-anchor-name
                  (org-element-property :value destination)))))
-     (t ;[[file:foo.png]], [[file:foo.org::* Heading]], [[file:foo.org::#custom-id]],
+     (t ;[[file:foo.png]], [[file:foo.org::* Heading]], [[file:foo.org::#custom-id]], link type: file
       (let* ((link-param-str "")
              (path (cond
                     (link-is-url
@@ -2556,9 +2560,19 @@ and rewrite link paths to make blogging more seamless."
                                ;; (message "[org-hugo-link DBG] link-search-str: %s" link-search-str)
                                (when link-search-str
                                  (setq anchor (org-hugo--search-and-get-anchor raw-path link-search-str info)))))
-                           (if (or (org-string-nw-p ref) (org-string-nw-p anchor))
-                               (format "{{< relref \"%s%s\" >}}" ref anchor)
-                             "")))
+                           ;; (message "[org-hugo-link file.org::*Heading DBG] ref    = %s" ref)
+                           ;; (message "[org-hugo-link file.org::*Heading DBG] anchor = %s" anchor)
+                           (cond
+                            ;; Link to a post subtree.  In this case,
+                            ;; the "anchor" is actually the post's
+                            ;; slug.
+                            ((and (org-string-nw-p anchor) (not (string-prefix-p "#" anchor)))
+                             (format "{{< relref \"%s\" >}}" anchor))
+                            ;; Link to a non-post subtree, like a subheading in a post.
+                            ((or (org-string-nw-p ref) (org-string-nw-p anchor))
+                             (format "{{< relref \"%s%s\" >}}" ref anchor))
+                            (t
+                             ""))))
                         (t ;; attachments like foo.png
                          (org-hugo--attachment-rewrite-maybe path1 info)))))
                     (t

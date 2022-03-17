@@ -4330,8 +4330,8 @@ subtree-number being exported.
               (if all-subtrees
                   (progn
                     (setq org-hugo--subtree-count (1+ org-hugo--subtree-count))
-                    (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))
-                (message "[ox-hugo] Exporting `%s' .." title))
+                    (message (format "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title)))
+                (message (format "[ox-hugo] Exporting `%s' .." title)))
               ;; Get the current subtree coordinates for
               ;; auto-calculation of menu item weight, page or
               ;; taxonomy weights ..

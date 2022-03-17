@@ -553,7 +553,8 @@ nil) plist were associated with them."
   :group 'org-export-hugo
   :type '(alist :key-type string :value-type (plist :key-type symbol :value-type boolean)))
 
-(defcustom org-hugo-anchor-functions '(org-hugo-get-custom-id
+(defcustom org-hugo-anchor-functions '(org-hugo-get-page-or-bundle-name
+                                       org-hugo-get-custom-id
                                        org-hugo-get-heading-slug
                                        org-hugo-get-md5)
   "A list of functions for deriving the anchor of current Org heading.
@@ -562,9 +563,10 @@ The functions will be run in the order added to this variable
 until the first one returns a non-nil value.  So the functions in
 this list are order-sensitive.
 
-For example, if `org-hugo-get-custom-id' is the first element in
-this list, the heading's `:CUSTOM_ID' property will have the
-highest precedence in determining the heading's anchor string.
+For example, if `org-hugo-get-page-or-bundle-name' is the first
+element in this list, the heading's `:EXPORT_FILE_NAME' property
+will have the highest precedence in determining the heading's
+anchor string.
 
 This variable is used in the `org-hugo--get-anchor' internal
 function.
@@ -576,6 +578,7 @@ even be declared as optional):
 2. INFO    : General plist used as a communication channel
 
 Some of the inbuilt functions that can be added to this list:
+- `org-hugo-get-page-or-bundle-name'
 - `org-hugo-get-custom-id'
 - `org-hugo-get-heading-slug'
 - `org-hugo-get-md5'
@@ -1854,13 +1857,27 @@ The `slug' generated from that STR follows these rules:
       (setq str (replace-regexp-in-string "--" "-" str)))
     str))
 
-(defun org-hugo-get-custom-id(element &optional _info)
+(defun org-hugo-get-page-or-bundle-name (element info)
+  "Return ELEMENT's slug based on `:EXPORT_FILE_NAME' and `:EXPORT_HUGO_BUNDLE'.
+
+If the \"slug\" of the element is \"section/post\", return
+\"post\".
+
+Return nil if ELEMENT doesn't have the EXPORT_FILE_NAME property
+set.
+
+INFO is a plist used as a communication channel."
+  (let ((slug (org-hugo--heading-get-slug element info nil)))
+    (when (org-string-nw-p slug)
+      (file-name-base slug))))
+
+(defun org-hugo-get-custom-id (element &optional _info)
   "Return ELEMENT's `:CUSTOM_ID' property.
 
 Return nil if ELEMENT doesn't have the CUSTOM_ID property set."
   (org-string-nw-p (org-element-property :CUSTOM_ID element)))
 
-(defun org-hugo-get-id(&optional element _info)
+(defun org-hugo-get-id (&optional element _info)
   "Return the value of `:ID' property for ELEMENT.
 
 Return nil if id is not found."
@@ -1881,7 +1898,7 @@ Return nil if ELEMENT's `:title' property is nil or an empty string."
                 (org-element-property :title element) 'md info)))
     (org-string-nw-p (org-hugo-slug title :allow-double-hyphens))))
 
-(defun org-hugo-get-md5(element info)
+(defun org-hugo-get-md5 (element info)
   "Return md5 sum derived string using ELEMENT's title property.
 
 INFO is a plist used as a communication channel.

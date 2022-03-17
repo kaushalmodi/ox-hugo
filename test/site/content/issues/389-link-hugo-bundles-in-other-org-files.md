@@ -10,3 +10,8 @@ draft = false
 -   [Link to Page Bundle A]({{< relref "page-bundle-a" >}})
 -   [Link to Page Bundle B]({{< relref "page-bundle-b" >}})
 -   [Link to Branch Bundle C]({{< relref "branch-bundle-c" >}})
+
+<!--listend-->
+
+-   [Link to a regular post subtree]({{< relref "planning-info" >}}) -- Here, the `EXPORT_FILE_NAME` is
+    not a direct _sluggified_ version of the subtree heading.

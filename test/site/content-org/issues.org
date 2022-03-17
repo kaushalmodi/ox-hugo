@@ -149,6 +149,10 @@ Test the linking of Hugo bundle subtrees in other Org files.
 - [[./all-posts.org::*Page Bundle A][Link to Page Bundle A]]
 - [[./all-posts.org::*Page Bundle B][Link to Page Bundle B]]
 - [[./all-posts.org::*Branch Bundle C][Link to Branch Bundle C]]
+
+
+- [[./all-posts.org::*Export with planning info][Link to a regular post subtree]] -- Here, the ~EXPORT_FILE_NAME~ is
+  not a direct /sluggified/ version of the subtree heading.
 * Footnotes
 [fn:1]
 #+begin_src elisp

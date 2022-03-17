@@ -1921,7 +1921,7 @@ versions for the issue that `org-element-at-point' does not
 return an element with all the inherited properties.  That issue
 is fixed in Org main branch at least as of 2022-03-17."
   (org-with-wide-buffer
-   (org-back-to-heading :invisible-ok)
+   (org-back-to-heading-or-point-min :invisible-ok)
    (let ((el (org-element-at-point))
          (level t)
          val)

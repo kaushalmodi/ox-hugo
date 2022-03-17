@@ -42,11 +42,11 @@
             (let ((el (org-element-at-point)))
               (org-hugo--heading-get-slug el info))))))
 
-(ert-deftest test-slug/title ()
-  "Test slug when EXPORT_HUGO_SLUG is set."
+(ert-deftest test-slug/ignore-hugo-slug ()
+  "Test that EXPORT_HUGO_SLUG is not used to derive the slug."
   ;; EXPORT_FILE_NAME + EXPORT_HUGO_SLUG
   (should
-   (string= "posts/slug"
+   (string= "posts/file"
             (org-test-with-parsed-data
                 "* Some Heading<point>
 :PROPERTIES:
@@ -58,7 +58,7 @@
 
   ;; EXPORT_FILE_NAME + EXPORT_HUGO_SLUG + EXPORT_HUGO_SECTION
   (should
-   (string= "section/slug"
+   (string= "section/file"
             (org-test-with-parsed-data
                 "* Section
 :PROPERTIES:

@@ -1896,18 +1896,15 @@ This function will never return nil."
 (defun org-hugo--heading-get-slug (heading info &optional inherit-export-file-name)
   "Return the slug string derived from an Org HEADING element.
 
-1. If HEADING has `:EXPORT_FILE_NAME' and `:EXPORT_HUGO_SLUG'
-   properties, use the latter as slug.
-
-2. If HEADING has only `:EXPORT_FILE_NAME' and it's not a Hugo
+1. If HEADING has only `:EXPORT_FILE_NAME' and it's not a Hugo
    page bundle, use that property as slug.
 
-3. If HEADING has a `:EXPORT_FILE_NAME' property, and its value
+2. If HEADING has a `:EXPORT_FILE_NAME' property, and its value
    is either \"index\" or \"_index\", use `:EXPORT_HUGO_BUNDLE'
    to derive the slug.  \"index\" subtree is a Leaf Bundle, and
    \"_index\" subtree is a Branch Bundle.
 
-4. If HEADING has a `:EXPORT_FILE_NAME' property, and its value
+3. If HEADING has a `:EXPORT_FILE_NAME' property, and its value
    is neither \"index\" nor \"_index\", use that to derive the
    slug.
 
@@ -1921,19 +1918,13 @@ INFO is a plist used as a communication channel.
 
 Return nil if none of the above are true."
   (let ((file (org-string-nw-p (org-export-get-node-property :EXPORT_FILE_NAME heading inherit-export-file-name)))
-        hugo-slug bundle slug)
+        bundle slug)
     ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_FILE_NAME: %S" file)
     (when file
-      (setq hugo-slug (org-string-nw-p (org-export-get-node-property :EXPORT_HUGO_SLUG heading :inherited)))
-      (unless hugo-slug
-        (setq bundle (org-string-nw-p (org-export-get-node-property :EXPORT_HUGO_BUNDLE heading :inherited)))
-        ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_HUGO_BUNDLE: %S" bundle)
-        )
+      (setq bundle (org-string-nw-p (org-export-get-node-property :EXPORT_HUGO_BUNDLE heading :inherited)))
+      ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_HUGO_BUNDLE: %S" bundle)
 
       (cond
-       (hugo-slug
-        ;; (message "[org-hugo--heading-get-slug DBG] hugo-slug: %S" hugo-slug)
-        (setq slug hugo-slug))
        ;; Leaf or branch bundle landing page.
        ((and bundle file (member file '("index" ;Leaf bundle
                                         "_index" ;Branch bundle
@@ -1947,39 +1938,35 @@ Return nil if none of the above are true."
         (setq slug (concat (file-name-as-directory bundle) file))
         ;; (message "[org-hugo--heading-get-slug DBG] branch bundle file slug: %S" slug)
         )
-       ;; Only EXPORT_FILE_NAME is set.
-       (file
-        (setq slug file))
+       ;; Not a Hugo page bundle.
        (t
-        ;; Do nothing
-        ))
+        (setq slug file)))
 
       ;; Prefix with section and fragmented sections if any.
-      (when slug
-        (let ((pheading heading)
-              section fragment fragments)
-          (setq section (org-string-nw-p
-                         (or (org-export-get-node-property :EXPORT_HUGO_SECTION heading :inherited)
-                             (plist-get info :hugo-section))))
+      (let ((pheading heading)
+            section fragment fragments)
+        (setq section (org-string-nw-p
+                       (or (org-export-get-node-property :EXPORT_HUGO_SECTION heading :inherited)
+                           (plist-get info :hugo-section))))
 
-          ;; Iterate over all parents of heading, and collect section
-          ;; path fragments.
-          (while (and pheading
-                      (not (org-export-get-node-property :EXPORT_HUGO_SECTION pheading nil)))
-            ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list.
-            (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* pheading nil))
-              (push fragment fragments))
-            (setq pheading (org-element-property :parent pheading)))
+        ;; Iterate over all parents of heading, and collect section
+        ;; path fragments.
+        (while (and pheading
+                    (not (org-export-get-node-property :EXPORT_HUGO_SECTION pheading nil)))
+          ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list.
+          (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* pheading nil))
+            (push fragment fragments))
+          (setq pheading (org-element-property :parent pheading)))
 
-          (when section
-            (setq slug (concat (file-name-as-directory section)
-                               (mapconcat #'file-name-as-directory fragments "")
-                               slug)))
-          ;; (message "[org-hugo--heading-get-slug DBG] section: %S" section)
-          ;; (message "[org-hugo--heading-get-slug DBG] section + slug: %S" slug)
-          ))
-      ;; (message "[org-hugo--heading-get-slug DBG] FINAL slug: %S" slug)
-      slug)))
+        (when section
+          (setq slug (concat (file-name-as-directory section)
+                             (mapconcat #'file-name-as-directory fragments "")
+                             slug)))
+        ;; (message "[org-hugo--heading-get-slug DBG] section: %S" section)
+        ;; (message "[org-hugo--heading-get-slug DBG] section + slug: %S" slug)
+        ))
+    ;; (message "[org-hugo--heading-get-slug DBG] FINAL slug: %S" slug)
+    slug))
 
 (defun org-hugo--get-anchor(element info)
   "Return anchor string for Org heading ELEMENT.

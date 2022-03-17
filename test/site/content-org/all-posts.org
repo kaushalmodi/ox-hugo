@@ -3724,6 +3724,7 @@ resolved to the containing post.
 - Link to subtree by CUSTOM_ID: [[#link-destination]]
 - Link to subtree by ID: [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678]]
 - Link to subtree by heading: [[*Link destination]]
+- Link to a subtree with custom Hugo slug: [[*Slug Front-matter]]
 **** Links with descriptions
 - [[#external-target][Link to CUSTOM_ID outside the same post]]
 - [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb][Link to ID outside the same post]]
@@ -3732,6 +3733,7 @@ resolved to the containing post.
 - [[#link-destination][Link to subtree by CUSTOM_ID]]
 - [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678][Link to subtree by ID]]
 - [[*Link destination][Link to subtree by heading]]
+- [[*Slug Front-matter][Link to a subtree with custom Hugo slug]]
 *** Internal target
 :PROPERTIES:
 :CUSTOM_ID: internal-target

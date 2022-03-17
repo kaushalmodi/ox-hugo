@@ -4498,13 +4498,14 @@ links."
                                   (org-element-property :title destination) 'ascii info)))
                             ;; (message "[ox-hugo pre process DBG] destination heading: %s" heading-title)
                             (org-element-set-contents link-copy heading-title)))
-                        (org-element-set-element link link-copy))))))))
 
           ;; Workaround to prevent exporting of empty special blocks.
           (org-element-map ast 'special-block
             (lambda (block)
               (unless (org-element-contents block)
                 (org-element-adopt-elements block ""))))
+                        (org-element-set-element link link-copy))))))
+              nil))
 
           ;; Turn the AST with updated links into an Org document.
           (insert (org-element-interpret-data ast))

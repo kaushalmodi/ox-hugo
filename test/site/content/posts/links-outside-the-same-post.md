@@ -53,6 +53,7 @@ resolved to the containing post.
 -   Link to subtree by CUSTOM_ID: [Link destination]({{< relref "link-destination" >}})
 -   Link to subtree by ID: [Link destination]({{< relref "link-destination" >}})
 -   Link to subtree by heading: [Link destination]({{< relref "link-destination" >}})
+-   Link to a subtree with custom Hugo slug: [Slug Front-matter]({{< relref "slug-front-matter" >}})
 
 
 ### Links with descriptions {#links-with-descriptions}
@@ -64,6 +65,7 @@ resolved to the containing post.
 -   [Link to subtree by CUSTOM_ID]({{< relref "link-destination" >}})
 -   [Link to subtree by ID]({{< relref "link-destination" >}})
 -   [Link to subtree by heading]({{< relref "link-destination" >}})
+-   [Link to a subtree with custom Hugo slug]({{< relref "slug-front-matter" >}})
 
 
 ## Internal target {#internal-target}

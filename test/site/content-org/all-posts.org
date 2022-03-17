@@ -241,24 +241,6 @@ Some more text, after image.
 [[/images/org-mode-unicorn-logo.png]]
 
 [[https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728][Discussion]]
-**** COMMENT Below will not work!
-You cannot wrap markdown code inside HTML.
-
-As /rdwatters/ says [[https://discourse.gohugo.io/t/is-it-possible-to-insert-html-code-in-markdown-content/4867/4?u=kaushalmodi][here]],
-#+begin_quote
-HTML can be part of markdown because HTML-inside-markdown is part of
-the spec. That said, remember that the spec disallows markdown nested
-inside of HTML. So if you create a div, just make sure everything
-inside that div is valid HTML.
-#+end_quote
-
-#+begin_export md
-<div class="inset">
-#+end_export
-[[/images/org-mode-unicorn-logo.png]]
-#+begin_export md
-</div>
-#+end_export
 *** Setting =alt= parameter
 [[https://www.reddit.com/r/emacs/comments/71wy6n/orgmode_as_a_markup_language_does_make_sense_even/dnhqudn/][Reference]]
 #+attr_html: :alt Org-mode Unicorn Logo
@@ -363,10 +345,28 @@ Rendered this:
 
 So using =#+html: <style>.foo img ... </style>= and =#+attr_html: :class
  foo= as shown in the workaround above.
-*** Other
+**** Other
 Similarly, =:link=, =:attr=, =:attrlink= parameters in =#+attr_html=
 are also supported to set the corresponding parameter in the Hugo
 =figure= shortcode.
+*** Pathogenic case (manual HTML tag wrappers in Org source)
+It works.. but *don't do it!!*
+#+begin_src org
+,#+begin_export html
+<div class="inset">
+,#+end_export
+[[/images/org-mode-unicorn-logo.png]]
+,#+begin_export html
+</div>
+,#+end_export
+#+end_src
+#+begin_export html
+<div class="inset">
+#+end_export
+[[/images/org-mode-unicorn-logo.png]]
+#+begin_export html
+</div>
+#+end_export
 ** Inlined SVG                                                   :svg:inline:
 :PROPERTIES:
 :EXPORT_FILE_NAME: inlined-svg
@@ -2978,17 +2978,20 @@ Content in the right side section
 :EXPORT_FILE_NAME: _index
 :END:
 This is the content for the "bundles" section landing page.
-** Page Bundle A
+** Page Bundle A (Bundle container)
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: page-bundle-a
 :END:
-*** Page Bundle A
+*** Page Bundle A                                               :leaf_bundle:
 :PROPERTIES:
 :EXPORT_FILE_NAME: index
 :EXPORT_HUGO_RESOURCES: :src "images/copy-of-*.png" :title "First copy of Org mode logo"
 :EXPORT_HUGO_RESOURCES+: :src "copy-2-*.png" :title "Second copy of Org mode logo"
 :END:
 Index page of /Page Bundle A/.
+
+- [[*Page Bundle B][Link to Leaf Bundle B]]
+- [[*Branch Bundle C][Link to Branch Bundle C]]
 **** Link to images not in the current directory
 ***** Source path contains =/static/=
 When path contains =/static/=, the path translations are the exact
@@ -3043,14 +3046,27 @@ See [[/images-in-content/page-bundle-images-in-same-dir/][this other test]] for 
 :EXPORT_FILE_NAME: bar
 :END:
 "Bar" page in /Page Bundle A/.
-** Page Bundle B
+** Page Bundle B                                                :leaf_bundle:
 :PROPERTIES:
 :EXPORT_FILE_NAME: index
 :EXPORT_HUGO_BUNDLE: page-bundle-b
 :END:
 Index page of /Page Bundle B/.
 
+- [[*Page Bundle A][Link to Leaf Bundle A]]
+- [[*Branch Bundle C][Link to Branch Bundle C]]
+
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
+** Branch Bundle C                                            :branch_bundle:
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: branch-bundle-c
+:EXPORT_FILE_NAME: _index
+:END:
+#+begin_description
+Example branch bundle.
+#+end_description
+- [[*Page Bundle A][Link to Page Bundle A]]
+- [[*Page Bundle B][Link to Page Bundle B]]
 ** Headless Page Bundle                                            :headless:
 *** Headless Page Bundle X
 :PROPERTIES:
@@ -3708,6 +3724,7 @@ resolved to the containing post.
 - Link to subtree by CUSTOM_ID: [[#link-destination]]
 - Link to subtree by ID: [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678]]
 - Link to subtree by heading: [[*Link destination]]
+- Link to a subtree with custom Hugo slug: [[*Slug Front-matter]]
 **** Links with descriptions
 - [[#external-target][Link to CUSTOM_ID outside the same post]]
 - [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb][Link to ID outside the same post]]
@@ -3716,6 +3733,7 @@ resolved to the containing post.
 - [[#link-destination][Link to subtree by CUSTOM_ID]]
 - [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678][Link to subtree by ID]]
 - [[*Link destination][Link to subtree by heading]]
+- [[*Slug Front-matter][Link to a subtree with custom Hugo slug]]
 *** Internal target
 :PROPERTIES:
 :CUSTOM_ID: internal-target

@@ -4734,7 +4734,14 @@ Return output file's name."
                 (org-export--get-buffer-attributes)
                 (org-export-get-environment 'hugo subtreep)))
          (pub-dir (org-hugo--get-pub-dir info))
-         (save-silently t) ;Don't print "Saving file .." for each exported file
+         ;; Don't print "Saving file .." for each exported file. This
+         ;; works in interactive mode i.e. when exporting posts from
+         ;; within emacs.  But in --batch mode, setting
+         ;; `save-silently' to t, ironically prints a blank line
+         ;; instead of the "Saving file .." message.  So leave this
+         ;; variable value at nil for --batch runs.
+         (save-silently (unless noninteractive
+                          t))
          (outfile (org-export-output-file-name ".md" subtreep pub-dir)))
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (prog1

@@ -155,6 +155,25 @@ Examples:
 (defvar org-hugo--trim-post-marker "<!-- trim-post -->"
   "Special string to mark where whitespace should be trimmed after an element.")
 
+(defvar org-hugo--opened-buffers '()
+  "List of buffers opened during an export, which will be auto-closed at the end.
+
+An export operation might need to open files for resolving links
+pointing to other Org files or temporary buffers for
+pre-processing an Org file.  Each buffer opened during an Ox-Hugo
+export gets added to this list, and they all are auto-closed at
+the end of the export in `org-hugo--after-all-exports-function'.")
+
+(defvar org-hugo--disable-after-all-exports-hook nil
+  "If set, `org-hugo--after-all-exports-function' function is not called.
+
+This variable is set internally by `org-hugo-export-wim-to-md'
+when its ALL-SUBTREES arg is set to a non-nil value.
+
+Setting this to non-nil will lead to slow or incorrect
+exports. This variable is for internal use only, and must not be
+modified.")
+
 (defconst org-hugo--preprocess-buffer t
   "Enable pre-processing of the current Org buffer.
 
@@ -811,7 +830,7 @@ This parameter is used in `org-hugo-src-block'.
 
 This advice is added to the ORIG-FUN only while an ox-hugo export
 is in progress.  See `org-hugo--before-export-function' and
-`org-hugo--after-export-function'."
+`org-hugo--after-1-export-function'."
   (let* ((param-keys-to-be-retained '(:hl_lines :linenos :front_matter_extra))
          (info (car args))
          (parameters (nth 2 info))
@@ -861,8 +880,7 @@ https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=6b2a7cb20b357e73
   "Function to be run before an ox-hugo export.
 
 This function is called in the very beginning of
-`org-hugo-export-to-md', `org-hugo-export-as-md' and
-`org-hugo-publish-to-md'.
+`org-hugo-export-to-md' and `org-hugo-export-as-md'.
 
 SUBTREEP is non-nil for subtree-based exports.
 
@@ -873,12 +891,14 @@ This is an internal function."
   (advice-add 'org-babel-exp-code :around #'org-hugo--org-babel-exp-code)
   (advice-add 'org-babel--string-to-number :override #'org-hugo--org-babel--string-to-number))
 
-(defun org-hugo--after-export-function (info outfile)
-  "Function to be run after an ox-hugo export.
+(defun org-hugo--after-1-export-function (info outfile)
+  "Function to be run after exporting one post.
 
-This function is called in the very end of
-`org-hugo-export-to-md', `org-hugo-export-as-md' and
-`org-hugo-publish-to-md'.
+The post could be exported using the subtree-based or file-based
+method.
+
+This function is called in the end of `org-hugo-export-to-md',
+and `org-hugo-export-as-md'.
 
 INFO is a plist used as a communication channel.
 
@@ -895,6 +915,19 @@ This is an internal function."
     (org-hugo-pandoc-cite--parse-citations-maybe info))
   (setq org-hugo--fm nil)
   (setq org-hugo--fm-yaml nil))
+
+(defun org-hugo--after-all-exports-function ()
+  "Function to be run after Ox-Hugo exports all the posts.
+
+This function is called in the end of
+`org-hugo-export-wim-to-md', `org-hugo-export-to-md' and
+`org-hugo-export-as-md' (if its ALL-SUBTREES arg is non-nil).
+
+This is an internal function."
+  ;; Kill all the buffers opened by during an export.
+  (dolist (buf org-hugo--opened-buffers)
+    (kill-buffer buf))
+  (setq org-hugo--opened-buffers nil))
 
 ;;;; HTMLized section number for heading
 (defun org-hugo--get-heading-number (heading info &optional toc)
@@ -2248,6 +2281,17 @@ Throw an error if no block contains REF."
         info 'first-match)
       (signal 'org-link-broken (list ref))))
 
+(defun org-hugo--org-mode-light ()
+  "Enable set current buffer's `major-mode' to `org-mode' quickly.
+
+It is necessary for the `major-mode' to be `org-mode' for many
+functions like `org-link-search'."
+  (unless (derived-mode-p 'org-mode)
+    (let ((inhibit-modification-hooks t)
+          (org-mode-hook nil)   ;Don't run any Org mode hook functions
+          (org-inhibit-startup t)) ;Don't run any Org buffer startup functions
+      (org-mode))))
+
 (defun org-hugo--search-and-get-anchor (org-file search-str info)
   "Return HTML anchor for the point where SEARCH-STR is found in ORG-FILE.
 
@@ -2267,33 +2311,31 @@ INFO is a plist used as a communication channel."
     (unless (file-exists-p org-file)
       (error "[org-hugo--search-and-get-anchor] Unable to open Org file `%s'" org-file))
     (with-current-buffer (find-file-noselect org-file)
-      (let ((inhibit-modification-hooks t)
-            (org-mode-hook nil)
-            (org-inhibit-startup t))
-        ;; `org-mode' needs to be loaded for `org-link-search' to work
-        ;; correctly. Otherwise `org-link-search' returns starting
-        ;; points for incorrect subtrees.
-        (org-mode)
-        (org-export-get-environment)        ;Eval #+bind keywords, etc.
-        (org-link-search search-str) ;This is extracted from the `org-open-file' function.
-        (setq elem (org-element-at-point))
-        (cond
-         ((equal (org-element-type elem) 'headline)
-          (setq anchor (org-hugo--get-anchor elem info)))
-         (t
-          ;; If current point has an Org Target, get the target anchor.
-          (let ((target-elem (org-element-target-parser)))
-            (when (equal (org-element-type target-elem) 'target)
-              (setq anchor (org-blackfriday--get-target-anchor target-elem))))))
-        (when (org-string-nw-p anchor)
-          ;; If the element has the `:EXPORT_FILE_NAME' it's not a
-          ;; sub-heading, but the subtree's main heading.  Don't prefix
-          ;; the "#" in that case.
-          (unless (org-export-get-node-property :EXPORT_FILE_NAME elem nil)
-            (setq anchor (format "#%s" anchor)))))
+      (unless buffer
+        (add-to-list 'org-hugo--opened-buffers (current-buffer)))
+      ;; `org-mode' needs to be loaded for `org-link-search' to work
+      ;; correctly. Otherwise `org-link-search' returns starting
+      ;; points for incorrect subtrees.
+      (org-hugo--org-mode-light)
+      (org-export-get-environment) ;Eval #+bind keywords, etc.
+      (org-link-search search-str) ;This is extracted from the `org-open-file' function.
+      (setq elem (org-element-at-point))
+      (cond
+       ((equal (org-element-type elem) 'headline)
+        (setq anchor (org-hugo--get-anchor elem info)))
+       (t
+        ;; If current point has an Org Target, get the target anchor.
+        (let ((target-elem (org-element-target-parser)))
+          (when (equal (org-element-type target-elem) 'target)
+            (setq anchor (org-blackfriday--get-target-anchor target-elem))))))
+      (when (org-string-nw-p anchor)
+        ;; If the element has the `:EXPORT_FILE_NAME' it's not a
+        ;; sub-heading, but the subtree's main heading.  Don't prefix
+        ;; the "#" in that case.
+        (unless (org-export-get-node-property :EXPORT_FILE_NAME elem nil)
+          (setq anchor (format "#%s" anchor))))
       ;; (message "[search and get anchor DBG] anchor: %S" anchor)
-      (unless buffer ;Kill the buffer if it wasn't open already
-        (kill-buffer (current-buffer))))
+      )
     anchor))
 
 (defun org-hugo-link (link desc info)
@@ -2710,6 +2752,8 @@ INFO is a plist used as a communication channel."
          (id-buffer (get-file-buffer id-file))) ;nil if `id-file' buffer is not already open
     ;; (message "[org-hugo-link--heading-anchor-maybe DBG] id-loc: %S" id-loc)
     (with-current-buffer (or id-buffer (find-file-noselect id-file :nowarn))
+      (unless id-buffer
+        (add-to-list 'org-hugo--opened-buffers (current-buffer)))
       (org-export-get-environment)        ;Eval #+bind keywords, etc.
       (goto-char id-pos)
       (let* ((elem (org-element-at-point))
@@ -2719,8 +2763,6 @@ INFO is a plist used as a communication channel."
         ;; (message "[org-hugo-link--heading-anchor-maybe DBG] elem type: %S" (org-element-type elem))
         ;; (message "[org-hugo-link--heading-anchor-maybe DBG] elem: %S" elem)
         ;; (message "[org-hugo-link--heading-anchor-maybe DBG] anchor: %S" anchor)
-        (unless id-buffer ;Kill the buffer with ID if it wasn't open already
-          (kill-buffer (current-buffer)))
         anchor))))
 
 ;;;;; Helpers
@@ -4436,7 +4478,8 @@ subtree-number being exported.
               ;; already be pre-processed in
               ;; `org-hugo-export-wim-to-md', so do not do that again.
               (if all-subtrees
-                  (setq ret (org-hugo-export-to-md async :subtreep visible-only))
+                  (let ((org-hugo--disable-after-all-exports-hook t))
+                    (setq ret (org-hugo-export-to-md async :subtreep visible-only)))
 
                 ;; Do the buffer pre-processing only if the user is
                 ;; exporting only the current valid Hugo post subtree.
@@ -4444,9 +4487,9 @@ subtree-number being exported.
                   (if org-hugo--preprocess-buffer
                       (let ((buffer (org-hugo--get-pre-processed-buffer)))
                         (with-current-buffer buffer
+                          (add-to-list 'org-hugo--opened-buffers buffer)
                           (goto-char (org-find-olp current-outline-path :this-buffer))
-                          (setq ret (org-hugo-export-to-md async :subtreep visible-only)))
-                        (kill-buffer buffer))
+                          (setq ret (org-hugo-export-to-md async :subtreep visible-only))))
                     (progn
                       (goto-char (org-find-olp current-outline-path :this-buffer))
                       (setq ret (org-hugo-export-to-md async :subtreep visible-only)))))))))
@@ -4575,13 +4618,8 @@ links."
             (bound-variables (org-export--list-bound-variables))
             (buffer (generate-new-buffer (concat pre-processed-buffer-prefix (buffer-name) " *"))))
         (with-current-buffer buffer
-          (let ((inhibit-modification-hooks t)
-                (org-mode-hook nil)
-                (org-inhibit-startup t)
-                vars)
-
-            (org-mode)
-
+          (let (vars)
+            (org-hugo--org-mode-light)
             ;; Copy specific buffer local variables and variables set
             ;; through BIND keywords.  Below snippet is copied from
             ;; ox.el -> `org-export--generate-copy-script'.
@@ -4647,7 +4685,8 @@ Return the buffer the export happened to."
     (prog1
         (org-export-to-buffer 'hugo "*Org Hugo Export*"
           async subtreep visible-only nil nil (lambda () (text-mode)))
-      (org-hugo--after-export-function info nil))))
+      (org-hugo--after-1-export-function info nil)
+      (org-hugo--after-all-exports-function))))
 
 ;;;###autoload
 (defun org-hugo-export-to-md (&optional async subtreep visible-only)
@@ -4692,7 +4731,9 @@ Return output file's name."
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (prog1
         (org-export-to-file 'hugo outfile async subtreep visible-only)
-      (org-hugo--after-export-function info outfile))))
+      (org-hugo--after-1-export-function info outfile)
+      (unless org-hugo--disable-after-all-exports-hook
+        (org-hugo--after-all-exports-function)))))
 
 ;;;###autoload
 (defun org-hugo-export-wim-to-md (&optional all-subtrees async visible-only noerror)
@@ -4749,6 +4790,7 @@ The optional argument NOERROR is passed to
          (if org-hugo--preprocess-buffer
              (let ((buffer (org-hugo--get-pre-processed-buffer)))
                (with-current-buffer buffer
+                 (add-to-list 'org-hugo--opened-buffers buffer)
                  (setq ret (org-map-entries
                             (lambda ()
                               (org-hugo--export-subtree-to-md
@@ -4756,8 +4798,7 @@ The optional argument NOERROR is passed to
                             ;; Export only the subtrees where
                             ;; EXPORT_FILE_NAME property is not
                             ;; empty.
-                            "EXPORT_FILE_NAME<>\"\""))
-                 (kill-buffer buffer)))
+                            "EXPORT_FILE_NAME<>\"\""))))
            (setq ret (org-map-entries
                       (lambda ()
                         (org-hugo--export-subtree-to-md
@@ -4769,7 +4810,8 @@ The optional argument NOERROR is passed to
          (message "[ox-hugo] Exported %d subtree%s from %s"
                   org-hugo--subtree-count
                   (if (= 1 org-hugo--subtree-count) "" "s")
-                  f-or-b-name))
+                  f-or-b-name)
+         (org-hugo--after-all-exports-function))
 
         ;; Publish only the current valid Hugo post subtree.  When
         ;; exporting only one subtree, buffer pre-processing is done

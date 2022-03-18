@@ -267,10 +267,13 @@ to be installed.")
   ;; tests work.
   (defun ox-hugo-test/current-time-override (&rest args)
     "Hard-code the 'current time' so that the lastmod tests are reproducible.
+
+`ox-hugo' uses `org-current-time' to determine the \"lastmod\" value.
+
 Fake current time: 2100/12/21 00:00:00 (arbitrary)."
     (encode-time 0 0 0 21 12 2100))
-  (advice-add 'current-time :override #'ox-hugo-test/current-time-override)
-  ;; (advice-remove 'current-time #'ox-hugo-test/current-time-override)
+  (advice-add 'org-current-time :override #'ox-hugo-test/current-time-override)
+  ;; (advice-remove 'org-current-time #'ox-hugo-test/current-time-override)
 
   ;; issue # 272
   (load (expand-file-name "test/issue-272-chkbox-items-to-front-matter.el"

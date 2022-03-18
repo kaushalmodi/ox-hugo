@@ -2248,6 +2248,17 @@ Throw an error if no block contains REF."
         info 'first-match)
       (signal 'org-link-broken (list ref))))
 
+(defun org-hugo--org-mode-light ()
+  "Enable set current buffer's `major-mode' to `org-mode' quickly.
+
+It is necessary for the `major-mode' to be `org-mode' for many
+functions like `org-link-search'."
+  (unless (derived-mode-p 'org-mode)
+    (let ((inhibit-modification-hooks t)
+          (org-mode-hook nil)   ;Don't run any Org mode hook functions
+          (org-inhibit-startup t)) ;Don't run any Org buffer startup functions
+      (org-mode))))
+
 (defun org-hugo--search-and-get-anchor (org-file search-str info)
   "Return HTML anchor for the point where SEARCH-STR is found in ORG-FILE.
 
@@ -2267,30 +2278,26 @@ INFO is a plist used as a communication channel."
     (unless (file-exists-p org-file)
       (error "[org-hugo--search-and-get-anchor] Unable to open Org file `%s'" org-file))
     (with-current-buffer (find-file-noselect org-file)
-      (let ((inhibit-modification-hooks t)
-            (org-mode-hook nil)
-            (org-inhibit-startup t))
-        ;; `org-mode' needs to be loaded for `org-link-search' to work
-        ;; correctly. Otherwise `org-link-search' returns starting
-        ;; points for incorrect subtrees.
-        (org-mode)
-        (org-export-get-environment)        ;Eval #+bind keywords, etc.
-        (org-link-search search-str) ;This is extracted from the `org-open-file' function.
-        (setq elem (org-element-at-point))
-        (cond
-         ((equal (org-element-type elem) 'headline)
-          (setq anchor (org-hugo--get-anchor elem info)))
-         (t
-          ;; If current point has an Org Target, get the target anchor.
-          (let ((target-elem (org-element-target-parser)))
-            (when (equal (org-element-type target-elem) 'target)
-              (setq anchor (org-blackfriday--get-target-anchor target-elem))))))
-        (when (org-string-nw-p anchor)
-          ;; If the element has the `:EXPORT_FILE_NAME' it's not a
-          ;; sub-heading, but the subtree's main heading.  Don't prefix
-          ;; the "#" in that case.
-          (unless (org-export-get-node-property :EXPORT_FILE_NAME elem nil)
-            (setq anchor (format "#%s" anchor)))))
+      ;; `org-mode' needs to be loaded for `org-link-search' to work
+      ;; correctly. Otherwise `org-link-search' returns starting
+      ;; points for incorrect subtrees.
+      (org-hugo--org-mode-light)
+      (org-link-search search-str) ;This is extracted from the `org-open-file' function.
+      (setq elem (org-element-at-point))
+      (cond
+       ((equal (org-element-type elem) 'headline)
+        (setq anchor (org-hugo--get-anchor elem info)))
+       (t
+        ;; If current point has an Org Target, get the target anchor.
+        (let ((target-elem (org-element-target-parser)))
+          (when (equal (org-element-type target-elem) 'target)
+            (setq anchor (org-blackfriday--get-target-anchor target-elem))))))
+      (when (org-string-nw-p anchor)
+        ;; If the element has the `:EXPORT_FILE_NAME' it's not a
+        ;; sub-heading, but the subtree's main heading.  Don't prefix
+        ;; the "#" in that case.
+        (unless (org-export-get-node-property :EXPORT_FILE_NAME elem nil)
+          (setq anchor (format "#%s" anchor))))
       ;; (message "[search and get anchor DBG] anchor: %S" anchor)
       (unless buffer ;Kill the buffer if it wasn't open already
         (kill-buffer (current-buffer))))
@@ -4575,13 +4582,8 @@ links."
             (bound-variables (org-export--list-bound-variables))
             (buffer (generate-new-buffer (concat pre-processed-buffer-prefix (buffer-name) " *"))))
         (with-current-buffer buffer
-          (let ((inhibit-modification-hooks t)
-                (org-mode-hook nil)
-                (org-inhibit-startup t)
-                vars)
-
-            (org-mode)
-
+          (let (vars)
+            (org-hugo--org-mode-light)
             ;; Copy specific buffer local variables and variables set
             ;; through BIND keywords.  Below snippet is copied from
             ;; ox.el -> `org-export--generate-copy-script'.

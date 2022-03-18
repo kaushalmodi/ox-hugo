@@ -644,6 +644,14 @@ This post must not be exported as it is tagged =noexport=.
 :EXPORT_FILE_NAME: commented-post
 :END:
 This post must not be exported as it is commented.
+* COMMENT Commented parent subtree
+** Dummy sub heading
+*** Nested post that should not export
+:PROPERTIES:
+:EXPORT_FILE_NAME: nested-post-that-should-not-export
+:END:
+This post must not be exported as one of its parent subtrees is
+commented.
 * Section                                                           :section:
 ** Articles
 :PROPERTIES:

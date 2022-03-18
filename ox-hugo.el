@@ -4423,7 +4423,10 @@ subtree-number being exported.
                       (org-export--get-buffer-attributes)
                       (org-export-get-environment 'hugo subtree)))
                (exclude-tags (plist-get info :exclude-tags))
-               (is-commented (org-element-property :commentedp subtree))
+               (is-commented (cdr (org-hugo--get-elem-with-prop :commentedp)))
+               (commented-heading (when is-commented
+                                    (org-element-property :title
+                                      (car (org-hugo--get-elem-with-prop :commentedp)))))
                is-excluded matched-exclude-tag ret)
           ;; (message "[org-hugo--export-subtree-to-md DBG] exclude-tags =
           ;; %s" exclude-tags)
@@ -4441,8 +4444,10 @@ subtree-number being exported.
           (let ((title (org-element-property :title subtree)))
             (cond
              (is-commented
-              (message "[ox-hugo] `%s' was not exported as that subtree is commented"
-                       title))
+              (if (string= title commented-heading)
+                  (message "[ox-hugo] `%s' was not exported as it is commented out" title)
+                (message "[ox-hugo] `%s' was not exported as one of its parent subtrees `%s' is commented out"
+                         title commented-heading)))
              (is-excluded
               (message "[ox-hugo] `%s' was not exported as it is tagged with an exclude tag `%s'"
                        title matched-exclude-tag))

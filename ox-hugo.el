@@ -2317,6 +2317,7 @@ INFO is a plist used as a communication channel."
       ;; correctly. Otherwise `org-link-search' returns starting
       ;; points for incorrect subtrees.
       (org-hugo--org-mode-light)
+      (org-export-get-environment) ;Eval #+bind keywords, etc.
       (org-link-search search-str) ;This is extracted from the `org-open-file' function.
       (setq elem (org-element-at-point))
       (cond

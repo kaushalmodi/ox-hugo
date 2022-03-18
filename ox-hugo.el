@@ -4280,8 +4280,10 @@ the heading of that subtree.
 
 Return nil if a valid Hugo post subtree is not found.  The point
 will be moved in this case too."
-  (let ((subtree (car (org-hugo--get-elem-with-prop :EXPORT_FILE_NAME))))
-    (goto-char (org-element-property :begin subtree))
+  (let* ((subtree (car (org-hugo--get-elem-with-prop :EXPORT_FILE_NAME)))
+         (point (org-element-property :begin subtree))) ;`point' will be nil if `subtree' is nil
+    (when point
+      (goto-char point))
     subtree))
 
 (defun org-hugo--get-post-subtree-coordinates (subtree)

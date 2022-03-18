@@ -4727,6 +4727,7 @@ Return output file's name."
                 (org-export--get-buffer-attributes)
                 (org-export-get-environment 'hugo subtreep)))
          (pub-dir (org-hugo--get-pub-dir info))
+         (save-silently t) ;Don't print "Saving file .." for each exported file
          (outfile (org-export-output-file-name ".md" subtreep pub-dir)))
     ;; (message "[org-hugo-export-to-md DBG] section-dir = %s" section-dir)
     (prog1

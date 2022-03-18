@@ -111,5 +111,33 @@
 <point>"
               (cdr (org-hugo--get-elem-with-prop :EXPORT_HUGO_SECTION))))))
 
+(ert-deftest test-elem/starting-position ()
+  "Test property lookup by specifying the starting position."
+
+  ;; Here, the needed property is not found because the starting
+  ;; position for search is set to the beginning of the buffer.
+  (should
+   (equal nil
+          (org-test-with-parsed-data
+              "
+* Heading 1<point>
+:PROPERTIES:
+:EXPORT_OPTIONS: toc:t
+:END:"
+            (cdr (org-hugo--get-elem-with-prop :EXPORT_OPTIONS 1)))))
+
+  ;; Here, the needed property *is* found because the starting
+  ;; position for search is set correctly, and that overrides the init
+  ;; position set by <point> in this test.
+  (should
+   (string= "toc:t"
+            (org-test-with-parsed-data
+                "<point>
+* Heading 2
+:PROPERTIES:
+:EXPORT_OPTIONS: toc:t
+:END:"
+              (cdr (org-hugo--get-elem-with-prop :EXPORT_OPTIONS 2))))))
+
 
 (provide 'telement)

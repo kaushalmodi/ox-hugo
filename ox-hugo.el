@@ -1910,11 +1910,14 @@ This function will never return nil."
                    "")))
     (substring (md5 title) 0 hash-len)))
 
-(defun org-hugo--get-elem-with-prop (prop &optional _info)
+(defun org-hugo--get-elem-with-prop (prop &optional pom _info)
   "Find the first element with PROP property in the current tree.
 
 PROP is a property symbol with a : prefix, example:
 `:EXPORT_FILE_NAME'.
+
+Optional argument POM is the position or marker from which the
+upward search for PROP should begin.
 
 Return a cons of type (ELEM . PVAL) where ELEM is the element
 containing the property PROP and PVAL is the property's value.
@@ -1926,13 +1929,17 @@ versions for the issue that `org-element-at-point' does not
 return an element with all the inherited properties.  That issue
 is fixed in Org main branch at least as of 2022-03-17."
   (org-with-wide-buffer
+   ;; (message (format "[search prop DBG] point 1 : %S" (point)))
+   (when pom
+     (goto-char pom))
+   ;; (message (format "[search prop DBG] point 2 : %S" (point)))
    (org-back-to-heading-or-point-min :invisible-ok)
    (let ((elem (org-element-at-point))
          (level t)
          pval)
      (catch :found
        (while elem
-         ;; (message (format "[search prop DBG] elem : %S" elem ))
+         ;; (message (format "[search prop DBG] prop %S, elem : %S" prop elem))
          (setq pval (org-element-property prop elem))
          ;; (message "[search prop DBG] level %S, pval %S" level pval)
          (when (or pval (null level))
@@ -1973,7 +1980,7 @@ INFO is a plist used as a communication channel.
 Return nil if none of the above are true."
   (org-with-wide-buffer
    (let ((heading-begin (org-element-property :begin heading)))
-     (when (numberp heading-begin)
+     (when heading-begin
        (goto-char heading-begin)))
    (let ((file (org-string-nw-p (org-export-get-node-property :EXPORT_FILE_NAME heading inherit-export-file-name)))
          bundle slug)
@@ -4489,7 +4496,10 @@ links."
                                                            ;; in a parent heading.
                                                            (plist-get
                                                             (org-export--parse-option-keyword
-                                                             (or (cdr (org-hugo--get-elem-with-prop :EXPORT_OPTIONS)) ""))
+                                                             (or (cdr (org-hugo--get-elem-with-prop
+                                                                       :EXPORT_OPTIONS
+                                                                       (org-element-property :begin el)))
+                                                                 ""))
                                                             :with-broken-links))
                                                  (user-error "Unable to resolve link: %S" (nth 1 err))))))
                                         (org-export-resolve-id-link el (org-export--collect-tree-properties ast info))))

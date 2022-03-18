@@ -174,6 +174,15 @@ Setting this to non-nil will lead to slow or incorrect
 exports. This variable is for internal use only, and must not be
 modified.")
 
+(defvar org-hugo--all-subtrees-export--functions-to-silence
+  '(org-babel-exp-src-block ;Don't print "org-babel-exp process .." messages
+    write-region            ;Don't print "Wrote .." messages
+    table-generate-source   ;Don't print "Generating source..." messages
+    )
+  "List of functions to silence in Echo and Messages buffers.
+
+These functions are silenced only when ALL-SUBTREES export is done.")
+
 (defconst org-hugo--preprocess-buffer t
   "Enable pre-processing of the current Org buffer.
 
@@ -927,7 +936,10 @@ This is an internal function."
   ;; Kill all the buffers opened by during an export.
   (dolist (buf org-hugo--opened-buffers)
     (kill-buffer buf))
-  (setq org-hugo--opened-buffers nil))
+  (setq org-hugo--opened-buffers nil)
+
+  (dolist (fn org-hugo--all-subtrees-export--functions-to-silence)
+    (advice-remove fn #'org-hugo--advice-silence-messages)))
 
 ;;;; HTMLized section number for heading
 (defun org-hugo--get-heading-number (heading info &optional toc)
@@ -1615,6 +1627,7 @@ INFO is a plist used as a communication channel."
          (member lang-2chars '("zh"      ;"zh", "zh_CH", ..
                                "ja"))))) ;"ja", ..
 
+;;;; Format tags into HTML
 (defun org-hugo--tags (tags info)
   "Format TAGS into HTML.
 INFO is a plist containing export options.
@@ -1631,6 +1644,7 @@ This function is almost identical to `org-html--tags' from
                        tag))
              tags ""))))
 
+;;;; Check if the buffer has any valid post subtree
 (defun org-hugo--buffer-has-valid-post-subtree-p ()
   "Return non-nil if the current Org buffer has at least one valid post subtree.
 
@@ -1642,6 +1656,12 @@ set to a non-empty string."
       (lambda () (throw 'found t)) ;Return quickly on finding the first match
       "EXPORT_FILE_NAME<>\"\""))))
 
+;;;; Advice for silencing messages
+(defun org-hugo--advice-silence-messages (orig-fun &rest args)
+  "Advice function that silences all messages in ORIG-FUN."
+  (let ((inhibit-message t)      ;Don't show the messages in Echo area
+        (message-log-max nil))   ;Don't show the messages in the *Messages* buffer
+    (apply orig-fun args)))
 
 
 ;;; Transcode Functions
@@ -4801,32 +4821,43 @@ The optional argument NOERROR is passed to
        (cond
         ;; Publish all subtrees in the current Org buffer.
         ((and buf-has-subtree all-subtrees)
-         (setq org-hugo--subtree-count 0) ;Reset the subtree count
-         (if org-hugo--preprocess-buffer
-             (let ((buffer (org-hugo--get-pre-processed-buffer)))
-               (with-current-buffer buffer
-                 (add-to-list 'org-hugo--opened-buffers buffer)
-                 (setq ret (org-map-entries
-                            (lambda ()
-                              (org-hugo--export-subtree-to-md
-                               async visible-only :all-subtrees))
-                            ;; Export only the subtrees where
-                            ;; EXPORT_FILE_NAME property is not
-                            ;; empty.
-                            "EXPORT_FILE_NAME<>\"\""))))
-           (setq ret (org-map-entries
-                      (lambda ()
-                        (org-hugo--export-subtree-to-md
-                         async visible-only :all-subtrees))
-                      ;; Export only the subtrees where
-                      ;; EXPORT_FILE_NAME property is not
-                      ;; empty.
-                      "EXPORT_FILE_NAME<>\"\"")))
-         (message "[ox-hugo] Exported %d subtree%s from %s"
-                  org-hugo--subtree-count
-                  (if (= 1 org-hugo--subtree-count) "" "s")
-                  f-or-b-name)
-         (org-hugo--after-all-exports-function))
+         (let ((start-time (current-time)))
+           (setq org-hugo--subtree-count 0) ;Reset the subtree count
+
+           ;; Make the *Messages* buffer less noisy when exporting all
+           ;; subtrees.
+           (dolist (fn org-hugo--all-subtrees-export--functions-to-silence)
+             (advice-add fn :around #'org-hugo--advice-silence-messages))
+
+           (if org-hugo--preprocess-buffer
+               (let ((buffer (org-hugo--get-pre-processed-buffer)))
+                 (with-current-buffer buffer
+                   (add-to-list 'org-hugo--opened-buffers buffer)
+                   (setq ret (org-map-entries
+                              (lambda ()
+                                (org-hugo--export-subtree-to-md
+                                 async visible-only :all-subtrees))
+                              ;; Export only the subtrees where
+                              ;; EXPORT_FILE_NAME property is not
+                              ;; empty.
+                              "EXPORT_FILE_NAME<>\"\""))))
+             (setq ret (org-map-entries
+                        (lambda ()
+                          (org-hugo--export-subtree-to-md
+                           async visible-only :all-subtrees))
+                        ;; Export only the subtrees where
+                        ;; EXPORT_FILE_NAME property is not
+                        ;; empty.
+                        "EXPORT_FILE_NAME<>\"\"")))
+           (let* ((elapsed-time (float-time (time-since start-time)))
+                  (avg-time (/ elapsed-time org-hugo--subtree-count)))
+             (message "[ox-hugo] Exported %d subtree%s from %s in %0.3fs (%0.3fs avg)"
+                      org-hugo--subtree-count
+                      (if (= 1 org-hugo--subtree-count) "" "s")
+                      f-or-b-name
+                      elapsed-time
+                      avg-time))
+           (org-hugo--after-all-exports-function)))
 
         ;; Publish only the current valid Hugo post subtree.  When
         ;; exporting only one subtree, buffer pre-processing is done

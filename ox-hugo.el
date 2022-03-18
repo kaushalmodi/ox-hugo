@@ -4849,7 +4849,8 @@ The optional argument NOERROR is passed to
                         ;; EXPORT_FILE_NAME property is not
                         ;; empty.
                         "EXPORT_FILE_NAME<>\"\"")))
-           (let* ((elapsed-time (float-time (time-since start-time)))
+           (let* ((finish-time (current-time))
+                  (elapsed-time (float-time (time-subtract finish-time start-time)))
                   (avg-time (/ elapsed-time org-hugo--subtree-count)))
              (message "[ox-hugo] Exported %d subtree%s from %s in %0.3fs (%0.3fs avg)"
                       org-hugo--subtree-count

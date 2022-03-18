@@ -4477,7 +4477,6 @@ links."
               (let ((type (org-element-property :type el)))
                 (when (member type '("custom-id" "id" "fuzzy"))
                   (let* ((raw-link (org-element-property :raw-link el))
-
                          (destination (if (string= type "fuzzy")
                                           (progn
                                             ;; Derived from ox.el -> `org-export-data'.  If a broken link is seen
@@ -4490,7 +4489,7 @@ links."
                                                            ;; in a parent heading.
                                                            (plist-get
                                                             (org-export--parse-option-keyword
-                                                             (cdr (org-hugo--get-elem-with-prop :EXPORT_OPTIONS)))
+                                                             (or (cdr (org-hugo--get-elem-with-prop :EXPORT_OPTIONS)) ""))
                                                             :with-broken-links))
                                                  (user-error "Unable to resolve link: %S" (nth 1 err))))))
                                         (org-export-resolve-id-link el (org-export--collect-tree-properties ast info))))

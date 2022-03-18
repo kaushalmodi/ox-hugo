@@ -1910,31 +1910,42 @@ This function will never return nil."
                    "")))
     (substring (md5 title) 0 hash-len)))
 
-(defun org-hugo--search-prop-in-parents (prop &optional _info)
-  "Return PROP if found in any of the parent headings.
+(defun org-hugo--get-elem-with-prop (prop &optional _info)
+  "Find the first element with PROP property in the current tree.
 
 PROP is a property symbol with a : prefix, example:
 `:EXPORT_FILE_NAME'.
 
-This function is creation as a workaround for Org 9.5 and older
+Return a cons of type (ELEM . PVAL) where ELEM is the element
+containing the property PROP and PVAL is the property's value.
+
+Return nil if the PROP is not found or if the PVAL is nil.
+
+This function is created as a workaround for Org 9.5 and older
 versions for the issue that `org-element-at-point' does not
 return an element with all the inherited properties.  That issue
 is fixed in Org main branch at least as of 2022-03-17."
   (org-with-wide-buffer
    (org-back-to-heading-or-point-min :invisible-ok)
-   (let ((el (org-element-at-point))
+   (let ((elem (org-element-at-point))
          (level t)
-         val)
+         pval)
      (catch :found
-       (while el
-         ;; (message (format "[search prop DBG] el : %S" el ))
-         (setq val (org-element-property prop el))
-         ;; (message "[search prop DBG] level %S, val %S" level val)
-         (when (or val (null level))
-           (throw :found val))
+       (while elem
+         ;; (message (format "[search prop DBG] elem : %S" elem ))
+         (setq pval (org-element-property prop elem))
+         ;; (message "[search prop DBG] level %S, pval %S" level pval)
+         (when (or pval (null level))
+           (if (null pval)
+               ;; There's probably no value to distinguish
+               ;; between the case where a property is not
+               ;; found, or the case where the property
+               ;; value is nil. Revisit this if that
+               ;; changes.
+               (throw :found nil)
+             (throw :found (cons elem pval))))
          (setq level (org-up-heading-safe))
-         (setq el (org-element-at-point))))
-     val)))
+         (setq elem (org-element-at-point)))))))
 
 (defun org-hugo--heading-get-slug (heading info &optional inherit-export-file-name)
   "Return the slug string derived from an Org HEADING element.
@@ -1966,7 +1977,7 @@ Return nil if none of the above are true."
     (when file
       (setq bundle (org-string-nw-p (or (org-export-get-node-property :EXPORT_HUGO_BUNDLE heading :inherited)
                                         (plist-get info :hugo-bundle)
-                                        (org-hugo--search-prop-in-parents :EXPORT_HUGO_BUNDLE))))
+                                        (cdr (org-hugo--get-elem-with-prop :EXPORT_HUGO_BUNDLE)))))
       ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_HUGO_BUNDLE: %S" bundle)
 
       (cond
@@ -4216,20 +4227,9 @@ the heading of that subtree.
 
 Return nil if a valid Hugo post subtree is not found.  The point
 will be moved in this case too."
-  (catch 'break
-    (while :infinite
-      (let* ((entry (org-element-at-point))
-             (fname (org-string-nw-p (org-element-property :EXPORT_FILE_NAME entry)))
-             level)
-        (when fname
-          (throw 'break entry))
-        ;; Keep on jumping to the parent heading if the current
-        ;; entry does not have an EXPORT_FILE_NAME property.
-        (setq level (org-up-heading-safe))
-        ;; If no more parent heading exists, break out of the loop
-        ;; and return nil
-        (unless level
-          (throw 'break nil))))))
+  (let ((subtree (car (org-hugo--get-elem-with-prop :EXPORT_FILE_NAME))))
+    (goto-char (org-element-property :begin subtree))
+    subtree))
 
 (defun org-hugo--get-post-subtree-coordinates (subtree)
   "Return the coordinates for the current valid Hugo post SUBTREE.

@@ -4468,13 +4468,7 @@ subtree-number being exported.
 Internal links to other subtrees are converted to external
 links."
   (let ((pre-processed-buffer-prefix "*Ox-hugo Pre-processed "))
-    (when (version< "25.99" emacs-version) ;`kill-matching-buffers' got `:no-ask' arg in emacs 26.1
-      ;; https://git.savannah.gnu.org/cgit/emacs.git/commit/?id=70d01daceddeb4e4c49c79473c81420f65ffd290
-      ;; First kill all the old pre-processed buffers if still left open
-      ;; for any reason.
-      (kill-matching-buffers (regexp-quote pre-processed-buffer-prefix) :internal-too :no-ask))
-    (let* ((buffer (generate-new-buffer (concat pre-processed-buffer-prefix (buffer-name) " *")))
-           ;; Create an abstract syntax tree (AST) of the Org document
+    (let* (;; Create an abstract syntax tree (AST) of the Org document
            ;; in the current buffer.
            (ast (org-element-parse-buffer))
            (org-use-property-inheritance (org-hugo--selective-property-inheritance))
@@ -4482,10 +4476,7 @@ links."
                   (list :parse-tree ast)
                   (org-export--get-export-attributes 'hugo)
                   (org-export--get-buffer-attributes)
-                  (org-export-get-environment 'hugo)))
-           (local-variables (buffer-local-variables))
-           (bound-variables (org-export--list-bound-variables))
-           vars)
+                  (org-export-get-environment 'hugo))))
 
       ;; Process all link elements in the AST.
       (org-element-map ast '(link special-block)
@@ -4565,34 +4556,47 @@ links."
                 (org-element-adopt-elements el "")))))
           nil)) ;Minor performance optimization: Make `org-element-map' lambda return a nil.
 
-      (with-current-buffer buffer
-        (let ((inhibit-modification-hooks t)
-              (org-mode-hook nil)
-              (org-inhibit-startup t))
+      (when (version< "25.99" emacs-version) ;`kill-matching-buffers' got `:no-ask' arg in emacs 26.1
+        ;; https://git.savannah.gnu.org/cgit/emacs.git/commit/?id=70d01daceddeb4e4c49c79473c81420f65ffd290
+        ;; First kill all the old pre-processed buffers if still left open
+        ;; for any reason.
+        (kill-matching-buffers (regexp-quote pre-processed-buffer-prefix) :internal-too :no-ask))
 
-          (org-mode)
-          ;; Copy specific buffer local variables and variables set
-          ;; through BIND keywords.
-          (dolist (entry local-variables vars)
-            (when (consp entry)
-              (let ((var (car entry))
-                    (val (cdr entry)))
-                (and (not (memq var org-export-ignored-local-variables))
-                     (or (memq var
-                               '(default-directory
-                                  buffer-file-name
-                                  buffer-file-coding-system))
-                         (assq var bound-variables)
-                         (string-match "^\\(org-\\|orgtbl-\\)"
-                                       (symbol-name var)))
-                     ;; Skip unreadable values, as they cannot be
-                     ;; sent to external process.
-                     (or (not val) (ignore-errors (read (format "%S" val))))
-                     (push (set (make-local-variable var) val) vars)))))
-          ;; Turn the AST with updated links into an Org document.
-          (insert (org-element-interpret-data ast))
-          (set-buffer-modified-p nil)))
-      buffer)))
+      ;; Turn the AST with updated links into an Org buffer.
+      (let ((local-variables (buffer-local-variables))
+            (bound-variables (org-export--list-bound-variables))
+            (buffer (generate-new-buffer (concat pre-processed-buffer-prefix (buffer-name) " *"))))
+        (with-current-buffer buffer
+          (let ((inhibit-modification-hooks t)
+                (org-mode-hook nil)
+                (org-inhibit-startup t)
+                vars)
+
+            (org-mode)
+
+            ;; Copy specific buffer local variables and variables set
+            ;; through BIND keywords.  Below snippet is copied from
+            ;; ox.el -> `org-export--generate-copy-script'.
+            (dolist (entry local-variables vars)
+              (when (consp entry)
+                (let ((var (car entry))
+                      (val (cdr entry)))
+                  (and (not (memq var org-export-ignored-local-variables))
+                       (or (memq var
+                                 '(default-directory
+                                    buffer-file-name
+                                    buffer-file-coding-system))
+                           (assq var bound-variables)
+                           (string-match "^\\(org-\\|orgtbl-\\)"
+                                         (symbol-name var)))
+                       ;; Skip unreadable values, as they cannot be
+                       ;; sent to external process.
+                       (or (not val) (ignore-errors (read (format "%S" val))))
+                       (push (set (make-local-variable var) val) vars)))))
+
+            (insert (org-element-interpret-data ast))
+            (set-buffer-modified-p nil)))
+        buffer))))
 
 
 

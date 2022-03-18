@@ -1979,20 +1979,10 @@ Return nil if none of the above are true."
          bundle slug)
      ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_FILE_NAME: %S" file)
      (when file
-       ;; (message "buffer : %S" (current-buffer))
-       ;; (message "point min : %S" (point-min))
-       ;; (message "point max : %S" (point-max))
        (setq bundle (let* ((elem-pval (org-hugo--get-elem-with-prop :EXPORT_HUGO_BUNDLE))
                            (pval (when elem-pval
                                    (cdr elem-pval))))
                       pval))
-       ;; (setq bundle (org-string-nw-p (or (org-export-get-node-property :EXPORT_HUGO_BUNDLE heading :inherited)
-       ;;                                   (plist-get info :hugo-bundle)
-       ;;                                   (cdr (org-hugo--get-elem-with-prop :EXPORT_HUGO_BUNDLE)))))
-
-       ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_HUGO_BUNDLE: %S" bundle)
-       ;; (message "[org-hugo--heading-get-slug DBG] point %S" (point))
-       ;; (message "[org-hugo--heading-get-slug DBG] bundle 2: %S" (cdr (org-hugo--get-elem-with-prop :EXPORT_HUGO_BUNDLE)))
 
        (cond
         ;; Leaf or branch bundle landing page.

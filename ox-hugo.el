@@ -4495,7 +4495,13 @@ links."
                                             (condition-case err
                                                 (org-export-resolve-fuzzy-link el info)
                                               (org-link-broken
-                                               (unless (plist-get info :with-broken-links)
+                                               (unless (or (plist-get info :with-broken-links)
+                                                           ;; Parse the `:EXPORT_OPTIONS' property if set
+                                                           ;; in a parent heading.
+                                                           (plist-get
+                                                            (org-export--parse-option-keyword
+                                                             (cdr (org-hugo--get-elem-with-prop :EXPORT_OPTIONS)))
+                                                            :with-broken-links))
                                                  (user-error "Unable to resolve link: %S" (nth 1 err))))))
                                         (org-export-resolve-id-link el (org-export--collect-tree-properties ast info))))
                          (source-path (org-hugo--heading-get-slug el info :inherit-export-file-name))

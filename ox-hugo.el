@@ -1971,58 +1971,70 @@ value is prepended to all of the above options.
 INFO is a plist used as a communication channel.
 
 Return nil if none of the above are true."
-  (let ((file (org-string-nw-p (org-export-get-node-property :EXPORT_FILE_NAME heading inherit-export-file-name)))
-        bundle slug)
-    ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_FILE_NAME: %S" file)
-    (when file
-      (setq bundle (org-string-nw-p (or (org-export-get-node-property :EXPORT_HUGO_BUNDLE heading :inherited)
-                                        (plist-get info :hugo-bundle)
-                                        (cdr (org-hugo--get-elem-with-prop :EXPORT_HUGO_BUNDLE)))))
-      ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_HUGO_BUNDLE: %S" bundle)
+  (org-with-wide-buffer
+   (goto-char (org-element-property :begin heading))
+   (let ((file (org-string-nw-p (org-export-get-node-property :EXPORT_FILE_NAME heading inherit-export-file-name)))
+         bundle slug)
+     ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_FILE_NAME: %S" file)
+     (when file
+       ;; (message "buffer : %S" (current-buffer))
+       ;; (message "point min : %S" (point-min))
+       ;; (message "point max : %S" (point-max))
+       (setq bundle (let* ((elem-pval (org-hugo--get-elem-with-prop :EXPORT_HUGO_BUNDLE))
+                           (pval (when elem-pval
+                                   (cdr elem-pval))))
+                      pval))
+       ;; (setq bundle (org-string-nw-p (or (org-export-get-node-property :EXPORT_HUGO_BUNDLE heading :inherited)
+       ;;                                   (plist-get info :hugo-bundle)
+       ;;                                   (cdr (org-hugo--get-elem-with-prop :EXPORT_HUGO_BUNDLE)))))
 
-      (cond
-       ;; Leaf or branch bundle landing page.
-       ((and bundle file (member file '("index" ;Leaf bundle
-                                        "_index" ;Branch bundle
-                                        )))
-        (setq slug bundle)
-        ;; (message "[org-hugo--heading-get-slug DBG] bundle slug: %S" slug)
-        )
-       ;; It's a Hugo page bundle, but the file is neither index nor
-       ;; _index. So likely a page in a branch bundle.
-       ((and bundle file)
-        (setq slug (concat (file-name-as-directory bundle) file))
-        ;; (message "[org-hugo--heading-get-slug DBG] branch bundle file slug: %S" slug)
-        )
-       ;; Not a Hugo page bundle.
-       (t
-        (setq slug file)))
+       ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_HUGO_BUNDLE: %S" bundle)
+       ;; (message "[org-hugo--heading-get-slug DBG] point %S" (point))
+       ;; (message "[org-hugo--heading-get-slug DBG] bundle 2: %S" (cdr (org-hugo--get-elem-with-prop :EXPORT_HUGO_BUNDLE)))
 
-      ;; Prefix with section and fragmented sections if any.
-      (let ((pheading heading)
-            section fragment fragments)
-        (setq section (org-string-nw-p
-                       (or (org-export-get-node-property :EXPORT_HUGO_SECTION heading :inherited)
-                           (plist-get info :hugo-section))))
+       (cond
+        ;; Leaf or branch bundle landing page.
+        ((and bundle file (member file '("index" ;Leaf bundle
+                                         "_index" ;Branch bundle
+                                         )))
+         (setq slug bundle)
+         ;; (message "[org-hugo--heading-get-slug DBG] bundle slug: %S" slug)
+         )
+        ;; It's a Hugo page bundle, but the file is neither index nor
+        ;; _index. So likely a page in a branch bundle.
+        ((and bundle file)
+         (setq slug (concat (file-name-as-directory bundle) file))
+         ;; (message "[org-hugo--heading-get-slug DBG] branch bundle file slug: %S" slug)
+         )
+        ;; Not a Hugo page bundle.
+        (t
+         (setq slug file)))
 
-        ;; Iterate over all parents of heading, and collect section
-        ;; path fragments.
-        (while (and pheading
-                    (not (org-export-get-node-property :EXPORT_HUGO_SECTION pheading nil)))
-          ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list.
-          (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* pheading nil))
-            (push fragment fragments))
-          (setq pheading (org-element-property :parent pheading)))
+       ;; Prefix with section and fragmented sections if any.
+       (let ((pheading heading)
+             section fragment fragments)
+         (setq section (org-string-nw-p
+                        (or (org-export-get-node-property :EXPORT_HUGO_SECTION heading :inherited)
+                            (plist-get info :hugo-section))))
 
-        (when section
-          (setq slug (concat (file-name-as-directory section)
-                             (mapconcat #'file-name-as-directory fragments "")
-                             slug)))
-        ;; (message "[org-hugo--heading-get-slug DBG] section: %S" section)
-        ;; (message "[org-hugo--heading-get-slug DBG] section + slug: %S" slug)
-        ))
-    ;; (message "[org-hugo--heading-get-slug DBG] FINAL slug: %S" slug)
-    slug))
+         ;; Iterate over all parents of heading, and collect section
+         ;; path fragments.
+         (while (and pheading
+                     (not (org-export-get-node-property :EXPORT_HUGO_SECTION pheading nil)))
+           ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list.
+           (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* pheading nil))
+             (push fragment fragments))
+           (setq pheading (org-element-property :parent pheading)))
+
+         (when section
+           (setq slug (concat (file-name-as-directory section)
+                              (mapconcat #'file-name-as-directory fragments "")
+                              slug)))
+         ;; (message "[org-hugo--heading-get-slug DBG] section: %S" section)
+         ;; (message "[org-hugo--heading-get-slug DBG] section + slug: %S" slug)
+         ))
+     ;; (message "[org-hugo--heading-get-slug DBG] FINAL slug: %S" slug)
+     slug)))
 
 (defun org-hugo--get-anchor(element info)
   "Return anchor string for Org heading ELEMENT.
@@ -4472,6 +4484,85 @@ links."
            (local-variables (buffer-local-variables))
            (bound-variables (org-export--list-bound-variables))
            vars)
+
+      ;; Process all link elements in the AST.
+      (org-element-map ast '(link special-block)
+        (lambda (el)
+          (let ((el-type (org-element-type el)))
+            (cond
+             ((equal 'link el-type)
+              (let ((type (org-element-property :type el)))
+                (when (member type '("custom-id" "id" "fuzzy"))
+                  (let* ((raw-link (org-element-property :raw-link el))
+
+                         (destination (if (string= type "fuzzy")
+                                          (progn
+                                            ;; Derived from ox.el -> `org-export-data'.  If a broken link is seen
+                                            ;; and if `broken-links' option is not nil, ignore the error.
+                                            (condition-case err
+                                                (org-export-resolve-fuzzy-link el info)
+                                              (org-link-broken
+                                               (unless (plist-get info :with-broken-links)
+                                                 (user-error "Unable to resolve link: %S" (nth 1 err))))))
+                                        (org-export-resolve-id-link el (org-export--collect-tree-properties ast info))))
+                         (source-path (org-hugo--heading-get-slug el info :inherit-export-file-name))
+                         (destination-path (org-hugo--heading-get-slug destination info :inherit-export-file-name))
+                         (destination-type (org-element-type destination)))
+                    ;; (message "[ox-hugo pre process DBG] destination-type : %s" destination-type)
+
+                    ;; Change the link if it points to a valid
+                    ;; destination outside the subtree.
+                    (unless (equal source-path destination-path)
+                      (let ((link-desc (org-element-contents el))
+                            (link-copy (org-element-copy el)))
+                        ;; (message "[ox-hugo pre process DBG] link desc: %s" link-desc)
+                        (apply #'org-element-adopt-elements link-copy link-desc)
+                        (org-element-put-property link-copy :type "file")
+                        (org-element-put-property
+                         link-copy :path
+                         (cond
+                          ;; If the destination is a heading with the
+                          ;; :EXPORT_FILE_NAME property defined, the
+                          ;; link should point to the file (without
+                          ;; anchor).
+                          ((org-element-property :EXPORT_FILE_NAME destination)
+                           (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix))
+                          ;; Hugo only supports anchors to headings,
+                          ;; so if a "fuzzy" type link points to
+                          ;; anything else than a heading, it should
+                          ;; point to the file.
+                          ((and (string= type "fuzzy")
+                                (not (string-prefix-p "*" raw-link)))
+                           (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix))
+                          ;; In "custom-id" type links, the raw-link
+                          ;; matches the anchor of the destination.
+                          ((string= type "custom-id")
+                           (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix "::" raw-link))
+                          ;; In "id" and "fuzzy" type links, the anchor
+                          ;; of the destination is derived from the
+                          ;; :CUSTOM_ID property or the title.
+                          (t
+                           (let ((anchor (org-hugo--get-anchor destination info)))
+                             (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix "::#" anchor)))))
+                        ;; If the link destination is a heading and if
+                        ;; user hasn't set the link description, set the
+                        ;; description to the destination heading title.
+                        (when (and (null link-desc)
+                                   (equal 'headline destination-type))
+                          (let ((heading-title
+                                 (org-export-data-with-backend
+                                  (org-element-property :title destination) 'ascii info)))
+                            ;; (message "[ox-hugo pre process DBG] destination heading: %s" heading-title)
+                            (org-element-set-contents link-copy heading-title)))
+                        (org-element-set-element el link-copy)))))))
+             ((equal 'special-block el-type)
+              ;; Handle empty Org special blocks.  When empty
+              ;; blocks are found, set that elements content as ""
+              ;; instead of nil.
+              (unless (org-element-contents el)
+                (org-element-adopt-elements el "")))))
+          nil)) ;Minor performance optimization: Make `org-element-map' lambda return a nil.
+
       (with-current-buffer buffer
         (let ((inhibit-modification-hooks t)
               (org-mode-hook nil)
@@ -4496,85 +4587,6 @@ links."
                      ;; sent to external process.
                      (or (not val) (ignore-errors (read (format "%S" val))))
                      (push (set (make-local-variable var) val) vars)))))
-
-          ;; Process all link elements in the AST.
-          (org-element-map ast '(link special-block)
-            (lambda (el)
-              (let ((el-type (org-element-type el)))
-                (cond
-                 ((equal 'link el-type)
-                  (let ((type (org-element-property :type el)))
-                    (when (member type '("custom-id" "id" "fuzzy"))
-                      (let* ((raw-link (org-element-property :raw-link el))
-
-                             (destination (if (string= type "fuzzy")
-                                              (progn
-                                                ;; Derived from ox.el -> `org-export-data'.  If a broken link is seen
-                                                ;; and if `broken-links' option is not nil, ignore the error.
-                                                (condition-case err
-                                                    (org-export-resolve-fuzzy-link el info)
-                                                  (org-link-broken
-                                                   (unless (plist-get info :with-broken-links)
-                                                     (user-error "Unable to resolve link: %S" (nth 1 err))))))
-                                            (org-export-resolve-id-link el (org-export--collect-tree-properties ast info))))
-                             (source-path (org-hugo--heading-get-slug el info :inherit-export-file-name))
-                             (destination-path (org-hugo--heading-get-slug destination info :inherit-export-file-name))
-                             (destination-type (org-element-type destination)))
-                        ;; (message "[ox-hugo pre process DBG] destination-type : %s" destination-type)
-
-                        ;; Change the link if it points to a valid
-                        ;; destination outside the subtree.
-                        (unless (equal source-path destination-path)
-                          (let ((link-desc (org-element-contents el))
-                                (link-copy (org-element-copy el)))
-                            ;; (message "[ox-hugo pre process DBG] link desc: %s" link-desc)
-                            (apply #'org-element-adopt-elements link-copy link-desc)
-                            (org-element-put-property link-copy :type "file")
-                            (org-element-put-property
-                             link-copy :path
-                             (cond
-                              ;; If the destination is a heading with the
-                              ;; :EXPORT_FILE_NAME property defined, the
-                              ;; link should point to the file (without
-                              ;; anchor).
-                              ((org-element-property :EXPORT_FILE_NAME destination)
-                               (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix))
-                              ;; Hugo only supports anchors to headings,
-                              ;; so if a "fuzzy" type link points to
-                              ;; anything else than a heading, it should
-                              ;; point to the file.
-                              ((and (string= type "fuzzy")
-                                    (not (string-prefix-p "*" raw-link)))
-                               (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix))
-                              ;; In "custom-id" type links, the raw-link
-                              ;; matches the anchor of the destination.
-                              ((string= type "custom-id")
-                               (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix "::" raw-link))
-                              ;; In "id" and "fuzzy" type links, the anchor
-                              ;; of the destination is derived from the
-                              ;; :CUSTOM_ID property or the title.
-                              (t
-                               (let ((anchor (org-hugo--get-anchor destination info)))
-                                 (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix "::#" anchor)))))
-                            ;; If the link destination is a heading and if
-                            ;; user hasn't set the link description, set the
-                            ;; description to the destination heading title.
-                            (when (and (null link-desc)
-                                       (equal 'headline destination-type))
-                              (let ((heading-title
-                                     (org-export-data-with-backend
-                                      (org-element-property :title destination) 'ascii info)))
-                                ;; (message "[ox-hugo pre process DBG] destination heading: %s" heading-title)
-                                (org-element-set-contents link-copy heading-title)))
-                            (org-element-set-element el link-copy)))))))
-                 ((equal 'special-block el-type)
-                  ;; Handle empty Org special blocks.  When empty
-                  ;; blocks are found, set that elements content as ""
-                  ;; instead of nil.
-                  (unless (org-element-contents el)
-                    (org-element-adopt-elements el "")))))
-              nil)) ;Minor performance optimization: Make `org-element-map' lambda return a nil.
-
           ;; Turn the AST with updated links into an Org document.
           (insert (org-element-interpret-data ast))
           (set-buffer-modified-p nil)))

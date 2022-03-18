@@ -4511,13 +4511,17 @@ links."
                     ;; Change the link if it points to a valid
                     ;; destination outside the subtree.
                     (unless (equal source-path destination-path)
-                      (let ((link-desc (org-element-contents el))
-                            (link-copy (org-element-copy el)))
+                      (let ((link-desc (org-element-contents el)))
                         ;; (message "[ox-hugo pre process DBG] link desc: %s" link-desc)
-                        (apply #'org-element-adopt-elements link-copy link-desc)
-                        (org-element-put-property link-copy :type "file")
+
+                        ;; Override the link types to be files.  We
+                        ;; will be using out-of-subtree links as links
+                        ;; to dummy files with
+                        ;; `org-hugo--preprocessed-buffer-dummy-file-suffix'
+                        ;; suffix.
+                        (org-element-put-property el :type "file")
                         (org-element-put-property
-                         link-copy :path
+                         el :path
                          (cond
                           ;; If the destination is a heading with the
                           ;; :EXPORT_FILE_NAME property defined, the
@@ -4551,8 +4555,7 @@ links."
                                  (org-export-data-with-backend
                                   (org-element-property :title destination) 'ascii info)))
                             ;; (message "[ox-hugo pre process DBG] destination heading: %s" heading-title)
-                            (org-element-set-contents link-copy heading-title)))
-                        (org-element-set-element el link-copy)))))))
+                            (org-element-set-contents el heading-title)))))))))
              ((equal 'special-block el-type)
               ;; Handle empty Org special blocks.  When empty
               ;; blocks are found, set that elements content as ""

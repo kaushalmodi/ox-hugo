@@ -1972,7 +1972,9 @@ INFO is a plist used as a communication channel.
 
 Return nil if none of the above are true."
   (org-with-wide-buffer
-   (goto-char (org-element-property :begin heading))
+   (let ((heading-begin (org-element-property :begin heading)))
+     (when (numberp heading-begin)
+       (goto-char heading-begin)))
    (let ((file (org-string-nw-p (org-export-get-node-property :EXPORT_FILE_NAME heading inherit-export-file-name)))
          bundle slug)
      ;; (message "[org-hugo--heading-get-slug DBG] EXPORT_FILE_NAME: %S" file)

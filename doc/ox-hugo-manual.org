@@ -1188,6 +1188,8 @@ adding this to the CSS:
   display: none;
 }
 #+end_src
+**** Auto-prefixing description of links to figures with "Figure"
+See [[*Linking numbered elements]].
 *** Source blocks
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-blocks
@@ -4157,6 +4159,79 @@ The translation language is detected from the ~#+language:~ keyword
 present in the Org file or the ~:EXPORT_LANGUAGE:~ property in the
 post subtree. For reference, see [[https://orgmode.org/manual/Export-Settings.html#index-LANGUAGE_002c-keyword][~LANGUAGE~ in the Export Settings]]
 section of the Org manual.
+*** Linking numbered elements
+:PROPERTIES:
+:EXPORT_FILE_NAME: linking-numbered-elements
+:END:
+#+begin_description
+How to link numbered elements like source blocks, tables or figures.
+#+end_description
+If you need to link to any of these elements, they need to have the
+~#+name~ keyword. The ~#+caption~ is optional.
+
+Below, you will find examples of the supported numbered elements, and
+how to link to them.
+**** Code block (~src-block~)
+#+begin_src org
+,#+name: code__hello
+,#+caption: Saying "Hello" in ~emacs-lisp~
+,#+begin_src emacs-lisp
+(message "Hello")
+,#+end_src
+
+Link to the above code block: [[code__hello]]
+#+end_src
+**** Table (~table~)
+#+begin_src org
+,#+name: tab__simple_table
+,#+caption: Simple Table
+|----------+----------+----------|
+| Header 1 | Header 2 | Header 3 |
+|----------+----------+----------|
+| abc      | def      | ghi      |
+|----------+----------+----------|
+
+Link to the above table: [[tab__simple_table]]
+#+end_src
+**** Figure
+#+begin_src org
+,#+name: fig__some_figure
+,#+caption: Some Figure
+[[./images/some_figure.png]]
+
+Link to the above figure: [[fig__some_figure]]
+#+end_src
+
+See [[*Image Links]] for more details.
+**** Auto-prefixing element type names in links
+When links are made to any of these numbered elements, ~ox-hugo~ has
+an option to prefix the link descriptions with that element's type
+name.
+
+#+name: tab__element_prefixes_en
+#+caption: Default prefixes (English) for the supported elements
+|---------------------------+--------------|
+| Element Type              | Prefix (en)  |
+|---------------------------+--------------|
+| ~src-block~ or code block | Code Snippet |
+| ~table~                   | Table        |
+| figure[fn:9]              | Figure       |
+|---------------------------+--------------|
+
+To enable this auto-prefixing feature, set
+~org-hugo-link-desc-insert-type~ to a non-nil value.
+
+#+name: code__enable_auto_prefixing_link_desc_with_type_names
+#+caption: Enable auto-prefixing of link descriptions with the referenced element's type name
+#+begin_src emacs-lisp
+(with-eval-after-load 'ox-hugo
+  (setq org-hugo-link-desc-insert-type t))
+#+end_src
+
+This feature has language support too. If the ~#+language~ keyword is
+set to a language code other than ~en~ (example: ~de~), the
+translations of the element type names get exported. The translations
+are based on the ~org-export-dictionary~ variable from ~ox.el~.
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"
@@ -4532,6 +4607,8 @@ Categories,)}}}.
 - Code optimization: Use of =org-entry-get= at places instead of
   maintaining global variables.
 * Footnotes
+[fn:9] "figure" is not exactly a proper "Org element". A "figure" is a
+standalone figure link in an Org paragraph.
 
 [fn:8] The [[https://github.com/toml-lang/toml#local-date-time][TOML date-time]] uses the same RFC3339 format.
 

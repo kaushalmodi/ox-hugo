@@ -2198,6 +2198,7 @@ property to =t=. So =~C-h f~= will show up as =<kbd>C-h f</kbd>=.
 
 Example:
 - Few of Emacs help keybindings: ~C-h f~, ~C-h v~
+- Test auto-protection of angle brackets: ~S-<left>~
 *** Don't Use Org Code markup for =kbd= tag
 :PROPERTIES:
 :EXPORT_HUGO_USE_CODE_FOR_KBD:

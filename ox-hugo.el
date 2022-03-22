@@ -1674,7 +1674,8 @@ The kdb wrapping is done if `org-hugo-use-code-for-kbd' is non-nil.
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
   (if (org-hugo--plist-get-true-p info :hugo-use-code-for-kbd)
-      (format "<kbd>%s</kbd>" (org-element-property :value verbatim))
+      (format "<kbd>%s</kbd>" (org-html-encode-plain-text
+                               (org-element-property :value verbatim)))
     (org-md-verbatim verbatim nil nil)))
 
 ;;;; Example Block

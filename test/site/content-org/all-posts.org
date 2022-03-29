@@ -634,6 +634,14 @@ Test the case where the title contains only the date, making it look
 like a Hugo TOML date field.
 #+end_description
 {{{oxhugoissue(350)}}}
+** Awesome title with % symbol
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-title-percent-symbol
+:EXPORT_DATE: 2017-07-24
+:END:
+Testing a post with a percent symbol in the title.
+*** Sub-heading with % symbol
+Sub-heading also exported correctly
 * Excluded post                                                    :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: excluded-post

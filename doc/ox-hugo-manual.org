@@ -333,7 +333,7 @@ error backtrace,
 
 Steps to run tests on your machine:
 1. Clone this repo.
-2. Ensure that ~pandoc~ (at least version {{{pandoc_version}}}) are
+2. Ensure that ~pandoc~ (at least version {{{pandoc_version}}}) is
    installed (more info
    {{{doc(contributing-guide,#contribute-to-code,here)}}}).
 3. Run ~make -j1 test~. This runs all the tests from the two kinds of
@@ -738,7 +738,7 @@ exported Markdown files.
    #+begin_example
    git clone -j8 https://github.com/kaushalmodi/ox-hugo
    #+end_example
-2. Ensure that [[https://go.dev/doc/install][~go~]], and ~pandoc-citeproc~ (at least version
+2. Ensure that [[https://go.dev/doc/install][~go~]], and ~pandoc~ (at least version
    {{{pandoc_version}}}) are installed (more info
    {{{titleref(Requirements#code_contributor_reqs,here)}}}).
 3. Start the =hugo= server:
@@ -759,7 +759,7 @@ exported Markdown files.
    #+begin_example
    git clone -j8 https://github.com/kaushalmodi/ox-hugo
    #+end_example
-2. Ensure that [[https://go.dev/doc/install][~go~]], ~pandoc~ and ~pandoc-citeproc~ (at least version
+2. Ensure that [[https://go.dev/doc/install][~go~]] and ~pandoc~ (at least version
    {{{pandoc_version}}}) are installed (more info
    {{{titleref(Requirements#code_contributor_reqs,here)}}}).
 3. =cd= to the =test/site/= directory and do:
@@ -4287,7 +4287,7 @@ the theme and component dependencies, Go is required for that.
 #+begin_note
 - Org mode version used for tests: {{{org_mode_version}}}
 - Minimum required ~hugo~ version: {{{min_hugo_version}}}
-- ~pandoc~ and ~pandoc_site~ version {{{pandoc_version}}}
+- ~pandoc~ version {{{pandoc_version}}}
 #+end_note
 
 - About Pandoc :: /While the end-user does not need Pandoc installed

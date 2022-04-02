@@ -388,12 +388,6 @@
   site = "https://notes.arne.me"
   org_dir = "org"
 
-[jhilker]
-   author = "Jacob Hilker"
-   source = "https://gitlab.com/jhilker/jhilker.gitlab.io/"
-   site = "https://jhilker.com"
-   org_dir = "content-org"
-
 [spcbfr]
    author = "Youssef Bouzekri"
    source = "https://gitlab.com/spcbfr/blog/"

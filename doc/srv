@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Time-stamp: <2022-02-22 11:40:20 kmodi>
+# Time-stamp: <2022-04-03 17:28:55 kmodi>
 
 set -euo pipefail # http://redsymbol.net/articles/unofficial-bash-strict-mode
 IFS=$'\n\t'

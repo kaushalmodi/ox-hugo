@@ -2094,13 +2094,27 @@ Author exporting can be disabled using any of these ways:
 The ~author~ front-matter parameter is *always* exported as a
 TOML/YAML *list*.
 #+end_note
-If you already have Hugo posts with the ~author~ front-matter already
-set, it is possible that those values exist as single string values
-instead of lists.
+If you have Hugo posts with the ~author~ front-matter already set, it
+is possible that those values exist as single string values instead of
+lists.
 
-If so, you can use a snippet like the [[https://github.com/kaushalmodi/hugo-onyx-theme/blob/master/layouts/partials/author.html][~author.html~ partial]] used by
-this doc site to parse the ~author~ parameter correctly (whether it's
-a plain string or a list of strings).
+If so, you can use an ~author.html~ Hugo partial[fn:10] like below to
+parse the ~author~ parameter correctly, whether it's a plain string or
+a /slice/ (list) of strings.
+
+#+name: code__author_partial
+#+caption: ~author.html~ partial code that supports both ~string~ and ~slice~ (list) type ~author~ front-matter
+#+begin_src go-html-template
+{{ with .Params.author }}
+    <span class="author">&mdash;
+        {{ if (reflect.IsSlice .) }}
+            {{ delimit . ", " }}
+        {{ else }}
+            {{ . }}
+        {{ end }}
+    </span>
+{{ end }}
+#+end_src
 ***** Forcing ~author~ to be a /string/ (alternative 1)
 If you are not comfortable with Hugo templates, you can alternatively
 force the ~author~ param to be a plain /string/ instead of a /list/,
@@ -4625,6 +4639,10 @@ Categories,)}}}.
 - Code optimization: Use of =org-entry-get= at places instead of
   maintaining global variables.
 * Footnotes
+
+[fn:10] You can find the same (or similar) ~author.html~ partial used
+in the [[https://github.com/kaushalmodi/hugo-onyx-theme][Hugo theme]] used for this doc site.
+
 [fn:9] "figure" is not exactly a proper "Org element". A "figure" is a
 standalone figure link in an Org paragraph.
 

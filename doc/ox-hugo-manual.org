@@ -2023,8 +2023,8 @@ disclosure /details/ to show in <span class=blue>blue</span>.
 :PROPERTIES:
 :EXPORT_FILE_NAME: author
 :END:
-The ~author~ front-matter parameter is designed to always be a list or
-an array, so that multiple authors can be supported.
+The ~author~ front-matter parameter is designed to *always be a list
+or an array*, so that multiple authors can be supported.
 **** Default Author
 The ~author~ parameter is set to always export by default (as the
 default value of ~org-export-with-author~ is ~t~).
@@ -2092,7 +2092,7 @@ Author exporting can be disabled using any of these ways:
 **** Tweaking your Hugo template to support /list/ ~author~
 #+begin_note
 The ~author~ front-matter parameter is *always* exported as a
-TOML/YAML list.
+TOML/YAML *list*.
 #+end_note
 If you already have Hugo posts with the ~author~ front-matter already
 set, it is possible that those values exist as single string values
@@ -2101,18 +2101,23 @@ instead of lists.
 If so, you can use a snippet like the [[https://github.com/kaushalmodi/hugo-onyx-theme/blob/master/layouts/partials/author.html][~author.html~ partial]] used by
 this doc site to parse the ~author~ parameter correctly (whether it's
 a plain string or a list of strings).
-***** Forcing ~author~ to be a /string/ (alternative)
+***** Forcing ~author~ to be a /string/ (alternative 1)
 If you are not comfortable with Hugo templates, you can alternatively
 force the ~author~ param to be a plain /string/ instead of a /list/,
 by setting it as a /custom/ front-matter parameter:
 #+begin_src org
-#+author:
-#+hugo_custom_front_matter: :author "FirstName LastName"
+,#+author:
+,#+hugo_custom_front_matter: :author "FirstName LastName"
 #+end_src
 
 - Note :: Remember to set the default author name to nil if doing this,
           by setting the ~#+author~ keyword (or ~:EXPORT_AUTHOR:~
           property) to /nothing/.
+***** Exporting the list of authors to ~authors~ front-matter instead of ~author~ (alternative 2)
+If your theme supports parsing a list of authors from an ~authors~
+front-matter parameter (instead of ~author~), use the
+~#+hugo_front_matter_key_replace~ feature as shown {{{titleref(Replace
+Front-matter Keys#replace-author-with-authors,here)}}}.
 *** Hugo Summary Splitter
 :PROPERTIES:
 :EXPORT_FILE_NAME: hugo-summary-splitter
@@ -2495,7 +2500,7 @@ front-matter key name to accommodate for your favorite Hugo theme.
 The syntax is:
 
 #+begin_src org
-#+hugo_front_matter_key_replace: oldkey1>newkey1 oldkey2>newkey2
+,#+hugo_front_matter_key_replace: oldkey1>newkey1 oldkey2>newkey2
 #+end_src
 
 or, if you want this to apply only for a specific Org tree:
@@ -2510,7 +2515,7 @@ Here are few use cases to better explain this feature.
           subtree-based flow). But the same would work for the Org
           keyword equivalents in file-based flow too.
 
-**** Use =description= in Org file, but export as =summary=
+**** {{{sec(1,)}}} Use =description= in Org file, but export as =summary=
 The /Description/ meta-data is standard in Org.
 
 Starting with *v0.55.0*, Hugo now supports ~summary~ as a built-in
@@ -2556,7 +2561,7 @@ And this can be over /multiple lines/ too!
 
 By doing above, you would be using /description/ in your Org source,
 but that would get exported as /summary/ in the Markdown! :smile:
-**** Use Org tags, but export as =keywords=
+**** {{{sec(1,)}}} Use Org tags, but export as =keywords=
 Here's another scenario.. you painstakingly set Org tags for all your
 posts, and then you switch to a theme that calls refers to your =tags=
 as =keywords= instead!
@@ -2567,24 +2572,24 @@ again! :sunglasses:
 Just add this at the top of your Org file:
 
 #+begin_src org
-#+hugo_front_matter_key_replace: tags>keywords
+,#+hugo_front_matter_key_replace: tags>keywords
 #+end_src
-**** Swap =tags= and =categories=
+**** {{{sec(1,)}}} Swap =tags= and =categories=
 And one more example.. you call them /tags/, the Hugo theme calls them
 /categories/, and vice-versa.
 
 What do you do? ..
 
 #+begin_src org
-#+hugo_front_matter_key_replace: tags>categories categories>tags
+,#+hugo_front_matter_key_replace: tags>categories categories>tags
 #+end_src
-**** Removing front-matter keys during export
+**** {{{sec(1,)}}} Removing front-matter keys during export
 :PROPERTIES:
 :CUSTOM_ID: removing-keys
 :END:
 In the front-matter key replacement syntax:
 #+begin_src org
-#+hugo_front_matter_key_replace: oldkey>newkey
+,#+hugo_front_matter_key_replace: oldkey>newkey
 #+end_src
 If ~newkey~ is a special string *nil*, ~oldkey~ will be _removed_ from
 the exported front-matter.
@@ -2593,7 +2598,20 @@ For example, if you want to remove the ~aliases~ front-matter from
 your exported files (but want to leave them in your Org files), simply
 add this to the top of your Org files:
 #+begin_src org
-#+hugo_front_matter_key_replace: aliases>nil
+,#+hugo_front_matter_key_replace: aliases>nil
+#+end_src
+**** {{{sec(1,)}}} Replacing the ~author~ with ~authors~ in front-matter
+:PROPERTIES:
+:CUSTOM_ID: replace-author-with-authors
+:END:
+Some themes like [[https://github.com/HEIGE-PCloud/DoIt][DoIt]] support parsing a list of authors from an
+~authors~ front-matter parameter. But ~ox-hugo~ always exports authors
+_as a list_ to the [[*Author][~author~ front-matter parameter]].
+
+You can have ~ox-hugo~ export the list of authors to the ~authors~
+front-matter by adding this to the top of your Org files:
+#+begin_src org
+,#+hugo_front_matter_key_replace: author>authors
 #+end_src
 **** Examples
 You can find a bunch of examples if you search for /"Replace

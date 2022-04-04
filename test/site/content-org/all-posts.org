@@ -3781,6 +3781,16 @@ Below links are invalid, they are there just for test purpose.
 
 - [[https://jira.example.com/issues/?jql=(project=MYPRJ)AND(assignee=currentUser())][A dummy Jira JQL link]]
 - [[https://jira.example.com/issues/?jql=(project=MYPRJ)AND(assignee=currentUser())AND(labels in (foo))][A dummy Jira JQL link with spaces]]
+** Links to Info manual nodes                                          :info:
+:PROPERTIES:
+:EXPORT_FILE_NAME: links-to-info-manual-nodes
+:END:
+#+begin_description
+Test links to Info manual nodes.
+#+end_description
+- Link to an Org Info manual node: [[info:org#Search Options]]
+- Link to an Emacs Info manual node: [[info:emacs#Point]]
+- Link to an Emacs Lisp Info manual node: [[info:elisp#Lambda Expressions]]
 * Equations                                                       :equations:
 ** MathJax                                                          :mathjax:
 *** Inline equations

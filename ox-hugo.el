@@ -885,6 +885,17 @@ https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=6b2a7cb20b357e73
   (and (string-match-p "\\`-?\\([0-9]\\|\\([1-9]\\|[0-9]*\\.\\)[0-9]*\\)\\'" string)
        (string-to-number string)))
 
+(defun org-hugo--org-info-export (path desc format)
+  "Add support for exporting [[info:..]] links for `hugo' format."
+  (let* ((parts (split-string path "#\\|::"))
+         (manual (car parts))
+         (node (or (nth 1 parts) "Top")))
+    (when (member format '(md hugo))
+      (format "[%s](%s#%s)"
+              (or desc path)
+              (org-info-map-html-url manual)
+              (org-info--expand-node-name node)))))
+
 (defun org-hugo--before-export-function (subtreep)
   "Function to be run before an ox-hugo export.
 
@@ -898,7 +909,8 @@ This is an internal function."
     ;; Reset the variables that are used only for subtree exports.
     (setq org-hugo--subtree-coord nil))
   (advice-add 'org-babel-exp-code :around #'org-hugo--org-babel-exp-code)
-  (advice-add 'org-babel--string-to-number :override #'org-hugo--org-babel--string-to-number))
+  (advice-add 'org-babel--string-to-number :override #'org-hugo--org-babel--string-to-number)
+  (advice-add 'org-info-export :override #'org-hugo--org-info-export))
 
 (defun org-hugo--after-1-export-function (info outfile)
   "Function to be run after exporting one post.
@@ -914,6 +926,7 @@ INFO is a plist used as a communication channel.
 OUTFILE is the Org exported file name.
 
 This is an internal function."
+  (advice-remove 'org-info-export #'org-hugo--org-info-export)
   (advice-remove 'org-babel--string-to-number #'org-hugo--org-babel--string-to-number)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
   (when (and outfile

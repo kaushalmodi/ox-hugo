@@ -1389,7 +1389,7 @@ contextual information."
                                               table info
                                               nil #'org-html--has-caption-p))
                              (format (concat "<div class=\"table-caption\">\n"
-                                             "  <span class=\"table-number\">%s</span>:\n"
+                                             "  <span class=\"table-number\">%s:</span>\n"
                                              "  %s\n"
                                              "</div>\n")
                                      (if table-ref ;Hyperlink the table prefix + number

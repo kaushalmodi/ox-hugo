@@ -34,7 +34,7 @@ that the link jump is evident):
 
 <a id="table--simple1"></a>
 <div class="table-caption">
-  <span class="table-number"><a href="#table--simple1">Table 1</a></span>:
+  <span class="table-number"><a href="#table--simple1">Table 1</a>:</span>
   Simple table 1
 </div>
 
@@ -100,7 +100,7 @@ Here's another table:
 
 <a id="table--simple2"></a>
 <div class="table-caption">
-  <span class="table-number"><a href="#table--simple2">Table 2</a></span>:
+  <span class="table-number"><a href="#table--simple2">Table 2</a>:</span>
   Simple table 2
 </div>
 

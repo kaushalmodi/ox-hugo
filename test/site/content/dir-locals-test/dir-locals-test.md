@@ -28,7 +28,7 @@ creator: "Dummy creator string"
 
 <a id="table--vars-dir-locals"></a>
 <div class="table-caption">
-  <span class="table-number"><a href="#table--vars-dir-locals">Table 1</a></span>:
+  <span class="table-number"><a href="#table--vars-dir-locals">Table 1</a>:</span>
   Variables set using <code>.dir-locals.el</code>
 </div>
 

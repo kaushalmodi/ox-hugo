@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ** [0.9.0] - <2022-04-04>
 
-[[https://github.com/kaushalmodi/ox-hugo/compare/9751d34e1133b89a533a978c085b0715f85db648...2292470e2559a79f9ba16637cd65c22acc32b866][9751d34...2292470]]
+[[https://github.com/kaushalmodi/ox-hugo/compare/9751d34e1133b89a533a978c085b0715f85db648...a85410081ac20ada23fff52a7b7ab6c8151aa8e0][9751d34...a854100]]
 
 *** @@html:<span style="display:none;">0</span>@@ :boom: Breaking
 
@@ -247,7 +247,7 @@ All notable changes to this project will be documented in this file.
 - Document the element link desc auto-prefixing feature Fixes Issue 601. ([[https://github.com/kaushalmodi/ox-hugo/commit/2f7f26cd18917e2e1fefa09b09a43e6b96eea0ac][2f7f26c]])
 - Front-matter replacement ex.: export authors instead of author ([[https://github.com/kaushalmodi/ox-hugo/commit/fc1fc8c59fbeb0e83d9ebebab921b350ba9a2af1][fc1fc8c]])
 - Inline the `author.html` partial code in the 'Author' doc ([[https://github.com/kaushalmodi/ox-hugo/commit/9454948ee3d41eb52ce0e2d074b908d2f1d0a14f][9454948]])
-- Add CHANGELOG generated using git-cliff ([[https://github.com/kaushalmodi/ox-hugo/commit/2292470e2559a79f9ba16637cd65c22acc32b866][2292470]])
+- Add CHANGELOG generated using git-cliff ([[https://github.com/kaushalmodi/ox-hugo/commit/a85410081ac20ada23fff52a7b7ab6c8151aa8e0][a854100]])
 
 *** @@html:<span style="display:none;">5</span>@@ :recycle: Refactor
 

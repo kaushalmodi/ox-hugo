@@ -57,7 +57,7 @@
     "picture" "progress"
     "q"
     "ruby"
-    "s" "samp" "script" "select" "slot" "span"
+    "s" "samp" "script" "select" "slot" "small" "span"
     ;; "strong" ;Use Org *bold* syntax instead
     ;; "sub" ;Use Org abc_{subscript} syntax instead
     ;; "sup" ;Use Org abc^{superscript} syntax instead

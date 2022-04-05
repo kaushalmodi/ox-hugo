@@ -71,7 +71,7 @@ There is a plan to create a =hugo.el= that would do things like:
 :EXPORT_FILE_NAME: changelog
 :EXPORT_HUGO_MENU: :menu "1.main"
 :END:
-#+include: "./ox-hugo-manual.org::#changelog" :only-contents t
+#+include: "../CHANGELOG.org::*Changelog" :only-contents t
 * Reused Sections
 ** Introduction
 :PROPERTIES:
@@ -4341,15 +4341,7 @@ the theme and component dependencies, Go is required for that.
 :EXPORT_FILE_NAME: test
 :END:
 #+include: "./ox-hugo-manual.org::#test" :only-contents t
-* Changelog [Reused Section]                                        :ARCHIVE:
-:PROPERTIES:
-:CUSTOM_ID: changelog
-:END:
-** COMMENT v
-*** Features
-*** Backward-incompatible changes
-*** Fixes
-*** Meta
+* COMMENT Older manually written changelog                          :ARCHIVE:
 ** v0.8 <2018-01-26 Fri>
 *** Features
 - Support exporting content files and attachments (images, documents)

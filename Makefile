@@ -96,7 +96,7 @@ test_check=1
 	hugo hugo_doc hugo_test serve server diff \
 	test md ert testmkgold \
 	do_test $(test_org_files) \
-	doc_md doc_gh doc doc_htmltest doc_test \
+	changelog doc_md doc_gh doc doc_htmltest doc_test \
 	ctemp diffgolden clean
 
 help:
@@ -112,6 +112,7 @@ help:
 	@echo " make diff          <-- Run git diff"
 	@echo " make doc_md        <-- Build the Markdown content for the documentation site"
 	@echo " make hugo_doc      <-- Build the documentation site using Hugo"
+	@echo " make changelog     <-- Update CHANGELOG.org"
 	@echo " make doc_gh        <-- Build README.org and CONTRIBUTING.org for GitHub"
 	@echo " make hugo_test     <-- Build the test site using Hugo"
 	@echo " make clean         <-- Delete the Hugo public/ directory and auto-installed elisp packages"
@@ -233,6 +234,10 @@ doc_gh:
 	@echo "[GitHub Docs] Generating README.org and CONTRIBUTING.org for GitHub .."
 	@$(MAKE_) emacs-batch FUNC=ox-hugo-export-gh-doc ORG_FILE=./doc/github-files.org
 	@echo "[GitHub Docs] Done"
+
+# Requires https://github.com/orhun/git-cliff to be installed.
+changelog:
+	git cliff -c ./doc/cliff.toml > ./CHANGELOG.org
 
 doc: vcheck_emacs doc_md hugo_doc doc_gh
 

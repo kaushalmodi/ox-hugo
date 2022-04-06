@@ -9,6 +9,9 @@ draft = false
 
 Example of an inline equation: <img src="/ltximg/all-posts_ceee782e7b4ae762ba5504ce2f6f7515c733c34c.svg" alt="\[ a + b \]" class="org-svg" />
 
+Testing `$ .. $` inline equations from `ox-hugo` Issue #[611](https://github.com/kaushalmodi/ox-hugo/issues/611) : Let us
+try an inline formula like <img src="/ltximg/all-posts_a2f8ff5884c400b703d2bd3bb56e2f12734ab4b7.svg" alt="$p \to q$" class="org-svg" />. Does this work? <img src="/ltximg/all-posts_fcfea8394a309a9047e94f624a025817e817f0cd.svg" alt="$r \to s$" class="org-svg" />
+
 Example of a block equation:
 
 

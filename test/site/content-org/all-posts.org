@@ -3983,6 +3983,9 @@ Exporting {{{latex}}} equations as SVG images.
 
 Example of an inline equation: \[ a + b \]
 
+Testing ~$ .. $~ inline equations from {{{oxhugoissue(611)}}} : Let us
+try an inline formula like $p \to q$. Does this work? $r \to s$
+
 Example of a block equation:
 
 \begin{equation}

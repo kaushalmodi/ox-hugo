@@ -4,7 +4,7 @@ tags = ["export-option", "toc"]
 draft = false
 +++
 
-<div class="ox-hugo-toc toc has-section-numbers">
+<nav class="ox-hugo-toc toc has-section-numbers">
 
 <div class="heading">Table of Contents</div>
 
@@ -12,7 +12,7 @@ draft = false
 - <span class="section-num">2</span> [Post sub-heading 2](#post-sub-heading-2)
 - <span class="section-num">3</span> [Post sub-heading 3](#post-sub-heading-3)
 
-</div>
+</nav>
 <!--endtoc-->
 
 

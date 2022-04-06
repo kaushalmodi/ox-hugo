@@ -8,7 +8,7 @@ tags = ["export-option", "toc", "todo", "disable"]
 draft = false
 +++
 
-<div class="ox-hugo-toc toc">
+<nav class="ox-hugo-toc toc">
 
 <div class="heading">Table of Contents</div>
 
@@ -16,7 +16,7 @@ draft = false
 - [Something to do](#something-to-do)
 - [Something done](#something-done)
 
-</div>
+</nav>
 <!--endtoc-->
 
 <style>

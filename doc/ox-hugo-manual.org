@@ -1803,6 +1803,17 @@ tries to get the "summary you mean". This partial is used by the
 /Note that you would need to use the =summary_minus_toc.html= partial
 wherever you do not intend to have TOC included in the summary (for
 example, in the Opengraph =og:description= meta tag)./
+**** Hiding bullets when TOC has numbered headings
+Add this to the CSS to hide bullets in table of contents when the
+headings are numbered. Export options set like ~#+options: toc:t
+num:t~ will cause this.
+
+#+begin_src css
+/* Hide bullets in TOC when headings are numbered. */
+.toc.has-section-numbers ul {
+  list-style: none;
+}
+#+end_src
 *** Table Styling
 :PROPERTIES:
 :EXPORT_FILE_NAME: table-styling

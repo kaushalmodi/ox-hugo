@@ -56,6 +56,7 @@ All notable changes to this project will be documented in this file.\n
   # preprocess the git log messages before git-cliff parses them.
   # https://github.com/orhun/git-cliff/issues/77#issuecomment-1090234236
   commit_preprocessors = [
+    { pattern = " *\\n* *$", replace = ""}, # Remove trailing spaces and newlines.
     { pattern = "\\n+", replace = " … "}, # Replace consecutive newlines with " … ".
     { pattern = "  +", replace = " "}, # Replace multiple spaces with a single space.
     { pattern = "\\[\\[", replace = "[​["}, # Break Org-link-like syntax in commit messages by injecting zero-width-space (ZWS) between "[[".
@@ -85,6 +86,7 @@ All notable changes to this project will be documented in this file.\n
       # Non-conventional
       { message = "^([Cc]leanup|[Cc]onsisten|[Tt]ypo)", skip = true},
       { message = "^users(\\.toml)*", skip = true},
+      { message = "^tool", skip = true}, # Commits related to tools like git-cliff, Makefile, etc.
       { message = "([Bb]reaking|BREAKING|[Nn]otice|NOTICE)", group = "@@html:<span style=\"display:none;\">0</span>@@ :boom: Breaking"},
       { message = "^([Pp]erf|[Ss]peed|[Oo]ptimiz)"         , group = "@@html:<span style=\"display:none;\">2</span>@@ :zap: Performance"},
       { message = "^[Ff]ix"                                , group = "@@html:<span style=\"display:none;\">3</span>@@ :bug: Bug Fixes"},

@@ -1048,37 +1048,34 @@ contents according to the current heading."
                      (replace-regexp-in-string "\n\\{2,\\}" "\n" toc-items))))
     ;; (message "[ox-hugo build-toc DBG] toc-items:%s" toc-items)
     (when toc-items
-      (concat (when (string-match-p "^\\s-*\\-\\s-<span class=\"section\\-num\"" toc-items)
-                ;; Hide the bullets if section numbers are present for
-                ;; even one heading.
-                (concat "<style>\n"
-                        "  .ox-hugo-toc ul {\n"
-                        "    list-style: none;\n"
-                        "  }\n"
-                        "</style>\n"))
-              (format "<div class=\"ox-hugo-toc toc%s\">\n"
-                      (if local
-                          " local"
-                        ""))
-              (unless (org-hugo--plist-get-true-p info :hugo-goldmark)
-                "<div></div>\n") ;This is a nasty workaround till Hugo/Blackfriday support
-              toc-heading    ;wrapping Markdown in HTML div's.
-              "\n"
-              toc-items ;https://github.com/kaushalmodi/ox-hugo/issues/93
-              "\n\n"
-              "</div>\n"
-              ;; Special comment that can be use to filter out the TOC
-              ;; from .Summary in Hugo templates.
-              ;;
-              ;;     {{ $summary_splits := split .Summary "<!--endtoc-->" }}
-              ;;     {{ if eq (len $summary_splits) 2 }}
-              ;;         <!-- If that endtoc special comment is present, output only the part after that comment as Summary. -->
-              ;;         {{ index $summary_splits 1 | safeHTML }}
-              ;;     {{ else }}
-              ;;         <!-- Print the whole Summary if endtoc special comment is not found. -->
-              ;;         {{ .Summary }}
-              ;;     {{ end }}
-              "<!--endtoc-->\n"))))
+      (let ((toc-classes '("toc" "ox-hugo-toc"))
+            ;; `has-section-numbers' is non-nil if section numbers are
+            ;; present for even one heading.
+            (has-section-numbers (string-match-p "^\\s-*\\-\\s-<span class=\"section\\-num\"" toc-items)))
+        (when has-section-numbers
+          (push "has-section-numbers" toc-classes))
+        (when local
+          (push "local" toc-classes))
+        (concat (format "<div class=\"%s\">\n" (string-join (reverse toc-classes) " "))
+                (unless (org-hugo--plist-get-true-p info :hugo-goldmark)
+                  "<div></div>\n") ;This is a nasty workaround till Hugo/Blackfriday support
+                toc-heading    ;wrapping Markdown in HTML div's.
+                "\n"
+                toc-items ;https://github.com/kaushalmodi/ox-hugo/issues/93
+                "\n\n"
+                "</div>\n"
+                ;; Special comment that can be use to filter out the TOC
+                ;; from .Summary in Hugo templates.
+                ;;
+                ;;     {{ $summary_splits := split .Summary "<!--endtoc-->" }}
+                ;;     {{ if eq (len $summary_splits) 2 }}
+                ;;         <!-- If that endtoc special comment is present, output only the part after that comment as Summary. -->
+                ;;         {{ index $summary_splits 1 | safeHTML }}
+                ;;     {{ else }}
+                ;;         <!-- Print the whole Summary if endtoc special comment is not found. -->
+                ;;         {{ .Summary }}
+                ;;     {{ end }}
+                "<!--endtoc-->\n")))))
 
 ;;;; Escape Hugo shortcode
 (defun org-hugo--escape-hugo-shortcode (code lang)

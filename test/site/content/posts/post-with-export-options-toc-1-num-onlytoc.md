@@ -4,12 +4,7 @@ tags = ["export-option", "toc"]
 draft = false
 +++
 
-<style>
-  .ox-hugo-toc ul {
-    list-style: none;
-  }
-</style>
-<div class="ox-hugo-toc toc">
+<div class="ox-hugo-toc toc has-section-numbers">
 
 <div class="heading">Table of Contents</div>
 

@@ -1,6 +1,6 @@
 github.com/julmot/mark.js v0.0.0-20210820195258-8b57fccf976b/go.mod h1:aAyDyl2EhNPiZbFqqURsAmxYwwTHslrIxZErXMO3pJQ=
-github.com/kaushalmodi/hugo-bare-min-theme v0.4.0 h1:rYCS00aZEmLSXYPkSdd9jbsYOCqM22EsTu8W+FMMBw8=
-github.com/kaushalmodi/hugo-bare-min-theme v0.4.0/go.mod h1:F3dhvekisR/Hg6lj/Ha+MBriwKcXGNmef+hzGGE+82E=
+github.com/kaushalmodi/hugo-bare-min-theme v0.5.0 h1:N85P1c/e/xAm4vboMoIh74kD+zHzh/nY+9/ucHoS4zM=
+github.com/kaushalmodi/hugo-bare-min-theme v0.5.0/go.mod h1:F3dhvekisR/Hg6lj/Ha+MBriwKcXGNmef+hzGGE+82E=
 github.com/kaushalmodi/hugo-debugprint v0.1.0/go.mod h1:vusrDLlGE+4Uc1b4PgM0dI8lJCEqC1o7NjFr8WIfkaQ=
 github.com/kaushalmodi/hugo-search-fuse-js v0.4.1/go.mod h1:Wr6gbPat+KW6wReh/hDBykKIWn296FsEkuhojJvHHxw=
 github.com/krisk/Fuse v3.2.1+incompatible/go.mod h1:3moWv8rDjwoKic9nwiPLgZjldkbdTAbtzJHCu/Vsj4A=

@@ -15,9 +15,9 @@ All notable changes to this project will be documented in this file.\n
   # https://tera.netlify.app/docs/#introduction
   body = """
 {% if version %}\
-    ** [{{ version | trim_start_matches(pat="v") }}] - <{{ timestamp | date(format="%Y-%m-%dT%H:%M:%S%.3fZ") | date(timezone="America/New_York") }}>
+    ** *{{ version | trim_start_matches(pat="v") }}* - <{{ timestamp | date(format="%Y-%m-%dT%H:%M:%S%.3fZ") | date(timezone="America/New_York") }}>
 {% else %}\
-    ** [unreleased]
+    ** :fire: *unreleased*
 {% endif %}\
 {% if previous %}\
     {% if previous.commit_id %}
@@ -28,7 +28,7 @@ All notable changes to this project will be documented in this file.\n
 {% for group, commits in commits | group_by(attribute="group") %}
     *** {{ group | upper_first }}
     {% for commit in commits %}
-        - {% if commit.breaking %}[*breaking*] {% endif %}{{ commit.message
+        - {{ commit.message
              | trim_end
              | replace(from="\n", to=" ")
              | replace(from="  ", to=" ")  | replace(from="    ", to=" ")  | replace(from="      ", to=" ")

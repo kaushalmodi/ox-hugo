@@ -38,6 +38,13 @@ All notable changes to this project will be documented in this file.
 - Changelog: Auto-hyperlink Issue and PR references in git logs … Ref: Issue # [[https://github.com/orhun/git-cliff/issues/77#issuecomment-1090234236][77]] … ([[https://github.com/kaushalmodi/ox-hugo/commit/cb2fad173356c22152ee2dce9d4855ebca6577b2][cb2fad1]])
 - Git-cliff: Uniquify group links for each version in changelog … ([[https://github.com/kaushalmodi/ox-hugo/commit/aa4172e061b199ae20c3d191c83f5ba15474312f][aa4172e]])
 
+*** @@html:<span style="display:none;">5</span>@@ :recycle: Refactor
+:PROPERTIES:
+:CUSTOM_ID: 5-recycle-refactor
+:END:
+
+- Optimize a regex replacement in cliff.toml using ${0} … ([[https://github.com/kaushalmodi/ox-hugo/commit/8831e4979781084c9f01842c0da494477330db6f][8831e49]])
+
 *** @@html:<span style="display:none;">6</span>@@ :hammer: Testing
 :PROPERTIES:
 :CUSTOM_ID: 6-hammer-testing

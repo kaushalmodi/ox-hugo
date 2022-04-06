@@ -26,7 +26,10 @@ All notable changes to this project will be documented in this file.\n
     {% endif %}\
 {% endif %}\
 {% for group, commits in commits | group_by(attribute="group") %}
-    *** {{ group | upper_first }}
+    *** {{ group }}
+    :PROPERTIES:
+    :CUSTOM_ID: {{ group | trim_start_matches(pat="@@html:") | striptags | slugify }}{% if version %}-{{ version }}{% endif %}
+    :END:
     {% for commit in commits %}
         - {{ commit.message
              | trim_end

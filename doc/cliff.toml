@@ -30,9 +30,6 @@ All notable changes to this project will be documented in this file.\n
     {% for commit in commits %}
         - {{ commit.message
              | trim_end
-             | replace(from="\n", to=" ")
-             | replace(from="  ", to=" ")  | replace(from="    ", to=" ")  | replace(from="      ", to=" ")
-             | replace(from="   ", to=" ") | replace(from="     ", to=" ") | replace(from="       ", to=" ")
              | replace(from="https://github.com/kaushalmodi/ox-hugo/issues/", to="Issue ")
              | truncate(length=90)
              | replace(from="[[file:", to="[​[file​:")
@@ -54,6 +51,14 @@ All notable changes to this project will be documented in this file.\n
   conventional_commits = true
   # filter out the commits that are not conventional
   filter_unconventional = false
+
+  # preprocess the git log messages before git-cliff parses them.
+  # https://github.com/orhun/git-cliff/issues/77#issuecomment-1090234236
+  commit_preprocessors = [
+	{ pattern = "\\n+", replace = "… "}, # replace consecutive newlines with "… "
+	{ pattern = "  +", replace = " "}, # replace multiple spaces with a single space
+  ]
+
   # regex for parsing and grouping commits
   commit_parsers = [
       # https://www.conventionalcommits.org/en/v1.0.0/#summary

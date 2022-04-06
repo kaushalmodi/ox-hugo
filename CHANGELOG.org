@@ -20,6 +20,13 @@ All notable changes to this project will be documented in this file.
 
 - Add <small> to the list of inline HTML elements … ([[https://github.com/kaushalmodi/ox-hugo/commit/a0d1c8eabca37cc03a893ccef7df4b2e980b92df][a0d1c8e]])
 
+*** @@html:<span style="display:none;">3</span>@@ :bug: Bug Fixes
+:PROPERTIES:
+:CUSTOM_ID: 3-bug-bug-fixes
+:END:
+
+- Add a missing : in a replacement rule in cliff.toml … ([[https://github.com/kaushalmodi/ox-hugo/commit/998ade74e44eec23d1ddd49a885ccedb430c9626][998ade7]])
+
 *** @@html:<span style="display:none;">4</span>@@ :memo: Documentation
 :PROPERTIES:
 :CUSTOM_ID: 4-memo-documentation

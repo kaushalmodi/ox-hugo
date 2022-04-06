@@ -62,7 +62,7 @@ All notable changes to this project will be documented in this file.\n
     { pattern = "file:", replace = "file​:"}, # Break Org-file-link-like syntax in commit messages by injecting ZWS between "file" and ":".
     { pattern = "https://github.com/[^ ]+/issues/([0-9]+)[^ ]*", replace = "Issue # [[${0}][${1}]]"}, # Turn issue links into Org links with desc.
     { pattern = "Merge pull request #([0-9]+) from [^ ]+", replace = "PR # [[https://github.com/kaushalmodi/ox-hugo/pull/${1}][${1}]]:"}, # Turn PR references into links.
-    { pattern = "https://github.com/kaushalmodi/ox-hugo/commit/([a-f0-9]{7})([a-f0-9]*)", replace = "commit # [[https://github.com/kaushalmodi/ox-hugo/commit/${1}${2}][${1}]]"}, # Hyperlink commit references.
+    { pattern = "https://github.com/kaushalmodi/ox-hugo/commit/([a-f0-9]{7})([a-f0-9]*)", replace = "commit # [[${0}][${1}]]"}, # Hyperlink commit references.
     { pattern = " ([a-f0-9]{7})([a-f0-9]*)", replace = " commit # [[https://github.com/kaushalmodi/ox-hugo/commit/${1}${2}][${1}]]"}, # Hyperlink commit references.
     { pattern = "[*_+=~]", replace = "${0}​​"}, # Break more valid Org markup by injecting ZWS that shows up in git logs.
     ]

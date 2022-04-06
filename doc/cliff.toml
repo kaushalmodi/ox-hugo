@@ -30,9 +30,7 @@ All notable changes to this project will be documented in this file.\n
     {% for commit in commits %}
         - {{ commit.message
              | trim_end
-             | replace(from="https://github.com/kaushalmodi/ox-hugo/issues/", to="Issue ")
-             | truncate(length=90)
-             | replace(from="[[file:", to="[​[file​:")
+             | truncate(length=200)
              | upper_first }} ([[https://github.com/kaushalmodi/ox-hugo/commit/{{ commit.id }}][{{ commit.id | truncate(length=7, end="") }}]])\
     {% endfor %}
 {% endfor %}\n
@@ -55,9 +53,16 @@ All notable changes to this project will be documented in this file.\n
   # preprocess the git log messages before git-cliff parses them.
   # https://github.com/orhun/git-cliff/issues/77#issuecomment-1090234236
   commit_preprocessors = [
-	{ pattern = "\\n+", replace = "… "}, # replace consecutive newlines with "… "
-	{ pattern = "  +", replace = " "}, # replace multiple spaces with a single space
-  ]
+	{ pattern = "\\n+", replace = " … "}, # Replace consecutive newlines with " … ".
+	{ pattern = "  +", replace = " "}, # Replace multiple spaces with a single space.
+    { pattern = "\\[\\[", replace = "[​["}, # Break Org-link-like syntax in commit messages by injecting zero-width-space (ZWS) between "[[".
+    { pattern = "file:", replace = "file​"}, # Break Org-file-link-like syntax in commit messages by injecting ZWS between "file" and ":".
+    { pattern = "https://github.com/[^ ]+/issues/([0-9]+)[^ ]*", replace = "Issue # [[${0}][${1}]]"}, # Turn issue links into Org links with desc.
+    { pattern = "Merge pull request #([0-9]+) from [^ ]+", replace = "PR # [[https://github.com/kaushalmodi/ox-hugo/pull/${1}][${1}]]:"}, # Turn PR references into links.
+    { pattern = "https://github.com/kaushalmodi/ox-hugo/commit/([a-f0-9]{7})([a-f0-9]*)", replace = "commit # [[https://github.com/kaushalmodi/ox-hugo/commit/${1}${2}][${1}]]"}, # Hyperlink commit references.
+    { pattern = " ([a-f0-9]{7})([a-f0-9]*)", replace = " commit # [[https://github.com/kaushalmodi/ox-hugo/commit/${1}${2}][${1}]]"}, # Hyperlink commit references.
+    { pattern = "[*_+=~]", replace = "${0}​​"}, # Break more valid Org markup by injecting ZWS that shows up in git logs.
+    ]
 
   # regex for parsing and grouping commits
   commit_parsers = [

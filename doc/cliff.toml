@@ -59,7 +59,7 @@ All notable changes to this project will be documented in this file.\n
     { pattern = "\\n+", replace = " … "}, # Replace consecutive newlines with " … ".
     { pattern = "  +", replace = " "}, # Replace multiple spaces with a single space.
     { pattern = "\\[\\[", replace = "[​["}, # Break Org-link-like syntax in commit messages by injecting zero-width-space (ZWS) between "[[".
-    { pattern = "file:", replace = "file​"}, # Break Org-file-link-like syntax in commit messages by injecting ZWS between "file" and ":".
+    { pattern = "file:", replace = "file​:"}, # Break Org-file-link-like syntax in commit messages by injecting ZWS between "file" and ":".
     { pattern = "https://github.com/[^ ]+/issues/([0-9]+)[^ ]*", replace = "Issue # [[${0}][${1}]]"}, # Turn issue links into Org links with desc.
     { pattern = "Merge pull request #([0-9]+) from [^ ]+", replace = "PR # [[https://github.com/kaushalmodi/ox-hugo/pull/${1}][${1}]]:"}, # Turn PR references into links.
     { pattern = "https://github.com/kaushalmodi/ox-hugo/commit/([a-f0-9]{7})([a-f0-9]*)", replace = "commit # [[https://github.com/kaushalmodi/ox-hugo/commit/${1}${2}][${1}]]"}, # Hyperlink commit references.

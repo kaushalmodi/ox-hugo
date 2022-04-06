@@ -60,7 +60,9 @@ All notable changes to this project will be documented in this file.\n
     { pattern = "  +", replace = " "}, # Replace multiple spaces with a single space.
     { pattern = "\\[\\[", replace = "[​["}, # Break Org-link-like syntax in commit messages by injecting zero-width-space (ZWS) between "[[".
     { pattern = "file:", replace = "file​:"}, # Break Org-file-link-like syntax in commit messages by injecting ZWS between "file" and ":".
-    { pattern = "https://github.com/[^ ]+/issues/([0-9]+)[^ ]*", replace = "Issue # [[${0}][${1}]]"}, # Turn issue links into Org links with desc.
+    { pattern = "https://github.com/kaushalmodi/ox-hugo/issues/([0-9]+)(#issuecomment-[0-9]+)*", replace = "Issue # [[${0}][${1}]]"}, # Turn issue links for this repo into Org links with desc.
+    { pattern = "https://github.com/kaushalmodi/ox-hugo/pull/([0-9]+)", replace = "PR # [[${0}][${1}]]"}, # Turn PR links for this repo into Org links with desc.
+    { pattern = "([^\\[])(https://github.com/([^ ]+)/(issues|pull)/([0-9]+)(#issuecomment-[0-9]+)*)", replace = "${1}[[${2}][${3} #${5}]]"}, # Turn external issue links into Org links with desc.
     { pattern = "Merge pull request #([0-9]+) from [^ ]+", replace = "PR # [[https://github.com/kaushalmodi/ox-hugo/pull/${1}][${1}]]:"}, # Turn PR references into links.
     { pattern = "https://github.com/kaushalmodi/ox-hugo/commit/([a-f0-9]{7})[a-f0-9]*", replace = "commit # [[${0}][${1}]]"}, # Hyperlink commit references.
     { pattern = "([ \\n])(([a-f0-9]{7})[a-f0-9]*)", replace = "${1}commit # [[https://github.com/kaushalmodi/ox-hugo/commit/${2}][${3}]]"}, # Hyperlink commit references.

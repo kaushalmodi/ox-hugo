@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Tweak the CHANGELOG formatting … ([[https://github.com/kaushalmodi/ox-hugo/commit/d02faf7844399692c71eb946803a8ae71694f0bc][d02faf7]])
 - Changelog: Replace ws removal hack with commit preprocessing … Ref: Issue # [[https://github.com/orhun/git-cliff/issues/77#issuecomment-1090234236][77]] … ([[https://github.com/kaushalmodi/ox-hugo/commit/24c8937833eca6193de4c3a200d40642572ac774][24c8937]])
 - Changelog: Auto-hyperlink Issue and PR references in git logs … Ref: Issue # [[https://github.com/orhun/git-cliff/issues/77#issuecomment-1090234236][77]] … ([[https://github.com/kaushalmodi/ox-hugo/commit/cb2fad173356c22152ee2dce9d4855ebca6577b2][cb2fad1]])
+- Git-cliff: Uniquify group links for each version in changelog … ([[https://github.com/kaushalmodi/ox-hugo/commit/aa4172e061b199ae20c3d191c83f5ba15474312f][aa4172e]])
 
 *** @@html:<span style="display:none;">6</span>@@ :hammer: Testing
 :PROPERTIES:

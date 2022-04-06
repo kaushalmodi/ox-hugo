@@ -4,6 +4,20 @@
 
 All notable changes to this project will be documented in this file.
 
+** [unreleased]
+
+*** @@html:<span style="display:none;">0</span>@@ :boom: Breaking
+
+- [*breaking*] Html validation: Do not export <style> elements above TOC ([[https://github.com/kaushalmodi/ox-hugo/commit/35d9552e29199e00de61cdad276c4407b7e9610e][35d9552]])
+
+*** @@html:<span style="display:none;">1</span>@@ :sparkles: Features
+
+- Add <small> to the list of inline HTML elements ([[https://github.com/kaushalmodi/ox-hugo/commit/a0d1c8eabca37cc03a893ccef7df4b2e980b92df][a0d1c8e]])
+
+*** @@html:<span style="display:none;">6</span>@@ :hammer: Testing
+
+- Add more LaTex fragment examples for dvisvgm ([[https://github.com/kaushalmodi/ox-hugo/commit/16be913231fb0c9b77078a562bd68c8413c6afac][16be913]])
+
 ** [0.9.0] - <2022-04-04>
 
 [[https://github.com/kaushalmodi/ox-hugo/compare/9751d34e1133b89a533a978c085b0715f85db648...a85410081ac20ada23fff52a7b7ab6c8151aa8e0][9751d34...a854100]]

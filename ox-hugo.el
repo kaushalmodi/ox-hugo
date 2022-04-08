@@ -1730,27 +1730,58 @@ holding contextual information."
   (let ((drawer-name (downcase (org-element-property :drawer-name drawer))))
     (cond
      ((string= "logbook" drawer-name)
+      ;; (message "[ox-hugo logbook] elem type: %s" (org-element-type drawer))
       ;; (pp drawer)
-      (message "[ox-hugo logbook] elem type: %s" (org-element-type drawer))
-      (org-element-map drawer 'plain-list
-        (lambda (lst)
-          (org-element-map lst 'item
-            (lambda (item)
-              (org-element-map item 'paragraph
-                (lambda (para)
-                  ;; (pp para)
-                  (message "[ox-hugo logbook] list content: %s"
-                           (org-export-data para info))
-                  (org-element-map para 'timestamp
-                    (lambda (ts)
-                      ;; (pp ts)
-                      (message "[ox-hugo logbook] ts: %s"
-                               (org-element-property :raw-value ts))))))))))
 
-      ;; TODO: Code to save the notes content and date/lastmod
-      ;; timestamps to appropriate front-matter.
-
-      "") ;Nothing from the LOGBOOK gets exported to the Markdown body
+      ;; (drawer
+      ;;  ..
+      ;;  (plain-list
+      ;;   (item
+      ;;    (paragraph
+      ;;     <State change text>
+      ;;     (timestamp <timestamp> )))))
+      (let ((logbook-states
+             (org-element-map drawer 'plain-list
+               (lambda (lst)
+                 (org-element-map lst 'item
+                   (lambda (item)
+                     (org-element-map item 'paragraph
+                       (lambda (para)
+                         ;; (pp para)
+                         (let ((ts-str (org-element-map para 'timestamp
+                                         (lambda (ts)
+                                           ;; (pp ts)
+                                           (let* ((ts-raw-str (org-element-property :raw-value ts))
+                                                  (ts-str (format-time-string
+                                                           "%Y-%m-%d"
+                                                           (apply #'encode-time
+                                                                  (org-parse-time-string ts-raw-str)))))
+                                             ;; (message "[ox-hugo logbook DBG] ts: %s, ts fmtd: %s"
+                                             ;;          ts-raw-str ts-str)
+                                             ts-str))
+                                         nil :first-match)) ;Each 'paragraph element will have only one 'timestamp element
+                               (para-raw-str (org-export-data para info))
+                               (state-change ())
+                               to-state from-state)
+                           (save-match-data
+                             (and (string-match "^State\\s-+\"\\([^\"]+\\)\"\\s-+from\\s-+\"\\([^\"]+\\)" para-raw-str)
+                                  (setq to-state (match-string-no-properties 1 para-raw-str))
+                                  (setq from-state (match-string-no-properties 2 para-raw-str))))
+                           (message "[ox-hugo logbook] from %s to %s @ %s"
+                                    from-state to-state ts-str)
+                           (setq state-change (plist-put state-change :from-state from-state))
+                           (setq state-change (plist-put state-change :to-state to-state))
+                           (setq state-change (plist-put state-change :timestamp ts-str))
+                           (message "[ox-hugo logbook] state change : %S" state-change)
+                           state-change))
+                       nil :first-match) ;Each 'item element will have only one 'paragraph element
+                     )))
+               nil :first-match))) ;The 'logbook element will have only one 'plain-list element
+        (message "[ox-hugo logbook] all state changes : %S" logbook-states)
+        ;; TODO: Code to save the notes content and date/lastmod
+        ;; timestamps to appropriate front-matter.
+        ;; (message "[ox-hugo logbook] state changes : %S" logbook-states)
+        "")) ;Nothing from the LOGBOOK gets exported to the Markdown body
      (t
       (org-html-drawer drawer contents info)))))
 

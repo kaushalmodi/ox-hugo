@@ -84,6 +84,7 @@ All notable changes to this project will be documented in this file.\n
       { body = "BREAKING CHANGE:"                          , group = "@@html:<span style=\"display:none;\">0</span>@@ :boom: Breaking"},
 
       # Non-conventional
+      { message = "^minor", skip = true},
       { message = "^([Cc]leanup|[Cc]onsisten|[Tt]ypo)", skip = true},
       { message = "users(\\.toml)*", skip = true},
       { message = "^tool", skip = true}, # Commits related to tools like git-cliff, Makefile, etc.

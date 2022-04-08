@@ -458,8 +458,8 @@ Once that property was renamed to an asterisk-less name:
 ~EXPORT_HUGO_SECTION_FRAG~, Org Column started working (see the
 screenshot in {{{pr(616)}}}).
 ***** Changes needed in user Org files
-Replace all instances of "EXPORT_HUGO_SECTION*" with
-"*EXPORT_HUGO_SECTION_FRAG*" in all Org files.
+Replace "EXPORT_HUGO_SECTION*" with "*EXPORT_HUGO_SECTION_FRAG*" in
+all Org files.
 **** Org Hugo Auto Export feature now a /minor mode/ -- <2019-01-03 Thu>
 ***** Changes needed in user config
 1. Do *not* require ~ox-hugo-auto-export~ any more!

@@ -6,6 +6,7 @@
 
 #+macro: commit commit [[https://github.com/kaushalmodi/ox-hugo/commit/$1][$1]]
 #+macro: issue #[[https://github.com/kaushalmodi/ox-hugo/issues/$1][$1]]
+#+macro: pr PR #[[https://github.com/kaushalmodi/ox-hugo/pull/$1][$1]]
 #+macro: bfissue Blackfriday #[[https://github.com/russross/blackfriday/issues/$1][$1]]
 #+macro: hugoissue Hugo #[[https://github.com/gohugoio/hugo/issues/$1][$1]]
 #+macro: ox-hugo-test-file  [[https://raw.githubusercontent.com/kaushalmodi/ox-hugo/main/test/site/content-org/all-posts.org][=all-posts.org=]]

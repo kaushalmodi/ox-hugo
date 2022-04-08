@@ -174,7 +174,7 @@ Before you export check that these properties are set as you need:
 [fn:section_more] The ~HUGO_SECTION~ is the bare-minimum requirement
 to specify the destination path. That path can be further tweaked
 using ~HUGO_BUNDLE~ key (and the associated ~EXPORT_HUGO_BUNDLE~
-property), and the ~EXPORT_HUGO_SECTION*~ property (only for
+property), and the ~EXPORT_HUGO_SECTION_FRAG~ property (only for
 /per-subtree/ exports).
 *** Export bindings
 The common =ox-hugo= export bindings are:
@@ -444,8 +444,24 @@ have the exported Markdown files.
 :PROPERTIES:
 :EXPORT_FILE_NAME: deprecation-notices
 :END:
+**** ~EXPORT_HUGO_SECTION*~ property is now ~EXPORT_HUGO_SECTION_FRAG~ -- <2022-04-07 Thu>
+:PROPERTIES:
+:CUSTOM_ID: export-hugo-section-frag
+:END:
+***** Reason for this change
+The earlier ~EXPORT_HUGO_SECTION*~ property name was not a canonical
+Org property name because it had an \ast{} in its name. It came to light in
+{{{issue(615)}}} that an Org built-in feature [[info:org#Column View][Org Column]] was unable to
+filter/edit that property.
+
+Once that property was renamed to an asterisk-less name:
+~EXPORT_HUGO_SECTION_FRAG~, Org Column started working (see the
+screenshot in {{{pr(616)}}}).
+***** Changes needed in user Org files
+Replace all instances of "EXPORT_HUGO_SECTION*" with
+"*EXPORT_HUGO_SECTION_FRAG*" in all Org files.
 **** Org Hugo Auto Export feature now a /minor mode/ -- <2019-01-03 Thu>
-***** Changes needed to be done in user config
+***** Changes needed in user config
 1. Do *not* require ~ox-hugo-auto-export~ any more!
    - For now, you will get a warning each time you do that
      /require/. But in few weeks, the old ~ox-hugo-auto-export.el~
@@ -3211,34 +3227,35 @@ But this is Emacs, and with the help of Emacs-Lisp and kind help from
 to this!
 
 #+begin_verse
->    /Introducing *~EXPORT_HUGO_SECTION*~* (with that asterisk)/ :tada:
+>    /Introducing *~EXPORT_HUGO_SECTION_FRAG~*/ :tada:
 #+end_verse
 
-If a subtree has the ~EXPORT_HUGO_SECTION*~ property set, it is
-treated as a section path *fragment*. Such fragment properties will be
-concatenated with the *same* fragment properties further up in the
-parent hierarchy.
+If a subtree has the ~EXPORT_HUGO_SECTION_FRAG~ property set[fn:11],
+it is treated as a section path *fragment*. Such fragment properties
+will be concatenated with the *same* fragment properties further up in
+the parent hierarchy.
 
-The collective concatenated value of ~EXPORT_HUGO_SECTION*~ properties
-is further prefixed with the value of the good old ~HUGO_SECTION~
-keyword/property that's effective in that subtree.
+The collective concatenated value of ~EXPORT_HUGO_SECTION_FRAG~
+properties is further prefixed with the value of the good old
+~HUGO_SECTION~ keyword/property that's effective in that subtree.
 
 #+begin_note
-~EXPORT_HUGO_SECTION*~ *has* to be set as a subtree property. There is
-no Org keyword equivalent for this, because this property is designed
-only for /per-subtree/ flow (and it makes sense only for this flow).
+~EXPORT_HUGO_SECTION_FRAG~ *has to be set as a subtree
+property*. There is no Org keyword equivalent for this, because this
+property is designed (and makes sense) only for the /per-subtree/
+flow.
 #+end_note
 
 So the final *section path* looks like this:
-#+begin_example
-<HUGO_BASE_DIR>/content/<HUGO_SECTION>/<concatenated values of EXPORT_HUGO_SECTION*>/
-                        └─────────────────────  section path  ──────────────────────┘
-#+end_example
+#+begin_src goat
+<HUGO_BASE_DIR>/content/<HUGO_SECTION>/<concatenated values of EXPORT_HUGO_SECTION_FRAG>/
+                        └─────────────────────  section path  ─────────────────────────┘
+#+end_src
 
 See the below example to get further clarity on this logic.
 
 #+name: code__using_hugo_section_fragments
-#+caption: Using ~EXPORT_HUGO_SECTION*~ in conjunction to ~EXPORT_HUGO_SECTION~
+#+caption: Using ~EXPORT_HUGO_SECTION_FRAG~ with ~EXPORT_HUGO_SECTION~
 #+begin_src org
 ,* Main section
 :PROPERTIES:
@@ -3247,22 +3264,22 @@ See the below example to get further clarity on this logic.
 The /section path/ derived at this level is ~"main/"~.
 ,** Sub section 1
 :PROPERTIES:
-:EXPORT_HUGO_SECTION*: sub1
+:EXPORT_HUGO_SECTION_FRAG: sub1
 :END:
 The /section path/ derived at this level is ~"main/sub1/"~.
 ,*** Sub section 1.1
 :PROPERTIES:
-:EXPORT_HUGO_SECTION*: p1
+:EXPORT_HUGO_SECTION_FRAG: p1
 :END:
 The /section path/ derived at this level is ~"main/sub1/p1/"~.
 ,*** Sub section 1.2
 :PROPERTIES:
-:EXPORT_HUGO_SECTION*: p2
+:EXPORT_HUGO_SECTION_FRAG: p2
 :END:
 The /section path/ derived at this level is ~"main/sub1/p2/"~.
 ,** Sub section 2
 :PROPERTIES:
-:EXPORT_HUGO_SECTION*: sub2
+:EXPORT_HUGO_SECTION_FRAG: sub2
 :END:
 The /section path/ derived at this level is ~"main/sub2/"~.
 #+end_src
@@ -4642,6 +4659,11 @@ Categories,)}}}.
 - Code optimization: Use of =org-entry-get= at places instead of
   maintaining global variables.
 * Footnotes
+
+
+[fn:11] If you are looking for ~EXPORT_HUGO_SECTION*~ property, that
+has been deprecated; please see {{{titleref(Deprecation
+Notices#export-hugo-section-frag)}}}.
 
 [fn:10] You can find the same (or similar) ~author.html~ partial used
 in the [[https://github.com/kaushalmodi/hugo-onyx-theme][Hugo theme]] used for this doc site.

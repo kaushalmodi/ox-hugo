@@ -161,7 +161,7 @@ Before you export check that these properties are set as you need:
 [fn:-1-section_more] The ~HUGO_SECTION~ is the bare-minimum requirement
 to specify the destination path. That path can be further tweaked
 using ~HUGO_BUNDLE~ key (and the associated ~EXPORT_HUGO_BUNDLE~
-property), and the ~EXPORT_HUGO_SECTION*~ property (only for
+property), and the ~EXPORT_HUGO_SECTION_FRAG~ property (only for
 /per-subtree/ exports).
 ** Export bindings
 The common =ox-hugo= export bindings are:

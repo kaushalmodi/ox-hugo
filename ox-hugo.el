@@ -1563,9 +1563,9 @@ Search is case-insensitive."
   "Return the Hugo section path.
 This is the path relative to the Hugo \"content\" directory.
 
-If the EXPORT_HUGO_SECTION* keyword is set in the current or a
+If the EXPORT_HUGO_SECTION_FRAG keyword is set in the current or a
 parent subtree, return the concatenation of the \"HUGO_SECTION\"
-and the concatenated \"EXPORT_HUGO_SECTION*\" values as a path.
+and the concatenated \"EXPORT_HUGO_SECTION_FRAG\" values as a path.
 
 Else, return the \"HUGO_SECTION\" path.
 
@@ -1574,7 +1574,7 @@ The function always returns a string.
 INFO is a plist used as a communication channel."
   (let* ((hugo-section-prop (org-entry-get nil "EXPORT_HUGO_SECTION" :inherit))
          (hugo-section-kwd (plist-get info :hugo-section))
-         (hugo-section-frag-prop (org-entry-get nil "EXPORT_HUGO_SECTION*" :inherit))
+         (hugo-section-frag-prop (org-entry-get nil "EXPORT_HUGO_SECTION_FRAG" :inherit))
          (section-path-1 (or hugo-section-prop ;EXPORT_HUGO_SECTION gets higher precedence
                              hugo-section-kwd)) ;This is mainly to support per-file flow
          section-path)
@@ -1587,7 +1587,7 @@ INFO is a plist used as a communication channel."
     (when (org-string-nw-p hugo-section-frag-prop)
       (setq section-path-1
             (concat (file-name-as-directory section-path-1) ;Add trailing slash if absent
-                    (org-hugo--entry-get-concat nil "EXPORT_HUGO_SECTION*" "/"))))
+                    (org-hugo--entry-get-concat nil "EXPORT_HUGO_SECTION_FRAG" "/"))))
     (setq section-path (file-name-as-directory section-path-1))
     ;; (message "[ox-hugo section-path DBG] section path: %S" section-path)
     section-path))
@@ -2084,8 +2084,8 @@ Return nil if none of the above are true."
          ;; path fragments.
          (while (and pheading
                      (not (org-export-get-node-property :EXPORT_HUGO_SECTION pheading nil)))
-           ;; Add the :EXPORT_HUGO_SECTION* value to the fragment list.
-           (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION* pheading nil))
+           ;; Add the :EXPORT_HUGO_SECTION_FRAG value to the fragment list.
+           (when (setq fragment (org-export-get-node-property :EXPORT_HUGO_SECTION_FRAG pheading nil))
              (push fragment fragments))
            (setq pheading (org-element-property :parent pheading)))
 
@@ -4260,7 +4260,7 @@ are \"toml\" and \"yaml\"."
                      "HUGO_ALLOW_SPACES_IN_TAGS"
                      "HUGO_BLACKFRIDAY"
                      "HUGO_SECTION"
-                     "HUGO_SECTION*"
+                     "HUGO_SECTION_FRAG"
                      "HUGO_BUNDLE"
                      "HUGO_BASE_DIR"
                      "HUGO_GOLDMARK"

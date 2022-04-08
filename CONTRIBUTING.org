@@ -60,7 +60,7 @@ error backtrace,
 
 Steps to run tests on your machine:
 1. Clone this repo.
-2. Ensure that ~pandoc~ (at least version [[https://github.com/jgm/pandoc/releases/tag/2.16.2][*2.16.2*]]) are
+2. Ensure that ~pandoc~ (at least version [[https://github.com/jgm/pandoc/releases/tag/2.16.2][*2.16.2*]]) is
    installed (more info
    [[https://ox-hugo.scripter.co/doc/contributing-guide/#contribute-to-code][here]]).
 3. Run ~make -j1 test~. This runs all the tests from the two kinds of

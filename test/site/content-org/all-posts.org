@@ -7306,6 +7306,9 @@ This test removes the ~foo~ front-matter key from the exported file
 :EXPORT_OPTIONS: d:t
 :END:
 :LOGBOOK:
+- Note taken on [2022-04-08 Fri 14:53] \\
+  This note addition prompt shows up on typing the ~C-c C-z~ binding.
+  See [[info:org#Drawers]].
 - Note taken on [2018-09-06 Thu 11:45] \\
   Another note *bold* /italics/.
 - Note taken on [2018-09-06 Thu 11:37] \\

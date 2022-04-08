@@ -4,32 +4,36 @@
 
 All notable changes to this project will be documented in this file.
 
-** :fire: *unreleased*
+** *0.10.0* - <2022-04-07>
+
+[[https://github.com/kaushalmodi/ox-hugo/compare/a85410081ac20ada23fff52a7b7ab6c8151aa8e0...ad412e0d2c8b36232abe090893cc731ffb1b8e17][a854100...ad412e0]]
 
 *** @@html:<span style="display:none;">0</span>@@ :boom: Breaking
 :PROPERTIES:
-:CUSTOM_ID: 0-boom-breaking
+:CUSTOM_ID: 0-boom-breaking-v0.10.0
 :END:
 
 - Html validation: Do not export <style> elements above TOC … <style> elements are not allowed inside <article> HTML elements. It is … very likely that the TOC +​​ post content would be wrapped in an … … ([[https://github.com/kaushalmodi/ox-hugo/commit/35d9552e29199e00de61cdad276c4407b7e9610e][35d9552]])
+- `EXPORT_​​HUGO_​​SECTION_​​FRAG` replaces `EXPORT_​​HUGO_​​SECTION*​​` … This commit is marked as a "feature" because now you can view/edit … Hugo section fragments easily in Org Column view. … If you… ([[https://github.com/kaushalmodi/ox-hugo/commit/88ae5c8c65a4f0d401b450338cf8bb36c47684fc][88ae5c8]])
 
 *** @@html:<span style="display:none;">1.1</span>@@ :rocket: PR Merges
 :PROPERTIES:
-:CUSTOM_ID: 1-1-rocket-pr-merges
+:CUSTOM_ID: 1-1-rocket-pr-merges-v0.10.0
 :END:
 
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/613][613]]: … fix!: html validation: Do not export <style> elements above TOC ([[https://github.com/kaushalmodi/ox-hugo/commit/2f37d27b60ce94217f5092e410fe8e74c9e7ecb0][2f37d27]])
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/616][616]]: … feat!: `EXPORT_​​HUGO_​​SECTION_​​FRAG` replaces `EXPORT_​​HUGO_​​SECTION*​​` ([[https://github.com/kaushalmodi/ox-hugo/commit/ad412e0d2c8b36232abe090893cc731ffb1b8e17][ad412e0]])
 
 *** @@html:<span style="display:none;">1</span>@@ :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: 1-sparkles-features
+:CUSTOM_ID: 1-sparkles-features-v0.10.0
 :END:
 
 - Add <small> to the list of inline HTML elements ([[https://github.com/kaushalmodi/ox-hugo/commit/a0d1c8eabca37cc03a893ccef7df4b2e980b92df][a0d1c8e]])
 
 *** @@html:<span style="display:none;">3</span>@@ :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: 3-bug-bug-fixes
+:CUSTOM_ID: 3-bug-bug-fixes-v0.10.0
 :END:
 
 - Add a missing : in a replacement rule in cliff.toml ([[https://github.com/kaushalmodi/ox-hugo/commit/998ade74e44eec23d1ddd49a885ccedb430c9626][998ade7]])
@@ -37,7 +41,7 @@ All notable changes to this project will be documented in this file.
 
 *** @@html:<span style="display:none;">4</span>@@ :memo: Documentation
 :PROPERTIES:
-:CUSTOM_ID: 4-memo-documentation
+:CUSTOM_ID: 4-memo-documentation-v0.10.0
 :END:
 
 - Update git-cliff "breaking change" regex; update CHANGELOG ([[https://github.com/kaushalmodi/ox-hugo/commit/2cdb6a15bd6f658f90d3dd49963f9eef3c7ba0b5][2cdb6a1]])
@@ -48,7 +52,7 @@ All notable changes to this project will be documented in this file.
 
 *** @@html:<span style="display:none;">5</span>@@ :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: 5-recycle-refactor
+:CUSTOM_ID: 5-recycle-refactor-v0.10.0
 :END:
 
 - Optimize a regex replacement in cliff.toml using ${0} ([[https://github.com/kaushalmodi/ox-hugo/commit/8831e4979781084c9f01842c0da494477330db6f][8831e49]])
@@ -56,7 +60,7 @@ All notable changes to this project will be documented in this file.
 
 *** @@html:<span style="display:none;">6</span>@@ :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: 6-hammer-testing
+:CUSTOM_ID: 6-hammer-testing-v0.10.0
 :END:
 
 - Add more LaTex fragment examples for dvisvgm … Ref: Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/611][611]] ([[https://github.com/kaushalmodi/ox-hugo/commit/16be913231fb0c9b77078a562bd68c8413c6afac][16be913]])

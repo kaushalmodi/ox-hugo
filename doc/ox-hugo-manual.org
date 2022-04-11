@@ -1022,7 +1022,8 @@ The date meta-data can be set as Org properties in post subtrees,
 similar to the keywords set for [[#dates-file-based-exports][File-based exports]]. But subtree-based
 exports allow an even concise way to set those dates.
 ***** Date
-This is interpreted from the Org [[https://orgmode.org/manual/Special-properties.html][Special Property]] =CLOSED=.
+This is interpreted from the Org /Special Property/ =CLOSED= (see
+[[info:org#Special Properties]]).
 
 The =CLOSED= property is inserted once the post-subtree's =TODO= state
 is set to =DONE= (~C-c C-t~), *if* the =org-log-done= variable is set
@@ -1239,8 +1240,7 @@ will export to:
   code blocks.
 **** Line numbers
 Line numbers can be enabled/configured using the Org =-n= / =+n=
-syntax. See the Info node [[https://orgmode.org/manual/Literal-Examples.html][=(org) Literal Examples=]] for more
-information.
+syntax. See [[info:org#Literal Examples]] for more information.
 
 Here are some examples fetched from the "Source blocks with line
 number annotation" test case in the {{{ox-hugo-test-file}}}.
@@ -1358,7 +1358,7 @@ hidden by adding this to the CSS:
 **** Code References
 ~ox-hugo~ generates code references hyperlinked to line numbers of
 source and example blocks when using the ~(ref:REF)~ syntax in the
-blocks as explained in [[https://orgmode.org/manual/Literal-Examples.html][Literal Examples]] section of the Org manual.
+blocks as explained in [[info:org#Literal Examples]].
 
 #+begin_quote
 Org interprets strings like ~(ref:name)~ as labels, and use them as
@@ -1608,10 +1608,6 @@ Then in your export setup, add that special tag to the
 =org-export-exclude-tags= variable. You can grep through this repo for
 the special tag =dont_export_during_make_test= that is used to mark
 few Org files to not be exported when running the tests.
-****** Why use =#+filetags= and not =#+tags=?
-- About =#+filetags= -- [[https://orgmode.org/manual/Tag-Inheritance.html][Tag Inheritance]] or =C-h i g (org) Tag
-  inheritance=
-- About =#+tags= -- [[https://orgmode.org/manual/Setting-Tags.html][Setting Tags]] or =C-h i g (org) Setting Tags=
 ***** Categories
 :PROPERTIES:
 :CUSTOM_ID: categories--subtree-based-export
@@ -1662,6 +1658,21 @@ If the tag inheritance doesn't work as expected, check the value of
 Above, the "My post" will end up have all tags ("tag1", "tag2",
 "tag3") and all categories ("cat1", "cat2", "cat3") if
 =org-use-tag-inheritance= is =t=.
+**** Why use =#+filetags= and not =#+tags=?
+=#+tags= keyword has some special uses in Org documents.
+- List of available tags for the current file :: It's used for
+  providing a list of tags at the top of an Org file which gets added
+  to the pool of tags for auto-completion (see [[info:org#Setting Tags]]
+  or =C-h i g (org) Setting Tags=).
+- Tag hierarchy definition :: The =#+tags= keyword is also used to
+  define /Tag Hierarchies/. See [[info:org#Tag Hierarchy]] (or =C-h i g
+  (org) Tag Hierarchy=).
+
+And the Org manual already has a dedicated keyword =#+filetags= to
+provide a list of tags to *apply* to the current file (see
+[[info:org#Tag Inheritance]] or =C-h i g (org) Tag inheritance=). So
+~ox-hugo~ recognizes =#+filetags= and not =#+tags= to collect the tags
+assigned for the current post.
 **** File-based Export
 ***** Tags
 :PROPERTIES:
@@ -1784,8 +1795,8 @@ control on:
 - Whether you want to list the sub-headings *only from the current
   heading in the post* --- /Example: ~#+toc: headlines 1 local~/.
 - Whether you want to list the sub-headings from a specified heading
-  in the current post using the ~:target~ attribute. See the [[https://orgmode.org/manual/Table-of-Contents.html][Org
-  Manual -- Table of Contents]] section for its example.
+  in the current post using the ~:target~ attribute. See
+  [[info:org#Table of Contents]] for its example.
 
 If you want to use the Org-generated TOC instead of the Hugo-generated
 one, do one of the following:
@@ -1802,7 +1813,7 @@ one, do one of the following:
    anywhere else in the post, you can do it using the =#+toc=
    keyword.. Example: =#+toc: headlines 2=.
 
-See the [[https://orgmode.org/manual/Table-of-Contents.html][Table of Contents]] section in the Org manual for more info.
+See [[info:org#Table of Contents]] for more information.
 
 /Note that =ox-hugo= does not support =#+toc: listings= and =#+toc:
 tables=./
@@ -2372,7 +2383,7 @@ See `org-capture-templates' for more information."
 
 Above capture will auto-insert a heading prefixed with =TODO=. With
 =org-log-done= set to ='time=, on changing the =TODO= state to the
-=DONE= state (=C-c C-t=), a [[https://orgmode.org/manual/Special-Properties.html][/Special Property/]] called =CLOSED= will be
+=DONE= state (=C-c C-t=), a [[info:org#Special Properties][/Special Property/]] called =CLOSED= will be
 auto-inserted below the heading. Below is an example.
 #+begin_example
 ,*** DONE Narrowing the Author column in Magit                       :org:log:
@@ -4045,7 +4056,7 @@ Above renders to:
 This links to the @@hugo:[Org Special Blocks]({{< relref
 "org-special-blocks" >}})@@ page.
 
-See the [[https://orgmode.org/org.html#Quoting-HTML-tags][HTML Export inline syntax]] for reference.
+See [[info:org#Quoting HTML tags]] for reference.
 
 /Using ~@@md:..@@~ or ~@@html:..@@~ will also export the same way./
 ***** ~#+hugo:~ Keyword
@@ -4092,7 +4103,7 @@ This is a warning.
 #+end_export
 **** Org Macros
 If you find yourself using the [[#inline-syntax][~@@hugo:..@@~ Inline Syntax]] a lot, you
-might appreciate the power of [[https://orgmode.org/manual/Macro-Replacement.html][Org Macros]].
+might appreciate the power of [[info:org#Macro Replacement][Org Macros]].
 
 This is best shown using the same ~relref~ shortcode example ..
 
@@ -4204,8 +4215,7 @@ org-hugo-get-custom-id org-hugo-get-heading-slug org-hugo-get-md5)~.
   ### Heading in a post {#74283e7c-a20b-1c22-af88-e41ff8055d17}
   #+end_src
 **** Target Links
-Org mode specifies the ~<<target>>~ syntax in the [[https://orgmode.org/manual/Internal-Links.html][Internal Links]]
-section of the Org manual.
+Org mode specifies the ~<<target>>~ syntax in [[info:org#Internal Links]].
 
 By default, a target named "foo" <<foo>>(~<<foo>>~) will create an
 HTML anchor with a prefix (like ~org-target--~). See [[foo][this link]] to that
@@ -4243,8 +4253,8 @@ Org Export library ~ox.el~ to derive translated strings for these:
 
 The translation language is detected from the ~#+language:~ keyword
 present in the Org file or the ~:EXPORT_LANGUAGE:~ property in the
-post subtree. For reference, see [[https://orgmode.org/manual/Export-Settings.html#index-LANGUAGE_002c-keyword][~LANGUAGE~ in the Export Settings]]
-section of the Org manual.
+post subtree. For reference, see the ~LANGUAGE~ keyword documentation
+in [[info:org#Export Settings]].
 *** Linking numbered elements
 :PROPERTIES:
 :EXPORT_FILE_NAME: linking-numbered-elements
@@ -4428,8 +4438,8 @@ the theme and component dependencies, Go is required for that.
   #+end_src
 - Export descriptive or definition lists in Blackfriday-friendly
   Markdown format -- {{{issue(114)}}}.
-- Support Org Special Blocks like in HTML and [[https://orgmode.org/manual/Special-blocks-in-LaTeX-export.html][LaTeX exports]] --
-  {{{issue(105)}}}. Here's one little example:
+- Support Org Special Blocks like in HTML and [[info:org#Special blocks
+  in LaTeX export]] -- {{{issue(105)}}}. Here's one little example:
   #+begin_src org
   ,#+begin_mark
   /Some/ *marked* text

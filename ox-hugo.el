@@ -889,10 +889,12 @@ https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=6b2a7cb20b357e73
   "Add support for exporting [[info:..]] links for `hugo' format."
   (let* ((parts (split-string path "#\\|::"))
          (manual (car parts))
-         (node (or (nth 1 parts) "Top")))
+         (node (or (nth 1 parts) "Top"))
+         (desc (or desc
+                   (format "%s Info: %s" (capitalize manual) node))))
     (when (member format '(md hugo))
       (format "[%s](%s#%s)"
-              (or desc path)
+              desc
               (org-info-map-html-url manual)
               (org-info--expand-node-name node)))))
 

@@ -3789,7 +3789,8 @@ Below links are invalid, they are there just for test purpose.
 Test links to Info manual nodes.
 #+end_description
 - Link to an Org Info manual node: [[info:org#Search Options]]
-- Link to an Emacs Info manual node: [[info:emacs#Point]]
+- Link to an Emacs Info manual node: [[info:emacs#Point]] (same link but
+  with a custom description: [[info:emacs#Point][🛈 Emacs: Point]])
 - Link to an Emacs Lisp Info manual node: [[info:elisp#Lambda Expressions]]
 * Equations                                                       :equations:
 ** MathJax                                                          :mathjax:

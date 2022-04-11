@@ -4,6 +4,23 @@
 
 All notable changes to this project will be documented in this file.
 
+** :fire: *unreleased*
+
+*** @@html:<span style="display:none;">1</span>@@ :sparkles: Features
+:PROPERTIES:
+:CUSTOM_ID: 1-sparkles-features
+:END:
+
+- Improve the default description of exported info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/13870caa6980cb219da3830c21c54c07467aa51e][13870ca]])
+
+*** @@html:<span style="display:none;">4</span>@@ :memo: Documentation
+:PROPERTIES:
+:CUSTOM_ID: 4-memo-documentation
+:END:
+
+- Update Equations doc with dvisvgm and dvipng references … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/619][619]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/c322fe2048b7ad2a20d48020239f462725ce3d59][c322fe2]])
+- Replace manually pasted HTML links with info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/5e13e6cec230f90de958a38b461622454f0c2620][5e13e6c]])
+
 ** *0.10.0* - <2022-04-07>
 
 [[https://github.com/kaushalmodi/ox-hugo/compare/a85410081ac20ada23fff52a7b7ab6c8151aa8e0...ad412e0d2c8b36232abe090893cc731ffb1b8e17][a854100...ad412e0]]

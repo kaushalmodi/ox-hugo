@@ -26,9 +26,15 @@ All notable changes to this project will be documented in this file.\n
     {% endif %}\
 {% endif %}\
 {% for group, commits in commits | group_by(attribute="group") %}
-    ***{{ group | striptags }}
+    {% set group_minus_html = group | striptags -%}
+    {% set group_array = group_minus_html | split(pat=":") -%}
+    {# If group_minus_html = ":memo: Documentation", split that by : so that you
+       get an array: ["", "memo", "Documentation"], and then use the element
+       from index 2 to derive the CUSTOM_ID.
+    -#}
+    ***{{ group_minus_html }}
     :PROPERTIES:
-    :CUSTOM_ID: {{ group | striptags | slugify }}{% if version %}-{{ version }}{% endif %}
+    :CUSTOM_ID: {{ group_array.2 | slugify }}{% if version %}-{{ version }}{% endif %}
     :END:
     {% for commit in commits %}
         - {{ commit.message

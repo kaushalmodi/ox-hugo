@@ -8,14 +8,14 @@ All notable changes to this project will be documented in this file.
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features
+:CUSTOM_ID: features
 :END:
 
 - Improve the default description of exported info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/13870caa6980cb219da3830c21c54c07467aa51e][13870ca]])
 
 *** :memo: Documentation
 :PROPERTIES:
-:CUSTOM_ID: memo-documentation
+:CUSTOM_ID: documentation
 :END:
 
 - Update Equations doc with dvisvgm and dvipng references … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/619][619]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/c322fe2048b7ad2a20d48020239f462725ce3d59][c322fe2]])
@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
 
 *** :boom: Breaking
 :PROPERTIES:
-:CUSTOM_ID: boom-breaking-v0.10.0
+:CUSTOM_ID: breaking-v0.10.0
 :END:
 
 - Html validation: Do not export <style> elements above TOC … <style> elements are not allowed inside <article> HTML elements. It is … very likely that the TOC +​​ post content would be wrapped in an … … ([[https://github.com/kaushalmodi/ox-hugo/commit/35d9552e29199e00de61cdad276c4407b7e9610e][35d9552]])
@@ -35,14 +35,14 @@ All notable changes to this project will be documented in this file.
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.10.0
+:CUSTOM_ID: features-v0.10.0
 :END:
 
 - Add <small> to the list of inline HTML elements ([[https://github.com/kaushalmodi/ox-hugo/commit/a0d1c8eabca37cc03a893ccef7df4b2e980b92df][a0d1c8e]])
 
 *** :rocket: PR Merges
 :PROPERTIES:
-:CUSTOM_ID: rocket-pr-merges-v0.10.0
+:CUSTOM_ID: pr-merges-v0.10.0
 :END:
 
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/613][613]]: … fix!: html validation: Do not export <style> elements above TOC ([[https://github.com/kaushalmodi/ox-hugo/commit/2f37d27b60ce94217f5092e410fe8e74c9e7ecb0][2f37d27]])
@@ -50,7 +50,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-bug-fixes-v0.10.0
+:CUSTOM_ID: bug-fixes-v0.10.0
 :END:
 
 - Add a missing : in a replacement rule in cliff.toml ([[https://github.com/kaushalmodi/ox-hugo/commit/998ade74e44eec23d1ddd49a885ccedb430c9626][998ade7]])
@@ -58,7 +58,7 @@ All notable changes to this project will be documented in this file.
 
 *** :memo: Documentation
 :PROPERTIES:
-:CUSTOM_ID: memo-documentation-v0.10.0
+:CUSTOM_ID: documentation-v0.10.0
 :END:
 
 - Update git-cliff "breaking change" regex; update CHANGELOG ([[https://github.com/kaushalmodi/ox-hugo/commit/2cdb6a15bd6f658f90d3dd49963f9eef3c7ba0b5][2cdb6a1]])
@@ -69,7 +69,7 @@ All notable changes to this project will be documented in this file.
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: recycle-refactor-v0.10.0
+:CUSTOM_ID: refactor-v0.10.0
 :END:
 
 - Optimize a regex replacement in cliff.toml using ${0} ([[https://github.com/kaushalmodi/ox-hugo/commit/8831e4979781084c9f01842c0da494477330db6f][8831e49]])
@@ -77,7 +77,7 @@ All notable changes to this project will be documented in this file.
 
 *** :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: hammer-testing-v0.10.0
+:CUSTOM_ID: testing-v0.10.0
 :END:
 
 - Add more LaTex fragment examples for dvisvgm … Ref: Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/611][611]] ([[https://github.com/kaushalmodi/ox-hugo/commit/16be913231fb0c9b77078a562bd68c8413c6afac][16be913]])
@@ -88,7 +88,7 @@ All notable changes to this project will be documented in this file.
 
 *** :boom: Breaking
 :PROPERTIES:
-:CUSTOM_ID: boom-breaking-v0.9.0
+:CUSTOM_ID: breaking-v0.9.0
 :END:
 
 - Make the "Table of Contents" heading a div element instead of h2 … Hard-coding the "Table of Contents" heading to h2 now looked like a … bad idea.. it seems semantically incorrect. So now it is a div … ([[https://github.com/kaushalmodi/ox-hugo/commit/1afb24a8c8b3cf71ade5acb058aba432f9995ad8][1afb24a]])
@@ -104,7 +104,7 @@ All notable changes to this project will be documented in this file.
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.9.0
+:CUSTOM_ID: features-v0.9.0
 :END:
 
 - Add hugo-bare-min-theme as a git submodule ([[https://github.com/kaushalmodi/ox-hugo/commit/1d19a92e8ff11370a544deee9349a43c4f5ca4c1][1d19a92]])
@@ -224,7 +224,7 @@ All notable changes to this project will be documented in this file.
 
 *** :rocket: PR Merges
 :PROPERTIES:
-:CUSTOM_ID: rocket-pr-merges-v0.9.0
+:CUSTOM_ID: pr-merges-v0.9.0
 :END:
 
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/453][453]]: … feat: treat external id links to normal posts and support point to headline ([[https://github.com/kaushalmodi/ox-hugo/commit/8345ceb90ff1314d598c6b67ba6ee7616e2b0bc4][8345ceb]])
@@ -283,7 +283,7 @@ All notable changes to this project will be documented in this file.
 
 *** :white_check_mark: Issue Fixes
 :PROPERTIES:
-:CUSTOM_ID: white-check-mark-issue-fixes-v0.9.0
+:CUSTOM_ID: issue-fixes-v0.9.0
 :END:
 
 - Export "description" special block content to front-matter … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/118][118]] ([[https://github.com/kaushalmodi/ox-hugo/commit/398f3a6cdeea478eaa0e75ca1251d06c00874d9b][398f3a6]])
@@ -384,7 +384,7 @@ All notable changes to this project will be documented in this file.
 
 *** :zap: Performance
 :PROPERTIES:
-:CUSTOM_ID: zap-performance-v0.9.0
+:CUSTOM_ID: performance-v0.9.0
 :END:
 
 - Improve underlines, add headline-hashes, Org style asterisks # doc ([[https://github.com/kaushalmodi/ox-hugo/commit/5d0219f743d9bfa3c1e5865be6d19233059c20a6][5d0219f]])
@@ -406,7 +406,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-bug-fixes-v0.9.0
+:CUSTOM_ID: bug-fixes-v0.9.0
 :END:
 
 - Fix a typo ([[https://github.com/kaushalmodi/ox-hugo/commit/b635f8a4818e416350715a40afca964b8a250776][b635f8a]])
@@ -532,7 +532,7 @@ All notable changes to this project will be documented in this file.
 
 *** :memo: Documentation
 :PROPERTIES:
-:CUSTOM_ID: memo-documentation-v0.9.0
+:CUSTOM_ID: documentation-v0.9.0
 :END:
 
 - Document the special comment <!--endtoc--> after Org-generated TOC ([[https://github.com/kaushalmodi/ox-hugo/commit/d53acbb3f8557583a1a03e92ec7626ccc63f5264][d53acbb]])
@@ -585,7 +585,7 @@ All notable changes to this project will be documented in this file.
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: recycle-refactor-v0.9.0
+:CUSTOM_ID: refactor-v0.9.0
 :END:
 
 - Support exporting shortcodes with positional arguments # take 2 … Add new attribute #+​​ATTR_​​SHORTCODE: to specify positional arguments … for the shortcode following ":args". … Example: … #+​​attr_​… ([[https://github.com/kaushalmodi/ox-hugo/commit/0150797401693cee51fde03fa07a1f10d36915e9][0150797]])
@@ -646,7 +646,7 @@ All notable changes to this project will be documented in this file.
 
 *** :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: hammer-testing-v0.9.0
+:CUSTOM_ID: testing-v0.9.0
 :END:
 
 - Test multi-paragraph summaries ([[https://github.com/kaushalmodi/ox-hugo/commit/ce8985b711db99d0186e8b892a4d1f9ba32a98b2][ce8985b]])
@@ -674,7 +674,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.9.0
+:CUSTOM_ID: other-v0.9.0
 :END:
 
 - Minor presentation improvement for multi-line strings in TOML ([[https://github.com/kaushalmodi/ox-hugo/commit/4101ece6ebd3c671bee1d71fe6840e74600bde7b][4101ece]])
@@ -1078,14 +1078,14 @@ All notable changes to this project will be documented in this file.
 
 *** :boom: Breaking
 :PROPERTIES:
-:CUSTOM_ID: boom-breaking-v0.8
+:CUSTOM_ID: breaking-v0.8
 :END:
 
 - Allow quoted strings with spaces in Org keywords … Org keywords: #+​​HUGO_​​TAGS, #+​​HUGO_​​CATEGORIES, #+​​KEYWORDS … or … Org properties: :EXPORT_​​HUGO_​​TAGS:, :EXPORT_​​HUGO_​​CATEGORIES:, :EXPO… ([[https://github.com/kaushalmodi/ox-hugo/commit/319435dbfcc56900b905ec8456db8c102c9a2209][319435d]])
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.8
+:CUSTOM_ID: features-v0.8
 :END:
 
 - Add few doc strings in setup-ox-hugo.el; trivial edits ([[https://github.com/kaushalmodi/ox-hugo/commit/b788b0261b2a0c2350131022b900a3b46c03f0a3][b788b02]])
@@ -1098,7 +1098,7 @@ All notable changes to this project will be documented in this file.
 
 *** :white_check_mark: Issue Fixes
 :PROPERTIES:
-:CUSTOM_ID: white-check-mark-issue-fixes-v0.8
+:CUSTOM_ID: issue-fixes-v0.8
 :END:
 
 - Don't double-escape # and ! chars … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/110][110]] … This actually fixes a bug in upstream ox-md. ([[https://github.com/kaushalmodi/ox-hugo/commit/3b6a0461bba27a2e8c64b69cf567da73be328279][3b6a046]])
@@ -1110,7 +1110,7 @@ All notable changes to this project will be documented in this file.
 
 *** :zap: Performance
 :PROPERTIES:
-:CUSTOM_ID: zap-performance-v0.8
+:CUSTOM_ID: performance-v0.8
 :END:
 
 - Optimize org-bf-latex-environment and org-bf-latex-fragment … Ref Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/113][113]] ([[https://github.com/kaushalmodi/ox-hugo/commit/7cb82630ca1543334112fbfe8455d775d55e123e][7cb8263]])
@@ -1119,7 +1119,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-bug-fixes-v0.8
+:CUSTOM_ID: bug-fixes-v0.8
 :END:
 
 - Fix the load-path; Remove unnecessary :append args ([[https://github.com/kaushalmodi/ox-hugo/commit/08b5d0c99d0fed2f4b80ec81ceca5f9dac2b2177][08b5d0c]])
@@ -1134,7 +1134,7 @@ All notable changes to this project will be documented in this file.
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: recycle-refactor-v0.8
+:CUSTOM_ID: refactor-v0.8
 :END:
 
 - Remove unnecessary defalias ([[https://github.com/kaushalmodi/ox-hugo/commit/748dd4de1d0ca373f5510c0a4a1a29341c04ecb8][748dd4d]])
@@ -1144,14 +1144,14 @@ All notable changes to this project will be documented in this file.
 
 *** :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: hammer-testing-v0.8
+:CUSTOM_ID: testing-v0.8
 :END:
 
 - Test cases for the HUGO_​​LEVEL_​​OFFSET fix in previous commit … Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/117][117]] ([[https://github.com/kaushalmodi/ox-hugo/commit/0384f444bdc4825edbc9b9c57df374d6c0dbfce7][0384f44]])
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.8
+:CUSTOM_ID: other-v0.8
 :END:
 
 - Update README.org too ([[https://github.com/kaushalmodi/ox-hugo/commit/1d0fae138eb79611733ee900befd50a90112c1f4][1d0fae1]])
@@ -1202,7 +1202,7 @@ All notable changes to this project will be documented in this file.
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.7
+:CUSTOM_ID: features-v0.7
 :END:
 
 - Add workaround to prevent Org-inserted TOC from leaking into Summary … - Add <!--endtoc--> comment at end of Org-inserted TOC's. … That acts as an aid to help filter out the TOC from Hugo … summaries.… ([[https://github.com/kaushalmodi/ox-hugo/commit/c2992639df68f1bf65ca94dcc96081e7b47ff252][c299263]])
@@ -1213,7 +1213,7 @@ All notable changes to this project will be documented in this file.
 
 *** :white_check_mark: Issue Fixes
 :PROPERTIES:
-:CUSTOM_ID: white-check-mark-issue-fixes-v0.7
+:CUSTOM_ID: issue-fixes-v0.7
 :END:
 
 - Support list values for custom front-matter variables … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/99][99]] ([[https://github.com/kaushalmodi/ox-hugo/commit/5f9b0f32a0963b9e802093e9d8aadc9098568fe3][5f9b0f3]])
@@ -1224,7 +1224,7 @@ All notable changes to this project will be documented in this file.
 
 *** :zap: Performance
 :PROPERTIES:
-:CUSTOM_ID: zap-performance-v0.7
+:CUSTOM_ID: performance-v0.7
 :END:
 
 - Improve printing Page Params for debug in bare_​​min single template ([[https://github.com/kaushalmodi/ox-hugo/commit/41d01117b708dc781af5c02ab61f83e1e75e5515][41d0111]])
@@ -1232,7 +1232,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-bug-fixes-v0.7
+:CUSTOM_ID: bug-fixes-v0.7
 :END:
 
 - Fix number of backticks in code fence when code contains code fence ([[https://github.com/kaushalmodi/ox-hugo/commit/6198bbe01ead051f9c0517c9b876268cd6c01a72][6198bbe]])
@@ -1243,14 +1243,14 @@ All notable changes to this project will be documented in this file.
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: recycle-refactor-v0.7
+:CUSTOM_ID: refactor-v0.7
 :END:
 
 - Remove unnecessary when form ([[https://github.com/kaushalmodi/ox-hugo/commit/67f2ef651a38fa40faa6c6dd8d5636a54235fd87][67f2ef6]])
 
 *** :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: hammer-testing-v0.7
+:CUSTOM_ID: testing-v0.7
 :END:
 
 - Remove 'fixme' from one of the tests … It was fixed a while back. ([[https://github.com/kaushalmodi/ox-hugo/commit/ee2723070c85874eb2af3eaf9ef630c2f1c2e5af][ee27230]])
@@ -1258,7 +1258,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.7
+:CUSTOM_ID: other-v0.7
 :END:
 
 - Derive Org heading based internal link refs using org-hugo-slug ([[https://github.com/kaushalmodi/ox-hugo/commit/a89fb81d034327ee7b730053c1ffcef53252cc8e][a89fb81]])
@@ -1293,7 +1293,7 @@ All notable changes to this project will be documented in this file.
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.6
+:CUSTOM_ID: features-v0.6
 :END:
 
 - Add more explanation to the "Footnotes at EOL" test case ([[https://github.com/kaushalmodi/ox-hugo/commit/29525b1a54c52cad9ad014d7cb0700817ac34806][29525b1]])
@@ -1303,7 +1303,7 @@ All notable changes to this project will be documented in this file.
 
 *** :white_check_mark: Issue Fixes
 :PROPERTIES:
-:CUSTOM_ID: white-check-mark-issue-fixes-v0.6
+:CUSTOM_ID: issue-fixes-v0.6
 :END:
 
 - Prevent a footnote ref at EOL to be on a new line by itself … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/96][96]] … https://discourse.gohugo.io/t/is-it-possible-to-enforce-the-footn… ([[https://github.com/kaushalmodi/ox-hugo/commit/6eae238918f833485d468fa3f9944e01b3c42d81][6eae238]])
@@ -1317,14 +1317,14 @@ All notable changes to this project will be documented in this file.
 
 *** :zap: Performance
 :PROPERTIES:
-:CUSTOM_ID: zap-performance-v0.6
+:CUSTOM_ID: performance-v0.6
 :END:
 
 - Improve setting of aliases … - Now a post can have multiple aliases. … - If the specified alias doesn't have the section portion, it is … auto-derived from that post's section. … - To manually specify… ([[https://github.com/kaushalmodi/ox-hugo/commit/8f8e1922d14c2bc5a074e37025c9708f76b5fa1c][8f8e192]])
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-bug-fixes-v0.6
+:CUSTOM_ID: bug-fixes-v0.6
 :END:
 
 - Fix ATTR_​​HTML above hyper-linked images ([[https://github.com/kaushalmodi/ox-hugo/commit/0883ee350c6bf78d9948c4507f22651971ca36e1][0883ee3]])
@@ -1336,14 +1336,14 @@ All notable changes to this project will be documented in this file.
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: recycle-refactor-v0.6
+:CUSTOM_ID: refactor-v0.6
 :END:
 
 - Code cleanup … Remove the now-unnecessary org-blackfriday-make-hline-builder function … generator. ([[https://github.com/kaushalmodi/ox-hugo/commit/e1f63d6a99cf13215589ea591b8dbeb1533553df][e1f63d6]])
 
 *** :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: hammer-testing-v0.6
+:CUSTOM_ID: testing-v0.6
 :END:
 
 - Makefile refinement regarding doc generation ([[https://github.com/kaushalmodi/ox-hugo/commit/76d2d7302df1e430722ca6e296edb9459aba603d][76d2d73]])
@@ -1351,7 +1351,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.6
+:CUSTOM_ID: other-v0.6
 :END:
 
 - Prefix image links with http/https/ftp where needed ([[https://github.com/kaushalmodi/ox-hugo/commit/b88b0c6de7d158ab9ebbd24ef8d43c895a316759][b88b0c6]])
@@ -1377,7 +1377,7 @@ All notable changes to this project will be documented in this file.
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.5
+:CUSTOM_ID: features-v0.5
 :END:
 
 - Add test for multiple #+​​ATTR_​​HTML ([[https://github.com/kaushalmodi/ox-hugo/commit/caa3aa99c6bef6d0dcaa4713a7934c7d410a5641][caa3aa9]])
@@ -1385,14 +1385,14 @@ All notable changes to this project will be documented in this file.
 
 *** :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: hammer-testing-v0.5
+:CUSTOM_ID: testing-v0.5
 :END:
 
 - Test site: Add meta viewport; remove other cruft … - Remove <link href=​​"http://gmpg.org/xfn/11" rel=​​"profile"> … https://stackoverflow.com/a/1417789/1219634 … - Remove xmlns=​​"http://www.w3.org/1… ([[https://github.com/kaushalmodi/ox-hugo/commit/8de0bbd612af6b4dda5e9d5de1bd9d4bf1cc582f][8de0bbd]])
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.5
+:CUSTOM_ID: other-v0.5
 :END:
 
 - Reformat, fix Image Links documentation ([[https://github.com/kaushalmodi/ox-hugo/commit/df2b12969481381e561fb72e8b37e5b79dab9571][df2b129]])
@@ -1405,14 +1405,14 @@ All notable changes to this project will be documented in this file.
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-bug-fixes-v0.4.1
+:CUSTOM_ID: bug-fixes-v0.4.1
 :END:
 
 - Fix EXPORT_​​HUGO_​​SECTION not getting inherited … Fixes #90 … - Also update changelog ([[https://github.com/kaushalmodi/ox-hugo/commit/c32359c71e7926c7f13039069d8d7481dfb9bc82][c32359c]])
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.4.1
+:CUSTOM_ID: other-v0.4.1
 :END:
 
 - Update contribution guide ([[https://github.com/kaushalmodi/ox-hugo/commit/c009ea892b4f7b66a8ed6c4bea13d436941ddb8c][c009ea8]])
@@ -1424,28 +1424,28 @@ All notable changes to this project will be documented in this file.
 
 *** :boom: Breaking
 :PROPERTIES:
-:CUSTOM_ID: boom-breaking-v0.4
+:CUSTOM_ID: breaking-v0.4
 :END:
 
 - Don't change default interpretation of #+​​TAGS #breaking … Fixes #89 … - Restore the default Org behavior of `#+​​TAGS`. Now that keyword (and … the `EXPORT_​​TAGS` property) is *​​*​​not*​​*​​ used … ([[https://github.com/kaushalmodi/ox-hugo/commit/30ac7c3351bc137fd6d424e05d347792feec30b9][30ac7c3]])
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.4
+:CUSTOM_ID: features-v0.4
 :END:
 
 - Add tests for indented source blocks ([[https://github.com/kaushalmodi/ox-hugo/commit/0f43e74a39054882a072a1aecabf9fc7bb06210a][0f43e74]])
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-bug-fixes-v0.4
+:CUSTOM_ID: bug-fixes-v0.4
 :END:
 
 - Fix typo ([[https://github.com/kaushalmodi/ox-hugo/commit/d330e1631b4112e4bcedeb37e745d2757fa2b79d][d330e16]])
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.4
+:CUSTOM_ID: other-v0.4
 :END:
 
 - Support specifying the image width in #+​​ATTR_​​HTML … Known issue as of Hugo v0.30: The Hugo figure shortcode does not … support specifying the height parameter! So ox-hugo will support only … the w… ([[https://github.com/kaushalmodi/ox-hugo/commit/4a476d906fc39210584c8ad435b320c9a34ae93b][4a476d9]])
@@ -1456,7 +1456,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-bug-fixes-v0.3.2
+:CUSTOM_ID: bug-fixes-v0.3.2
 :END:
 
 - Fix corner case where post sub-heading tag leaked into front-matter … For a reason unknown, if we have: … *​​ Post title :good: … :PROPERTIES: … :EXPORT_​​FILE_​​NAME: post-title … :END: … *​​*​​ Post… ([[https://github.com/kaushalmodi/ox-hugo/commit/e6ebac4c2034c6add6fbeee67db4cd4eb47d40e8][e6ebac4]])
@@ -1465,7 +1465,7 @@ All notable changes to this project will be documented in this file.
 
 *** :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: hammer-testing-v0.3.2
+:CUSTOM_ID: testing-v0.3.2
 :END:
 
 - Test for draft state being broken when post has other headlines ([[https://github.com/kaushalmodi/ox-hugo/commit/61b426cb7a1ab3e9a7e9511789d00bf2a2a2724f][61b426c]])
@@ -1476,7 +1476,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.3.1
+:CUSTOM_ID: other-v0.3.1
 :END:
 
 - Line numbers annotations when change in number of digits … - Add gen_​​test_​​md target to the Makefile for just generating the … Markdown files, and not doing checks. … - Use the doc Org macro in the… ([[https://github.com/kaushalmodi/ox-hugo/commit/16cf5d595644ee4e05b05b351e0c4fdd5df0ac44][16cf5d5]])
@@ -1487,7 +1487,7 @@ All notable changes to this project will be documented in this file.
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.3
+:CUSTOM_ID: features-v0.3
 :END:
 
 - Add Say Thanks! badge … https://saythanks.io ([[https://github.com/kaushalmodi/ox-hugo/commit/c7b7434c4633cc973308e8d4821490b3a8e0dfe9][c7b7434]])
@@ -1496,14 +1496,14 @@ All notable changes to this project will be documented in this file.
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: recycle-refactor-v0.3
+:CUSTOM_ID: refactor-v0.3
 :END:
 
 - Remove a now-unnecessary setting … .. unnecessary after switching to Chroma ([[https://github.com/kaushalmodi/ox-hugo/commit/a8df723117ad0db39e7d89c50e1b116c1709687f][a8df723]])
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.3
+:CUSTOM_ID: other-v0.3
 :END:
 
 - Remove the ZERO WIDTH SPACE char 0x200b that snuck in by mistake … Thanks Nicolas … http://lists.gnu.org/archive/html/emacs-orgmode/2017-10/msg00223.html ([[https://github.com/kaushalmodi/ox-hugo/commit/daed39f8953d3ec8c089ec4178b2b82f8b2d57f5][daed39f]])
@@ -1514,7 +1514,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.2.3
+:CUSTOM_ID: other-v0.2.3
 :END:
 
 - Strip off any HTML from the input string when deriving slug … `org-hugo-slug' earlier stripped off only the `code' HTML tag (`<code> … .. </code>') from the input string, if present. … Now it does tha… ([[https://github.com/kaushalmodi/ox-hugo/commit/37d7a0d3d633542de02b4c415b1931ae93dd8ff6][37d7a0d]])
@@ -1525,21 +1525,21 @@ All notable changes to this project will be documented in this file.
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.2.2
+:CUSTOM_ID: features-v0.2.2
 :END:
 
 - Add brief 'Getting Started' guide within package commentary … - Minor refinements to overall documentation ([[https://github.com/kaushalmodi/ox-hugo/commit/781e4c0652f7d5b606bd1025cbbe00dee36e8061][781e4c0]])
 
 *** :white_check_mark: Issue Fixes
 :PROPERTIES:
-:CUSTOM_ID: white-check-mark-issue-fixes-v0.2.2
+:CUSTOM_ID: issue-fixes-v0.2.2
 :END:
 
 - Add note on how to enable this package in Spacemacs … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/82][82]] ([[https://github.com/kaushalmodi/ox-hugo/commit/113188296c366fbb37dbbeaa06f423f7ef509ced][1131882]])
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.2.2
+:CUSTOM_ID: other-v0.2.2
 :END:
 
 - Change package website to https://ox-hugo.scripter.co ([[https://github.com/kaushalmodi/ox-hugo/commit/752beb52ac8b5ae9cd7b3a0122f3942ac6fe9668][752beb5]])
@@ -1554,14 +1554,14 @@ All notable changes to this project will be documented in this file.
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.2.1
+:CUSTOM_ID: features-v0.2.1
 :END:
 
 - Add test where org-export-with-emphasize is set to nil … .. Using #+​​OPTIONS: *​​:nil ([[https://github.com/kaushalmodi/ox-hugo/commit/511a67c2ed3dab0afcf02fdf3b848482805c7c57][511a67c]])
 
 *** :white_check_mark: Issue Fixes
 :PROPERTIES:
-:CUSTOM_ID: white-check-mark-issue-fixes-v0.2.1
+:CUSTOM_ID: issue-fixes-v0.2.1
 :END:
 
 - Don't allow weight to be "auto" in front-matter for per-file exports … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/83][83]] … Add gitter badge. ([[https://github.com/kaushalmodi/ox-hugo/commit/c77289167d9158da489ddc848623fe4f309ac215][c772891]])
@@ -1569,14 +1569,14 @@ All notable changes to this project will be documented in this file.
 
 *** :memo: Documentation
 :PROPERTIES:
-:CUSTOM_ID: memo-documentation-v0.2.1
+:CUSTOM_ID: documentation-v0.2.1
 :END:
 
 - Bump to version 0.2.1; update Changelog and Docs ([[https://github.com/kaushalmodi/ox-hugo/commit/a0a1bb95d12fd45e3e111d29fd49b8171db1109b][a0a1bb9]])
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.2.1
+:CUSTOM_ID: other-v0.2.1
 :END:
 
 - Change look for timestamps in Changelog ([[https://github.com/kaushalmodi/ox-hugo/commit/0318cb7e78f6193c6bc161ad7b9c0920d3f66536][0318cb7]])
@@ -1587,7 +1587,7 @@ All notable changes to this project will be documented in this file.
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.2
+:CUSTOM_ID: features-v0.2
 :END:
 
 - Add TOC to README … Thanks to toc-org package ([[https://github.com/kaushalmodi/ox-hugo/commit/134bad89835b7eb5bf6ea41aa06c1598774753eb][134bad8]])
@@ -1602,14 +1602,14 @@ All notable changes to this project will be documented in this file.
 
 *** :rocket: PR Merges
 :PROPERTIES:
-:CUSTOM_ID: rocket-pr-merges-v0.2
+:CUSTOM_ID: pr-merges-v0.2
 :END:
 
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/80][80]]: … Add documentation for auto-publishing one Org file per post ([[https://github.com/kaushalmodi/ox-hugo/commit/306633ac24a88430a83c6af1d281eb7c02098c92][306633a]])
 
 *** :white_check_mark: Issue Fixes
 :PROPERTIES:
-:CUSTOM_ID: white-check-mark-issue-fixes-v0.2
+:CUSTOM_ID: issue-fixes-v0.2
 :END:
 
 - Add svg to org-hugo-external-file-extensions-allowed-for-copying … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/73][73]] ([[https://github.com/kaushalmodi/ox-hugo/commit/70a534b1129f0185a98d4bd06919abb139e3f131][70a534b]])
@@ -1618,14 +1618,14 @@ All notable changes to this project will be documented in this file.
 
 *** :zap: Performance
 :PROPERTIES:
-:CUSTOM_ID: zap-performance-v0.2
+:CUSTOM_ID: performance-v0.2
 :END:
 
 - Improve org-hugo-debug-info ([[https://github.com/kaushalmodi/ox-hugo/commit/7febe63147f932a70de23e66e82fff5a6283493e][7febe63]])
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-bug-fixes-v0.2
+:CUSTOM_ID: bug-fixes-v0.2
 :END:
 
 - Prevent error if input to org-hugo--quote-string is an empty string ([[https://github.com/kaushalmodi/ox-hugo/commit/ba9e8365f6ee42f030ed806bf5ec42d6acce4c76][ba9e836]])
@@ -1634,7 +1634,7 @@ All notable changes to this project will be documented in this file.
 
 *** :memo: Documentation
 :PROPERTIES:
-:CUSTOM_ID: memo-documentation-v0.2
+:CUSTOM_ID: documentation-v0.2
 :END:
 
 - Document "make test" ([[https://github.com/kaushalmodi/ox-hugo/commit/ecd3ad5635069b6093dbefebdfd6eb7919fa8f59][ecd3ad5]])
@@ -1643,7 +1643,7 @@ All notable changes to this project will be documented in this file.
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: recycle-refactor-v0.2
+:CUSTOM_ID: refactor-v0.2
 :END:
 
 - Refactoring for example-site move +​​ Improve Makefile ([[https://github.com/kaushalmodi/ox-hugo/commit/af9cf7da1fbaf16ade043026b677fc85f769aa58][af9cf7d]])
@@ -1651,14 +1651,14 @@ All notable changes to this project will be documented in this file.
 
 *** :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: hammer-testing-v0.2
+:CUSTOM_ID: testing-v0.2
 :END:
 
 - Run tests in Universal Time Zone … - Remove the TZ env var setting from .travis.yml; Move it to the … emacs-batch recipe in Makefile so that it works as expected for any … other user in any time zone … ([[https://github.com/kaushalmodi/ox-hugo/commit/fc530bc3dfe4b05efa74218e6b8fcce19904efaf][fc530bc]])
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.2
+:CUSTOM_ID: other-v0.2
 :END:
 
 - Tweak the TOC.. don't link all Changelog items … The TOC and noexport_​​1 tags added to ox-hugo-manual.org are special to … the toc-org package. ([[https://github.com/kaushalmodi/ox-hugo/commit/48ae0ba6ae86f7621921e2a2af2a230223a0b8bc][48ae0ba]])
@@ -1692,14 +1692,14 @@ All notable changes to this project will be documented in this file.
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: recycle-refactor-v0.1.3
+:CUSTOM_ID: refactor-v0.1.3
 :END:
 
 - Org-hugo--plist-value-true-p -> org-hugo--plist-get-true-p … The order of the arguments in this function are also swapped to match … that of plist-get. … Now org-hugo--plist-get-true-p can be used to … ([[https://github.com/kaushalmodi/ox-hugo/commit/61b5cbe3923fb5f498de30613bca7d36b6a8bcad][61b5cbe]])
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.1.3
+:CUSTOM_ID: other-v0.1.3
 :END:
 
 - Use org-hugo--plist-get-true-p instead of plist-get for boolean keys ([[https://github.com/kaushalmodi/ox-hugo/commit/0f0c19f084e0fb697d049839c52fcd5030f9ccf2][0f0c19f]])
@@ -1709,7 +1709,7 @@ All notable changes to this project will be documented in this file.
 
 *** :boom: Breaking
 :PROPERTIES:
-:CUSTOM_ID: boom-breaking-v0.1.2
+:CUSTOM_ID: breaking-v0.1.2
 :END:
 
 - If user prefers hyphens in tags, now use 3 "_​​" to convert to 1 "_​​" … This is a breaking change, as earlier 2 "_​​" in Org tags converted to 1 … "_​​" in Hugo tags/categories. ([[https://github.com/kaushalmodi/ox-hugo/commit/13d3d2b0691548c330b3be03d8a7271c2451000a][13d3d2b]])
@@ -1717,7 +1717,7 @@ All notable changes to this project will be documented in this file.
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: sparkles-features-v0.1.2
+:CUSTOM_ID: features-v0.1.2
 :END:
 
 - Add ox-blackfriday.el … Hugo uses the Blackfriday markdwon parser, whose syntax is similar, … but not identical, to Github Flaboured Markdown. Since this parser may … be used by other projects, it see… ([[https://github.com/kaushalmodi/ox-hugo/commit/b33dcc31cf012ae7098b889e5da0e5c47bf18f0b][b33dcc3]])
@@ -1759,7 +1759,7 @@ All notable changes to this project will be documented in this file.
 
 *** :rocket: PR Merges
 :PROPERTIES:
-:CUSTOM_ID: rocket-pr-merges-v0.1.2
+:CUSTOM_ID: pr-merges-v0.1.2
 :END:
 
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/8][8]]: … Matt refactor ([[https://github.com/kaushalmodi/ox-hugo/commit/c2b9e2e77a276f680b714e45f2224352b7b915c8][c2b9e2e]])
@@ -1770,7 +1770,7 @@ All notable changes to this project will be documented in this file.
 
 *** :white_check_mark: Issue Fixes
 :PROPERTIES:
-:CUSTOM_ID: white-check-mark-issue-fixes-v0.1.2
+:CUSTOM_ID: issue-fixes-v0.1.2
 :END:
 
 - Fix window scrolling upon export … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/42][42]] ([[https://github.com/kaushalmodi/ox-hugo/commit/260a417686cae8f7b088ac20e860c3b458d09c08][260a417]])
@@ -1784,7 +1784,7 @@ All notable changes to this project will be documented in this file.
 
 *** :zap: Performance
 :PROPERTIES:
-:CUSTOM_ID: zap-performance-v0.1.2
+:CUSTOM_ID: performance-v0.1.2
 :END:
 
 - Optimize the front matter generation ([[https://github.com/kaushalmodi/ox-hugo/commit/64d22f7acfe035e817e45a06e692749e1b4c95f2][64d22f7]])
@@ -1797,7 +1797,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-bug-fixes-v0.1.2
+:CUSTOM_ID: bug-fixes-v0.1.2
 :END:
 
 - Fix the case where date is not specified at all … .. by wrapping (org-export-data (plist-get info :date) info) in org-string-nw-p … - Also fix the date specification in property drawer in small1.org …… ([[https://github.com/kaushalmodi/ox-hugo/commit/a1aed1c39dfdc0bade52256d13bffe62541affb6][a1aed1c]])
@@ -1822,14 +1822,14 @@ All notable changes to this project will be documented in this file.
 
 *** :memo: Documentation
 :PROPERTIES:
-:CUSTOM_ID: memo-documentation-v0.1.2
+:CUSTOM_ID: documentation-v0.1.2
 :END:
 
 - Documentation update; typo fix ([[https://github.com/kaushalmodi/ox-hugo/commit/ff3f48dfbe95835965f59445897d4c75d83a2bfc][ff3f48d]])
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: recycle-refactor-v0.1.2
+:CUSTOM_ID: refactor-v0.1.2
 :END:
 
 - Left over metadata -> front matter refactoring ([[https://github.com/kaushalmodi/ox-hugo/commit/33fed240aa116666ad7bf3ae32f89142a0d77023][33fed24]])
@@ -1846,7 +1846,7 @@ All notable changes to this project will be documented in this file.
 
 *** :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: hammer-testing-v0.1.2
+:CUSTOM_ID: testing-v0.1.2
 :END:
 
 - Add function to walk headlines of current file … - add org-hugo-walk-headlines … - exports each 1st-level headline to a hugo entry. … - primitive with no error testing or finer controls … - should def… ([[https://github.com/kaushalmodi/ox-hugo/commit/4be635bdc56a819aaca81a4118993341f41eaf73][4be635b]])
@@ -1856,7 +1856,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bento: Other
 :PROPERTIES:
-:CUSTOM_ID: bento-other-v0.1.2
+:CUSTOM_ID: other-v0.1.2
 :END:
 
 - Initial commit ([[https://github.com/kaushalmodi/ox-hugo/commit/0e627431b7f424e3e1e3107fda44ad198671eeee][0e62743]])

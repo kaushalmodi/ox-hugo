@@ -2058,7 +2058,7 @@ Support anchoring the source and example block lines using Org coderef
 links.
 #+end_description
 
-See [[info:org#Literal%20Examples][info:org#Literal Examples]].
+See [[info:org#Literal Examples]].
 
 In literal examples, Org interprets strings like ~(ref:name)~ as
 labels, and use them as targets for special hyperlinks like
@@ -3789,6 +3789,7 @@ Below links are invalid, they are there just for test purpose.
 Test links to Info manual nodes.
 #+end_description
 - Link to an Org Info manual node: [[info:org#Search Options]]
+- Links to Top nodes of manuals: [[info:emacs#Top]] | [[info:org#Top]]
 - Link to an Emacs Info manual node: [[info:emacs#Point]] (same link but
   with a custom description: [[info:emacs#Point][🛈 Emacs: Point]])
 - Link to an Emacs Lisp Info manual node: [[info:elisp#Lambda Expressions]]

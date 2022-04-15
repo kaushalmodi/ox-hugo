@@ -802,7 +802,8 @@ Here are some examples of sites generated using *=ox-hugo= + Hugo*.
 
 If you too have a site generated using this package, and have the Org
 source of your site public, feel free to open a PR (updating just
-[[https://github.com/kaushalmodi/ox-hugo/blob/main/doc/data/users.toml][=users.toml=]]) to add yourself here, or open an issue.
+[[https://github.com/kaushalmodi/ox-hugo/blob/main/doc/data/users.toml][=users.toml=]]) to add yourself here (start the commit message with
+~doc(realworld):~ string), or open an issue.
 ** Org to Hugo
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "5.org_to_hugo"

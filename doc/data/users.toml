@@ -1,4 +1,5 @@
-# [unique_key] # This can be any unique string (would suffice to set this to your GitHub/Gitlab/etc. username)
+# [unique_key] # This can be any unique TOML key string (cannot contain spaces or periods)
+#              # It would suffice to set this to your GitHub/Gitlab/etc. username in most cases.
 #   author = "Foo Bar" (*mandatory*)
 #   source = "Git repo of your site; needs to have the Org source" (*mandatory*)
 #   site = "https://your.site/" (*mandatory*)
@@ -421,3 +422,11 @@
 #   site = ""
 #   org_dir = "specify this if Org file not directly in repo root dir"
 #   branch = "specify this if not 'main'"
+
+# Note for formatting git commit messages when adding new sites:
+#   Start the commit message with "doc(realworld):" string. This is so that the
+# changelog updated on https://ox-hugo.scripter.co/doc/changelog/ puts these
+# commits in a separate "Real World Examples" category.
+#
+# Example commit message:
+# doc(realworld): Add <your website URL>

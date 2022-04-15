@@ -78,12 +78,15 @@ All notable changes to this project will be documented in this file.\n
 
   # regex for parsing and grouping commits
   commit_parsers = [
+      { message = "^doc\\(realworld\\)"                    , group = "<!-- 4.1 --> :heart: Real World Examples"},
+      { message = "^[Aa]dd .*[Rr]eal .*[Ww]orld .*[Ee]xample", group = "<!-- 4.1 --> :heart: Real World Examples"},
+
       # https://www.conventionalcommits.org/en/v1.0.0/#summary
       { message = "^[^ ]+!:"                               , group = "<!-- 0 --> :boom: Breaking"},
       { message = "^feat"                                  , group = "<!-- 1.0 --> :sparkles: Features"},
       { message = "^perf"                                  , group = "<!-- 2 --> :zap: Performance"},
       { message = "^fix"                                   , group = "<!-- 3 --> :bug: Bug Fixes"},
-      { message = "^docs?"                                 , group = "<!-- 4 --> :memo: Documentation"},
+      { message = "^docs?"                                 , group = "<!-- 4.0 --> :memo: Documentation"},
       { message = "^refactor"                              , group = "<!-- 5 --> :recycle: Refactor"},
       { message = "^test"                                  , group = "<!-- 6 --> :hammer: Testing"},
       { message = "^(chore.*|ci:)", skip = true},
@@ -95,7 +98,6 @@ All notable changes to this project will be documented in this file.\n
       { message = "users(\\.toml)*", skip = true},
       { message = "^tool", skip = true}, # Commits related to tools like git-cliff, Makefile, etc.
       { message = "[Uu]pdate.*theme", skip = true}, # Commits related to updating test or doc site themes.
-      { message = "[Rr]eal .*[Ww]orld .*[Ee]xample", skip = true}, # Commits related to real world examples.
       { message = "^[Cc]heckdoc [Ff]ixes$", skip = true}, # Commits to make emacs-lisp checkdoc pass.
       { message = "^[Pp]ass [Cc]heckdoc$", skip = true}, # Commits to make emacs-lisp checkdoc pass.
       { message = "([Bb]reaking|BREAKING|[Nn]otice|NOTICE)", group = "<!-- 0 --> :boom: Breaking"},
@@ -103,9 +105,9 @@ All notable changes to this project will be documented in this file.\n
       { message = "Fixes Issue #"                          , group = "<!-- 1.2 --> :white_check_mark: Issue Fixes"},
       { message = "^([Pp]erf|[Ss]peed|[Oo]ptimiz|[Ii]mprov)", group = "<!-- 2 --> :zap: Performance"},
       { message = "^[Ff]ix"                                , group = "<!-- 3 --> :bug: Bug Fixes"},
-      { message = "^[Dd]oc"                                , group = "<!-- 4 --> :memo: Documentation"},
+      { message = "^[Dd]oc"                                , group = "<!-- 4.0 --> :memo: Documentation"},
       { message = "(csp|CSP)", skip = true}, # Commits related to CSP
-      { message = "update .*[Dd]oc"                        , group = "<!-- 4 --> :memo: Documentation"},
+      { message = "update .*[Dd]oc"                        , group = "<!-- 4.0 --> :memo: Documentation"},
       { message = "([Rr]efactor|[Rr]ename|[Ss]implify|[Cc]leanup)", group = "<!-- 5 --> :recycle: Refactor"},
       { message = "^([Tt]est|ert|ERT)"                     , group = "<!-- 6 --> :hammer: Testing"},
       { message = "^[Mm]akefile"                           , group = "<!-- 6 --> :hammer: Testing"},
@@ -140,3 +142,5 @@ All notable changes to this project will be documented in this file.\n
   date_order = true
   # sort the commits inside sections by oldest/newest order
   sort_commits = "oldest"
+
+# Emoji ideas: https://gitmoji.dev/

@@ -12,6 +12,14 @@ All notable changes to this project will be documented in this file.
 :END:
 
 - Improve the default description of exported info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/13870caa6980cb219da3830c21c54c07467aa51e][13870ca]])
+- Better HTML target for info: links … - HTML targets are now individual pages for the nodes instead of an anchor … in a single page HTML manual. … Before : https://www.gnu.org/software/emacs/manual/htm… ([[https://github.com/kaushalmodi/ox-hugo/commit/1d5b0ce665412de6eb31f86c119093cbea81fddf][1d5b0ce]])
+
+*** :rocket: PR Merges
+:PROPERTIES:
+:CUSTOM_ID: pr-merges
+:END:
+
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/620][620]]: … feat: Better HTML target for info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/e5fe9fa0d552481a7261db7a9d9b0e9b7ea2370e][e5fe9fa]])
 
 *** :memo: Documentation
 :PROPERTIES:
@@ -20,6 +28,13 @@ All notable changes to this project will be documented in this file.
 
 - Update Equations doc with dvisvgm and dvipng references … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/619][619]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/c322fe2048b7ad2a20d48020239f462725ce3d59][c322fe2]])
 - Replace manually pasted HTML links with info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/5e13e6cec230f90de958a38b461622454f0c2620][5e13e6c]])
+
+*** :heart: Real World Examples
+:PROPERTIES:
+:CUSTOM_ID: real-world-examples
+:END:
+
+- Added https://shom.dev to real world examples … Ref: PR # [[https://github.com/kaushalmodi/ox-hugo/pull/621][621]] ([[https://github.com/kaushalmodi/ox-hugo/commit/adaf03c7bf73eabdb8469329a394b547691059e7][adaf03c]])
 
 ** *0.10.0* - <2022-04-07>
 
@@ -444,6 +459,7 @@ All notable changes to this project will be documented in this file.
 - Fix (error (void-function org-hugo-auto-export-mode)) during make ([[https://github.com/kaushalmodi/ox-hugo/commit/4a768c2f8bedacd6b6f07b407517f628b9feab17][4a768c2]])
 - Effective heading level needs to be calc for non-zero loffset … .. which defaults to 1. ([[https://github.com/kaushalmodi/ox-hugo/commit/87b3dcdefdba48887fca201da49a6252eb651606][87b3dcd]])
 - Don't drop the char after -- or --- in post titles ([[https://github.com/kaushalmodi/ox-hugo/commit/43557daaea911e22cdd6f918a452ec7050b60faa][43557da]])
+- Fix incorrect org_​​dir for two real world examples ([[https://github.com/kaushalmodi/ox-hugo/commit/5e2066c7c6b207839a09c93485aa099363764d5e][5e2066c]])
 - Fix for deprecations on Hugo v0.55.0 ([[https://github.com/kaushalmodi/ox-hugo/commit/5e2e52b8986cf81898d84ca78cecf8053dcaf71b][5e2e52b]])
 - Fix for deprecations in Hugo v0.55.0 [doc site] ([[https://github.com/kaushalmodi/ox-hugo/commit/35e4af4fc4593d7210191d9956c072d61f143e1b][35e4af4]])
 - Fix typo in docs ([[https://github.com/kaushalmodi/ox-hugo/commit/1e0130af0afe2253ae2877d73ec7a6622fce0fc1][1e0130a]])
@@ -582,6 +598,21 @@ All notable changes to this project will be documented in this file.
 - Front-matter replacement ex.: export authors instead of author … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/608][608]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/fc1fc8c59fbeb0e83d9ebebab921b350ba9a2af1][fc1fc8c]])
 - Inline the `author.html` partial code in the 'Author' doc ([[https://github.com/kaushalmodi/ox-hugo/commit/9454948ee3d41eb52ce0e2d074b908d2f1d0a14f][9454948]])
 - Add CHANGELOG generated using git-cliff … https://github.com/orhun/git-cliff … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/563][563]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/a85410081ac20ada23fff52a7b7ab6c8151aa8e0][a854100]])
+
+*** :heart: Real World Examples
+:PROPERTIES:
+:CUSTOM_ID: real-world-examples-v0.9.0
+:END:
+
+- Add Real World Examples! … @punchagan @lambdaloop @shimmy1996 @isaaczhou @zzamboni @dmolina … @shanesssveller @edkolev @vinurs @xianmin @jwiegley … See https://ox-hugo.scripter.co/doc/examples/ . ([[https://github.com/kaushalmodi/ox-hugo/commit/f380d681c83b7079d0a3fea678d5f1af5582416d][f380d68]])
+- Add one more real world example ([[https://github.com/kaushalmodi/ox-hugo/commit/74e565b633fc1987bb6a0f1e4c61da890aaad3db][74e565b]])
+- Add one more real world example ([[https://github.com/kaushalmodi/ox-hugo/commit/c483894c4e9f6cd80164510516bff8f950ef109a][c483894]])
+- Add one more real world example ([[https://github.com/kaushalmodi/ox-hugo/commit/305e535df000d87804ac3e909b45f7612bb01ef8][305e535]])
+- Add more real world examples … Thank you @ldenman and @amca01 for sharing the site Org source. ([[https://github.com/kaushalmodi/ox-hugo/commit/f9a8513cca7a119b0e674241fac3f36d3f345f1b][f9a8513]])
+- Add real world example: https://zcl.space … Thanks @emacsun! ([[https://github.com/kaushalmodi/ox-hugo/commit/d2869905c29c15cbf2f654591d97ed924dc6c96d][d286990]])
+- Add real world example: https://cadadr.github.io/elisp/index.html … Thanks @cadadr! ([[https://github.com/kaushalmodi/ox-hugo/commit/eb8276630ba1ff2ee7084b890b0b82847b82638c][eb82766]])
+- Add more real world examples … Thank you @xianmin @dkensinger @justinbarclay @bebound @emilioj … @cdodev @lowkey2046 @inzkyk and @drdavis for sharing your site … sources. ([[https://github.com/kaushalmodi/ox-hugo/commit/f0b9c316c3055df609a4afab724eb40333171eb8][f0b9c31]])
+- Add Real World Examples ([[https://github.com/kaushalmodi/ox-hugo/commit/44aae25eab5d50e4c0bacc3682da4ed71a03132b][44aae25]])
 
 *** :recycle: Refactor
 :PROPERTIES:
@@ -723,6 +754,7 @@ All notable changes to this project will be documented in this file.
 - Escape backslashes in front-matter … - Handle single-line and multi-line front-matter values for both TOML … and YAML. ([[https://github.com/kaushalmodi/ox-hugo/commit/428afda6673f41811657ad1b3adf6eb005d8c0bb][428afda]])
 - Use Hugo getJSON to get last committed dates for Examples ([[https://github.com/kaushalmodi/ox-hugo/commit/56da5eec093c69cef94b1b50b8d85c64ed3919f7][56da5ee]])
 - Update GitHub README ([[https://github.com/kaushalmodi/ox-hugo/commit/23a8b006f5c035be1642e3a1c9ff8f874b4f5244][23a8b00]])
+- Move the "Real World Examples" link ([[https://github.com/kaushalmodi/ox-hugo/commit/8f2b42ca05bfa30f87ae056fc270686191e44ca8][8f2b42c]])
 - Github ignores #+​​begin_​​note block completely; so reorg prev commit ([[https://github.com/kaushalmodi/ox-hugo/commit/15a6df059f5eac0964c075c1386ce1c83cfe979d][15a6df0]])
 - Update description special block example ([[https://github.com/kaushalmodi/ox-hugo/commit/22622b3b3cf1a9564d461dac91d89521247478db][22622b3]])
 - Accommodate for the org-get-tags definition change in Org 9.2 ([[https://github.com/kaushalmodi/ox-hugo/commit/bcfb3eb8002585b646d906707e62af8cb0b4193a][bcfb3eb]])
@@ -801,6 +833,7 @@ All notable changes to this project will be documented in this file.
 - Remove fluff from the last citations+​​caption test case ([[https://github.com/kaushalmodi/ox-hugo/commit/016959c76ec15c36c03f3de2416052ad9992993b][016959c]])
 - Allow disabling Pandoc citations in subtrees ([[https://github.com/kaushalmodi/ox-hugo/commit/0670d755fd2db8874b5ec88f7a4343af26a7674b][0670d75]])
 - Add explicit -j1 to the make command … Looks like it is needed on MacOS. On GNU/Linux systems (mine [RHEL … 6.8] and on Travis CI), that is not needed. … Ref: … - https://twitter.com/takaxp/status/103… ([[https://github.com/kaushalmodi/ox-hugo/commit/f8a052e1cca45722751babf75baf37951c01919c][f8a052e]])
+- More real world examples! … Copying @ryancummings, @taipapamotohus, @grugrut, @junahan, … @alexmurray, @vdemeester and @emacsomancer. ([[https://github.com/kaushalmodi/ox-hugo/commit/fc02bd94c3207c530e83122269caa00ebbced263][fc02bd9]])
 - Add note about pandoc +​​ pandoc-citeproc requirement for devel … Move common Org macros to doc-setupfile.org. … Ref: Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/195][195]] ([[https://github.com/kaushalmodi/ox-hugo/commit/7185780b90aaea61d420fff925ab316cd8d383bd][7185780]])
 - Add pandoc mention at few more places … Ref: Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/195][195]] ([[https://github.com/kaushalmodi/ox-hugo/commit/e9e63e370a4d4787a1005fa77fa376a2578a98da][e9e63e3]])
 - Use "perl -pi -e" instead of "sed -r -i" for macOS compatibility … Ref: Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/195#issuecomment-416486948][195]] ([[https://github.com/kaushalmodi/ox-hugo/commit/f139244121a23458fa550c6e83eeecf169461dc4][f139244]])
@@ -1270,6 +1303,7 @@ All notable changes to this project will be documented in this file.
 - Minor re-org of tests and tags ([[https://github.com/kaushalmodi/ox-hugo/commit/5d9b531df03f2145ce6db837286d915abc54b79a][5d9b531]])
 - Don't increase the number of backticks unnecessarily … A better version of the fix in … commit # [[https://github.com/kaushalmodi/ox-hugo/commit/6198bbe01ead051f9c0517c9b876268cd6c01a72][6198bbe]] ([[https://github.com/kaushalmodi/ox-hugo/commit/80cdaa2ecaf0f366c0edc782e680c9a65577820f][80cdaa2]])
 - Minor update to a test … .. just because I realized that I had "Hello again x4" followed by … "Hello again x6", but no "Hello again x5" :) ([[https://github.com/kaushalmodi/ox-hugo/commit/2df6532075e6d93feba105ea516dde3ba7dbdc73][2df6532]])
+- Support exporting Latex Environments from Org too … - org-blackfriday-latex-fragment: Escape *​​ to \*​​ in latex fragments … - org-blackfriday-latex-environment: New function, added to do the … escap… ([[https://github.com/kaushalmodi/ox-hugo/commit/95dd1ea388a9d625bec6ef4f59f09ee28a991a2e][95dd1ea]])
 - Move common logic to org-blackfriday-escape-chars-in-equation ([[https://github.com/kaushalmodi/ox-hugo/commit/9f8cac054dab4a15515d58fa71611a278e8b53d0][9f8cac0]])
 - Minor formatting fixes in a test ([[https://github.com/kaushalmodi/ox-hugo/commit/0dc672a1865a7a2d730fb026da55ab7f9bc1c9c4][0dc672a]])
 - Update GitHub README.org that got missed out in last commit ([[https://github.com/kaushalmodi/ox-hugo/commit/f5803c683a0efd001356ef4174425749fbe328df][f5803c6]])

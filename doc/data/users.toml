@@ -410,6 +410,11 @@
    site = "https://www.yidajiabei.xyz/"
    org_dir = "org"
 
+[shombando]
+   author = "Shom Bandopadhaya"
+   source = "https://github.com/shombando/shom.dev"
+   site = "https://shom.dev"
+
 # [ValidTOMLKey] <-- The key cannot contain spaces or periods.
 #   author = ""
 #   source = ""

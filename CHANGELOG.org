@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 - Improve the default description of exported info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/13870caa6980cb219da3830c21c54c07467aa51e][13870ca]])
 - Better HTML target for info: links … - HTML targets are now individual pages for the nodes instead of an anchor … in a single page HTML manual. … Before : https://www.gnu.org/software/emacs/manual/htm… ([[https://github.com/kaushalmodi/ox-hugo/commit/1d5b0ce665412de6eb31f86c119093cbea81fddf][1d5b0ce]])
+- Export info: links for Org manual to https://orgmode.org URLs ([[https://github.com/kaushalmodi/ox-hugo/commit/63084bfdb33785be48e091693ca395d7ea516506][63084bf]])
 
 *** :rocket: PR Merges
 :PROPERTIES:

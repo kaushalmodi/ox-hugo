@@ -898,14 +898,16 @@ https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=6b2a7cb20b357e73
          ;; `link' below is mostly derived from the code in
          ;; `org-info-map-html-url'.
          (link (cond ((member manual org-info-emacs-documents)
-                          (let* ((base-url "https://www.gnu.org/software/emacs/manual/html_node")
-                                 (node-url (if (string= node "Top")
-                                               "index.html"
-                                             (concat (org-info--expand-node-name node) ".html"))))
-                            (format "%s/%s/%s" base-url manual node-url)))
-                         ((cdr (assoc manual org-info-other-documents)))
-                         (t
-                          (concat manual ".html")))))
+                      (let* ((manual-url (if (string= (downcase manual) "org")
+                                             "https://orgmode.org/manual"
+                                           (format "https://www.gnu.org/software/emacs/manual/html_node/%s" manual)))
+                             (node-url (if (string= node "Top")
+                                           "index.html"
+                                         (concat (org-info--expand-node-name node) ".html"))))
+                        (format "%s/%s" manual-url node-url)))
+                     ((cdr (assoc manual org-info-other-documents)))
+                     (t
+                      (concat manual ".html")))))
     (when (member format '(md hugo))
       (format "[%s](%s \"%s\")" desc link title))))
 

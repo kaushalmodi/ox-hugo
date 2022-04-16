@@ -8,7 +8,7 @@ tags = ["src-block", "coderef", "annotation", "example-block"]
 draft = false
 +++
 
-See [Org Info: Literal Examples](https://www.gnu.org/software/emacs/manual/html_node/org/Literal-Examples.html "Emacs Lisp: (info \"(org) Literal Examples\")").
+See [Org Info: Literal Examples](https://orgmode.org/manual/Literal-Examples.html "Emacs Lisp: (info \"(org) Literal Examples\")").
 
 In literal examples, Org interprets strings like `(ref:name)` as
 labels, and use them as targets for special hyperlinks like

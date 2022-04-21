@@ -22,6 +22,14 @@ All notable changes to this project will be documented in this file.
 
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/620][620]]: … feat: Better HTML target for info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/e5fe9fa0d552481a7261db7a9d9b0e9b7ea2370e][e5fe9fa]])
 
+*** :bug: Bug Fixes
+:PROPERTIES:
+:CUSTOM_ID: bug-fixes
+:END:
+
+- Fixes for checkdoc ([[https://github.com/kaushalmodi/ox-hugo/commit/088551275d7d423ba6ff1d2d09e99e533701a217][0885512]])
+- Fix compilation error for Org 9.3 … `org-back-to-heading-or-point-min` was introduced in Org 9.5. So make … `ox-hugo` define it if user's Org version doesn't define it. … Ref: https://git.savannah.gnu… ([[https://github.com/kaushalmodi/ox-hugo/commit/124c4a0c5858e82fe7853aa66fdcf978e301fdd2][124c4a0]])
+
 *** :memo: Documentation
 :PROPERTIES:
 :CUSTOM_ID: documentation

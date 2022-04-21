@@ -171,7 +171,7 @@ This variable is set internally by `org-hugo-export-wim-to-md'
 when its ALL-SUBTREES arg is set to a non-nil value.
 
 Setting this to non-nil will lead to slow or incorrect
-exports. This variable is for internal use only, and must not be
+exports.  This variable is for internal use only, and must not be
 modified.")
 
 (defvar org-hugo--all-subtrees-export--functions-to-silence
@@ -886,7 +886,9 @@ https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=6b2a7cb20b357e73
        (string-to-number string)))
 
 (defun org-hugo--org-info-export (path desc format)
-  "Add support for exporting [[info:..]] links for `hugo' format."
+  "Add support for exporting [[info:..]] links for `hugo' format.
+
+See `org-link-parameters' for details about PATH, DESC and FORMAT."
   (let* ((parts (split-string path "#\\|::"))
          (manual (car parts))
          (node (or (nth 1 parts) "Top"))
@@ -1683,7 +1685,8 @@ set to a non-empty string."
 
 ;;;; Advice for silencing messages
 (defun org-hugo--advice-silence-messages (orig-fun &rest args)
-  "Advice function that silences all messages in ORIG-FUN."
+  "Advice function that silences all messages in ORIG-FUN.
+ARGS are the ORIG-FUN function's arguments."
   (let ((inhibit-message t)      ;Don't show the messages in Echo area
         (message-log-max nil))   ;Don't show the messages in the *Messages* buffer
     (apply orig-fun args)))

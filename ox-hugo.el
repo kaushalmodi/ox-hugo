@@ -104,6 +104,19 @@
       (defalias 'org-hugo--get-tags 'org-get-tags)
     (defalias 'org-hugo--get-tags 'org-get-tags-at)))
 
+;; `org-back-to-heading-or-point-min' was introduced in Org 9.5 in
+;; https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=1bdff9f73dc1e7ff625a90e3e61350bdea99f29c.
+;; If a user is using a slightly older version of Org (like 9.3),
+;; define it.
+(unless (fboundp #'org-back-to-heading-or-point-min)
+  (defun org-back-to-heading-or-point-min (&optional invisible-ok)
+    "Go back to heading or first point in buffer.
+If point is before first heading go to first point in buffer
+instead of back to heading."
+    (if (org-before-first-heading-p)
+        (goto-char (point-min))
+      (org-back-to-heading invisible-ok))))
+
 (defvar org-hugo--subtree-coord nil
   "Variable to store the current valid Hugo subtree coordinates.
 It holds the value returned by

@@ -18,3 +18,16 @@ This Org snippet:
 renders as below:
 
 This `relref` links to [this same page]({{< relref "hugo-keyword" >}}).
+
+
+## Using `#+hugo:` for unpaired shortcodes with named arguments {#using-plus-hugo-for-unpaired-shortcodes-with-named-arguments}
+
+`ox-hugo` Issue #[624](https://github.com/kaushalmodi/ox-hugo/issues/624)
+
+```org
+#+hugo: {{</* myshortcode-named arg1="horizontal" arg2="static/img/legacy/works/land" */>}}
+```
+
+renders as below:
+
+{{< myshortcode-named arg1="horizontal" arg2="static/img/legacy/works/land" >}}

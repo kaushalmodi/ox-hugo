@@ -2745,6 +2745,15 @@ This Org snippet:
 renders as below:
 
 #+hugo: This `relref` links to [this same page]({{< relref "hugo-keyword" >}}).
+**** Using ~#+hugo:~ for unpaired shortcodes with named arguments
+{{{oxhugoissue(624)}}}
+#+begin_src org
+,#+hugo: {{< myshortcode-named arg1="horizontal" arg2="static/img/legacy/works/land" >}}
+#+end_src
+
+renders as below:
+
+#+hugo: {{< myshortcode-named arg1="horizontal" arg2="static/img/legacy/works/land" >}}
 ** Dealing with underscores
 :PROPERTIES:
 :EXPORT_FILE_NAME: dealing-with-underscores

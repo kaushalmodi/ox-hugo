@@ -6736,8 +6736,29 @@ exports, <code>verbatim</code>.@@
 :PROPERTIES:
 :EXPORT_FILE_NAME: export_block_hugo
 :END:
+#+begin_description
+Testing ~#+begin_export hugo~ .. ~#+end_export~ blocks.
+#+end_description
 #+begin_export hugo
 This will get exported **only for** Hugo exports, `verbatim`.
+#+end_export
+**** Using /export hugo/ block for unpaired shortcodes with named arguments
+{{{oxhugoissue(624)}}}
+Below:
+#+begin_src org
+,#+begin_export hugo
+{{< myshortcode-named
+      arg1="horizontal"
+      arg2="static/img/legacy/works/land"
+>}}
+,#+end_export
+#+end_src
+renders as:
+#+begin_export hugo
+{{< myshortcode-named
+      arg1="horizontal"
+      arg2="static/img/legacy/works/land"
+>}}
 #+end_export
 *** Export block Markdown                                          :markdown:
 :PROPERTIES:

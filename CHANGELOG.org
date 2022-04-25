@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 :END:
 
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/620][620]]: … feat: Better HTML target for info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/e5fe9fa0d552481a7261db7a9d9b0e9b7ea2370e][e5fe9fa]])
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/626][626]]: … fix: Links to Org IDs of post subtrees in other Org files ([[https://github.com/kaushalmodi/ox-hugo/commit/ad26385eebcd32964540601a9f9f703f5cd6675f][ad26385]])
 
 *** :bug: Bug Fixes
 :PROPERTIES:
@@ -29,6 +30,7 @@ All notable changes to this project will be documented in this file.
 
 - Fixes for checkdoc ([[https://github.com/kaushalmodi/ox-hugo/commit/088551275d7d423ba6ff1d2d09e99e533701a217][0885512]])
 - Fix compilation error for Org 9.3 … `org-back-to-heading-or-point-min` was introduced in Org 9.5. So make … `ox-hugo` define it if user's Org version doesn't define it. … Ref: https://git.savannah.gnu… ([[https://github.com/kaushalmodi/ox-hugo/commit/124c4a0c5858e82fe7853aa66fdcf978e301fdd2][124c4a0]])
+- Linking post subtrees in other Org files using their Org IDs … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/625][625]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/6106d0495e1a47a00662fda5a98b61983eb17234][6106d04]])
 
 *** :memo: Documentation
 :PROPERTIES:
@@ -37,6 +39,7 @@ All notable changes to this project will be documented in this file.
 
 - Update Equations doc with dvisvgm and dvipng references … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/619][619]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/c322fe2048b7ad2a20d48020239f462725ce3d59][c322fe2]])
 - Replace manually pasted HTML links with info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/5e13e6cec230f90de958a38b461622454f0c2620][5e13e6c]])
+- Example of how to write multi-line unpaired shortcodes … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/624][624]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/252f8ad9d3fe382e09de3cff746ee9b3aba2ade1][252f8ad]])
 
 *** :heart: Real World Examples
 :PROPERTIES:
@@ -44,6 +47,22 @@ All notable changes to this project will be documented in this file.
 :END:
 
 - Added https://shom.dev to real world examples … Ref: PR # [[https://github.com/kaushalmodi/ox-hugo/pull/621][621]] ([[https://github.com/kaushalmodi/ox-hugo/commit/adaf03c7bf73eabdb8469329a394b547691059e7][adaf03c]])
+
+*** :recycle: Refactor
+:PROPERTIES:
+:CUSTOM_ID: refactor
+:END:
+
+- Add `org-hugo--get-anchor-at-point` … Move logic for deriving the anchor string at point to this new … function. ([[https://github.com/kaushalmodi/ox-hugo/commit/fb7e3e25b6608bb27327b621698293463e686159][fb7e3e2]])
+
+*** :hammer: Testing
+:PROPERTIES:
+:CUSTOM_ID: testing
+:END:
+
+- Using #+​​hugo for unpaired shortcodes with named args … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/624][624]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/2b762139bc8e68b97ef17420cec2df1fcec1ef13][2b76213]])
+- Multi-line shortcode in "export hugo" block … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/624][624]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/8b97276b60465422edca6a3e20d1fab1ba1a4f39][8b97276]])
+- Linking post subtrees in other Org files using their Org IDs … Ref: Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/625][625]] ([[https://github.com/kaushalmodi/ox-hugo/commit/058a8c859004a9657497df29a5901dae7a4be141][058a8c8]])
 
 ** *0.10.0* - <2022-04-07>
 

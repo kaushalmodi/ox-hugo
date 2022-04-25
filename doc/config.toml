@@ -23,6 +23,11 @@ disableFastRender = true        # Hugo 0.30
 
 disableKinds = ["taxonomy", "taxonomyTerm"]
 
+# Continue building the doc site even if the getJSON calls (for
+# fetching the last_update date for Real World Examples) fail due to
+# GitHub's API rate limiting.
+ignoreErrors = ["error-remote-getjson"]
+
 [module]
   [[module.imports]]
     path = "github.com/kaushalmodi/hugo-onyx-theme"

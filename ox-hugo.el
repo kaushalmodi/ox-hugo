@@ -2354,6 +2354,40 @@ functions like `org-link-search'."
           (org-inhibit-startup t)) ;Don't run any Org buffer startup functions
       (org-mode))))
 
+(defun org-hugo--get-anchor-at-point (info)
+  "Return anchor string based on the current point.
+
+If point is in a `headline' element, derive the anchor using
+`org-hugo--get-anchor'.
+
+Otherwise, if the current point has an Org target, get the target
+anchor.
+
+If current element has `:EXPORT_FILE_NAME' property, return the
+anchor as-is, otherwise prefix the anchor string with \"#\".
+
+Return an empty string if an anchor cannot be derived.
+
+INFO is a plist used as a communication channel."
+  (let ((elem (org-element-at-point))
+        (anchor ""))
+    (cond
+     ((equal (org-element-type elem) 'headline)
+      (setq anchor (org-hugo--get-anchor elem info)))
+     (t
+      ;; If current point has an Org Target, get the target anchor.
+      (let ((target-elem (org-element-target-parser)))
+        (when (equal (org-element-type target-elem) 'target)
+          (setq anchor (org-blackfriday--get-target-anchor target-elem))))))
+    (when (org-string-nw-p anchor)
+      ;; If the element has the `:EXPORT_FILE_NAME' it's not a
+      ;; sub-heading, but the subtree's main heading.  Don't prefix
+      ;; the "#" in that case.
+      (unless (org-export-get-node-property :EXPORT_FILE_NAME elem nil)
+        (setq anchor (format "#%s" anchor))))
+    ;; (message "[search and get anchor DBG] anchor: %S" anchor)
+    anchor))
+
 (defun org-hugo--search-and-get-anchor (org-file search-str info)
   "Return HTML anchor for the point where SEARCH-STR is found in ORG-FILE.
 
@@ -2367,9 +2401,7 @@ If the search fails, return \"\".
 INFO is a plist used as a communication channel."
   ;; (message "[search and get anchor DBG] org-file: %S" org-file)
   ;; (message "[search and get anchor DBG] search-str: %S" search-str)
-  (let ((buffer (get-file-buffer org-file)) ;nil if `org-file' buffer is not already open
-        (anchor "")
-        elem )
+  (let ((buffer (get-file-buffer org-file))) ;nil if `org-file' buffer is not already open
     (unless (file-exists-p org-file)
       (error "[org-hugo--search-and-get-anchor] Unable to open Org file `%s'" org-file))
     (with-current-buffer (find-file-noselect org-file)
@@ -2381,24 +2413,7 @@ INFO is a plist used as a communication channel."
       (org-hugo--org-mode-light)
       (org-export-get-environment) ;Eval #+bind keywords, etc.
       (org-link-search search-str) ;This is extracted from the `org-open-file' function.
-      (setq elem (org-element-at-point))
-      (cond
-       ((equal (org-element-type elem) 'headline)
-        (setq anchor (org-hugo--get-anchor elem info)))
-       (t
-        ;; If current point has an Org Target, get the target anchor.
-        (let ((target-elem (org-element-target-parser)))
-          (when (equal (org-element-type target-elem) 'target)
-            (setq anchor (org-blackfriday--get-target-anchor target-elem))))))
-      (when (org-string-nw-p anchor)
-        ;; If the element has the `:EXPORT_FILE_NAME' it's not a
-        ;; sub-heading, but the subtree's main heading.  Don't prefix
-        ;; the "#" in that case.
-        (unless (org-export-get-node-property :EXPORT_FILE_NAME elem nil)
-          (setq anchor (format "#%s" anchor))))
-      ;; (message "[search and get anchor DBG] anchor: %S" anchor)
-      )
-    anchor))
+      (org-hugo--get-anchor-at-point info))))
 
 (defun org-hugo-link (link desc info)
   "Convert LINK to Markdown format.

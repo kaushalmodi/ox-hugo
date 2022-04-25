@@ -2460,14 +2460,15 @@ and rewrite link paths to make blogging more seamless."
              ;; (message "[org-hugo-link DBG] plain-text path: %s" path)
              (if (org-id-find-id-file raw-path)
                  (let* ((anchor (org-hugo-link--heading-anchor-maybe link info))
-                        (anchor-str (if (org-string-nw-p anchor)
-                                        (concat "#" anchor)
-                                      "")))
+                        (ref (if (and (org-string-nw-p anchor)
+                                      (not (string-prefix-p "#" anchor)))
+                                 ;; If the "anchor" doesn't begin with
+                                 ;; "#", it's a direct reference to a
+                                 ;; post subtree.
+                                 anchor
+                               (concat path anchor))))
                    ;; (message "[org-hugo-link DBG] plain-text org-id anchor: %S" anchor)
-                   ;; (message "[org-hugo-link DBG] plain-text org-id anchor-str: %S" anchor-str)
-                   (if desc
-                       (format "[%s]({{< relref \"%s%s\" >}})" desc path anchor-str)
-                     (format "[%s]({{< relref \"%s%s\" >}})" path path anchor-str)))
+                   (format "[%s]({{< relref \"%s\" >}})" (or desc path) ref))
                (if desc
                    (format "[%s](%s)" desc path)
                  (format "<%s>" path)))))
@@ -2833,14 +2834,7 @@ INFO is a plist used as a communication channel."
         (add-to-list 'org-hugo--opened-buffers (current-buffer)))
       (org-export-get-environment)        ;Eval #+bind keywords, etc.
       (goto-char id-pos)
-      (let* ((elem (org-element-at-point))
-             (anchor (if (equal (org-element-type elem) 'headline)
-                         (org-hugo--get-anchor elem info)
-                       "")))    ;If it's a file ID and not a headline ID
-        ;; (message "[org-hugo-link--heading-anchor-maybe DBG] elem type: %S" (org-element-type elem))
-        ;; (message "[org-hugo-link--heading-anchor-maybe DBG] elem: %S" elem)
-        ;; (message "[org-hugo-link--heading-anchor-maybe DBG] anchor: %S" anchor)
-        anchor))))
+      (org-hugo--get-anchor-at-point info))))
 
 ;;;;; Helpers
 (defun org-hugo--copy-resources-maybe (info)

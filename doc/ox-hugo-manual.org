@@ -4074,6 +4074,7 @@ Above renders to:
 
 /Using ~#+md:..~ or ~#+html:..~ will also export the same way./
 ***** ~#+begin_export hugo~
+<<.embedding-shortcodes-discouraged>>
 #+begin_note
 This method is discouraged because we would then end up with Org text
 with a lot of content which can be exported for only Hugo consumption!
@@ -4084,10 +4085,10 @@ Blocks,#org-special-blocks)}}} and {{{relref(Hugo Paired
 Shortcodes,#hugo-paired-shortcodes)}}} are the recommended methods if
 you really want to blend Hugo shortcodes with your Org source.
 
-Even though discouraged, this method is being documented for the sake
-of completeness.
+Even though discouraged, this method is documented for the sake of
+completeness.
 
-#+begin_src md
+#+begin_src org
 ,#+begin_export hugo
 {{< alert2 warning >}}
 This is a warning.
@@ -4102,6 +4103,21 @@ renders as:
 This is a warning.
 {{< /alert2 >}}
 #+end_export
+****** Multi-line shortcodes
+Hugo supports unpaired shortcodes written over multiple lines.
+
+For example, if you have an unpaired shortcode called ~album~ which
+accepts multiple arguments, you can write it like below /(but it's
+[[.embedding-shortcodes-discouraged][discouraged]])/ for readability.
+
+#+begin_src org
+,#+begin_export hugo
+{{< album
+    position="horizontal"
+    path="static/img/some/very/long/path"
+>}}
+,#+end_export
+#+end_src
 **** Org Macros
 If you find yourself using the [[#inline-syntax][~@@hugo:..@@~ Inline Syntax]] a lot, you
 might appreciate the power of [[info:org#Macro Replacement][Org Macros]].

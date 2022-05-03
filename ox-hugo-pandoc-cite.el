@@ -357,6 +357,45 @@ INFO is a plist used as a communication channel."
       (org-hugo-pandoc-cite--restore-fm-in-orig-outfile
        orig-outfile fm orig-outfile-contents))))
 
+(defun org-hugo-pandoc-cite--meta-data-generator (data)
+  "Return YAML front-matter to pass citation meta-data to Pandoc.
+
+DATA is the alist containing all the post meta-data for
+front-matter generation.
+
+Pandoc accepts `csl', `nocite' and `link-citations' variables via
+a YAML front-matter.
+
+References:
+- https://pandoc.org/MANUAL.html#citation-rendering
+- https://pandoc.org/MANUAL.html#including-uncited-items-in-the-bibliography
+- https://pandoc.org/MANUAL.html#other-relevant-metadata-fields"
+  (let* ((yaml ())
+         (link-citations (cdr (assoc 'link-citations data)))
+         (link-citations (if (symbolp link-citations)
+                             (symbol-name link-citations)
+                           link-citations))
+         (csl (cdr (assoc 'csl data)))
+         (nocite (cdr (assoc 'nocite data))))
+    (push "---" yaml)
+    (when csl
+      (push (format "csl: %S" csl) yaml))
+    (when nocite
+      (push (format "nocite: [%s]"
+                    (string-join
+                     (mapcar (lambda (elem)
+                               (format "%S" (symbol-name elem)))
+                             nocite)
+                     ", "))
+            yaml))
+    (when link-citations
+      (push (format "link-citations: %s"
+                    (org-hugo--front-matter-value-booleanize link-citations))
+            yaml))
+    (push "---" yaml)
+    ;; (message "[org-hugo-pandoc-cite--meta-data-generator DBG] yaml: %S" yaml)
+    (string-join yaml "\n")))
+
 
 (provide 'ox-hugo-pandoc-cite)
 

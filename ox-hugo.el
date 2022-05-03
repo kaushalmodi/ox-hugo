@@ -85,6 +85,7 @@
 (require 'org-id)                       ;For `org-id-find'
 
 (declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
+(declare-function org-hugo-pandoc-cite--meta-data-generator "ox-hugo-pandoc-cite")
 
 (require 'ox-hugo-deprecated)
 
@@ -3927,8 +3928,10 @@ INFO is a plist used as a communication channel."
         ;; Pandoc parses fields like csl and nocite from YAML
         ;; front-matter.  So create the `org-hugo--fm-yaml'
         ;; front-matter in YAML format just for Pandoc.
-        (setq org-hugo--fm-yaml (org-hugo--gen-yaml-front-matter data))
+        (setq org-hugo--fm-yaml
+              (org-hugo-pandoc-cite--meta-data-generator data))
       (setq org-hugo--fm-yaml ret))
+    ;; (message "org-hugo--fm-yaml: %s" org-hugo--fm-yaml)
     ret))
 
 (defun org-hugo--calc-weight ()

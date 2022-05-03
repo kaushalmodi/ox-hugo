@@ -17,6 +17,17 @@
 
 ;;; Code:
 
+;; Silence byte-compiler
+(defvar org-hugo--date-time-regexp)
+(defvar org-hugo--subtree-coord)
+(declare-function org-string-nw-p "org-macs")
+(declare-function org-hugo--calc-weight "ox-hugo")
+(declare-function org-hugo-slug "ox-hugo")
+(declare-function org-hugo--front-matter-value-booleanize "ox-hugo")
+(declare-function org-hugo--delim-str-to-list "ox-hugo")
+(declare-function org-hugo--parse-property-arguments "ox-hugo")
+;;
+
 (make-obsolete-variable 'org-hugo-blackfriday-options nil "Hugo has switched to use Goldmark as the default Markdown parser since v0.60." "Jan 15, 2022")
 (make-obsolete-variable 'org-hugo-blackfriday-extensions nil "Hugo has switched to use Goldmark as the default Markdown parser since v0.60." "Jan 15, 2022")
 

@@ -5,9 +5,9 @@ tags: ["menu", "yaml"]
 draft: false
 menu:
   main:
-    identifier: "yaml-menu-override"
-    weight: 25
     parent: "posts"
+    weight: 25
+    identifier: "yaml-menu-override"
 ---
 
 Testing the addition of _menu_ meta data to the YAML front

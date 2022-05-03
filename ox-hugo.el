@@ -3,7 +3,7 @@
 ;; Authors: Kaushal Modi <kaushal.modi@gmail.com>
 ;;          Matt Price <moptop99@gmail.com>
 ;; URL: https://ox-hugo.scripter.co
-;; Package-Requires: ((emacs "24.4") (org "9.0"))
+;; Package-Requires: ((emacs "24.4") (org "9.0") (tomelr "0.0.0"))
 ;; Keywords: Org, markdown, docs
 ;; Version: 0.7
 
@@ -72,6 +72,8 @@
 
 ;;; Code:
 
+(require 'tomelr)                       ;For `tomelr-encode'
+
 (require 'ox-blackfriday)
 
 (require 'ffap)                         ;For `ffap-url-regexp'
@@ -84,8 +86,8 @@
 
 (declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
 
-(declare-function org-hugo--return-valid-blackfriday-extension "ox-hugo-deprecated")
-(declare-function org-hugo--parse-blackfriday-prop-to-alist "ox-hugo-deprecated")
+(require 'ox-hugo-deprecated)
+
 
 (defvar ffap-url-regexp)                ;Silence byte-compiler
 
@@ -1214,31 +1216,6 @@ or \"name\" are packed into an alist with `car' as \"params\"."
       (setq all-src (nreverse all-src))
       ;; (message "all-src: %S" all-src)
       all-src)))
-
-;;;; List to YAML/TOML list string
-(defun org-hugo--get-yaml-toml-list-string (key list)
-  "Return KEY's LIST value as a YAML/TOML list, represented as a string.
-
-KEY is a string and LIST is a list where an element can be a
-symbol, number or a non-empty string.  Examples:
-
-  \(\"abc\" \"def\")   -> \"[\\\"abc\\\", \\\"def\\\"]\"."
-  (concat "["
-          (mapconcat #'identity
-                     (mapcar (lambda (v)
-                               (org-hugo--quote-string
-                                (cond
-                                 ((symbolp v)
-                                  (symbol-name v))
-                                 ((numberp v)
-                                  (number-to-string v))
-                                 ((org-string-nw-p v)
-                                  v)
-                                 (t
-                                  (user-error "Invalid element %S in `%s' value %S" v key list)))))
-                             list)
-                     ", ")
-          "]"))
 
 ;;;; Publication Directory
 (defun org-hugo--get-pub-dir (info)
@@ -3480,114 +3457,6 @@ INFO is a plist holding export options."
       (format "%s%s%s" fm body org-hugo-footer))))
 
 ;;;;; Hugo Front-Matter
-(defun org-hugo--quote-string (val &optional prefer-no-quotes format)
-  "Wrap VAL with quotes as appropriate.
-
-VAL can be a string, symbol, number or nil.
-
-If VAL contains newlines, format it according to TOML or YAML
-FORMAT to preserve them.
-
-VAL is returned as-it-is under the following cases:
-- It is a number.
-- It is a string and is already wrapped with double quotes.
-- It is a string and it's value is \"true\" or \"false\".
-- It is a string representing a date.
-- It is a string representing an integer or float.
-
-If VAL is nil or an empty string, a quoted empty string \"\" is
-returned.
-
-If optional argument PREFER-NO-QUOTES is non-nil, return the VAL
-as-it-is if it's a string with just alphanumeric characters.
-
-Optional argument FORMAT can be \"toml\" or \"yaml\"."
-  (cond
-   ((null val)                          ;nil
-    val)
-   ((numberp val)
-    val)
-   ((symbolp val)
-    (format "\"%s\"" (symbol-name val)))
-   ((stringp val)
-    (cond
-     ((org-string-nw-p val)            ;If `val' is a non-empty string
-      (cond
-       ((or (and (string= (substring val 0 1) "\"") ;First char is literally a "
-                 (string= (substring val -1) "\"")) ;Last char is literally a "
-            (and prefer-no-quotes ;If quotes are not preferred and `val' is only alpha-numeric
-                 (string-match-p "\\`[a-zA-Z0-9]+\\'" val))
-            ;; or if it an integer that can be stored in the system as
-            ;; a fixnum.  For example, if `val' is
-            ;; "10040216507682529280" that needs more than 64 bits to
-            ;; be stored as a signed integer, it will be automatically
-            ;; stored as a float.  So (integerp (string-to-number
-            ;; val)) will return nil [or `fixnump' instead of
-            ;; `integerp' in Emacs 27 or newer]
-            ;; https://github.com/toml-lang/toml#integer Integer
-            ;; examples: 7, +7, -7, 7_000
-            (and (string-match-p "\\`[+-]?[[:digit:]_]+\\'" val)
-                 (if (functionp #'fixnump) ;`fixnump' and `bignump' get introduced in Emacs 27.x
-                     (fixnump (string-to-number val))
-                   (integerp (string-to-number val)))) ;On older Emacsen, `integerp' behaved the same as the new `fixnump'
-            (string= "true" val)
-            (string= "false" val)
-            ;; or if it is a date (date, publishDate, expiryDate, lastmod)
-            (string-match-p org-hugo--date-time-regexp val)
-            ;; or if it is a float
-            ;; https://github.com/toml-lang/toml#float
-            ;; Float examples (decimals): 7.8, +7.8, -7.8
-            (string-match-p "\\`[+-]?[[:digit:]_]+\\.[[:digit:]_]+\\'" val)
-            ;; Float examples (exponentials): 7e-8, -7E+8, 1.7e-05
-            (string-match-p "\\`[+-]?[[:digit:]_]+\\(\\.[[:digit:]_]+\\)*[eE][+-]?[[:digit:]_]+\\'" val)
-            ;; Special float values (infinity/NaN)
-            ;; Looks like Hugo is not supporting these.. Tue Mar 20 18:05:40 EDT 2018 - kmodi
-            ;; (let ((case-fold-search nil))
-            ;;   (string-match-p "\\`[+-]?\\(inf\\|nan\\)\\'" val))
-            )
-        val)
-       ((string-match-p "\n" val)       ;Multi-line string
-        ;; The indentation of the multi-line string is needed only for the
-        ;; YAML format.  But the same is done for TOML too just for better
-        ;; presentation.
-        (setq val (replace-regexp-in-string "^" "  " val))
-
-        (if (and (stringp format)
-                 (string= format "yaml"))
-            (progn
-              ;; https://yaml-multiline.info/
-              ;;
-              ;;     |             |foo : >
-              ;;     |abc          |  abc
-              ;;     |       >>>   |
-              ;;     |def          |
-              ;;     |             |  def
-              ;;
-              ;; In Org, a single blank line is used to start a new
-              ;; paragraph. In the YAML multi-line string, that needs to
-              ;; be 2 blank lines.
-              (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n\n" val))
-              (format ">\n%s" val))
-          ;; Escape the backslashes (only for multi-line TOML).
-          (setq val (replace-regexp-in-string "\\\\" "\\\\\\\\" val))
-
-          ;; Remove indentation/space from blank lines if any.
-          (setq val (replace-regexp-in-string "\n[[:blank:]]*\n" "\n\n" val))
-          (format "\"\"\"\n%s\n  \"\"\"" val))) ;Triple-quote
-       (t                                       ;Single-line string
-        ;; Below 2 replacements are order-dependent.. first escape the
-        ;; backslashes, then escape the quotes with backslashes.
-
-        ;; Escape the backslashes (for both TOML and YAML).
-        (setq val (replace-regexp-in-string "\\\\" "\\\\\\\\" val))
-        ;; Escape the double-quotes.
-        (setq val (replace-regexp-in-string "\"" "\\\\\""  val))
-        (concat "\"" val "\""))))
-     (t                                 ;If `val' is any empty string
-      "\"\"")))
-   (t                            ;Return empty string if anything else
-    "\"\"")))
-
 (defun org-hugo--parse-property-arguments (str)
   "Return an alist converted from a string STR of Hugo property value.
 
@@ -3620,20 +3489,46 @@ convert to ((foo . \"bar\") (baz . 1) (zoo . \"two words\"))."
      (t
       (user-error "%S needs to represent a boolean value" str)))))
 
-(defun org-hugo--parse-menu-prop-to-alist (str)
-  "Return an alist of valid Hugo menu properties converted from STR.
+(defun org-hugo--parse-menu-prop-to-alist (info)
+  "Return an alist of valid Hugo menu properties derived from INFO.
 
-Example: Input STR \":name foo :weight 80\" would convert
-to ((name . \"foo\") (weight . 80))."
-  (let ((menu-alist (org-hugo--parse-property-arguments str))
-        valid-menu-alist)
+INFO is a plist used as a communication channel."
+  (let* ((fm-format (plist-get info :hugo-front-matter-format))
+         (menu-alist (org-hugo--parse-property-arguments (plist-get info :hugo-menu)))
+         (menu-ov-alist (org-hugo--parse-property-arguments (plist-get info :hugo-menu-override)))
+         (menu-props '(name url identifier pre post weight parent title))
+         valid-menu-alist)
+    ;; (message "[org-hugo--parse-menu-prop-to-alist DBG] menu str: %S, alist: %S" str menu-alist)
     ;; Hugo menu properties: https://gohugo.io/content-management/menus/
     ;; "title" property for menus was introduced in Hugo v0.32.
     ;; https://github.com/gohugoio/hugo/commit/9df3736fec164c51d819797416dc263f2869be77
-    (dolist (prop '(menu name url identifier pre post weight parent title)) ;children prop is probably read-only
-      (let ((cell (assoc prop menu-alist)))
-        (when cell
-          (push cell valid-menu-alist))))
+    (cond
+     ((string= fm-format "toml")
+      (when (assoc 'menu menu-alist)
+        (setq valid-menu-alist (list (cdr (assoc 'menu menu-alist))))
+        (let (menu-params)
+          (dolist (prop menu-props)
+            (let ((cell (or (assoc prop menu-ov-alist)
+                            (assoc prop menu-alist))))
+              (when cell
+                (push cell menu-params))))
+          ;; Auto-set menu identifier if not already set by user.
+          (unless (assoc 'identifier menu-params)
+            (let ((id (org-hugo-slug (org-hugo--get-sanitized-title info))))
+              (push `(identifier . ,id) menu-params)))
+          ;; Auto-set menu weight if not already set by user.
+          (unless (assoc 'weight menu-params)
+            (when org-hugo--subtree-coord
+              (push `(weight . ,(org-hugo--calc-weight)) menu-params)))
+          (setcdr valid-menu-alist menu-params))
+        (setq valid-menu-alist (list valid-menu-alist))))
+     ((string= fm-format "yaml")
+      (push 'menu menu-props)
+      (dolist (prop menu-props)
+        (let ((cell (or (assoc prop menu-ov-alist)
+                        (assoc prop menu-alist))))
+          (when cell
+            (push cell valid-menu-alist))))))
     valid-menu-alist))
 
 (defun org-hugo--get-sanitized-title (info)
@@ -3679,14 +3574,7 @@ double-quotes."
         (setq title (replace-regexp-in-string "---\\([^-]\\)" "—\\1" title)) ;EM DASH
         (setq title (replace-regexp-in-string "--\\([^-]\\)" "–\\1" title)) ;EN DASH
 
-        (setq title (replace-regexp-in-string "\\.\\.\\." "…" title)) ;HORIZONTAL ELLIPSIS
-
-        ;; Double-quote the title so that even if the title contains
-        ;; just numbers or a date, it still gets rendered as a string
-        ;; type in Hugo. Do this only if the title doesn't already
-        ;; contain double-quotes.
-        (unless (string-match "\"" title)
-          (setq title (format "\"%s\"" title)))))
+        (setq title (replace-regexp-in-string "\\.\\.\\." "…" title)))) ;HORIZONTAL ELLIPSIS
     title))
 
 (defun org-hugo--replace-underscores-with-spaces (str)
@@ -3801,6 +3689,15 @@ the Hugo front-matter."
 
 INFO is a plist used as a communication channel."
   (memq 'subtree (plist-get info :export-options)))
+
+(defun org-hugo--string-unquote (str)
+  "Return STR after removing beginning and ending quotes if any."
+  (let ((unquoted-str str))
+    (when (and (stringp str)
+               (string= (substring str 0 1) "\"") ;First char is literally a "
+               (string= (substring str -1) "\"")) ;Last char is literally a "
+      (setq unquoted-str (substring str 1 -1)))
+    unquoted-str))
 
 (defun org-hugo--get-front-matter (info)
   "Return the Hugo front-matter string.
@@ -3922,18 +3819,7 @@ INFO is a plist used as a communication channel."
                             (push (cons key value) weight-data-1)))
                         ;; (message "weight DBG weight-data: %S" weight-data-1)
                         weight-data-1))
-         (menu-alist (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu)))
-         (menu-alist-override (org-hugo--parse-menu-prop-to-alist (plist-get info :hugo-menu-override)))
-         ;; If menu-alist-override is non-nil, update menu-alist with values from that.
-         (menu-alist (let ((updated-menu-alist menu-alist))
-                       (dolist (override-prop menu-alist-override)
-                         (let* ((override-key (car override-prop))
-                                (override-val (cdr override-prop))
-                                (matching-prop (assoc override-key updated-menu-alist)))
-                           (if matching-prop
-                               (setcdr matching-prop override-val)
-                             (push override-prop updated-menu-alist))))
-                       updated-menu-alist))
+         (menu-alist (org-hugo--parse-menu-prop-to-alist info))
          (custom-fm-data (org-hugo--parse-property-arguments (plist-get info :hugo-custom-front-matter)))
          (resources (org-hugo--get-resources-alist
                      (org-hugo--parse-property-arguments (plist-get info :hugo-resources))))
@@ -3943,7 +3829,7 @@ INFO is a plist used as a communication channel."
          (data `(;; The order of the elements below will be the order in which the front-matter
                  ;; variables will be ordered.
                  (title . ,(org-hugo--get-sanitized-title info))
-                 (audio . ,(plist-get info :hugo-audio))
+                 (audio . ,(org-hugo--string-unquote (plist-get info :hugo-audio)))
                  (author . ,author-list)
                  (description . ,description)
                  (date . ,(org-hugo--format-date :date info))
@@ -3969,10 +3855,8 @@ INFO is a plist used as a communication channel."
                  (headless . ,headless)
                  (creator . ,creator)
                  (locale . ,locale)
-                 (blackfriday . ,blackfriday)
-                 (menu . ,menu-alist)
-                 (resources . ,resources)))
-         (data `,(append data weight-data custom-fm-data))
+                 (blackfriday . ,blackfriday)))
+         (data `,(append data weight-data custom-fm-data (list (cons 'menu menu-alist) (cons 'resources resources))))
          ret)
     ;; (message "[get fm DBG] tags: %s" tags)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
@@ -3981,7 +3865,8 @@ INFO is a plist used as a communication channel."
     ;; (message "[get fm menu override DBG] %S" menu-alist-override)
     ;; (message "[custom fm data DBG] %S" custom-fm-data)
     ;; (message "[fm resources OUT DBG] %S" resources)
-    ;; (message "[fm data DBG] %S" data)
+    ;; (message "[fm data DBG] data: %S" data)
+    ;; (progn (message "[fm data DBG] ") (pp data))
     ;; (message "[fm tags DBG] %S" tags)
     ;; (message "[fm categories DBG] %S" categories)
     ;; (message "[fm keywords DBG] %S" keywords)
@@ -4042,7 +3927,7 @@ INFO is a plist used as a communication channel."
         ;; Pandoc parses fields like csl and nocite from YAML
         ;; front-matter.  So create the `org-hugo--fm-yaml'
         ;; front-matter in YAML format just for Pandoc.
-        (setq org-hugo--fm-yaml (org-hugo--gen-front-matter data "yaml"))
+        (setq org-hugo--fm-yaml (org-hugo--gen-yaml-front-matter data))
       (setq org-hugo--fm-yaml ret))
     ret))
 
@@ -4064,232 +3949,10 @@ where KEY is a symbol and VAL is a string.
 
 Generate the front-matter in the specified FORMAT.  Valid values
 are \"toml\" and \"yaml\"."
-  (let ((sep (cond ((string= format "toml") "+++\n")
-                   ((string= format "yaml") "---\n")
-                   (t "")))
-        (sign (cond ((string= format "toml") " =") ;Conventional to have space on the left side of "=" in TOML
-                    ((string= format "yaml") ":")  ;Conventional to have no space on the left side of ":" in YAML
-                    (t "")))
-        (front-matter "")
-        (indent (make-string 2 ? ))
-        (nested-string "")
-        (menu-string "")
-        (res-string ""))
-    ;; (message "hugo fm format: %s" format)
-    (dolist (pair data)
-      (let ((key (symbol-name (car pair)))
-            (value (cdr pair)))
-        ;; (message "[hugo fm key value DBG] %S %S" key value)
-        (unless (or (null value) ;Skip writing front-matter variables whose value is nil
-                    (and (stringp value) ;or an empty string.
-                         (string= "" value)))
-          ;; In TOML/YAML, the value portion needs to be wrapped in
-          ;; double quotes.
-          ;; TOML example:
-          ;;     title = "My Post"
-          ;; YAML example:
-          ;;     title: "My Post"
-
-          ;; In TOML, the menu information in the front-matter is as a
-          ;; table. So it needs to be always added to the end of the
-          ;; front-matter. So generate the `menu-string' separately
-          ;; and then append it to `front-matter' at the end.  Do the
-          ;; same for blackfriday param values.
-          (cond
-           ((string= key "menu")
-            (unless (listp value)
-              (user-error (concat "The `menu' front-matter did not get the expected "
-                                  "list value; probably because HUGO_MENU was not "
-                                  "used to set its value.\n"
-                                  "Usage examples: \":EXPORT_HUGO_MENU: :menu main\" or "
-                                  "\"#+hugo_menu: :menu main\"")))
-            ;; Menu name needs to be non-nil to insert menu info in front-matter.
-            (when (assoc 'menu value)
-              (let* ((menu-alist value)
-                     ;; Menu entry string might need to be quoted if
-                     ;; it contains spaces, for example.
-                     (menu-entry (org-hugo--quote-string (cdr (assoc 'menu menu-alist)) :prefer-no-quotes))
-                     (menu-entry-str "")
-                     (menu-value-str ""))
-                ;; Auto-set menu identifier if not already set by user.
-                (unless (assoc 'identifier menu-alist)
-                  (let ((title (cdr (assoc 'title data))))
-                    (push `(identifier . ,(org-hugo-slug title)) menu-alist)))
-
-                ;; Auto-set menu weight if not already set by user.
-                (unless (assoc 'weight menu-alist)
-                  (when org-hugo--subtree-coord
-                    (push `(weight . ,(org-hugo--calc-weight)) menu-alist)))
-
-                ;; (message "[menu alist DBG] = %S" menu-alist)
-                (when menu-entry
-                  (setq menu-entry-str (cond ((string= format "toml")
-                                              (format "[menu.%s]\n" menu-entry))
-                                             ((string= format "yaml")
-                                              (prog1
-                                                  (format "menu%s\n%s%s%s\n"
-                                                          sign indent menu-entry sign)
-                                                (setq indent (concat indent indent)))) ;Double the indent for next use
-                                             (t
-                                              "")))
-                  (dolist (menu-pair menu-alist)
-                    (let ((menu-key (symbol-name (car menu-pair)))
-                          (menu-value (cdr menu-pair)))
-                      ;; (message "menu DBG: %S %S %S" menu-entry menu-key menu-value)
-                      (unless (string= "menu" menu-key)
-                        (when menu-value
-                          ;; Cannot skip quote wrapping for values of keys inside menu.
-                          ;; Attempting to do:
-                          ;;   [menu.foo]
-                          ;;     parent = main
-                          ;;     # parent = "main" # But this works
-                          ;; gives this error:
-                          ;; ERROR 2017/07/21 10:56:07 failed to parse page metadata
-                          ;; for "singles/post-draft.md": Near line 10 (last key parsed
-                          ;; 'menu.foo.parent'): expected value but found "main" instead.
-                          (setq menu-value (org-hugo--quote-string menu-value))
-                          (setq menu-value-str
-                                (concat menu-value-str
-                                        (format "%s%s%s %s\n"
-                                                indent menu-key sign menu-value)))))))
-                  (setq menu-string (concat menu-entry-str menu-value-str))))))
-           ((string= key "resources")
-            (unless (listp value)
-              (user-error (concat "The `resources' front-matter did not get the expected "
-                                  "list value; probably because HUGO_RESOURCES was not "
-                                  "used to set its value.\n"
-                                  "Usage examples: \":EXPORT_HUGO_RESOURCES: :src \"my-image.png\" :title \"My Image\" "
-                                  "or \"#+hugo_resources: :src \"my-image.png\" :title \"My Image\"")))
-            (when value
-              (dolist (res-alist value)
-                (let ((res-entry-str "")
-                      (res-value-str "")
-                      res-src-present
-                      res-param-str)
-                  (setq res-entry-str (cond ((string= format "toml")
-                                             "[[resources]]\n")
-                                            ((string= format "yaml")
-                                             ;; For YAML, this string
-                                             ;; needs to be inserted
-                                             ;; only once.
-                                             (if (org-string-nw-p res-string)
-                                                 ""
-                                               (format "resources%s\n" sign)))
-                                            (t
-                                             "")))
-                  (dolist (res-pair res-alist)
-                    ;; (message "[resources DBG] res-pair: %S" res-pair)
-                    (let* ((res-key (symbol-name (car res-pair)))
-                           (res-value (cdr res-pair)))
-                      ;; (message "[resources DBG]: %S %S" res-key res-value)
-                      (cond ((string= res-key "params")
-                             (setq indent (make-string 4 ? ))
-                             (setq res-param-str (cond ((string= format "toml")
-                                                        (format "  [resources.%s]\n" res-key))
-                                                       ((string= format "yaml")
-                                                        (format "  %s%s\n" res-key sign))
-                                                       (t
-                                                        "")))
-                             (dolist (param-pair res-value) ;res-value would be an alist of params
-                               (let ((param-key (symbol-name (car param-pair)))
-                                     (param-value (cdr param-pair))
-                                     param-value-str)
-                                 ;; (message "[resources DBG] param-key: %S" param-key)
-                                 ;; (message "[resources DBG] param-value: %S" param-value)
-                                 (setq param-value-str (if (listp param-value)
-                                                           (org-hugo--get-yaml-toml-list-string param-key param-value)
-                                                         (org-hugo--quote-string param-value)))
-                                 (setq res-param-str
-                                       (concat res-param-str
-                                               (format "%s%s%s %s\n"
-                                                       indent param-key sign param-value-str)))))
-                             ;; (message "[resources params DBG] %s" res-param-str)
-                             )
-                            (t
-                             (when (string= res-key "src")
-                               (setq res-src-present t))
-                             (if (and (string= res-key "src")
-                                      (string= format "yaml"))
-                                 (setq indent "- ")
-                               (setq indent "  "))
-                             (setq res-value (org-hugo--quote-string res-value))
-                             (setq res-value-str
-                                   (concat res-value-str
-                                           (format "%s%s%s %s\n"
-                                                   indent res-key sign res-value)))))))
-                  (unless res-src-present
-                    (user-error "`src' must be set for the `resources'"))
-                  (setq res-string (concat res-string res-entry-str res-value-str res-param-str))))))
-           (;; Front-matter with nested map values: blackfriday, custom front-matter.
-            ;; Only 1 level of nesting is supported.
-            (and (listp value) ;Example value: '((legs . 4) ("eyes" . 2) (friends . (poo boo)))
-                 (eq 0 (cl-count-if (lambda (el) ;Check if value is a list of lists (or conses)
-                                      (not (listp el)))
-                                    value)))
-            (let ((nested-parent-key key)
-                  (nested-alist value)
-                  (nested-parent-key-str "")
-                  (nested-keyval-str ""))
-              ;; (message "[nested entry DBG] = %s" nested-parent-key)
-              ;; (message "[nested alist DBG] = %S" nested-alist)
-              (setq nested-parent-key-str (cond ((string= format "toml")
-                                                 (format "[%s]\n" nested-parent-key))
-                                                ((string= format "yaml")
-                                                 (format "%s%s\n" nested-parent-key sign))
-                                                (t
-                                                 "")))
-              (dolist (nested-pair nested-alist)
-                (unless (consp nested-pair)
-                  (user-error "Ox-hugo: Custom front-matter values with nested maps need to be an alist of conses"))
-                ;; (message "[nested pair DBG] = %S" nested-pair)
-                (let* ((nested-key (car nested-pair))
-                       (nested-key (cond
-                                    ((symbolp nested-key)
-                                     (symbol-name nested-key))
-                                    (t
-                                     nested-key)))
-                       (nested-value (cdr nested-pair))
-                       (nested-value (cond
-                                      ((and nested-value
-                                            (listp nested-value))
-                                       (if (and (string= nested-parent-key "blackfriday")
-                                                (or (string= nested-key "extensions")
-                                                    (string= nested-key "extensionsmask")))
-                                           (org-hugo--get-yaml-toml-list-string
-                                            nested-key
-                                            (mapcar #'org-hugo--return-valid-blackfriday-extension
-                                                    nested-value))
-                                         (org-hugo--get-yaml-toml-list-string nested-key nested-value)))
-                                      ((null nested-value)
-                                       "false")
-                                      ((equal nested-value 't)
-                                       "true")
-                                      (t
-                                       (org-hugo--quote-string nested-value)))))
-                  ;; (message "nested DBG: %S KEY %S->%S VALUE %S->%S" nested-parent-key
-                  ;;          (car nested-pair) nested-key
-                  ;;          (cdr nested-pair) nested-value)
-                  (when nested-value
-                    (setq nested-keyval-str
-                          (concat nested-keyval-str
-                                  (format "%s%s%s %s\n"
-                                          indent nested-key sign nested-value))))))
-              (when (org-string-nw-p nested-keyval-str)
-                (setq nested-string (concat nested-string nested-parent-key-str
-                                            nested-keyval-str)))))
-           (t
-            (setq front-matter
-                  (concat front-matter
-                          (format "%s%s %s\n"
-                                  key
-                                  sign
-                                  (cond (;; Tags, categories, keywords, aliases,
-                                         ;; custom front-matter which are lists.
-                                         (listp value)
-                                         (org-hugo--get-yaml-toml-list-string key value))
-                                        (t
-                                         (org-hugo--quote-string value nil format)))))))))))
-    (concat sep front-matter nested-string menu-string res-string sep)))
+  (if (string= format "yaml")
+      (org-hugo--gen-yaml-front-matter data)
+    (let ((tomelr-indent-multi-line-strings t))
+      (format "+++\n%s\n+++\n" (tomelr-encode data)))))
 
 (defun org-hugo--selective-property-inheritance ()
   "Return a list of properties that should be inherited."

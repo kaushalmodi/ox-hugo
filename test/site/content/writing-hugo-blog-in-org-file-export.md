@@ -12,9 +12,10 @@ baz = "zoo"
 alpha = 1
 beta = "two words"
 gamma = 10
-[menu.main]
-  identifier = "writing-hugo-blog-in-org-file-export"
-  weight = 2001
+[menu]
+  [menu.main]
+    identifier = "writing-hugo-blog-in-org-file-export"
+    weight = 2001
 +++
 
 ## First heading within the post {#first-heading-within-the-post}

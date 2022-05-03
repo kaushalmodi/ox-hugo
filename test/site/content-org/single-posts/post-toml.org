@@ -2,7 +2,7 @@
 #+author:
 #+date: 2017-07-20
 
-#+filetags: single toml "cross-link" @cat1 @cat2
+#+filetags: single toml cross-link @cat1 @cat2
 
 #+hugo_base_dir: ../../
 #+hugo_section: singles

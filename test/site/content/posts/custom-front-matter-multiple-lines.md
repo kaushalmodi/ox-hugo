@@ -8,6 +8,7 @@ baz = "zoo"
 alpha = 1
 beta = "two words"
 gamma = 10
+empty_string = ""
 +++
 
 From [**(org) Property Syntax**](https://orgmode.org/manual/Property-Syntax.html):

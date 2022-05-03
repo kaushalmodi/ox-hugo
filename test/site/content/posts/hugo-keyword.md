@@ -1,6 +1,8 @@
 +++
 title = "Hugo keyword"
-description = "Stuff followed the `#+hugo:` exports as-is except when it is \"more\""
+description = """
+  Stuff followed the `#+hugo:` exports as-is except when it is "more"
+  """
 tags = ["body", "keyword", "hugo"]
 draft = false
 +++

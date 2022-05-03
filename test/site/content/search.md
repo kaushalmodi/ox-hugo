@@ -5,10 +5,11 @@ outputs = ["html", "json"]
 draft = false
 [sitemap]
   priority = 0.1
-[menu."0.search"]
-  weight = 2001
-  identifier = "search"
-  title = "Click to Search"
+[menu]
+  [menu."0.search"]
+    weight = 2001
+    identifier = "search"
+    title = "Click to Search"
 +++
 
 Results from static site search implemented using _Fusejs_, _jquery_

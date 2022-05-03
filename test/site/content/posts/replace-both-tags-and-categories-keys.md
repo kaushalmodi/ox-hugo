@@ -1,5 +1,7 @@
 +++
-title = "Replace both \"tags\" and \"categories\" keys"
+title = """
+  Replace both "tags" and "categories" keys
+  """
 keywords = ["front-matter", "keys", "replace", "tags", "categories"]
 cats = ["test-cat-x"]
 draft = false

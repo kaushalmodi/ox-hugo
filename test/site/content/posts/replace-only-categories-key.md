@@ -1,5 +1,7 @@
 +++
-title = "Replace only \"categories\" key"
+title = """
+  Replace only "categories" key
+  """
 tags = ["front-matter", "keys", "replace", "categories"]
 cats = ["test-cat-x"]
 draft = false

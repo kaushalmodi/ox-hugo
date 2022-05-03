@@ -12,7 +12,6 @@ draft = false
   caption = "stay hungry, stay foolish"
 [collection]
   animals = ["dog", "cat", "penguin", "mountain gorilla"]
-  nothing = false
   nonnil = true
   strings-symbols = ["abc", "def", "two words"]
   integers = [123, -5, 17, 1_234]

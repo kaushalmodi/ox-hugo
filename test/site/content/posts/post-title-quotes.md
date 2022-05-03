@@ -1,5 +1,7 @@
 +++
-title = "Awesome title with \"quoted text\""
+title = """
+  Awesome title with "quoted text"
+  """
 date = 2017-07-24
 tags = ["title"]
 draft = false

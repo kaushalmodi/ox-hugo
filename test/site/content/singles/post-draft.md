@@ -4,10 +4,11 @@ date = 2017-07-20
 tags = ["single", "toml"]
 categories = ["cat1", "cat2"]
 draft = true
-[menu.foo]
-  identifier = "single-post-but-draft"
-  parent = "main"
-  weight = 10
+[menu]
+  [menu.foo]
+    identifier = "single-post-but-draft"
+    parent = "main"
+    weight = 10
 +++
 
 This is a single post. You do not need to set the `EXPORT_FILE_NAME`

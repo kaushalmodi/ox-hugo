@@ -5,10 +5,11 @@ date = 2017-07-20
 tags = ["single", "toml", "cross-link"]
 categories = ["cat1", "cat2"]
 draft = false
-[menu.foo]
-  parent = "main"
-  weight = 10
-  identifier = "single-toml"
+[menu]
+  [menu.foo]
+    parent = "main"
+    weight = 10
+    identifier = "single-toml"
 +++
 
 This is a single post. You do not need to set the `EXPORT_FILE_NAME`

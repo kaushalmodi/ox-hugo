@@ -1,6 +1,10 @@
 +++
-title = "Description meta-data with \"quoted text\""
-description = "Some description with \"quoted text\""
+title = """
+  Description meta-data with "quoted text"
+  """
+description = """
+  Some description with "quoted text"
+  """
 date = 2017-07-24
 tags = ["front-matter", "description"]
 draft = false

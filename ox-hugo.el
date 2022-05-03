@@ -3925,11 +3925,13 @@ INFO is a plist used as a communication channel."
     (setq ret (org-hugo--gen-front-matter data fm-format))
     (if (and (string= "toml" fm-format)
              (org-hugo--pandoc-citations-enabled-p info))
-        ;; Pandoc parses fields like csl and nocite from YAML
-        ;; front-matter.  So create the `org-hugo--fm-yaml'
-        ;; front-matter in YAML format just for Pandoc.
-        (setq org-hugo--fm-yaml
-              (org-hugo-pandoc-cite--meta-data-generator data))
+        (progn
+          ;; Pandoc parses fields like csl and nocite from YAML
+          ;; front-matter.  So create the `org-hugo--fm-yaml'
+          ;; front-matter in YAML format just for Pandoc.
+          (require 'ox-hugo-pandoc-cite)
+          (setq org-hugo--fm-yaml
+                (org-hugo-pandoc-cite--meta-data-generator data)))
       (setq org-hugo--fm-yaml ret))
     ;; (message "org-hugo--fm-yaml: %s" org-hugo--fm-yaml)
     ret))

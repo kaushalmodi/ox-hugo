@@ -3,9 +3,9 @@
 ;; Authors: Kaushal Modi <kaushal.modi@gmail.com>
 ;;          Matt Price <moptop99@gmail.com>
 ;; URL: https://ox-hugo.scripter.co
-;; Package-Requires: ((emacs "24.4") (org "9.0") (tomelr "0.0.0"))
+;; Package-Requires: ((emacs "24.4") (org "9.0") (tomelr "0.2.2"))
 ;; Keywords: Org, markdown, docs
-;; Version: 0.7
+;; Version: 0.11.0
 
 ;;; Commentary:
 

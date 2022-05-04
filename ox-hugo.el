@@ -1290,6 +1290,33 @@ INFO is a plist used as a communication channel."
     (org-export-get-date info fmt))))
 
 ;;;; Format Dates
+(defun org-hugo--org-date-time-to-rfc3339 (date-time info)
+  "Convert DATE-TIME to RFC 3339 format.
+
+DATE-TIME can be either Emacs format time list (example: return
+value of `current-time'), or an Org date/time string.
+
+INFO is a plist used as a communication channel."
+  (let* ((date-time (if (stringp date-time)
+                        (apply #'encode-time (org-parse-time-string date-time))
+                      date-time))
+         (date-nocolon (format-time-string
+                        (plist-get info :hugo-date-format)
+                        date-time)))
+    ;; Hugo expects the date stamp in this format (RFC3339 -- See
+    ;; `org-hugo--date-time-regexp'.) i.e. if the date contains the
+    ;; time-zone, a colon is required to separate the hours and
+    ;; minutes in the time-zone section.  2017-07-06T14:59:45-04:00
+
+    ;; But by default the "%z" placeholder for time-zone (see
+    ;; `format-time-string') produces the zone time-string as "-0400"
+    ;; (Note the missing colon).  Below simply adds a colon between
+    ;; "04" and "00" in that example.
+    (and (stringp date-nocolon)
+         (replace-regexp-in-string
+          "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
+          date-nocolon))))
+
 (defun org-hugo--format-date (date-key info)
   "Return a date string formatted in Hugo-compatible format.
 
@@ -1313,85 +1340,68 @@ cannot be formatted in Hugo-compatible format."
                      (org-entry-get (point) "SCHEDULED"))
                     (t ;:hugo-lastmod, :hugo-publishdate, :hugo-expirydate
                      (org-string-nw-p (plist-get info date-key)))))
-         (date-nocolon (cond
-                        ;; If the date set for the DATE-KEY parameter
-                        ;; is already in Hugo-compatible format, use
-                        ;; it.
-                        ((and (stringp date-raw)
-                              (string-match-p org-hugo--date-time-regexp date-raw))
-                         date-raw)
-                        ;; Else if it's any other string (like
-                        ;; "<2018-01-23 Tue>"), try to parse that
-                        ;; date.
-                        ((stringp date-raw)
-                         (condition-case err
-                             (format-time-string
-                              date-fmt
-                              (apply #'encode-time (org-parse-time-string date-raw)))
-                           (error
-                            ;; Set date-nocolon to nil if error
-                            ;; happens.  An example: If #+date is set
-                            ;; to 2012-2017 to set the copyright
-                            ;; years, just set the date to nil instead
-                            ;; of throwing an error like:
-                            ;; org-parse-time-string: Not a standard
-                            ;; Org time string: 2012-2017
-                            (message
-                             (format "[ox-hugo] Date will not be set in the front-matter: %s"
-                                     (nth 1 err)))
-                            nil)))
-                        ;; Else (if nil) and user want to auto-set the
-                        ;; lastmod field.
-                        ((and (equal date-key :hugo-lastmod)
-                              (org-hugo--plist-get-true-p info :hugo-auto-set-lastmod))
-                         (let* ((curr-time (org-current-time))
-                                (lastmod-str (format-time-string date-fmt curr-time)))
-                           ;; (message "[ox-hugo suppress-lastmod] current-time = %S (decoded = %S)"
-                           ;;          curr-time (decode-time curr-time))
-                           ;; (message "[ox-hugo suppress-lastmod] lastmod-str = %S"
-                           ;;          lastmod-str )
-                           (if (= 0.0 org-hugo-suppress-lastmod-period)
-                               (progn
-                                 ;; (message "[ox-hugo suppress-lastmod] not suppressed")
-                                 lastmod-str)
-                             (let ((date-str (org-string-nw-p (org-hugo--get-date info date-fmt))))
-                               ;; (message "[ox-hugo suppress-lastmod] date-str = %S"
-                               ;;          date-str)
-                               (when date-str
-                                 (let* ((date-time (apply #'encode-time
-                                                          (mapcar (lambda (el) (or el 0))
-                                                                  (parse-time-string date-str))))
-                                        ;; It's safe to assume that
-                                        ;; `current-time' will always
-                                        ;; be >= the post date.
-                                        (delta (float-time
-                                                (time-subtract curr-time date-time)))
-                                        (suppress-period (if (< 0.0 org-hugo-suppress-lastmod-period)
-                                                             org-hugo-suppress-lastmod-period
-                                                           (- org-hugo-suppress-lastmod-period))))
-                                   ;; (message "[ox-hugo suppress-lastmod] date-time = %S (decoded = %S)"
-                                   ;;          date-time (decode-time date-time))
-                                   ;; (message "[ox-hugo suppress-lastmod] delta = %S" delta)
-                                   ;; (message "[ox-hugo suppress-lastmod] suppress-period = %S"
-                                   ;;          suppress-period)
-                                   (when (>= delta suppress-period)
-                                     lastmod-str)))))))
-                        ;; Else.. do nothing.
-                        (t
-                         nil)))
-         ;; Hugo expects the date stamp in this format (RFC3339 -- See
-         ;; `org-hugo--date-time-regexp'.) i.e. if the date contains
-         ;; the time-zone, a colon is required to separate the hours
-         ;; and minutes in the time-zone section.
-         ;;   2017-07-06T14:59:45-04:00
-         ;; But by default the "%z" placeholder for time-zone (see
-         ;; `format-time-string') produces the zone time-string as
-         ;; "-0400" (Note the missing colon).  Below simply adds a
-         ;; colon between "04" and "00" in that example.
-         (date-str (and (stringp date-nocolon)
-                        (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
-                                                  date-nocolon))))
-    date-str))
+         (dt-rfc3339 (cond
+                      ;; If the date set for the DATE-KEY parameter is
+                      ;; already in Hugo-compatible format, use it.
+                      ((and (stringp date-raw)
+                            (string-match-p org-hugo--date-time-regexp date-raw))
+                       date-raw)
+                      ;; Else if it's any other string (like
+                      ;; "<2018-01-23 Tue>"), try to parse that date.
+                      ((stringp date-raw)
+                       (condition-case err
+                           (org-hugo--org-date-time-to-rfc3339 date-raw info)
+                         (error
+                          ;; Set dt-rfc3339 to nil if error happens.
+                          ;; An example: If #+date is set to 2012-2017
+                          ;; to set the copyright years, just set the
+                          ;; date to nil instead of throwing an error
+                          ;; like: org-parse-time-string: Not a
+                          ;; standard Org time string: 2012-2017
+                          (message
+                           (format "[ox-hugo] Date will not be set in the front-matter: %s"
+                                   (nth 1 err)))
+                          nil)))
+                      ;; Else (if nil) and user want to auto-set the
+                      ;; lastmod field.
+                      ((and (equal date-key :hugo-lastmod)
+                            (org-hugo--plist-get-true-p info :hugo-auto-set-lastmod))
+                       (let* ((curr-time (org-current-time))
+                              (lastmod-str (org-hugo--org-date-time-to-rfc3339 curr-time info)))
+                         ;; (message "[ox-hugo suppress-lastmod] current-time = %S (decoded = %S)"
+                         ;;          curr-time (decode-time curr-time))
+                         ;; (message "[ox-hugo suppress-lastmod] lastmod-str = %S"
+                         ;;          lastmod-str )
+                         (if (= 0.0 org-hugo-suppress-lastmod-period)
+                             (progn
+                               ;; (message "[ox-hugo suppress-lastmod] not suppressed")
+                               lastmod-str)
+                           (let ((date-str (org-string-nw-p (org-hugo--get-date info date-fmt))))
+                             ;; (message "[ox-hugo suppress-lastmod] date-str = %S"
+                             ;;          date-str)
+                             (when date-str
+                               (let* ((date-time (apply #'encode-time
+                                                        (mapcar (lambda (el) (or el 0))
+                                                                (parse-time-string date-str))))
+                                      ;; It's safe to assume that
+                                      ;; `current-time' will always
+                                      ;; be >= the post date.
+                                      (delta (float-time
+                                              (time-subtract curr-time date-time)))
+                                      (suppress-period (if (< 0.0 org-hugo-suppress-lastmod-period)
+                                                           org-hugo-suppress-lastmod-period
+                                                         (- org-hugo-suppress-lastmod-period))))
+                                 ;; (message "[ox-hugo suppress-lastmod] date-time = %S (decoded = %S)"
+                                 ;;          date-time (decode-time date-time))
+                                 ;; (message "[ox-hugo suppress-lastmod] delta = %S" delta)
+                                 ;; (message "[ox-hugo suppress-lastmod] suppress-period = %S"
+                                 ;;          suppress-period)
+                                 (when (>= delta suppress-period)
+                                   lastmod-str)))))))
+                      ;; Else.. do nothing.
+                      (t
+                       nil))))
+    dt-rfc3339))
 
 ;;;; Replace Front-matter Keys
 (defun org-hugo--replace-keys-maybe (data info)

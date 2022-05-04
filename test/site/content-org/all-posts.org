@@ -7306,6 +7306,9 @@ This test removes the ~foo~ front-matter key from the exported file
 :EXPORT_OPTIONS: d:t
 :END:
 :LOGBOOK:
+- Note taken on [2022-05-04 Wed 13:15] \\
+  This new note added last should be the first element of the
+  ~[[logbook_notes]]~ TOML table array.
 - Note taken on [2022-04-08 Fri 14:53] \\
   This note addition prompt shows up on typing the ~C-c C-z~ binding.
   See [[info:org#Drawers]].
@@ -7318,8 +7321,8 @@ This test removes the ~foo~ front-matter key from the exported file
 - State "TODO"       from              [2018-09-06 Thu 11:25]
 :END:
 #+begin_description
-Parse notes from LOGBOOK into a TOML table (YAML map?) of ~notes~
-front-matter.
+Parse notes from LOGBOOK into a TOML table (YAML map?) of
+~logbook_notes~ front-matter.
 #+end_description
 
 {{{oxhugoissue(203)}}}
@@ -7338,11 +7341,13 @@ For example,
 :END:
 #+end_src
 
-should export these ~notes~ in arrays of TOML tables.
+should export only the notes to an array of TOML tables with key
+~logbook_notes~. The notes are ordered starting from the newest note
+first in the TOML table array to the oldest note at the last.
 
 - Note :: The state change notes are intentionally put in this test
-          LOGBOOK, because we want to ensure that they don't seep into
-          the ~org-logbook~ front-matter.
+  LOGBOOK, because we want to ensure that they don't seep into the
+  ~logbook_notes~ front-matter.
 ** Extra Front-matter tests                        :extra:verbatim:src_block:
 *** Extra Front-matter
 :PROPERTIES:

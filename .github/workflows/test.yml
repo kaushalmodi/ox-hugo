@@ -20,6 +20,7 @@ jobs:
           - 'ubuntu-latest'
         emacs_version:
           - 'snapshot'
+          - '28.1'
           - '27.2'
           - '26.3'
           # - '25.3' # citeproc.el throws error on emacs 25.3: https://github.com/andras-simonyi/citeproc-el/issues/102

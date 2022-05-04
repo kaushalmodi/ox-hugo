@@ -20,6 +20,8 @@
 
 ;;; Code:
 
+(declare-function org-hugo-export-wim-to-md "ox-hugo")
+
 (defun org-hugo-export-wim-to-md-after-save ()
   "Function for `after-save-hook' to run `org-hugo-export-wim-to-md'.
 

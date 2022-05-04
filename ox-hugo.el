@@ -1,11 +1,26 @@
 ;;; ox-hugo.el --- Hugo Markdown Back-End for Org Export Engine  -*- lexical-binding: t -*-
 
-;; Authors: Kaushal Modi <kaushal.modi@gmail.com>
-;;          Matt Price <moptop99@gmail.com>
-;; URL: https://ox-hugo.scripter.co
-;; Package-Requires: ((emacs "24.4") (org "9.0") (tomelr "0.2.2"))
-;; Keywords: Org, markdown, docs
+;; Author: Kaushal Modi <kaushal.modi@gmail.com>
+;;         Matt Price <moptop99@gmail.com>
 ;; Version: 0.11.0
+;; Package-Requires: ((emacs "24.4") (org "9.0") tomelr)
+;; Keywords: Org, markdown, docs
+;; URL: https://ox-hugo.scripter.co
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -82,7 +97,9 @@
 ;; https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=f636cf91b6cbe322eca56e23283f4614548c9d65
 (require 'org-refile nil :noerror)      ;For `org-get-outline-path'
 
+(require 'org)
 (require 'org-id)                       ;For `org-id-find'
+(require 'ol-info)                      ;For `org-info-emacs-documents', `org-info-other-documents'
 
 (declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
 (declare-function org-hugo-pandoc-cite--meta-data-generator "ox-hugo-pandoc-cite")

@@ -17,6 +17,7 @@
 
 ;;; Code:
 
+(require 'org)
 (require 'ox-md)
 (require 'ox-publish)
 (require 'table)         ;To support tables written in table.el format

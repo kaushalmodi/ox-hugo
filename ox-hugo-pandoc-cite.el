@@ -11,7 +11,10 @@
 
 ;;; Code:
 
+(require 'org)
+
 (declare-function org-hugo--plist-get-true-p "ox-hugo")
+(declare-function org-hugo--front-matter-value-booleanize "ox-hugo")
 
 (defcustom org-hugo-pandoc-cite-references-heading "References {#references}"
   "Markdown title for Pandoc inserted references section."

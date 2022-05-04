@@ -4,11 +4,20 @@
 
 All notable changes to this project will be documented in this file.
 
-** :fire: *unreleased*
+** *0.11.0* - <2022-05-03>
+
+[[https://github.com/kaushalmodi/ox-hugo/compare/ad412e0d2c8b36232abe090893cc731ffb1b8e17...76e1f20635dd886da4ad737bc15ac32d7330d344][ad412e0...76e1f20]]
+
+*** :boom: Breaking
+:PROPERTIES:
+:CUSTOM_ID: breaking-v0.11.0
+:END:
+
+- Use tomelr.el for TOML generation … Move YAML generation logic to ox-hugo-deprecated.el. … NOTE: At some point, YAML generation support will be removed entirely. … Minor breaking changes: … - Empty st… ([[https://github.com/kaushalmodi/ox-hugo/commit/c24ea792484598ffd2f8e786fadb823d48c8ec12][c24ea79]])
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: features
+:CUSTOM_ID: features-v0.11.0
 :END:
 
 - Improve the default description of exported info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/13870caa6980cb219da3830c21c54c07467aa51e][13870ca]])
@@ -17,24 +26,27 @@ All notable changes to this project will be documented in this file.
 
 *** :rocket: PR Merges
 :PROPERTIES:
-:CUSTOM_ID: pr-merges
+:CUSTOM_ID: pr-merges-v0.11.0
 :END:
 
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/620][620]]: … feat: Better HTML target for info: links ([[https://github.com/kaushalmodi/ox-hugo/commit/e5fe9fa0d552481a7261db7a9d9b0e9b7ea2370e][e5fe9fa]])
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/626][626]]: … fix: Links to Org IDs of post subtrees in other Org files ([[https://github.com/kaushalmodi/ox-hugo/commit/ad26385eebcd32964540601a9f9f703f5cd6675f][ad26385]])
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/629][629]]: … feat!: Use tomelr for TOML front-matter generation ([[https://github.com/kaushalmodi/ox-hugo/commit/a8345117b80950cd84139f748dd4147e9a1490cb][a834511]])
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-fixes
+:CUSTOM_ID: bug-fixes-v0.11.0
 :END:
 
 - Fixes for checkdoc ([[https://github.com/kaushalmodi/ox-hugo/commit/088551275d7d423ba6ff1d2d09e99e533701a217][0885512]])
 - Fix compilation error for Org 9.3 … `org-back-to-heading-or-point-min` was introduced in Org 9.5. So make … `ox-hugo` define it if user's Org version doesn't define it. … Ref: https://git.savannah.gnu… ([[https://github.com/kaushalmodi/ox-hugo/commit/124c4a0c5858e82fe7853aa66fdcf978e301fdd2][124c4a0]])
 - Linking post subtrees in other Org files using their Org IDs … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/625][625]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/6106d0495e1a47a00662fda5a98b61983eb17234][6106d04]])
+- Silence compilation warnings ([[https://github.com/kaushalmodi/ox-hugo/commit/e164cae9c9473b297acd64b312c2700970949b5d][e164cae]])
+- Append a newline after the Pandoc meta-data YAML block ([[https://github.com/kaushalmodi/ox-hugo/commit/26696331f1b5f035f84308929213cad5f109c985][2669633]])
 
 *** :memo: Documentation
 :PROPERTIES:
-:CUSTOM_ID: documentation
+:CUSTOM_ID: documentation-v0.11.0
 :END:
 
 - Update Equations doc with dvisvgm and dvipng references … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/619][619]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/c322fe2048b7ad2a20d48020239f462725ce3d59][c322fe2]])
@@ -43,21 +55,22 @@ All notable changes to this project will be documented in this file.
 
 *** :heart: Real World Examples
 :PROPERTIES:
-:CUSTOM_ID: real-world-examples
+:CUSTOM_ID: real-world-examples-v0.11.0
 :END:
 
 - Added https://shom.dev to real world examples … Ref: PR # [[https://github.com/kaushalmodi/ox-hugo/pull/621][621]] ([[https://github.com/kaushalmodi/ox-hugo/commit/adaf03c7bf73eabdb8469329a394b547691059e7][adaf03c]])
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: refactor
+:CUSTOM_ID: refactor-v0.11.0
 :END:
 
 - Add `org-hugo--get-anchor-at-point` … Move logic for deriving the anchor string at point to this new … function. ([[https://github.com/kaushalmodi/ox-hugo/commit/fb7e3e25b6608bb27327b621698293463e686159][fb7e3e2]])
+- Pandoc citations now doesn't dep on ox-hugo-deprecated.el … Add a small dummy YAML generator only for the stuff that Pandoc needs … as `org-hugo-pandoc-cite--meta-data-generator`. ([[https://github.com/kaushalmodi/ox-hugo/commit/6f4750705163500909cfb2f342200ab875766e7e][6f47507]])
 
 *** :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: testing
+:CUSTOM_ID: testing-v0.11.0
 :END:
 
 - Using #+​​hugo for unpaired shortcodes with named args … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/624][624]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/2b762139bc8e68b97ef17420cec2df1fcec1ef13][2b76213]])

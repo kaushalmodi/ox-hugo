@@ -6,11 +6,19 @@ description = """
   """
 tags = ["dates", "date", "logbook"]
 draft = false
+[[org-logbook]]
+  timestamp = 2022-01-11T11:22:00-05:00
+  to-state = "DONE"
+  from-state = "TEST\\__TODO"
+[[org-logbook]]
+  timestamp = 2018-09-06T11:42:00-04:00
+  to-state = "DONE"
+  from-state = "DRAFT"
+[[org-logbook]]
+  timestamp = 2018-09-06T11:38:00-04:00
+  to-state = "DONE"
+  from-state = "DRAFT"
 +++
-
--   State "DONE"       from "TEST\__TODO" <span class="timestamp-wrapper"><span class="timestamp">[2022-01-11 Tue 11:22]</span></span>
--   State "DONE"       from "DRAFT"      <span class="timestamp-wrapper"><span class="timestamp">[2018-09-06 Thu 11:42]</span></span>
--   State "DONE"       from "DRAFT"      <span class="timestamp-wrapper"><span class="timestamp">[2018-09-06 Thu 11:38]</span></span>
 
 `ox-hugo` Issue #[203](https://github.com/kaushalmodi/ox-hugo/issues/203)
 

@@ -7338,22 +7338,11 @@ For example,
 :END:
 #+end_src
 
-should export these ~notes~ in TOML front-matter (and the equivalent
-in YAML):
-#+begin_src toml
-[[notes]]
-  index = 0
-  date = 2018-09-06T11:37:00-04:00
-  content = "A note."
-[[notes]]
-  index = 1
-  date = 2018-09-06T11:45:00-04:00
-  content = "Another note."
-#+end_src
+should export these ~notes~ in arrays of TOML tables.
 
 - Note :: The state change notes are intentionally put in this test
           LOGBOOK, because we want to ensure that they don't seep into
-          the ~notes~ front-matter.
+          the ~org-logbook~ front-matter.
 ** Extra Front-matter tests                        :extra:verbatim:src_block:
 *** Extra Front-matter
 :PROPERTIES:

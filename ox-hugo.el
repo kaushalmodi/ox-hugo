@@ -1767,10 +1767,7 @@ holding contextual information."
                              (lambda (ts)
                                ;; (pp ts)
                                (let* ((ts-raw-str (org-element-property :raw-value ts))
-                                      (ts-str (format-time-string
-                                               (plist-get info :hugo-date-format)
-                                               (apply #'encode-time
-                                                      (org-parse-time-string ts-raw-str)))))
+                                      (ts-str (org-hugo--org-date-time-to-rfc3339 ts-raw-str info)))
                                  ;; (message "[ox-hugo logbook DBG] ts: %s, ts fmtd: %s"
                                  ;;          ts-raw-str ts-str)
                                  (setq logbook-entry (plist-put logbook-entry :timestamp ts-str)))
@@ -1816,6 +1813,7 @@ holding contextual information."
         ;; TODO: Code to save the notes content and date/lastmod
         ;; timestamps to appropriate front-matter.
         ;; (message "[ox-hugo logbook DBG] state changes : %S" logbook-entries)
+        (plist-put info :logbook-entries logbook-entries)
         "")) ;Nothing from the LOGBOOK gets exported to the Markdown body
      (t
       (org-html-drawer drawer contents info)))))
@@ -3980,7 +3978,11 @@ INFO is a plist used as a communication channel."
                  (creator . ,creator)
                  (locale . ,locale)
                  (blackfriday . ,blackfriday)))
-         (data `,(append data weight-data custom-fm-data (list (cons 'menu menu-alist) (cons 'resources resources))))
+         (data `,(append data weight-data custom-fm-data
+                         (list
+                          (cons 'menu menu-alist)
+                          (cons 'resources resources)
+                          (cons 'org-logbook (plist-get info :logbook-entries)))))
          ret)
     ;; (message "[get fm DBG] tags: %s" tags)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))

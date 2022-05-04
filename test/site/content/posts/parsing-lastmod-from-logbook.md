@@ -6,10 +6,15 @@ description = """
   """
 tags = ["dates", "lastmod", "logbook"]
 draft = false
+[[org-logbook]]
+  timestamp = 2018-09-06T11:41:00-04:00
+  to-state = "DONE"
+  from-state = "DRAFT"
+[[org-logbook]]
+  timestamp = 2018-09-06T11:40:00-04:00
+  to-state = "DONE"
+  from-state = "DRAFT"
 +++
-
--   State "DONE"       from "DRAFT"      <span class="timestamp-wrapper"><span class="timestamp">[2018-09-06 Thu 11:41]</span></span>
--   State "DONE"       from "DRAFT"      <span class="timestamp-wrapper"><span class="timestamp">[2018-09-06 Thu 11:40]</span></span>
 
 `ox-hugo` Issue #[203](https://github.com/kaushalmodi/ox-hugo/issues/203)
 

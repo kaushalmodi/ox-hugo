@@ -60,6 +60,7 @@
 #+hugo_outputs: json
 
 # Resources
+#+hugo_resources: :src "*.png" :name "my-cool-image-:counter" :title "The Image #:counter"
 #+hugo_resources: :src "*.png" :animals '(dog cat "penguin" "mountain gorilla")
 #+hugo_resources: :strings-symbols '("abc" def "two words")
 #+hugo_resources: :integers '(123 -5 17 1_234)
@@ -67,7 +68,6 @@
 #+hugo_resources: :booleans '(true false)
 #+hugo_resources: :foo bar
 #+hugo_resources: :src "image-4.png" :title "The Fourth Image"
-#+hugo_resources: :src "*.png" :name "my-cool-image-:counter" :title "The Image #:counter"
 #+hugo_resources: :src "*.png" :byline "bep"
 #+hugo_resources: :src "*.jpg" :title "JPEG Image #:counter"
 

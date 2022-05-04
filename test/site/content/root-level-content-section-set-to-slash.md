@@ -1,5 +1,7 @@
 +++
-title = "Setting EXPORT_HUGO_SECTION to \"/\""
+title = """
+  Setting EXPORT_HUGO_SECTION to "/"
+  """
 description = "Case where `EXPORT_HUGO_SECTION` is set to `/`."
 tags = ["section", "root-level"]
 draft = false

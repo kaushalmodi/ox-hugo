@@ -7556,7 +7556,7 @@ the ~.Permalink~ and ~.RelPermalink~ get set to ~""~.
 *** _build: Don't render or list this page   :dont_render:dont_list:headless:
 :PROPERTIES:
 :EXPORT_FILE_NAME: do-not-render-or-list
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :_build '((render . nil) (list . nil))
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :_build '((render . false) (list . false))
 :END:
 #+begin_description
 Do not render or list this page.

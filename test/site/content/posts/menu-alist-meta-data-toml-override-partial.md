@@ -3,10 +3,11 @@ title = "Overriding few menu properties"
 date = 2017-07-18
 tags = ["menu"]
 draft = false
-[menu."something here"]
-  parent = "posts"
-  weight = 10
-  identifier = "ov-partial"
+[menu]
+  [menu."something here"]
+    parent = "posts"
+    weight = 10
+    identifier = "ov-partial"
 +++
 
 For this post, we should see just the menu _weight_ and _identifier_

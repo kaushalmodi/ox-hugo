@@ -31,16 +31,16 @@ booleans = [true, false]
   image = "projects/Readingabook.jpg"
   caption = "stay hungry, stay foolish"
 [collection]
-  nothing = false
   nonnil = true
   animals = ["dog", "cat", "penguin", "mountain gorilla"]
   strings-symbols = ["abc", "def", "two words"]
   integers = [123, -5, 17, 1_234]
   floats = [12.3, -5.0, -1.7e-05]
   booleans = [true, false]
-[menu.foo]
-  identifier = "keyword-collection"
-  weight = 10
+[menu]
+  [menu.foo]
+    identifier = "keyword-collection"
+    weight = 10
 [[resources]]
   src = "*.png"
   name = "my-cool-image-:counter"

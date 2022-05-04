@@ -1,6 +1,10 @@
 +++
-title = "Replace only \"linkTitle\" key"
-linktitle = "Replace only \"linkTitle\" key"
+title = """
+  Replace only "linkTitle" key
+  """
+linktitle = """
+  Replace only "linkTitle" key
+  """
 tags = ["front-matter", "keys", "replace", "linktitle"]
 draft = false
 +++

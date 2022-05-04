@@ -1,5 +1,5 @@
 +++
-title = "2020-04-19"
+title = 2020-04-19
 description = """
   Test the case where the title contains only the date, making it look
   like a Hugo TOML date field.

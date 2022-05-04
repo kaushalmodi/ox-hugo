@@ -3933,7 +3933,7 @@ INFO is a plist used as a communication channel."
           (setq org-hugo--fm-yaml
                 (org-hugo-pandoc-cite--meta-data-generator data)))
       (setq org-hugo--fm-yaml ret))
-    ;; (message "org-hugo--fm-yaml: %s" org-hugo--fm-yaml)
+    ;; (message "org-hugo--fm-yaml: `%s'" org-hugo--fm-yaml)
     ret))
 
 (defun org-hugo--calc-weight ()

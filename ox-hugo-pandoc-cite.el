@@ -378,6 +378,10 @@ References:
          (csl (cdr (assoc 'csl data)))
          (nocite (cdr (assoc 'nocite data))))
     (push "---" yaml)
+    (when link-citations
+      (push (format "link-citations: %s"
+                    (org-hugo--front-matter-value-booleanize link-citations))
+            yaml))
     (when csl
       (push (format "csl: %S" csl) yaml))
     (when nocite
@@ -388,13 +392,9 @@ References:
                              nocite)
                      ", "))
             yaml))
-    (when link-citations
-      (push (format "link-citations: %s"
-                    (org-hugo--front-matter-value-booleanize link-citations))
-            yaml))
-    (push "---" yaml)
+    (push "---\n" yaml)
     ;; (message "[org-hugo-pandoc-cite--meta-data-generator DBG] yaml: %S" yaml)
-    (string-join yaml "\n")))
+    (string-join (nreverse yaml) "\n")))
 
 
 (provide 'ox-hugo-pandoc-cite)

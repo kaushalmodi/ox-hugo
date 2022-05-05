@@ -4,6 +4,17 @@
 
 All notable changes to this project will be documented in this file.
 
+** *0.11.2* - <2022-05-05>
+
+[[https://github.com/kaushalmodi/ox-hugo/compare/4fc594eda0d0cb41cc3b634b43fbd055db7ae67e...858707201c174e5b0c496edb30e3159113ab9f74][4fc594e...8587072]]
+
+*** :boom: Breaking
+:PROPERTIES:
+:CUSTOM_ID: breaking-v0.11.2
+:END:
+
+- Update version requirements: Requires Emacs 26.3+​​ … - Emacs version bump to 26.3 was long overdue, now that Emacs 28.1 is … already out. … - Depend on tomelr 0.3.0 as that fixes the plist input supp… ([[https://github.com/kaushalmodi/ox-hugo/commit/858707201c174e5b0c496edb30e3159113ab9f74][8587072]])
+
 ** *0.11.0* - <2022-05-03>
 
 [[https://github.com/kaushalmodi/ox-hugo/compare/ad412e0d2c8b36232abe090893cc731ffb1b8e17...76e1f20635dd886da4ad737bc15ac32d7330d344][ad412e0...76e1f20]]

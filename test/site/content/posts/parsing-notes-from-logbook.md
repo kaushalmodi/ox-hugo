@@ -6,24 +6,25 @@ description = """
   """
 tags = ["front-matter", "notes", "logbook"]
 draft = false
-[[logbook_notes]]
-  timestamp = 2022-05-04T13:15:00+00:00
-  note = """
-    This new note added last should be the first element of the
-    `[[logbook_notes]]` TOML table array.
-    """
-[[logbook_notes]]
-  timestamp = 2022-04-08T14:53:00+00:00
-  note = """
-    This note addition prompt shows up on typing the `C-c C-z` binding.
-    See [Org Info: Drawers](https://orgmode.org/manual/Drawers.html "Emacs Lisp: (info \\"(org) Drawers\\")").
-    """
-[[logbook_notes]]
-  timestamp = 2018-09-06T11:45:00+00:00
-  note = "Another note **bold** _italics_."
-[[logbook_notes]]
-  timestamp = 2018-09-06T11:37:00+00:00
-  note = "A note `mono`."
+[logbook]
+  [[logbook.notes]]
+    timestamp = 2022-05-04T13:15:00+00:00
+    note = """
+      This new note added last should be the first element of the
+      `[[logbook_notes]]` TOML table array.
+      """
+  [[logbook.notes]]
+    timestamp = 2022-04-08T14:53:00+00:00
+    note = """
+      This note addition prompt shows up on typing the `C-c C-z` binding.
+      See [Org Info: Drawers](https://orgmode.org/manual/Drawers.html "Emacs Lisp: (info \\"(org) Drawers\\")").
+      """
+  [[logbook.notes]]
+    timestamp = 2018-09-06T11:45:00+00:00
+    note = "Another note **bold** _italics_."
+  [[logbook.notes]]
+    timestamp = 2018-09-06T11:37:00+00:00
+    note = "A note `mono`."
 +++
 
 `ox-hugo` Issue #[203](https://github.com/kaushalmodi/ox-hugo/issues/203)

@@ -3987,7 +3987,8 @@ INFO is a plist used as a communication channel."
                           (cons 'menu menu-alist)
                           (cons 'resources resources)
                           ;; (cons 'logbook-entries (plist-get info :logbook-entries))
-                          (cons 'logbook_notes (plist-get info :logbook-notes)))))
+                          (cons 'logbook (list
+                                          (cons 'notes (plist-get info :logbook-notes)))))))
          ret)
     ;; (message "[get fm DBG] tags: %s" tags)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))

@@ -86,7 +86,7 @@ content translates from Org to Markdown as expected.
 presentation styles./
 
 * Installation
-This package requires at least GNU Emacs *25.3* and
+This package requires at least GNU Emacs *26.3* and
 Org Mode *9.0*. It is available on Melpa
 ([[https://melpa.org/#/ox-hugo]]), and it's recommended to install this
 package from [[https://melpa.org/#/getting-started][Melpa]] (​_not_ Melpa /Stable/).

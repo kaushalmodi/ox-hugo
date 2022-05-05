@@ -2,7 +2,7 @@
 title = "Parsing notes from LOGBOOK"
 description = """
   Parse notes from LOGBOOK into a TOML table (YAML map?) of
-  `logbook_notes` front-matter.
+  `logbook.notes` front-matter.
   """
 tags = ["front-matter", "notes", "logbook"]
 draft = false
@@ -11,7 +11,7 @@ draft = false
     timestamp = 2022-05-04T13:15:00+00:00
     note = """
       This new note added last should be the first element of the
-      `[[logbook_notes]]` TOML table array.
+      `[[logbook.notes]]` TOML table array.
       """
   [[logbook.notes]]
     timestamp = 2022-04-08T14:53:00+00:00
@@ -44,10 +44,10 @@ For example,
 ```
 
 should export only the notes to an array of TOML tables with key
-`logbook_notes`. The notes are ordered starting from the newest note
+`logbook.notes`. The notes are ordered starting from the newest note
 first in the TOML table array to the oldest note at the last.
 
 Note
 : The state change notes are intentionally put in this test
     LOGBOOK, because we want to ensure that they don't seep into the
-    `logbook_notes` front-matter.
+    `logbook.notes` front-matter.

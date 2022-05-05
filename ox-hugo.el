@@ -1737,9 +1737,11 @@ channel."
   "Transcode a DRAWER element from Org to appropriate Hugo front-matter.
 CONTENTS holds the contents of the block.  INFO is a plist
 holding contextual information."
-  (let ((drawer-name (downcase (org-element-property :drawer-name drawer))))
+  (let* ((logbook-drawer-name (org-log-into-drawer))
+         (drawer-name (org-element-property :drawer-name drawer)))
+    (message "dbg: %S" logbook-drawer-name)
     (cond
-     ((string= "logbook" drawer-name)
+     ((equal logbook-drawer-name drawer-name)
       ;; (message "[ox-hugo logbook DBG] elem type: %s" (org-element-type drawer))
       ;; (pp drawer)
 
@@ -3985,11 +3987,12 @@ INFO is a plist used as a communication channel."
          (data `,(append data weight-data custom-fm-data
                          (list
                           (cons 'menu menu-alist)
-                          (cons 'resources resources)
-                          ;; (cons 'logbook-entries (plist-get info :logbook-entries))
-                          (cons 'logbook (list
-                                          (cons 'notes (plist-get info :logbook-notes)))))))
+                          (cons 'resources resources))))
          ret)
+
+    (when (plist-get info :logbook-notes)
+      (setq data (append data `((logbook . ((notes . ,(plist-get info :logbook-notes))))))))
+
     ;; (message "[get fm DBG] tags: %s" tags)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
     ;; (message "[get fm info DBG] %S" info)

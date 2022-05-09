@@ -99,7 +99,14 @@
 
 (require 'org)
 (require 'org-id)                       ;For `org-id-find'
-(require 'ol-info)                      ;For `org-info-emacs-documents', `org-info-other-documents'
+
+;; For `org-info-emacs-documents', `org-info-other-documents'
+;; org-info.el got renamed to ol-info.el in Org version 9.3.  Remove
+;; below if condition after the minimum emacs dependency is raised to
+;; emacs 27.x. The Org version shipped with Emacs 26.3 is 9.1.9.
+(if (version< (org-version) "9.3")
+    (require 'org-info)
+  (require 'ol-info))
 
 (declare-function org-hugo-pandoc-cite--parse-citations-maybe "ox-hugo-pandoc-cite")
 (declare-function org-hugo-pandoc-cite--meta-data-generator "ox-hugo-pandoc-cite")

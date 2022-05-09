@@ -25,12 +25,12 @@ endif
 EMACS_BIN_SOURCE ?= https://github.com/npostavs/emacs-travis/releases/download/bins
 EMACS_BIN_VERSION ?= 27
 
-# In Netlify, set HUGO env var to something like "/tmp/me/ox-hugo-dev/hugo/bin/hugo"
-# to use the custom-built hugo dev binary.
+# In Netlify, set HUGO env var to "/tmp/me/ox-hugo-dev/hugo/hugo" to
+# use the hugo binary installed by this Makefile.
 HUGO ?= hugo
 HUGO_exists := $(shell command -v $(HUGO) 2> /dev/null)
 ifeq ("$(HUGO_exists)","")
-	HUGO := $(ox_hugo_tmp_dir)/hugo/bin/hugo
+	HUGO := $(ox_hugo_tmp_dir)/hugo/hugo
 endif
 
 HTMLTEST ?= htmltest
@@ -45,8 +45,9 @@ ifeq ("$(PANDOC_exists)","")
 	PANDOC := $(ox_hugo_tmp_dir)/pandoc/bin/pandoc
 endif
 
-HUGO_BIN_SOURCE ?= https://gitlab.com/kaushalmodi/unofficial-hugo-dev-builds.git
-HUGO_VERSION ?= DEV
+HUGO_VERSION ?= 0.98.0
+HUGO_ARCHIVE_NAME ?= hugo_$(HUGO_VERSION)_Linux-64bit.tar.gz
+HUGO_BIN_SOURCE ?= https://github.com/gohugoio/hugo/releases/download/v$(HUGO_VERSION)
 
 PANDOC_BIN_VERSION ?= 2.16.2
 PANDOC_ARCHIVE_NAME ?= pandoc-$(PANDOC_BIN_VERSION)-linux-amd64.tar.gz
@@ -157,10 +158,10 @@ endif
 vcheck_hugo:
 	@mkdir -p $(ox_hugo_tmp_dir)
 ifeq ("$(HUGO_exists)","")
+	@find $(ox_hugo_tmp_dir) -maxdepth 1 -type d -name hugo -exec rm -rf "{}" \;
+	@$(CURL) -O $(HUGO_BIN_SOURCE)/$(HUGO_ARCHIVE_NAME)
 	@mkdir -p $(ox_hugo_tmp_dir)/hugo
-	@find $(ox_hugo_tmp_dir)/hugo -maxdepth 1 -type d -name bin -exec rm -rf "{}" \;
-	@git clone $(HUGO_BIN_SOURCE) $(ox_hugo_tmp_dir)/hugo/bin
-	@tar xf $(ox_hugo_tmp_dir)/hugo/bin/hugo_DEV-Linux-64bit.tar.xz -C $(ox_hugo_tmp_dir)/hugo/bin
+	@tar xf $(HUGO_ARCHIVE_NAME) -C $(ox_hugo_tmp_dir)/hugo
 endif
 	$(HUGO) version
 

@@ -151,12 +151,6 @@ Emacs installation.  If Emacs is installed using
         (add-to-list 'package-archives (cons "melpa" melpa-url) :append) ;For `toc-org', `citeproc'
         )
 
-      ;; Workaround for this error on GHA when using Emacs 26.3:
-      ;;   signal(file-error ("https://elpa.gnu.org/packages/tomelr-0.2.2.tar" "Bad Request"))
-      (when (version< emacs-version "27.0")
-        ;; https://lists.gnu.org/archive/html/help-gnu-emacs/2020-01/msg00162.html
-        (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
-
       ;; Delete element with "nongnu" car from `package-archives'.
       (setq package-archives (delq (assoc "nongnu" package-archives) package-archives))
 

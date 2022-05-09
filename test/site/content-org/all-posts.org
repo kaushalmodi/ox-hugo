@@ -2416,6 +2416,15 @@ parent; only the menu properties set in his subtree are effective.
 :END:
 The =title= property for menu entries was introduced in Hugo v0.32 in
 [[https://github.com/gohugoio/hugo/commit/9df3736fec164c51d819797416dc263f2869be77][this commit]].
+*** Menu with nested maps
+:PROPERTIES:
+:EXPORT_FILE_NAME: menu-with-nested-maps
+:EXPORT_HUGO_MENU: :menu "signalandsystems" :weight 2.0 :parent "chapter 1 advanced problems"
+:END:
+#+begin_description
+Test ~menu~ front-matter with nested maps.
+#+end_description
+{{{oxhugoissue(325)}}}
 ** Menu Meta Data in YAML Front Matter                                 :yaml:
 :PROPERTIES:
 :EXPORT_HUGO_FRONT_MATTER_FORMAT: yaml

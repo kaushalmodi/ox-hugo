@@ -4,6 +4,15 @@
 
 All notable changes to this project will be documented in this file.
 
+** :fire: *unreleased*
+
+*** :bug: Bug Fixes
+:PROPERTIES:
+:CUSTOM_ID: bug-fixes
+:END:
+
+- Require org-info instead of ol-info if old Org version detected … If a user is running Emacs 26.3 with the default Org installation, … they would be using Org 9.1.9 and so they will need to use org-in… ([[https://github.com/kaushalmodi/ox-hugo/commit/772d53dee36773471f3b471b73ffdc3822e3b6e9][772d53d]])
+
 ** *0.11.2* - <2022-05-05>
 
 [[https://github.com/kaushalmodi/ox-hugo/compare/4fc594eda0d0cb41cc3b634b43fbd055db7ae67e...858707201c174e5b0c496edb30e3159113ab9f74][4fc594e...8587072]]

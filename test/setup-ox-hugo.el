@@ -141,15 +141,6 @@ Emacs installation.  If Emacs is installed using
       ;; Below require will auto-create `package-user-dir' it doesn't exist.
       (require 'package)
 
-      ;; Only for 25.x versions
-      ;; Workaround for these failures on Travis CI when installing Org
-      ;;    Contacting host: elpa.gnu.org:80
-      ;;    Debugger entered--Lisp error: (bad-signature "archive-contents.sig")
-      ;;      signal(bad-signature ("archive-contents.sig"))
-      (when (and (version< emacs-version "26.0")
-                 (version<= "25.0" emacs-version))
-        (setq package-check-signature nil))
-
       ;; Note: Org stable is now fetched from the GNU Elpa.
       (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                           (not (gnutls-available-p))))
@@ -159,12 +150,6 @@ Emacs installation.  If Emacs is installed using
              (melpa-url (concat protocol "://melpa.org/packages/")))
         (add-to-list 'package-archives (cons "melpa" melpa-url) :append) ;For `toc-org', `citeproc'
         )
-
-      ;; Workaround for this error on GHA when using Emacs 26.3:
-      ;;   signal(file-error ("https://elpa.gnu.org/packages/tomelr-0.2.2.tar" "Bad Request"))
-      (when (version< emacs-version "27.0")
-        ;; https://lists.gnu.org/archive/html/help-gnu-emacs/2020-01/msg00162.html
-        (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
       ;; Delete element with "nongnu" car from `package-archives'.
       (setq package-archives (delq (assoc "nongnu" package-archives) package-archives))
@@ -287,29 +272,4 @@ Fake current time: 2100/12/21 00:00:00 (arbitrary)."
         nil :nomessage :nosuffix)
 
   (with-eval-after-load 'ox
-    (add-to-list 'org-export-exclude-tags "dont_export_during_make_test"))
-
-  ;; Wed Sep 04 22:23:03 EDT 2019 - kmodi
-  ;; The ox-hugo tests were failing on Travis only on Emacs 24.4 and
-  ;; 24.5 because the "/" got auto-appended to links without them:
-  ;; https://travis-ci.org/kaushalmodi/ox-hugo/jobs/580990010#L3740
-  ;; So when the https://ox-hugo.scripter.co link got exported via
-  ;; `org-html-link' internally, it got converted to
-  ;; https://ox-hugo.scripter.co/! As it turns out, this behavior got
-  ;; fixed in Emacs 25+ in:
-  ;; https://git.savannah.gnu.org/cgit/emacs.git/commit/?id=b792ecea1715e080ad8e232d3d154b8a25d2edfb
-  (unless (version<= "25.0" emacs-version)
-    (with-eval-after-load 'url-parse
-      (defun url-path-and-query (urlobj)
-        "Return the path and query components of URLOBJ.
-These two components are stored together in the FILENAME slot of
-the object.  The return value of this function is (PATH . QUERY),
-where each of PATH and QUERY are strings or nil."
-        (let ((name (url-filename urlobj))
-	          path query)
-          (when name
-            (if (string-match "\\?" name)
-	            (setq path  (substring name 0 (match-beginning 0))
-		              query (substring name (match-end 0)))
-	          (setq path name)))
-          (cons path query))))))
+    (add-to-list 'org-export-exclude-tags "dont_export_during_make_test")))

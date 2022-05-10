@@ -6,12 +6,34 @@ All notable changes to this project will be documented in this file.
 
 ** :fire: *unreleased*
 
+*** :boom: Breaking
+:PROPERTIES:
+:CUSTOM_ID: breaking
+:END:
+
+- Export Org Verse blocks in div tags instead of p tags … This change is required so that CSS rules for .verse class *​​*​​actually … work*​​*​​. So while this is technically a breaking change, this cha… ([[https://github.com/kaushalmodi/ox-hugo/commit/1a6acb5617c0aeaa1624dd66ae20fb3d8f0aebd4][1a6acb5]])
+
+*** :rocket: PR Merges
+:PROPERTIES:
+:CUSTOM_ID: pr-merges
+:END:
+
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/631][631]]: … tool(ci): Fix "Bad request" error when installing tomelr from GNU ELPA on Emacs 26.3 ([[https://github.com/kaushalmodi/ox-hugo/commit/c2cc2c45a8885576893e9413ee72145fc14d217e][c2cc2c4]])
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/634][634]]: … fix!: Export Org Verse blocks in div tags instead of p tags ([[https://github.com/kaushalmodi/ox-hugo/commit/fe1f2af27196c9cf76a603108681742f88d2b528][fe1f2af]])
+
 *** :bug: Bug Fixes
 :PROPERTIES:
 :CUSTOM_ID: bug-fixes
 :END:
 
 - Require org-info instead of ol-info if old Org version detected … If a user is running Emacs 26.3 with the default Org installation, … they would be using Org 9.1.9 and so they will need to use org-in… ([[https://github.com/kaushalmodi/ox-hugo/commit/772d53dee36773471f3b471b73ffdc3822e3b6e9][772d53d]])
+
+*** :hammer: Testing
+:PROPERTIES:
+:CUSTOM_ID: testing
+:END:
+
+- Add nested menu example … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/325][325]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/059f2b822cb95e1b9e84cbd37c266bccacdf56f4][059f2b8]])
 
 ** *0.11.2* - <2022-05-05>
 

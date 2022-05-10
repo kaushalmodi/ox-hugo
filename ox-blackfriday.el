@@ -1519,7 +1519,7 @@ contextual information."
                (lambda (m)
                  (org-html--make-string (length m) "&nbsp;"))
                ret))
-         (ret (format "<p class=\"verse\">\n\n%s\n</p>" ret)))
+         (ret (format "<div class=\"verse\">\n\n%s\n</div>" ret)))
     ret))
 
 

@@ -4542,6 +4542,17 @@ Testing quote blocks in numbered lists, just because this came up on
 To preserve the line breaks, indentation and blank lines in a region,
 but otherwise use normal formatting, you can use the /verse/
 construct, which can also be used to format poetry -- [[https://orgmode.org/manual/Paragraphs.html][Reference]].
+
+#+begin_export html
+<style>
+  .verse {
+    color: red;
+  }
+</style>
+#+end_export
+
+/Below verse should render in red./
+
 #+begin_verse
 Great clouds overhead
 Tiny black birds rise and fall

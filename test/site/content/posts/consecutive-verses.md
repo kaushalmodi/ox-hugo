@@ -5,7 +5,7 @@ tags = ["verse"]
 draft = false
 +++
 
-<p class="verse">
+<div class="verse">
 
 Tyger Tyger, burning bright,<br />
 In the forests of the night;<br />
@@ -19,17 +19,17 @@ What the hand, dare seize the fire?<br />
 <br />
 &nbsp;&nbsp;&nbsp;-- "The Tyger" _by_ William Blake<br />
 
-</p>
+</div>
 
-<p class="verse">
+<div class="verse">
 
 Some parts can be **bold**<br />
 &nbsp;&nbsp;Some can be `monospace`<br />
 &nbsp;&nbsp;&nbsp;&nbsp;Some can be _italic_ too.<br />
 
-</p>
+</div>
 
-<p class="verse">
+<div class="verse">
 
 What is this life if, full of care,<br />
 We have no time to stand and stare.<br />
@@ -42,4 +42,4 @@ Where squirrels hide their nuts in grass.<br />
 <br />
 &nbsp;&nbsp;&nbsp;-- "Leisure" _by_ William Henry Davis<br />
 
-</p>
+</div>

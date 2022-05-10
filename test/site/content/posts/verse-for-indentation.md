@@ -6,11 +6,11 @@ draft = false
 
 Some text before indented text.
 
-<p class="verse">
+<div class="verse">
 
 &nbsp;&nbsp;&nbsp;&nbsp;Text indented by 4 spaces<br />
 
-</p>
+</div>
 
 Org removes indentation from the first line of the text block even in
 a Verse block. To get around that, the trick is to use the `>`
@@ -23,35 +23,35 @@ removed when translating to Markdown.
 
 -   More indentation than in the above example:
 
-    <p class="verse">
+    <div class="verse">
 
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text indented by 8 spaces<br />
 
-    </p>
+    </div>
 -   Leading blank line followed by indented text:
 
-    <p class="verse">
+    <div class="verse">
 
     <br />
     &nbsp;&nbsp;&nbsp;&nbsp;Text indented by 4 spaces<br />
 
-    </p>
+    </div>
 -   Indented text followed by a trailing blank line:
 
-    <p class="verse">
+    <div class="verse">
 
     &nbsp;&nbsp;&nbsp;&nbsp;Text indented by 4 spaces<br />
     <br />
 
-    </p>
+    </div>
 -   Using tab characters for indentation; each tab character still
     constitutes for one `&nbsp;` in HTML.
 
-    <p class="verse">
+    <div class="verse">
 
     &nbsp;&nbsp;&nbsp;&nbsp;Text indented by 4 tab characters<br />
 
-    </p>
+    </div>
 
 
 ## Corner cases {#corner-cases}
@@ -69,7 +69,7 @@ Line 5 has this > charcter in-between and is retained.
 Only the **first** `>` character immediately following spaces and empty
 lines will be removed:
 
-<p class="verse">
+<div class="verse">
 
 <br />
 Line 1 above was empty. So the first `>` seen on this line is removed.<br />
@@ -77,7 +77,7 @@ Line 3 had no `>` char.<br />
 &gt; ← See that this `>` on line 4 is retained even at the beginning of the line.<br />
 Line 5 has this &gt; charcter in-between and is retained.<br />
 
-</p>
+</div>
 
 If someone really wants to have `>` as the first non-blank character
 in the final output, they can use `>>` instead.. **only for that first
@@ -94,7 +94,7 @@ Line 5 has this > charcter in-between and is retained.
 #+end_verse
 ```
 
-<p class="verse">
+<div class="verse">
 
 <br />
 &gt;Line 1 above was empty. So **only** the first `>` seen on this line is removed.<br />
@@ -102,4 +102,4 @@ Line 3 had no `>` char.<br />
 &gt; ← See that this `>` on line 4 is retained even at the beginning of the line.<br />
 Line 5 has this &gt; charcter in-between and is retained.<br />
 
-</p>
+</div>

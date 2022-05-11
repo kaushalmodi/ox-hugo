@@ -1717,6 +1717,24 @@ ARGS are the ORIG-FUN function's arguments."
         (message-log-max nil))   ;Don't show the messages in the *Messages* buffer
     (apply orig-fun args)))
 
+;;;; Plainify (mimick the Hugo plainify function)
+(defun org-hugo--plainify-string (str info)
+  "Return STR string without any markup.
+
+INFO is a plist used as a communication channel.
+
+If STR is an empty string or nil, return nil.
+
+This function aims to mimick the Hugo `plainify' function:
+https://gohugo.io/functions/plainify/. For example, if STR is
+\"string *with* some /markup/\", the returned string is \"string
+with some markup\"."
+  (org-string-nw-p
+   (replace-regexp-in-string
+    "</?[^>]+>" ""
+    (org-export-data-with-backend str 'html info))))
+
+
 
 ;;; Transcode Functions
 
@@ -1738,13 +1756,22 @@ channel."
 CONTENTS holds the contents of the block.  INFO is a plist
 holding contextual information."
   (let* ((logbook-drawer-name (org-log-into-drawer))
-         (drawer-name (org-element-property :drawer-name drawer)))
-    (message "dbg: %S" logbook-drawer-name)
+         (drawer-name (org-element-property :drawer-name drawer))
+         (parent1-section (let ((p (org-export-get-parent drawer)))
+                            (and (equal 'section (org-element-type p)) p)))
+         (parent2-headline (let ((p (and parent1-section
+                                         (org-export-get-parent parent1-section))))
+                             (and (equal 'headline (org-element-type p)) p)))
+         (sub-heading (org-hugo--plainify-string
+                       (org-element-property :title parent2-headline)
+                       info)))
+    ;; (message "[org-hugo-drawer DBG] drawer name : %S" logbook-drawer-name)
+    ;; (message "[org-hugo-drawer DBG] parent1-section : %S" parent1-section)
+    ;; (message "[org-hugo-drawer DBG] parent2-headline : %S" parent2-headline)
+    ;; (message "[org-hugo-drawer DBG] sub-heading : %S" sub-heading)
     (cond
      ((equal logbook-drawer-name drawer-name)
       ;; (message "[ox-hugo logbook DBG] elem type: %s" (org-element-type drawer))
-      ;; (pp drawer)
-
       ;; (drawer
       ;;  ..
       ;;  (plain-list
@@ -1752,7 +1779,7 @@ holding contextual information."
       ;;    (paragraph
       ;;     <State change text>
       ;;     (timestamp <timestamp> )))))
-      (let* ((logbook-notes ())
+      (let* ((logbook-notes (plist-get info :logbook))
              (logbook-entries
               (org-element-map drawer 'plain-list
                 (lambda (lst)
@@ -1808,7 +1835,12 @@ holding contextual information."
                                (t
                                 (user-error "LOGBOOK drawer entry is neither a state change, nor a note."))))
                             (when (assoc 'note logbook-entry)
-                              (push (nreverse logbook-entry) logbook-notes))
+                              (let ((context-key (or sub-heading "_toplevel")))
+                                (unless (assoc context-key logbook-notes)
+                                  (push (cons context-key (list (cons 'notes (list)))) logbook-notes))
+                                (setcdr (assoc 'notes (assoc context-key logbook-notes))
+                                        (append (cdr (assoc 'notes (assoc context-key logbook-notes)))
+                                                (list (nreverse logbook-entry))))))
                             ;; (message "[ox-hugo logbook DBG] logbook entry : %S" logbook-entry)
                             logbook-entry))
                         nil :first-match) ;Each 'item element will have only one 'paragraph element
@@ -1818,8 +1850,9 @@ holding contextual information."
         ;; TODO: Code to save the notes content and date/lastmod
         ;; timestamps to appropriate front-matter.
         ;; (message "[ox-hugo logbook DBG] state changes : %S" logbook-entries)
+        (message "[ox-hugo logbook DBG] logbook-notes : %S" logbook-notes)
         (plist-put info :logbook-entries logbook-entries) ;Includes notes + state changes
-        (plist-put info :logbook-notes (nreverse logbook-notes))
+        (plist-put info :logbook logbook-notes)
         "")) ;Nothing from the LOGBOOK gets exported to the Markdown body
      (t
       (org-html-drawer drawer contents info)))))
@@ -3987,11 +4020,9 @@ INFO is a plist used as a communication channel."
          (data `,(append data weight-data custom-fm-data
                          (list
                           (cons 'menu menu-alist)
-                          (cons 'resources resources))))
+                          (cons 'resources resources)
+                          (cons 'logbook (plist-get info :logbook)))))
          ret)
-
-    (when (plist-get info :logbook-notes)
-      (setq data (append data `((logbook . ((notes . ,(plist-get info :logbook-notes))))))))
 
     ;; (message "[get fm DBG] tags: %s" tags)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))

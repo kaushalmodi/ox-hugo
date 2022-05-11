@@ -4137,7 +4137,8 @@ are \"toml\" and \"yaml\"."
                      "BIBLIOGRAPHY"
                      "HUGO_AUTO_SET_LASTMOD"
                      "LANGUAGE"
-                     "AUTHOR")))
+                     "AUTHOR"
+                     "OPTIONS")))
     (mapcar (lambda (str)
               (concat "EXPORT_" str))
             prop-list)))

@@ -7298,12 +7298,15 @@ be ~authors~ instead of the default ~author~ created by ~ox-hugo~.
 This test removes the ~foo~ front-matter key from the exported file
 (and replaces ~bar~ key with ~zoo~).
 #+end_description
-** DONE Parsing notes from LOGBOOK                            :notes:logbook:
+** LOGBOOK Notes                                              :notes:logbook:
 :PROPERTIES:
-:EXPORT_FILE_NAME: parsing-notes-from-logbook
 :LOG_INTO_DRAWER: t
 :LOGGING: TODO(!) DRAFT(!) DONE(!)
 :EXPORT_OPTIONS: d:t
+:END:
+*** DONE Parsing notes from LOGBOOK
+:PROPERTIES:
+:EXPORT_FILE_NAME: parsing-notes-from-logbook
 :END:
 :LOGBOOK:
 - Note taken on [2022-05-04 Wed 13:15] \\

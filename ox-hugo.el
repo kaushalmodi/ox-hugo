@@ -1779,79 +1779,79 @@ holding contextual information."
       ;;    (paragraph
       ;;     <State change text>
       ;;     (timestamp <timestamp> )))))
-      (let* ((logbook-notes (plist-get info :logbook))
-             (logbook-entries
-              (org-element-map drawer 'plain-list
-                (lambda (lst)
-                  (org-element-map lst 'item
-                    (lambda (item)
-                      (org-element-map item 'paragraph
-                        (lambda (para)
-                          ;; (pp para)
-                          (let ((logbook-entry ())
-                                (para-raw-str (org-export-data para info)))
-                            ;; (message "\n[ox-hugo logbook DBG] paragraph raw str : %s" para-raw-str)
+      (let ((logbook-notes (plist-get info :logbook)))
+        (org-element-map drawer 'plain-list
+          (lambda (lst)
+            (org-element-map lst 'item
+              (lambda (item)
+                (org-element-map item 'paragraph
+                  (lambda (para)
+                    ;; (pp para)
+                    (let ((logbook-entry ())
+                          (para-raw-str (org-export-data para info)))
+                      ;; (message "\n[ox-hugo logbook DBG] paragraph raw str : %s" para-raw-str)
 
-                            ;; Parse the logbook entry's timestamp.
-                            (org-element-map para 'timestamp
-                              (lambda (ts)
-                                ;; (pp ts)
-                                (let* ((ts-raw-str (org-element-property :raw-value ts))
-                                       (ts-str (org-hugo--org-date-time-to-rfc3339 ts-raw-str info)))
-                                  ;; (message "[ox-hugo logbook DBG] ts: %s, ts fmtd: %s"
-                                  ;;          ts-raw-str ts-str)
-                                  (push `(timestamp . ,ts-str) logbook-entry))
-                                nil)
-                              nil :first-match) ;Each 'paragraph element will have only one 'timestamp element
+                      ;; Parse the logbook entry's timestamp.
+                      (org-element-map para 'timestamp
+                        (lambda (ts)
+                          ;; (pp ts)
+                          (let* ((ts-raw-str (org-element-property :raw-value ts))
+                                 (ts-str (org-hugo--org-date-time-to-rfc3339 ts-raw-str info)))
+                            ;; (message "[ox-hugo logbook DBG] ts: %s, ts fmtd: %s"
+                            ;;          ts-raw-str ts-str)
+                            (push `(timestamp . ,ts-str) logbook-entry))
+                          nil) ;lambda return for (org-element-map para 'timestamp
+                        nil :first-match) ;Each 'paragraph element will have only one 'timestamp element
 
-                            (save-match-data
-                              (cond
-                               ;; Parse (assq 'state org-log-note-headings)
-                               ((string-match "^State\\s-+\\(?1:\".+?\"\\)*\\s-+from\\s-+\\(?2:\".+?\"\\)*"
-                                              para-raw-str)
-                                (let ((to-state (org-string-nw-p
-                                                 (save-match-data ;Required because `string-trim' changes match data
-                                                   (string-trim
-                                                    (or (match-string-no-properties 1 para-raw-str) "")
-                                                    "\"" "\""))))
-                                      (from-state (org-string-nw-p
-                                                   (save-match-data ;Required because `string-trim' changes match data
-                                                     (string-trim
-                                                      (or (match-string-no-properties 2 para-raw-str) "")
-                                                      "\"" "\"")))))
-                                  ;; (message "[ox-hugo logbook DBG] state change : from %s to %s @ %s"
-                                  ;;          from-state to-state (plist-get logbook-entry :timestamp))
-                                  (when to-state
-                                    (push `(to_state . ,to-state) logbook-entry))
-                                  (when from-state
-                                    (push `(from_state . ,from-state) logbook-entry))))
-                               ;; Parse (assq 'note org-log-note-headings)
-                               ((string-match "^Note taken on .*?\n\\(?1:\\(.\\|\n\\)*\\)" para-raw-str)
-                                (let ((note (string-trim
-                                             (match-string-no-properties 1 para-raw-str))))
-                                  ;; (message "[ox-hugo logbook DBG] note : %s @ %s"
-                                  ;;          note (plist-get logbook-entry :timestamp))
-                                  (push `(note . ,note) logbook-entry)))
-                               (t
-                                (user-error "LOGBOOK drawer entry is neither a state change, nor a note."))))
-                            (when (assoc 'note logbook-entry)
-                              (let ((context-key (or sub-heading "_toplevel")))
-                                (unless (assoc context-key logbook-notes)
-                                  (push (cons context-key (list (cons 'notes (list)))) logbook-notes))
-                                (setcdr (assoc 'notes (assoc context-key logbook-notes))
-                                        (append (cdr (assoc 'notes (assoc context-key logbook-notes)))
-                                                (list (nreverse logbook-entry))))))
-                            ;; (message "[ox-hugo logbook DBG] logbook entry : %S" logbook-entry)
-                            logbook-entry))
-                        nil :first-match) ;Each 'item element will have only one 'paragraph element
-                      )))
-                nil :first-match))) ;The 'logbook element will have only one 'plain-list element
-        ;; (message "[ox-hugo logbook DBG] all logbook entries : %S" logbook-entries)
+                      (save-match-data
+                        (cond
+                         ;; Parse (assq 'state org-log-note-headings)
+                         ((string-match "^State\\s-+\\(?1:\".+?\"\\)*\\s-+from\\s-+\\(?2:\".+?\"\\)*"
+                                        para-raw-str)
+                          (let ((to-state (org-string-nw-p
+                                           (save-match-data ;Required because `string-trim' changes match data
+                                             (string-trim
+                                              (or (match-string-no-properties 1 para-raw-str) "")
+                                              "\"" "\""))))
+                                (from-state (org-string-nw-p
+                                             (save-match-data ;Required because `string-trim' changes match data
+                                               (string-trim
+                                                (or (match-string-no-properties 2 para-raw-str) "")
+                                                "\"" "\"")))))
+                            ;; (message "[ox-hugo logbook DBG] state change : from %s to %s @ %s"
+                            ;;          from-state to-state (plist-get logbook-entry :timestamp))
+                            (when to-state
+                              (push `(to_state . ,to-state) logbook-entry))
+                            (when from-state
+                              (push `(from_state . ,from-state) logbook-entry))))
+                         ;; Parse (assq 'note org-log-note-headings)
+                         ((string-match "^Note taken on .*?\n\\(?1:\\(.\\|\n\\)*\\)" para-raw-str)
+                          (let ((note (string-trim
+                                       (match-string-no-properties 1 para-raw-str))))
+                            ;; (message "[ox-hugo logbook DBG] note : %s @ %s"
+                            ;;          note (plist-get logbook-entry :timestamp))
+                            (push `(note . ,note) logbook-entry)))
+                         (t
+                          (user-error "LOGBOOK drawer entry is neither a state change, nor a note."))))
+
+                      (when (assoc 'note logbook-entry)
+                        (let ((context-key (or sub-heading "_toplevel")))
+                          (unless (assoc context-key logbook-notes)
+                            (push (cons context-key (list (cons 'notes (list)))) logbook-notes))
+                          (setcdr (assoc 'notes (assoc context-key logbook-notes))
+                                  (append (cdr (assoc 'notes (assoc context-key logbook-notes)))
+                                          (list (nreverse logbook-entry))))))
+
+                      ;; (message "[ox-hugo logbook DBG] logbook entry : %S" logbook-entry)
+                      logbook-entry)
+                    nil) ;lambda return for (org-element-map item 'paragraph
+                  nil :first-match) ;Each 'item element will have only one 'paragraph element
+                nil))    ;lambda return for (org-element-map lst 'item
+            nil) ;lambda return for (org-element-map drawer 'plain-list ..
+          nil :first-match) ;The 'logbook element will have only one 'plain-list element
         ;; TODO: Code to save the notes content and date/lastmod
         ;; timestamps to appropriate front-matter.
-        ;; (message "[ox-hugo logbook DBG] state changes : %S" logbook-entries)
         (message "[ox-hugo logbook DBG] logbook-notes : %S" logbook-notes)
-        (plist-put info :logbook-entries logbook-entries) ;Includes notes + state changes
         (plist-put info :logbook logbook-notes)
         "")) ;Nothing from the LOGBOOK gets exported to the Markdown body
      (t

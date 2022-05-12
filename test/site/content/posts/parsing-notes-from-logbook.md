@@ -4,6 +4,7 @@ description = """
   Parse notes from LOGBOOK into a TOML table (YAML map?) of
   `logbook.notes` front-matter.
   """
+layout = "alternate-single"
 tags = ["front-matter", "notes", "logbook"]
 draft = false
 [logbook]

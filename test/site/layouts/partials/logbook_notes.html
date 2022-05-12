@@ -1,0 +1,17 @@
+{{ with .page.Param .notes_param }}
+    <dl>
+        {{ range . }}
+            <dt>
+                <span class="timestamp-wrapper">
+                    <span class="timestamp">
+                        {{ printf `&lt;%s&gt;` (time.Format "2006-01-02" .timestamp)
+                        | safeHTML }}
+                    </span>
+                </span>
+            </dt>
+            <dd>
+                {{ .note | $.page.RenderString | emojify }}
+            </dd>
+        {{ end }}
+    </dl>
+{{ end }}

@@ -1,0 +1,6 @@
+<h{{ .Level }} id="{{ .Anchor | safeURL }}">{{ .Text | safeHTML }}
+  <a href="#{{ .Anchor | safeURL }}"><small>#</small></a>
+</h{{ .Level }}>
+{{ partial "logbook_notes.html"
+           (dict "page" $.Page
+                 "notes_param" (printf "logbook.%s.notes" .PlainText)) }}

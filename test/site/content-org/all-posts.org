@@ -7303,6 +7303,7 @@ This test removes the ~foo~ front-matter key from the exported file
 :LOG_INTO_DRAWER: t
 :LOGGING: TODO(!) DRAFT(!) DONE(!)
 :EXPORT_OPTIONS: d:t
+:EXPORT_HUGO_LAYOUT: alternate-single
 :END:
 *** DONE Parsing notes from LOGBOOK
 :PROPERTIES:

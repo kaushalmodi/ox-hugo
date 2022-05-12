@@ -1,6 +1,7 @@
 +++
 title = "LOGBOOK Notes in nested headings"
 description = "Parse notes from LOGBOOK drawers in top-level and nested headings."
+layout = "alternate-single"
 tags = ["front-matter", "notes", "logbook"]
 draft = false
 [logbook]

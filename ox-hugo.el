@@ -1846,7 +1846,8 @@ holding contextual information."
                             (when to-state
                               (push `(to_state . ,to-state) logbook-entry)
                               ;; (message "[ox-hugo logbook DBG] org-done-keywords: %S" org-done-keywords)
-                              (when (member to-state org-done-keywords)
+                              (when (and (null sub-heading) ;Parse dates from only the toplevel LOGBOOK drawer.
+                                         (member to-state org-done-keywords))
                                 ;; The first parsed TODO state change entry will be the
                                 ;; latest one, and `:logbook-date' would already have
                                 ;; been set to that.  So if `:logbook-lastmod' is not set,
@@ -1872,8 +1873,9 @@ holding contextual information."
                             ;; note's timestamp.
                             ;; *This always works because the newest state change or note
                             ;; entry is always put to the top of the LOGBOOK.*
-                            (unless (plist-get info :logbook-lastmod)
-                              (plist-put info :logbook-lastmod timestamp))))
+                            (unless sub-heading ;Parse dates from only the toplevel LOGBOOK drawer.
+                              (unless (plist-get info :logbook-lastmod)
+                                (plist-put info :logbook-lastmod timestamp)))))
 
                          (t
                           (user-error "LOGBOOK drawer entry is neither a state change, nor a note."))))

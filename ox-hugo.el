@@ -3,7 +3,7 @@
 ;; Author: Kaushal Modi <kaushal.modi@gmail.com>
 ;;         Matt Price <moptop99@gmail.com>
 ;; Version: 0.11.1
-;; Package-Requires: ((emacs "26.3") (tomelr "0.3.0"))
+;; Package-Requires: ((emacs "26.3") (tomelr "0.4.3"))
 ;; Keywords: Org, markdown, docs
 ;; URL: https://ox-hugo.scripter.co
 
@@ -709,6 +709,7 @@ bibliography heading auto-injection is not done."
               (org-hugo-export-as-md a s v)))))
 ;;;; translate-alist
   :translate-alist '((code . org-hugo-kbd-tags-maybe)
+                     (drawer . org-hugo-drawer)
                      (example-block . org-hugo-example-block)
                      (export-block . org-hugo-export-block)
                      (export-snippet . org-hugo-export-snippet)
@@ -1269,19 +1270,24 @@ INFO is a plist used as a communication channel."
 (defun org-hugo--get-date (info fmt)
   "Return current post's publish date as a string.
 
-1. If the point is in an Org subtree which has the `CLOSED' property
-   set (usually generated automatically when switching a heading's
-   TODO state to \"DONE\"), get the `CLOSED' time stamp.
+The date is derived with this precedence:
 
-2. If that's not the case, but the subtree has the `EXPORT_DATE'
-   property set, use the date from that.
+1. `:logbook-date' property from INFO
 
-3. Else, try to get the date from the \"#+date\" keyword in the Org
-   file, and format it using the time format string FMT.  If this
-   keyword is not set either, return nil.
+2. `CLOSED' time stamp if the point is in an Org subtree with the
+   `CLOSED' property set (usually generated automatically when
+   switching a heading's TODO state to \"DONE\")
+
+3. `EXPORT_DATE' property in current post subtree
+
+4. Date if set in the Org file's \"#+date\" keyword. This date is
+   formatted using the time format string FMT.
+
+If none of the above apply, return nil.
 
 INFO is a plist used as a communication channel."
   (or
+   (plist-get info :logbook-date)
    (org-entry-get (point) "CLOSED")
    (org-string-nw-p
     (org-export-data (plist-get info :date) info)) ;`org-export-data' required
@@ -1289,6 +1295,33 @@ INFO is a plist used as a communication channel."
     (org-export-get-date info fmt))))
 
 ;;;; Format Dates
+(defun org-hugo--org-date-time-to-rfc3339 (date-time info)
+  "Convert DATE-TIME to RFC 3339 format.
+
+DATE-TIME can be either Emacs format time list (example: return
+value of `current-time'), or an Org date/time string.
+
+INFO is a plist used as a communication channel."
+  (let* ((date-time (if (stringp date-time)
+                        (apply #'encode-time (org-parse-time-string date-time))
+                      date-time))
+         (date-nocolon (format-time-string
+                        (plist-get info :hugo-date-format)
+                        date-time)))
+    ;; Hugo expects the date stamp in this format (RFC3339 -- See
+    ;; `org-hugo--date-time-regexp'.) i.e. if the date contains the
+    ;; time-zone, a colon is required to separate the hours and
+    ;; minutes in the time-zone section.  2017-07-06T14:59:45-04:00
+
+    ;; But by default the "%z" placeholder for time-zone (see
+    ;; `format-time-string') produces the zone time-string as "-0400"
+    ;; (Note the missing colon).  Below simply adds a colon between
+    ;; "04" and "00" in that example.
+    (and (stringp date-nocolon)
+         (replace-regexp-in-string
+          "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
+          date-nocolon))))
+
 (defun org-hugo--format-date (date-key info)
   "Return a date string formatted in Hugo-compatible format.
 
@@ -1306,91 +1339,80 @@ cannot be formatted in Hugo-compatible format."
                      ;; (message "[ox-hugo date DBG] 1 %s" (plist-get info date-key))
                      ;; (message "[ox-hugo date DBG] 2 %s" (org-export-data (plist-get info date-key) info))
                      (org-hugo--get-date info date-fmt))
+                    ((equal date-key :hugo-lastmod)
+                     (or (plist-get info :logbook-lastmod) ;lastmod derived from LOGBOOK gets higher precedence
+                         (org-string-nw-p (plist-get info date-key))))
                     ((and (equal date-key :hugo-publishdate)
                           (org-entry-get (point) "SCHEDULED"))
                      ;; Get the date from the "SCHEDULED" property.
                      (org-entry-get (point) "SCHEDULED"))
-                    (t ;:hugo-lastmod, :hugo-publishdate, :hugo-expirydate
+                    (t            ;:hugo-publishdate, :hugo-expirydate
                      (org-string-nw-p (plist-get info date-key)))))
-         (date-nocolon (cond
-                        ;; If the date set for the DATE-KEY parameter
-                        ;; is already in Hugo-compatible format, use
-                        ;; it.
-                        ((and (stringp date-raw)
-                              (string-match-p org-hugo--date-time-regexp date-raw))
-                         date-raw)
-                        ;; Else if it's any other string (like
-                        ;; "<2018-01-23 Tue>"), try to parse that
-                        ;; date.
-                        ((stringp date-raw)
-                         (condition-case err
-                             (format-time-string
-                              date-fmt
-                              (apply #'encode-time (org-parse-time-string date-raw)))
-                           (error
-                            ;; Set date-nocolon to nil if error
-                            ;; happens.  An example: If #+date is set
-                            ;; to 2012-2017 to set the copyright
-                            ;; years, just set the date to nil instead
-                            ;; of throwing an error like:
-                            ;; org-parse-time-string: Not a standard
-                            ;; Org time string: 2012-2017
-                            (message
-                             (format "[ox-hugo] Date will not be set in the front-matter: %s"
-                                     (nth 1 err)))
-                            nil)))
-                        ;; Else (if nil) and user want to auto-set the
-                        ;; lastmod field.
-                        ((and (equal date-key :hugo-lastmod)
-                              (org-hugo--plist-get-true-p info :hugo-auto-set-lastmod))
-                         (let* ((curr-time (org-current-time))
-                                (lastmod-str (format-time-string date-fmt curr-time)))
-                           ;; (message "[ox-hugo suppress-lastmod] current-time = %S (decoded = %S)"
-                           ;;          curr-time (decode-time curr-time))
-                           ;; (message "[ox-hugo suppress-lastmod] lastmod-str = %S"
-                           ;;          lastmod-str )
-                           (if (= 0.0 org-hugo-suppress-lastmod-period)
-                               (progn
-                                 ;; (message "[ox-hugo suppress-lastmod] not suppressed")
-                                 lastmod-str)
-                             (let ((date-str (org-string-nw-p (org-hugo--get-date info date-fmt))))
-                               ;; (message "[ox-hugo suppress-lastmod] date-str = %S"
-                               ;;          date-str)
-                               (when date-str
-                                 (let* ((date-time (apply #'encode-time
-                                                          (mapcar (lambda (el) (or el 0))
-                                                                  (parse-time-string date-str))))
-                                        ;; It's safe to assume that
-                                        ;; `current-time' will always
-                                        ;; be >= the post date.
-                                        (delta (float-time
-                                                (time-subtract curr-time date-time)))
-                                        (suppress-period (if (< 0.0 org-hugo-suppress-lastmod-period)
-                                                             org-hugo-suppress-lastmod-period
-                                                           (- org-hugo-suppress-lastmod-period))))
-                                   ;; (message "[ox-hugo suppress-lastmod] date-time = %S (decoded = %S)"
-                                   ;;          date-time (decode-time date-time))
-                                   ;; (message "[ox-hugo suppress-lastmod] delta = %S" delta)
-                                   ;; (message "[ox-hugo suppress-lastmod] suppress-period = %S"
-                                   ;;          suppress-period)
-                                   (when (>= delta suppress-period)
-                                     lastmod-str)))))))
-                        ;; Else.. do nothing.
-                        (t
-                         nil)))
-         ;; Hugo expects the date stamp in this format (RFC3339 -- See
-         ;; `org-hugo--date-time-regexp'.) i.e. if the date contains
-         ;; the time-zone, a colon is required to separate the hours
-         ;; and minutes in the time-zone section.
-         ;;   2017-07-06T14:59:45-04:00
-         ;; But by default the "%z" placeholder for time-zone (see
-         ;; `format-time-string') produces the zone time-string as
-         ;; "-0400" (Note the missing colon).  Below simply adds a
-         ;; colon between "04" and "00" in that example.
-         (date-str (and (stringp date-nocolon)
-                        (replace-regexp-in-string "\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)\\'" "\\1:\\2"
-                                                  date-nocolon))))
-    date-str))
+         (dt-rfc3339 (cond
+                      ;; If the date set for the DATE-KEY parameter is
+                      ;; already in Hugo-compatible format, use it.
+                      ((and (stringp date-raw)
+                            (string-match-p org-hugo--date-time-regexp date-raw))
+                       date-raw)
+                      ;; Else if it's any other string (like
+                      ;; "<2018-01-23 Tue>"), try to parse that date.
+                      ((stringp date-raw)
+                       (condition-case err
+                           (org-hugo--org-date-time-to-rfc3339 date-raw info)
+                         (error
+                          ;; Set dt-rfc3339 to nil if error happens.
+                          ;; An example: If #+date is set to 2012-2017
+                          ;; to set the copyright years, just set the
+                          ;; date to nil instead of throwing an error
+                          ;; like: org-parse-time-string: Not a
+                          ;; standard Org time string: 2012-2017
+                          (message
+                           (format "[ox-hugo] Date will not be set in the front-matter: %s"
+                                   (nth 1 err)))
+                          nil)))
+                      ;; Else (if nil) and user want to auto-set the
+                      ;; lastmod field. If the lastmod value is
+                      ;; derived from LOGBOOK, disable the
+                      ;; auto-setting of lastmod.
+                      ((and (equal date-key :hugo-lastmod)
+                            (null (plist-get info :logbook-lastmod))
+                            (org-hugo--plist-get-true-p info :hugo-auto-set-lastmod))
+                       (let* ((curr-time (org-current-time))
+                              (lastmod-str (org-hugo--org-date-time-to-rfc3339 curr-time info)))
+                         ;; (message "[ox-hugo suppress-lastmod] current-time = %S (decoded = %S)"
+                         ;;          curr-time (decode-time curr-time))
+                         ;; (message "[ox-hugo suppress-lastmod] lastmod-str = %S"
+                         ;;          lastmod-str )
+                         (if (= 0.0 org-hugo-suppress-lastmod-period)
+                             (progn
+                               ;; (message "[ox-hugo suppress-lastmod] not suppressed")
+                               lastmod-str)
+                           (let ((date-str (org-string-nw-p (org-hugo--get-date info date-fmt))))
+                             ;; (message "[ox-hugo suppress-lastmod] date-str = %S"
+                             ;;          date-str)
+                             (when date-str
+                               (let* ((date-time (apply #'encode-time
+                                                        (mapcar (lambda (el) (or el 0))
+                                                                (parse-time-string date-str))))
+                                      ;; It's safe to assume that
+                                      ;; `current-time' will always
+                                      ;; be >= the post date.
+                                      (delta (float-time
+                                              (time-subtract curr-time date-time)))
+                                      (suppress-period (if (< 0.0 org-hugo-suppress-lastmod-period)
+                                                           org-hugo-suppress-lastmod-period
+                                                         (- org-hugo-suppress-lastmod-period))))
+                                 ;; (message "[ox-hugo suppress-lastmod] date-time = %S (decoded = %S)"
+                                 ;;          date-time (decode-time date-time))
+                                 ;; (message "[ox-hugo suppress-lastmod] delta = %S" delta)
+                                 ;; (message "[ox-hugo suppress-lastmod] suppress-period = %S"
+                                 ;;          suppress-period)
+                                 (when (>= delta suppress-period)
+                                   lastmod-str)))))))
+                      ;; Else.. do nothing.
+                      (t
+                       nil))))
+    dt-rfc3339))
 
 ;;;; Replace Front-matter Keys
 (defun org-hugo--replace-keys-maybe (data info)
@@ -1706,6 +1728,24 @@ ARGS are the ORIG-FUN function's arguments."
         (message-log-max nil))   ;Don't show the messages in the *Messages* buffer
     (apply orig-fun args)))
 
+;;;; Plainify (mimick the Hugo plainify function)
+(defun org-hugo--plainify-string (str info)
+  "Return STR string without any markup.
+
+INFO is a plist used as a communication channel.
+
+If STR is an empty string or nil, return nil.
+
+This function aims to mimick the Hugo `plainify' function:
+https://gohugo.io/functions/plainify/. For example, if STR is
+\"string *with* some /markup/\", the returned string is \"string
+with some markup\"."
+  (org-string-nw-p
+   (replace-regexp-in-string
+    "</?[^>]+>" ""
+    (org-export-data-with-backend str 'html info))))
+
+
 
 ;;; Transcode Functions
 
@@ -1720,6 +1760,138 @@ channel."
       (format "<kbd>%s</kbd>" (org-html-encode-plain-text
                                (org-element-property :value verbatim)))
     (org-md-verbatim verbatim nil nil)))
+
+;;;; Drawer (specifically Logbook)
+(defun org-hugo-drawer (drawer contents info)
+  "Transcode a DRAWER element from Org to appropriate Hugo front-matter.
+CONTENTS holds the contents of the block.  INFO is a plist
+holding contextual information."
+  (let* ((logbook-drawer-name (org-log-into-drawer))
+         (drawer-name (org-element-property :drawer-name drawer))
+         (parent1-section (let ((p (org-export-get-parent drawer)))
+                            (and (equal 'section (org-element-type p)) p)))
+         (parent2-headline (let ((p (and parent1-section
+                                         (org-export-get-parent parent1-section))))
+                             (and (equal 'headline (org-element-type p)) p)))
+         (sub-heading (org-hugo--plainify-string
+                       (org-element-property :title parent2-headline)
+                       info)))
+    ;; (message "[org-hugo-drawer DBG] drawer name : %S" logbook-drawer-name)
+    ;; (message "[org-hugo-drawer DBG] parent1-section : %S" parent1-section)
+    ;; (message "[org-hugo-drawer DBG] parent2-headline : %S" parent2-headline)
+    ;; (message "[org-hugo-drawer DBG] sub-heading : %S" sub-heading)
+    (cond
+     ((equal logbook-drawer-name drawer-name)
+      ;; (message "[ox-hugo logbook DBG] elem type: %s" (org-element-type drawer))
+      ;; (drawer
+      ;;  ..
+      ;;  (plain-list
+      ;;   (item
+      ;;    (paragraph
+      ;;     <State change text>
+      ;;     (timestamp <timestamp> )))))
+      (let ((logbook-notes (plist-get info :logbook)))
+        (org-element-map drawer 'plain-list
+          (lambda (lst)
+            (org-element-map lst 'item
+              (lambda (item)
+                (org-element-map item 'paragraph
+                  (lambda (para)
+                    ;; (pp para)
+                    (let* ((logbook-entry ())
+                           (para-raw-str (org-export-data para info))
+                           ;; Parse the logbook entry's timestamp.
+                           (timestamp
+                            (org-element-map para 'timestamp
+                              (lambda (ts)
+                                ;; (pp ts)
+                                (let* ((ts-raw-str (org-element-property :raw-value ts))
+                                       (ts-str (org-hugo--org-date-time-to-rfc3339 ts-raw-str info)))
+                                  ;; (message "[ox-hugo logbook DBG] ts: %s, ts fmtd: %s"
+                                  ;;          ts-raw-str ts-str)
+                                  (push `(timestamp . ,ts-str) logbook-entry)
+                                  ts-str)) ;lambda return for (org-element-map para 'timestamp
+                              nil :first-match))) ;Each 'paragraph element will have only one 'timestamp element
+
+                      ;; (message "\n[ox-hugo logbook DBG] paragraph raw str : %s" para-raw-str)
+                      ;; (message "[ox-hugo logbook DBG] timestamp : %s" timestamp)
+                      (unless timestamp
+                        (user-error "No time stamp is recorded in the LOGBOOK drawer entry."))
+
+                      (save-match-data
+                        (cond
+                         ;; Parse (assq 'state org-log-note-headings)
+                         ((string-match "^State\\s-+\\(?1:\".+?\"\\)*\\s-+from\\s-+\\(?2:\".+?\"\\)*"
+                                        para-raw-str)
+                          (let ((to-state (org-string-nw-p
+                                           (replace-regexp-in-string
+                                            ;; Handle corner case: If a TODO state has "__" in them, the
+                                            ;; underscore will be escaped. Remove that "\".
+                                            "\\\\" ""
+                                            (save-match-data ;Required because `string-trim' changes match data
+                                              (string-trim
+                                               (or (match-string-no-properties 1 para-raw-str) "")
+                                               "\"" "\"")))))
+                                (from-state (org-string-nw-p
+                                             (replace-regexp-in-string
+                                              ;; Handle corner case: If a TODO state has "__" in them, the
+                                              ;; underscore will be escaped. Remove that "\".
+                                              "\\\\" ""
+                                              (save-match-data ;Required because `string-trim' changes match data
+                                                (string-trim
+                                                 (or (match-string-no-properties 2 para-raw-str) "")
+                                                 "\"" "\""))))))
+                            ;; (message "[ox-hugo logbook DBG] state change : from %s to %s @ %s"
+                            ;;          from-state to-state timestamp)
+                            (when to-state
+                              (push `(to_state . ,to-state) logbook-entry)
+                              ;; (message "[ox-hugo logbook DBG] org-done-keywords: %S" org-done-keywords)
+                              (when (member to-state org-done-keywords)
+                                ;; The first TODO state change entry will be the latest one, and
+                                ;; `:logbook-date' would already have been set to that.
+                                ;; So if `:logbook-lastmod' is not set, set that that to the
+                                ;; value of `:logbook-date'.
+                                (unless (plist-get info :logbook-lastmod)
+                                  (when (plist-get info :logbook-date)
+                                    (plist-put info :logbook-lastmod (plist-get info :logbook-date))))
+                                (plist-put info :logbook-date timestamp)))
+                            (when from-state ;For debug purpose
+                              (push `(from_state . ,from-state) logbook-entry))))
+
+                         ;; Parse (assq 'note org-log-note-headings)
+                         ((string-match "^Note taken on .*?\n\\(?1:\\(.\\|\n\\)*\\)" para-raw-str)
+                          (let ((note (string-trim
+                                       (match-string-no-properties 1 para-raw-str))))
+                            ;; (message "[ox-hugo logbook DBG] note : %s @ %s" note timestamp)
+                            (push `(note . ,note) logbook-entry)))
+
+                         (t
+                          (user-error "LOGBOOK drawer entry is neither a state change, nor a note."))))
+
+                      (when (assoc 'note logbook-entry)
+                        (let ((context-key (or sub-heading "_toplevel")))
+                          (unless (assoc context-key logbook-notes)
+                            (push (cons context-key (list (cons 'notes (list)))) logbook-notes))
+                          (setcdr (assoc 'notes (assoc context-key logbook-notes))
+                                  (append (cdr (assoc 'notes (assoc context-key logbook-notes)))
+                                          (list (nreverse logbook-entry))))))
+
+                      ;; (message "[ox-hugo logbook DBG] logbook entry : %S" logbook-entry)
+                      logbook-entry)
+                    nil) ;lambda return for (org-element-map item 'paragraph
+                  nil :first-match) ;Each 'item element will have only one 'paragraph element
+                nil))    ;lambda return for (org-element-map lst 'item
+            nil) ;lambda return for (org-element-map drawer 'plain-list ..
+          nil :first-match) ;The 'logbook element will have only one 'plain-list element
+        ;; TODO: Code to save the notes content and date/lastmod
+        ;; timestamps to appropriate front-matter.
+        ;; (message "[ox-hugo logbook DBG] logbook-notes : %S" logbook-notes)
+        ;; (message "[ox-hugo logbook DBG] logbook derived `date' : %S" (plist-get info :logbook-date))
+        ;; (message "[ox-hugo logbook DBG] logbook derived `lastmod' : %S" (plist-get info :logbook-lastmod))
+        (plist-put info :logbook logbook-notes)
+        "")) ;Nothing from the LOGBOOK gets exported to the Markdown body
+     (t
+      (org-html-drawer drawer contents info)))))
 
 ;;;; Example Block
 (defun org-hugo-example-block (example-block _contents info)
@@ -3881,8 +4053,13 @@ INFO is a plist used as a communication channel."
                  (creator . ,creator)
                  (locale . ,locale)
                  (blackfriday . ,blackfriday)))
-         (data `,(append data weight-data custom-fm-data (list (cons 'menu menu-alist) (cons 'resources resources))))
+         (data `,(append data weight-data custom-fm-data
+                         (list
+                          (cons 'menu menu-alist)
+                          (cons 'resources resources)
+                          (cons 'logbook (plist-get info :logbook)))))
          ret)
+
     ;; (message "[get fm DBG] tags: %s" tags)
     ;; (message "dbg: hugo tags: %S" (plist-get info :hugo-tags))
     ;; (message "[get fm info DBG] %S" info)
@@ -4027,7 +4204,8 @@ are \"toml\" and \"yaml\"."
                      "BIBLIOGRAPHY"
                      "HUGO_AUTO_SET_LASTMOD"
                      "LANGUAGE"
-                     "AUTHOR")))
+                     "AUTHOR"
+                     "OPTIONS")))
     (mapcar (lambda (str)
               (concat "EXPORT_" str))
             prop-list)))

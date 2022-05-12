@@ -2,6 +2,10 @@
 
 {{ "**This is `alternate-single` layout from `_default`.**" | markdownify }}
 
+{{ partial "logbook_notes.html"
+           (dict "page" $.Page
+                 "notes_param" "logbook._toplevel.notes") }}
+
 <hr>
 {{ .Content }}
 

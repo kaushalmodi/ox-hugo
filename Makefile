@@ -98,7 +98,7 @@ test_check=1
 	test md ert testmkgold \
 	do_test $(test_org_files) \
 	changelog doc_md doc_gh doc doc_htmltest doc_test \
-	ctemp diffgolden clean
+	ctemp diffgolden clean cleandocs
 
 help:
 	@echo "Help for command-line Org->Markdown for Hugo Exporter"
@@ -117,6 +117,7 @@ help:
 	@echo " make doc_gh        <-- Build README.org and CONTRIBUTING.org for GitHub"
 	@echo " make hugo_test     <-- Build the test site using Hugo"
 	@echo " make clean         <-- Delete the Hugo public/ directory and auto-installed elisp packages"
+	@echo " make cleandocs     <-- Delete the Markdown files in doc/content/"
 	@echo " make               <-- Show this help"
 
 # Note: The Org file from $(ORG_FILE) is loaded *after* the --eval
@@ -269,8 +270,10 @@ clean: ctemp
 	find $(OX_HUGO_TMP_DIR_BASE)  -maxdepth 1 -type d -name ox-hugo-dev -exec rm -rf "{}" \;
 	find $(OX_HUGO_TEST_SITE_DIR) -maxdepth 1 -type d \( -name public -o -name content-golden -o -name content-modified \) -exec rm -rf "{}" \;
 	find ./doc -maxdepth 1 -type d -name public -exec rm -rf "{}" \;
-	find ./doc/content -name "*.md" -delete
 	rm -f ox-hugo-autoloads.el
+
+cleandocs:
+	find ./doc/content -name "*.md" -delete
 
 # Set a make variable during rule execution
 # https://stackoverflow.com/a/1909390/1219634

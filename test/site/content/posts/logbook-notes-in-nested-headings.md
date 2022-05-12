@@ -19,6 +19,10 @@ draft = false
       note = "Note in the top-heading LOGBOOK drawer"
 +++
 
+The `lastmod` field is not set for this post (even if it has a note
+with timestamp) because this post is not marked as DONE.
+
+
 ## Sub-heading {#sub-heading}
 
 

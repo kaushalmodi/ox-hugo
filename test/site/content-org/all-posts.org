@@ -7313,6 +7313,12 @@ This test removes the ~foo~ front-matter key from the exported file
 :EXPORT_FILE_NAME: parsing-notes-from-logbook
 :END:
 :LOGBOOK:
+- Note taken on [2022-05-12 Thu 08:13] \\
+  Another update to the post. This update timestamp should update the
+  ~lastmod~.
+- State "DONE"       from "TEST__TODO" <2022-05-10 Tue 08:13>
+- State "TODO"       from "DRAFT"      <2022-05-08 Sun 06:13>
+- State "DRAFT"      from "DONE"       <2022-05-06 Fri 04:12>
 - Note taken on [2022-05-04 Wed 13:15] \\
   This new note added last should be the first element of the
   ~[[logbook.notes]]~ TOML table array.
@@ -7366,6 +7372,8 @@ note first in the TOML table array to the oldest note at the last.
 #+begin_description
 Parse notes from LOGBOOK drawers in top-level and nested headings.
 #+end_description
+The ~lastmod~ field is not set for this post (even if it has a note
+with timestamp) because this post is not marked as DONE.
 **** Sub-heading
 :LOGBOOK:
 - Note taken on [2022-05-11 Wed 12:18] \\

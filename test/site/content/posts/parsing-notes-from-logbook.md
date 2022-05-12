@@ -6,10 +6,17 @@ description = """
   """
 date = 2018-09-06T11:25:00+00:00
 layout = "alternate-single"
+lastmod = 2022-05-12T08:13:00+00:00
 tags = ["front-matter", "notes", "logbook"]
 draft = false
 [logbook]
   [logbook._toplevel]
+    [[logbook._toplevel.notes]]
+      timestamp = 2022-05-12T08:13:00+00:00
+      note = """
+  Another update to the post. This update timestamp should update the
+  `lastmod`.
+  """
     [[logbook._toplevel.notes]]
       timestamp = 2022-05-04T13:15:00+00:00
       note = """

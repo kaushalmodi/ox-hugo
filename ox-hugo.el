@@ -1847,13 +1847,17 @@ holding contextual information."
                               (push `(to_state . ,to-state) logbook-entry)
                               ;; (message "[ox-hugo logbook DBG] org-done-keywords: %S" org-done-keywords)
                               (when (member to-state org-done-keywords)
-                                ;; The first TODO state change entry will be the latest one, and
-                                ;; `:logbook-date' would already have been set to that.
-                                ;; So if `:logbook-lastmod' is not set, set that that to the
-                                ;; value of `:logbook-date'.
+                                ;; The first parsed TODO state change entry will be the
+                                ;; latest one, and `:logbook-date' would already have
+                                ;; been set to that.  So if `:logbook-lastmod' is not set,
+                                ;; set that that to the value of `:logbook-date'.
+                                ;; *This always works because the newest state change or note
+                                ;; entry is always put to the top of the LOGBOOK.*
                                 (unless (plist-get info :logbook-lastmod)
                                   (when (plist-get info :logbook-date)
                                     (plist-put info :logbook-lastmod (plist-get info :logbook-date))))
+                                ;; `:logbook-date' will keep on getting updating until the last
+                                ;; parsed (first entered) "state changed to DONE" entry.
                                 (plist-put info :logbook-date timestamp)))
                             (when from-state ;For debug purpose
                               (push `(from_state . ,from-state) logbook-entry))))
@@ -1863,7 +1867,13 @@ holding contextual information."
                           (let ((note (string-trim
                                        (match-string-no-properties 1 para-raw-str))))
                             ;; (message "[ox-hugo logbook DBG] note : %s @ %s" note timestamp)
-                            (push `(note . ,note) logbook-entry)))
+                            (push `(note . ,note) logbook-entry)
+                            ;; Update the `lastmod' field using the
+                            ;; note's timestamp.
+                            ;; *This always works because the newest state change or note
+                            ;; entry is always put to the top of the LOGBOOK.*
+                            (unless (plist-get info :logbook-lastmod)
+                              (plist-put info :logbook-lastmod timestamp))))
 
                          (t
                           (user-error "LOGBOOK drawer entry is neither a state change, nor a note."))))
@@ -1883,11 +1893,15 @@ holding contextual information."
                 nil))    ;lambda return for (org-element-map lst 'item
             nil) ;lambda return for (org-element-map drawer 'plain-list ..
           nil :first-match) ;The 'logbook element will have only one 'plain-list element
-        ;; TODO: Code to save the notes content and date/lastmod
-        ;; timestamps to appropriate front-matter.
         ;; (message "[ox-hugo logbook DBG] logbook-notes : %S" logbook-notes)
         ;; (message "[ox-hugo logbook DBG] logbook derived `date' : %S" (plist-get info :logbook-date))
         ;; (message "[ox-hugo logbook DBG] logbook derived `lastmod' : %S" (plist-get info :logbook-lastmod))
+
+        ;; Don't set `:logbook-lastmod' if `:logbook-date' is not
+        ;; parsed from the LOGBOOK drawer (which means that the post
+        ;; is not marked as DONE).
+        (unless (plist-get info :logbook-date)
+          (plist-put info :logbook-lastmod nil))
         (plist-put info :logbook logbook-notes)
         "")) ;Nothing from the LOGBOOK gets exported to the Markdown body
      (t

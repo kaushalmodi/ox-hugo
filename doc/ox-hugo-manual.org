@@ -876,8 +876,9 @@ Also see the [[*Custom Front-matter Parameters][Custom Front-matter Parameters]]
   4. =#+date:= keyword
 - Precedence for =lastmod= parsing ::
   1. Last (second or later) transition to a /DONE/ state recorded in
-     =:LOGBOOK:= (see {{{titleref(Drawers#logbook-dates,Dates parsed
-     from ~:LOGBOOK:~ drawers)}}})
+     =:LOGBOOK:=, or timestamp of the last added note (see
+     {{{titleref(Drawers#logbook-dates,Dates parsed from ~:LOGBOOK:~
+     drawers)}}})
   2. =lastmod= set automatically if =:EXPORT_HUGO_AUTO_SET_LASTMOD: t=
      *and* if it's not derived from the =:LOGBOOK:= drawer.
   3. =EXPORT_HUGO_LASTMOD= subtree property or =#+hugo_lastmod:= keyword
@@ -4410,10 +4411,8 @@ state changed or under the heading where the ~org-add-note~ command
   ~org-done-keywords~ values[fn:15] i.e. transition to /DONE/ state.
 - ~lastmod~ :: This front-matter variable is updated with the
   timestamp associated with the *last* TODO state transition to the
-  /DONE/ state.
-
-  Note that if only one transition to the /DONE/ state was recorded,
-  then this front-matter variable remains unset.
+  /DONE/ state, or with the *last* added note (whichever is the
+  latest).
 
 #+begin_note
 The ~date~ and ~lastmod~ values parsed from the ~:LOGBOOK:~ drawer

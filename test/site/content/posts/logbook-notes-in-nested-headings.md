@@ -2,6 +2,7 @@
 title = "LOGBOOK Notes in nested headings"
 description = "Parse notes from LOGBOOK drawers in top-level and nested headings."
 layout = "alternate-single"
+lastmod = 2022-05-11T12:17:00+00:00
 tags = ["front-matter", "notes", "logbook"]
 draft = false
 [logbook]
@@ -18,10 +19,6 @@ draft = false
       timestamp = 2022-05-11T12:17:00+00:00
       note = "Note in the top-heading LOGBOOK drawer"
 +++
-
-The `lastmod` field is not set for this post (even if it has a note
-with timestamp) because this post is not marked as DONE.
-
 
 ## Sub-heading {#sub-heading}
 

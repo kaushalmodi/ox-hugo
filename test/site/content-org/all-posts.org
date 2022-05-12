@@ -7372,8 +7372,6 @@ note first in the TOML table array to the oldest note at the last.
 #+begin_description
 Parse notes from LOGBOOK drawers in top-level and nested headings.
 #+end_description
-The ~lastmod~ field is not set for this post (even if it has a note
-with timestamp) because this post is not marked as DONE.
 **** Sub-heading
 :LOGBOOK:
 - Note taken on [2022-05-11 Wed 12:18] \\
@@ -7405,6 +7403,19 @@ with timestamp) because this post is not marked as DONE.
   marked DONE, but this note's timestamp should not affect the post's
   ~lastmod~ field (because this is not the toplevel LOGBOOK drawer).
 :END:
+*** DONE Parse lastmod from LOGBOOK Notes with no recorded state changes :lastmod:
+CLOSED: <2022-05-10 Tue>
+:PROPERTIES:
+:EXPORT_FILE_NAME: logbook-lastmod-from-notes
+:END:
+:LOGBOOK:
+- Note taken on [2022-05-12 Thu 10:56] \\
+  Some note.
+:END:
+#+begin_description
+Parse ~lastmod~ from toplevel LOGBOOK notes even if the drawer didn't
+record any state changes.
+#+end_description
 ** Extra Front-matter tests                        :extra:verbatim:src_block:
 *** Extra Front-matter
 :PROPERTIES:

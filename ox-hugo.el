@@ -1898,12 +1898,6 @@ holding contextual information."
         ;; (message "[ox-hugo logbook DBG] logbook-notes : %S" logbook-notes)
         ;; (message "[ox-hugo logbook DBG] logbook derived `date' : %S" (plist-get info :logbook-date))
         ;; (message "[ox-hugo logbook DBG] logbook derived `lastmod' : %S" (plist-get info :logbook-lastmod))
-
-        ;; Don't set `:logbook-lastmod' if `:logbook-date' is not
-        ;; parsed from the LOGBOOK drawer (which means that the post
-        ;; is not marked as DONE).
-        (unless (plist-get info :logbook-date)
-          (plist-put info :logbook-lastmod nil))
         (plist-put info :logbook logbook-notes)
         "")) ;Nothing from the LOGBOOK gets exported to the Markdown body
      (t

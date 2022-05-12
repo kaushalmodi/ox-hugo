@@ -863,9 +863,19 @@ set.
 | =weight = 123= (in =[menu.foo]=)   | =:EXPORT_HUGO_MENU: :menu foo=         | Menu weight is auto-calculated unless specified                            |
 |------------------------------------+----------------------------------------+----------------------------------------------------------------------------|
 ***** Notes
-- Precedence for =date= parsing :: =CLOSED= subtree property /more
-     than/ =EXPORT_DATE= subtree property /more than/ =#+date:=
-     keyword.
+- Precedence for =date= parsing ::
+  1. First transition to a /DONE/ state recorded in =:LOGBOOK:= (see
+     {{{titleref(Drawers#logbook-dates,Dates parsed from ~:LOGBOOK:~
+     drawers)}}})
+  2. =CLOSED= subtree property
+  3. =EXPORT_DATE= subtree property
+  4. =#+date:= keyword
+- Precedence for =lastmod= parsing ::
+  1. =lastmod= set automatically if =:EXPORT_HUGO_AUTO_SET_LASTMOD: t=
+  2. Last (second or later) transition to a /DONE/ state recorded in
+     =:LOGBOOK:= (see {{{titleref(Drawers#logbook-dates,Dates parsed
+     from ~:LOGBOOK:~ drawers)}}})
+  3. =EXPORT_HUGO_LASTMOD= subtree property or =#+hugo_lastmod:= keyword
 - Precedence for =draft= parsing :: Org TODO state based /draft/ state
      /more than/ =EXPORT_HUGO_DRAFT= subtree property.
 - Custom front-matter parameters :: See the [[*Custom Front-matter Parameters][Custom Front-matter
@@ -4352,33 +4362,49 @@ are based on the ~org-export-dictionary~ variable from ~ox.el~.
 #+begin_description
 How Org Drawers get exported to front-matter.
 #+end_description
+#+begin_note
+This feature will work only if the ~org-hugo-front-matter-format~ is
+left at its default value of ~"toml"~.
+#+end_note
 See [[info:org#Drawers]] to learn more about the Org Drawers feature.
 **** ~:LOGBOOK:~ Drawer
 :PROPERTIES:
 :CUSTOM_ID: logbook-drawer
 :END:
-Ox-hugo natively supports parsing of these two kinds of information in
-the ~:LOGBOOK:~ drawers:
-1. Notes saved to the ~:LOGBOOK:~ drawers.
-2. /TODO/ state changes saved to these drawers.
+Ox-hugo supports parsing of these two kinds of information from the
+~:LOGBOOK:~ drawers:
+1. /TODO/ state changes saved to these drawers.
+2. Notes saved to the ~:LOGBOOK:~ drawers.
 
 #+begin_note
-For now, the ~:LOGBOOK:~ exporting feature works well only if the
-~org-log-note-headings~ is left at its default value.
+The ~:LOGBOOK:~ dates and notes exporting features work only if the
+~org-log-note-headings~ variable is left uncustomized, at its default
+value.
 #+end_note
 
-This feature works only if:
-1. ~org-log-into-drawer~ is set to a non-nil value (or the
-   ~:LOG_INTO_DRAWER:~ subtree property is set to a non-nil
-   value)[fn:13], *and*
-2. Drawer exporting is enabled[fn:14]. For example, enable that using
-   ~#+options: d:t~ keyword or ~:EXPORT_OPTIONS: d:t~ subtree
-   property.
+These features work only if:
+1. ~org-log-into-drawer~ (or the ~:LOG_INTO_DRAWER:~ subtree property)
+   is set to a non-nil value[fn:13], *and*
+2. Drawer exporting is enabled. You can enable that using ~#+options:
+   d:t~ keyword or ~:EXPORT_OPTIONS: d:t~ subtree property[fn:14].
 
-With ~LOG_INTO_DRAWER:~ enabled, the ~:LOGBOOK:~ drawer (default name
+With ~:LOG_INTO_DRAWER:~ enabled, the ~:LOGBOOK:~ drawer (default name
 of this drawer) is created immediately after the Org heading whose
-state changed or under where the ~org-add-note~ (bound by default to
-~C-c C-z~) command was called.
+state changed or under the heading where the ~org-add-note~ command
+(bound by default to ~C-c C-z~) was called.
+***** Dates parsed from ~:LOGBOOK:~ /TODO/ state changes
+:PROPERTIES:
+:CUSTOM_ID: logbook-dates
+:END:
+- ~date~ :: This front-matter variable is updated with the timestamp
+  associated with the *first* TODO state transition to one of the
+  ~org-done-keywords~ values[fn:15] i.e. transition to /DONE/ state.
+- ~lastmod~ :: This front-matter variable is updated with the
+  timestamp associated with the *last* TODO state transition to the
+  /DONE/ state.
+
+  Note that if only one transition to the /DONE/ state was recorded,
+  then this front-matter variable remains unset.
 ***** ~:LOGBOOK:~ Notes
 - Notes added to the ~:LOGBOOK:~ drawer under the post heading will be
   exported to the TOML Table Array ~[[logbook._toplevel.notes]]~ in
@@ -4386,15 +4412,16 @@ state changed or under where the ~org-add-note~ (bound by default to
 
   Here, *_toplevel* is a special/reserved TOML Table name to store
   notes associated with the post's main heading.
-- Notes added to the ~:LOGBOOK:~ drawer under a post's *sub-heading*
+- Notes added to the ~:LOGBOOK:~ drawer under a post's sub-heading
   will be exported to the TOML Table Array ~[[logbook.<sub heading
   title>.notes]]~ in the page front-matter.
 
 By design, Ox-hugo exports the ~:LOGBOOK:~ drawer notes as /data/ to
-the front-matter, and user is given freedom on where and how to render
-that data.
-****** ~logbook~ front-matter Hugo templating example
-Here is one way of rendering that data in Hugo templates:
+the front-matter, and user is given the freedom on where and how to
+render that data.
+***** ~logbook~ front-matter Hugo templating examples
+This section shared just one of the ways to render the ~logbook~
+front-matter data using Hugo templates.
 
 Create ~layouts/partials/logbook_notes.html~ in your Hugo site repo
 with these contents:
@@ -4422,9 +4449,10 @@ with these contents:
 #+end_src
 
 This partial accepts a Hugo *dict* input argument with keys *page* and
-*notes_param*. Here's an example of how one could use that partial in
-the ~single.html~ template:
-******* Example of rendering "_toplevel" notes
+*notes_param*.
+****** Example of rendering "_toplevel" notes
+Here's an example of how one could use that partial in the
+~single.html~ template:
 #+name: code__rendering_toplevel_logbook_notes
 #+caption: Example of using ~logbook_notes.html~ Hugo Partial in ~single.html~ layout file
 #+begin_src go-html-template
@@ -4434,10 +4462,10 @@ the ~single.html~ template:
 #+end_src
 
 Above,
-- The ~page~ key is passed the context of the current page ~$.Page~.
+- The ~page~ key is passed the context of the current page: ~$.Page~.
 - The ~notes_param~ key is passed the hierarchical path to the
   /toplevel/ Logbook notes: ~"logbook._toplevel.notes"~.
-******* Example of rendering notes under sub-headings
+****** Example of rendering notes under sub-headings
 Hugo's [[https://gohugo.io/templates/render-hooks/#heading-link-example][Render Hooks for Headings]] feature can be leveraged for
 rendering notes entered in ~:LOGBOOK:~ drawers under sub-headings in a
 post.
@@ -4455,12 +4483,14 @@ site repo with these contents:
                  "notes_param" (printf "logbook.%s.notes" .PlainText)) }}
 #+end_src
 
-Above, the same ~logbook_notes.html~ partial is used but with
-different value for the ~notes_param~ key. This time, it derives the
+Above, the same ~logbook_notes.html~ partial is used but with the
+~notes_param~ key set differently --- This time, it derives the
 hierarchical path to the ~logbook. .. .notes~ TOML Table Array using
-the ~.PlainText~ variable. For example, if the sub-heading title is
-"Example of rendering notes under sub-headings", the value of
-~.PlainText~ for that heading will be the same.
+the Heading Render Hook's ~.PlainText~ variable.
+
+For example, if the sub-heading title is "Example of rendering notes
+under sub-headings", the value of ~.PlainText~ for that heading will
+be the same.
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"
@@ -4829,10 +4859,8 @@ Categories,)}}}.
   maintaining global variables.
 * Footnotes
 
-
-
-
-
+[fn:15] The default value of the buffer-local variable
+~org-done-keywords~ in any Org buffer is ~("DONE")~.
 
 [fn:14] See the *'d'* option in [[info:org#Export Settings]].
 

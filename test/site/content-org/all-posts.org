@@ -7382,6 +7382,13 @@ Parse notes from LOGBOOK drawers in top-level and nested headings.
 - Note taken on [2022-05-11 Wed 17:12] \\
   Another note in a different sub heading.
 :END:
+Some text in body between two ~:LOGBOOK:~ drawers.
+:LOGBOOK:
+- Note taken on [2022-05-12 Thu 13:44] \\
+  Testing a pathogenic case where the user has forcefully inserted a
+  ~:LOGBOOK:~ drawer in the middle of subtree content.
+:END:
+Text after the second ~:LOGBOOK:~ drawer.
 *** DONE Post marked as DONE with LOGBOOK Notes in nested headings  :lastmod:
 :PROPERTIES:
 :EXPORT_FILE_NAME: logbook-done-post-with-notes-in-sub-headings

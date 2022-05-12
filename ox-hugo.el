@@ -1766,22 +1766,10 @@ channel."
   "Transcode a DRAWER element from Org to appropriate Hugo front-matter.
 CONTENTS holds the contents of the block.  INFO is a plist
 holding contextual information."
-  (let* ((logbook-drawer-name (org-log-into-drawer))
-         (drawer-name (org-element-property :drawer-name drawer))
-         (parent1-section (let ((p (org-export-get-parent drawer)))
-                            (and (equal 'section (org-element-type p)) p)))
-         (parent2-headline (let ((p (and parent1-section
-                                         (org-export-get-parent parent1-section))))
-                             (and (equal 'headline (org-element-type p)) p)))
-         (sub-heading (org-hugo--plainify-string
-                       (org-element-property :title parent2-headline)
-                       info)))
-    ;; (message "[org-hugo-drawer DBG] drawer name : %S" logbook-drawer-name)
-    ;; (message "[org-hugo-drawer DBG] parent1-section : %S" parent1-section)
-    ;; (message "[org-hugo-drawer DBG] parent2-headline : %S" parent2-headline)
-    ;; (message "[org-hugo-drawer DBG] sub-heading : %S" sub-heading)
+  (let ((drawer-name (org-element-property :drawer-name drawer)))
     (cond
-     ((equal logbook-drawer-name drawer-name)
+     ;; :LOGBOOK:
+     ((equal drawer-name (org-log-into-drawer))
       ;; (message "[ox-hugo logbook DBG] elem type: %s" (org-element-type drawer))
       ;; (drawer
       ;;  ..
@@ -1790,7 +1778,22 @@ holding contextual information."
       ;;    (paragraph
       ;;     <State change text>
       ;;     (timestamp <timestamp> )))))
-      (let ((logbook-notes (plist-get info :logbook)))
+      (let* ((parent-heading (catch 'found
+                               (let ((el drawer))
+                                 (while t
+                                   (let ((p-el (org-export-get-parent el)))
+                                     (when (or (null p-el)
+                                               (equal 'headline (org-element-type p-el)))
+                                       ;; Return when there's no parent element
+                                       ;; or if the parent element is a `headline'.
+                                       (throw 'found p-el))
+                                     (setq el p-el))))))
+             (sub-heading (org-hugo--plainify-string
+                           (org-element-property :title parent-heading)
+                           info))
+             (logbook-notes (plist-get info :logbook)))
+        ;; (message "[org-hugo-drawer DBG] parent-heading : %S" parent-heading)
+        ;; (message "[org-hugo-drawer DBG] sub-heading : %S" sub-heading)
         (org-element-map drawer 'plain-list
           (lambda (lst)
             (org-element-map lst 'item
@@ -1900,6 +1903,7 @@ holding contextual information."
         ;; (message "[ox-hugo logbook DBG] logbook derived `lastmod' : %S" (plist-get info :logbook-lastmod))
         (plist-put info :logbook logbook-notes)
         "")) ;Nothing from the LOGBOOK gets exported to the Markdown body
+     ;; Other Org Drawers
      (t
       (org-html-drawer drawer contents info)))))
 

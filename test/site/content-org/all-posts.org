@@ -7313,6 +7313,12 @@ This test removes the ~foo~ front-matter key from the exported file
 :EXPORT_FILE_NAME: parsing-notes-from-logbook
 :END:
 :LOGBOOK:
+- Note taken on [2022-05-12 Thu 08:13] \\
+  Another update to the post. This update timestamp should update the
+  ~lastmod~.
+- State "DONE"       from "TEST__TODO" <2022-05-10 Tue 08:13>
+- State "TODO"       from "DRAFT"      <2022-05-08 Sun 06:13>
+- State "DRAFT"      from "DONE"       <2022-05-06 Fri 04:12>
 - Note taken on [2022-05-04 Wed 13:15] \\
   This new note added last should be the first element of the
   ~[[logbook.notes]]~ TOML table array.
@@ -7366,6 +7372,8 @@ note first in the TOML table array to the oldest note at the last.
 #+begin_description
 Parse notes from LOGBOOK drawers in top-level and nested headings.
 #+end_description
+The ~lastmod~ field is not set for this post (even if it has a note
+with timestamp) because this post is not marked as DONE.
 **** Sub-heading
 :LOGBOOK:
 - Note taken on [2022-05-11 Wed 12:18] \\
@@ -7375,6 +7383,27 @@ Parse notes from LOGBOOK drawers in top-level and nested headings.
 :LOGBOOK:
 - Note taken on [2022-05-11 Wed 17:12] \\
   Another note in a different sub heading.
+:END:
+*** DONE Post marked as DONE with LOGBOOK Notes in nested headings  :lastmod:
+:PROPERTIES:
+:EXPORT_FILE_NAME: logbook-done-post-with-notes-in-sub-headings
+:END:
+:LOGBOOK:
+- State "DONE"       from "DRAFT"      <2022-05-01 Sun 08:49>
+- State "DRAFT"      from "TODO"       <2022-04-17 Sun 08:49>
+- State "TODO"       from              <2022-04-01 Fri 08:48>
+:END:
+#+begin_description
+Parse notes from LOGBOOK drawers in top-level and nested headings.
+#+end_description
+The ~lastmod~ field is not set for this post (even if it has a note
+with timestamp) because this post is not marked as DONE.
+**** Sub-heading
+:LOGBOOK:
+- Note taken on [2022-05-12 Thu 08:49] \\
+  This LOGBOOK note was added in a sub-heading *after* the post was
+  marked DONE, but this note's timestamp should not affect the post's
+  ~lastmod~ field (because this is not the toplevel LOGBOOK drawer).
 :END:
 ** Extra Front-matter tests                        :extra:verbatim:src_block:
 *** Extra Front-matter

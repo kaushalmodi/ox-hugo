@@ -4,6 +4,8 @@ description = """
   Parse the date from an entry like `"- State "DONE" from "DRAFT"
   [2018-09-06 Thu 11:25]`.
   """
+date = 2018-09-06T11:38:00+00:00
+lastmod = 2022-01-11T11:22:00+00:00
 tags = ["dates", "date", "logbook"]
 draft = false
 +++

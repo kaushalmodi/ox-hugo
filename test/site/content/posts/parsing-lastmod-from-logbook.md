@@ -4,6 +4,8 @@ description = """
   If LOGBOOK has multiple entries of `"- State "DONE" from .."`, use the
   newest entry to parse the `lastmod` date from.
   """
+date = 2018-09-06T11:40:00+00:00
+lastmod = 2018-09-06T11:41:00+00:00
 tags = ["dates", "lastmod", "logbook"]
 draft = false
 +++

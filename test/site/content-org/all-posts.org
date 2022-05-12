@@ -7321,8 +7321,8 @@ This test removes the ~foo~ front-matter key from the exported file
 - Note taken on [2018-09-06 Thu 11:37] \\
   A note ~mono~.
 - State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:25]
-- State "DRAFT"      from "TODO"       [2018-09-06 Thu 11:25]
-- State "TODO"       from              [2018-09-06 Thu 11:25]
+- State "DRAFT"      from "TODO"       [2018-09-04 Tue 11:25]
+- State "TODO"       from              [2018-09-01 Sat 11:25]
 :END:
 #+begin_description
 Parse notes from LOGBOOK into a TOML table (YAML map?) of

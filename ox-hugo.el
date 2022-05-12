@@ -1270,19 +1270,24 @@ INFO is a plist used as a communication channel."
 (defun org-hugo--get-date (info fmt)
   "Return current post's publish date as a string.
 
-1. If the point is in an Org subtree which has the `CLOSED' property
-   set (usually generated automatically when switching a heading's
-   TODO state to \"DONE\"), get the `CLOSED' time stamp.
+The date is derived with this precedence:
 
-2. If that's not the case, but the subtree has the `EXPORT_DATE'
-   property set, use the date from that.
+1. `:logbook-date' property from INFO
 
-3. Else, try to get the date from the \"#+date\" keyword in the Org
-   file, and format it using the time format string FMT.  If this
-   keyword is not set either, return nil.
+2. `CLOSED' time stamp if the point is in an Org subtree with the
+   `CLOSED' property set (usually generated automatically when
+   switching a heading's TODO state to \"DONE\")
+
+3. `EXPORT_DATE' property in current post subtree
+
+4. Date if set in the Org file's \"#+date\" keyword. This date is
+   formatted using the time format string FMT.
+
+If none of the above apply, return nil.
 
 INFO is a plist used as a communication channel."
   (or
+   (plist-get info :logbook-date)
    (org-entry-get (point) "CLOSED")
    (org-string-nw-p
     (org-export-data (plist-get info :date) info)) ;`org-export-data' required
@@ -1334,11 +1339,14 @@ cannot be formatted in Hugo-compatible format."
                      ;; (message "[ox-hugo date DBG] 1 %s" (plist-get info date-key))
                      ;; (message "[ox-hugo date DBG] 2 %s" (org-export-data (plist-get info date-key) info))
                      (org-hugo--get-date info date-fmt))
+                    ((equal date-key :hugo-lastmod)
+                     (or (plist-get info :logbook-lastmod) ;lastmod derived from LOGBOOK gets higher precedence
+                         (org-string-nw-p (plist-get info date-key))))
                     ((and (equal date-key :hugo-publishdate)
                           (org-entry-get (point) "SCHEDULED"))
                      ;; Get the date from the "SCHEDULED" property.
                      (org-entry-get (point) "SCHEDULED"))
-                    (t ;:hugo-lastmod, :hugo-publishdate, :hugo-expirydate
+                    (t            ;:hugo-publishdate, :hugo-expirydate
                      (org-string-nw-p (plist-get info date-key)))))
          (dt-rfc3339 (cond
                       ;; If the date set for the DATE-KEY parameter is
@@ -1787,21 +1795,25 @@ holding contextual information."
                 (org-element-map item 'paragraph
                   (lambda (para)
                     ;; (pp para)
-                    (let ((logbook-entry ())
-                          (para-raw-str (org-export-data para info)))
-                      ;; (message "\n[ox-hugo logbook DBG] paragraph raw str : %s" para-raw-str)
+                    (let* ((logbook-entry ())
+                           (para-raw-str (org-export-data para info))
+                           ;; Parse the logbook entry's timestamp.
+                           (timestamp
+                            (org-element-map para 'timestamp
+                              (lambda (ts)
+                                ;; (pp ts)
+                                (let* ((ts-raw-str (org-element-property :raw-value ts))
+                                       (ts-str (org-hugo--org-date-time-to-rfc3339 ts-raw-str info)))
+                                  ;; (message "[ox-hugo logbook DBG] ts: %s, ts fmtd: %s"
+                                  ;;          ts-raw-str ts-str)
+                                  (push `(timestamp . ,ts-str) logbook-entry)
+                                  ts-str)) ;lambda return for (org-element-map para 'timestamp
+                              nil :first-match))) ;Each 'paragraph element will have only one 'timestamp element
 
-                      ;; Parse the logbook entry's timestamp.
-                      (org-element-map para 'timestamp
-                        (lambda (ts)
-                          ;; (pp ts)
-                          (let* ((ts-raw-str (org-element-property :raw-value ts))
-                                 (ts-str (org-hugo--org-date-time-to-rfc3339 ts-raw-str info)))
-                            ;; (message "[ox-hugo logbook DBG] ts: %s, ts fmtd: %s"
-                            ;;          ts-raw-str ts-str)
-                            (push `(timestamp . ,ts-str) logbook-entry))
-                          nil) ;lambda return for (org-element-map para 'timestamp
-                        nil :first-match) ;Each 'paragraph element will have only one 'timestamp element
+                      ;; (message "\n[ox-hugo logbook DBG] paragraph raw str : %s" para-raw-str)
+                      ;; (message "[ox-hugo logbook DBG] timestamp : %s" timestamp)
+                      (unless timestamp
+                        (user-error "No time stamp is recorded in the LOGBOOK drawer entry."))
 
                       (save-match-data
                         (cond
@@ -1809,28 +1821,47 @@ holding contextual information."
                          ((string-match "^State\\s-+\\(?1:\".+?\"\\)*\\s-+from\\s-+\\(?2:\".+?\"\\)*"
                                         para-raw-str)
                           (let ((to-state (org-string-nw-p
-                                           (save-match-data ;Required because `string-trim' changes match data
-                                             (string-trim
-                                              (or (match-string-no-properties 1 para-raw-str) "")
-                                              "\"" "\""))))
+                                           (replace-regexp-in-string
+                                            ;; Handle corner case: If a TODO state has "__" in them, the
+                                            ;; underscore will be escaped. Remove that "\".
+                                            "\\\\" ""
+                                            (save-match-data ;Required because `string-trim' changes match data
+                                              (string-trim
+                                               (or (match-string-no-properties 1 para-raw-str) "")
+                                               "\"" "\"")))))
                                 (from-state (org-string-nw-p
-                                             (save-match-data ;Required because `string-trim' changes match data
-                                               (string-trim
-                                                (or (match-string-no-properties 2 para-raw-str) "")
-                                                "\"" "\"")))))
+                                             (replace-regexp-in-string
+                                              ;; Handle corner case: If a TODO state has "__" in them, the
+                                              ;; underscore will be escaped. Remove that "\".
+                                              "\\\\" ""
+                                              (save-match-data ;Required because `string-trim' changes match data
+                                                (string-trim
+                                                 (or (match-string-no-properties 2 para-raw-str) "")
+                                                 "\"" "\""))))))
                             ;; (message "[ox-hugo logbook DBG] state change : from %s to %s @ %s"
-                            ;;          from-state to-state (plist-get logbook-entry :timestamp))
+                            ;;          from-state to-state timestamp)
                             (when to-state
-                              (push `(to_state . ,to-state) logbook-entry))
-                            (when from-state
+                              (push `(to_state . ,to-state) logbook-entry)
+                              ;; (message "[ox-hugo logbook DBG] org-done-keywords: %S" org-done-keywords)
+                              (when (member to-state org-done-keywords)
+                                ;; The first TODO state change entry will be the latest one, and
+                                ;; `:logbook-date' would already have been set to that.
+                                ;; So if `:logbook-lastmod' is not set, set that that to the
+                                ;; value of `:logbook-date'.
+                                (unless (plist-get info :logbook-lastmod)
+                                  (when (plist-get info :logbook-date)
+                                    (plist-put info :logbook-lastmod (plist-get info :logbook-date))))
+                                (plist-put info :logbook-date timestamp)))
+                            (when from-state ;For debug purpose
                               (push `(from_state . ,from-state) logbook-entry))))
+
                          ;; Parse (assq 'note org-log-note-headings)
                          ((string-match "^Note taken on .*?\n\\(?1:\\(.\\|\n\\)*\\)" para-raw-str)
                           (let ((note (string-trim
                                        (match-string-no-properties 1 para-raw-str))))
-                            ;; (message "[ox-hugo logbook DBG] note : %s @ %s"
-                            ;;          note (plist-get logbook-entry :timestamp))
+                            ;; (message "[ox-hugo logbook DBG] note : %s @ %s" note timestamp)
                             (push `(note . ,note) logbook-entry)))
+
                          (t
                           (user-error "LOGBOOK drawer entry is neither a state change, nor a note."))))
 
@@ -1851,7 +1882,9 @@ holding contextual information."
           nil :first-match) ;The 'logbook element will have only one 'plain-list element
         ;; TODO: Code to save the notes content and date/lastmod
         ;; timestamps to appropriate front-matter.
-        (message "[ox-hugo logbook DBG] logbook-notes : %S" logbook-notes)
+        ;; (message "[ox-hugo logbook DBG] logbook-notes : %S" logbook-notes)
+        ;; (message "[ox-hugo logbook DBG] logbook derived `date' : %S" (plist-get info :logbook-date))
+        ;; (message "[ox-hugo logbook DBG] logbook derived `lastmod' : %S" (plist-get info :logbook-lastmod))
         (plist-put info :logbook logbook-notes)
         "")) ;Nothing from the LOGBOOK gets exported to the Markdown body
      (t

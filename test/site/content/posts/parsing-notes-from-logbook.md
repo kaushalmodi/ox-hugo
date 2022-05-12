@@ -47,10 +47,10 @@ For example,
 ```
 
 should export only the notes to an array of TOML tables with key
-`logbook.notes`. The notes are ordered starting from the newest note
-first in the TOML table array to the oldest note at the last.
+`logbook.<..>.notes`. The notes are ordered starting from the newest
+note first in the TOML table array to the oldest note at the last.
 
 Note
 : The state change notes are intentionally put in this test
     LOGBOOK, because we want to ensure that they don't seep into the
-    `logbook.notes` front-matter.
+    `logbook.<..>.notes` front-matter.

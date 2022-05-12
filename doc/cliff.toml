@@ -94,6 +94,7 @@ All notable changes to this project will be documented in this file.\n
 
       # Non-conventional
       { message = "^minor", skip = true},
+      { message = "\\b(wip|WIP)\\b", skip = true},
       { message = "^([Cc]leanup|[Cc]onsisten|[Tt]ypo)", skip = true},
       { message = "users(\\.toml)*", skip = true},
       { message = "^tool", skip = true}, # Commits related to tools like git-cliff, Makefile, etc.

@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Require org-info instead of ol-info if old Org version detected … If a user is running Emacs 26.3 with the default Org installation, … they would be using Org 9.1.9 and so they will need to use org-in… ([[https://github.com/kaushalmodi/ox-hugo/commit/772d53dee36773471f3b471b73ffdc3822e3b6e9][772d53d]])
 - LOGBOOK state change derived `lastmod` -> highest precedence ([[https://github.com/kaushalmodi/ox-hugo/commit/e4b60d98aec6451cd5e41a8d2d05b89b79c10c00][e4b60d9]])
 - Only the toplevel LOGBOOK activity should update date/lastmod ([[https://github.com/kaushalmodi/ox-hugo/commit/fd3ed77a76363f1ebee257d5ae81308847ac2f2e][fd3ed77]])
+- Always export `lastmod` parsed from LOGBOOK notes … Hugo allows the presence `lastmod` and no `date` front-matter. In that … case, the `.Date` and `.Lastmod` both get set to the `lastmod` … front-matt… ([[https://github.com/kaushalmodi/ox-hugo/commit/6050ee6df3b186caa25601de874409036d5fd12b][6050ee6]])
 
 *** :memo: Documentation
 :PROPERTIES:
@@ -67,17 +68,6 @@ All notable changes to this project will be documented in this file.
 :END:
 
 - Add nested menu example … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/325][325]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/059f2b822cb95e1b9e84cbd37c266bccacdf56f4][059f2b8]])
-
-*** :bento: Other
-:PROPERTIES:
-:CUSTOM_ID: other
-:END:
-
-- Logbook content parsing ([[https://github.com/kaushalmodi/ox-hugo/commit/275c71a9f0244b5c34a06fbc4e0ad9a7024116f1][275c71a]])
-- Logbook: Collect all logbook state changes in a list of plists ([[https://github.com/kaushalmodi/ox-hugo/commit/c53e3fb01b36a146a6ee188f3c5e883ecfbdcb58][c53e3fb]])
-- Logbook: Parse LOGBOOK notes entered using C-c C-z ([[https://github.com/kaushalmodi/ox-hugo/commit/e6c78c48cea1441ac8191b72c4e45a742cf18652][e6c78c4]])
-- Export all LOGBOOK activity to org-logbook front-matter for now ([[https://github.com/kaushalmodi/ox-hugo/commit/95f179deed221b603ecdca135bd1a838fbf1cf58][95f179d]])
-- Change the format of the logbook front-matter … Now the `notes` table array is nested inside the `logbook` table. ([[https://github.com/kaushalmodi/ox-hugo/commit/194a321c57c023b6e0c302f98a16ae5bc098b9f4][194a321]])
 
 ** *0.11.2* - <2022-05-05>
 
@@ -1216,7 +1206,6 @@ All notable changes to this project will be documented in this file.
 - Add test for file based export allowing broken links … Ref: Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/587][587]] ([[https://github.com/kaushalmodi/ox-hugo/commit/e9b1bacbd967ac848d869131ae5cbfd5bfb16140][e9b1bac]])
 - Move auto-update of org-id locations to the "wim" export function ([[https://github.com/kaushalmodi/ox-hugo/commit/63c87ee1ecfa0361dc4a6efa71ec994a3a409b9b][63c87ee]])
 - Silence the "Finding ID locations .." messages ([[https://github.com/kaushalmodi/ox-hugo/commit/8f3ba7d878dc52371102eacaf69abe184cd91255][8f3ba7d]])
-- Allow exporting broken-links when buffer pre-processing is enabled too … Buffer pre-processing is enabled by default when doing subtree … exports. … Ref: Issue # [[https://github.com/kaushalmodi/ox-hu… ([[https://github.com/kaushalmodi/ox-hugo/commit/4d10d7f52f25ed45fb44869329ffe00c11c0692a][4d10d7f]])
 - Include colon in the src-block-number span ([[https://github.com/kaushalmodi/ox-hugo/commit/9202948b0d296c3fefe2e66011a1ba11226da201][9202948]])
 - Update tests; ref PR # [[https://github.com/kaushalmodi/ox-hugo/pull/592][592]] ([[https://github.com/kaushalmodi/ox-hugo/commit/06ea4f051fe5eecedd68ecad6dfdabe5c6637e66][06ea4f0]])
 - Replace `org-hugo--get-element-path` with `org-hugo-get-heading-slug` ([[https://github.com/kaushalmodi/ox-hugo/commit/d3ea986ccf0fafbf77fadd443b17e38b820c4540][d3ea986]])

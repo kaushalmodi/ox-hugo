@@ -862,7 +862,11 @@ set.
 | =tags_weight = 123= (auto-calc)    | =:EXPORT_HUGO_WEIGHT: :tags auto=      | When set to =:FOO auto=, /FOO/ taxonomy weight is auto-calculated          |
 | =weight = 123= (in =[menu.foo]=)   | =:EXPORT_HUGO_MENU: :menu foo=         | Menu weight is auto-calculated unless specified                            |
 |------------------------------------+----------------------------------------+----------------------------------------------------------------------------|
-***** Notes
+Also see the [[*Custom Front-matter Parameters][Custom Front-matter Parameters]] section.
+***** Front-matter Precedence
+:PROPERTIES:
+:CUSTOM_ID: front-matter-precedence
+:END:
 - Precedence for =date= parsing ::
   1. First transition to a /DONE/ state recorded in =:LOGBOOK:= (see
      {{{titleref(Drawers#logbook-dates,Dates parsed from ~:LOGBOOK:~
@@ -871,15 +875,15 @@ set.
   3. =EXPORT_DATE= subtree property
   4. =#+date:= keyword
 - Precedence for =lastmod= parsing ::
-  1. =lastmod= set automatically if =:EXPORT_HUGO_AUTO_SET_LASTMOD: t=
-  2. Last (second or later) transition to a /DONE/ state recorded in
+  1. Last (second or later) transition to a /DONE/ state recorded in
      =:LOGBOOK:= (see {{{titleref(Drawers#logbook-dates,Dates parsed
      from ~:LOGBOOK:~ drawers)}}})
+  2. =lastmod= set automatically if =:EXPORT_HUGO_AUTO_SET_LASTMOD: t=
+     *and* if it's not derived from the =:LOGBOOK:= drawer.
   3. =EXPORT_HUGO_LASTMOD= subtree property or =#+hugo_lastmod:= keyword
-- Precedence for =draft= parsing :: Org TODO state based /draft/ state
-     /more than/ =EXPORT_HUGO_DRAFT= subtree property.
-- Custom front-matter parameters :: See the [[*Custom Front-matter Parameters][Custom Front-matter
-  Parameters]] section.
+- Precedence for =draft= parsing ::
+  1. Org TODO state based /draft/ state
+  2. =EXPORT_HUGO_DRAFT= subtree property
 **** For file-based exports
 #+caption: Hugo front-matter translation for file-based exports
 #+attr_html: :class sane-table
@@ -1089,6 +1093,11 @@ It's normal for one to choose to auto-set the /last modified/ date for
 all the posts. So instead of setting the above property for each post
 individually, it might be more convenient to simply put
 =#+hugo_auto_set_lastmod: t= at the top of the file.
+
+But note that if the =lastmod= date is parsed from the
+{{{titleref(Drawers#logbook-dates,~:LOGBOOK:~ drawer)}}} that value
+will take precedence, and the "auto set lastmod" feature will be
+disabled.
 *** Image Links
 :PROPERTIES:
 :EXPORT_FILE_NAME: image-links
@@ -4405,6 +4414,14 @@ state changed or under the heading where the ~org-add-note~ command
 
   Note that if only one transition to the /DONE/ state was recorded,
   then this front-matter variable remains unset.
+
+#+begin_note
+The ~date~ and ~lastmod~ values parsed from the ~:LOGBOOK:~ drawer
+state transitions will have the highest precedence. See
+{{{titleref(Org meta-data to Hugo
+front-matter#front-matter-precedence,Front-matter Precedence)}}} for
+more info.
+#+end_note
 ***** ~:LOGBOOK:~ Notes
 - Notes added to the ~:LOGBOOK:~ drawer under the post heading will be
   exported to the TOML Table Array ~[[logbook._toplevel.notes]]~ in

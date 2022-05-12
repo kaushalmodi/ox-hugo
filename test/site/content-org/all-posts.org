@@ -5904,6 +5904,7 @@ The =lastmod= for this post is Hugo-compatible i.e. [[https://tools.ietf.org/htm
 :LOG_INTO_DRAWER: t
 :LOGGING: DONE(!)
 :EXPORT_OPTIONS: d:t
+:EXPORT_HUGO_AUTO_SET_LASTMOD: t
 :END:
 :LOGBOOK:
 - State "DONE"       from "DRAFT"      [2018-09-06 Thu 11:41]
@@ -5919,7 +5920,9 @@ In the case of multiple ~"State "DONE" from .."~ entries,
 - Use the newest entry to set the ~lastmod~.
 - Use the oldest entry to set the ~date~.
 
-*Do not auto-set ~lastmod~ using ~current-time~ in this case.~
+The ~lastmod~ field parsed from LOGBOOK transitions will have the
+highest precedence. So it will *not be auto-set* even if the
+~:EXPORT_HUGO_AUTO_SET_LASTMOD: t~ property is set.
 ** Publish Date                                                 :publishdate:
 *** Publish date set using Org time stamp
 :PROPERTIES:

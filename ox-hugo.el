@@ -1371,8 +1371,11 @@ cannot be formatted in Hugo-compatible format."
                                    (nth 1 err)))
                           nil)))
                       ;; Else (if nil) and user want to auto-set the
-                      ;; lastmod field.
+                      ;; lastmod field. If the lastmod value is
+                      ;; derived from LOGBOOK, disable the
+                      ;; auto-setting of lastmod.
                       ((and (equal date-key :hugo-lastmod)
+                            (null (plist-get info :logbook-lastmod))
                             (org-hugo--plist-get-true-p info :hugo-auto-set-lastmod))
                        (let* ((curr-time (org-current-time))
                               (lastmod-str (org-hugo--org-date-time-to-rfc3339 curr-time info)))

@@ -4507,6 +4507,209 @@ This feature has language support too. If the ~#+language~ keyword is
 set to a language code other than ~en~ (example: ~de~), the
 translations of the element type names get exported. The translations
 are based on the ~org-export-dictionary~ variable from ~ox.el~.
+*** Menu Front-matter
+:PROPERTIES:
+:EXPORT_FILE_NAME: menu-front-matter
+:END:
+#+begin_description
+Support for exporting to ~menu~ front-matter.
+#+end_description
+In Hugo, the global ~site~ variable contains a dictionary called
+~Menus~. Within ~Menus~, a /Menu Name/ is used to reference a
+collection or slice of /Menu Entries/. Each of those /Menu Entries/
+are associated with a /Page/. One can visualize the relationship of
+those objects in this manner:
+
+#+name: code__hugo_menu_entry_visualization
+#+caption: Visualization of Hugo Menu Entries
+#+begin_src text
+site
+    Menus
+       |                     +--------------+
+       +-- "Menu Name 1" --> | Menu Entry 1 +----> Page 1
+       |                     +--------------+
+       |                     | Menu Entry 2 +----> Page 2
+       |                     +--------------+
+       |                     | ..           +----> ..
+       |                     +--------------+
+       |
+       |                     +--------------+
+       +-- "Menu Name 2" --> | Menu Entry a +----> Page a
+       |                     +--------------+
+       |                     | Menu Entry b +----> Page b
+       |                     +--------------+
+       .                     | ..           +----> ..
+                             +--------------+
+#+end_src
+
+So on each /Page/, the user can specify the keys of the associated
+/Menu Entry/ using the ~menu~ front-matter.
+
+#+begin_note
+A /Menu Entry/ is uniquely associated with a /Page/.
+#+end_note
+
+Here are the valid keys for that ~menu~ config as derived from the
+[[https://gohugo.io/variables/menus/#menu-entry-variables][Menu Entry Variables]] documentation:
+
+#+name: tab__menu_config_keys
+#+caption: Menu Entry /keys/ and associated variables accessible from Hugo template
+|------------------+-------------------------------+-----------------------------------------------------------------------------------------|
+| Menu Entry /Key/ | Menu Entry /Variable/         | Brief Description                                                                       |
+|------------------+-------------------------------+-----------------------------------------------------------------------------------------|
+| ~[menu.NAME]~    | ~.Menu~                       | Name of the Menu containing the current Menu Entry                                      |
+| ~url~            | ~.URL~                        | /URL/ that this Menu Entry points to, defaults to page's ~.RelPermalink~                |
+| ~identifier~     | ~.Identifier~                 | /Identifier/ is the unique string used to identify this Menu Entry                      |
+| ~name~           | ~.Name~                       | /Name/ of this Menu Entry, defaults to page's ~.LinkTitle~                              |
+| ~pre~            | ~.Pre~                        | HTML string that can be used to /prefix/ the Menu Entry ~.Name~                         |
+| ~post~           | ~.Post~                       | HTML string that can be used to /postfix/ the Menu Entry ~.Name~                        |
+| ~weight~         | ~.Weight~                     | /Weight/ for this Menu Entry, used for sorting menus in a sidebar                       |
+| ~parent~         | ~.Parent~                     | Name or Identifier of this Menu Entry's /Parent/ Menu Entry                             |
+| ~title~          | ~.Title~ (this is a function) | Used to set this Menu Entry's link's ~title~ attribute, defaults to page's ~.LinkTitle~ |
+|------------------+-------------------------------+-----------------------------------------------------------------------------------------|
+**** ~:EXPORT_HUGO_MENU:~ and ~#+hugo_menu:~
+In Org mode, these Menu Entry keys are specified using the
+~:EXPORT_HUGO_MENU:~ property (subtree-based exports) or
+~#+hugo_menu:~ keyword (file-based exports). They are set in this
+/property list/ form:
+
+#+begin_src org
+:EXPORT_HUGO_MENU: :menu <menu name> <:key 1> <val 1> <:key 2> <val 2> ..
+#+end_src
+
+The ~:menu~ key is mandatory because that's used to specify the
+current Page's Menu Entry's parent Menu name.
+
+The rest of the property list keys map directly with the Menu Entry
+keys shown below:
+
+#+name: tab__menu_front_matter_keys
+#+caption: ~menu~ Front Matter keys
+|--------------------------------------------+-------------------------+-----------------------------------------------------------|
+| ~:EXPORT_HUGO_MENU:~ or ~#+hugo_menu:~ key | Menu Entry Front-matter | Note                                                      |
+|--------------------------------------------+-------------------------+-----------------------------------------------------------|
+| ~:menu VAL~                                | ~[menu.VAL]~            | *mandatory*                                               |
+| ~:identifier VAL~                          | ~identifier = VAL~      | Gets auto-set to the /sanitized/ post title if not set    |
+| ~:weight VAL~                              | ~weight = VAL~          | Gets auto-set based on post subtree's location if not set |
+| ~:url VAL~                                 | ~url = VAL~             | /optional/                                                |
+| ~:pre VAL~                                 | ~pre = VAL~             | /optional/                                                |
+| ~:name VAL~                                | ~name = VAL~            | /optional/                                                |
+| ~:post VAL~                                | ~post = VAL~            | /optional/                                                |
+| ~:parent VAL~                              | ~parent = VAL~          | /optional/                                                |
+| ~:title VAL~                               | ~title = VAL~           | /optional/                                                |
+|--------------------------------------------+-------------------------+-----------------------------------------------------------|
+***** General use example
+For subtree-based exports, it would be common to specify the container
+Menu name in a parent subtree and let that value trickle down to the
+nest post subtrees as a result of Org property inheritance.
+
+It would look something like this:
+
+#+name: code__common_menu_setting
+#+caption: Common style of setting the ~menu~ front-matter
+#+begin_src org
+,* Posts under the ~main~ Menu
+:PROPERTIES:
+:EXPORT_HUGO_MENU: :menu main
+:END:
+,** Post 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-1
+:END:
+,** Post 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-2
+:END:
+#+end_src
+
+When these posts are exported, the ~menu~ front-matter in them will
+look something like this:
+
+#+name: code__common_menu_setting_post_1_fm
+#+caption: ~menu~ in "Post 1" front-matter
+#+begin_src toml
+[menu]
+  [menu.main]
+    weight = 3001
+    identifier = "post-1"
+#+end_src
+
+#+name: code__common_menu_setting_post_2_fm
+#+caption: ~menu~ in "Post 2" front-matter
+#+begin_src toml
+[menu]
+  [menu.main]
+    weight = 3002
+    identifier = "post-2"
+#+end_src
+
+Note that the ~weight~ and ~identifier~ were set automatically by
+~ox-hugo~ as they were not specified.
+***** Example where more ~menu~ keys are specified
+For a post with the below property (subtree-based export):
+#+begin_src org
+:EXPORT_HUGO_MENU: :menu "something here" :weight 80 :parent posts :identifier foo1
+#+end_src
+
+, the ~menu~ in the exported front-matter will look like below:
+#+begin_src toml
+[menu]
+  [menu."something here"]
+    parent = "posts"
+    weight = 80
+    identifier = "foo1"
+#+end_src
+**** Overriding Menu Entry keys
+#+begin_note
+This feature is applicable only to subtree-based flow.
+#+end_note
+Use the ~:EXPORT_HUGO_MENU_OVERRIDE:~ property if you need to override
+only some of the inherited Menu Entry keys.
+
+Here's an example Org snippet:
+
+#+name: code__hugo_menu_override_org
+#+caption: Example of using ~:EXPORT_HUGO_MENU_OVERRIDE:~
+#+begin_src org
+,* Parent subtree
+:PROPERTIES:
+:EXPORT_HUGO_MENU: :menu "something here" :parent posts
+:END:
+,** Post 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: foo
+:EXPORT_HUGO_MENU_OVERRIDE: :identifier "abc" :weight 100
+:END:
+,** Post 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: bar
+:EXPORT_HUGO_MENU_OVERRIDE: :weight 1
+:END:
+#+end_src
+
+With above, "Post 1" ~menu~ front-matter will be exported as:
+
+#+name: code__hugo_menu_override_post_1
+#+caption: ~menu~ in "Post 1" front-matter with overridden ~identifier~ and ~weight~ values
+#+begin_src toml
+[menu]
+  [menu."something here"]
+    parent = "posts"
+    weight = 100
+    identifier = "abc"
+#+end_src
+
+, and "Post 2" ~menu~ front-matter will be exported as:
+
+#+name: code__hugo_menu_override_post_2
+#+caption: ~menu~ in "Post 2" front-matter with overridden ~weight~ value
+#+begin_src toml
+[menu]
+  [menu."something here"]
+    identifier = "post-2"
+    parent = "posts"
+    weight = 1
+#+end_src
 ** Meta
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "7.meta"

@@ -17,14 +17,6 @@ else
 	EMACS ?= emacs
 endif
 
-EMACS_exists := $(shell command -v $(EMACS) 2> /dev/null)
-ifeq ("$(EMACS_exists)","")
-	EMACS := /tmp/emacs/bin/emacs
-endif
-
-EMACS_BIN_SOURCE ?= https://github.com/npostavs/emacs-travis/releases/download/bins
-EMACS_BIN_VERSION ?= 27
-
 # In Netlify, set HUGO env var to "/tmp/me/ox-hugo-dev/hugo/hugo" to
 # use the hugo binary installed by this Makefile.
 HUGO ?= hugo
@@ -143,16 +135,10 @@ md1:
 
 vcheck_emacs:
 	@mkdir -p $(ox_hugo_tmp_dir)
-ifeq ("$(EMACS_exists)","")
-	@$(CURL) -O $(EMACS_BIN_SOURCE)/emacs-bin-$(EMACS_BIN_VERSION).tar.gz
-	@tar xf emacs-bin-$(EMACS_BIN_VERSION).tar.gz -C /
-endif
-	@echo "Emacs binary used: $(EMACS)"
 	@$(EMACS) --batch --eval "(progn\
 	(setenv \"OX_HUGO_TMP_DIR\" \"$(ox_hugo_tmp_dir)\")\
 	(load-file (expand-file-name \"setup-ox-hugo.el\" \"$(OX_HUGO_TEST_DIR)\"))\
-	(message \"[Version check] Emacs %s\" emacs-version)\
-	(message \"[Version check] %s\" (org-version nil :full))\
+	(print-emacs-org-versions)\
 	)" \
 	--kill
 
@@ -164,7 +150,9 @@ ifeq ("$(HUGO_exists)","")
 	@mkdir -p $(ox_hugo_tmp_dir)/hugo
 	@tar xf $(HUGO_ARCHIVE_NAME) -C $(ox_hugo_tmp_dir)/hugo
 endif
-	$(HUGO) version
+	@echo ""
+	@echo ":: Version Check :: Hugo ::"
+	@$(HUGO) version
 
 vcheck_pandoc:
 	@mkdir -p $(ox_hugo_tmp_dir)
@@ -176,7 +164,9 @@ ifeq ("$(PANDOC_exists)","")
 	@mv pandoc-$(PANDOC_BIN_VERSION)/bin $(ox_hugo_tmp_dir)/pandoc/.
 	@rm -rf pandoc-$(PANDOC_BIN_VERSION)
 endif
-	$(PANDOC) --version
+	@echo ""
+	@echo ":: Version Check :: Pandoc ::"
+	@$(PANDOC) --version
 
 vcheck: vcheck_emacs vcheck_hugo vcheck_pandoc
 

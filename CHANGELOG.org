@@ -4,18 +4,20 @@
 
 All notable changes to this project will be documented in this file.
 
-** :fire: *unreleased*
+** *0.12.0* - <2022-05-12>
+
+[[https://github.com/kaushalmodi/ox-hugo/compare/858707201c174e5b0c496edb30e3159113ab9f74...5ad69b40a6c8609f92268a76ecf4b8cf1700350b][8587072...5ad69b4]]
 
 *** :boom: Breaking
 :PROPERTIES:
-:CUSTOM_ID: breaking
+:CUSTOM_ID: breaking-v0.12.0
 :END:
 
 - Export Org Verse blocks in div tags instead of p tags … This change is required so that CSS rules for .verse class *​​*​​actually … work*​​*​​. So while this is technically a breaking change, this cha… ([[https://github.com/kaushalmodi/ox-hugo/commit/1a6acb5617c0aeaa1624dd66ae20fb3d8f0aebd4][1a6acb5]])
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: features
+:CUSTOM_ID: features-v0.12.0
 :END:
 
 - :LOGBOOK: drawer notes now export to logbook_​​notes TTA … TTA: TOML Table Array … TODO state change info in the logbooks doesn't get exported to … [​[logbook_​​notes]]. … Caveat: This feature works o… ([[https://github.com/kaushalmodi/ox-hugo/commit/78dd4d8cebdadaeb3457052429731d893ed3be76][78dd4d8]])
@@ -27,7 +29,7 @@ All notable changes to this project will be documented in this file.
 
 *** :rocket: PR Merges
 :PROPERTIES:
-:CUSTOM_ID: pr-merges
+:CUSTOM_ID: pr-merges-v0.12.0
 :END:
 
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/631][631]]: … tool(ci): Fix "Bad request" error when installing tomelr from GNU ELPA on Emacs 26.3 ([[https://github.com/kaushalmodi/ox-hugo/commit/c2cc2c45a8885576893e9413ee72145fc14d217e][c2cc2c4]])
@@ -37,7 +39,7 @@ All notable changes to this project will be documented in this file.
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-fixes
+:CUSTOM_ID: bug-fixes-v0.12.0
 :END:
 
 - Require org-info instead of ol-info if old Org version detected … If a user is running Emacs 26.3 with the default Org installation, … they would be using Org 9.1.9 and so they will need to use org-in… ([[https://github.com/kaushalmodi/ox-hugo/commit/772d53dee36773471f3b471b73ffdc3822e3b6e9][772d53d]])
@@ -47,24 +49,27 @@ All notable changes to this project will be documented in this file.
 
 *** :memo: Documentation
 :PROPERTIES:
-:CUSTOM_ID: documentation
+:CUSTOM_ID: documentation-v0.12.0
 :END:
 
 - Add Hugo template example for rendering `logbook` front-matter ([[https://github.com/kaushalmodi/ox-hugo/commit/2ee37855af60c16f7e4b8744edd5cafdb21b8f94][2ee3785]])
 - Add "Drawers" page to the manual ([[https://github.com/kaushalmodi/ox-hugo/commit/8ca0b77a7f857542b11884062ddee4a5b1b81b60][8ca0b77]])
 - Document date parsing from :LOGBOOK: drawers ([[https://github.com/kaushalmodi/ox-hugo/commit/36cb26efdb975840d19f74ba3bd67db578e5d242][36cb26e]])
+- How to set the `menu` front-matter … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/166][166]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/5ad69b40a6c8609f92268a76ecf4b8cf1700350b][5ad69b4]])
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: refactor
+:CUSTOM_ID: refactor-v0.12.0
 :END:
 
 - Move RFC 3339 date/time str gen to a separate function ([[https://github.com/kaushalmodi/ox-hugo/commit/11aedff305dc792292341cbf9aec490b330ce68b][11aedff]])
 - Make `logbook-entry` an alist instead of a plist … This commit is a small workaround to make the TOML generation for … `logbook_​​notes` to work on Emacs 26.3 as well. … The plist worked fine too, but… ([[https://github.com/kaushalmodi/ox-hugo/commit/4322236dd006a9ee2b4a522750d8b4c4d47c34bf][4322236]])
+- Make the LOGBOOK drawer's parent heading derivation robust … Add test where a :LOGBOOK: drawer with note might be manually inserted … in the middle of a post (and not using the `C-c C-z` binding). ([[https://github.com/kaushalmodi/ox-hugo/commit/efb9870f008cba135f28702cc14f58e21d27b446][efb9870]])
+- Move LOGBOOK parsing code to `org-hugo--logbook-drawer` ([[https://github.com/kaushalmodi/ox-hugo/commit/cab606a2098524ea7ac97704cc8df6d2d9d190f8][cab606a]])
 
 *** :hammer: Testing
 :PROPERTIES:
-:CUSTOM_ID: testing
+:CUSTOM_ID: testing-v0.12.0
 :END:
 
 - Add nested menu example … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/325][325]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/059f2b822cb95e1b9e84cbd37c266bccacdf56f4][059f2b8]])

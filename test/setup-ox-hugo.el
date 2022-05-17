@@ -232,6 +232,16 @@ to be installed.")
   (with-eval-after-load 'ox
     (setq org-export-headline-levels 4))) ;default is 3
 
+(defun print-emacs-org-versions ()
+  "Display Org mode and detailed Emacs version info."
+  (let ((emacs-build-info
+         (concat (emacs-version) "," " built using commit " emacs-repository-version "\n"
+                 "    .. configure options: " system-configuration-options "\n"
+                 "    .. features: " system-configuration-features)))
+    (message "\n:: Version Check :: Emacs ::")
+    (message emacs-build-info)
+    (message "\n:: Version Check :: Org Mode ::")
+    (message (org-version nil :full))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Settings *only* for tests (applied during "make test")

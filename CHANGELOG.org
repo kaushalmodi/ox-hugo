@@ -13,6 +13,15 @@ All notable changes to this project will be documented in this file.
 
 - Remove auto-insertion of Bibliography heading for org-ref cit. … Adding this feature for org-ref is a bit painful because: … 1. `org-ref` uses `citeproc-render-bib` in `org-ref-export.el`., while … th… ([[https://github.com/kaushalmodi/ox-hugo/commit/22065f719580dd6e46762dcf090957702c54dc43][22065f7]])
 
+*** :sparkles: Features
+:PROPERTIES:
+:CUSTOM_ID: features
+:END:
+
+- Auto-escape Hugo shortcodes in inline src blocks ([[https://github.com/kaushalmodi/ox-hugo/commit/a23ff91eb44486d571da390f2bbfed1cb2bf6e9b][a23ff91]])
+- Add a commented out test case for an inline src block parsing issue … .. in upstream Org mode. … Ref: https://lists.gnu.org/r/emacs-orgmode/2022-03/msg00008.html ([[https://github.com/kaushalmodi/ox-hugo/commit/c0e762e573986ee46782ed8636ddfe05f6fdb8b6][c0e762e]])
+- Use HTML code element with classes to export inline-src blocks … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/638][638]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/39566c2e6ee09fc209b15e301345437dcfaf7b22][39566c2]])
+
 *** :rocket: PR Merges
 :PROPERTIES:
 :CUSTOM_ID: pr-merges
@@ -21,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/636][636]]: … Revert "tool(ci): Disable CI runs on emacs master for now" ([[https://github.com/kaushalmodi/ox-hugo/commit/68916a64a9015a5f09ea5a9afa110a88ef0ad474][68916a6]])
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/637][637]]: … refactor: Make the org-hugo-drawer function more readable ([[https://github.com/kaushalmodi/ox-hugo/commit/8914b75f51e3340d4a8d394f53ac2ece20e649c0][8914b75]])
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/639][639]]: … perf: Better way to auto-inject bibliography heading ([[https://github.com/kaushalmodi/ox-hugo/commit/e63bb0952303e01db0a5af9a73540d9e45dfeea5][e63bb09]])
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/578][578]]: … Improve inline src blocks -- they now export to HTML `code` elements with `inline-src` class and language-specific class and data attri… ([[https://github.com/kaushalmodi/ox-hugo/commit/1d4221550406b737a094aee991cdd4edc69625f9][1d42215]])
 
 *** :white_check_mark: Issue Fixes
 :PROPERTIES:

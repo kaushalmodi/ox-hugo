@@ -2160,6 +2160,48 @@ src_emacs-lisp[:exports both]{(message "Hello 3")} {{{results(=Hello 3=)}}}
 src_emacs-lisp[:exports none]{(message "Hello 4")}
 #+end_src
 src_emacs-lisp[:exports none]{(message "Hello 4")} {{{results(=Hello 4=)}}}
+** Escape Hugo shortcodes
+- md :: src_md[:exports code]{{{< some_shortcode "foo" >}}}
+- org :: src_org[:exports code]{{{% some_shortcode "foo" %}}}
+- go-html-template :: src_go-html-template[:exports code]{{{< some_shortcode "foo" >}}}
+** Using custom CSS for inline src blocks
+{{{oxhugoissue(638)}}}
+
+CSS used here:
+#+begin_src html :noweb-ref inline_src_css
+<style>
+    code.inline-src.language-nim::before {
+        color: initial;
+        content: "｢";
+    }
+    code.inline-src.language-nim::after {
+        color: initial;
+        content: "｣";
+    }
+</style>
+#+end_src
+
+#+begin_export html
+<style>
+    code.inline-src.language-nim::before {
+        color: initial;
+        content: "｢";
+    }
+    code.inline-src.language-nim::after {
+        color: initial;
+        content: "｣";
+    }
+</style>
+#+end_export
+
+In Nim, src_nim[:exports code]{echo "hello"} will print
+{{{results(/hello/)}}}.
+** COMMENT Wrapping inline source block in a list item
+As of <2022-03-01 Tue>, below snippet exports incorrectly due to a bug
+in Org element parsing in Org mode. The issue was [[https://lists.gnu.org/r/emacs-orgmode/2022-03/msg00008.html][reported on the
+mailing list today]].
+- abcdefg abcdefg abcdefg abcdefg src_org[:exports code]{[[abc
+  def][bar]]}.
 * Formatting                                                     :formatting:
 ** General
 :PROPERTIES:

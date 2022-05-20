@@ -2444,8 +2444,16 @@ holding export options."
 
 ;;;; Inline Src Block
 (defun org-hugo-inline-src-block (inline-src-block _contents _info)
-  "Transcode INLINE-SRC-BLOCK object into Hugo-compatible Markdown format."
-  (org-md-verbatim inline-src-block nil nil))
+  "Transcode INLINE-SRC-BLOCK object into HTML.
+
+Escape Hugo shortcodes if present in this element's value."
+  (let* ((lang (org-element-property :language inline-src-block))
+         (code (org-hugo--escape-hugo-shortcode
+                (org-element-property :value inline-src-block)
+                lang)))
+    (org-element-put-property inline-src-block :value code)
+    (format "<code class=\"inline-src language-%s\" data-lang=\"%s\">%s</code>"
+            lang lang code)))
 
 ;;;; Keyword
 (defun org-hugo-keyword (keyword contents info)

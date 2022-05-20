@@ -654,20 +654,13 @@ Some of the inbuilt functions that can be added to this list:
   :group 'org-export-hugo
   :type '(repeat function))
 
-(defcustom org-hugo-citations-plist '(:bibliography-section-heading "References"
-                                      :bibliography-section-regexp "\n\n<style>\\(.\\|\n\\)*?<div class=\"csl-bib-body\">"
-                                      ;;                            ^^^^ blank line before the <style> ..
-                                      ;;                                          .. <div class="csl-bib-body"> block
-                                      )
+(defcustom org-hugo-citations-plist '(:bibliography-section-heading "References")
   "Property list for storing default properties for citation exports.
 
 Properties recognized in the PLIST:
 
 - :bibliography-section-heading :: Heading to insert before the bibliography
                                    section.
-
-- :bibliography-section-regexp :: Regular expression to find the
-                                  beginning of the bibliography section.
 
 Auto-detection of bibliography section requires installing the
 `citations' package from Melpa and adding `#+cite_export: csl' at
@@ -876,11 +869,7 @@ arguments of the ORIG-FUN.
 
 This advice retains the `:hl_lines', `linenos' and
 `:front_matter_extra' parameters, if added to any source block.
-This parameter is used in `org-hugo-src-block'.
-
-This advice is added to the ORIG-FUN only while an ox-hugo export
-is in progress.  See `org-hugo--before-export-function' and
-`org-hugo--after-1-export-function'."
+This parameter is used in `org-hugo-src-block'."
   (let* ((param-keys-to-be-retained '(:hl_lines :linenos :front_matter_extra))
          (info (car args))
          (parameters (nth 2 info))
@@ -954,6 +943,25 @@ See `org-link-parameters' for details about PATH, DESC and FORMAT."
     (when (member format '(md hugo))
       (format "[%s](%s \"%s\")" desc link title))))
 
+(defun org-hugo--org-cite-export-bibliography (orig-fun &rest args)
+  "Insert a heading before the exported bibliography.
+
+ORIG-FUN is the original function `org-cite-export-bibliography'
+that this function is designed to advice using `:around'.  ARGS
+are the arguments of the ORIG-FUN."
+  (let ((bib (apply orig-fun args)))
+    (when (org-string-nw-p bib)
+      ;; Auto-inject Bibliography heading.
+      (let ((info (nth 2 args)) ;(org-cite-export-bibliography KEYWORD _ INFO)
+            (bib-heading (org-string-nw-p (plist-get org-hugo-citations-plist :bibliography-section-heading))))
+        (when bib-heading
+          (let* ((bib-heading (org-blackfriday--translate nil info bib-heading))
+                 (loffset (string-to-number
+                           (or (org-entry-get nil "EXPORT_HUGO_LEVEL_OFFSET" :inherit)
+                               (plist-get info :hugo-level-offset))))
+                 (level-mark (make-string (+ loffset 1) ?#)))
+            (format "%s %s\n\n%s" level-mark bib-heading bib)))))))
+
 (defun org-hugo--before-export-function (subtreep)
   "Function to be run before an ox-hugo export.
 
@@ -962,13 +970,18 @@ This function is called in the very beginning of
 
 SUBTREEP is non-nil for subtree-based exports.
 
+This function is used to advise few functions.  Those advices are
+effective only while an ox-hugo export is in progress because
+they get removed later in `org-hugo--after-1-export-function'.
+
 This is an internal function."
   (unless subtreep
     ;; Reset the variables that are used only for subtree exports.
     (setq org-hugo--subtree-coord nil))
   (advice-add 'org-babel-exp-code :around #'org-hugo--org-babel-exp-code)
   (advice-add 'org-babel--string-to-number :override #'org-hugo--org-babel--string-to-number)
-  (advice-add 'org-info-export :override #'org-hugo--org-info-export))
+  (advice-add 'org-info-export :override #'org-hugo--org-info-export)
+  (advice-add 'org-cite-export-bibliography :around #'org-hugo--org-cite-export-bibliography))
 
 (defun org-hugo--after-1-export-function (info outfile)
   "Function to be run after exporting one post.
@@ -984,6 +997,7 @@ INFO is a plist used as a communication channel.
 OUTFILE is the Org exported file name.
 
 This is an internal function."
+  (advice-remove 'org-cite-export-bibliography #'org-hugo--org-cite-export-bibliography)
   (advice-remove 'org-info-export #'org-hugo--org-info-export)
   (advice-remove 'org-babel--string-to-number #'org-hugo--org-babel--string-to-number)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
@@ -2418,19 +2432,6 @@ holding export options."
                             ;; (`).
                             "\\([[:space:]>]\\|\n\\)+\\([^-#`]\\)")
                     " \\2" contents)))
-
-    ;; Auto-inject Bibliography heading.
-    (let ((bib-heading (org-string-nw-p (plist-get org-hugo-citations-plist :bibliography-section-heading))))
-      (when (and bib-heading (featurep 'citeproc))
-        (let* ((bib-heading (org-blackfriday--translate nil info bib-heading))
-               (bib-regexp (plist-get org-hugo-citations-plist :bibliography-section-regexp))
-               (loffset (string-to-number
-                         (or (org-entry-get nil "EXPORT_HUGO_LEVEL_OFFSET" :inherit)
-                             (plist-get info :hugo-level-offset))))
-               (level-mark (make-string (+ loffset 1) ?#)))
-          (setq contents (replace-regexp-in-string
-                          bib-regexp
-                          (format "\n\n%s %s\\&" level-mark bib-heading) contents)))))
 
     ;; (message "[org-hugo-inner-template DBG] toc-level: %s" toc-level)
     (org-trim (concat

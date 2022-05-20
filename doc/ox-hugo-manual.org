@@ -2909,7 +2909,7 @@ property list variable.
 :PROPERTIES:
 :CUSTOM_ID: org-hugo-citations-plist
 :END:
-This property list recognizes these properties:
+This property list recognizes this property:
 
 - :bibliography-section-heading :: /(string)/ Heading to insert before
   the bibliography section.  The default value is "References".
@@ -2932,15 +2932,6 @@ This property list recognizes these properties:
   (with-eval-after-load 'ox-hugo
     (plist-put org-hugo-citations-plist :bibliography-section-heading ""))
   #+end_src
-- :bibliography-section-regexp :: /(string)/ Regular expression to
-  find the beginning of the bibliography section.  The default value
-  is a regular expression that matches the ~<div
-  class="csl-bib-body">~ HTML element exported by ~citeproc.el~.
-
-  #+begin_note
-  The default regular expression applies to bibliography insertion
-  done by Org Cite or [[* Org Ref Citations][Org Ref]] because both use ~citeproc.el~ for that.
-  #+end_note
 **** Example
 Minimal example with ~org-cite~ citations:
 
@@ -2986,14 +2977,6 @@ that."
         (org-ref-process-buffer 'html)))
     (add-to-list 'org-export-before-parsing-hook #'my/org-ref-process-buffer--html)))
 #+end_src
-**** Auto-inserting /Bibliography/ heading
-A Markdown heading named "References" will be auto-inserted above
-the ~org-ref~ ~[[bibliography:..]]~ link, which is typically present
-at the end of a post.
-
-This feature is controlled by the
-{{{relref(~org-hugo-citations-plist~,org-cite-citations/#org-hugo-citations-plist)}}}
-property list variable.
 **** Example
 Minimal example with ~org-ref~ citations:
 

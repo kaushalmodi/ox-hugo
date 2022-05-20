@@ -869,11 +869,7 @@ arguments of the ORIG-FUN.
 
 This advice retains the `:hl_lines', `linenos' and
 `:front_matter_extra' parameters, if added to any source block.
-This parameter is used in `org-hugo-src-block'.
-
-This advice is added to the ORIG-FUN only while an ox-hugo export
-is in progress.  See `org-hugo--before-export-function' and
-`org-hugo--after-1-export-function'."
+This parameter is used in `org-hugo-src-block'."
   (let* ((param-keys-to-be-retained '(:hl_lines :linenos :front_matter_extra))
          (info (car args))
          (parameters (nth 2 info))
@@ -948,7 +944,11 @@ See `org-link-parameters' for details about PATH, DESC and FORMAT."
       (format "[%s](%s \"%s\")" desc link title))))
 
 (defun org-hugo--org-cite-export-bibliography (orig-fun &rest args)
-  "Insert a heading before the exported bibliography."
+  "Insert a heading before the exported bibliography.
+
+ORIG-FUN is the original function `org-cite-export-bibliography'
+that this function is designed to advice using `:around'.  ARGS
+are the arguments of the ORIG-FUN."
   (let ((bib (apply orig-fun args)))
     (when (org-string-nw-p bib)
       ;; Auto-inject Bibliography heading.
@@ -969,6 +969,10 @@ This function is called in the very beginning of
 `org-hugo-export-to-md' and `org-hugo-export-as-md'.
 
 SUBTREEP is non-nil for subtree-based exports.
+
+This function is used to advise few functions.  Those advices are
+effective only while an ox-hugo export is in progress because
+they get removed later in `org-hugo--after-1-export-function'.
 
 This is an internal function."
   (unless subtreep

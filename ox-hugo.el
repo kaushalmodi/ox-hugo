@@ -654,20 +654,13 @@ Some of the inbuilt functions that can be added to this list:
   :group 'org-export-hugo
   :type '(repeat function))
 
-(defcustom org-hugo-citations-plist '(:bibliography-section-heading "References"
-                                      :bibliography-section-regexp "\n\n<style>\\(.\\|\n\\)*?<div class=\"csl-bib-body\">"
-                                      ;;                            ^^^^ blank line before the <style> ..
-                                      ;;                                          .. <div class="csl-bib-body"> block
-                                      )
+(defcustom org-hugo-citations-plist '(:bibliography-section-heading "References")
   "Property list for storing default properties for citation exports.
 
 Properties recognized in the PLIST:
 
 - :bibliography-section-heading :: Heading to insert before the bibliography
                                    section.
-
-- :bibliography-section-regexp :: Regular expression to find the
-                                  beginning of the bibliography section.
 
 Auto-detection of bibliography section requires installing the
 `citations' package from Melpa and adding `#+cite_export: csl' at
@@ -954,6 +947,21 @@ See `org-link-parameters' for details about PATH, DESC and FORMAT."
     (when (member format '(md hugo))
       (format "[%s](%s \"%s\")" desc link title))))
 
+(defun org-hugo--org-cite-export-bibliography (orig-fun &rest args)
+  "Insert a heading before the exported bibliography."
+  (let ((bib (apply orig-fun args)))
+    (when (org-string-nw-p bib)
+      ;; Auto-inject Bibliography heading.
+      (let ((info (nth 2 args)) ;(org-cite-export-bibliography KEYWORD _ INFO)
+            (bib-heading (org-string-nw-p (plist-get org-hugo-citations-plist :bibliography-section-heading))))
+        (when bib-heading
+          (let* ((bib-heading (org-blackfriday--translate nil info bib-heading))
+                 (loffset (string-to-number
+                           (or (org-entry-get nil "EXPORT_HUGO_LEVEL_OFFSET" :inherit)
+                               (plist-get info :hugo-level-offset))))
+                 (level-mark (make-string (+ loffset 1) ?#)))
+            (format "%s %s\n\n%s" level-mark bib-heading bib)))))))
+
 (defun org-hugo--before-export-function (subtreep)
   "Function to be run before an ox-hugo export.
 
@@ -968,7 +976,8 @@ This is an internal function."
     (setq org-hugo--subtree-coord nil))
   (advice-add 'org-babel-exp-code :around #'org-hugo--org-babel-exp-code)
   (advice-add 'org-babel--string-to-number :override #'org-hugo--org-babel--string-to-number)
-  (advice-add 'org-info-export :override #'org-hugo--org-info-export))
+  (advice-add 'org-info-export :override #'org-hugo--org-info-export)
+  (advice-add 'org-cite-export-bibliography :around #'org-hugo--org-cite-export-bibliography))
 
 (defun org-hugo--after-1-export-function (info outfile)
   "Function to be run after exporting one post.
@@ -984,6 +993,7 @@ INFO is a plist used as a communication channel.
 OUTFILE is the Org exported file name.
 
 This is an internal function."
+  (advice-remove 'org-cite-export-bibliography #'org-hugo--org-cite-export-bibliography)
   (advice-remove 'org-info-export #'org-hugo--org-info-export)
   (advice-remove 'org-babel--string-to-number #'org-hugo--org-babel--string-to-number)
   (advice-remove 'org-babel-exp-code #'org-hugo--org-babel-exp-code)
@@ -2418,19 +2428,6 @@ holding export options."
                             ;; (`).
                             "\\([[:space:]>]\\|\n\\)+\\([^-#`]\\)")
                     " \\2" contents)))
-
-    ;; Auto-inject Bibliography heading.
-    (let ((bib-heading (org-string-nw-p (plist-get org-hugo-citations-plist :bibliography-section-heading))))
-      (when (and bib-heading (featurep 'citeproc))
-        (let* ((bib-heading (org-blackfriday--translate nil info bib-heading))
-               (bib-regexp (plist-get org-hugo-citations-plist :bibliography-section-regexp))
-               (loffset (string-to-number
-                         (or (org-entry-get nil "EXPORT_HUGO_LEVEL_OFFSET" :inherit)
-                             (plist-get info :hugo-level-offset))))
-               (level-mark (make-string (+ loffset 1) ?#)))
-          (setq contents (replace-regexp-in-string
-                          bib-regexp
-                          (format "\n\n%s %s\\&" level-mark bib-heading) contents)))))
 
     ;; (message "[org-hugo-inner-template DBG] toc-level: %s" toc-level)
     (org-trim (concat

@@ -2909,7 +2909,7 @@ property list variable.
 :PROPERTIES:
 :CUSTOM_ID: org-hugo-citations-plist
 :END:
-This property list recognizes these properties:
+This property list recognizes this property:
 
 - :bibliography-section-heading :: /(string)/ Heading to insert before
   the bibliography section.  The default value is "References".
@@ -2932,15 +2932,6 @@ This property list recognizes these properties:
   (with-eval-after-load 'ox-hugo
     (plist-put org-hugo-citations-plist :bibliography-section-heading ""))
   #+end_src
-- :bibliography-section-regexp :: /(string)/ Regular expression to
-  find the beginning of the bibliography section.  The default value
-  is a regular expression that matches the ~<div
-  class="csl-bib-body">~ HTML element exported by ~citeproc.el~.
-
-  #+begin_note
-  The default regular expression applies to bibliography insertion
-  done by Org Cite or [[* Org Ref Citations][Org Ref]] because both use ~citeproc.el~ for that.
-  #+end_note
 **** Example
 Minimal example with ~org-cite~ citations:
 

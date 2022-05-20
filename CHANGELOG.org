@@ -4,6 +4,45 @@
 
 All notable changes to this project will be documented in this file.
 
+** :fire: *unreleased*
+
+*** :boom: Breaking
+:PROPERTIES:
+:CUSTOM_ID: breaking
+:END:
+
+- Remove auto-insertion of Bibliography heading for org-ref cit. … Adding this feature for org-ref is a bit painful because: … 1. `org-ref` uses `citeproc-render-bib` in `org-ref-export.el`., while … th… ([[https://github.com/kaushalmodi/ox-hugo/commit/22065f719580dd6e46762dcf090957702c54dc43][22065f7]])
+
+*** :rocket: PR Merges
+:PROPERTIES:
+:CUSTOM_ID: pr-merges
+:END:
+
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/636][636]]: … Revert "tool(ci): Disable CI runs on emacs master for now" ([[https://github.com/kaushalmodi/ox-hugo/commit/68916a64a9015a5f09ea5a9afa110a88ef0ad474][68916a6]])
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/637][637]]: … refactor: Make the org-hugo-drawer function more readable ([[https://github.com/kaushalmodi/ox-hugo/commit/8914b75f51e3340d4a8d394f53ac2ece20e649c0][8914b75]])
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/639][639]]: … perf: Better way to auto-inject bibliography heading ([[https://github.com/kaushalmodi/ox-hugo/commit/e63bb0952303e01db0a5af9a73540d9e45dfeea5][e63bb09]])
+
+*** :white_check_mark: Issue Fixes
+:PROPERTIES:
+:CUSTOM_ID: issue-fixes
+:END:
+
+- Revert "tool(ci): Disable CI runs on emacs master for now" … This reverts commit commit # [[https://github.com/kaushalmodi/ox-hugo/commit/288c2f577be5c1e9b0871d1c5a02b3b28346615a][288c2f5]]. … Fixes I… ([[https://github.com/kaushalmodi/ox-hugo/commit/21269f664bcf5dd5ddab6cf01d41c22821000e93][21269f6]])
+
+*** :zap: Performance
+:PROPERTIES:
+:CUSTOM_ID: performance
+:END:
+
+- Better way to auto-inject bibliography heading … Earlier method wasn't elegant because it relied on an empirically … derived regexp. The reason for this change was that this regexp was … falsely match… ([[https://github.com/kaushalmodi/ox-hugo/commit/5a24d8f31f04a00a0ff6364ecf0a7e2c4afc8e02][5a24d8f]])
+
+*** :recycle: Refactor
+:PROPERTIES:
+:CUSTOM_ID: refactor
+:END:
+
+- Make the org-hugo-drawer function more readable … - Remove internal function `org-hugo--logbook-drawer`. … - Move logbook entry parsing to a new internal function … `org-hugo--parse-logbook-entry`. … … ([[https://github.com/kaushalmodi/ox-hugo/commit/b300c5bb7b562e48a987c1d814b7941957c77c31][b300c5b]])
+
 ** *0.12.0* - <2022-05-12>
 
 [[https://github.com/kaushalmodi/ox-hugo/compare/858707201c174e5b0c496edb30e3159113ab9f74...5ad69b40a6c8609f92268a76ecf4b8cf1700350b][8587072...5ad69b4]]

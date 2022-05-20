@@ -2977,14 +2977,6 @@ that."
         (org-ref-process-buffer 'html)))
     (add-to-list 'org-export-before-parsing-hook #'my/org-ref-process-buffer--html)))
 #+end_src
-**** Auto-inserting /Bibliography/ heading
-A Markdown heading named "References" will be auto-inserted above
-the ~org-ref~ ~[[bibliography:..]]~ link, which is typically present
-at the end of a post.
-
-This feature is controlled by the
-{{{relref(~org-hugo-citations-plist~,org-cite-citations/#org-hugo-citations-plist)}}}
-property list variable.
 **** Example
 Minimal example with ~org-ref~ citations:
 

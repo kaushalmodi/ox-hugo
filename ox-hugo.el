@@ -2456,8 +2456,9 @@ Escape Hugo shortcodes if present in this element's value."
                 (org-element-property :value inline-src-block)
                 lang)))
     (org-element-put-property inline-src-block :value code)
-    (format "<code class=\"inline-src language-%s\" data-lang=\"%s\">%s</code>"
-            lang lang code)))
+    (format "<span class=\"inline-src language-%s\" data-lang=\"%s\">%s</span>"
+            lang lang
+            (org-md-verbatim inline-src-block nil nil))))
 
 ;;;; Keyword
 (defun org-hugo-keyword (keyword contents info)

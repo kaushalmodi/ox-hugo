@@ -2170,11 +2170,11 @@ src_emacs-lisp[:exports none]{(message "Hello 4")} {{{results(=Hello 4=)}}}
 CSS used here:
 #+begin_src html :noweb-ref inline_src_css
 <style>
-    code.inline-src.language-nim::before {
+  .inline-src.language-nim code::before {
         color: initial;
         content: "｢";
     }
-    code.inline-src.language-nim::after {
+  .inline-src.language-nim code::after {
         color: initial;
         content: "｣";
     }
@@ -2183,16 +2183,20 @@ CSS used here:
 
 #+begin_export html
 <style>
-    code.inline-src.language-nim::before {
+    .inline-src.language-nim code::before {
         color: initial;
         content: "｢";
     }
-    code.inline-src.language-nim::after {
+    .inline-src.language-nim code::after {
         color: initial;
         content: "｣";
     }
 </style>
 #+end_export
+
+{{{oxhugoissue(640)}}} -- Test that straight quotes in inline src
+blocks don't get rendered as curved quotes by Hugo/Goldmark's
+Typographer.
 
 In Nim, src_nim[:exports code]{echo "hello"} will print
 {{{results(/hello/)}}}.

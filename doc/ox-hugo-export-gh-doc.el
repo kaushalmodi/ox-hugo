@@ -1,11 +1,9 @@
-;; Time-stamp: <2017-10-11 04:28:38 kmodi>
-
 ;; Export Org document to GitHub documents like README.org,
 ;; CONTRIBUTING.org.
 
 (defvar ox-hugo-git-root (progn
                            (require 'vc-git)
-                           (file-truename (vc-git-root "."))))
+                           (file-truename (vc-git-root default-directory))))
 
 (defun ox-hugo-export-gh-doc ()
   "Export `ox-hugo' Org documentation to documentation on GitHub repo."

@@ -31,6 +31,8 @@ All notable changes to this project will be documented in this file.
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/637][637]]: … refactor: Make the org-hugo-drawer function more readable ([[https://github.com/kaushalmodi/ox-hugo/commit/8914b75f51e3340d4a8d394f53ac2ece20e649c0][8914b75]])
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/639][639]]: … perf: Better way to auto-inject bibliography heading ([[https://github.com/kaushalmodi/ox-hugo/commit/e63bb0952303e01db0a5af9a73540d9e45dfeea5][e63bb09]])
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/578][578]]: … Improve inline src blocks -- they now export to HTML `code` elements with `inline-src` class and language-specific class and data attri… ([[https://github.com/kaushalmodi/ox-hugo/commit/1d4221550406b737a094aee991cdd4edc69625f9][1d42215]])
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/643][643]]: … Fix auto menu weight calculation during "all subtrees" exports ([[https://github.com/kaushalmodi/ox-hugo/commit/d3faba4549518006fa4d7eeca657fd4142718c4b][d3faba4]])
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/641][641]]: … fix: Change inline src block output to work around CommonMark issue ([[https://github.com/kaushalmodi/ox-hugo/commit/3070aaab5bbe297b6f90620c29171ced0bd4c439][3070aaa]])
 
 *** :white_check_mark: Issue Fixes
 :PROPERTIES:
@@ -45,6 +47,14 @@ All notable changes to this project will be documented in this file.
 :END:
 
 - Better way to auto-inject bibliography heading … Earlier method wasn't elegant because it relied on an empirically … derived regexp. The reason for this change was that this regexp was … falsely match… ([[https://github.com/kaushalmodi/ox-hugo/commit/5a24d8f31f04a00a0ff6364ecf0a7e2c4afc8e02][5a24d8f]])
+
+*** :bug: Bug Fixes
+:PROPERTIES:
+:CUSTOM_ID: bug-fixes
+:END:
+
+- Correct auto menu weight calc when batch-exporting subtrees … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/642][642]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/f9c9aaf0160bb552d438cda20b7627a41dfaf125][f9c9aaf]])
+- Change inline src block output to work around CommonMark issue … - Before: Inline src block classes were in the HTML code element … - Now: The inline src block classes are in HTLM span tags wrapping …… ([[https://github.com/kaushalmodi/ox-hugo/commit/1cb3895e964ab0260dbae8d1ef10555e6c7c1b68][1cb3895]])
 
 *** :recycle: Refactor
 :PROPERTIES:

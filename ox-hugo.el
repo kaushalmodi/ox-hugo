@@ -4485,16 +4485,15 @@ subtree-number being exported.
                 (setq org-hugo--subtree-coord
                       (org-hugo--get-post-subtree-coordinates subtree)))
 
-              (if org-hugo--preprocess-buffer
-                  (let ((buffer (or org-hugo--preprocessed-buffer
-                                    (org-hugo--get-pre-processed-buffer))))
-                    (unless org-hugo--preprocessed-buffer
-                      (setq org-hugo--preprocessed-buffer buffer))
-                    (with-current-buffer buffer
-                      (add-to-list 'org-hugo--opened-buffers buffer)
-                      (goto-char (org-find-olp current-outline-path :this-buffer))
-                      (setq ret (org-hugo-export-to-md async :subtreep visible-only))))
-                (progn
+              (let ((buffer (if org-hugo--preprocess-buffer
+                                (let ((pre-proc-buf (or org-hugo--preprocessed-buffer
+                                                        (org-hugo--get-pre-processed-buffer))))
+                                  (unless org-hugo--preprocessed-buffer
+                                    (setq org-hugo--preprocessed-buffer pre-proc-buf)
+                                    (add-to-list 'org-hugo--opened-buffers pre-proc-buf))
+                                  pre-proc-buf)
+                              (current-buffer))))
+                (with-current-buffer buffer
                   (goto-char (org-find-olp current-outline-path :this-buffer))
                   (setq ret (org-hugo-export-to-md async :subtreep visible-only)))))))
           ret)

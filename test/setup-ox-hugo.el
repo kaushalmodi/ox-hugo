@@ -120,9 +120,10 @@ Emacs installation.  If Emacs is installed using
   ;; beginning of `ox-hugo-packages'.
   (add-to-list 'ox-hugo-packages 'org))
 
-(defvar ox-hugo-site-git-root (progn
-                                (require 'vc-git)
-                                (file-truename (vc-git-root default-directory)))
+(defvar ox-hugo-site-git-root "/home/kmodi/stow/pub_dotfiles/emacs/dot-emacs.d/elisp/ox-hugo/"
+                              ;; (progn
+                              ;;   (require 'vc-git)
+                              ;;   (file-truename (vc-git-root default-directory)))
   "Absolute path of the git root of the current project.")
 (when ox-hugo-test-setup-verbose
   (message "ox-hugo-site-git-root: %S" ox-hugo-site-git-root))

@@ -1,9 +1,11 @@
 ;; Export Org document to GitHub documents like README.org,
 ;; CONTRIBUTING.org.
 
-(defvar ox-hugo-git-root (progn
-                           (require 'vc-git)
-                           (file-truename (vc-git-root default-directory))))
+(defvar ox-hugo-git-root "/home/kmodi/stow/pub_dotfiles/emacs/dot-emacs.d/elisp/ox-hugo/"
+                         ;; (progn
+                         ;;   (require 'vc-git)
+                         ;;   (file-truename (vc-git-root default-directory)))
+                         )
 
 (defun ox-hugo-export-gh-doc ()
   "Export `ox-hugo' Org documentation to documentation on GitHub repo."

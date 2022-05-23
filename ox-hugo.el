@@ -4399,9 +4399,6 @@ subtree-number being exported.
   return t.
 
 - Else, return nil."
-  ;; ;; Publish only the current subtree
-  ;; (ignore-errors
-  ;;   (org-back-to-heading :invisible-ok))
   (let ((subtree (org-hugo--get-valid-subtree)))
     (if subtree
         ;; If subtree is a valid Hugo post subtree, proceed ..
@@ -4811,11 +4808,9 @@ The optional argument NOERROR is passed to
 
            (setq ret (org-map-entries
                       (lambda ()
-                        (org-hugo--export-subtree-to-md
-                         async visible-only :all-subtrees))
+                        (org-hugo--export-subtree-to-md async visible-only :all-subtrees))
                       ;; Export only the subtrees where
-                      ;; EXPORT_FILE_NAME property is not
-                      ;; empty.
+                      ;; EXPORT_FILE_NAME property is not empty.
                       "EXPORT_FILE_NAME<>\"\""))
 
            (let* ((elapsed-time (float-time (time-since start-time)))

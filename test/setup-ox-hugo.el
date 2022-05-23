@@ -98,13 +98,13 @@ Emacs installation.  If Emacs is installed using
       ;; (message (list-load-path-shadows :stringp))
       )))
 
-(defvar ox-hugo-tmp-dir (let ((dir (file-name-as-directory (getenv "OX_HUGO_TMP_DIR"))))
-                          (unless dir
-                            (setq dir
-                                  (let* ((dir-1 (file-name-as-directory (expand-file-name user-login-name temporary-file-directory)))
-                                         (dir-2 (file-name-as-directory (expand-file-name "ox-hugo-dev" dir-1))))
-                                    dir-2)))
-                          (setq dir (file-name-as-directory dir))
+(defvar ox-hugo-tmp-dir (let ((dir (file-name-as-directory
+                                    (or (getenv "OX_HUGO_TMP_DIR")
+                                        (expand-file-name
+                                         "ox-hugo-dev"
+                                         (file-name-as-directory
+                                          (expand-file-name
+                                           user-login-name temporary-file-directory)))))))
                           (make-directory dir :parents)
                           dir))
 (when ox-hugo-test-setup-verbose

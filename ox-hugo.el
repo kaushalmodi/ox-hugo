@@ -230,6 +230,9 @@ This variable needs to be non-nil for the support of
 cross-subtree Org internal links when using the subtree-based
 export flow.")
 
+(defvar org-hugo--preprocessed-buffer nil
+  "Name of the pre-processed buffer.")
+
 (defconst org-hugo--preprocessed-buffer-dummy-file-suffix ".pre-processed.org"
   "Dummy suffix (including file extension) for pre-processed buffers.
 
@@ -1022,6 +1025,7 @@ This is an internal function."
   (dolist (buf org-hugo--opened-buffers)
     (kill-buffer buf))
   (setq org-hugo--opened-buffers nil)
+  (setq org-hugo--preprocessed-buffer nil)
 
   (dolist (fn org-hugo--all-subtrees-export--functions-to-silence)
     (advice-remove fn #'org-hugo--advice-silence-messages)))
@@ -4184,6 +4188,8 @@ The returned weight = INDEX + 1000*LEVEL.  See
 LEVEL."
   (let* ((level (car org-hugo--subtree-coord))
          (index (cdr org-hugo--subtree-coord)))
+    ;; (message "[org-hugo--calc-weight dbg] level = %S" level)
+    ;; (message "[org-hugo--calc-weight dbg] index = %S" index)
     (+ (* 1000 level) index)))
 
 (defun org-hugo--gen-front-matter (data format)
@@ -4295,6 +4301,8 @@ So the value returned for Level C will be (2 . 3)."
           (scope (if (org-up-heading-safe)
                      'tree ;Map entries only in parent subtree scope if parent exists
                    nil))) ;Else map in the whole buffer (provided the MATCH conditions below)
+      ;; (message "[org-hugo--get-post-subtree-coordinates dbg] current-pos: %S, scope: %S"
+      ;;          current-pos scope)
       (when level
         (org-map-entries (lambda ()
                            (when (< (point) current-pos)
@@ -4302,8 +4310,7 @@ So the value returned for Level C will be (2 . 3)."
                          ;; Loop through only headings that are at the
                          ;; same level as SUBTREE, and those which have
                          ;; the EXPORT_FILE_NAME property defined.
-                         (concat "+LEVEL="
-                                 (number-to-string level)
+                         (concat "+LEVEL=" (number-to-string level)
                                  "+EXPORT_FILE_NAME<>\"\"")
                          scope)
         (cons level index)))))
@@ -4391,9 +4398,9 @@ subtree-number being exported.
   return t.
 
 - Else, return nil."
-  ;; Publish only the current subtree
-  (ignore-errors
-    (org-back-to-heading :invisible-ok))
+  ;; ;; Publish only the current subtree
+  ;; (ignore-errors
+  ;;   (org-back-to-heading :invisible-ok))
   (let ((subtree (org-hugo--get-valid-subtree)))
     (if subtree
         ;; If subtree is a valid Hugo post subtree, proceed ..
@@ -4421,7 +4428,23 @@ subtree-number being exported.
           ;; (message "[current subtree DBG] subtree: %S" subtree)
           ;; (message "[current subtree DBG] is-commented:%S, tags:%S,
           ;; is-excluded:%S" is-commented tags is-excluded)
-          (let ((title (org-element-property :title subtree)))
+          (let ((title (org-element-property :title subtree))
+                ;; FIXME: Sometimes `org-get-outline-path' returns the
+                ;; list with empty string elements. It's not clear
+                ;; why, but the below `cl-delete-if' workarounds works
+                ;; (for now).
+                (current-outline-path (cl-delete-if
+                                       (lambda (el)
+                                         (string= el ""))
+                                       (org-get-outline-path :with-self)))
+                ;; When batch-exporting subtrees, do not call
+                ;; `org-hugo--after-all-exports-function' after each
+                ;; subtree export.  In that case, that function is
+                ;; called *after* looping through all the post
+                ;; subtrees.
+                (org-hugo--disable-after-all-exports-hook all-subtrees))
+            ;; (message "[org-hugo--export-subtree-to-md dbg] @ point %S, current-outline-path: %S"
+            ;;          (point) current-outline-path)
             (cond
              (is-commented
               (if (string= title commented-heading)
@@ -4437,6 +4460,9 @@ subtree-number being exported.
                     (setq org-hugo--subtree-count (1+ org-hugo--subtree-count))
                     (message "[ox-hugo] %d/ Exporting `%s' .." org-hugo--subtree-count title))
                 (message "[ox-hugo] Exporting `%s' .." title))
+
+              ;; (message "[org-hugo--export-subtree-to-md dbg] EXPORT_HUGO_MENU value: %S"
+              ;;          (org-entry-get nil "EXPORT_HUGO_MENU" :inherit))
               ;; Get the current subtree coordinates for
               ;; auto-calculation of menu item weight, page or
               ;; taxonomy weights ..
@@ -4461,25 +4487,18 @@ subtree-number being exported.
                 (setq org-hugo--subtree-coord
                       (org-hugo--get-post-subtree-coordinates subtree)))
 
-              ;; If `all-subtrees' is non-nil, the Org buffer would
-              ;; already be pre-processed in
-              ;; `org-hugo-export-wim-to-md', so do not do that again.
-              (if all-subtrees
-                  (let ((org-hugo--disable-after-all-exports-hook t))
-                    (setq ret (org-hugo-export-to-md async :subtreep visible-only)))
-
-                ;; Do the buffer pre-processing only if the user is
-                ;; exporting only the current valid Hugo post subtree.
-                (let ((current-outline-path (org-get-outline-path :with-self)))
-                  (if org-hugo--preprocess-buffer
-                      (let ((buffer (org-hugo--get-pre-processed-buffer)))
-                        (with-current-buffer buffer
-                          (add-to-list 'org-hugo--opened-buffers buffer)
-                          (goto-char (org-find-olp current-outline-path :this-buffer))
-                          (setq ret (org-hugo-export-to-md async :subtreep visible-only))))
-                    (progn
+              (if org-hugo--preprocess-buffer
+                  (let ((buffer (or org-hugo--preprocessed-buffer
+                                    (org-hugo--get-pre-processed-buffer))))
+                    (unless org-hugo--preprocessed-buffer
+                      (setq org-hugo--preprocessed-buffer buffer))
+                    (with-current-buffer buffer
+                      (add-to-list 'org-hugo--opened-buffers buffer)
                       (goto-char (org-find-olp current-outline-path :this-buffer))
-                      (setq ret (org-hugo-export-to-md async :subtreep visible-only)))))))))
+                      (setq ret (org-hugo-export-to-md async :subtreep visible-only))))
+                (progn
+                  (goto-char (org-find-olp current-outline-path :this-buffer))
+                  (setq ret (org-hugo-export-to-md async :subtreep visible-only)))))))
           ret)
 
       ;; If the point is not in a valid subtree, check if there's a
@@ -4789,26 +4808,15 @@ The optional argument NOERROR is passed to
            (dolist (fn org-hugo--all-subtrees-export--functions-to-silence)
              (advice-add fn :around #'org-hugo--advice-silence-messages))
 
-           (if org-hugo--preprocess-buffer
-               (let ((buffer (org-hugo--get-pre-processed-buffer)))
-                 (with-current-buffer buffer
-                   (add-to-list 'org-hugo--opened-buffers buffer)
-                   (setq ret (org-map-entries
-                              (lambda ()
-                                (org-hugo--export-subtree-to-md
-                                 async visible-only :all-subtrees))
-                              ;; Export only the subtrees where
-                              ;; EXPORT_FILE_NAME property is not
-                              ;; empty.
-                              "EXPORT_FILE_NAME<>\"\""))))
-             (setq ret (org-map-entries
-                        (lambda ()
-                          (org-hugo--export-subtree-to-md
-                           async visible-only :all-subtrees))
-                        ;; Export only the subtrees where
-                        ;; EXPORT_FILE_NAME property is not
-                        ;; empty.
-                        "EXPORT_FILE_NAME<>\"\"")))
+           (setq ret (org-map-entries
+                      (lambda ()
+                        (org-hugo--export-subtree-to-md
+                         async visible-only :all-subtrees))
+                      ;; Export only the subtrees where
+                      ;; EXPORT_FILE_NAME property is not
+                      ;; empty.
+                      "EXPORT_FILE_NAME<>\"\""))
+
            (let* ((elapsed-time (float-time (time-since start-time)))
                   (avg-time (/ elapsed-time org-hugo--subtree-count)))
              (message "[ox-hugo] Exported %d subtree%s from %s in %0.3fs (%0.3fs avg)"

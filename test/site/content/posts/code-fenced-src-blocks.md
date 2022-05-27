@@ -12,7 +12,6 @@ Here are few variables that you might like to change in the `local.mk`:
 
 `prefix`
 : Org installation directory
-
     ```makefile
     prefix = /dir/where/you/want/to/install/org # Default: /usr/share
     ```
@@ -25,7 +24,6 @@ Here are few variables that you might like to change in the `local.mk`:
 : Org Info installation directory. I like to keep the
     Info file for development version of Org in a separate
     directory.
-
     ```makefile
     infodir = $(prefix)/org/info # Default: $(prefix)/info
     ```
@@ -33,7 +31,6 @@ Here are few variables that you might like to change in the `local.mk`:
 `ORG_MAKE_DOC`
 : Types of Org documentation you'd like to build by
     default.
-
     ```makefile
     # Define below you only need info documentation, the default includes html and pdf
     ORG_MAKE_DOC = info pdf card # html
@@ -43,7 +40,6 @@ Here are few variables that you might like to change in the `local.mk`:
 : Packages from the `contrib/` directory that
     you'd like to build along with Org. Below are the ones on my
     _must-have_ list.
-
     ```makefile
     # Define if you want to include some (or all) files from contrib/lisp
     # just the filename please (no path prefix, no .el suffix), maybe with globbing

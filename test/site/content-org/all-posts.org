@@ -1731,6 +1731,9 @@ Another such example, but with space before a hyphen in source block:
 :EXPORT_DATE: 2017-08-01
 :EXPORT_FILE_NAME: list-has-src-block-but-no-list-syntax
 :END:
+#+begin_description
+Test source blocks inside list.
+#+end_description
 This case is not affected by /Blackfriday/ [[https://github.com/russross/blackfriday/issues/239][Issue #239]] as the fenced
 code block does not have Markdown syntax lists.
 - List item 1
@@ -1740,6 +1743,23 @@ code block does not have Markdown syntax lists.
   =def=
   #+end_src
 - List item 2
+-----
+{{{oxhugoissue(645)}}}
+
+1. item one
+2. This paragraph is followed by a source block *with* caption.
+   #+name: code__foo
+   #+caption: Foo
+   #+begin_src emacs-lisp
+   (message "hey")
+   #+end_src
+
+
+1. item one
+2. This paragraph is followed by a source block without caption.
+   #+begin_src emacs-lisp
+   (message "hey")
+   #+end_src
 **** Source block with list syntax but not in a list
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01

@@ -1,0 +1,887 @@
+#+hugo_base_dir: .
+#+hugo_section: temp
+
+#+property: header-args :eval never-export
+
+#+startup: indent
+
+#+author:
+
+* Preparation
+:PROPERTIES:
+:EXPORT_FILE_NAME: prep
+:EXPORT_DATE: 2017-07-12T17:05:38-04:00
+:END:
+1. Be the root directory for this Hugo site (the directory containing
+   =config.toml=).
+2. Run
+  #+begin_example
+  hugo server --port 1111
+  #+end_example
+3. See the site served on "http://localhost:1111/".
+* Post 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-1
+:EXPORT_DATE: 2017-07-12T17:31:56-04:00
+:END:
+Export this *first* post only by bringing point here and doing =M-x org-hugo-export-wim-to-md=.
+* Post 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-2
+:END:
+This post has no date.
+
+Export this *second* post only by bringing point here and doing =M-x org-hugo-export-wim-to-md=.
+* Image / Figure                                                      :image:
+** Image links
+:PROPERTIES:
+:EXPORT_FILE_NAME: image-links
+:EXPORT_DATE: 2017-07-15T07:49:44-04:00
+:END:
+This is some text before the first heading of this post.
+*** Unclickable image (works!)
+
+#+begin_src org
+# Org source
+,#+name: fig__unclickable_image
+,#+caption: Don't click this image -- It's not a hyperlink
+[[/images/org-mode-unicorn-logo.png]]
+#+end_src
+
+#+name: fig__unclickable_image
+#+caption: Don't click this image -- It's not a hyperlink
+[[/images/org-mode-unicorn-logo.png]]
+
+-----
++To be fixed+ (*Now fixed*): The sub-headings in a post get exported as /Heading 1/
+ instead of /Heading 2/.
+
+For example, this sub-section's heading is exported as:
+#+begin_example
+# Unclickable image
+#+end_example
+instead of
+#+begin_example
+## Unclickable image
+#+end_example
+
+-----
+*Solution*: Above is fixed by setting =HUGO_OFFSET_LEVEL= to 1.
+
+So the sub-heading title and the post title both get the /Heading 1/
+tag and look the same size.
+*** Clickable link that opens the image (works!)
+[[/images/org-mode-unicorn-logo.png][Click here to see the unicorn]]
+
+Do *not* use ~file:~ prefix in the Description if you want the image
+link to show up as-is i.e. not be replaced by the image-at-link like
+in [[fig__clickable_image_that_opens_the_image]]:
+
+#+begin_src org
+# Org source
+[[/images/org-mode-unicorn-logo.png][/images/org-mode-unicorn-logo.png]]
+#+end_src
+
+[[/images/org-mode-unicorn-logo.png][/images/org-mode-unicorn-logo.png]]
+
+*** Clickable image that opens the image (works!)
+Click below image to jump to the unicorn image.
+
+#+begin_src org
+# Org source
+#+name: fig__clickable_image_that_opens_the_image
+#+caption: Click this image -- It's a hyperlink
+[[/images/org-mode-unicorn-logo.png][file:../files-to-be-copied-to-static/static/images/unicorn-logo-small.png]]
+#+end_src
+
+#+name: fig__clickable_image_that_opens_the_image
+#+caption: Click this image -- It's a hyperlink
+[[/images/org-mode-unicorn-logo.png][file:../files-to-be-copied-to-static/static/images/unicorn-logo-small.png]]
+
+- NOTE :: =file:= has to be used in the *Description component* of the
+          Org link.
+**** Similar link with =#+name= specified
+Here's a similar link with =#+name= specified.. which should also be
+clickable.
+
+#+name: fig__unicorn
+[[/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+**** Same link with =file:= in "link" portion of the Org link too
+/Note that the =file:= is needed only in the "description" portion to
+create a hyperlinked image that links to an image. But having =file:=
+in the "link" portion of the Org link too shouldn't hurt./
+
+Click below image to jump to the unicorn image.
+
+[[file:/images/org-mode-unicorn-logo.png][file:/images/org-mode-unicorn-logo.png]]
+*** Link to image outside of standard Hugo =static= directory
+:PROPERTIES:
+:CUSTOM_ID: path-containing-static
+:END:
+[[../files-to-be-copied-to-static/static/images/copy-of-unicorn-logo.png]]
+
+If you link to files outside of the Hugo =static= directory, ensure
+that the path contains =/static/= if you would like to preserve the
+directory structure.
+
+Example translations between outside =static= directory paths to the
+copied location inside =static=:
+|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
+| Outside =static=                 | Copied-to location inside =static=        | Explanation                                                                                                          |
+|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
+| =~/temp/static/images/foo.png=   | =<HUGO_BASE_DIR>/static/images/foo.png=   | If the *outside* path has =/static/= in it, the directory structure after that is preserved when copied.             |
+| =~/temp/static/img/foo.png=      | =<HUGO_BASE_DIR>/static/img/foo.png=      | (same as above)                                                                                                      |
+| =~/temp/static/foo.png=          | =<HUGO_BASE_DIR>/static/foo.png=          | (same as above)                                                                                                      |
+| =~/temp/static/articles/zoo.pdf= | =<HUGO_BASE_DIR>/static/articles/zoo.pdf= | (same as above)                                                                                                      |
+|----------------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------|
+
+The above path translations (when path contains =static=) hold true
+even when inside page bundle pages.
+**** Source path does not contain =/static/=
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
+|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------|
+| Outside =static=         | Copied-to location inside =static=       | Explanation                                                                                                           |
+|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------|
+| =~/temp/bar/baz/foo.png= | =<HUGO_BASE_DIR>/static/ox-hugo/foo.png= | Here, as the *outside* path does not have =/static/=, the file is copied to the =ox-hugo/= dir in Hugo =static/= dir. |
+|--------------------------+------------------------------------------+-----------------------------------------------------------------------------------------------------------------------|
+- Note :: The =ox-hugo= sub-directory name is because of the default
+          value of
+          =org-hugo-default-static-subdirectory-for-externals=.
+***** Same image, but hyperlinked to itself
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
+*** Link to an image with space in filename
+This is a link to a file with a space in the filename:
+[[file:../files-to-be-copied-to-static/foo/unicorn logo.png][Link to ~unicorn logo.png~]]
+** Inline hyperlinked and non-hyperlinked images                     :inline:
+:PROPERTIES:
+:EXPORT_FILE_NAME: inline-images
+:END:
+This tests the feature added to support proper export syntax for
+inline images
+*** Inline non-hyperlinked image
+**** No Alt text or any other attributes
+This is an inline non-hyperlinked image without alt text or other
+attributes: [[/images/org-mode-unicorn-logo.png]].
+**** With Alt text
+#+attr_html: :alt Inline Non-hyperlinked Image
+This is an inline non-hyperlinked image with alt text:
+[[/images/org-mode-unicorn-logo.png]].
+**** With other HTML attributes
+#+attr_html: :width 30
+This is an inline non-hyperlinked image with the width attribute:
+[[/images/org-mode-unicorn-logo.png]].
+*** Non-inline non-hyperlinked image
+[[/images/org-mode-unicorn-logo.png]]
+*** Inline hyperlinked image
+**** No Alt text or any other attributes
+:PROPERTIES:
+:CUSTOM_ID: inline-image-to-be-copied-to-static--no-attr
+:END:
+This is an inline non-hyperlinked image without alt text or other
+attributes:
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
+**** With Alt text
+#+attr_html: :alt Inline Non-hyperlinked Image
+This is an inline non-hyperlinked image with alt text:
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
+**** With other HTML attributes
+#+attr_html: :width 30
+This is an inline non-hyperlinked image with the width attribute:
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]].
+**** With space in the filename
+This is an inline hyperlinked image with a space in the filename:
+[[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/unicorn%20logo.png]].
+
+*** Non-inline hyperlinked image
+ [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png][file:../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
+** Image captions
+:PROPERTIES:
+:EXPORT_DATE: 2017-07-19
+:EXPORT_FILE_NAME: image-captions
+:CUSTOM_ID: image-captions
+:END:
+#+begin_description
+Figure captions with markup.
+#+end_description
+
+Some text before image.
+
+#+caption: A unicorn! "Something in double quotes"
+[[/images/org-mode-unicorn-logo.png]]
+
+Some more text, after image.
+
+#+caption: The /same/ figure *again*, testing [[https://ox-hugo.scripter.co][a link]] too!
+[[/images/org-mode-unicorn-logo.png]]
+
+** Image with Hugo =figure= shortcode parameters set using =ATTR_HTML=
+:PROPERTIES:
+:EXPORT_FILE_NAME: figure-shortcode-and-attr-html
+:END:
+*** Setting =class= parameter
+#+attr_html: :class inset
+[[/images/org-mode-unicorn-logo.png]]
+
+[[https://github.com/kaushalmodi/ox-hugo/issues/17#issuecomment-313627728][Discussion]]
+*** Setting =alt= parameter
+[[https://www.reddit.com/r/emacs/comments/71wy6n/orgmode_as_a_markup_language_does_make_sense_even/dnhqudn/][Reference]]
+#+attr_html: :alt Org-mode Unicorn Logo
+[[/images/org-mode-unicorn-logo.png]]
+*** Setting =title= parameter
+#+attr_html: :title Logo
+[[/images/org-mode-unicorn-logo.png]]
+*** Setting image caption
+The image caption can be set in two ways.
+1. Using the Org =#+caption= keyword
+2. Using =#+attr_html: :caption my caption=
+
+The =#+caption= is available will get the higher precedence. In the
+below image, caption is set using that:
+
+#+include: "./temp.org::#image-captions" :only-contents t
+
+Below, the same caption is set using the =#+attr_html= method instead:
+
+Some text before image.
+
+#+attr_html: :caption A unicorn!
+[[/images/org-mode-unicorn-logo.png]]
+
+/Enter a new line after the image link so that it's in an "Org
+paragraph" that contains just that image. That tells Org that that
+=#+attr_html= attribute is associated *only* with that image, and not
+to the text that follows that image too./
+*** Setting image size
+**** Setting =:width= parameter
+The image [[https://www.w3schools.com/tags/att_img_width.asp][width]] can be specified in *pixels* using the =:width=
+parameter. *The height of the image will be resized proportionally.*
+
+Below image is shown 50 pixels wide.
+#+attr_html: :width 50
+[[/images/org-mode-unicorn-logo.png]]
+
+Below image is shown 100 pixels wide.
+#+attr_html: :width 100
+[[/images/org-mode-unicorn-logo.png]]
+
+Below image is shown with a width of 1000 pixels! Now the size of this
+image is 200px × 200px. But the image will still show up in 1000px ×
+1000px size, but obviously heavily pixelated!
+
+#+attr_html: :width 1000
+[[/images/org-mode-unicorn-logo.png]]
+**** Setting =:height= parameter
+*NOTE*: Support for specifying =height= parameter to the Hugo =figure=
+ shortcut was only added recently in [[https://github.com/gohugoio/hugo/pull/4018][hugo PR #4018]]. So setting this
+ parameter will need *hugo v0.31* or later.
+
+-----
+
+The image [[https://www.w3schools.com/tags/att_img_height.asp][height]] can be specified in *pixels* using the =:height=
+parameter. *The weight of the image will be resized proportionally.*
+
+Below image is shown 50 pixels tall.
+#+attr_html: :height 50
+[[/images/org-mode-unicorn-logo.png]]
+
+Below image is shown 100 pixels tall.
+#+attr_html: :height 100
+[[/images/org-mode-unicorn-logo.png]]
+
+Below image is shown with a height of 1000 pixels! Now the size of
+this image is 200px × 200px. But the image will still show up in
+1000px × 1000px size, but obviously heavily pixelated!
+
+#+attr_html: :height 1000
+[[/images/org-mode-unicorn-logo.png]]
+**** Setting both =:width= and =:height=
+The *NOTE* above applies here too.. needs *hugo v0.31* or later.
+
+The figure sizes below are intentionally set /mis-proportionally/ just
+for testing.
+- =:width 100 :height 200=
+  #+attr_html: :width 100 :height 200
+  [[/images/org-mode-unicorn-logo.png]]
+- =:width 200 :height 100=
+  #+attr_html: :width 200 :height 100
+  [[/images/org-mode-unicorn-logo.png]]
+*** Multiple =ATTR_HTML=
+Below in Org source:
+#+begin_src org
+#+html: <style>.foo img { border:2px solid black; }</style>
+#+attr_html: :alt Org mode logo
+#+attr_html: :width 300 :class foo
+[[https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
+#+end_src
+
+Rendered this:
+
+#+html: <style>.foo img { border:2px solid black; }</style>
+#+attr_html: :alt Org mode logo
+#+attr_html: :width 300 :class foo
+[[https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png]]
+
+*NOTE*: We cannot use =:style= in =#+attr_html= because Hugo does not
+ /yet/ support a =style= argument in the =figure= shortcode [ [[https://github.com/gohugoio/hugo/blob/488631fe0abc3667355345c7eb98ba7a2204deb5/tpl/tplimpl/template_embedded.go#L22-L37][Source]]
+ ].
+
+So using =#+html: <style>.foo img ... </style>= and =#+attr_html: :class
+ foo= as shown in the workaround above.
+**** Other
+Similarly, =:link=, =:attr=, =:attrlink= parameters in =#+attr_html=
+are also supported to set the corresponding parameter in the Hugo
+=figure= shortcode.
+*** Pathogenic case (manual HTML tag wrappers in Org source)
+It works.. but *don't do it!!*
+#+begin_src org
+,#+begin_export html
+<div class="inset">
+,#+end_export
+[[/images/org-mode-unicorn-logo.png]]
+,#+begin_export html
+</div>
+,#+end_export
+#+end_src
+#+begin_export html
+<div class="inset">
+#+end_export
+[[/images/org-mode-unicorn-logo.png]]
+#+begin_export html
+</div>
+#+end_export
+** Inlined SVG                                                   :svg:inline:
+:PROPERTIES:
+:EXPORT_FILE_NAME: inlined-svg
+:END:
+#+begin_description
+Test inlined SVGs with hyperlinks.
+#+end_description
+
+- [[http://plantuml.com/svg][Example of generating SVG with hyperlinks using PlantUML]]
+- [[https://alligator.io/svg/hyperlinks-svg/][SVGs with hyperlinks need to be inlined]]
+
+Introduce a new ~:inlined t~ HTML attribute.
+
+#+begin_src plantuml :file images/svg-with-hyperlinks.svg :exports results
+skinparam svgLinkTarget _parent
+start
+:[[https://ox-hugo.scripter.co/ ox-hugo homepage]];
+stop
+#+end_src
+#+caption: An SVG with *hyperlinks* -- generated using PlantUML
+#+attr_html: :inlined t
+#+RESULTS:
+[[file:images/svg-with-hyperlinks.svg]]
+*** Captioned source block followed by an inlined SVG
+
+#+caption: My class diagram
+#+begin_src plantuml :file images/issue-552.svg :exports both
+  class A
+  url of A is [[https://example.org/]]
+#+end_src
+#+attr_html: :inlined t
+#+RESULTS:
+[[file:images/issue-552.svg]]
+** Figures from included Org file                                   :include:
+:PROPERTIES:
+:EXPORT_FILE_NAME: figures-from-included-org-file
+:END:
+
+*** Including another subtree from this same file
+This test can be truly tested by locally deleting
+~test/site/static/ox-hugo/copy-2-of-unicorn-logo.png~ from this repo,
+exporting this file and checking that the file got copied again.
+
+#+include: "./temp.org::#inline-image-to-be-copied-to-static--no-attr" :only-contents t
+*** Including a subtree from a file in different directory
+This test can be truly tested by locally deleting
+~test/site/static/ox-hugo/gnu.png~ from this repo, exporting this file
+and checking that the file got copied again.
+
+#+include: "./images-in-content/images-in-content.org::*Post 1" :only-contents t
+* Video                                                              :videos:
+** Embedded Video                                                  :embedded:
+:PROPERTIES:
+:EXPORT_FILE_NAME: embedded-video
+:END:
+
+[[https://www.w3schools.com/html/html5_video.asp][Using ~video~ HTML5 tag]]
+
+#+attr_html: :width 320 :height 240 :controls t
+#+begin_video
+<source src="/videos/sample.mp4" type="video/mp4">
+Your browser does not support the video tag.
+#+end_video
+
+[[https://sample-videos.com/][/Video source/]]
+* Heading                                                          :headings:
+** Setting heading anchors                                           :anchor:
+:PROPERTIES:
+:EXPORT_FILE_NAME: setting-heading-anchors
+:EXPORT_DATE: 2017-07-12T17:05:39-04:00
+:END:
+*** Heading 1 of the post
+:PROPERTIES:
+:CUSTOM_ID: cool-ref-1
+:END:
+Something
+**** Heading 1.1 of the post
+:PROPERTIES:
+:CUSTOM_ID: cool-ref-1.1
+:END:
+Something else
+*** Heading 2 of the post
+:PROPERTIES:
+:CUSTOM_ID: cool-ref-2
+:END:
+Something 2
+**** Heading 2.1 of the post
+:PROPERTIES:
+:CUSTOM_ID: cool-ref-2.1
+:END:
+Something 2.1
+** Post heading with crazy characters
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-heading-slugs
+:EXPORT_DATE: 2017-07-12T13:46:33-04:00
+:END:
+*** Releasing version 1.1
+*** Foo ( Bar ) Baz
+*** (Foo)Bar.Baz&Zoo
+- ~.~ → ~dot~
+- ~&~ → ~and~
+*** C++
+- ~+~ → ~plus~
+*** Hey! I have a link [[https://example.org][here]] (Awesome!)
+*** Este título es en español
+*** Non-English titles
+**** ÂÊÎÔÛ
+**** ÁÉÍÓÚÝ
+**** ÀÈÌÒÙ
+**** ÄËÏÖÜ
+**** ÃÐÑÕÞ
+***** Ç
+*** Headings with HTML
+**** Checklist [1/3]
+Above title would render to ~Checklist <code>[1/3]</code>~ in
+Markdown.
+***** DONE Item 1
+Above would render to ~<span class="todo DONE_">DONE </span> Item 1~
+in Markdown.
+***** TODO Item 2
+Above would render to ~<span class="todo TODO_">TODO </span> Item 2~
+in Markdown.
+***** TODO Item 3
+Above would render to ~<span class="todo TODO_">TODO </span> Item 3~
+in Markdown.
+**** Version 0.1 <2017-10-11 Wed>
+Above title would render to ~Version 0.1 <span
+class="timestamp-wrapper"><span class="timestamp">&lt;2017-10-11
+Wed&gt;</span></span>~ in Markdown.
+** HTML Container                                            :container:html:
+:PROPERTIES:
+:EXPORT_HTML_CONTAINER: section
+:END:
+*** HTML Container with class
+:PROPERTIES:
+:EXPORT_FILE_NAME: html-container-with-class
+:EXPORT_HTML_CONTAINER_CLASS: foo
+:END:
+**** Top level heading 1
+This heading is wrapped in a ~section~ tag with classes ~outline-1~
+and ~foo~.
+***** Sub-heading 1.1
+This heading is wrapped in a ~div~ tag with classes ~outline-2~ and
+~foo~.
+**** Top level heading 2
+:PROPERTIES:
+:EXPORT_HTML_CONTAINER_CLASS: bar
+:END:
+This heading is wrapped in a ~section~ tag with classes ~outline-2~ and
+~bar~.
+***** Sub-heading 2.1
+:PROPERTIES:
+:EXPORT_HTML_CONTAINER_CLASS: zoo
+:END:
+This heading is wrapped in a ~div~ tag with classes ~outline-2~ and
+~zoo~.
+**** Top level heading 3
+:PROPERTIES:
+:EXPORT_HTML_CONTAINER: aside
+:END:
+This heading is wrapped in an ~aside~ tag with classes ~outline-1~ and
+~foo~.
+***** Sub-heading 3.1
+:PROPERTIES:
+:EXPORT_HTML_CONTAINER: blockquote
+:EXPORT_HTML_CONTAINER_CLASS: baz
+:END:
+This heading is wrapped in a ~blockquote~ tag with classes ~outline-2~
+and ~baz~.
+** Export with planning info                                       :planning:
+:PROPERTIES:
+:EXPORT_FILE_NAME: planning-info
+:EXPORT_OPTIONS: p:t
+:END:
+#+begin_description
+Export the SCHEDULED, DEADLINE, etc. planning info time stamps.
+#+end_description
+*** TODO Some plan
+SCHEDULED: <2022-01-20 Mon> DEADLINE: <2022-01-30 Mon>
+** Export with sub-heading tags                        :tags:subheading_tags:
+:PROPERTIES:
+:EXPORT_FILE_NAME: sub-headings-with-tags
+:EXPORT_OPTIONS: tags:t h:2
+:END:
+#+begin_description
+Export tags of sub-headings
+#+end_description
+*** Sub heading level 1                      :abc:def:@abc__def__ghi:ghi_jkl:
+**** Sub heading level 2                     :abc:def:@abc__def__ghi:ghi_jkl:
+***** Sub heading level 3                    :abc:def:@abc__def__ghi:ghi_jkl:
+****** Sub heading level 4                   :abc:def:@abc__def__ghi:ghi_jkl:
+* Title in Front Matter                                               :title:
+** Awesome title with "quoted text"
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-title-quotes
+:EXPORT_DATE: 2017-07-24
+:END:
+Testing a post with double quotes in the title.
+** Under_scores_in_title
+:PROPERTIES:
+:EXPORT_FILE_NAME: under-scores-in-title
+:EXPORT_DATE: 2017-07-28
+:END:
+Ensure that the underscores in =title= string of front matter do not
+get escaped.. =foo_bar= must not become =foo\_bar=.
+** Allow empty titles                                                 :empty:
+:PROPERTIES:
+:EXPORT_FILE_NAME: allow-empty-titles-2
+:EXPORT_TITLE:
+:END:
+This post will be exported without =title= in the front-matter because
+it is explicitly set to /empty/ using =:EXPORT_TITLE:=.
+** En dash --, Em dash ---, Horizontal ellipsis ... in titles          :@upstream:
+:PROPERTIES:
+:EXPORT_FILE_NAME: en-dash-em-dash-hellip-in-titles
+:END:
+This tests an =ox-hugo= feature that gets around an upstream
+limitation, where the Blackfriday /smartDashes/ rendering does not
+happen in post titles.
+** *Title with **lots** and *lots* of * aste*risks**
+:PROPERTIES:
+:EXPORT_FILE_NAME: title_with_asterisks
+:END:
+- All asterisk characters meant for Org =*bold*= markup are removed.
+- The rest of the asterisk characters are retained.
+** Title with /lots/ and lots / / / of forward/slashes
+:PROPERTIES:
+:EXPORT_FILE_NAME: title_with_forward_slashes
+:END:
+- All forward slash characters meant for Org =/italic/= markup are
+  removed.
+- The rest of the forward slash characters are retained.
+** _Title_ with __lots and _lots_ _ _ of under_scores__
+:PROPERTIES:
+:EXPORT_FILE_NAME: title_with_under_scores
+:END:
+- All underscore characters meant for Org =_underline_= markup are
+  removed.
+- The rest of the underscore characters are retained.
+** =Title with lots= of ` ` ` backticks` `foo =bar= ~ ~zoomba~
+:PROPERTIES:
+:EXPORT_FILE_NAME: title_with_backticks_equals_tildes
+:END:
+- All equal/tilde characters meant for Org =~code~= or ~=verbatim=~
+  markup are removed.
+- The rest of the equal/tilde characters are retained.
+** =Title with lots= of ` ` ` backticks` * asterisks *bold*, /italics/ =retain*,_,` in monospace= underscores _ _ _*foo*_ =bar= **
+:PROPERTIES:
+:EXPORT_FILE_NAME: title_with_asterisks_underscores_backticks
+:END:
+- All the Org markup characters are removed.
+- The "markup characters" not doing actual markup are retained.
+** 2020-04-19
+:PROPERTIES:
+:EXPORT_FILE_NAME: title-with-just-date-chars
+:END:
+#+begin_description
+Test the case where the title contains only the date, making it look
+like a Hugo TOML date field.
+#+end_description
+** Awesome title with % symbol
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-title-percent-symbol
+:EXPORT_DATE: 2017-07-24
+:END:
+Testing a post with a percent symbol in the title.
+*** Sub-heading with % symbol
+Sub-heading also exported correctly
+* Excluded post                                                    :noexport:
+:PROPERTIES:
+:EXPORT_FILE_NAME: excluded-post
+:END:
+This post must not be exported as it is tagged =noexport=.
+* COMMENT Commented post
+:PROPERTIES:
+:EXPORT_FILE_NAME: commented-post
+:END:
+This post must not be exported as it is commented.
+* COMMENT Commented parent subtree
+** Dummy sub heading
+*** Nested post that should not export
+:PROPERTIES:
+:EXPORT_FILE_NAME: nested-post-that-should-not-export
+:END:
+This post must not be exported as one of its parent subtrees is
+commented.
+* Section                                                           :section:
+** Articles
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: articles
+:END:
+*** Article 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: article-1
+:EXPORT_DATE: 2017-07-19T08:34:29-04:00
+:END:
+First article.
+
+This will land in =content/articles/= as the parent of this subtree
+sets =EXPORT_HUGO_SECTION= to =articles=. Note that the theme needs to
+define at least the =single.html=, either in the =layouts/_default/=
+directory, or =layouts/articles/=, either in the Hugo base dir or the
+theme dir.
+*** Article 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: article-2
+:EXPORT_DATE: 2017-07-19T08:34:22-04:00
+:END:
+Second article.
+
+This will also land in =content/articles/= the same way.
+** Emacs posts                                                        :emacs:
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: posts
+:END:
+*** Emacs Post 1                                                        :foo:
+:PROPERTIES:
+:EXPORT_FILE_NAME: emacs-post-1
+:EXPORT_DATE: 2017-07-12T17:31:56-04:00
+:END:
+Here is the first post on Emacs.
+*** Emacs Post 2                                                        :bar:
+:PROPERTIES:
+:EXPORT_FILE_NAME: emacs-post-2
+:EXPORT_DATE: 2017-07-12T17:31:56-04:00
+:END:
+Here is the second post on Emacs.
+** HUGO_SECTION set in post subtree
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: zoo
+:EXPORT_FILE_NAME: post-in-zoo-section
+:END:
+#+begin_description
+Test where ~EXPORT_HUGO_SECTION~ is set in the post subtree itself.
+#+end_description
+This post will be created in the =zoo= section.
+** Null HUGO_SECTION                                             :root_level:
+*** Using empty EXPORT_HUGO_SECTION
+:PROPERTIES:
+:EXPORT_HUGO_SECTION:
+:EXPORT_FILE_NAME: root-level-content-empty-section
+:END:
+#+begin_description
+Case where ~EXPORT_HUGO_SECTION~ is set to nothing.
+#+end_description
+
+This post is created at the site root.
+*** Setting EXPORT_HUGO_SECTION to "/"
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: /
+:EXPORT_FILE_NAME: root-level-content-section-set-to-slash
+:END:
+#+begin_description
+Case where ~EXPORT_HUGO_SECTION~ is set to ~/~.
+#+end_description
+
+This behaves the same as *not setting* ~EXPORT_HUGO_SECTION~ at all.
+
+This post is created at the site root.
+** Section fragment concatenation       :fragment:concatenation:deep_nesting:
+*** sub1 section
+:PROPERTIES:
+:EXPORT_HUGO_SECTION_FRAG: sub1
+:END:
+**** Post in sub1
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-section-frag-post-in-posts-sub1
+:END:
+#+begin_description
+Test post created in ~posts/sub1~.
+#+end_description
+**** sub1/sub2 section
+:PROPERTIES:
+:EXPORT_HUGO_SECTION_FRAG: sub2
+:END:
+***** Post in sub1/sub2
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-section-frag-post-in-posts-sub1-sub2
+:END:
+#+begin_description
+Test post created in ~posts/sub1/sub2~.
+#+end_description
+***** sub1/sub2/sub3 section
+:PROPERTIES:
+:EXPORT_HUGO_SECTION_FRAG: sub3
+:END:
+****** Post in sub1/sub2/sub3
+:PROPERTIES:
+:EXPORT_FILE_NAME: hugo-section-frag-post-in-posts-sub1-sub2-sub3
+:END:
+#+begin_description
+Test post created in ~posts/sub1/sub2/sub3~.
+#+end_description
+*** Post with all HUGO_SECTION, HUGO_SECTION_FRAG, EXPORT_FILE_NAME in same subtree
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: articles
+:EXPORT_HUGO_SECTION_FRAG: emacs
+:EXPORT_FILE_NAME: hugo-section-frag-post-in-articles-emacs
+:END:
+#+begin_description
+Test post created in ~articles/emacs~.
+#+end_description
+** Hugo Bundle concatenation :fragment:concatenation:deep_nesting:page_bundles:
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: bundle-concat
+:END:
+*** Articles
+:PROPERTIES:
+:EXPORT_HUGO_SECTION_FRAG: articles
+:END:
+**** Articles Index page
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+This is an index page (/branch/ bundle) for all the articles.
+
+[[https://github.com/kaushalmodi/ox-hugo/issues/210#issuecomment-424891371][Ref]]
+**** Article One
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: article-one
+:END:
+***** Article One Index page
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+This is an index page (/branch/ bundle) for Articles/Article One.
+***** Chapter One
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: chapter-one
+:END:
+****** Article One Chapter One Index page
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+This is an index page (/branch/ bundle) for Articles/Article
+One/Chapter One.
+****** Section 1A
+:PROPERTIES:
+:EXPORT_FILE_NAME: section-1a
+:END:
+This is the content of Articles/Article One/Chapter One/Section 1A.
+****** Section 1B
+:PROPERTIES:
+:EXPORT_FILE_NAME: section-1b
+:END:
+This is the content of Articles/Article One/Chapter One/Section 1B.
+* Tables                                                              :table:
+** Simple Table
+:PROPERTIES:
+:EXPORT_FILE_NAME: simple-table
+:EXPORT_DATE: 2017-07-12T19:25:56-04:00
+:END:
+| h1 | h2 |
+| a  | b  |
+| c  | d  |
+** Table with narrowest cols
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-with-narrowest-columns
+:EXPORT_DATE: 2017-07-12T19:26:00-04:00
+:END:
+| 1 | 2 | 3 |
+| a | b | e |
+| c | d | f |
+** Table with top border
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-top-border
+:EXPORT_DATE: 2017-07-12T19:26:04-04:00
+:END:
+|---+---+---+---|
+| 1 | 2 | 3 | 4 |
+| a | b | e | g |
+| c | d | f | h |
+** Table with bottom border
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-bottom-border
+:EXPORT_DATE: 2017-07-12T19:26:06-04:00
+:END:
+| 1 | 2 | 3 | 4 |
+| a | b | e | g |
+| c | d | f | h |
+|---+---+---+---|
+** Table with top and bottom border
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-top-and-bottom-border
+:EXPORT_DATE: 2017-07-12T19:26:10-04:00
+:END:
+|---+---+---+---|
+| 1 | 2 | 3 | 4 |
+| a | b | e | g |
+| c | d | f | h |
+|---+---+---+---|
+** Table with rule after first row
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-only-rule-after-first-row
+:EXPORT_DATE: 2017-07-12T19:26:13-04:00
+:END:
+| 1 | 2 | 3 | 4 |
+|---+---+---+---|
+| a | b | e | g |
+| c | d | f | h |
+** Table with borders and rule after first
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-with-borders-and-rule-after-first
+:EXPORT_DATE: 2017-07-12T19:26:16-04:00
+:END:
+|---+---+---+---|
+| 1 | 2 | 3 | 4 |
+|---+---+---+---|
+| a | b | e | g |
+| c | d | f | h |
+|---+---+---+---|
+** Table with single column
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-with-single-column
+:END:
+| h1 |
+| a  |
+| b  |
+** Table with single row
+:PROPERTIES:
+:EXPORT_FILE_NAME: table-with-single-row
+:END:
+| a | b |
+* Instructions
+Command to reproduce the error:
+#+begin_src shell
+make /home/kmodi/stow/pub_dotfiles/emacs/dot-emacs.d/elisp/ox-hugo/test/site/content-org/temp.org
+#+end_src
+or
+#+begin_src shell
+make md1 ORG_FILE=test/site/content-org/temp.org
+#+end_src
+
+This error is difficult to reproduce as it depends on the content of
+the file. If any of the subtree is removed or added, it's very likely
+that the error won't be reproduced.

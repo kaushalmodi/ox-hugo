@@ -752,8 +752,11 @@ to this rule:
      current item.
 
   3. In an item, if a paragraph is immediately followed by an src
-     or example block (or vice-versa), don't add a blank line
-     between those elements."
+     or example block, don't add a blank line after the paragraph.
+
+  4. In an item, if an src or example block doesn't have a caption
+     and is immediately followed by a paragraph, don't add a blank
+     line after that src or example block."
   (org-element-map tree (remq 'item org-element-all-elements) ;Exception 1 in the doc-string
     (lambda (el)
       (let ((post-blank (cond
@@ -771,9 +774,14 @@ to this rule:
                                (let ((next-el (org-export-get-next-element el info)))
                                  (memq (org-element-type next-el) '(src-block example-block))))
                           0)
-                         ;; Exception 3 in the doc-string (src-block -> paragraph).
+                         ;; Exception 4 in the doc-string (caption-less src-block -> paragraph).
+                         ;; If an src or example block has a caption,
+                         ;; that caption will be wrapped in an HTML
+                         ;; div block. In that case, we *do* need to
+                         ;; leave a blank line after the div block (CommonMark).
                          ((and (memq (org-element-type el) '(src-block example-block))
                                (eq (org-element-type (org-element-property :parent el)) 'item)
+                               (null (org-element-property :caption el)) ;<-- "no caption" check
                                (let ((next-el (org-export-get-next-element el info)))
                                  (memq (org-element-type next-el) '(paragraph))))
                           0)

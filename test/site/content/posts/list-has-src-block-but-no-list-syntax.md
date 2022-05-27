@@ -21,8 +21,7 @@ code block does not have Markdown syntax lists.
 
 `ox-hugo` Issue #[645](https://github.com/kaushalmodi/ox-hugo/issues/645)
 
-1.  item one
-2.  This paragraph is followed by a source block **with** caption.
+1.  paragraph -&gt; src block with caption -&gt; paragraph -&gt; src block
     <a id="code-snippet--foo"></a>
     ```emacs-lisp
     (message "hey")
@@ -32,10 +31,17 @@ code block does not have Markdown syntax lists.
       Foo
     </div>
 
-<!--listend-->
-
-1.  item one
-2.  This paragraph is followed by a source block without caption.
+    sandwiched paragraph
     ```emacs-lisp
     (message "hey")
     ```
+    last paragraph
+2.  paragraph -&gt; src block **without** caption -&gt; paragraph -&gt; src block
+    ```emacs-lisp
+    (message "hey")
+    ```
+    sandwiched paragraph
+    ```emacs-lisp
+    (message "hey")
+    ```
+    last paragraph

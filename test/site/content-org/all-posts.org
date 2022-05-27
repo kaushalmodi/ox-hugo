@@ -1746,20 +1746,26 @@ code block does not have Markdown syntax lists.
 -----
 {{{oxhugoissue(645)}}}
 
-1. item one
-2. This paragraph is followed by a source block *with* caption.
+1. paragraph -> src block with caption -> paragraph -> src block
    #+name: code__foo
    #+caption: Foo
    #+begin_src emacs-lisp
    (message "hey")
    #+end_src
-
-
-1. item one
-2. This paragraph is followed by a source block without caption.
+   sandwiched paragraph
    #+begin_src emacs-lisp
    (message "hey")
    #+end_src
+   last paragraph
+2. paragraph -> src block *without* caption -> paragraph -> src block
+   #+begin_src emacs-lisp
+   (message "hey")
+   #+end_src
+   sandwiched paragraph
+   #+begin_src emacs-lisp
+   (message "hey")
+   #+end_src
+   last paragraph
 **** Source block with list syntax but not in a list
 :PROPERTIES:
 :EXPORT_DATE: 2017-08-01

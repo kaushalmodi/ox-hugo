@@ -1,5 +1,5 @@
-#+hugo_base_dir: .
-#+hugo_section: temp
+#+hugo_base_dir: /tmp
+#+hugo_section: debug
 
 #+property: header-args :eval never-export
 

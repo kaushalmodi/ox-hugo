@@ -62,7 +62,6 @@ that the link jump is evident):
 ````emacs-lisp
 (message "Hello")
 ````
-
 <div class="src-block-caption">
   <span class="src-block-number"><a href="#code-snippet--hello">Programmlisting 1</a>:</span>
   Hello
@@ -126,7 +125,6 @@ blandit in.
 ````emacs-lisp
 (message "Hello again")
 ````
-
 <div class="src-block-caption">
   <span class="src-block-number"><a href="#code-snippet--helloagain">Programmlisting 2</a>:</span>
   Hello Again

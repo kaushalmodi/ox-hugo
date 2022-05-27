@@ -12,13 +12,11 @@ lists. `ox-hugo` provides a hack to get around that bug.
 Below is an example of such a case:
 
 -   List item 1
-
     ```text
     ​- List item 1.1 in code block
     ​- List item 1.2 in code block
     ```
 -   List item 2
-
     ```text
     ​+ List item 2.1 in code block
     ​+ List item 2.2 in code block
@@ -29,13 +27,11 @@ Another such example, but with spaces before the hyphens in example
 blocks:
 
 -   List item 1
-
     ```text
     ​- List item 1.1 in code block
     ​- List item 1.2 in code block
     ```
 -   List item 2
-
     ```text
     ​+ List item 2.1 in code block
     ​+ List item 2.2 in code block

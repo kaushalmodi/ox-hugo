@@ -134,7 +134,7 @@ tag needs to be `python'."
 ;;; Define Back-End
 
 (org-export-define-derived-backend 'blackfriday 'md
-  :filters-alist '((:filter-parse-tree . org-md-separate-elements))
+  :filters-alist '((:filter-parse-tree . org-blackfriday-separate-elements))
   ;; Do not clutter the *Org Exporter Dispatch* menu.
   ;; :menu-entry
   ;; '(?b "Export to Blackfriday Flavored Markdown"
@@ -729,6 +729,71 @@ This function is mostly a copy of
   (let* ((org-str (org-element-interpret-data (org-element-contents el)))
          (html-str (org-export-string-as org-str 'html :body-only)))
     html-str))
+
+
+
+;;; Filter Functions
+
+;; This function is adapted from `org-md-separate-elements'.
+(defun org-blackfriday-separate-elements (tree _backend info)
+  "Fix blank lines between elements.
+
+TREE is the parse tree being exported.
+
+INFO is a plist used as a communication channel.
+
+Enforce a blank line between elements.  There are 3 exceptions
+to this rule:
+
+  1. Preserve blank lines between sibling items in a plain list,
+
+  2. In an item, remove any blank line before the very first
+     paragraph and the next sub-list when the latter ends the
+     current item.
+
+  3. In an item, if a paragraph is immediately followed by an src
+     or example block, don't add a blank line after the paragraph.
+
+  4. In an item, if an src or example block doesn't have a caption
+     and is immediately followed by a paragraph, don't add a blank
+     line after that src or example block."
+  (org-element-map tree (remq 'item org-element-all-elements) ;Exception 1 in the doc-string
+    (lambda (el)
+      (let ((post-blank (cond
+                         ;; Exception 2 in the doc-string.
+                         ((and (eq (org-element-type el) 'paragraph)
+                               (eq (org-element-type (org-element-property :parent el)) 'item)
+                               (org-export-first-sibling-p el info)
+                               (let ((next-el (org-export-get-next-element el info)))
+                                 (and (eq (org-element-type next-el) 'plain-list)
+                                      (not (org-export-get-next-element next-el info)))))
+                          0)
+                         ;; Exception 3 in the doc-string (paragraph -> src-block).
+                         ((and (eq (org-element-type el) 'paragraph)
+                               (eq (org-element-type (org-element-property :parent el)) 'item)
+                               (let ((next-el (org-export-get-next-element el info)))
+                                 (memq (org-element-type next-el) '(src-block example-block))))
+                          0)
+                         ;; Exception 4 in the doc-string (caption-less src-block -> paragraph).
+                         ;; If an src or example block has a caption,
+                         ;; that caption will be wrapped in an HTML
+                         ;; div block. In that case, we *do* need to
+                         ;; leave a blank line after the div block (CommonMark).
+                         ((and (memq (org-element-type el) '(src-block example-block))
+                               (eq (org-element-type (org-element-property :parent el)) 'item)
+                               (null (org-element-property :caption el)) ;<-- "no caption" check
+                               (let ((next-el (org-export-get-next-element el info)))
+                                 (memq (org-element-type next-el) '(paragraph))))
+                          0)
+                         (t
+                          1))))
+        (org-element-put-property el :post-blank post-blank)
+        ;; (message "[org-blackfriday-separate-elements DBG] %S post-blank: %d"
+        ;;          (org-element-type el)
+        ;;          (org-element-property :post-blank el))
+        )))
+  ;; Return updated tree.
+  tree)
 
 
 

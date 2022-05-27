@@ -25,29 +25,24 @@ Some content.
 Reference: `hugo` Issue #[4006](https://github.com/gohugoio/hugo/issues/4006)
 
 -   List item 1
-
     ```emacs-lisp
     (message "I am in list at level-1 indentation")
     ```
 
     -   List item 1.1
-
         ```emacs-lisp
         (message "I am in list at level-2 indentation")
         ```
 
         -   List item 1.1.1
-
             ```emacs-lisp
             (message "I am in list at level-3 indentation")
             ```
     -   List item 2.1
-
         ```emacs-lisp
         (message "I am in list back at level-2 indentation")
         ```
 -   List item 2
-
     ```emacs-lisp
     (message "I am in list back at level-1 indentation")
     ```
@@ -96,29 +91,24 @@ there.
 </div>
 
 -   List item 1
-
     ```emacs-lisp { linenos=true, linenostart=1 }
     (message "I am in list at level-1 indentation")
     ```
 
     -   List item 1.1
-
         ```emacs-lisp { linenos=true, linenostart=1 }
         (message "I am in list at level-2 indentation")
         ```
 
         -   List item 1.1.1
-
             ```emacs-lisp { linenos=true, linenostart=1 }
             (message "I am in list at level-3 indentation")
             ```
     -   List item 2.1
-
         ```emacs-lisp { linenos=true, linenostart=1 }
         (message "I am in list back at level-2 indentation")
         ```
 -   List item 2
-
     ```emacs-lisp { linenos=true, linenostart=1 }
     (message "I am in list back at level-1 indentation")
     ```

@@ -13,13 +13,11 @@ lists. `ox-hugo` provides a hack to get around that bug.
 Below is an example of such a case:
 
 -   List item 1
-
     ```md
     ​- List item 1.1 in code block
     ​- List item 1.2 in code block
     ```
 -   List item 2
-
     ```md
     ​+ List item 2.1 in code block
     ​+ List item 2.2 in code block
@@ -29,13 +27,11 @@ Below is an example of such a case:
 Another such example, but with space before a hyphen in source block:
 
 1.  First item
-
     ```yaml
     ports:
       foo: bar
     ```
 2.  Second item
-
     ```yaml
     ports:
     ​ - port: 80

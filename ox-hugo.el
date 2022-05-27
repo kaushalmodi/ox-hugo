@@ -3436,7 +3436,7 @@ their Hugo site's config."
                                     (caption-str
                                      (org-html-convert-special-strings ;Interpret em-dash, en-dash, etc.
                                       (org-export-data-with-backend caption 'html info))))
-                               (format (concat "\n\n<div class=\"src-block-caption\">\n"
+                               (format (concat "\n<div class=\"src-block-caption\">\n"
                                                "  <span class=\"src-block-number\">%s:</span>\n"
                                                "  %s\n"
                                                "</div>")

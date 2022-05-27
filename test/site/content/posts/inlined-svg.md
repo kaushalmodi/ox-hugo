@@ -65,7 +65,6 @@ style="stroke:#A80036;stroke-width:1.0;"/></g></svg>
 class A
 url of A is [[https://example.org/]]
 ```
-
 <div class="src-block-caption">
   <span class="src-block-number">Code Snippet 1:</span>
   My class diagram

@@ -15,7 +15,6 @@ Here are few variables that you might like to change in the `local.mk`:
     ```makefile
     prefix = /dir/where/you/want/to/install/org # Default: /usr/share
     ```
-
     The `.el` files will go to `$(prefix)/emacs/site-lisp/org` by
                 default. If you'd like to change that, you can tweak the
                 `lispdir` variable.

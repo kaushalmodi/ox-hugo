@@ -751,9 +751,9 @@ to this rule:
      paragraph and the next sub-list when the latter ends the
      current item.
 
-  3. In an item, if a paragraph is immediately followed by an
-     src or example block, don't add a blank line after that
-     paragraph."
+  3. In an item, if a paragraph is immediately followed by an src
+     or example block (or vice-versa), don't add a blank line
+     between those elements."
   (org-element-map tree (remq 'item org-element-all-elements) ;Exception 1 in the doc-string
     (lambda (el)
       (let ((post-blank (cond
@@ -765,11 +765,17 @@ to this rule:
                                  (and (eq (org-element-type next-el) 'plain-list)
                                       (not (org-export-get-next-element next-el info)))))
                           0)
-                         ;; Exception 3 in the doc-string.
+                         ;; Exception 3 in the doc-string (paragraph -> src-block).
                          ((and (eq (org-element-type el) 'paragraph)
                                (eq (org-element-type (org-element-property :parent el)) 'item)
                                (let ((next-el (org-export-get-next-element el info)))
                                  (memq (org-element-type next-el) '(src-block example-block))))
+                          0)
+                         ;; Exception 3 in the doc-string (src-block -> paragraph).
+                         ((and (memq (org-element-type el) '(src-block example-block))
+                               (eq (org-element-type (org-element-property :parent el)) 'item)
+                               (let ((next-el (org-export-get-next-element el info)))
+                                 (memq (org-element-type next-el) '(paragraph))))
                           0)
                          (t
                           1))))

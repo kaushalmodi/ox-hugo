@@ -1995,12 +1995,15 @@ there.
 :EXPORT_FILE_NAME: source-block-md-with-hugo-shortcodes
 :EXPORT_HUGO_CODE_FENCE: t
 :END:
+#+begin_description
+Test verbatim use of Hugo shortcodes in content.
+#+end_description
 *** Shortcodes escaped
 The =figure= shortcodes in the two Markdown source code blocks below
 should *not* be expanded.. they should be visible verbatim.
 
-- {{< .. >}} --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown][Shortcodes without Markdown]]
-- {{% .. %}} --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown][Shortcodes with Markdown]]
+- src_md[:exports code]{{{< .. >}}} --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown][Shortcodes without Markdown]]
+- src_md[:exports code]{{{% .. %}}} --- [[https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown][Shortcodes with Markdown]]
 **** Code block using code fences
 #+begin_src md
 {{< figure src="https://ox-hugo.scripter.co/test/images/org-mode-unicorn-logo.png" >}}
@@ -6463,7 +6466,7 @@ instead.
 This test tests the following:
 - Pandoc leave the HTML ~span~ tags as-is.
 - Pandoc does not escape the ~<~ in the ~figure~ shortcodes with
-  captions (in general: ~{{< ..>}}~ shortcodes that could wrap across
+  captions (in general: ~{{< .. >}}~ shortcodes that could wrap across
   lines).
 - While Pandoc auto-wraps the re-written Markdown, it also wraps the
   ~{{< .. >}}~ shortcodes. The test checks that such "wrapped

@@ -1,5 +1,6 @@
 +++
 title = "Markdown source block with Hugo shortcodes"
+description = "Test verbatim use of Hugo shortcodes in content."
 tags = ["src-block", "shortcode"]
 draft = false
 +++
@@ -9,8 +10,8 @@ draft = false
 The `figure` shortcodes in the two Markdown source code blocks below
 should **not** be expanded.. they should be visible verbatim.
 
--   {{&lt; .. &gt;}} --- [Shortcodes without Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown)
--   {&lbrace;% .. %&rbrace;} --- [Shortcodes with Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown)
+-   <span class="inline-src language-md" data-lang="md">`{{</* .. */>}}`</span> --- [Shortcodes without Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-without-markdown)
+-   <span class="inline-src language-md" data-lang="md">`{{%/* .. */%}}`</span> --- [Shortcodes with Markdown](https://gohugo.io/content-management/shortcodes/#shortcodes-with-markdown)
 
 
 ### Code block using code fences {#code-block-using-code-fences}

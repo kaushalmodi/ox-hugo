@@ -4,18 +4,20 @@
 
 All notable changes to this project will be documented in this file.
 
-** :fire: *unreleased*
+** *0.12.1* - <2022-05-31>
+
+[[https://github.com/kaushalmodi/ox-hugo/compare/5ad69b40a6c8609f92268a76ecf4b8cf1700350b...3c8c0bf28cf02128ceff9a972db3ebad01083953][5ad69b4...3c8c0bf]]
 
 *** :boom: Breaking
 :PROPERTIES:
-:CUSTOM_ID: breaking
+:CUSTOM_ID: breaking-v0.12.1
 :END:
 
 - Remove auto-insertion of Bibliography heading for org-ref cit. … Adding this feature for org-ref is a bit painful because: … 1. `org-ref` uses `citeproc-render-bib` in `org-ref-export.el`., while … th… ([[https://github.com/kaushalmodi/ox-hugo/commit/22065f719580dd6e46762dcf090957702c54dc43][22065f7]])
 
 *** :sparkles: Features
 :PROPERTIES:
-:CUSTOM_ID: features
+:CUSTOM_ID: features-v0.12.1
 :END:
 
 - Auto-escape Hugo shortcodes in inline src blocks ([[https://github.com/kaushalmodi/ox-hugo/commit/a23ff91eb44486d571da390f2bbfed1cb2bf6e9b][a23ff91]])
@@ -24,7 +26,7 @@ All notable changes to this project will be documented in this file.
 
 *** :rocket: PR Merges
 :PROPERTIES:
-:CUSTOM_ID: pr-merges
+:CUSTOM_ID: pr-merges-v0.12.1
 :END:
 
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/636][636]]: … Revert "tool(ci): Disable CI runs on emacs master for now" ([[https://github.com/kaushalmodi/ox-hugo/commit/68916a64a9015a5f09ea5a9afa110a88ef0ad474][68916a6]])
@@ -33,32 +35,37 @@ All notable changes to this project will be documented in this file.
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/578][578]]: … Improve inline src blocks -- they now export to HTML `code` elements with `inline-src` class and language-specific class and data attri… ([[https://github.com/kaushalmodi/ox-hugo/commit/1d4221550406b737a094aee991cdd4edc69625f9][1d42215]])
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/643][643]]: … Fix auto menu weight calculation during "all subtrees" exports ([[https://github.com/kaushalmodi/ox-hugo/commit/d3faba4549518006fa4d7eeca657fd4142718c4b][d3faba4]])
 - PR # [[https://github.com/kaushalmodi/ox-hugo/pull/641][641]]: … fix: Change inline src block output to work around CommonMark issue ([[https://github.com/kaushalmodi/ox-hugo/commit/3070aaab5bbe297b6f90620c29171ced0bd4c439][3070aaa]])
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/646][646]]: … fix: Remove the blank line inserted between code blocks and captions ([[https://github.com/kaushalmodi/ox-hugo/commit/4cc8de4ec5f87bfa7fca97d61ae445ea0a75ae1e][4cc8de4]])
 
 *** :white_check_mark: Issue Fixes
 :PROPERTIES:
-:CUSTOM_ID: issue-fixes
+:CUSTOM_ID: issue-fixes-v0.12.1
 :END:
 
 - Revert "tool(ci): Disable CI runs on emacs master for now" … This reverts commit commit # [[https://github.com/kaushalmodi/ox-hugo/commit/288c2f577be5c1e9b0871d1c5a02b3b28346615a][288c2f5]]. … Fixes I… ([[https://github.com/kaushalmodi/ox-hugo/commit/21269f664bcf5dd5ddab6cf01d41c22821000e93][21269f6]])
 
 *** :zap: Performance
 :PROPERTIES:
-:CUSTOM_ID: performance
+:CUSTOM_ID: performance-v0.12.1
 :END:
 
 - Better way to auto-inject bibliography heading … Earlier method wasn't elegant because it relied on an empirically … derived regexp. The reason for this change was that this regexp was … falsely match… ([[https://github.com/kaushalmodi/ox-hugo/commit/5a24d8f31f04a00a0ff6364ecf0a7e2c4afc8e02][5a24d8f]])
 
 *** :bug: Bug Fixes
 :PROPERTIES:
-:CUSTOM_ID: bug-fixes
+:CUSTOM_ID: bug-fixes-v0.12.1
 :END:
 
 - Correct auto menu weight calc when batch-exporting subtrees … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/642][642]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/f9c9aaf0160bb552d438cda20b7627a41dfaf125][f9c9aaf]])
 - Change inline src block output to work around CommonMark issue … - Before: Inline src block classes were in the HTML code element … - Now: The inline src block classes are in HTLM span tags wrapping …… ([[https://github.com/kaushalmodi/ox-hugo/commit/1cb3895e964ab0260dbae8d1ef10555e6c7c1b68][1cb3895]])
+- Remove the blank line inserted between code blocks and captions … This change is part of the fix for … Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/645][645]]. The good thing is … that ther… ([[https://github.com/kaushalmodi/ox-hugo/commit/71cb5f25737c6794927273554efdac1026fd676b][71cb5f2]])
+- Don't introduce extra blank lines after list item paragraphs … Before: … https://spec.commonmark.org/dingus/?text=​​1.%20item%20one%0A2.%20item%20two%0A%20%20%20%60%60%60el%0A%20%20%20(message%20%22he… ([[https://github.com/kaushalmodi/ox-hugo/commit/9471c21fc033c8d7ab874f5f648521486c08a3f2][9471c21]])
+- Don't add blank line after a code block followed by para either … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/645][645]]. … This handles this case: … 1. item one … 2. This paragraph … ([[https://github.com/kaushalmodi/ox-hugo/commit/ace25a665006e23f254ecf6f4490948687916139][ace25a6]])
+- Do ensure a blank line after a captioned src or example block! … The src and example block captions are wrapped in HTML div tags. As … per CommonMark, the block HTML tags like div tags need to be sepa… ([[https://github.com/kaushalmodi/ox-hugo/commit/aa793507b9669a470a3cf6b833b927258b0a644d][aa79350]])
 
 *** :recycle: Refactor
 :PROPERTIES:
-:CUSTOM_ID: refactor
+:CUSTOM_ID: refactor-v0.12.1
 :END:
 
 - Make the org-hugo-drawer function more readable … - Remove internal function `org-hugo--logbook-drawer`. … - Move logbook entry parsing to a new internal function … `org-hugo--parse-logbook-entry`. … … ([[https://github.com/kaushalmodi/ox-hugo/commit/b300c5bb7b562e48a987c1d814b7941957c77c31][b300c5b]])

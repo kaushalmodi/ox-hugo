@@ -3595,7 +3595,7 @@ INFO is a plist holding export options."
         contents)
        ((string= block-type "description")
         ;; Overwrite the value of the `:description' key in `info'.
-        (plist-put info :description contents)
+        (plist-put info :description (org-hugo--escape-hugo-shortcode contents "md"))
         nil)
        ;; https://emacs.stackexchange.com/a/28685/115
        ((cl-member block-type paired-shortcodes

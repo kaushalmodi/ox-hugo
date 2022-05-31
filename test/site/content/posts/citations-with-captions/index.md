@@ -5,10 +5,10 @@ description = """
 
   -   Pandoc leave the HTML `span` tags as-is.
   -   Pandoc does not escape the `<` in the `figure` shortcodes with
-      captions (in general: `{{< ..>}}` shortcodes that could wrap across
+      captions (in general: `{{</* .. */>}}` shortcodes that could wrap across
       lines).
   -   While Pandoc auto-wraps the re-written Markdown, it also wraps the
-      `{{< .. >}}` shortcodes. The test checks that such "wrapped
+      `{{</* .. */>}}` shortcodes. The test checks that such "wrapped
       shortcodes" get unwrapped.
   """
 date = 2018-08-19

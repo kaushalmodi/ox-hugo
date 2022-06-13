@@ -3886,6 +3886,7 @@ Test links to Info manual nodes.
 - Link to an Emacs Info manual node: [[info:emacs#Point]] (same link but
   with a custom description: [[info:emacs#Point][🛈 Emacs: Point]])
 - Link to an Emacs Lisp Info manual node: [[info:elisp#Lambda Expressions]]
+- Link to a GNU software (~tar~) Info manual node: [[info:tar#Old Options]]
 * Equations                                                       :equations:
 ** MathJax                                                          :mathjax:
 *** Inline equations

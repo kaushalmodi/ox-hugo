@@ -10,3 +10,4 @@ draft = false
 -   Link to an Emacs Info manual node: [Emacs Info: Point](https://www.gnu.org/software/emacs/manual/html_node/emacs/Point.html "Emacs Lisp: (info \"(emacs) Point\")") (same link but
     with a custom description: [🛈 Emacs: Point](https://www.gnu.org/software/emacs/manual/html_node/emacs/Point.html "Emacs Lisp: (info \"(emacs) Point\")"))
 -   Link to an Emacs Lisp Info manual node: [Elisp Info: Lambda Expressions](https://www.gnu.org/software/emacs/manual/html_node/elisp/Lambda-Expressions.html "Emacs Lisp: (info \"(elisp) Lambda Expressions\")")
+-   Link to a GNU software (`tar`) Info manual node: [Tar Info: Old Options](https://www.gnu.org/software/tar/manual/html_node/Old-Options.html "Emacs Lisp: (info \"(tar) Old Options\")")

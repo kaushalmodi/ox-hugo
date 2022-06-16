@@ -4009,12 +4009,14 @@ INFO is a plist used as a communication channel."
   (memq 'subtree (plist-get info :export-options)))
 
 (defun org-hugo--string-unquote (str)
-  "Return STR after removing beginning and ending quotes if any."
-  (let ((unquoted-str str))
-    (when (and (stringp str)
-               (string= (substring str 0 1) "\"") ;First char is literally a "
-               (string= (substring str -1) "\"")) ;Last char is literally a "
-      (setq unquoted-str (substring str 1 -1)))
+  "Return STR after removing beginning and ending quotes if any.
+
+Return nil if STR is an empty string, or not a string."
+  (let ((unquoted-str (org-string-nw-p str))) ;Ensure that `str' is a non-empty string
+    (when (and unquoted-str
+               (string= (substring unquoted-str 0 1) "\"") ;First char is literally a "
+               (string= (substring unquoted-str -1) "\"")) ;Last char is literally a "
+      (setq unquoted-str (substring unquoted-str 1 -1)))
     unquoted-str))
 
 (defun org-hugo--get-front-matter (info)

@@ -4,6 +4,33 @@
 
 All notable changes to this project will be documented in this file.
 
+** *0.12.2* - <2022-06-16>
+
+[[https://github.com/kaushalmodi/ox-hugo/compare/3c8c0bf28cf02128ceff9a972db3ebad01083953...af3d0cdf8c672be498d54bc9efdd0e40b2528602][3c8c0bf...af3d0cd]]
+
+*** :sparkles: Features
+:PROPERTIES:
+:CUSTOM_ID: features-v0.12.2
+:END:
+
+- Export links to manual pages of GNU software like tar too … New custom variable `org-hugo-info-gnu-software`. It contains a list … of GNU software taken from https://www.gnu.org/software/. ([[https://github.com/kaushalmodi/ox-hugo/commit/e2da16e1752ba71198f6c7cf1a0a15c0c51f2642][e2da16e]])
+
+*** :rocket: PR Merges
+:PROPERTIES:
+:CUSTOM_ID: pr-merges-v0.12.2
+:END:
+
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/649][649]]: … fix: Escape Hugo shortcodes in description front-matter ([[https://github.com/kaushalmodi/ox-hugo/commit/df0b12ef1aff2b322403f24006f0ec17676d3606][df0b12e]])
+- PR # [[https://github.com/kaushalmodi/ox-hugo/pull/652][652]]: … feat: Export links to manual pages of GNU software like tar too ([[https://github.com/kaushalmodi/ox-hugo/commit/2b46cd602c9692e339833a765ef6fe3acc4fa2ec][2b46cd6]])
+
+*** :bug: Bug Fixes
+:PROPERTIES:
+:CUSTOM_ID: bug-fixes-v0.12.2
+:END:
+
+- Escape Hugo shortcodes in description front-matter … The description front-matter will most likely be parsed as Markdown … string using $.Page.RenderString, and we do not want literal strings … like "… ([[https://github.com/kaushalmodi/ox-hugo/commit/4f6517dfe18a08387a786d666deb326f8342ea4c][4f6517d]])
+- Don't attempt to unquote empty strings … Fixes Issue # [[https://github.com/kaushalmodi/ox-hugo/issues/655][655]]. ([[https://github.com/kaushalmodi/ox-hugo/commit/af3d0cdf8c672be498d54bc9efdd0e40b2528602][af3d0cd]])
+
 ** *0.12.1* - <2022-05-31>
 
 [[https://github.com/kaushalmodi/ox-hugo/compare/5ad69b40a6c8609f92268a76ecf4b8cf1700350b...3c8c0bf28cf02128ceff9a972db3ebad01083953][5ad69b4...3c8c0bf]]

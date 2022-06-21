@@ -416,6 +416,13 @@
    source = "https://github.com/shombando/shom.dev"
    site = "https://shom.dev"
 
+[BlogWinnyTech]
+   author = "Winston (winny) Weinert"
+   source = "https://gitlab.com/winny.tech/blog.winny.tech"
+   site = "https://blog.winny.tech"
+   org_dir = "content-org"
+   branch = "master"
+
 # [ValidTOMLKey] <-- The key cannot contain spaces or periods.
 #   author = ""
 #   source = ""

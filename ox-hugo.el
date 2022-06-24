@@ -457,7 +457,7 @@ This option can also be set with the OPTIONS keyword,
 e.g. \"num:onlytoc\", \"num:nil\", \"num:t\" or \"num:3\"."
   :group 'org-export-hugo
   :type '(choice
-          (const :tag "Don't number only in body" 'onlytoc)
+          (const :tag "Don't number only in body" onlytoc)
           (const :tag "Don't number any heading" nil)
           (const :tag "Number all headings" t)
           (integer :tag "Number to level")))

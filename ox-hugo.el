@@ -1090,6 +1090,19 @@ This is an internal function."
   (setq org-hugo--fm nil)
   (setq org-hugo--fm-yaml nil))
 
+(defun org-hugo--cleanup ()
+  "Function to kill Ox-Hugo opened buffers and reset internal variables.
+
+This is an internal function."
+  (setq org-hugo--subtree-count 0) ;Reset the subtree count
+
+  ;; Kill all the buffers opened by during an export.
+  (dolist (buf org-hugo--opened-buffers)
+    (kill-buffer buf))
+  (setq org-hugo--opened-buffers nil)
+
+  (setq org-hugo--preprocessed-buffer nil))
+
 (defun org-hugo--after-all-exports-function ()
   "Function to be run after Ox-Hugo exports all the posts.
 
@@ -1098,12 +1111,7 @@ This function is called in the end of
 `org-hugo-export-as-md' (if its ALL-SUBTREES arg is non-nil).
 
 This is an internal function."
-  ;; Kill all the buffers opened by during an export.
-  (dolist (buf org-hugo--opened-buffers)
-    (kill-buffer buf))
-  (setq org-hugo--opened-buffers nil)
-  (setq org-hugo--preprocessed-buffer nil)
-
+  (org-hugo--cleanup)
   (dolist (fn org-hugo--all-subtrees-export--functions-to-silence)
     (advice-remove fn #'org-hugo--advice-silence-messages)))
 
@@ -4871,14 +4879,14 @@ The optional argument NOERROR is passed to
     (when (or (eq org-id-locations nil) (zerop (hash-table-count org-id-locations)))
       (org-id-update-id-locations (directory-files "." :full "\.org\$" :nosort) :silent))
 
+    (org-hugo--cleanup)
+
     (save-window-excursion
       (org-with-wide-buffer
        (cond
         ;; Publish all subtrees in the current Org buffer.
         ((and buf-has-subtree all-subtrees)
          (let ((start-time (current-time)))
-           (setq org-hugo--subtree-count 0) ;Reset the subtree count
-
            ;; Make the *Messages* buffer less noisy when exporting all
            ;; subtrees.
            (dolist (fn org-hugo--all-subtrees-export--functions-to-silence)

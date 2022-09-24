@@ -745,6 +745,17 @@ The software list is taken from https://www.gnu.org/software/."
   :group 'org-export-hugo
   :type '(repeat string))
 
+(defcustom org-hugo-omit-subheadings nil
+  "When non-nil, omit subheadings with their own pages.
+
+Normally, each heading includes its subheadings' content along
+with its own. When this variable is non-nil, those subheadings
+that have their own pages (as indicated by the presence of the
+`:EXPORT_FILE_NAME' property), will have their content omitted
+from the parent heading's page."
+  :group 'org-export-hugo
+  :type 'boolean)
+;;;###autoload (put 'org-hugo-exclude-subheadings 'safe-local-variable 'booleanp)
 
 
 ;;; Define Back-End
@@ -2141,6 +2152,7 @@ a communication channel."
                   ;; of that preceding list.
                   bullet " " heading tags-fmtd "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
+       ((and org-hugo-omit-subheadings (org-hugo--export-file-name-p heading)) "")
        (t
         (let* ((anchor (format "{#%s}" (org-hugo--get-anchor heading info))) ;https://gohugo.io/extras/crossreferences/
                (heading-title (org-hugo--heading-title style level loffset title
@@ -2182,6 +2194,10 @@ Else, no HTML element is wrapped around the HEADING."
            (if (= 1 (org-export-get-relative-level heading info))
                (plist-get info :html-container)
              "div"))))
+
+(defun org-hugo--export-file-name-p (heading)
+  "Determine if a heading has the `:EXPORT_FILE_NAME' property."
+  (org-export-get-node-property :EXPORT_FILE_NAME heading nil))
 
 ;;;###autoload
 (defun org-hugo-slug (str &optional allow-double-hyphens)

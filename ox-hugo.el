@@ -2523,13 +2523,14 @@ holding export options."
                     " \\2" contents)))
 
     ;; (message "[org-hugo-inner-template DBG] toc-level: %s" toc-level)
-    (concat
-     toc
-     contents
-     ;; Make sure CONTENTS is separated from table of contents
-     ;; and footnotes with at least a blank line.
-     "\n"
-     (org-blackfriday-footnote-section info (org-hugo--lang-cjk-p info)))))
+    (string-trim-left ;Remove any extra blank lines between front-matter and the content #consistency
+     (concat
+      toc
+      contents
+      ;; Make sure CONTENTS is separated from table of contents
+      ;; and footnotes with at least a blank line.
+      "\n"
+      (org-blackfriday-footnote-section info (org-hugo--lang-cjk-p info))))))
 
 ;;;; Inline Src Block
 (defun org-hugo-inline-src-block (inline-src-block _contents _info)

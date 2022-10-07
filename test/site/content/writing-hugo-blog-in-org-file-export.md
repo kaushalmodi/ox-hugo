@@ -42,5 +42,6 @@ titled _Writing Hugo blog in Org_ to a Hugo post.
 The exported Markdown has a little comment footer as set in the _Local
 Variables_ section below.
 
+
 [//]: # "Exported with love from a post written in Org mode"
 [//]: # "- https://github.com/kaushalmodi/ox-hugo"

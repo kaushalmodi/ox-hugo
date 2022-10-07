@@ -155,9 +155,11 @@ Emacs installation.  If Emacs is installed using
       (setq package-archives (delq (assoc "nongnu" package-archives) package-archives))
 
       ;; Generate/update and load the autoloads for ox-hugo.el and co.
-      (let ((generated-autoload-file ox-hugo-autoloads-file))
-        (update-directory-autoloads ox-hugo-site-git-root)
-        (load-file ox-hugo-autoloads-file))
+      (if (fboundp #'loaddefs-generate) ;Emacs 29+
+          (loaddefs-generate ox-hugo-site-git-root ox-hugo-autoloads-file)
+        (let ((generated-autoload-file ox-hugo-autoloads-file)) ;Emacs 28.x and older
+          (update-directory-autoloads ox-hugo-site-git-root)))
+      (load-file ox-hugo-autoloads-file)
 
       ;; Load emacs packages and activate them.
       ;; Don't delete this line.

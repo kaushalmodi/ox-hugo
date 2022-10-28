@@ -6151,6 +6151,15 @@ This post should also be created in =content/section-a/=.
 :END:
 #+toc: headlines 6
 #+include: "./all-posts.org::#nested-sections-example" :only-contents t
+*** Post with ~#+toc: headlines 1~ but no headings
+:PROPERTIES:
+:EXPORT_FILE_NAME: post-with-toc-headlines-but-no-headings
+:END:
+#+begin_description
+Test the use of ~#+toc: headlines 1~ in a post with no headings.
+#+end_description
+{{{oxhugoissue(679)}}}
+#+toc: headlines 1
 *** TOC Local                                                         :local:
 :PROPERTIES:
 :EXPORT_FILE_NAME: toc-local

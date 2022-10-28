@@ -2020,6 +2020,26 @@ numbering.
 #+begin_src org
 ,#+macro: relref @@hugo:[@@ $1 @@hugo:]({{< relref "$2" >}})@@
 #+end_src
+**** Shortcode escaped in Emacs-Lisp source blocks
+{{{oxhugoissue(680)}}}
+
+#+begin_src emacs-lisp
+;; Follow Hugo links
+(defun org-hugo-follow (link)
+  "Follow Hugo link shortcodes"
+  (org-link-open-as-file
+   (string-trim "{{% ref test.org %}}" "{{% ref " "%}}")))
+
+;; New link type for Org-Hugo internal links
+(org-link-set-parameters
+ "hugo"
+ :complete (lambda ()
+             (concat "{{% ref */"
+                     (file-name-nondirectory
+                      (read-file-name "File: "))
+                     " %}}"))
+ :follow #'org-hugo-follow)
+#+end_src
 *** Shortcodes *not* escaped
 The =figure= shortcode in the below example block *should* be
 expanded.. you should be seeing a little unicorn below.

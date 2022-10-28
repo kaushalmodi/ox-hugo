@@ -40,6 +40,29 @@ numbering.
 ```
 
 
+### Shortcode escaped in Emacs-Lisp source blocks {#shortcode-escaped-in-emacs-lisp-source-blocks}
+
+`ox-hugo` Issue #[680](https://github.com/kaushalmodi/ox-hugo/issues/680)
+
+```emacs-lisp
+;; Follow Hugo links
+(defun org-hugo-follow (link)
+  "Follow Hugo link shortcodes"
+  (org-link-open-as-file
+   (string-trim "{{%/* ref test.org */%}}" "{{%/* ref " "*/%}}")))
+
+;; New link type for Org-Hugo internal links
+(org-link-set-parameters
+ "hugo"
+ :complete (lambda ()
+             (concat "{{%/* ref */"
+                     (file-name-nondirectory
+                      (read-file-name "File: "))
+                     " */%}}"))
+ :follow #'org-hugo-follow)
+```
+
+
 ## Shortcodes **not** escaped {#shortcodes-not-escaped}
 
 The `figure` shortcode in the below example block **should** be

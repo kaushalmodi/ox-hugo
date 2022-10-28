@@ -417,6 +417,12 @@
    org_dir = "content-org"
    branch = "master"
 
+[pi-kappa-devel]
+   author = "Pantelis Karapanagiotis"
+   source = "https://github.com/pi-kappa-devel/methods-course"
+   site = "https://teach.pikappa.eu/methods/"
+   branch = "master"
+
 # [ValidTOMLKey] <-- The key cannot contain spaces or periods.
 #   author = ""
 #   source = ""

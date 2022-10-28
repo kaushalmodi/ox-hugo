@@ -2575,8 +2575,9 @@ channel."
                (local? keyword))))
         (when (and depth
                    (> depth 0))
-          (org-remove-indentation
-           (org-hugo--build-toc info depth scope local?)))))
+          (let ((toc-str (org-hugo--build-toc info depth scope local?)))
+            (when toc-str
+              (org-remove-indentation toc-str))))))
      (t
       (org-md-keyword keyword contents info)))))
 

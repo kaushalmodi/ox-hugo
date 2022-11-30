@@ -423,6 +423,12 @@
    site = "https://teach.pikappa.eu/methods/"
    branch = "master"
 
+[Narice]
+   author = "Narice"
+   source = "https://github.com/Narice/Narice.github.io"
+   site = "https://narice.github.io/"
+   org_dir = "content-org"
+
 # [ValidTOMLKey] <-- The key cannot contain spaces or periods.
 #   author = ""
 #   source = ""

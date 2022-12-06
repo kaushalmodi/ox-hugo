@@ -279,6 +279,12 @@ https://github.com/kaushalmodi/ox-hugo/discussions/485."
   :type 'boolean)
 ;;;###autoload (put 'org-hugo-goldmark 'safe-local-variable 'booleanp)
 
+(defcustom org-hugo-headline-anchor t
+  "Enable anchor for headline"
+  :group 'org-export-hugo
+  :type 'boolean)
+;;;###autoload (put 'org-hugo-headline-anchor 'safe-local-variable 'booleanp)
+
 (defcustom org-hugo-section "posts"
   "Default section for Hugo posts.
 
@@ -2142,7 +2148,8 @@ a communication channel."
                   bullet " " heading tags-fmtd "\n\n"
                   (and contents (replace-regexp-in-string "^" "    " contents)))))
        (t
-        (let* ((anchor (format "{#%s}" (org-hugo--get-anchor heading info))) ;https://gohugo.io/extras/crossreferences/
+        (let* ((anchor (when org-hugo-headline-anchor
+                         (format "{#%s}" (org-hugo--get-anchor heading info)))) ;https://gohugo.io/extras/crossreferences/
                (heading-title (org-hugo--heading-title style level loffset title
                                                        todo-fmtd tags-fmtd anchor numbers))
                (wrap-element (org-hugo--container heading info))

@@ -265,6 +265,15 @@ export."
   :type 'directory)
 ;;;###autoload (put 'org-hugo-base-dir 'safe-local-variable 'stringp)
 
+(defcustom org-hugo-content-folder "content"
+  "Content folder for Hugo.
+
+Set either this value, or the HUGO_BASE_CONTENT_FOLDER global property for
+export."
+  :group 'org-export-hugo
+  :type 'string)
+;;;###autoload (put 'org-hugo-content-folder 'safe-local-variable 'stringp)
+
 (defcustom org-hugo-goldmark t
   "Enable Goldmark or Commonmark compatible Markdown export.
 
@@ -807,6 +816,7 @@ The software list is taken from https://www.gnu.org/software/."
                    (:hugo-section "HUGO_SECTION" nil org-hugo-section)
                    (:hugo-bundle "HUGO_BUNDLE" nil nil)
                    (:hugo-base-dir "HUGO_BASE_DIR" nil org-hugo-base-dir)
+                   (:hugo-base-dir "HUGO_BASE_CONTENT_FOLDER" nil org-hugo-content-folder)
                    (:hugo-goldmark "HUGO_GOLDMARK" nil org-hugo-goldmark)
                    (:hugo-code-fence "HUGO_CODE_FENCE" nil t) ;Prefer to generate triple-backquoted Markdown code blocks by default.
                    (:hugo-use-code-for-kbd "HUGO_USE_CODE_FOR_KBD" nil org-hugo-use-code-for-kbd)
@@ -1356,7 +1366,7 @@ INFO is a plist used as a communication channel."
   (let* ((base-dir (if (plist-get info :hugo-base-dir)
                        (file-name-as-directory (plist-get info :hugo-base-dir))
                      (user-error "It is mandatory to set the HUGO_BASE_DIR property or the `org-hugo-base-dir' local variable")))
-         (content-dir "content/")
+         (content-dir (concat org-hugo-content-folder "/"))
          (section-path (org-hugo--get-section-path info))
          (bundle-dir (let ((bundle-path (or ;Hugo bundle set in the post subtree gets higher precedence
                                          (org-hugo--entry-get-concat nil "EXPORT_HUGO_BUNDLE" "/")
@@ -3204,7 +3214,7 @@ INFO is a plist used as a communication channel."
          (bundle-name (when bundle-dir
                         (let* ((content-dir (file-truename
                                              (file-name-as-directory
-                                              (expand-file-name "content" hugo-base-dir))))
+                                              (expand-file-name org-hugo-content-folder hugo-base-dir))))
                                (is-home-branch-bundle (string= bundle-dir content-dir)))
                           (cond
                            (is-home-branch-bundle
@@ -4307,6 +4317,7 @@ are \"toml\" and \"yaml\"."
                      "HUGO_SECTION_FRAG"
                      "HUGO_BUNDLE"
                      "HUGO_BASE_DIR"
+                     "HUGO_BASE_CONTENT_FOLDER"
                      "HUGO_GOLDMARK"
                      "HUGO_CODE_FENCE"
                      "HTML_CONTAINER"

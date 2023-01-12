@@ -189,6 +189,11 @@ to be installed.")
         (setq ox-hugo-missing-packages '())))
   (error "The environment variable OX_HUGO_TMP_DIR needs to be set"))
 
+;; Fixes for Org mode that haven't yet been released to GNU Elpa
+(when ox-hugo-install-org-from-elpa
+  (add-to-list 'load-path (concat ox-hugo-site-git-root "test/"))
+  (require 'upstream-org-fixes))
+
 (require 'oc-csl nil :noerror)          ;Auto-register csl processor
 (require 'org-ref)
 

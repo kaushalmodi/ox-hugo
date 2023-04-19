@@ -429,6 +429,13 @@
    site = "https://narice.github.io/"
    org_dir = "content-org"
 
+[iDlip]
+   author = "Dilip"
+   source = "https://github.com/idlip/idlip.github.io"
+   site = "https://idlip.github.io/"
+   org_dir = "org-mode"
+   branch = "den-den-mushi"
+  
 # [ValidTOMLKey] <-- The key cannot contain spaces or periods.
 #   author = ""
 #   source = ""

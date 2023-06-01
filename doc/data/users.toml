@@ -329,13 +329,6 @@
   org_dir = "content-org"
   branch = "src"
 
-[RobinWils]
-  author = "Robin Wils"
-  source = "https://gitlab.com/RobinWils/robinwils.com"
-  site = "https://www.robinwils.com"
-  org_dir = "content-org"
-  branch = "master"
-
 [wych42]
   author = "chi"
   source = "https://github.com/wych42/wych42.github.io"

@@ -428,6 +428,12 @@
    site = "https://idlip.github.io/"
    org_dir = "org-mode"
    branch = "den-den-mushi"
+
+[rossabaker]
+   author = "Ross A. Baker"
+   source = "https://github.com/rossabaker/cromulent"
+   site = "https://rossabaker.com/"
+   org_dir = "src/org"
   
 # [ValidTOMLKey] <-- The key cannot contain spaces or periods.
 #   author = ""

@@ -4619,25 +4619,25 @@ links."
               (let ((type (org-element-property :type el)))
                 (when (member type '("custom-id" "id" "fuzzy"))
                   (let* ((raw-link (org-element-property :raw-link el))
-                         (destination (if (string= type "fuzzy")
-                                          (progn
-                                            ;; Derived from ox.el -> `org-export-data'.  If a broken link is seen
-                                            ;; and if `broken-links' option is not nil, ignore the error.
-                                            (condition-case err
-                                                (org-export-resolve-fuzzy-link el info)
-                                              (org-link-broken
-                                               (unless (or (plist-get info :with-broken-links)
-                                                           ;; Parse the `:EXPORT_OPTIONS' property if set
-                                                           ;; in a parent heading.
-                                                           (plist-get
-                                                            (org-export--parse-option-keyword
-                                                             (or (cdr (org-hugo--get-elem-with-prop
-                                                                       :EXPORT_OPTIONS
-                                                                       (org-element-property :begin el)))
-                                                                 ""))
-                                                            :with-broken-links))
-                                                 (user-error "Unable to resolve link: %S" (nth 1 err))))))
-                                        (org-export-resolve-id-link el (org-export--collect-tree-properties ast info))))
+                         (destination
+                          ;; Derived from ox.el -> `org-export-data'.  If a broken link is seen
+                          ;; and if `broken-links' option is not nil, ignore the error.
+                          (condition-case err
+                              (if (string= type "fuzzy")
+                                  (org-export-resolve-fuzzy-link el info)
+                                (org-export-resolve-id-link el (org-export--collect-tree-properties ast info)))
+                            (org-link-broken
+                             (unless (or (plist-get info :with-broken-links)
+                                         ;; Parse the `:EXPORT_OPTIONS' property if set
+                                         ;; in a parent heading.
+                                         (plist-get
+                                          (org-export--parse-option-keyword
+                                           (or (cdr (org-hugo--get-elem-with-prop
+                                                     :EXPORT_OPTIONS
+                                                     (org-element-property :begin el)))
+                                               ""))
+                                          :with-broken-links))
+                               (user-error "Unable to resolve link: %S" (nth 1 err))))))
                          (source-path (org-hugo--heading-get-slug el info :inherit-export-file-name))
                          (destination-path (org-hugo--heading-get-slug destination info :inherit-export-file-name))
                          (destination-type (org-element-type destination)))

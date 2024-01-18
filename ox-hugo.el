@@ -2151,8 +2151,9 @@ a communication channel."
               (let* ((container-class (or (org-element-property :HTML_CONTAINER_CLASS heading)
                                           (org-element-property :EXPORT_HTML_CONTAINER_CLASS heading)
                                           (plist-get info :html-container-class)))
-                     (container-class-str (when (org-string-nw-p container-class)
-                                            (concat " " container-class))))
+                     (container-class-str (if (org-string-nw-p container-class)
+                                              (concat " " container-class)
+                                            container-class)))
                 (format (concat "<%s class=\"outline-%d%s\">\n"
                                 "%s%s\n"
                                 "</%s>")

@@ -22,13 +22,21 @@
 
 (declare-function org-hugo-export-wim-to-md "ox-hugo")
 
+(defcustom org-hugo-auto-export-async nil
+  "When non-nil, `org-hugo-auto-export-mode' will export asynchronously.
+
+This avoids blocking the main thread while exporting."
+  :group 'org-export-hugo
+  :type 'boolean)
+;;;###autoload (put 'org-hugo-auto-export-async 'safe-local-variable 'booleanp)
+
 (defun org-hugo-export-wim-to-md-after-save ()
   "Function for `after-save-hook' to run `org-hugo-export-wim-to-md'.
 
 The exporting happens only when Org Capture is not in progress."
   (unless (eq real-this-command 'org-capture-finalize)
     (save-excursion
-      (org-hugo-export-wim-to-md))))
+      (org-hugo-export-wim-to-md :async org-hugo-auto-export-async))))
 
 ;;;###autoload
 (define-minor-mode org-hugo-auto-export-mode

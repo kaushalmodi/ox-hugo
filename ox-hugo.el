@@ -474,7 +474,7 @@ copied to this sub-directory inside the Hugo static directory."
 ;;;###autoload (put 'org-hugo-default-static-subdirectory-for-externals 'safe-local-variable 'stringp)
 
 (defcustom org-hugo-external-file-extensions-allowed-for-copying
-  '("jpg" "jpeg" "tiff" "png" "svg" "gif"
+  '("jpg" "jpeg" "tiff" "png" "svg" "gif" "bmp"
     "mp4"
     "pdf" "odt"
     "doc" "ppt" "xls"

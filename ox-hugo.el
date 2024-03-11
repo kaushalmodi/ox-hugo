@@ -822,6 +822,7 @@ The software list is taken from https://www.gnu.org/software/."
                    (:bibliography "BIBLIOGRAPHY" nil nil newline) ;Used in ox-hugo-pandoc-cite
                    (:html-container "HTML_CONTAINER" nil org-hugo-container-element)
                    (:html-container-class "HTML_CONTAINER_CLASS" nil "")
+                   (:html-container-nested "HTML_CONTAINER_NESTED" nil nil)
 
                    ;; Front-matter variables
                    ;; https://gohugo.io/content-management/front-matter/#front-matter-variables
@@ -2151,8 +2152,9 @@ a communication channel."
               (let* ((container-class (or (org-element-property :HTML_CONTAINER_CLASS heading)
                                           (org-element-property :EXPORT_HTML_CONTAINER_CLASS heading)
                                           (plist-get info :html-container-class)))
-                     (container-class-str (when (org-string-nw-p container-class)
-                                            (concat " " container-class))))
+                     (container-class-str (if (org-string-nw-p container-class)
+                                              (concat " " container-class)
+                                            container-class)))
                 (format (concat "<%s class=\"outline-%d%s\">\n"
                                 "%s%s\n"
                                 "</%s>")
@@ -2179,7 +2181,8 @@ Else, no HTML element is wrapped around the HEADING."
   (or (org-element-property :HTML_CONTAINER heading) ;property of the immediate heading
       (org-element-property :EXPORT_HTML_CONTAINER heading) ;property of the immediate heading
       (and (org-string-nw-p (plist-get info :html-container)) ;inherited :html-container: property if any
-           (if (= 1 (org-export-get-relative-level heading info))
+           (if (or (plist-get info :html-container-nested)
+                   (= 1 (org-export-get-relative-level heading info)))
                (plist-get info :html-container)
              "div"))))
 

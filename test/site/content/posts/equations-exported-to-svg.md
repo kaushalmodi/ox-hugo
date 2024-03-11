@@ -1,7 +1,7 @@
 +++
 title = "Equations exported to SVG (dvisvgm)"
 description = "Exporting <span class=\"latex\">L<sup>a</sup>T<sub>e</sub>X</span> equations as SVG images."
-tags = ["equations", "dvisvgm", "dont-export-during-make-test"]
+tags = ["equations", "dvisvgm"]
 draft = false
 +++
 

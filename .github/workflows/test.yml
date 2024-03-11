@@ -25,8 +25,16 @@ jobs:
           - '26.3'
     # runs-on: ubuntu-latest
     runs-on: ${{ matrix.os }}
+    # https://github.com/xu-cheng/texlive-action/issues/6#issuecomment-1004561244
+    container:
+      image: ghcr.io/xu-cheng/texlive-full:latest
     continue-on-error: ${{ matrix.emacs_version == 'snapshot' }}
     steps:
+      # Below run commands are to install some basic utils in the texlive
+      # docker container.
+      - run: |
+          export USER="gha" # USER needs to be set for purcell/setup-emacs@master to work
+          apk add git make
       - uses: actions/checkout@v2
       - uses: purcell/setup-emacs@master
         with:

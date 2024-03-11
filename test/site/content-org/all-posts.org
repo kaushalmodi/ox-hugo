@@ -4087,7 +4087,7 @@ spacing:
   \[a\;b\]
   \[a\:b\]
   \[a\!b\]
-** Equations exported to SVG (dvisvgm) :dvisvgm:dont_export_during_make_test:
+** Equations exported to SVG (dvisvgm)                              :dvisvgm:
 :PROPERTIES:
 :EXPORT_FILE_NAME: equations-exported-to-svg
 :EXPORT_OPTIONS: tex:dvisvgm

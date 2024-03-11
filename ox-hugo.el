@@ -4516,14 +4516,7 @@ subtree-number being exported.
           ;; (message "[current subtree DBG] is-commented:%S, tags:%S,
           ;; is-excluded:%S" is-commented tags is-excluded)
           (let ((title (org-element-property :title subtree))
-                ;; FIXME: Sometimes `org-get-outline-path' returns the
-                ;; list with empty string elements. It's not clear
-                ;; why, but the below `cl-delete-if' workarounds works
-                ;; (for now).
-                (current-outline-path (cl-delete-if
-                                       (lambda (el)
-                                         (string= el ""))
-                                       (org-get-outline-path :with-self)))
+                (current-outline-path (org-get-outline-path :with-self))
                 ;; When batch-exporting subtrees, do not call
                 ;; `org-hugo--after-all-exports-function' after each
                 ;; subtree export.  In that case, that function is

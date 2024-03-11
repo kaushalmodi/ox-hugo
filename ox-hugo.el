@@ -1217,14 +1217,14 @@ contents according to the current heading."
           (push "has-section-numbers" toc-classes))
         (when local
           (push "local" toc-classes))
-        (concat (format "<div class=\"%s\">\n" (string-join (reverse toc-classes) " "))
+        (concat (format "<nav class=\"%s\">\n" (string-join (reverse toc-classes) " "))
                 (unless (org-hugo--plist-get-true-p info :hugo-goldmark)
-                  "<div></div>\n") ;This is a nasty workaround till Hugo/Blackfriday support
+                  "<nav></nav>\n") ;This is a nasty workaround till Hugo/Blackfriday support
                 toc-heading    ;wrapping Markdown in HTML div's.
                 "\n"
                 toc-items ;https://github.com/kaushalmodi/ox-hugo/issues/93
                 "\n\n"
-                "</div>\n"
+                "</nav>\n"
                 ;; Special comment that can be use to filter out the TOC
                 ;; from .Summary in Hugo templates.
                 ;;

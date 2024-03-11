@@ -13,14 +13,14 @@ draft = false
 
 ### landing page {#landing-page}
 
-<div class="ox-hugo-toc toc">
+<nav class="ox-hugo-toc toc">
 
 <div class="heading">Table of Contents</div>
 
 - [landing page](#landing-page)
 - [first subsection in Reading](#first-subsection-in-reading)
 
-</div>
+</nav>
 <!--endtoc-->
 
 
@@ -43,12 +43,12 @@ draft = false
 
 ### Another section {#another-section}
 
-<div class="ox-hugo-toc toc">
+<nav class="ox-hugo-toc toc">
 
 <div class="heading">Table of Contents</div>
 
 - [Heading A](#heading-a)
 - [Heading B](#heading-b)
 
-</div>
+</nav>
 <!--endtoc-->

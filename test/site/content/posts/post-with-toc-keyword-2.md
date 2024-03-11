@@ -4,7 +4,7 @@ tags = ["keyword", "toc"]
 draft = false
 +++
 
-<div class="ox-hugo-toc toc">
+<nav class="ox-hugo-toc toc">
 
 <div class="heading">Table of Contents</div>
 
@@ -18,7 +18,7 @@ draft = false
 - [Post sub-heading 3](#post-sub-heading-3)
     - [Post sub-heading 3.1](#post-sub-heading-3-dot-1)
 
-</div>
+</nav>
 <!--endtoc-->
 
 

@@ -2651,11 +2651,13 @@ TOML front-matter.
 But the big integer "10040216507682529280" which would need more than
 64-bits to be stored as a signed integer is left as a string in the
 TOML front-matter.
-** Custom front matter value via Elisp                                :elisp:
+** Custom front matter value via Elisp                       :elisp:noexport:
 :PROPERTIES:
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :attendees (xeijin/conv-chkbox-items-to-front-matter "Attendees")
 :EXPORT_AUTHOR: xeijin
 :END:
+<2022-12-13 Tue> These tests fail to run on the CI in Org 9.6 due to
+[[https://git.savannah.gnu.org/cgit/emacs/org-mode.git/commit/?id=10e857d42859a55b23cd4206ffce3ebd0f678583][this change]]. For now, remove these tests from CI.
 *** Meeting 1
 :PROPERTIES:
 :EXPORT_FILE_NAME: custom-fm-convert-chkbox-list-to-fm-1

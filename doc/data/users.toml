@@ -434,6 +434,12 @@
    source = "https://github.com/rossabaker/cromulent"
    site = "https://rossabaker.com/"
    org_dir = "src/org"
+
+[enigmacurry]
+   author = "EnigmaCurry"
+   source = "https://github.com/enigmacurry/org"
+   site = "https://book.rymcg.tech/"
+   branch = "ox-hugo"
   
 # [ValidTOMLKey] <-- The key cannot contain spaces or periods.
 #   author = ""

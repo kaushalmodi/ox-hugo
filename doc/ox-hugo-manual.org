@@ -4303,6 +4303,11 @@ sub-tree is exported as a heading surrounding with ~<section>~ and
 ~</section>~. By default, that ~section~ tag has the class
 "outline-NUM" where /NUM/ is the level of that heading in that post.
 
+By default, if ~HTML_CONTAINER~ is inherited (for example, set at the
+file level), it is only applied to top-level sections. Deeper sections
+get wrapped in ~div~ tags. If you would like the same container to be
+applied throughout, set ~HTML_CONTAINER_NESTED~ to ~t~.
+
 Additionally, if it has the property ~EXPORT_HTML_CONTAINER_CLASS:
 foo~, the "foo" class gets added to that container tag as well.
 

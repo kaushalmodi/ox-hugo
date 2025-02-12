@@ -329,13 +329,6 @@
   org_dir = "content-org"
   branch = "src"
 
-[RobinWils]
-  author = "Robin Wils"
-  source = "https://gitlab.com/RobinWils/robinwils.com"
-  site = "https://www.robinwils.com"
-  org_dir = "content-org"
-  branch = "master"
-
 [wych42]
   author = "chi"
   source = "https://github.com/wych42/wych42.github.io"
@@ -428,6 +421,31 @@
    source = "https://github.com/Narice/Narice.github.io"
    site = "https://narice.github.io/"
    org_dir = "content-org"
+
+[iDlip]
+   author = "Dilip"
+   source = "https://github.com/idlip/idlip.github.io"
+   site = "https://idlip.github.io/"
+   org_dir = "org-mode"
+   branch = "den-den-mushi"
+
+[rossabaker]
+   author = "Ross A. Baker"
+   source = "https://github.com/rossabaker/cromulent"
+   site = "https://rossabaker.com/"
+   org_dir = "src/org"
+
+[enigmacurry]
+   author = "EnigmaCurry"
+   source = "https://github.com/enigmacurry/org"
+   site = "https://book.rymcg.tech/"
+   branch = "ox-hugo"
+  
+[crunchbang]
+  author = "Athul Suresh"
+  source = "https://github.com/crunchbang/athulsuresh.com"
+  site = "https://athulsuresh.com"
+  org_dir = "content-org"
 
 # [ValidTOMLKey] <-- The key cannot contain spaces or periods.
 #   author = ""

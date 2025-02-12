@@ -540,6 +540,23 @@ This heading is wrapped in an ~aside~ tag with classes ~outline-1~ and
 :END:
 This heading is wrapped in a ~blockquote~ tag with classes ~outline-2~
 and ~baz~.
+*** HTML Container without class
+:PROPERTIES:
+:EXPORT_FILE_NAME: html-container-without-class
+:END:
+**** Top level heading 1
+This heading is wrapped in a ~section~ tag with class ~outline-1~.
+***** Sub-heading 1.1
+This heading is wrapped in a ~div~ tag with class ~outline-2~.
+*** HTML Container nested
+:PROPERTIES:
+:EXPORT_FILE_NAME: html-container-nested
+:EXPORT_HTML_CONTAINER_NESTED: t
+:END:
+**** Top level heading 1
+This heading is wrapped in a ~section~ tag with class ~outline-1~.
+***** Sub-heading 1.1
+This heading is wrapped in a ~section~ tag with class ~outline-2~.
 ** Export with planning info                                       :planning:
 :PROPERTIES:
 :EXPORT_FILE_NAME: planning-info

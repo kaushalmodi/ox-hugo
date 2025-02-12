@@ -3131,7 +3131,7 @@ This is the content for the "bundles" section landing page.
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: page-bundle-a
 :END:
-*** Page Bundle A                                :leaf_bundle:noexport:fixme:
+*** Page Bundle A                                               :leaf_bundle:
 :PROPERTIES:
 :EXPORT_FILE_NAME: index
 :EXPORT_HUGO_RESOURCES: :src "images/copy-of-*.png" :title "First copy of Org mode logo"
@@ -3195,7 +3195,7 @@ See [[/images-in-content/page-bundle-images-in-same-dir/][this other test]] for 
 :EXPORT_FILE_NAME: bar
 :END:
 "Bar" page in /Page Bundle A/.
-** Page Bundle B                                 :leaf_bundle:noexport:fixme:
+** Page Bundle B                                                :leaf_bundle:
 :PROPERTIES:
 :EXPORT_FILE_NAME: index
 :EXPORT_HUGO_BUNDLE: page-bundle-b
@@ -3206,7 +3206,7 @@ Index page of /Page Bundle B/.
 - [[*Branch Bundle C][Link to Branch Bundle C]]
 
 [[../files-to-be-copied-to-static/foo/copy-2-of-unicorn-logo.png]]
-** Branch Bundle C                             :branch_bundle:fixme:noexport:
+** Branch Bundle C                                            :branch_bundle:
 :PROPERTIES:
 :EXPORT_HUGO_BUNDLE: branch-bundle-c
 :EXPORT_FILE_NAME: _index
@@ -3853,10 +3853,10 @@ an *:ID* property, the =org-id= feature must first be loaded, either
 through =org-customize= or by adding =(require 'org-id)= in your Emacs
 init file.
 
-# - [[#internal-target][Link to CUSTOM_ID within the same post]]
-# - [[id:8e65ff86-3f9a-48ef-9b43-751a2e8a9372][Link to ID within the same post]]
-# - [[*Internal target][Link to heading within the same post]]
-# - Links to target links within the same post like [[internal target link][this]].
+- [[#internal-target][Link to CUSTOM_ID within the same post]]
+- [[id:8e65ff86-3f9a-48ef-9b43-751a2e8a9372][Link to ID within the same post]]
+- [[*Internal target][Link to heading within the same post]]
+- Links to target links within the same post like [[internal target link][this]].
 *** Cross-post links                                        :crosspost_links:
 Cross-post links are internal links pointing to targets in a different
 subtree that will be exported to another Hugo post than the link
@@ -3865,12 +3865,7 @@ shortcodes only supports anchors to headings, so links to a heading,
 a *:CUSTOM_ID* property, or an *:ID* property will be resolved to the
 appropriate location in the linked file, but links to targets will be
 resolved to the containing post.
-
-<2025-02-11 Tue> Below section throws this error
-#+begin_example
-Error: user-error ("Org export aborted.  Unable to resolve link: \"posts/link-destination.pre-processed.org::#external-target\"
-#+end_example
-**** COMMENT Links without descriptions
+**** Links without descriptions
 - Link to CUSTOM_ID outside the same post: [[#external-target]]
 - Link to ID outside the same post: [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb]]
 - Link to target outside the same post: [[*External target]]
@@ -3879,7 +3874,7 @@ Error: user-error ("Org export aborted.  Unable to resolve link: \"posts/link-de
 - Link to subtree by ID: [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678]]
 - Link to subtree by heading: [[*Link destination]]
 - Link to a subtree with custom Hugo slug: [[*Slug Front-matter]]
-**** COMMENT Links with descriptions
+**** Links with descriptions
 - [[#external-target][Link to CUSTOM_ID outside the same post]]
 - [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb][Link to ID outside the same post]]
 - [[*External target][Link to target outside the same post]]
@@ -6338,7 +6333,7 @@ See [[#citation-example-toml-section-2]].
 :CUSTOM_ID: citation-example-toml-section-2
 :END:
 Content in section 2.
-**** COMMENT Testing random Hugo shortcodes
+**** Testing random Hugo shortcodes
 #+begin_mdshortcode
 Text containing *Markdown*
 #+end_mdshortcode

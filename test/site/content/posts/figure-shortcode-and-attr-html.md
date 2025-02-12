@@ -49,7 +49,7 @@ Below, the same caption is set using the `#+attr_html` method instead:
 
 Some text before image.
 
-<span class="timestamp-wrapper"><span class="timestamp">&lt;2025-02-11 Tue&gt; </span></span> Fix export of standalone images.
+{{< figure src="/images/org-mode-unicorn-logo.png" caption="<span class=\"figure-number\">Figure 3: </span>A unicorn!" >}}
 
 _Enter a new line after the image link so that it's in an "Org
 paragraph" that contains just that image. That tells Org that that

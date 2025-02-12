@@ -84,7 +84,6 @@ content translates from Org to Markdown as expected.
 
 /See [[https://themes.gohugo.io/][Hugo Themes]] for examples of really good site prettification and
 presentation styles./
-
 * Installation
 This package requires at least GNU Emacs *26.3* and
 Org Mode *9.0*. It is available on Melpa
@@ -108,7 +107,6 @@ If you use [[https://github.com/jwiegley/use-package][=use-package=]], you can d
   :pin melpa  ;`package-archives' should already have ("melpa" . "https://melpa.org/packages/")
   :after ox)
 #+end_src
-
 ** Spacemacs
 Spacemacs users can use =ox-hugo= by setting the variable
 =org-enable-hugo-support=.
@@ -129,7 +127,7 @@ out ~ox-hugo~ with Hugo.
 Before you export check that these properties are set as you need:
 - HUGO_BASE_DIR :: Root directory of the source for the Hugo site. If
      this is set to =~/hugo/=, the exported Markdown files will be saved
-     to =~/hugo/content/<HUGO_SECTION>/= directory[fn:-1-section_more].  By
+     to =~/hugo/content/<HUGO_SECTION>/= directory[fn:-0-section_more].  By
      default, the Markdown files reside in a hierarchy under the
      =content/= directory in the site root directory ([[https://gohugo.io/content-management/organization/][ref]]).
 
@@ -158,7 +156,7 @@ Before you export check that these properties are set as you need:
  [[https://en.wikipedia.org/wiki/Tree_(data_structure)][branch/leaf data structure terminlogy]], then the subtrees with
  =EXPORT_FILE_NAME= property need to be /leaf nodes/.
 
-[fn:-1-section_more] The ~HUGO_SECTION~ is the bare-minimum requirement
+[fn:-0-section_more] The ~HUGO_SECTION~ is the bare-minimum requirement
 to specify the destination path. That path can be further tweaked
 using ~HUGO_BUNDLE~ key (and the associated ~EXPORT_HUGO_BUNDLE~
 property), and the ~EXPORT_HUGO_SECTION_FRAG~ property (only for

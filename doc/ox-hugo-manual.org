@@ -9,6 +9,7 @@
 #+setupfile: doc-setupfile.org
 
 #+macro: imageclick [[file:./static/images/$1][file:/images/$1]]
+#+macro: relref [$1]({{< relref "$2" >}})
 
 #+bibliography: ../test/site/content-org/cite/bib/orgcite.bib
 
@@ -643,12 +644,15 @@ There are 2 major blogging flows that can be used with this package:
      translate to post =draft= state, auto weight calculation for
      pages, taxonomies and menu items, etc.
 
-See the [[*Org Capture Setup][Org Capture Setup]] page to see how to quickly create new posts.
+# See the [[*Org Capture Setup][Org Capture Setup]] page to see how to quickly create new posts.
+See the {{{relref(Org Capture Setup,org-capture-setup)}}} page to see
+how to quickly create new posts.
 
-See the [[*Auto-export on Saving][Auto-export on saving]] page to learn how to setup up seeing
-live-preview of the Hugo-rendered HTML each time you do =C-x C-s= in
-the Org file. That section explains how to set that up for either of
-the above two blogging flows.
+# See the [[*Auto-export on Saving][Auto-export on saving]] page to learn how to setup up seeing
+See the {{{relref(Auto-export on Saving,auto-export-on-saving)}}} page
+to learn how to setup up seeing live-preview of the Hugo-rendered HTML
+each time you do =C-x C-s= in the Org file. That section explains how
+to set that up for either of the above two blogging flows.
 *** Goldmark
 :PROPERTIES:
 :EXPORT_FILE_NAME: goldmark
@@ -695,12 +699,19 @@ breaks in Markdown that were supposed to create paragraph breaks will
 be /seen/ as just a whitespace and those paragraph breaks will
 disappear!
 
+# One scenario where this is happen is if (i) you have a Windows OS, but
+# (ii) you set the default ~buffer-file-coding-system~ (~C-x RET f~) to
+# be ~utf-8-unix~, and then (iii) [[*Inlined SVGs][embedded a file like an SVG]] created in
+# Windows. Here, your Org buffer will have unix-style line endings, but
+# the SVG created outside Emacs will have dos-style line endings. So you
+# end up exporting a file with mixed line endings.
 One scenario where this is happen is if (i) you have a Windows OS, but
 (ii) you set the default ~buffer-file-coding-system~ (~C-x RET f~) to
-be ~utf-8-unix~, and then (iii) [[*Inlined SVGs][embedded a file like an SVG]] created in
-Windows. Here, your Org buffer will have unix-style line endings, but
-the SVG created outside Emacs will have dos-style line endings. So you
-end up exporting a file with mixed line endings.
+be ~utf-8-unix~, and then (iii) {{{relref(embedded a file like an
+SVG,inlined-svgs)}}} created in Windows. Here, your Org buffer will
+have unix-style line endings, but the SVG created outside Emacs will
+have dos-style line endings. So you end up exporting a file with mixed
+line endings.
 
 Here are some possible fixes:
 - Consistent line endings :: Figure out a way for the externally
@@ -862,7 +873,9 @@ set.
 | =tags_weight = 123= (auto-calc)    | =:EXPORT_HUGO_WEIGHT: :tags auto=      | When set to =:FOO auto=, /FOO/ taxonomy weight is auto-calculated          |
 | =weight = 123= (in =[menu.foo]=)   | =:EXPORT_HUGO_MENU: :menu foo=         | Menu weight is auto-calculated unless specified                            |
 |------------------------------------+----------------------------------------+----------------------------------------------------------------------------|
-Also see the [[*Custom Front-matter Parameters][Custom Front-matter Parameters]] section.
+# Also see the [[*Custom Front-matter Parameters][Custom Front-matter Parameters]] section.
+Also see the {{{relref(Custom Front-matter
+Parameters,custom-front-matter)}}} section.
 ***** Front-matter Precedence
 :PROPERTIES:
 :CUSTOM_ID: front-matter-precedence
@@ -912,10 +925,15 @@ Also see the [[*Custom Front-matter Parameters][Custom Front-matter Parameters]]
   For the file-based exports, the weights have to be specified
   manually. Any /weight/ assignment to ="auto"= for file-based exports
   is ignored.
-- See [[#org-hugo-date-format][~org-hugo-date-format~]] for customizing the date formats for all
-  /date/ front-matter parameters.
-- For setting custom front-matter parameters, see the [[*Custom Front-matter Parameters][Custom
-  Front-matter Parameters]] section.
+# - See [[#org-hugo-date-format][~org-hugo-date-format~]] for customizing the date formats for all
+#   /date/ front-matter parameters.
+- See {{{relref(`org-hugo-date-format`,dates#org-hugo-date-format)}}}
+  for customizing the date formats for all /date/ front-matter
+  parameters.
+# - For setting custom front-matter parameters, see the [[*Custom Front-matter Parameters][Custom
+#   Front-matter Parameters]] section.
+- For setting custom front-matter parameters, see the {{{relref(Custom
+  Front-matter Parameters,custom-front-matter)}}} section.
 *** Formatting
 :PROPERTIES:
 :EXPORT_FILE_NAME: formatting
@@ -1227,7 +1245,8 @@ adding this to the CSS:
 }
 #+end_src
 **** Auto-prefixing description of links to figures with "Figure"
-See [[*Linking numbered elements]].
+# See [[*Linking numbered elements]].
+See {{{relref(Linking numbered elements,linking-numbered-elements)}}}.
 *** Source blocks
 :PROPERTIES:
 :EXPORT_FILE_NAME: source-blocks
@@ -2618,8 +2637,11 @@ the Hugo publishes that site. So all the content in there can be
 accessed using the root prefix =/=. So a =static/foo.png= file can be
 accessed at =/foo.png=.
 
+# More detail for this conventional approach can be found in the
+# documentation for [[#references-to-files-in-the-static-directory][referencing files in static directory]].
 More detail for this conventional approach can be found in the
-documentation for [[#references-to-files-in-the-static-directory][referencing files in static directory]].
+documentation for {{{relref(referencing files in static
+directory,image-links#references-to-files-in-the-static-directory)}}}.
 **** Images and Regular Pages
 OK, so with that short intro out of the way, =ox-hugo= supports
 putting the /attachment files/ in the same directory as the source Org
@@ -2675,7 +2697,9 @@ for writing your posts in Org, there are examples for both in the
 - [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content-org/images-in-content][Org source]]
 - [[https://github.com/kaushalmodi/ox-hugo/tree/main/test/site/content/images-in-content][Exported Markdown]]
 **** Images and Page Bundles
-/See [[*Hugo Bundle][Hugo Bundle]] section on how to define those via ~ox-hugo~./
+# /See [[*Hugo Bundle][Hugo Bundle]] section on how to define those via ~ox-hugo~./
+/See {{{relref(Hugo Bundle,hugo-bundle)}}} section on how to define
+those via ~ox-hugo~./
 
 *Only for page bundles*, when a link points to a local attachment, and
 the image path contains the hugo bundle name, following attachment
@@ -2697,10 +2721,16 @@ copying rules apply:
       └── some-dir-2/image.png
   #+end_example
 
+# #+begin_note
+# If the attachment path does _not_ contain the bundle name, it will be
+# copied as usual to the ~static/~ directory (See the documentation for
+# [[#references-to-files-in-the-static-directory][referencing files in static directory]]).
+# #+end_note
 #+begin_note
 If the attachment path does _not_ contain the bundle name, it will be
 copied as usual to the ~static/~ directory (See the documentation for
-[[#references-to-files-in-the-static-directory][referencing files in static directory]]).
+{{{relref(referencing files in static
+directory,image-links#references-to-files-in-the-static-directory)}}}).
 #+end_note
 ***** Examples
 :PROPERTIES:
@@ -2845,9 +2875,13 @@ add this to the top of your Org files:
 :PROPERTIES:
 :CUSTOM_ID: replace-author-with-authors
 :END:
+# Some themes like [[https://github.com/HEIGE-PCloud/DoIt][DoIt]] support parsing a list of authors from an
+# ~authors~ front-matter parameter. But ~ox-hugo~ always exports authors
+# _as a list_ to the [[*Author][~author~ front-matter parameter]].
 Some themes like [[https://github.com/HEIGE-PCloud/DoIt][DoIt]] support parsing a list of authors from an
 ~authors~ front-matter parameter. But ~ox-hugo~ always exports authors
-_as a list_ to the [[*Author][~author~ front-matter parameter]].
+_as a list_ to the {{{relref(`author` front-matter
+parameter,author)}}}.
 
 You can have ~ox-hugo~ export the list of authors to the ~authors~
 front-matter by adding this to the top of your Org files:
@@ -3002,8 +3036,11 @@ Org mode has built-in supporting for exporting citations starting
 #+begin_mark
 version 9.5
 #+end_mark
-. See [[*Org Cite Citations][Org Cite Citations]] for more info.
+. See {{{relref(Org Cite Citations,org-cite-citations)}}} for more info.
 #+end_note
+# #+end_mark
+# . See [[*Org Cite Citations][Org Cite Citations]] for more info.
+# #+end_note
 
 The [[https://pandoc.org/][Pandoc]] Citations are prefixed with the *@* character. If the
 citation is ~@foo~, that particular /foo/ reference much be present in
@@ -4323,11 +4360,17 @@ Hugo supports specifying custom ID's for headings in a page using the
 ~{#some-id}~ syntax. See its documentation on [[https://gohugo.io/content-management/cross-references/#heading-ids][Cross References:
 Heading IDs]] for reference.
 
+# If the heading ID's are not specified using the above syntax, Hugo
+# will generate them automatically. While that is OK in general, it
+# becomes problematic when user generates [[* Table of Contents][TOC]] using Org, where the links
+# to headings on the page need to be embedded, or uses Org internal or
+# external links to reference other headings.
 If the heading ID's are not specified using the above syntax, Hugo
 will generate them automatically. While that is OK in general, it
-becomes problematic when user generates [[* Table of Contents][TOC]] using Org, where the links
-to headings on the page need to be embedded, or uses Org internal or
-external links to reference other headings.
+becomes problematic when user generates {{{relref(TOC,org-toc)}}}
+using Org, where the links to headings on the page need to be
+embedded, or uses Org internal or external links to reference other
+headings.
 
 So in order to make the user experience smooth, anchors for all
 headings are always derived withing ~ox-hugo~ and exported using the
@@ -4465,7 +4508,8 @@ Link to the above table: [[tab__simple_table]]
 Link to the above figure: [[fig__some_figure]]
 #+end_src
 
-See [[*Image Links]] for more details.
+# See [[*Image Links]] for more details.
+See {{{relref(Image Links,image-links)}}} for more details.
 **** Auto-prefixing element type names in links
 When links are made to any of these numbered elements, ~ox-hugo~ has
 an option to prefix the link descriptions with that element's type
@@ -4756,10 +4800,15 @@ the theme and component dependencies, Go is required for that.
 - ~pandoc~ version {{{pandoc_version}}}
 #+end_note
 
+# - About Pandoc :: /While the end-user does not need Pandoc installed
+#   on their machine, a code contributor needs to have ~pandoc~
+#   installed[fn:7]. These are needed for ~make md~ and ~make -j1 test~
+#   steps to work as they use/test the [[*Pandoc Citations][Pandoc Citations]] feature too./
 - About Pandoc :: /While the end-user does not need Pandoc installed
   on their machine, a code contributor needs to have ~pandoc~
   installed[fn:7]. These are needed for ~make md~ and ~make -j1 test~
-  steps to work as they use/test the [[*Pandoc Citations][Pandoc Citations]] feature too./
+  steps to work as they use/test the {{{relref(Pandoc
+  Citations,pandoc-citations)}}} feature too./
 *** Contributing Guide
 :PROPERTIES:
 :EXPORT_FILE_NAME: contributing-guide

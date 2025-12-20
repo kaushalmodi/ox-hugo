@@ -27,6 +27,11 @@ an **:ID** property, the `org-id` feature must first be loaded, either
 through `org-customize` or by adding `(require 'org-id)` in your Emacs
 init file.
 
+-   [Link to CUSTOM_ID within the same post](#internal-target)
+-   [Link to ID within the same post](#internal-target)
+-   [Link to heading within the same post](#internal-target)
+-   Links to target links within the same post like [this](#org-target--internal-target-link).
+
 
 ## Cross-post links <span class="tag"><span class="crosspost_links">crosspost-links</span></span> {#cross-post-links}
 
@@ -38,11 +43,29 @@ a **:CUSTOM_ID** property, or an **:ID** property will be resolved to the
 appropriate location in the linked file, but links to targets will be
 resolved to the containing post.
 
-<span class="timestamp-wrapper"><span class="timestamp">&lt;2025-02-11 Tue&gt; </span></span> Below section throws this error
 
-```text
-Error: user-error ("Org export aborted.  Unable to resolve link: \"posts/link-destination.pre-processed.org::#external-target\"
-```
+### Links without descriptions {#links-without-descriptions}
+
+-   Link to CUSTOM_ID outside the same post: [External target]({{< relref "link-destination#external-target" >}})
+-   Link to ID outside the same post: [External target]({{< relref "link-destination#external-target" >}})
+-   Link to target outside the same post: [External target]({{< relref "link-destination#external-target" >}})
+-   Another link to target outside the same post: [External target with **bold** and _italic_]({{< relref "link-destination#external-target-with-bold-and-italic" >}})
+-   Link to subtree by CUSTOM_ID: [Link destination]({{< relref "link-destination" >}})
+-   Link to subtree by ID: [Link destination]({{< relref "link-destination" >}})
+-   Link to subtree by heading: [Link destination]({{< relref "link-destination" >}})
+-   Link to a subtree with custom Hugo slug: [Slug Front-matter]({{< relref "slug-front-matter" >}})
+
+
+### Links with descriptions {#links-with-descriptions}
+
+-   [Link to CUSTOM_ID outside the same post]({{< relref "link-destination#external-target" >}})
+-   [Link to ID outside the same post]({{< relref "link-destination#external-target" >}})
+-   [Link to target outside the same post]({{< relref "link-destination#external-target" >}})
+-   [Another link to target outside the same post]({{< relref "link-destination#external-target-with-bold-and-italic" >}})
+-   [Link to subtree by CUSTOM_ID]({{< relref "link-destination" >}})
+-   [Link to subtree by ID]({{< relref "link-destination" >}})
+-   [Link to subtree by heading]({{< relref "link-destination" >}})
+-   [Link to a subtree with custom Hugo slug]({{< relref "slug-front-matter" >}})
 
 
 ## Internal target {#internal-target}

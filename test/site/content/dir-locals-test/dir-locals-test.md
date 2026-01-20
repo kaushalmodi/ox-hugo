@@ -7,14 +7,14 @@ draft: false
 creator: "Dummy creator string"
 ---
 
-<div class="ox-hugo-toc toc has-section-numbers">
+<nav class="ox-hugo-toc toc has-section-numbers">
 
 <div class="heading">Table of Contents</div>
 
 - <span class="section-num">1</span> [Variables set in <kbd>.dir-locals.el</kbd>](#variables-set-in-dot-dir-locals-dot-el)
 - <span class="section-num">2</span> [Test text](#test-text)
 
-</div>
+</nav>
 <!--endtoc-->
 
 

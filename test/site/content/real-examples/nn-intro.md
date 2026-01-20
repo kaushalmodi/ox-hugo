@@ -14,7 +14,7 @@ Disclaimer
 
 ---
 
-<div class="ox-hugo-toc toc">
+<nav class="ox-hugo-toc toc">
 
 <div class="heading">Table of Contents</div>
 
@@ -35,7 +35,7 @@ Disclaimer
     - [代价函数：交叉熵](#代价函数-交叉熵)
     - [规范化](#规范化)
 
-</div>
+</nav>
 <!--endtoc-->
 
 神经网络相关基本知识笔记

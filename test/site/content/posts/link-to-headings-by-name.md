@@ -4,7 +4,7 @@ tags = ["links", "internal-links", "toc", "headings", "export-option"]
 draft = false
 +++
 
-<div class="ox-hugo-toc toc has-section-numbers">
+<nav class="ox-hugo-toc toc has-section-numbers">
 
 <div class="heading">Table of Contents</div>
 
@@ -16,7 +16,7 @@ draft = false
 - [Zeta 103 which has **some** _markup_](#zeta-103-which-has-some-markup)
     - [Links (no descriptions) to headings with section numbers](#links--no-descriptions--to-headings-with-section-numbers)
 
-</div>
+</nav>
 <!--endtoc-->
 
 

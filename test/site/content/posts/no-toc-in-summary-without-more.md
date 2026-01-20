@@ -4,14 +4,14 @@ tags = ["export-option", "toc", "summary", "endtoc"]
 draft = false
 +++
 
-<div class="ox-hugo-toc toc">
+<nav class="ox-hugo-toc toc">
 
 <div class="heading">Table of Contents</div>
 
 - [`ox-hugo`'s Solution](#ox-hugo-s-solution)
 - [Snippet](#snippet)
 
-</div>
+</nav>
 <!--endtoc-->
 
 By default, Hugo will dump everything at the beginning of a post into

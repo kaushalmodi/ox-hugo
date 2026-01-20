@@ -11,7 +11,7 @@ draft = false
 
 Below, TOC is exported with only level-1 headings in this post.
 
-<div class="ox-hugo-toc toc">
+<nav class="ox-hugo-toc toc">
 
 <div class="heading">Table of Contents</div>
 
@@ -19,20 +19,20 @@ Below, TOC is exported with only level-1 headings in this post.
 - [Post sub-heading 2](#post-sub-heading-2)
 - [Post sub-heading 3](#post-sub-heading-3)
 
-</div>
+</nav>
 <!--endtoc-->
 
 Below exported TOC should look the same as above even when it's
 generated using the `local` param as it is at the root level of this
 post.
 
-<div class="ox-hugo-toc toc local">
+<nav class="ox-hugo-toc toc local">
 
 - [Post sub-heading 1](#post-sub-heading-1)
 - [Post sub-heading 2](#post-sub-heading-2)
 - [Post sub-heading 3](#post-sub-heading-3)
 
-</div>
+</nav>
 <!--endtoc-->
 
 
@@ -41,13 +41,13 @@ post.
 Below, TOC is exported with only level-1 headings **relative to** this
 "Post sub-heading 1" section.
 
-<div class="ox-hugo-toc toc local">
+<nav class="ox-hugo-toc toc local">
 
 - [Post sub-heading 1.1](#post-sub-heading-1-dot-1)
 - [Post sub-heading 1.2](#post-sub-heading-1-dot-2)
 - [Post sub-heading 1.3](#post-sub-heading-1-dot-3)
 
-</div>
+</nav>
 <!--endtoc-->
 
 
@@ -74,7 +74,7 @@ Below, TOC is exported with only level-1 headings **relative to** this
 Below, TOC is exported with only up to level-2 headings **relative to**
 this "Post sub-heading 2.2" section.
 
-<div class="ox-hugo-toc toc local">
+<nav class="ox-hugo-toc toc local">
 
 - [Post sub-heading 2.2.1](#post-sub-heading-2-dot-2-dot-1)
 - [Post sub-heading 2.2.2](#post-sub-heading-2-dot-2-dot-2)
@@ -82,7 +82,7 @@ this "Post sub-heading 2.2" section.
     - [Post sub-heading 2.2.3.1](#post-sub-heading-2-dot-2-dot-3-dot-1)
     - [Post sub-heading 2.2.3.2](#post-sub-heading-2-dot-2-dot-3-dot-2)
 
-</div>
+</nav>
 <!--endtoc-->
 
 
@@ -97,12 +97,12 @@ this "Post sub-heading 2.2" section.
 Below, TOC is exported with only level-1 headings **relative to** this
 "Post sub-heading 2.2.3" section.
 
-<div class="ox-hugo-toc toc local">
+<nav class="ox-hugo-toc toc local">
 
 - [Post sub-heading 2.2.3.1](#post-sub-heading-2-dot-2-dot-3-dot-1)
 - [Post sub-heading 2.2.3.2](#post-sub-heading-2-dot-2-dot-3-dot-2)
 
-</div>
+</nav>
 <!--endtoc-->
 
 

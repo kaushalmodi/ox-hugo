@@ -262,10 +262,8 @@ Below, the same caption is set using the =#+attr_html= method instead:
 
 Some text before image.
 
-# #+attr_html: :caption A unicorn!
-# [[/images/org-mode-unicorn-logo.png]]
-
-<2025-02-11 Tue> Fix export of standalone images.
+#+attr_html: :caption A unicorn!
+[[/images/org-mode-unicorn-logo.png]]
 
 /Enter a new line after the image link so that it's in an "Org
 paragraph" that contains just that image. That tells Org that that

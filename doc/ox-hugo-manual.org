@@ -246,7 +246,7 @@ effortless.
 
 If you are a /one Org-file per post/ type of a person, that flow works
 too! Just note that in this flow many of those =#+hugo_= properties
-need to be managed manually.. just as one would manage the front-matter
+need to be managed manually. Just as one would manage the front-matter
 in Markdown files --- See the Org versions in the above screenshots for
 comparison.
 ** Demo

@@ -453,6 +453,12 @@
   site = "https://afermg.github.io"
   org_dir = "content-org"
 
+[jneidel]
+  author = "Jonathan Neidel"
+  source = "https://github.com/jneidel/jneidel.com"
+  site = "https://jneidel.com"
+  org_dir = "src"
+
 # [ValidTOMLKey] <-- The key cannot contain spaces or periods.
 #   author = ""
 #   source = ""

@@ -2765,6 +2765,33 @@ and rewrite link paths to make blogging more seamless."
     (cond
      ;; Link type is handled by a special function.
      ((org-export-custom-protocol-maybe link desc 'md info))
+     ;; Cross-post dummy paths that lost their file: type (Org 9.7+
+     ;; interpret-data) and reparsed as fuzzy: handle like file links.
+     ((and (string= type "fuzzy")
+           (let ((p (or raw-path "")))
+             (string-match-p
+              (concat (regexp-quote org-hugo--preprocessed-buffer-dummy-file-suffix)
+                      "\\(?:\\'\\|::\\)")
+              p)))
+      (let* ((parts (split-string raw-path "::" t))
+             (file-part (car parts))
+             (search-part (cadr parts))
+             (ref (string-remove-suffix
+                   org-hugo--preprocessed-buffer-dummy-file-suffix
+                   (file-name-nondirectory file-part)))
+             (anchor (or search-part "")))
+        (cond
+         ((and (org-string-nw-p anchor) (not (string-prefix-p "#" anchor)))
+          (if desc
+              (format "[%s]({{< relref \"%s\" >}})" desc anchor)
+            (format "{{< relref \"%s\" >}}" anchor)))
+         ((or (org-string-nw-p ref) (org-string-nw-p anchor))
+          (let ((path (format "{{< relref \"%s%s\" >}}" ref anchor)))
+            (if desc
+                (format "[%s](%s)" desc path)
+              path)))
+         (t
+          (or desc "")))))
      ((member type '("custom-id" "id"
                      "fuzzy")) ;<<target>>, #+name, heading links
       (let ((destination (if (string= type "fuzzy")
@@ -3061,20 +3088,24 @@ and rewrite link paths to make blogging more seamless."
                                             org-hugo--preprocessed-buffer-dummy-file-suffix
                                             (file-name-nondirectory path1)))
                                  ;; Dummy Org file paths created in
-                                 ;; `org-hugo--get-pre-processed-buffer'
-                                 ;; For dummy Org file paths, we are
-                                 ;; limiting to only "#" style search
-                                 ;; strings.
-                                 (when (string-match ".*\\.org::\\(#.*\\)" raw-link)
-                                   (setq anchor (match-string-no-properties 1 raw-link))))
+                                 ;; `org-hugo--get-pre-processed-buffer'.
+                                 ;; Prefer :search-option (Org 9.x) then
+                                 ;; raw-link "::" form.
+                                 (setq anchor
+                                       (or (org-string-nw-p
+                                            (org-element-property :search-option link))
+                                           (and (string-match ".*\\.org::\\(#.*\\)" raw-link)
+                                                (match-string-no-properties 1 raw-link))
+                                           "")))
                              ;; Regular Org file paths.
                              (setq ref (file-name-sans-extension (file-name-nondirectory path1)))
                              (let ((link-search-str
                                     ;; If raw-link is "./foo.org::#bar",
                                     ;; set `link-search-str' to
                                     ;; "#bar".
-                                    (when (string-match ".*\\.org::\\(.*\\)" raw-link)
-                                      (match-string-no-properties 1 raw-link))))
+                                    (or (org-element-property :search-option link)
+                                        (when (string-match ".*\\.org::\\(.*\\)" raw-link)
+                                          (match-string-no-properties 1 raw-link)))))
                                ;; (message "[org-hugo-link DBG] link-search-str: %s" link-search-str)
                                (when link-search-str
                                  (setq anchor (org-hugo--search-and-get-anchor raw-path link-search-str info)))))
@@ -4672,10 +4703,21 @@ links."
 
                     ;; Change the link if it points to a valid
                     ;; destination outside the subtree.
-                    (unless (or  (equal source-path destination-path)
-                                 (and (string= type "id")
-                                      (org-id-find-id-file
-                                       (org-element-property :path el))))
+                    ;;
+                    ;; Skip only id links whose target lives in a
+                    ;; *different* Org file (true external id).  Same-file
+                    ;; ids still need dummy-path rewriting so they export
+                    ;; as cross-post relrefs rather than file.md anchors.
+                    (unless (or (equal source-path destination-path)
+                                (and (string= type "id")
+                                     (let ((id-file
+                                            (org-id-find-id-file
+                                             (org-element-property :path el)))
+                                           (here (buffer-file-name)))
+                                       (and id-file here
+                                            (not (file-equal-p
+                                                  (file-truename id-file)
+                                                  (file-truename here)))))))
                       (let ((link-desc (org-element-contents el)))
                         ;; (message "[ox-hugo pre process DBG] link desc: %s" link-desc)
 
@@ -4684,33 +4726,43 @@ links."
                         ;; to dummy files with
                         ;; `org-hugo--preprocessed-buffer-dummy-file-suffix'
                         ;; suffix.
-                        (org-element-put-property el :type "file")
-                        (org-element-put-property
-                         el :path
-                         (cond
-                          ;; If the destination is a heading with the
-                          ;; :EXPORT_FILE_NAME property defined, the
-                          ;; link should point to the file (without
-                          ;; anchor).
-                          ((org-element-property :EXPORT_FILE_NAME destination)
-                           (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix))
-                          ;; Hugo only supports anchors to headings,
-                          ;; so if a "fuzzy" type link points to
-                          ;; anything else than a heading, it should
-                          ;; point to the file.
-                          ((and (string= type "fuzzy")
-                                (not (string-prefix-p "*" raw-link)))
-                           (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix))
-                          ;; In "custom-id" type links, the raw-link
-                          ;; matches the anchor of the destination.
-                          ((string= type "custom-id")
-                           (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix "::" raw-link))
-                          ;; In "id" and "fuzzy" type links, the anchor
-                          ;; of the destination is derived from the
-                          ;; :CUSTOM_ID property or the title.
-                          (t
-                           (let ((anchor (org-hugo--get-anchor destination info)))
-                             (concat destination-path org-hugo--preprocessed-buffer-dummy-file-suffix "::#" anchor)))))
+                        ;;
+                        ;; Keep the file path and search option
+                        ;; separate.  Putting "::#anchor" into :path
+                        ;; used to work by accident; Org 9.7+ treats
+                        ;; the whole string as the path and then
+                        ;; re-parses the interpreted link as fuzzy.
+                        (when (org-string-nw-p destination-path)
+                          (let* ((dummy-path
+                                  (concat destination-path
+                                          org-hugo--preprocessed-buffer-dummy-file-suffix))
+                                 (search-option
+                                  (cond
+                                   ;; Post subtree landing page: no anchor.
+                                   ((org-element-property :EXPORT_FILE_NAME destination)
+                                    nil)
+                                   ;; Fuzzy non-heading targets: post only.
+                                   ((and (string= type "fuzzy")
+                                         (not (string-prefix-p "*" raw-link)))
+                                    nil)
+                                   ;; custom-id: raw-link is like "#id".
+                                   ((string= type "custom-id")
+                                    raw-link)
+                                   ;; id / fuzzy heading: derive anchor.
+                                   (t
+                                    (let ((anchor (org-hugo--get-anchor destination info)))
+                                      (and (org-string-nw-p anchor)
+                                           (if (string-prefix-p "#" anchor)
+                                               anchor
+                                             (concat "#" anchor))))))))
+                            (org-element-put-property el :type "file")
+                            (org-element-put-property el :path dummy-path)
+                            (org-element-put-property el :search-option search-option)
+                            (org-element-put-property
+                             el :raw-link
+                             (if search-option
+                                 (concat "file:" dummy-path "::" search-option)
+                               (concat "file:" dummy-path)))))
                         ;; If the link destination is a heading and if
                         ;; user hasn't set the link description, set the
                         ;; description to the destination heading title.
@@ -4763,8 +4815,32 @@ links."
                        (push (set (make-local-variable var) val) vars)))))
 
             (insert (org-element-interpret-data ast))
+            ;; `org-element-interpret-data' emits file links without the
+            ;; "file:" type prefix for relative paths.  On re-parse those
+            ;; become fuzzy links whose path is the dummy file name
+            ;; (optionally with "::#anchor"), and Org 9.7+ aborts export
+            ;; with "Unable to resolve link".  Force the file type back.
+            (org-hugo--ensure-preprocessed-file-link-types)
             (set-buffer-modified-p nil)))
         buffer))))
+
+(defun org-hugo--ensure-preprocessed-file-link-types ()
+  "Rewrite dummy cross-post link targets to explicit file: links.
+
+Call in the pre-processed buffer after `org-element-interpret-data'.
+See `org-hugo--get-pre-processed-buffer'."
+  (let ((re (concat "\\[\\[\\(?1:\\(?:file:\\)?\\(?2:[^]|]*?"
+                    (regexp-quote org-hugo--preprocessed-buffer-dummy-file-suffix)
+                    "\\)\\(?3:::\\(?4:[^]|]*\\)\\)?\\)\\]")))
+    (goto-char (point-min))
+    (while (re-search-forward re nil t)
+      (let ((path (match-string-no-properties 2))
+            (search (match-string-no-properties 4)))
+        (replace-match
+         (if (org-string-nw-p search)
+             (format "[[file:%s::%s]" path search)
+           (format "[[file:%s]" path))
+         t t)))))
 
 
 

@@ -17,5 +17,5 @@ prefix = /dir/where/you/want/to/install/org # Default: /usr/share
 ```
 <div class="src-block-caption">
   <span class="src-block-number">Code Snippet 2:</span>
-  Hello &#x2014; Caption with em-dash &#x2013; and &#x2013; en-dash
+  Hello &mdash; Caption with em-dash &ndash; and &ndash; en-dash
 </div>

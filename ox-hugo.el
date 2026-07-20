@@ -4657,6 +4657,104 @@ subtree-number being exported.
           (message "Point is not in a valid Hugo post subtree; move to one and try again"))
         valid-subtree-found))))
 
+
+(defvar-local org-hugo--cross-post-index nil
+  "Cache for `org-hugo--get-cross-post-index'.")
+
+(defvar-local org-hugo--cross-post-index-tick nil
+  "Buffer-chars-modified-tick for `org-hugo--cross-post-index'.")
+
+(defun org-hugo--cross-post-entry (slug is-landing title anchor)
+  "Return a cross-post index entry as a vector [SLUG IS-LANDING TITLE ANCHOR]."
+  (vector slug is-landing title anchor))
+
+(defsubst org-hugo--cpe-slug (e) (aref e 0))
+(defsubst org-hugo--cpe-landing-p (e) (aref e 1))
+(defsubst org-hugo--cpe-title (e) (aref e 2))
+(defsubst org-hugo--cpe-anchor (e) (aref e 3))
+
+(defun org-hugo--get-cross-post-index (info)
+  "Build or return cached same-file cross-post destination index.
+
+Uses one `org-element-at-point' per headline (not full-buffer parse)."
+  (let ((tick (buffer-chars-modified-tick)))
+    (if (and org-hugo--cross-post-index
+             (eq org-hugo--cross-post-index-tick tick))
+        org-hugo--cross-post-index
+      (let ((by-custom-id (make-hash-table :test #'equal))
+            (by-id (make-hash-table :test #'equal))
+            (by-title (make-hash-table :test #'equal))
+            (by-target (make-hash-table :test #'equal)))
+        (org-with-wide-buffer
+         (org-map-entries
+          (lambda ()
+            (let* ((el (org-element-at-point))
+                   (slug (org-hugo--heading-get-slug
+                          el info :inherit-export-file-name))
+                   (own-file (org-string-nw-p
+                              (org-element-property :EXPORT_FILE_NAME el)))
+                   (title
+                    (let ((raw (org-element-property :title el)))
+                      (and raw
+                           (substring-no-properties
+                            (org-export-data-with-backend raw 'ascii info)))))
+                   (anchor (org-hugo--get-anchor el info))
+                   (custom-id (org-string-nw-p
+                               (org-element-property :CUSTOM_ID el)))
+                   (id (org-string-nw-p (org-element-property :ID el)))
+                   (entry (and (org-string-nw-p slug)
+                               (org-hugo--cross-post-entry
+                                slug (and own-file t) title anchor))))
+              (when entry
+                (when custom-id (puthash custom-id entry by-custom-id))
+                (when id (puthash id entry by-id))
+                (when (org-string-nw-p title)
+                  (puthash title entry by-title)))))
+          t 'file)
+         (goto-char (point-min))
+         (while (re-search-forward "<<\\([^<>\n]+\\)>>" nil t)
+           (let ((name (match-string-no-properties 1))
+                 (pos (match-beginning 0)))
+             (save-excursion
+               (goto-char pos)
+               (unless (org-before-first-heading-p)
+                 (org-back-to-heading t)
+                 (let* ((el (org-element-at-point))
+                        (slug (org-hugo--heading-get-slug
+                               el info :inherit-export-file-name)))
+                   (when (org-string-nw-p slug)
+                     (puthash name
+                              (org-hugo--cross-post-entry slug nil name "")
+                              by-target))))))))
+        (setq org-hugo--cross-post-index-tick tick
+              org-hugo--cross-post-index
+              (list :by-custom-id by-custom-id
+                    :by-id by-id
+                    :by-title by-title
+                    :by-target by-target))))))
+
+(defun org-hugo--resolve-cross-post-link (type raw-link path index)
+  "Resolve Org link TYPE/RAW-LINK/PATH via INDEX; return entry or nil."
+  (cond
+   ((string= type "custom-id")
+    (let ((key (if (and (stringp path) (string-prefix-p "#" path))
+                   (substring path 1)
+                 path)))
+      (gethash key (plist-get index :by-custom-id))))
+   ((string= type "id")
+    (and (stringp path) (gethash path (plist-get index :by-id))))
+   ((string= type "fuzzy")
+    (cond
+     ((and (stringp raw-link) (string-prefix-p "*" raw-link))
+      (gethash (org-trim (substring raw-link 1))
+               (plist-get index :by-title)))
+     ((stringp path)
+      (or (gethash path (plist-get index :by-target))
+          (gethash path (plist-get index :by-title))))
+     (t nil)))
+   (t nil)))
+
+
 (defun org-hugo--get-pre-processed-buffer (&optional subtree)
   "Return a pre-processed copy of the current buffer.
 
@@ -4665,24 +4763,39 @@ links.
 
 Optional SUBTREE is an Org element for the post being exported.
 When non-nil (single-subtree export), only links inside that
-subtree are rewritten.  When nil (all-subtrees batch export),
-every cross-post link in the file is rewritten so the shared
-pre-processed buffer works for every post.
+subtree are rewritten using a light destination index (no
+full-document parse; issue #732).  When nil (all-subtrees batch),
+every cross-post link is rewritten into a shared buffer.
 
 Performance: copy the original buffer text and splice rewritten
-links in place.  Avoid `org-element-interpret-data' on the full
-AST, which re-serializes the entire document and dominates GC on
-large multi-post files (see issue #732)."
+links in place instead of `org-element-interpret-data' on the
+full AST."
   (let ((pre-processed-buffer-prefix "*Ox-hugo Pre-processed "))
-    (let* ((ast (org-element-parse-buffer))
-           (org-use-property-inheritance (org-hugo--selective-property-inheritance))
-           (info (org-combine-plists
-                  (list :parse-tree ast)
-                  (org-export--get-export-attributes 'hugo)
-                  (org-export--get-buffer-attributes)
-                  (org-export-get-environment 'hugo)))
-           ;; Collect once; resolve-id-link used to recompute this per link.
-           (info (org-export--collect-tree-properties ast info))
+    (let* ((org-use-property-inheritance (org-hugo--selective-property-inheritance))
+           (info0 (org-combine-plists
+                   (org-export--get-export-attributes 'hugo)
+                   (org-export--get-buffer-attributes)
+                   (org-export-get-environment 'hugo)))
+           ;; Single-subtree: parse only that region + light index.
+           ;; All-subtrees: full parse once for the shared buffer.
+           (ast (if subtree
+                    (org-with-wide-buffer
+                     (save-restriction
+                       (narrow-to-region
+                        (org-element-property :begin subtree)
+                        (org-element-property :end subtree))
+                       (org-element-parse-buffer)))
+                  (org-element-parse-buffer)))
+           (info (if subtree
+                     info0
+                   (org-export--collect-tree-properties
+                    ast
+                    (org-combine-plists (list :parse-tree ast) info0))))
+           (index (and subtree (org-hugo--get-cross-post-index info0)))
+           (source-path
+            (and subtree
+                 (org-hugo--heading-get-slug
+                  subtree info0 :inherit-export-file-name)))
            (subtree-beg (and subtree (org-element-property :begin subtree)))
            (subtree-end (and subtree (org-element-property :end subtree)))
            (replacements nil))
@@ -4697,29 +4810,63 @@ large multi-post files (see issue #732)."
                                 (>= beg subtree-beg)
                                 (< beg subtree-end))))
               (let* ((raw-link (org-element-property :raw-link el))
+                     (path (org-element-property :path el))
+                     (entry
+                      (and index
+                           (org-hugo--resolve-cross-post-link
+                            type raw-link path index)))
                      (destination
-                      (condition-case err
-                          (if (string= type "fuzzy")
-                              (org-export-resolve-fuzzy-link el info)
-                            (org-export-resolve-id-link el info))
-                        (org-link-broken
-                         (unless (or (plist-get info :with-broken-links)
-                                     (plist-get
-                                      (org-export--parse-option-keyword
-                                       (or (cdr (org-hugo--get-elem-with-prop
-                                                 :EXPORT_OPTIONS
-                                                 (org-element-property :begin el)))
-                                           ""))
-                                      :with-broken-links))
-                           (user-error "Unable to resolve link: %S" (nth 1 err))))))
-                     (source-path (org-hugo--heading-get-slug el info :inherit-export-file-name))
-                     (destination-path (org-hugo--heading-get-slug destination info :inherit-export-file-name))
-                     (destination-type (org-element-type destination)))
-                (unless (or (equal source-path destination-path)
+                      (and (null index)
+                           (condition-case err
+                               (if (string= type "fuzzy")
+                                   (org-export-resolve-fuzzy-link el info)
+                                 (org-export-resolve-id-link el info))
+                             (org-link-broken
+                              (unless (or (plist-get info :with-broken-links)
+                                          (plist-get
+                                           (org-export--parse-option-keyword
+                                            (or (cdr (org-hugo--get-elem-with-prop
+                                                      :EXPORT_OPTIONS
+                                                      (org-element-property :begin el)))
+                                                ""))
+                                           :with-broken-links))
+                                (user-error "Unable to resolve link: %S"
+                                            (nth 1 err)))))))
+                     (this-source-path
+                      (or source-path
+                          (org-hugo--heading-get-slug
+                           el info :inherit-export-file-name)))
+                     (destination-path
+                      (if entry
+                          (org-hugo--cpe-slug entry)
+                        (and destination
+                             (org-hugo--heading-get-slug
+                              destination info :inherit-export-file-name))))
+                     (destination-type
+                      (if entry 'headline
+                        (and destination (org-element-type destination))))
+                     (destination-landing
+                      (if entry
+                          (org-hugo--cpe-landing-p entry)
+                        (and destination
+                             (org-element-property :EXPORT_FILE_NAME destination))))
+                     (destination-title
+                      (if entry
+                          (org-hugo--cpe-title entry)
+                        (and destination
+                             (equal destination-type 'headline)
+                             (substring-no-properties
+                              (org-export-data-with-backend
+                               (org-element-property :title destination)
+                               'ascii info)))))
+                     (destination-anchor
+                      (if entry
+                          (org-hugo--cpe-anchor entry)
+                        (and destination (org-hugo--get-anchor destination info)))))
+                (unless (or (equal this-source-path destination-path)
                             (and (string= type "id")
                                  (let ((id-file
-                                        (org-id-find-id-file
-                                         (org-element-property :path el)))
+                                        (org-id-find-id-file path))
                                        (here (buffer-file-name)))
                                    (and id-file here
                                         (not (file-equal-p
@@ -4731,31 +4878,28 @@ large multi-post files (see issue #732)."
                                     org-hugo--preprocessed-buffer-dummy-file-suffix))
                            (search-option
                             (cond
-                             ((org-element-property :EXPORT_FILE_NAME destination)
-                              nil)
+                             (destination-landing nil)
                              ((and (string= type "fuzzy")
                                    (stringp raw-link)
                                    (not (string-prefix-p "*" raw-link)))
                               nil)
                              ((string= type "custom-id")
-                              raw-link)
+                              (if (and (stringp path) (string-prefix-p "#" path))
+                                  path
+                                (concat "#" (or path ""))))
                              (t
-                              (let ((anchor (org-hugo--get-anchor destination info)))
-                                (and (org-string-nw-p anchor)
-                                     (if (string-prefix-p "#" anchor)
-                                         anchor
-                                       (concat "#" anchor)))))))
+                              (and (org-string-nw-p destination-anchor)
+                                   (if (string-prefix-p "#" destination-anchor)
+                                       destination-anchor
+                                     (concat "#" destination-anchor))))))
                            (link-desc
                             (let ((cb (org-element-property :contents-begin el))
                                   (ce (org-element-property :contents-end el)))
                               (cond
                                ((and cb ce)
                                 (buffer-substring-no-properties cb ce))
-                               ((equal 'headline destination-type)
-                                (substring-no-properties
-                                 (org-export-data-with-backend
-                                  (org-element-property :title destination)
-                                  'ascii info)))
+                               ((org-string-nw-p destination-title)
+                                destination-title)
                                (t nil))))
                            (core (if (org-string-nw-p search-option)
                                      (format "file:%s::%s" dummy-path search-option)

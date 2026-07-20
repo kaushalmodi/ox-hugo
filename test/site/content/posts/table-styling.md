@@ -294,7 +294,7 @@ block.
 <div class="ox-hugo-table sane-table">
 <div class="table-caption">
   <span class="table-number">Table 9:</span>
-  Sane Table &#x2014; with minimal styling
+  Sane Table &mdash; with minimal styling
 </div>
 
 | Name | ID    | Favorite Color |

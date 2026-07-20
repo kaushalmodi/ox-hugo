@@ -10,4 +10,4 @@ draft = false
 
 ## <span class="org-todo todo TODO">TODO</span> Some plan {#some-plan}
 
-<p><span class="timestamp-wrapper"><span class="timestamp-kwd">DEADLINE:</span> <span class="timestamp">&lt;2022-01-30 Sun&gt; </span> <span class="timestamp-kwd">SCHEDULED:</span> <span class="timestamp">&lt;2022-01-20 Thu&gt;</span></span></p>
+<p><span class="timestamp-wrapper"><span class="timestamp-kwd">DEADLINE:</span> <span class="timestamp">&lt;2022-01-30 Sun&gt;</span> <span class="timestamp-kwd">SCHEDULED:</span> <span class="timestamp">&lt;2022-01-20 Thu&gt; </span></span></p>

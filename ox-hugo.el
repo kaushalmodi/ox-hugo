@@ -4982,11 +4982,16 @@ The optional argument NOERROR is passed to
         (buf-has-subtree (org-hugo--buffer-has-valid-post-subtree-p))
         ret)
 
-    ;; Auto-update `org-id-locations' if it's nil or empty hash table
-    ;; to avoid broken [[id:..]] type links.
+    ;; Auto-update `org-id-locations' for [[id:..]] links.
+    ;; Always rescan .org files in `default-directory'.  If we only
+    ;; update when the locations table is empty, a prior export that
+    ;; wrote a non-empty ~/.emacs.d/.org-id-locations (common in the
+    ;; test suite with shared HOME) skips sibling files and breaks
+    ;; cross-file id links such as the org-roam fixtures.
     (unless org-id-locations (org-id-locations-load))
-    (when (or (null org-id-locations) (zerop (hash-table-count org-id-locations)))
-      (org-id-update-id-locations (directory-files "." :full "\\.org$" :nosort) :silent))
+    (let ((local-org-files (directory-files "." :full "\\.org$" :nosort)))
+      (when local-org-files
+        (org-id-update-id-locations local-org-files :silent)))
 
     (org-hugo--cleanup)
 

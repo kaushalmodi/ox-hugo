@@ -38,11 +38,29 @@ a **:CUSTOM_ID** property, or an **:ID** property will be resolved to the
 appropriate location in the linked file, but links to targets will be
 resolved to the containing post.
 
-<span class="timestamp-wrapper"><span class="timestamp">&lt;2025-02-11 Tue&gt; </span></span> Below section throws this error
 
-```text
-Error: user-error ("Org export aborted.  Unable to resolve link: \"posts/link-destination.pre-processed.org::#external-target\"
-```
+### Links without descriptions {#links-without-descriptions}
+
+-   Link to CUSTOM_ID outside the same post: [External target]({{< relref "link-destination#external-target" >}})
+-   Link to ID outside the same post: [External target]({{< relref "link-destination#external-target" >}})
+-   Link to target outside the same post: [External target]({{< relref "link-destination#external-target" >}})
+-   Another link to target outside the same post: [External target with **bold** and _italic_]({{< relref "link-destination#external-target-with-bold-and-italic" >}})
+-   Link to subtree by CUSTOM_ID: [Link destination]({{< relref "link-destination" >}})
+-   Link to subtree by ID: [Link destination]({{< relref "link-destination" >}})
+-   Link to subtree by heading: [Link destination]({{< relref "link-destination" >}})
+-   Link to a subtree with custom Hugo slug: [Slug Front-matter]({{< relref "slug-front-matter" >}})
+
+
+### Links with descriptions {#links-with-descriptions}
+
+-   [Link to CUSTOM_ID outside the same post]({{< relref "link-destination#external-target" >}})
+-   [Link to ID outside the same post]({{< relref "link-destination#external-target" >}})
+-   [Link to target outside the same post]({{< relref "link-destination#external-target" >}})
+-   [Another link to target outside the same post]({{< relref "link-destination#external-target-with-bold-and-italic" >}})
+-   [Link to subtree by CUSTOM_ID]({{< relref "link-destination" >}})
+-   [Link to subtree by ID]({{< relref "link-destination" >}})
+-   [Link to subtree by heading]({{< relref "link-destination" >}})
+-   [Link to a subtree with custom Hugo slug]({{< relref "slug-front-matter" >}})
 
 
 ## Internal target {#internal-target}

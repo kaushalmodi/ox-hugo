@@ -3866,11 +3866,7 @@ a *:CUSTOM_ID* property, or an *:ID* property will be resolved to the
 appropriate location in the linked file, but links to targets will be
 resolved to the containing post.
 
-<2025-02-11 Tue> Below section throws this error
-#+begin_example
-Error: user-error ("Org export aborted.  Unable to resolve link: \"posts/link-destination.pre-processed.org::#external-target\"
-#+end_example
-**** COMMENT Links without descriptions
+**** Links without descriptions
 - Link to CUSTOM_ID outside the same post: [[#external-target]]
 - Link to ID outside the same post: [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb]]
 - Link to target outside the same post: [[*External target]]
@@ -3879,7 +3875,7 @@ Error: user-error ("Org export aborted.  Unable to resolve link: \"posts/link-de
 - Link to subtree by ID: [[id:1e5e0bcd-caea-40ad-a75b-e488634c2678]]
 - Link to subtree by heading: [[*Link destination]]
 - Link to a subtree with custom Hugo slug: [[*Slug Front-matter]]
-**** COMMENT Links with descriptions
+**** Links with descriptions
 - [[#external-target][Link to CUSTOM_ID outside the same post]]
 - [[id:de0df718-f9b4-4449-bb0a-eb4402fa5fcb][Link to ID outside the same post]]
 - [[*External target][Link to target outside the same post]]

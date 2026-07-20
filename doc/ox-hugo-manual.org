@@ -2414,12 +2414,108 @@ the Heading Render Hook's ~.PlainText~ variable.
 For example, if the sub-heading title is "Example of rendering notes
 under sub-headings", the value of ~.PlainText~ for that heading will
 be the same.
-*** COMMENT Hyperlinks
+*** Hyperlinks
 :PROPERTIES:
 :EXPORT_FILE_NAME: hyperlinks
 :END:
+#+begin_description
+How =ox-hugo= turns Org links into Hugo-friendly Markdown (including
+same-file cross-post =relref= shortcodes).
+#+end_description
+
+This page covers the links that matter most when blogging from one Org
+file with many post subtrees.
 **** External Links
-**** Internal Links
+Usual =https:= / =http:= / =mailto:= / =file:= links export like other
+Org Markdown exporters: as normal Markdown links or angle-bracket URLs.
+
+Image and attachment paths under the Hugo =static/= tree have extra
+helpers; see the {{{relref(Image Links,image-links)}}} page.
+**** Internal Links (same post)
+Links that stay inside the /same/ Hugo post (same =EXPORT_FILE_NAME=
+subtree, or the same file for file-based export) become Markdown
+anchors:
+
+- Custom ID :: =[[#my-anchor][...]]= → =[...](#my-anchor)=
+- Heading :: =[[*Some heading][...]]= → =[...](#some-heading)=
+- Named target :: =<<target>>= / =[[target][...]]=
+
+For =id:= links, load Org's =org-id= library first
+(=(require 'org-id)= in your init, or via =org-customize=).
+**** Cross-post links (same Org file, different post)
+:PROPERTIES:
+:CUSTOM_ID: cross-post-links
+:END:
+With the preferred /one post per subtree/ flow, several posts often
+live in one Org file. A link from one post subtree to another is a
+*cross-post link*.
+
+=ox-hugo= rewrites those links during export so Hugo gets
+={{</* relref "..." */>}}= shortcodes instead of broken in-file anchors.
+
+Supported Org forms (pointing at another subtree that has
+=EXPORT_FILE_NAME=):
+
+#+begin_src org
+,*** Source post
+:PROPERTIES:
+:EXPORT_FILE_NAME: source-post
+:END:
+- Heading: [[*Destination post]]
+- Custom ID: [[#some-anchor]]
+- Org ID: [[id:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx]]
+- Whole post: [[*Destination post][see this post]]
+
+,*** Destination post
+:PROPERTIES:
+:EXPORT_FILE_NAME: destination-post
+:CUSTOM_ID: some-anchor
+:ID:       xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+:END:
+Target content.
+#+end_src
+
+Typical Markdown output:
+
+#+begin_src markdown
+- Heading: [Destination post]({{</* relref "destination-post" */>}})
+- Custom ID: [Destination post]({{</* relref "destination-post#some-anchor" */>}})
+#+end_src
+
+#+begin_note
+These are *native Org links*. You do not need to hand-write
+={{</* relref */>}}= or ={{{relref(...)}}}= macros in the Org source for
+same-file cross-post targets.
+#+end_note
+***** Org 9.7+ and the pre-processed buffer
+Under Org 9.7 and newer, export used to abort on these links with:
+
+#+begin_example
+Unable to resolve link: "posts/foo.pre-processed.org::#anchor"
+#+end_example
+
+Cause in short: =ox-hugo= rewrites out-of-subtree targets to dummy
+=file:= paths in a pre-processed buffer; =org-element-interpret-data=
+then drops the =file:= type for relative paths, so re-parse treated
+them as fuzzy links and Org 9.7+ refused to resolve them.
+
+Current =ox-hugo= keeps the dummy path and search option separate,
+forces =file:= back after interpret, and still rewrites same-file
+=id:= targets to cross-post ~relref~ shortcodes. The suite post /Links outside
+the same post/ exercises this path
+(={{{ox-hugo-test-file}}}=).
+***** Tips
+- Prefer =[[*Exact heading title]]= or =[[#custom-id]]= for in-repo
+  cross-post links; they need no =org-id= database.
+- For =[[id:...]]= across posts in the *same* file, =org-id= must know
+  the ID (same as other Org ID links). =ox-hugo= rescans =.org= files
+  in =default-directory= before export so sibling files in that
+  directory are picked up even if =org-id-locations= was already
+  non-empty (for example after an earlier export in the same Emacs
+  session).
+- Cross-file =id:= links (true org-roam / multi-file setups) still use
+  Org's ID locations for the other file; keep that database up to date
+  for those workflows.
 ** Enhancements
 :PROPERTIES:
 :EXPORT_HUGO_MENU: :menu "6.enhancements"

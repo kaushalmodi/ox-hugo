@@ -1051,7 +1051,8 @@ are the arguments of the ORIG-FUN."
       ;; Auto-inject Bibliography heading.
       (let ((info (nth 2 args)) ;(org-cite-export-bibliography KEYWORD _ INFO)
             (bib-heading (org-string-nw-p (plist-get org-hugo-citations-plist :bibliography-section-heading))))
-        (when bib-heading
+        (if (not bib-heading)
+            bib
           (let* ((bib-heading (org-blackfriday--translate nil info bib-heading))
                  (loffset (string-to-number
                            (or (org-entry-get nil "EXPORT_HUGO_LEVEL_OFFSET" :inherit)
